@@ -1,0 +1,34 @@
+{
+  "name": "md-comments-monorepo",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "copy-icons": "node scripts/copy-icons.js",
+    "watch": "pnpm copy-icons && pnpm --filter md-comments run watch",
+    "watch:vscode": "pnpm copy-icons && pnpm --filter md-comments run watch",
+    "watch:obsidian": "pnpm --filter obsidian-md-comments run dev",
+    "watch:chrome": "pnpm copy-icons && pnpm --filter chrome-md-comments run dev",
+    "build:vscode": "pnpm copy-icons && pnpm --filter md-comments run compile",
+    "build:obsidian": "pnpm --filter obsidian-md-comments run build",
+    "build:chrome": "pnpm copy-icons && pnpm --filter chrome-md-comments run build",
+    "build": "pnpm copy-icons && pnpm --filter md-comments run compile && pnpm --filter obsidian-md-comments run build && pnpm --filter chrome-md-comments run build",
+    "package:vscode": "pnpm copy-icons && pnpm --filter md-comments run package",
+    "lint": "eslint .",
+    "format:check": "prettier --check \"**/*.{ts,js,json,css,md}\"",
+    "format": "prettier --write \"**/*.{ts,js,json,css,md}\"",
+    "typecheck": "tsc --noEmit && pnpm --recursive exec tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "@vitest/coverage-v8": "^2.0.5",
+    "eslint": "^8.57.0",
+    "eslint-plugin-security": "^3.0.1",
+    "prettier": "^3.3.3",
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.5"
+  }
+}

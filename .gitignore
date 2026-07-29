@@ -1,0 +1,19 @@
+# Dependency directories
+node_modules/
+
+# Build outputs
+dist/
+out/
+*.vsix
+main.js
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Dynamically copied icons (source in root assets/)
+vscode-extension/icon.png
+chrome-extension/icons/
+
+# Test coverage reports
+coverage/

@@ -1,0 +1,109 @@
+{
+  "name": "md-comments",
+  "displayName": "Markdown Comments",
+  "description": "Rich inline commenting on Markdown preview with companion YAML file persistence",
+  "version": "0.1.0",
+  "publisher": "mstrelex",
+  "license": "MIT",
+  "icon": "icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/md-comments/md-comments.git"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:markdown",
+    "onStartupFinished"
+  ],
+  "main": "./dist/vscode-extension/src/extension.js",
+  "contributes": {
+    "markdown.markdownItPlugins": true,
+    "markdown.previewScripts": [
+      "./media/inlineAnchors.js",
+      "./media/previewSidebar.js",
+      "./media/previewActions.js",
+      "./media/mentionAutocomplete.js",
+      "./media/avatarFallback.js",
+      "./media/preview.js"
+    ],
+    "markdown.previewStyles": [
+      "./media/preview.css"
+    ],
+    "commands": [
+      {
+        "command": "mdComments.openCommentPreview",
+        "title": "Markdown Comments: Open Comment Preview",
+        "icon": "$(comment-discussion)"
+      },
+      {
+        "command": "mdComments.handlePreviewAction",
+        "title": "Markdown Comments: Handle Preview Action"
+      },
+      {
+        "command": "mdComments.refreshPreview",
+        "title": "Markdown Comments: Refresh Preview"
+      },
+      {
+        "command": "mdComments.scanOrphans",
+        "title": "Markdown Comments: Scan for Orphaned Comments"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "mdComments.openCommentPreview",
+          "when": "editorLangId == markdown",
+          "group": "navigation@99"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Markdown Comments",
+      "properties": {
+        "mdComments.sidebarWidth": {
+          "type": "number",
+          "default": 340,
+          "minimum": 260,
+          "maximum": 600,
+          "description": "Default width (px) of the comments side panel in Markdown preview"
+        },
+        "mdComments.reactionEmojis": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "👍",
+            "👀",
+            "❤️",
+            "🎉",
+            "❓"
+          ],
+          "description": "Emoji options for reactions"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/markdown-it": "^14.1.0",
+    "@types/node": "^20.14.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^3.2.1",
+    "typescript": "^5.5.0"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0",
+    "markdown-it": "^14.1.0"
+  }
+}

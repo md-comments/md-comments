@@ -1,0 +1,61 @@
+name: Deploy to Marketplaces
+
+on:
+  release:
+    types: [published, edited]
+
+jobs:
+  deploy:
+    name: Deploy to Marketplaces
+    # Only run when release is NOT a draft and NOT a pre-release
+    if: github.event.release.draft == false && github.event.release.prerelease == false
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Download Release Assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p artifacts
+          gh release download ${{ github.event.release.tag_name }} --pattern "*" --dir artifacts
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Deploy VS Code Extension
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        run: |
+          # Find the .vsix file in downloaded artifacts
+          VSIX_FILE=$(find artifacts -name "*.vsix" | head -n 1)
+          if [ -z "$VSIX_FILE" ]; then
+            echo "Error: No .vsix file found in release assets!"
+            exit 1
+          fi
+          echo "Publishing VS Code Extension: $VSIX_FILE"
+          pnpm dlx @vscode/vsce publish --packagePath "$VSIX_FILE" -p "$VSCE_PAT"
+
+      - name: Deploy Chrome Extension
+        uses: hziegler/chrome-extension-deploy@v2
+        with:
+          extension-id: ${{ secrets.CHROME_EXTENSION_ID }}
+          client-id: ${{ secrets.CHROME_CLIENT_ID }}
+          client-secret: ${{ secrets.CHROME_CLIENT_SECRET }}
+          refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
+          zip-path: artifacts/chrome-extension.zip
+
+      - name: Deploy Obsidian Plugin
+        run: |
+          echo "Obsidian plugins are published by uploading manifest.json, main.js, and styles.css as assets to the GitHub Release."
+          echo "These assets were already uploaded during the pre-release/release phase."
+          echo "Obsidian pulls updates directly from the GitHub Release."
