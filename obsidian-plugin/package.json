@@ -25,7 +25,7 @@
     "@codemirror/view": "^6.26.3",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^20.11.24",
-    "esbuild": "^0.20.1",
+    "esbuild": "^0.28.1",
     "obsidian": "^1.5.7-1",
     "tslib": "^2.6.2",
     "typescript": "^5.3.3"
