@@ -60,10 +60,12 @@ jobs:
         run: pnpm build
 
       - name: Run FOSSA Scan & Test
-        if: ${{ secrets.FOSSA_API_KEY != '' }}
+        env:
+          FOSSA_API_KEY: ${{ secrets.FOSSA_API_KEY }}
+        if: ${{ env.FOSSA_API_KEY != '' }}
         uses: fossas/fossa-action@v2
         with:
-          api-key: ${{ secrets.FOSSA_API_KEY }}
+          api-key: ${{ env.FOSSA_API_KEY }}
           run-tests: true
 
       - name: Package VS Code Extension
