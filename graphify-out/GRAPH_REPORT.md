@@ -1,19 +1,23 @@
 # Graph Report - md-comments  (2026-07-29)
 
 ## Corpus Check
-- 95 files · ~51,713 words
+- 95 files · ~51,722 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1057 nodes · 1987 edges · 72 communities (54 shown, 18 thin omitted)
+- 1057 nodes · 1987 edges · 71 communities (53 shown, 18 thin omitted)
 - Extraction: 93% EXTRACTED · 7% INFERRED · 0% AMBIGUOUS · INFERRED: 130 edges (avg confidence: 0.79)
 - Token cost: 0 input · 0 output
+
+## Graph Freshness
+- Built from commit: `ca2dad67`
+- Run `git rev-parse HEAD` and compare to check if the graph is stale.
+- Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - markdownItPlugin.ts
 - content.ts
 - compress.py
-- commentStore.ts
 - validate.py
 - vscode-extension/package.json
 - obsidian-plugin/package.json
@@ -109,23 +113,19 @@
 ## Import Cycles
 - None detected.
 
-## Communities (72 total, 18 thin omitted)
+## Communities (71 total, 18 thin omitted)
 
 ### Community 0 - "markdownItPlugin.ts"
-Cohesion: 0.06
-Nodes (81): clearAuthorCache(), extractMentionLogins(), fallbackAuthor(), getCachedAuthor(), githubAvatarUrl(), githubProfileUrl(), isCacheValid(), isGitHubLogin() (+73 more)
+Cohesion: 0.05
+Nodes (110): clearAuthorCache(), extractMentionLogins(), fallbackAuthor(), getCachedAuthor(), githubAvatarUrl(), githubProfileUrl(), isCacheValid(), isGitHubLogin() (+102 more)
 
 ### Community 1 - "content.ts"
 Cohesion: 0.09
-Nodes (80): Chrome Extension Icon SVG, Chrome Extension Options UI, activeDomParagraphs, activeIndicators, attachCommentCardEvents(), checkPageChange(), cleanupInjections(), clearPendingCommentsCache() (+72 more)
+Nodes (81): Chrome Extension Icon SVG, Chrome Extension Options UI, activeDomParagraphs, activeIndicators, attachCommentCardEvents(), CacheEntry, checkPageChange(), cleanupInjections() (+73 more)
 
 ### Community 2 - "compress.py"
 Cohesion: 0.11
 Nodes (25): main(), print_usage(), backup_dir_for(), build_compress_prompt(), build_fix_prompt(), call_claude(), compress_file(), is_sensitive_path() (+17 more)
-
-### Community 3 - "commentStore.ts"
-Cohesion: 0.21
-Nodes (27): getAuthor(), executeCommentAction(), resolveText(), savedToast(), addInlineComment(), addPageComment(), addReply(), applyReactionToggle() (+19 more)
 
 ### Community 4 - "validate.py"
 Cohesion: 0.17
@@ -148,8 +148,8 @@ Cohesion: 0.07
 Nodes (30): 👍, ./media/avatarFallback.js, ./media/inlineAnchors.js, ./media/mentionAutocomplete.js, ./media/preview.css, ./media/preview.js, ./media/previewActions.js, ./media/previewSidebar.js (+22 more)
 
 ### Community 9 - "CommentStore"
-Cohesion: 0.28
-Nodes (5): CacheEntry, CommentStore, newId(), CommentRootType, CommentsFile
+Cohesion: 0.33
+Nodes (3): CommentStore, newId(), CommentRootType
 
 ### Community 10 - "chrome-extension/manifest.json"
 Cohesion: 0.07
@@ -157,11 +157,11 @@ Nodes (26): action, default_icon, default_title, content_scripts, 128, 16, 32, 4
 
 ### Community 11 - "chrome-extension/package.json"
 Cohesion: 0.08
-Nodes (25): esbuild, js-yaml, tslib, @types/js-yaml, @types/node, typescript, @types/chrome, author (+17 more)
+Nodes (25): author, dependencies, js-yaml, description, devDependencies, esbuild, tslib, @types/chrome (+17 more)
 
 ### Community 13 - "main.ts"
 Cohesion: 0.14
-Nodes (32): createLivePreviewExtension(), fuzzyMatch(), highlightTextInElement(), registerReadingViewProcessor(), displayNameCache, pendingFetches, EMPTY, normalizeCommentsFile() (+24 more)
+Nodes (31): createLivePreviewExtension(), fuzzyMatch(), highlightTextInElement(), registerReadingViewProcessor(), displayNameCache, pendingFetches, EMPTY, normalizeCommentsFile() (+23 more)
 
 ### Community 14 - "previewActions.js"
 Cohesion: 0.16
@@ -344,4 +344,4 @@ _Questions this graph is uniquely positioned to answer:_
 - **What connects `root`, `parser`, `browser` to the rest of the system?**
   _388 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `markdownItPlugin.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.0627147766323024 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.051493563304586924 - nodes in this community are weakly interconnected._

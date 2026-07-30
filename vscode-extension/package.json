@@ -103,7 +103,7 @@
     "typescript": "^5.5.0"
   },
   "dependencies": {
-    "js-yaml": "^4.1.0",
+    "js-yaml": "^4.3.0",
     "markdown-it": "^14.1.0"
   }
 }

@@ -20,9 +20,9 @@
     "semantic_hash": ""
   },
   "chrome-extension/package.json": {
-    "mtime": 1782423512.2934737,
-    "ast_hash": "b976ef331804f9fc01a74497adcf0831",
-    "semantic_hash": "b976ef331804f9fc01a74497adcf0831"
+    "mtime": 1785372776.5344794,
+    "ast_hash": "0588e9a0c77561ede1ade6ec1fb794b7",
+    "semantic_hash": ""
   },
   "chrome-extension/src/content.ts": {
     "mtime": 1785357999.4622676,
@@ -50,8 +50,8 @@
     "semantic_hash": ""
   },
   "obsidian-plugin/package.json": {
-    "mtime": 1785358031.059588,
-    "ast_hash": "9524c4f460563e84d29f844d4e638be2",
+    "mtime": 1785372776.533672,
+    "ast_hash": "1ce709bdb9b5df76d0c50ec06608c534",
     "semantic_hash": ""
   },
   "obsidian-plugin/src/livePreview.ts": {
@@ -145,8 +145,8 @@
     "semantic_hash": ""
   },
   "vscode-extension/package.json": {
-    "mtime": 1785362460.4712589,
-    "ast_hash": "83f84b063e3dd9860d29e19641e9a036",
+    "mtime": 1785372776.5336645,
+    "ast_hash": "e414c657e8ba5245e511deafdbcf3ac7",
     "semantic_hash": ""
   },
   "vscode-extension/src/author.ts": {

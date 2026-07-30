@@ -2,7 +2,6 @@
   "0": "markdownItPlugin.ts",
   "1": "content.ts",
   "2": "compress.py",
-  "3": "commentStore.ts",
   "4": "validate.py",
   "5": "vscode-extension/package.json",
   "6": "obsidian-plugin/package.json",
