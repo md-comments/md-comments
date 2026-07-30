@@ -12,6 +12,9 @@ on:
       version:
         description: 'The version parsed from package.json'
         value: ${{ jobs.build.outputs.version }}
+    secrets:
+      FOSSA_API_KEY:
+        required: false
 
 jobs:
   build:
