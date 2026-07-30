@@ -1,0 +1,10 @@
+{
+  "id": "md-comments",
+  "name": "Markdown Comments",
+  "version": "0.1.0",
+  "minAppVersion": "1.0.0",
+  "description": "Rich inline commenting on Markdown preview with companion YAML file persistence",
+  "author": "md-comments",
+  "authorUrl": "https://github.com/md-comments/md-comments",
+  "isDesktopOnly": false
+}

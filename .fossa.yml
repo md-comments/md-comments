@@ -1,0 +1,9 @@
+version: 3
+project:
+  locator: custom+63574/github.com/md-comments/md-comments
+  name: md-comments
+
+targets:
+  excludeManifestStrategies: true
+
+

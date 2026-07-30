@@ -1,0 +1,11 @@
+# Ignore python path, root config, and uncached list
+.graphify_python
+.graphify_root
+.graphify_uncached.txt
+
+# Ignore caches and cost tracking
+cache/
+cost.json
+
+# Ignore backup/run directories
+202*

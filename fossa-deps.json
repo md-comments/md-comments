@@ -1,0 +1,14 @@
+{
+  "referenced-dependencies": [
+    {
+      "type": "npm",
+      "name": "js-yaml",
+      "version": "4.3.0"
+    },
+    {
+      "type": "npm",
+      "name": "markdown-it",
+      "version": "14.2.0"
+    }
+  ]
+}

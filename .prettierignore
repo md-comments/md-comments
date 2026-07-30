@@ -1,0 +1,13 @@
+# Exclude graphify caching and reports
+graphify-out/
+
+# Exclude coverage reports
+coverage/
+
+# Exclude package managers lock files
+pnpm-lock.yaml
+
+# Exclude build output directories
+dist/
+out/
+node_modules/

@@ -1,0 +1,111 @@
+name: Build and Package Artifacts
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: 'Target environment name'
+        required: true
+        type: string
+        default: 'Development'
+    outputs:
+      version:
+        description: 'The version parsed from package.json'
+        value: ${{ jobs.build.outputs.version }}
+    secrets:
+      FOSSA_API_KEY:
+        required: false
+
+jobs:
+  build:
+    name: Build and Verify
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run Dependency Audit (SCA)
+        run: pnpm audit --prod --audit-level high
+
+      - name: Lint Code (with SAST Security rules)
+        run: pnpm lint
+
+      - name: Check Code Formatting
+        run: pnpm format:check
+
+      - name: Static Typecheck
+        run: pnpm typecheck
+
+      - name: Run Tests with Coverage
+        run: pnpm test:coverage
+
+      - name: Verify Bundle Builds
+        run: pnpm build
+
+      - name: Run FOSSA Scan & Test
+        env:
+          FOSSA_API_KEY: ${{ secrets.FOSSA_API_KEY }}
+        if: ${{ env.FOSSA_API_KEY != '' }}
+        run: |
+          curl -H "Cache-Control: no-cache" https://raw.githubusercontent.com/fossas/fossa-cli/master/install-latest.sh | bash
+          fossa analyze
+
+          # Run fossa test and capture output to handle revision sync delay gracefully
+          echo "Running FOSSA test..."
+          if ! output=$(fossa test 2>&1); then
+            echo "$output"
+            if echo "$output" | grep -q "Revision for locator .* was not found"; then
+              echo "WARNING: FOSSA revision is not available yet (sync delay). Passing build."
+              exit 0
+            fi
+            exit 1
+          fi
+          echo "$output"
+
+      - name: Package VS Code Extension
+        run: |
+          cd vscode-extension
+          node -e "const fs = require('fs'); const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8')); pkg.scripts['vscode:prepublish_backup'] = pkg.scripts['vscode:prepublish']; delete pkg.scripts['vscode:prepublish']; fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2));"
+          pnpm dlx vsce-pnpm package --pnpm
+          node -e "const fs = require('fs'); const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8')); pkg.scripts['vscode:prepublish'] = pkg.scripts['vscode:prepublish_backup']; delete pkg.scripts['vscode:prepublish_backup']; fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2));"
+
+      - name: Package Obsidian Plugin
+        run: |
+          zip -j obsidian-plugin.zip obsidian-plugin/main.js obsidian-plugin/manifest.json obsidian-plugin/styles.css
+
+      - name: Package Chrome Extension
+        run: |
+          cd chrome-extension/dist
+          zip -r ../../chrome-extension.zip .
+
+      - name: Get Version
+        id: get_version
+        run: |
+          VERSION=$(node -p "require('./vscode-extension/package.json').version")
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v6
+        with:
+          name: build-artifacts
+          path: |
+            vscode-extension/*.vsix
+            obsidian-plugin.zip
+            chrome-extension.zip
