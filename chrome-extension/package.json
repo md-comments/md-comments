@@ -13,7 +13,7 @@
     "js-yaml": "^4.3.0"
   },
   "devDependencies": {
-    "@types/chrome": "^0.0.263",
+    "@types/chrome": "^0.2.2",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^20.11.24",
     "esbuild": "^0.20.1",
