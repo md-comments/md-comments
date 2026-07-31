@@ -5356,8 +5356,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_html",
-      "community": 0,
-      "community_name": "markdownItPlugin.ts",
+      "community": 13,
+      "community_name": "main.ts",
       "norm_label": "html.ts"
     },
     {
@@ -7908,8 +7908,8 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "vscode_extension_src_author_warmauthorcache",
-      "community": 0,
-      "community_name": "markdownItPlugin.ts",
+      "community": 3,
+      "community_name": "commentStore.ts",
       "norm_label": "warmauthorcache()"
     },
     {
@@ -8062,8 +8062,8 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "vscode_extension_src_commentactions_commentactionmessage",
-      "community": 0,
-      "community_name": "markdownItPlugin.ts",
+      "community": 3,
+      "community_name": "commentStore.ts",
       "norm_label": "commentactionmessage"
     },
     {
@@ -8095,8 +8095,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel",
-      "community": 0,
-      "community_name": "markdownItPlugin.ts",
+      "community": 3,
+      "community_name": "commentStore.ts",
       "norm_label": "commentpreviewpanel.ts"
     },
     {
@@ -8106,8 +8106,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel",
-      "community": 0,
-      "community_name": "markdownItPlugin.ts",
+      "community": 3,
+      "community_name": "commentStore.ts",
       "norm_label": "commentpreviewpanel"
     },
     {
@@ -8117,8 +8117,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_show",
-      "community": 0,
-      "community_name": "markdownItPlugin.ts",
+      "community": 3,
+      "community_name": "commentStore.ts",
       "norm_label": ".show()"
     },
     {
@@ -8128,8 +8128,8 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_refreshforuri",
-      "community": 0,
-      "community_name": "markdownItPlugin.ts",
+      "community": 3,
+      "community_name": "commentStore.ts",
       "norm_label": ".refreshforuri()"
     },
     {
@@ -8139,8 +8139,8 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_constructor",
-      "community": 0,
-      "community_name": "markdownItPlugin.ts",
+      "community": 3,
+      "community_name": "commentStore.ts",
       "norm_label": ".constructor()"
     },
     {
@@ -8150,8 +8150,8 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_refresh",
-      "community": 0,
-      "community_name": "markdownItPlugin.ts",
+      "community": 3,
+      "community_name": "commentStore.ts",
       "norm_label": ".refresh()"
     },
     {
@@ -8425,8 +8425,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_extension",
-      "community": 0,
-      "community_name": "markdownItPlugin.ts",
+      "community": 3,
+      "community_name": "commentStore.ts",
       "norm_label": "extension.ts"
     },
     {
@@ -8436,8 +8436,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "vscode_extension_src_extension_mdurifrommessage",
-      "community": 0,
-      "community_name": "markdownItPlugin.ts",
+      "community": 3,
+      "community_name": "commentStore.ts",
       "norm_label": "mdurifrommessage()"
     },
     {
@@ -8447,8 +8447,8 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "vscode_extension_src_extension_refreshpreview",
-      "community": 0,
-      "community_name": "markdownItPlugin.ts",
+      "community": 3,
+      "community_name": "commentStore.ts",
       "norm_label": "refreshpreview()"
     },
     {
@@ -8458,8 +8458,8 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "vscode_extension_src_extension_handlepreviewaction",
-      "community": 0,
-      "community_name": "markdownItPlugin.ts",
+      "community": 3,
+      "community_name": "commentStore.ts",
       "norm_label": "handlepreviewaction()"
     },
     {
@@ -8469,8 +8469,8 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "vscode_extension_src_extension_handleuri",
-      "community": 0,
-      "community_name": "markdownItPlugin.ts",
+      "community": 3,
+      "community_name": "commentStore.ts",
       "norm_label": "handleuri()"
     },
     {
@@ -8480,8 +8480,8 @@
       "source_location": "L79",
       "_origin": "ast",
       "id": "vscode_extension_src_extension_activate",
-      "community": 0,
-      "community_name": "markdownItPlugin.ts",
+      "community": 3,
+      "community_name": "commentStore.ts",
       "norm_label": "activate()"
     },
     {
@@ -8491,8 +8491,8 @@
       "source_location": "L182",
       "_origin": "ast",
       "id": "vscode_extension_src_extension_deactivate",
-      "community": 0,
-      "community_name": "markdownItPlugin.ts",
+      "community": 3,
+      "community_name": "commentStore.ts",
       "norm_label": "deactivate()"
     },
     {
@@ -9195,8 +9195,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_previewcommand",
-      "community": 0,
-      "community_name": "markdownItPlugin.ts",
+      "community": 3,
+      "community_name": "commentStore.ts",
       "norm_label": "previewcommand.ts"
     },
     {
@@ -9206,8 +9206,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "vscode_extension_src_previewcommand_parsepreviewcommandarg",
-      "community": 0,
-      "community_name": "markdownItPlugin.ts",
+      "community": 3,
+      "community_name": "commentStore.ts",
       "norm_label": "parsepreviewcommandarg()"
     },
     {
@@ -9217,8 +9217,8 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "vscode_extension_src_previewcommand_normalizeobject",
-      "community": 0,
-      "community_name": "markdownItPlugin.ts",
+      "community": 3,
+      "community_name": "commentStore.ts",
       "norm_label": "normalizeobject()"
     },
     {
@@ -11750,6 +11750,39 @@
       "community": 63,
       "community_name": "Agentic AI Code Review Guide",
       "norm_label": "security static analysis (sast) & sca"
+    },
+    {
+      "label": "assets/README.md",
+      "file_type": "document",
+      "source_file": "website/assets/README.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "website_assets_readme",
+      "community": 73,
+      "community_name": "Website Assets",
+      "norm_label": "assets/readme.md"
+    },
+    {
+      "label": "Website Assets",
+      "file_type": "document",
+      "source_file": "website/assets/README.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "website_assets_readme_website_assets",
+      "community": 73,
+      "community_name": "Website Assets",
+      "norm_label": "website assets"
+    },
+    {
+      "label": "Screenshots Directory",
+      "file_type": "document",
+      "source_file": "website/assets/README.md",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "website_assets_readme_screenshots_directory",
+      "community": 73,
+      "community_name": "Website Assets",
+      "norm_label": "screenshots directory"
     },
     {
       "label": "Markdown Comments Overview",
@@ -34983,6 +35016,28 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "website/assets/README.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "website_assets_readme",
+      "target": "website_assets_readme_website_assets",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "website/assets/README.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "website_assets_readme_website_assets",
+      "target": "website_assets_readme_screenshots_directory",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "conceptually_related_to",
       "confidence": "INFERRED",
       "confidence_score": 0.75,
@@ -35094,5 +35149,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "0b68f3b8aa1d9388a64fde48c0aae4b821e5aca9"
+  "built_at_commit": "487226c2f166ead45ead46d2c52c258efe0450c0"
 }

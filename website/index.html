@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Markdown Comments | Inline Feedback for Markdown Docs</title>
+    <meta
+      name="description"
+      content="Collaborative inline comments for Markdown files stored in YAML companion files. Support for VS Code, Obsidian, and GitHub via Chrome Extension."
+    />
+    <link rel="icon" type="image/svg+xml" href="assets/icon.svg" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <div class="container header-container">
+        <a href="#" class="logo-link">
+          <svg class="logo-icon" viewBox="0 0 512 512" fill="currentColor" width="32" height="32">
+            <path
+              fill-rule="evenodd"
+              d="M 136 64 L 376 64 C 424 64 456 96 456 144 L 456 304 C 456 352 424 384 376 384 L 216 384 C 184 384 150 404 126 428 C 118 436 104 430 104 418 L 104 384 C 72 380 56 352 56 304 L 56 144 C 56 96 88 64 136 64 Z M 132 168 L 164 168 L 192 232 L 220 168 L 252 168 L 252 280 L 226 280 L 226 212 L 201 268 L 183 268 L 158 212 L 158 280 L 132 280 Z M 276 168 L 324 168 C 358 168 380 188 380 224 C 380 260 358 280 324 280 L 276 280 Z M 302 192 L 302 256 L 322 256 C 342 256 352 246 352 224 C 352 202 342 192 322 192 Z"
+            />
+          </svg>
+          <span>Markdown Comments</span>
+        </a>
+        <nav class="nav">
+          <a href="#features" class="nav-link">Features</a>
+          <a href="#integrations" class="nav-link">Integrations</a>
+          <a href="privacy.html" class="nav-link">Privacy Policy</a>
+        </nav>
+        <div class="nav-actions">
+          <button id="theme-toggle" class="theme-toggle" aria-label="Toggle light/dark theme">
+            <!-- Sun Icon (Dark Mode View) -->
+            <svg class="sun-icon" viewBox="0 0 24 24">
+              <path
+                d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.01c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"
+              />
+            </svg>
+            <!-- Moon Icon (Light Mode View) -->
+            <svg class="moon-icon" viewBox="0 0 24 24">
+              <path
+                d="M12.3 22h-.1c-5.5 0-10-4.5-10-10 0-4.8 3.5-8.9 8.2-9.8.6-.1 1.2.3 1.3.9.1.6-.3 1.2-.9 1.3-3.4.7-5.8 3.7-5.8 7.2 0 4.1 3.4 7.5 7.5 7.5 3.5 0 6.5-2.4 7.2-5.8.1-.6.7-1 1.3-.9.6.1 1 .7.9 1.3-.9 4.7-5 8.2-9.6 8.3z"
+              />
+            </svg>
+          </button>
+          <a
+            href="https://github.com/md-comments/md-comments"
+            class="btn btn-secondary btn-github"
+            target="_blank"
+            rel="noopener"
+          >
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.646.64.699 1.026 1.592 1.026 2.683 0 3.842-2.337 4.687-4.565 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.138 20.161 22 16.416 22 12c0-5.523-4.523-10-10-10z"
+              />
+            </svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <h1 class="hero-title">
+            Version-Controlled Comments,<br /><span class="gradient-text"
+              >Inside Your Rendered Markdown</span
+            >
+          </h1>
+          <p class="hero-subtitle">
+            Highlight text and collaborate directly on Markdown documentation. Stored locally in
+            companion YAML files, enabling native Git review, grep, and synchronization.
+          </p>
+          <div class="hero-buttons">
+            <a href="#integrations" class="btn btn-primary">See Integrations</a>
+          </div>
+        </div>
+
+        <!-- Interactive Static Mockup of the Concept -->
+        <div class="mockup-window">
+          <div class="mockup-header">
+            <div class="mockup-controls">
+              <div class="mockup-dot red"></div>
+              <div class="mockup-dot yellow"></div>
+              <div class="mockup-dot green"></div>
+            </div>
+            <span class="mockup-title">doc_collaboration.md</span>
+          </div>
+          <div class="mockup-body">
+            <div class="vscode-editor">
+              <div class="vscode-tabs">
+                <div class="vscode-tab active">doc_collaboration.md</div>
+              </div>
+              <div class="vscode-content" style="font-family: var(--font-sans); line-height: 1.6">
+                <h1
+                  style="
+                    font-size: 1.5rem;
+                    margin-bottom: 16px;
+                    border-bottom: 1px solid var(--border-color);
+                    padding-bottom: 8px;
+                    font-family: var(--font-display);
+                  "
+                >
+                  Project Architecture
+                </h1>
+                <p style="margin-bottom: 12px">This project implements collaborative tools.</p>
+                <p style="margin-bottom: 12px">
+                  <span class="highlight-select"
+                    >The frontend relies on responsive vanilla styles</span
+                  >
+                  for modern performance.
+                </p>
+                <p style="margin-bottom: 12px">YAML companion files sync changes seamlessly.</p>
+              </div>
+            </div>
+            <div class="vscode-sidebar">
+              <div class="vscode-sidebar-title">
+                <span>Comments</span>
+                <span>● ● ●</span>
+              </div>
+              <div class="vscode-comments">
+                <div class="comment-thread">
+                  <div class="comment-header">
+                    <div class="avatar">D</div>
+                    <span class="author-name">dev_lead</span>
+                    <span class="comment-time">10m ago</span>
+                  </div>
+                  <div class="comment-body">Should we also add Tailwind CSS config options?</div>
+                  <div class="comment-footer">
+                    <span class="comment-status open">Open</span>
+                    <div class="comment-reactions">
+                      <span class="reaction-btn">👍 2</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+      <div class="container">
+        <h2 class="section-title">Why Markdown Comments?</h2>
+        <p class="section-subtitle">
+          A modern approach to documentation feedback. <br />
+          Keep reviews alongside your content.
+        </p>
+
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon-wrapper">
+              <svg
+                width="24"
+                height="24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                />
+              </svg>
+            </div>
+            <h3>Companion File Persistence</h3>
+            <p>
+              Comments are stored in <code>&lt;filename&gt;.comments.yml</code> right next to your
+              Markdown. No centralized database, no lock-in. Track reviews alongside content in Git
+              branches.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon-wrapper">
+              <svg
+                width="24"
+                height="24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+                />
+              </svg>
+            </div>
+            <h3>Fuzzy Anchoring Cascade</h3>
+            <p>
+              Robustly anchors comments to text paragraphs. If you edit, move, or modify lines, our
+              cascade matching locates the comment block safely without losing data.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon-wrapper">
+              <svg
+                width="24"
+                height="24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                />
+              </svg>
+            </div>
+            <h3>Threaded Conversations</h3>
+            <p>
+              Support for nested replies, emoji reactions, and thread status (Open / Resolved) to
+              manage feedback resolution loops within your document panels.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Integrations Section -->
+    <section id="integrations" class="integrations">
+      <div class="container">
+        <h2 class="section-title">Integrations for Your Workflow</h2>
+        <p class="section-subtitle">
+          Use Markdown Comments natively in your favorite editors and GitHub.
+        </p>
+
+        <div class="tabs-container">
+          <button class="tab-btn active" data-tab="tab-vscode">
+            <span>VS Code / Cursor / Antigravity</span>
+          </button>
+          <button class="tab-btn" data-tab="tab-obsidian">
+            <span>Obsidian Plugin</span>
+          </button>
+          <button class="tab-btn" data-tab="tab-github">
+            <span>GitHub Chrome Extension</span>
+          </button>
+        </div>
+
+        <!-- VS Code Tab Content -->
+        <div id="tab-vscode" class="tab-content active">
+          <div class="integration-layout">
+            <div class="integration-info">
+              <h3>VS Code, Cursor & Antigravity</h3>
+              <p>
+                A fully featured workspace extension. Access comments in a native side panel,
+                highlight selections to anchor thoughts, and edit files side-by-side.
+              </p>
+              <ul class="integration-features">
+                <li>
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span>Interactive side panel mapping comment threads to lines.</span>
+                </li>
+                <li>
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span>Command Palette action to scan for orphaned comments.</span>
+                </li>
+                <li>
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span>Robust configuration for reactions and pane widths.</span>
+                </li>
+              </ul>
+              <a
+                href="https://github.com/md-comments/md-comments#install"
+                class="btn btn-secondary"
+                target="_blank"
+                >Setup Instructions</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Obsidian Tab Content -->
+        <div id="tab-obsidian" class="tab-content">
+          <div class="integration-layout">
+            <div class="integration-info">
+              <h3>Obsidian Plugin</h3>
+              <p>
+                Bring native collaboration to your personal knowledge base. Right-click any block in
+                Live Preview or Reading Mode to write comment logs in companion files.
+              </p>
+              <ul class="integration-features">
+                <li>
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span>Integrates seamlessly with Obsidian's right sidebar ribbon.</span>
+                </li>
+                <li>
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span>Supports Obsidian Sync, Dropbox, and Git vault backup.</span>
+                </li>
+                <li>
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span>Custom Author fallback using Git username configs.</span>
+                </li>
+              </ul>
+              <a
+                href="https://github.com/md-comments/md-comments#obsidian"
+                class="btn btn-secondary"
+                target="_blank"
+                >Setup Instructions</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- GitHub Tab Content -->
+        <div id="tab-github" class="tab-content">
+          <div class="integration-layout">
+            <div class="integration-info">
+              <h3>GitHub Integration (Chrome Extension)</h3>
+              <p>
+                Collaborate natively on GitHub PRs. Renders a dedicated "Comments" workspace and
+                lets you comment inline on Markdown diff lines using direct Git commits.
+              </p>
+              <ul class="integration-features">
+                <li>
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span>Automated PR tab integration alongside code review.</span>
+                </li>
+                <li>
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span>Direct commits back to target repository or comments branches.</span>
+                </li>
+                <li>
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span>Supports Personal Access Tokens (PAT) for rate-limit bypass.</span>
+                </li>
+              </ul>
+              <a
+                href="https://github.com/md-comments/md-comments#github-chrome-extension"
+                class="btn btn-secondary"
+                target="_blank"
+                >Setup Instructions</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <h4>Markdown Comments</h4>
+            <p>
+              Collaborative inline comments for Markdown documents, stored in YAML companion files.
+            </p>
+          </div>
+          <div class="footer-links-col">
+            <h5>Product</h5>
+            <ul>
+              <li><a href="#features">Features</a></li>
+              <li><a href="#integrations">Integrations</a></li>
+            </ul>
+          </div>
+          <div class="footer-links-col">
+            <h5>Privacy & Legal</h5>
+            <ul>
+              <li><a href="privacy.html">Privacy Policy</a></li>
+              <li>
+                <a
+                  href="https://github.com/md-comments/md-comments/blob/main/LICENSE"
+                  target="_blank"
+                  rel="noopener"
+                  >License (MIT)</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2026 Markdown Comments. All rights reserved.</p>
+          <p>
+            Support:
+            <a href="mailto:info@md-comments.com" style="text-decoration: underline"
+              >info@md-comments.com</a
+            >
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="main.js"></script>
+  </body>
+</html>

@@ -1,16 +1,16 @@
 # Graph Report - md-comments  (2026-07-30)
 
 ## Corpus Check
-- 100 files · ~98,187 words
+- 101 files · ~101,952 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1086 nodes · 2017 edges · 75 communities (55 shown, 20 thin omitted)
+- 1089 nodes · 2019 edges · 76 communities (55 shown, 21 thin omitted)
 - Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 129 edges (avg confidence: 0.79)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `0b68f3b8`
+- Built from commit: `487226c2`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -87,6 +87,7 @@
 - Reporting a Vulnerability
 - Privacy Policy
 - generate_cws_tiles.py
+- Website Assets
 - Context Pack
 - Workflow: context-pack
 
@@ -117,11 +118,11 @@
 ## Import Cycles
 - None detected.
 
-## Communities (75 total, 20 thin omitted)
+## Communities (76 total, 21 thin omitted)
 
 ### Community 0 - "markdownItPlugin.ts"
-Cohesion: 0.06
-Nodes (81): clearAuthorCache(), extractMentionLogins(), fallbackAuthor(), getCachedAuthor(), githubAvatarUrl(), githubProfileUrl(), isCacheValid(), isGitHubLogin() (+73 more)
+Cohesion: 0.08
+Nodes (71): clearAuthorCache(), extractMentionLogins(), fallbackAuthor(), getCachedAuthor(), githubAvatarUrl(), githubProfileUrl(), isCacheValid(), isGitHubLogin() (+63 more)
 
 ### Community 1 - "content.ts"
 Cohesion: 0.08
@@ -132,8 +133,8 @@ Cohesion: 0.11
 Nodes (25): main(), print_usage(), backup_dir_for(), build_compress_prompt(), build_fix_prompt(), call_claude(), compress_file(), is_sensitive_path() (+17 more)
 
 ### Community 3 - "commentStore.ts"
-Cohesion: 0.21
-Nodes (27): getAuthor(), executeCommentAction(), resolveText(), savedToast(), addInlineComment(), addPageComment(), addReply(), applyReactionToggle() (+19 more)
+Cohesion: 0.13
+Nodes (37): getAuthor(), warmAuthorCache(), CommentActionMessage, executeCommentAction(), resolveText(), savedToast(), CommentPreviewPanel, addInlineComment() (+29 more)
 
 ### Community 4 - "validate.py"
 Cohesion: 0.17
@@ -336,9 +337,9 @@ Cohesion: 0.33
 Nodes (5): Context Pack, Guardrails, Output Focus, Patterns, Workflow
 
 ## Knowledge Gaps
-- **405 isolated node(s):** `root`, `parser`, `browser`, `node`, `es2022` (+400 more)
+- **406 isolated node(s):** `root`, `parser`, `browser`, `node`, `es2022` (+401 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **20 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **21 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
@@ -347,13 +348,13 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.025) - this node is a cross-community bridge._
 - **Why does `obsidian` connect `main.ts` to `obsidian-plugin/package.json`?**
   _High betweenness centrality (0.025) - this node is a cross-community bridge._
-- **Why does `escapeHtml()` connect `markdownItPlugin.ts` to `content.ts`, `CommentsSidebarView`, `main.ts`?**
+- **Why does `escapeHtml()` connect `markdownItPlugin.ts` to `content.ts`, `commentStore.ts`, `CommentsSidebarView`, `main.ts`?**
   _High betweenness centrality (0.013) - this node is a cross-community bridge._
 - **Are the 65 inferred relationships involving `Chrome Extension Options UI` (e.g. with `Chrome Extension Icon SVG` and `content.ts`) actually correct?**
   _`Chrome Extension Options UI` has 65 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 28 inferred relationships involving `Obsidian Plugin Guide` (e.g. with `main.ts` and `CommentComposerModal`) actually correct?**
   _`Obsidian Plugin Guide` has 28 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `root`, `parser`, `browser` to the rest of the system?**
-  _405 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _406 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `markdownItPlugin.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.0627147766323024 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07592407592407592 - nodes in this community are weakly interconnected._

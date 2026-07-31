@@ -608,5 +608,35 @@
     "mtime": 1785462853.6709511,
     "ast_hash": "90364e8a726476a1e2e087d7e978f6ae",
     "semantic_hash": ""
+  },
+  ".github/workflows/deploy-pages.yml": {
+    "mtime": 1785463304.3170168,
+    "ast_hash": "5b502bd5c6c77a531ceb87fc2c59ce7c",
+    "semantic_hash": ""
+  },
+  "website/assets/README.md": {
+    "mtime": 1785463309.3306205,
+    "ast_hash": "00282770e0a323a9af7abbb7b2a95932",
+    "semantic_hash": ""
+  },
+  "website/index.html": {
+    "mtime": 1785464476.28668,
+    "ast_hash": "845018f16b3beb18362959d87e61d87b",
+    "semantic_hash": ""
+  },
+  "website/privacy.html": {
+    "mtime": 1785464381.8953404,
+    "ast_hash": "37e0b7686485449c77358c51ab461c82",
+    "semantic_hash": ""
+  },
+  "website/assets/icon.png": {
+    "mtime": 1785463247.1546533,
+    "ast_hash": "12c1fdb677711ae4c011187d6ce75838",
+    "semantic_hash": ""
+  },
+  "website/assets/icon.svg": {
+    "mtime": 1785463247.1521916,
+    "ast_hash": "cf5f835ac7a180fb51beb18981b409aa",
+    "semantic_hash": ""
   }
 }
