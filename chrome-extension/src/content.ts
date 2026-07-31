@@ -47,6 +47,7 @@ let squashCommits = true;
 let useFixupCommits = true;
 let batchCommentsMode = true;
 let isTabContentRendered = false;
+let cachedSelectedClasses: string[] = [];
 let currentDisplayAuthor = '';
 
 type ParsedUrl = { type: 'pull'; owner: string; repo: string; pullNumber: number };
@@ -1813,21 +1814,41 @@ function handleTabVisibility() {
 
   if (active) {
     document.documentElement.classList.add('md-comments-tab-active');
-    const filesTab =
-      document.getElementById('prs-files-anchor-tab') ||
-      document.querySelector('nav[aria-label*="Pull request navigation"] a[role="tab"]') ||
-      document.querySelector('nav[aria-label*="Pull request navigation"] a[class*="TabNavLink"]') ||
-      document.querySelector('nav[aria-label*="Pull request navigation"] a');
 
-    if (filesTab) {
-      const selectedClasses = Array.from(filesTab.classList).filter(
-        (c) => c.toLowerCase().includes('selected') || c === 'selected'
-      );
-      selectedClasses.forEach((c) => tabEl.classList.add(c));
-    } else {
-      tabEl.classList.add('selected');
+    // Dynamically infer the selected classes from whichever native tab is currently selected
+    const allTabs = document.querySelectorAll(
+      'nav[aria-label*="Pull request navigation"] a[role="tab"], nav[aria-label*="Pull request navigation"] a[class*="TabNavLink"], nav[aria-label*="Pull request navigation"] a'
+    );
+    let foundSelectedClasses: string[] = [];
+    for (const tab of Array.from(allTabs)) {
+      if (tab.id !== 'md-comments-tab') {
+        const hasSelectedClass = Array.from(tab.classList).some(
+          (c) => c.toLowerCase().includes('selected') || c === 'selected'
+        );
+        if (
+          hasSelectedClass ||
+          tab.getAttribute('aria-selected') === 'true' ||
+          tab.getAttribute('aria-current') === 'page'
+        ) {
+          const classes = Array.from(tab.classList).filter(
+            (c) => c.toLowerCase().includes('selected') || c === 'selected'
+          );
+          if (classes.length > 0) {
+            foundSelectedClasses = classes;
+            break;
+          }
+        }
+      }
     }
+
+    if (foundSelectedClasses.length > 0) {
+      cachedSelectedClasses = foundSelectedClasses;
+    }
+
+    const classesToApply = cachedSelectedClasses.length > 0 ? cachedSelectedClasses : ['selected'];
+    classesToApply.forEach((c) => tabEl.classList.add(c));
     tabEl.setAttribute('aria-selected', 'true');
+    tabEl.setAttribute('aria-current', 'page');
     tabEl.setAttribute('tabindex', '0');
 
     const otherTabs = document.querySelectorAll(
@@ -1842,6 +1863,7 @@ function handleTabVisibility() {
           }
         }
         t.setAttribute('aria-selected', 'false');
+        t.removeAttribute('aria-current');
         t.setAttribute('tabindex', '-1');
       }
     });
@@ -1875,7 +1897,9 @@ function handleTabVisibility() {
         tabEl.classList.remove(c);
       }
     }
+    cachedSelectedClasses.forEach((c) => tabEl.classList.remove(c));
     tabEl.setAttribute('aria-selected', 'false');
+    tabEl.removeAttribute('aria-current');
     tabEl.setAttribute('tabindex', '-1');
 
     const nativeContent = getNativeContentContainer();
