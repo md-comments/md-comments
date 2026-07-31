@@ -183,6 +183,10 @@ pnpm typecheck        # Checks types across all packages (TypeScript)
   pnpm watch:chrome
   ```
 
+## Privacy Policy
+
+For details on how the Chrome Extension, VS Code Extension, and Obsidian Plugin handle user data, settings, and permissions, please refer to our [Privacy Policy](PRIVACY.md).
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

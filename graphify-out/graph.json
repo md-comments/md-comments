@@ -2529,8 +2529,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "chrome_extension_src_githubapi",
-      "community": 25,
-      "community_name": "GitHubApi",
+      "community": 1,
+      "community_name": "content.ts",
       "norm_label": "githubapi.ts"
     },
     {
@@ -2540,8 +2540,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "chrome_extension_src_githubapi_viewerinfo",
-      "community": 25,
-      "community_name": "GitHubApi",
+      "community": 1,
+      "community_name": "content.ts",
       "norm_label": "viewerinfo"
     },
     {
@@ -2551,8 +2551,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "chrome_extension_src_githubapi_repometadata",
-      "community": 25,
-      "community_name": "GitHubApi",
+      "community": 1,
+      "community_name": "content.ts",
       "norm_label": "repometadata"
     },
     {
@@ -7996,8 +7996,8 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "vscode_extension_src_commentactions_commentactionmessage",
-      "community": 3,
-      "community_name": "commentStore.ts",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "commentactionmessage"
     },
     {
@@ -8029,8 +8029,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel",
-      "community": 3,
-      "community_name": "commentStore.ts",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "commentpreviewpanel.ts"
     },
     {
@@ -9052,8 +9052,8 @@
       "source_location": "L662",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_loadcontext",
-      "community": 13,
-      "community_name": "main.ts",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "loadcontext()"
     },
     {
@@ -11409,6 +11409,160 @@
       "community": 67,
       "community_name": "Project Governance",
       "norm_label": "decision making"
+    },
+    {
+      "label": "PRIVACY.md",
+      "file_type": "document",
+      "source_file": "PRIVACY.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "privacy",
+      "community": 71,
+      "community_name": "Privacy Policy",
+      "norm_label": "privacy.md"
+    },
+    {
+      "label": "Privacy Policy",
+      "file_type": "document",
+      "source_file": "PRIVACY.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "privacy_privacy_policy",
+      "community": 71,
+      "community_name": "Privacy Policy",
+      "norm_label": "privacy policy"
+    },
+    {
+      "label": "1. Executive Summary",
+      "file_type": "document",
+      "source_file": "PRIVACY.md",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "privacy_1_executive_summary",
+      "community": 71,
+      "community_name": "Privacy Policy",
+      "norm_label": "1. executive summary"
+    },
+    {
+      "label": "2. Information Collection and Handling",
+      "file_type": "document",
+      "source_file": "PRIVACY.md",
+      "source_location": "L19",
+      "_origin": "ast",
+      "id": "privacy_2_information_collection_and_handling",
+      "community": 71,
+      "community_name": "Privacy Policy",
+      "norm_label": "2. information collection and handling"
+    },
+    {
+      "label": "VS Code Extension & Obsidian Plugin",
+      "file_type": "document",
+      "source_file": "PRIVACY.md",
+      "source_location": "L21",
+      "_origin": "ast",
+      "id": "privacy_vs_code_extension_obsidian_plugin",
+      "community": 71,
+      "community_name": "Privacy Policy",
+      "norm_label": "vs code extension & obsidian plugin"
+    },
+    {
+      "label": "Chrome Extension (GitHub Integration)",
+      "file_type": "document",
+      "source_file": "PRIVACY.md",
+      "source_location": "L27",
+      "_origin": "ast",
+      "id": "privacy_chrome_extension_github_integration",
+      "community": 71,
+      "community_name": "Privacy Policy",
+      "norm_label": "chrome extension (github integration)"
+    },
+    {
+      "label": "3. Browser & System Permissions Explained",
+      "file_type": "document",
+      "source_file": "PRIVACY.md",
+      "source_location": "L34",
+      "_origin": "ast",
+      "id": "privacy_3_browser_system_permissions_explained",
+      "community": 71,
+      "community_name": "Privacy Policy",
+      "norm_label": "3. browser & system permissions explained"
+    },
+    {
+      "label": "Chrome Extension",
+      "file_type": "document",
+      "source_file": "PRIVACY.md",
+      "source_location": "L38",
+      "_origin": "ast",
+      "id": "privacy_chrome_extension",
+      "community": 71,
+      "community_name": "Privacy Policy",
+      "norm_label": "chrome extension"
+    },
+    {
+      "label": "VS Code Extension",
+      "file_type": "document",
+      "source_file": "PRIVACY.md",
+      "source_location": "L43",
+      "_origin": "ast",
+      "id": "privacy_vs_code_extension",
+      "community": 71,
+      "community_name": "Privacy Policy",
+      "norm_label": "vs code extension"
+    },
+    {
+      "label": "Obsidian Plugin",
+      "file_type": "document",
+      "source_file": "PRIVACY.md",
+      "source_location": "L47",
+      "_origin": "ast",
+      "id": "privacy_obsidian_plugin",
+      "community": 71,
+      "community_name": "Privacy Policy",
+      "norm_label": "obsidian plugin"
+    },
+    {
+      "label": "4. Third-Party Services",
+      "file_type": "document",
+      "source_file": "PRIVACY.md",
+      "source_location": "L53",
+      "_origin": "ast",
+      "id": "privacy_4_third_party_services",
+      "community": 71,
+      "community_name": "Privacy Policy",
+      "norm_label": "4. third-party services"
+    },
+    {
+      "label": "5. Security",
+      "file_type": "document",
+      "source_file": "PRIVACY.md",
+      "source_location": "L63",
+      "_origin": "ast",
+      "id": "privacy_5_security",
+      "community": 71,
+      "community_name": "Privacy Policy",
+      "norm_label": "5. security"
+    },
+    {
+      "label": "6. Changes to This Policy",
+      "file_type": "document",
+      "source_file": "PRIVACY.md",
+      "source_location": "L72",
+      "_origin": "ast",
+      "id": "privacy_6_changes_to_this_policy",
+      "community": 71,
+      "community_name": "Privacy Policy",
+      "norm_label": "6. changes to this policy"
+    },
+    {
+      "label": "7. Contact Us",
+      "file_type": "document",
+      "source_file": "PRIVACY.md",
+      "source_location": "L78",
+      "_origin": "ast",
+      "id": "privacy_7_contact_us",
+      "community": 71,
+      "community_name": "Privacy Policy",
+      "norm_label": "7. contact us"
     },
     {
       "label": "SECURITY.md",
@@ -34420,6 +34574,149 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "PRIVACY.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "privacy",
+      "target": "privacy_privacy_policy",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PRIVACY.md",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "privacy_privacy_policy",
+      "target": "privacy_1_executive_summary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PRIVACY.md",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "privacy_privacy_policy",
+      "target": "privacy_2_information_collection_and_handling",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PRIVACY.md",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "privacy_privacy_policy",
+      "target": "privacy_3_browser_system_permissions_explained",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PRIVACY.md",
+      "source_location": "L53",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "privacy_privacy_policy",
+      "target": "privacy_4_third_party_services",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PRIVACY.md",
+      "source_location": "L63",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "privacy_privacy_policy",
+      "target": "privacy_5_security",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PRIVACY.md",
+      "source_location": "L72",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "privacy_privacy_policy",
+      "target": "privacy_6_changes_to_this_policy",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PRIVACY.md",
+      "source_location": "L78",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "privacy_privacy_policy",
+      "target": "privacy_7_contact_us",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PRIVACY.md",
+      "source_location": "L27",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "privacy_2_information_collection_and_handling",
+      "target": "privacy_chrome_extension_github_integration",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PRIVACY.md",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "privacy_2_information_collection_and_handling",
+      "target": "privacy_vs_code_extension_obsidian_plugin",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PRIVACY.md",
+      "source_location": "L38",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "privacy_3_browser_system_permissions_explained",
+      "target": "privacy_chrome_extension",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PRIVACY.md",
+      "source_location": "L47",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "privacy_3_browser_system_permissions_explained",
+      "target": "privacy_obsidian_plugin",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PRIVACY.md",
+      "source_location": "L43",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "privacy_3_browser_system_permissions_explained",
+      "target": "privacy_vs_code_extension",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "SECURITY.md",
       "source_location": "L1",
       "weight": 1.0,
@@ -34628,5 +34925,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "dbc718b67a7b4f26b5a72a7e50f6fd394103907c"
+  "built_at_commit": "bcd5ad2133703ea7b5559e77ad46c0daef279ffc"
 }

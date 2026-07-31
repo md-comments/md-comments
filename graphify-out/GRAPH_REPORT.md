@@ -1,16 +1,16 @@
-# Graph Report - md-comments  (2026-07-29)
+# Graph Report - md-comments  (2026-07-30)
 
 ## Corpus Check
-- 98 files · ~52,547 words
+- 99 files · ~53,265 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1066 nodes · 1995 edges · 73 communities (54 shown, 19 thin omitted)
+- 1080 nodes · 2008 edges · 74 communities (54 shown, 20 thin omitted)
 - Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 129 edges (avg confidence: 0.79)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `dbc718b6`
+- Built from commit: `bcd5ad21`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -85,6 +85,7 @@
 - Changelog
 - Authors
 - Reporting a Vulnerability
+- Privacy Policy
 - Context Pack
 - Workflow: context-pack
 
@@ -115,23 +116,23 @@
 ## Import Cycles
 - None detected.
 
-## Communities (73 total, 19 thin omitted)
+## Communities (74 total, 20 thin omitted)
 
 ### Community 0 - "markdownItPlugin.ts"
 Cohesion: 0.06
-Nodes (80): clearAuthorCache(), extractMentionLogins(), fallbackAuthor(), getCachedAuthor(), githubAvatarUrl(), githubProfileUrl(), isCacheValid(), isGitHubLogin() (+72 more)
+Nodes (82): clearAuthorCache(), extractMentionLogins(), fallbackAuthor(), getCachedAuthor(), githubAvatarUrl(), githubProfileUrl(), isCacheValid(), isGitHubLogin() (+74 more)
 
 ### Community 1 - "content.ts"
-Cohesion: 0.09
-Nodes (79): Chrome Extension Icon SVG, Chrome Extension Options UI, activeIndicators, attachCommentCardEvents(), checkPageChange(), cleanupInjections(), clearPendingCommentsCache(), closeSidebar() (+71 more)
+Cohesion: 0.08
+Nodes (81): Chrome Extension Icon SVG, Chrome Extension Options UI, activeIndicators, attachCommentCardEvents(), checkPageChange(), cleanupInjections(), clearPendingCommentsCache(), closeSidebar() (+73 more)
 
 ### Community 2 - "compress.py"
 Cohesion: 0.11
 Nodes (25): main(), print_usage(), backup_dir_for(), build_compress_prompt(), build_fix_prompt(), call_claude(), compress_file(), is_sensitive_path() (+17 more)
 
 ### Community 3 - "commentStore.ts"
-Cohesion: 0.20
-Nodes (28): getAuthor(), CommentActionMessage, executeCommentAction(), resolveText(), savedToast(), addInlineComment(), addPageComment(), addReply() (+20 more)
+Cohesion: 0.21
+Nodes (27): getAuthor(), executeCommentAction(), resolveText(), savedToast(), addInlineComment(), addPageComment(), addReply(), applyReactionToggle() (+19 more)
 
 ### Community 4 - "validate.py"
 Cohesion: 0.17
@@ -163,7 +164,7 @@ Nodes (25): author, dependencies, js-yaml, description, devDependencies, esbuild
 
 ### Community 13 - "main.ts"
 Cohesion: 0.10
-Nodes (37): CacheEntry, createLivePreviewExtension(), fuzzyMatch(), highlightTextInElement(), registerReadingViewProcessor(), displayNameCache, pendingFetches, CommentStore (+29 more)
+Nodes (36): CacheEntry, createLivePreviewExtension(), fuzzyMatch(), highlightTextInElement(), registerReadingViewProcessor(), displayNameCache, pendingFetches, CommentStore (+28 more)
 
 ### Community 14 - "previewActions.js"
 Cohesion: 0.16
@@ -208,10 +209,6 @@ Nodes (14): findParagraphFromNode(), getAnchorFromParagraph(), getAnchorFromSele
 ### Community 24 - "scripts"
 Cohesion: 0.05
 Nodes (38): eslint, eslint-plugin-security, devDependencies, eslint, eslint-plugin-security, prettier, typescript, @typescript-eslint/eslint-plugin (+30 more)
-
-### Community 25 - "GitHubApi"
-Cohesion: 0.20
-Nodes (3): GitHubApi, RepoMetadata, ViewerInfo
 
 ### Community 26 - "Obsidian Plugin Guide"
 Cohesion: 0.12
@@ -325,14 +322,18 @@ Nodes (3): Added, Changelog, [Unreleased]
 Cohesion: 0.29
 Nodes (6): 1. GitHub Private Vulnerability Reporting, 2. Contact the Maintainers, Reporting a Vulnerability, Security Policy, Supported Versions, What to Include
 
+### Community 71 - "Privacy Policy"
+Cohesion: 0.14
+Nodes (13): 1. Executive Summary, 2. Information Collection and Handling, 3. Browser & System Permissions Explained, 4. Third-Party Services, 5. Security, 6. Changes to This Policy, 7. Contact Us, Chrome Extension (+5 more)
+
 ### Community 102 - "Context Pack"
 Cohesion: 0.33
 Nodes (5): Context Pack, Guardrails, Output Focus, Patterns, Workflow
 
 ## Knowledge Gaps
-- **394 isolated node(s):** `root`, `parser`, `browser`, `node`, `es2022` (+389 more)
+- **404 isolated node(s):** `root`, `parser`, `browser`, `node`, `es2022` (+399 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **19 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **20 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
@@ -340,14 +341,14 @@ _Questions this graph is uniquely positioned to answer:_
 - **Why does `obsidian` connect `main.ts` to `obsidian-plugin/package.json`?**
   _High betweenness centrality (0.026) - this node is a cross-community bridge._
 - **Why does `keywords` connect `obsidian-plugin/package.json` to `main.ts`?**
-  _High betweenness centrality (0.026) - this node is a cross-community bridge._
+  _High betweenness centrality (0.025) - this node is a cross-community bridge._
 - **Are the 65 inferred relationships involving `Chrome Extension Options UI` (e.g. with `Chrome Extension Icon SVG` and `content.ts`) actually correct?**
   _`Chrome Extension Options UI` has 65 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 28 inferred relationships involving `Obsidian Plugin Guide` (e.g. with `main.ts` and `CommentComposerModal`) actually correct?**
   _`Obsidian Plugin Guide` has 28 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `root`, `parser`, `browser` to the rest of the system?**
-  _394 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _404 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `markdownItPlugin.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.06338185890257558 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.061855670103092786 - nodes in this community are weakly interconnected._
 - **Should `content.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.08955696202531646 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.08433734939759036 - nodes in this community are weakly interconnected._
