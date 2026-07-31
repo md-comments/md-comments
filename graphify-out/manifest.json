@@ -25,8 +25,8 @@
     "semantic_hash": ""
   },
   "chrome-extension/src/content.ts": {
-    "mtime": 1785461894.5986924,
-    "ast_hash": "8a2677421e6516d80da8d5683fadb528",
+    "mtime": 1785462310.4264433,
+    "ast_hash": "599775ca9e47be9cf3c15783eef86ce1",
     "semantic_hash": ""
   },
   "chrome-extension/src/githubApi.ts": {
@@ -592,6 +592,21 @@
   "PRIVACY.md": {
     "mtime": 1785461117.0675368,
     "ast_hash": "94bb0a52030ea85fbfcbe11beb31f875",
+    "semantic_hash": ""
+  },
+  "scripts/generate_cws_tiles.py": {
+    "mtime": 1785462847.254652,
+    "ast_hash": "923f41da274289974260769afea494b3",
+    "semantic_hash": ""
+  },
+  "assets/chrome-extension/promo-marquee.png": {
+    "mtime": 1785462853.739861,
+    "ast_hash": "91638d3fedf67ca81deff326f8601dc2",
+    "semantic_hash": ""
+  },
+  "assets/chrome-extension/promo-small.png": {
+    "mtime": 1785462853.6709511,
+    "ast_hash": "90364e8a726476a1e2e087d7e978f6ae",
     "semantic_hash": ""
   }
 }
