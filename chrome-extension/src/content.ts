@@ -1671,12 +1671,12 @@ function openSidebarForNewInline(fields: {
 
 function renameOriginalConversationTab() {
   const tabList =
-    document.querySelector('nav[aria-label="Pull request navigation tabs"] div[role="tablist"]') ||
-    document.querySelector('nav[aria-label="Pull request navigation tabs"]') ||
+    document.querySelector('nav[aria-label*="Pull request navigation"] div[role="tablist"]') ||
+    document.querySelector('nav[aria-label*="Pull request navigation"]') ||
     document.querySelector('div[role="tablist"]');
   if (!tabList) return;
 
-  const tabs = tabList.querySelectorAll('a[role="tab"]');
+  const tabs = tabList.querySelectorAll('a[role="tab"], a[class*="TabNavLink"], a');
   for (const tab of Array.from(tabs)) {
     const text = tab.textContent?.toLowerCase() || '';
     if (text.includes('conversation') || text.includes('code review')) {
@@ -1703,16 +1703,16 @@ function injectPRTab() {
   if (document.getElementById('md-comments-tab')) return;
 
   const tabList =
-    document.querySelector('nav[aria-label="Pull request navigation tabs"] div[role="tablist"]') ||
-    document.querySelector('nav[aria-label="Pull request navigation tabs"]') ||
+    document.querySelector('nav[aria-label*="Pull request navigation"] div[role="tablist"]') ||
+    document.querySelector('nav[aria-label*="Pull request navigation"]') ||
     document.querySelector('div[role="tablist"]');
   if (!tabList) return;
 
-  let conversationTab = tabList.querySelector('a[role="tab"]');
+  let conversationTab = tabList.querySelector('a[role="tab"]') || tabList.querySelector('a');
   if (conversationTab) {
     const text = conversationTab.textContent?.toLowerCase() || '';
     if (!text.includes('conversation') && !text.includes('code review')) {
-      const tabs = tabList.querySelectorAll('a[role="tab"]');
+      const tabs = tabList.querySelectorAll('a[role="tab"], a[class*="TabNavLink"], a');
       for (const tab of Array.from(tabs)) {
         const tabText = tab.textContent?.toLowerCase() || '';
         if (tabText.includes('conversation') || tabText.includes('code review')) {
@@ -1794,7 +1794,7 @@ function getNativeContentContainer(): HTMLElement | null {
     if (el) return el as HTMLElement;
   }
 
-  const navTabs = document.querySelector('nav[aria-label="Pull request navigation tabs"]');
+  const navTabs = document.querySelector('nav[aria-label*="Pull request navigation"]');
   if (navTabs) {
     const header = navTabs.closest('header') || navTabs.parentElement;
     if (header && header.nextElementSibling) {
@@ -1815,7 +1815,9 @@ function handleTabVisibility() {
     document.documentElement.classList.add('md-comments-tab-active');
     const filesTab =
       document.getElementById('prs-files-anchor-tab') ||
-      document.querySelector('nav[aria-label="Pull request navigation tabs"] a[role="tab"]');
+      document.querySelector('nav[aria-label*="Pull request navigation"] a[role="tab"]') ||
+      document.querySelector('nav[aria-label*="Pull request navigation"] a[class*="TabNavLink"]') ||
+      document.querySelector('nav[aria-label*="Pull request navigation"] a');
 
     if (filesTab) {
       const selectedClasses = Array.from(filesTab.classList).filter(
@@ -1829,7 +1831,7 @@ function handleTabVisibility() {
     tabEl.setAttribute('tabindex', '0');
 
     const otherTabs = document.querySelectorAll(
-      'nav[aria-label="Pull request navigation tabs"] a[role="tab"]'
+      'nav[aria-label*="Pull request navigation"] a[role="tab"], nav[aria-label*="Pull request navigation"] a[class*="TabNavLink"], nav[aria-label*="Pull request navigation"] a'
     );
     otherTabs.forEach((t) => {
       if (t.id !== 'md-comments-tab') {
