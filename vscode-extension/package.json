@@ -2,7 +2,7 @@
   "name": "md-comments",
   "displayName": "Markdown Comments",
   "description": "Rich inline commenting on Markdown preview with companion YAML file persistence",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "publisher": "mstrelex",
   "license": "MIT",
   "icon": "icon.png",

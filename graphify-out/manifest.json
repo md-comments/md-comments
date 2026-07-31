@@ -15,13 +15,13 @@
     "semantic_hash": ""
   },
   "chrome-extension/manifest.json": {
-    "mtime": 1785357756.7503948,
-    "ast_hash": "bf0015958025e8d16ffa0c30ada8bdea",
+    "mtime": 1785464844.6947188,
+    "ast_hash": "eeb918a22d8c8f8668740acccae94777",
     "semantic_hash": ""
   },
   "chrome-extension/package.json": {
-    "mtime": 1785372776.5344794,
-    "ast_hash": "0588e9a0c77561ede1ade6ec1fb794b7",
+    "mtime": 1785464841.6766315,
+    "ast_hash": "fde388dd158e694eaa05e387b0d8cdcc",
     "semantic_hash": ""
   },
   "chrome-extension/src/content.ts": {
@@ -45,13 +45,13 @@
     "semantic_hash": "406bb0cd9a4b8c76f9f0f1a23552ae33"
   },
   "obsidian-plugin/manifest.json": {
-    "mtime": 1785357089.7892394,
-    "ast_hash": "0b43c3b03178f9eb2bc488e8bfc9ee40",
+    "mtime": 1785464838.573329,
+    "ast_hash": "88a1b7ccde1337552f41c5a0537385ed",
     "semantic_hash": ""
   },
   "obsidian-plugin/package.json": {
-    "mtime": 1785372776.533672,
-    "ast_hash": "1ce709bdb9b5df76d0c50ec06608c534",
+    "mtime": 1785464835.523329,
+    "ast_hash": "8096194108b7256942d925a699fa2364",
     "semantic_hash": ""
   },
   "obsidian-plugin/src/livePreview.ts": {
@@ -145,8 +145,8 @@
     "semantic_hash": ""
   },
   "vscode-extension/package.json": {
-    "mtime": 1785372776.5336645,
-    "ast_hash": "e414c657e8ba5245e511deafdbcf3ac7",
+    "mtime": 1785464854.3859122,
+    "ast_hash": "2accf5cf0bccb2af1d4ba5e94128410d",
     "semantic_hash": ""
   },
   "vscode-extension/src/author.ts": {
@@ -225,8 +225,8 @@
     "semantic_hash": "0bc020d491fca99550c1ea3de0a5f862"
   },
   "README.md": {
-    "mtime": 1785461078.1542892,
-    "ast_hash": "130d7344ef42963ba7878e7fb651ff11",
+    "mtime": 1785464858.3234723,
+    "ast_hash": "dc69174a0b17900507e291eafd552398",
     "semantic_hash": ""
   },
   "chrome-extension/options.html": {
@@ -460,8 +460,8 @@
     "semantic_hash": ""
   },
   "shared/package.json": {
-    "mtime": 1785361101.1772504,
-    "ast_hash": "88d6117f6895cb304e6bbd8149e76d0b",
+    "mtime": 1785464851.4750302,
+    "ast_hash": "2b109d1e18895f3dd1001be826f9b885",
     "semantic_hash": ""
   },
   "shared/tsconfig.json": {

@@ -1,6 +1,6 @@
 {
   "name": "chrome-md-comments",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Chrome extension to display and commit Markdown Comments on GitHub",
   "main": "dist/content.js",
   "scripts": {
