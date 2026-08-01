@@ -6,7 +6,7 @@
 
 A collaboration tool for Markdown documentation. Markdown excels at authoring, version control, and agent workflows, but it has no built-in way to highlight a passage and leave feedback inline. **Markdown Comments** closes that gap with a visual commenting UI while keeping comments in companion `*.comments.yml` files next to each document — making them easy to grep, diff, and sync. If your local files are backed up by Git, this allows seamless collaboration; however, you can also use any other synchronization mechanism, such as Obsidian Sync, Google Drive, or Dropbox, to share comments across devices.
 
-Works in **VS Code**, **Cursor**, **Antigravity**, **Obsidian**, and **GitHub (Chrome Extension)**.
+Works in **VS Code** ([Marketplace](https://marketplace.visualstudio.com/items?itemName=md-comments.md-comments) or [Open VSX](https://open-vsx.org/extension/md-comments/md-comments)), **Cursor**, **Antigravity**, **Obsidian**, and **GitHub** ([Chrome Extension](https://chromewebstore.google.com/detail/markdown-comments/mjlhdjonjfcedkbpajkfeidfebefhkpp)).
 
 ---
 
@@ -40,7 +40,9 @@ Refer to the respective folders for platform-specific documentation and configur
 
 ### VS Code / Cursor / Antigravity
 
-Download the latest `.vsix` from [GitHub Releases](https://github.com/md-comments/md-comments/releases), then install from the UI:
+Install directly from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=md-comments.md-comments) or [Open VSX Registry](https://open-vsx.org/extension/md-comments/md-comments).
+
+Alternatively, download the latest `.vsix` from [GitHub Releases](https://github.com/md-comments/md-comments/releases), then install from the UI:
 
 In your editor, open the **Extensions** view, click the **⋯** menu at the top-right, and select **Install from VSIX…**
 
@@ -57,6 +59,10 @@ cursor --install-extension md-comments-<version>.vsix
 Manually copy the compiled `main.js`, `manifest.json`, and `styles.css` from the build output into your vault's plugin directory: `<vault-root>/.obsidian/plugins/md-comments/`. Enable it under **Settings** → **Community Plugins**.
 
 ### GitHub (Chrome Extension)
+
+Install directly from the [Chrome Web Store](https://chromewebstore.google.com/detail/markdown-comments/mjlhdjonjfcedkbpajkfeidfebefhkpp).
+
+Alternatively, to run the extension locally for development:
 
 1. Open Chrome and navigate to `chrome://extensions/`.
 2. Enable **Developer mode** using the toggle switch in the top right.

@@ -225,8 +225,8 @@
     "semantic_hash": "0bc020d491fca99550c1ea3de0a5f862"
   },
   "README.md": {
-    "mtime": 1785595425.156342,
-    "ast_hash": "30216e2768260ff378787ee514a8d33c",
+    "mtime": 1785613352.0181444,
+    "ast_hash": "bb9bd1e46dc3f9141511d641794d5580",
     "semantic_hash": ""
   },
   "chrome-extension/options.html": {
@@ -620,8 +620,8 @@
     "semantic_hash": ""
   },
   "website/index.html": {
-    "mtime": 1785603530.3669214,
-    "ast_hash": "6214a656d451006fa673ac1c4b79289a",
+    "mtime": 1785613535.2992094,
+    "ast_hash": "2210228f8338007fd772defa8af115d4",
     "semantic_hash": ""
   },
   "website/privacy.html": {

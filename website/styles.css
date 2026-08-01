@@ -531,7 +531,8 @@ h6 {
 }
 
 .btn-chrome svg,
-.btn-vscode svg {
+.btn-vscode svg,
+.btn-openvsx svg {
   margin-right: 8px;
   flex-shrink: 0;
 }
