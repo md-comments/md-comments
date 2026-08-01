@@ -59,13 +59,13 @@ jobs:
           npx ovsx publish "$VSIX_FILE" -p "$OVSX_PAT"
 
       - name: Deploy Chrome Extension
-        uses: hziegler/chrome-extension-deploy@v2
+        uses: mnao305/chrome-extension-upload@v6.0.0
         with:
+          file-path: artifacts/chrome-extension.zip
           extension-id: ${{ secrets.CHROME_EXTENSION_ID }}
           client-id: ${{ secrets.CHROME_CLIENT_ID }}
           client-secret: ${{ secrets.CHROME_CLIENT_SECRET }}
           refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
-          zip-path: artifacts/chrome-extension.zip
 
       - name: Deploy Obsidian Plugin
         run: |
