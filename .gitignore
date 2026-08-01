@@ -5,7 +5,7 @@ node_modules/
 dist/
 out/
 *.vsix
-main.js
+obsidian-plugin/main.js
 
 # OS metadata
 .DS_Store

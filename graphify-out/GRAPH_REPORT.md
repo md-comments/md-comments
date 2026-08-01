@@ -1,16 +1,16 @@
-# Graph Report - md-comments  (2026-07-30)
+# Graph Report - md-comments  (2026-08-01)
 
 ## Corpus Check
-- 101 files · ~101,952 words
+- 102 files · ~101,765 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1089 nodes · 2019 edges · 76 communities (55 shown, 21 thin omitted)
-- Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 129 edges (avg confidence: 0.79)
+- 1091 nodes · 2020 edges · 77 communities (56 shown, 21 thin omitted)
+- Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 130 edges (avg confidence: 0.79)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `487226c2`
+- Built from commit: `21631b75`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -118,10 +118,10 @@
 ## Import Cycles
 - None detected.
 
-## Communities (76 total, 21 thin omitted)
+## Communities (77 total, 21 thin omitted)
 
 ### Community 0 - "markdownItPlugin.ts"
-Cohesion: 0.08
+Cohesion: 0.07
 Nodes (71): clearAuthorCache(), extractMentionLogins(), fallbackAuthor(), getCachedAuthor(), githubAvatarUrl(), githubProfileUrl(), isCacheValid(), isGitHubLogin() (+63 more)
 
 ### Community 1 - "content.ts"
@@ -357,4 +357,4 @@ _Questions this graph is uniquely positioned to answer:_
 - **What connects `root`, `parser`, `browser` to the rest of the system?**
   _406 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `markdownItPlugin.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.07592407592407592 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07465108730931516 - nodes in this community are weakly interconnected._

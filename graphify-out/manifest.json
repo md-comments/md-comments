@@ -620,13 +620,13 @@
     "semantic_hash": ""
   },
   "website/index.html": {
-    "mtime": 1785464476.28668,
-    "ast_hash": "845018f16b3beb18362959d87e61d87b",
+    "mtime": 1785594833.6804867,
+    "ast_hash": "8a8406636350cc22b350b49b6319a72d",
     "semantic_hash": ""
   },
   "website/privacy.html": {
-    "mtime": 1785464381.8953404,
-    "ast_hash": "37e0b7686485449c77358c51ab461c82",
+    "mtime": 1785594838.7239408,
+    "ast_hash": "33c3088bac567eacd63a6004093e2b25",
     "semantic_hash": ""
   },
   "website/assets/icon.png": {
@@ -637,6 +637,11 @@
   "website/assets/icon.svg": {
     "mtime": 1785463247.1521916,
     "ast_hash": "cf5f835ac7a180fb51beb18981b409aa",
+    "semantic_hash": ""
+  },
+  "website/main.js": {
+    "mtime": 1785594752.3820124,
+    "ast_hash": "7a736b2707eb1cb8a2cb01f374623313",
     "semantic_hash": ""
   }
 }
