@@ -530,7 +530,8 @@ h6 {
   flex-wrap: wrap;
 }
 
-.btn-chrome svg {
+.btn-chrome svg,
+.btn-vscode svg {
   margin-right: 8px;
   flex-shrink: 0;
 }
