@@ -15,13 +15,13 @@
     "semantic_hash": ""
   },
   "chrome-extension/manifest.json": {
-    "mtime": 1785464844.6947188,
-    "ast_hash": "eeb918a22d8c8f8668740acccae94777",
+    "mtime": 1785602423.927209,
+    "ast_hash": "b8f68dd620775b05cf0bd3f65f7e8bd6",
     "semantic_hash": ""
   },
   "chrome-extension/package.json": {
-    "mtime": 1785464841.6766315,
-    "ast_hash": "fde388dd158e694eaa05e387b0d8cdcc",
+    "mtime": 1785602420.0549114,
+    "ast_hash": "94248890718ebbd6a887a1c6343c6182",
     "semantic_hash": ""
   },
   "chrome-extension/src/content.ts": {
@@ -45,13 +45,13 @@
     "semantic_hash": "406bb0cd9a4b8c76f9f0f1a23552ae33"
   },
   "obsidian-plugin/manifest.json": {
-    "mtime": 1785464838.573329,
-    "ast_hash": "88a1b7ccde1337552f41c5a0537385ed",
+    "mtime": 1785602431.3199651,
+    "ast_hash": "e1f61dbfb7ae5b179e4e78c688dff1dd",
     "semantic_hash": ""
   },
   "obsidian-plugin/package.json": {
-    "mtime": 1785464835.523329,
-    "ast_hash": "8096194108b7256942d925a699fa2364",
+    "mtime": 1785602428.2494283,
+    "ast_hash": "80e1f87f896a55ef298451b8d27ffee6",
     "semantic_hash": ""
   },
   "obsidian-plugin/src/livePreview.ts": {
@@ -145,8 +145,8 @@
     "semantic_hash": ""
   },
   "vscode-extension/package.json": {
-    "mtime": 1785601098.2479036,
-    "ast_hash": "68f3c9a54d422b643f66872a28bd43f1",
+    "mtime": 1785602409.4855182,
+    "ast_hash": "a91e745231dad5293bb46984fea5ca69",
     "semantic_hash": ""
   },
   "vscode-extension/src/author.ts": {
@@ -460,8 +460,8 @@
     "semantic_hash": ""
   },
   "shared/package.json": {
-    "mtime": 1785464851.4750302,
-    "ast_hash": "2b109d1e18895f3dd1001be826f9b885",
+    "mtime": 1785602414.3489025,
+    "ast_hash": "1ff63430bcff090e7d3a9c1aa889ac9c",
     "semantic_hash": ""
   },
   "shared/tsconfig.json": {
@@ -620,8 +620,8 @@
     "semantic_hash": ""
   },
   "website/index.html": {
-    "mtime": 1785598059.9265313,
-    "ast_hash": "f35ae8693fc903342b503cd7ad63ab62",
+    "mtime": 1785603530.3669214,
+    "ast_hash": "6214a656d451006fa673ac1c4b79289a",
     "semantic_hash": ""
   },
   "website/privacy.html": {
@@ -650,8 +650,8 @@
     "semantic_hash": ""
   },
   "vscode-extension/README.md": {
-    "mtime": 1785601031.14203,
-    "ast_hash": "d07f18b1e4b81f84c1e4a0ddb948646d",
+    "mtime": 1785601112.342666,
+    "ast_hash": "c37da81df4dce63d0cb80173879a9811",
     "semantic_hash": ""
   }
 }

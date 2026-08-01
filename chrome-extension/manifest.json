@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Markdown Comments",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Visual inline comments for Markdown documents on GitHub using companion YAML files.",
   "permissions": ["storage"],
   "host_permissions": ["https://github.com/*", "https://raw.githubusercontent.com/*"],

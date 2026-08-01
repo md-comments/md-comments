@@ -2,13 +2,14 @@
   "name": "md-comments",
   "displayName": "MD-Comments",
   "description": "Rich inline commenting on Markdown preview with companion YAML file persistence",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "md-comments",
   "license": "MIT",
   "icon": "icon.png",
   "repository": {
     "type": "git",
-    "url": "https://github.com/md-comments/md-comments.git"
+    "url": "https://github.com/md-comments/md-comments.git",
+    "directory": "vscode-extension"
   },
   "engines": {
     "vscode": "^1.85.0"
