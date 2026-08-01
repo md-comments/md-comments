@@ -92,7 +92,7 @@
   "scripts": {
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "package": "vsce package"
+    "package": "pnpm dlx vsce-pnpm package --pnpm"
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",

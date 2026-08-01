@@ -7908,8 +7908,8 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "vscode_extension_src_author_warmauthorcache",
-      "community": 3,
-      "community_name": "commentStore.ts",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "warmauthorcache()"
     },
     {
@@ -8062,8 +8062,8 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "vscode_extension_src_commentactions_commentactionmessage",
-      "community": 3,
-      "community_name": "commentStore.ts",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "commentactionmessage"
     },
     {
@@ -8095,8 +8095,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel",
-      "community": 3,
-      "community_name": "commentStore.ts",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "commentpreviewpanel.ts"
     },
     {
@@ -8106,8 +8106,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel",
-      "community": 3,
-      "community_name": "commentStore.ts",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "commentpreviewpanel"
     },
     {
@@ -8117,8 +8117,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_show",
-      "community": 3,
-      "community_name": "commentStore.ts",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": ".show()"
     },
     {
@@ -8128,8 +8128,8 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_refreshforuri",
-      "community": 3,
-      "community_name": "commentStore.ts",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": ".refreshforuri()"
     },
     {
@@ -8139,8 +8139,8 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_constructor",
-      "community": 3,
-      "community_name": "commentStore.ts",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": ".constructor()"
     },
     {
@@ -8150,8 +8150,8 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_refresh",
-      "community": 3,
-      "community_name": "commentStore.ts",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": ".refresh()"
     },
     {
@@ -8425,8 +8425,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_extension",
-      "community": 3,
-      "community_name": "commentStore.ts",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "extension.ts"
     },
     {
@@ -8436,8 +8436,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "vscode_extension_src_extension_mdurifrommessage",
-      "community": 3,
-      "community_name": "commentStore.ts",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "mdurifrommessage()"
     },
     {
@@ -8447,8 +8447,8 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "vscode_extension_src_extension_refreshpreview",
-      "community": 3,
-      "community_name": "commentStore.ts",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "refreshpreview()"
     },
     {
@@ -8458,8 +8458,8 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "vscode_extension_src_extension_handlepreviewaction",
-      "community": 3,
-      "community_name": "commentStore.ts",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "handlepreviewaction()"
     },
     {
@@ -8469,8 +8469,8 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "vscode_extension_src_extension_handleuri",
-      "community": 3,
-      "community_name": "commentStore.ts",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "handleuri()"
     },
     {
@@ -8480,8 +8480,8 @@
       "source_location": "L79",
       "_origin": "ast",
       "id": "vscode_extension_src_extension_activate",
-      "community": 3,
-      "community_name": "commentStore.ts",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "activate()"
     },
     {
@@ -8491,8 +8491,8 @@
       "source_location": "L182",
       "_origin": "ast",
       "id": "vscode_extension_src_extension_deactivate",
-      "community": 3,
-      "community_name": "commentStore.ts",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "deactivate()"
     },
     {
@@ -9195,8 +9195,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_previewcommand",
-      "community": 3,
-      "community_name": "commentStore.ts",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "previewcommand.ts"
     },
     {
@@ -9206,8 +9206,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "vscode_extension_src_previewcommand_parsepreviewcommandarg",
-      "community": 3,
-      "community_name": "commentStore.ts",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "parsepreviewcommandarg()"
     },
     {
@@ -9217,8 +9217,8 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "vscode_extension_src_previewcommand_normalizeobject",
-      "community": 3,
-      "community_name": "commentStore.ts",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "normalizeobject()"
     },
     {
@@ -11772,6 +11772,116 @@
       "community": 63,
       "community_name": "Agentic AI Code Review Guide",
       "norm_label": "security static analysis (sast) & sca"
+    },
+    {
+      "label": "vscode-extension/README.md",
+      "file_type": "document",
+      "source_file": "vscode-extension/README.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "vscode_extension_readme",
+      "community": 75,
+      "community_name": "Markdown Comments for VS Code",
+      "norm_label": "vscode-extension/readme.md"
+    },
+    {
+      "label": "Markdown Comments for VS Code",
+      "file_type": "document",
+      "source_file": "vscode-extension/README.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "vscode_extension_readme_markdown_comments_for_vs_code",
+      "community": 75,
+      "community_name": "Markdown Comments for VS Code",
+      "norm_label": "markdown comments for vs code"
+    },
+    {
+      "label": "Key Features",
+      "file_type": "document",
+      "source_file": "vscode-extension/README.md",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "vscode_extension_readme_key_features",
+      "community": 75,
+      "community_name": "Markdown Comments for VS Code",
+      "norm_label": "key features"
+    },
+    {
+      "label": "Installation",
+      "file_type": "document",
+      "source_file": "vscode-extension/README.md",
+      "source_location": "L24",
+      "_origin": "ast",
+      "id": "vscode_extension_readme_installation",
+      "community": 75,
+      "community_name": "Markdown Comments for VS Code",
+      "norm_label": "installation"
+    },
+    {
+      "label": "From VS Code Marketplace / Open VSX",
+      "file_type": "document",
+      "source_file": "vscode-extension/README.md",
+      "source_location": "L26",
+      "_origin": "ast",
+      "id": "vscode_extension_readme_from_vs_code_marketplace_open_vsx",
+      "community": 75,
+      "community_name": "Markdown Comments for VS Code",
+      "norm_label": "from vs code marketplace / open vsx"
+    },
+    {
+      "label": "From VSIX",
+      "file_type": "document",
+      "source_file": "vscode-extension/README.md",
+      "source_location": "L29",
+      "_origin": "ast",
+      "id": "vscode_extension_readme_from_vsix",
+      "community": 75,
+      "community_name": "Markdown Comments for VS Code",
+      "norm_label": "from vsix"
+    },
+    {
+      "label": "Usage",
+      "file_type": "document",
+      "source_file": "vscode-extension/README.md",
+      "source_location": "L45",
+      "_origin": "ast",
+      "id": "vscode_extension_readme_usage",
+      "community": 75,
+      "community_name": "Markdown Comments for VS Code",
+      "norm_label": "usage"
+    },
+    {
+      "label": "Commands",
+      "file_type": "document",
+      "source_file": "vscode-extension/README.md",
+      "source_location": "L56",
+      "_origin": "ast",
+      "id": "vscode_extension_readme_commands",
+      "community": 75,
+      "community_name": "Markdown Comments for VS Code",
+      "norm_label": "commands"
+    },
+    {
+      "label": "Settings",
+      "file_type": "document",
+      "source_file": "vscode-extension/README.md",
+      "source_location": "L66",
+      "_origin": "ast",
+      "id": "vscode_extension_readme_settings",
+      "community": 75,
+      "community_name": "Markdown Comments for VS Code",
+      "norm_label": "settings"
+    },
+    {
+      "label": "License",
+      "file_type": "document",
+      "source_file": "vscode-extension/README.md",
+      "source_location": "L75",
+      "_origin": "ast",
+      "id": "vscode_extension_readme_license",
+      "community": 75,
+      "community_name": "Markdown Comments for VS Code",
+      "norm_label": "license"
     },
     {
       "label": "assets/README.md",
@@ -35052,6 +35162,105 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "vscode-extension/README.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "vscode_extension_readme",
+      "target": "vscode_extension_readme_markdown_comments_for_vs_code",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "vscode-extension/README.md",
+      "source_location": "L56",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "vscode_extension_readme_markdown_comments_for_vs_code",
+      "target": "vscode_extension_readme_commands",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "vscode-extension/README.md",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "vscode_extension_readme_markdown_comments_for_vs_code",
+      "target": "vscode_extension_readme_installation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "vscode-extension/README.md",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "vscode_extension_readme_markdown_comments_for_vs_code",
+      "target": "vscode_extension_readme_key_features",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "vscode-extension/README.md",
+      "source_location": "L75",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "vscode_extension_readme_markdown_comments_for_vs_code",
+      "target": "vscode_extension_readme_license",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "vscode-extension/README.md",
+      "source_location": "L66",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "vscode_extension_readme_markdown_comments_for_vs_code",
+      "target": "vscode_extension_readme_settings",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "vscode-extension/README.md",
+      "source_location": "L45",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "vscode_extension_readme_markdown_comments_for_vs_code",
+      "target": "vscode_extension_readme_usage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "vscode-extension/README.md",
+      "source_location": "L26",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "vscode_extension_readme_installation",
+      "target": "vscode_extension_readme_from_vs_code_marketplace_open_vsx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "vscode-extension/README.md",
+      "source_location": "L29",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "vscode_extension_readme_installation",
+      "target": "vscode_extension_readme_from_vsix",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "website/assets/README.md",
       "source_location": "L1",
       "weight": 1.0,
@@ -35183,5 +35392,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "ccc6b1183bd0966b859a606f15e788b555ccb6a2"
+  "built_at_commit": "5cd0e79e747b50d24b0dbf3b2010dd7efbbfdf86"
 }

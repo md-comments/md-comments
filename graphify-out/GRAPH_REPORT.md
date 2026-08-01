@@ -1,16 +1,16 @@
 # Graph Report - md-comments  (2026-08-01)
 
 ## Corpus Check
-- 102 files · ~101,919 words
+- 103 files · ~102,557 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1091 nodes · 2020 edges · 77 communities (56 shown, 21 thin omitted)
+- 1101 nodes · 2029 edges · 78 communities (57 shown, 21 thin omitted)
 - Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 130 edges (avg confidence: 0.79)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `ccc6b118`
+- Built from commit: `5cd0e79e`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -88,6 +88,7 @@
 - Privacy Policy
 - generate_cws_tiles.py
 - Website Assets
+- Markdown Comments for VS Code
 - Context Pack
 - Workflow: context-pack
 
@@ -118,11 +119,11 @@
 ## Import Cycles
 - None detected.
 
-## Communities (77 total, 21 thin omitted)
+## Communities (78 total, 21 thin omitted)
 
 ### Community 0 - "markdownItPlugin.ts"
-Cohesion: 0.07
-Nodes (71): clearAuthorCache(), extractMentionLogins(), fallbackAuthor(), getCachedAuthor(), githubAvatarUrl(), githubProfileUrl(), isCacheValid(), isGitHubLogin() (+63 more)
+Cohesion: 0.06
+Nodes (81): clearAuthorCache(), extractMentionLogins(), fallbackAuthor(), getCachedAuthor(), githubAvatarUrl(), githubProfileUrl(), isCacheValid(), isGitHubLogin() (+73 more)
 
 ### Community 1 - "content.ts"
 Cohesion: 0.08
@@ -133,8 +134,8 @@ Cohesion: 0.11
 Nodes (25): main(), print_usage(), backup_dir_for(), build_compress_prompt(), build_fix_prompt(), call_claude(), compress_file(), is_sensitive_path() (+17 more)
 
 ### Community 3 - "commentStore.ts"
-Cohesion: 0.13
-Nodes (37): getAuthor(), warmAuthorCache(), CommentActionMessage, executeCommentAction(), resolveText(), savedToast(), CommentPreviewPanel, addInlineComment() (+29 more)
+Cohesion: 0.21
+Nodes (27): getAuthor(), executeCommentAction(), resolveText(), savedToast(), addInlineComment(), addPageComment(), addReply(), applyReactionToggle() (+19 more)
 
 ### Community 4 - "validate.py"
 Cohesion: 0.17
@@ -332,12 +333,16 @@ Nodes (13): 1. Executive Summary, 2. Information Collection and Handling, 3. Bro
 Cohesion: 0.80
 Nodes (4): draw_text_centered(), draw_text_with_shadow(), main(), make_rounded_card()
 
+### Community 75 - "Markdown Comments for VS Code"
+Cohesion: 0.20
+Nodes (9): Commands, From VS Code Marketplace / Open VSX, From VSIX, Installation, Key Features, License, Markdown Comments for VS Code, Settings (+1 more)
+
 ### Community 102 - "Context Pack"
 Cohesion: 0.33
 Nodes (5): Context Pack, Guardrails, Output Focus, Patterns, Workflow
 
 ## Knowledge Gaps
-- **406 isolated node(s):** `root`, `parser`, `browser`, `node`, `es2022` (+401 more)
+- **413 isolated node(s):** `root`, `parser`, `browser`, `node`, `es2022` (+408 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **21 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -348,13 +353,13 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.025) - this node is a cross-community bridge._
 - **Why does `obsidian` connect `main.ts` to `obsidian-plugin/package.json`?**
   _High betweenness centrality (0.025) - this node is a cross-community bridge._
-- **Why does `escapeHtml()` connect `markdownItPlugin.ts` to `content.ts`, `commentStore.ts`, `CommentsSidebarView`, `main.ts`?**
+- **Why does `escapeHtml()` connect `markdownItPlugin.ts` to `content.ts`, `CommentsSidebarView`, `main.ts`?**
   _High betweenness centrality (0.013) - this node is a cross-community bridge._
 - **Are the 65 inferred relationships involving `Chrome Extension Options UI` (e.g. with `Chrome Extension Icon SVG` and `content.ts`) actually correct?**
   _`Chrome Extension Options UI` has 65 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 28 inferred relationships involving `Obsidian Plugin Guide` (e.g. with `main.ts` and `CommentComposerModal`) actually correct?**
   _`Obsidian Plugin Guide` has 28 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `root`, `parser`, `browser` to the rest of the system?**
-  _406 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _413 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `markdownItPlugin.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.07465108730931516 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.0627147766323024 - nodes in this community are weakly interconnected._

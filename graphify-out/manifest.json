@@ -145,8 +145,8 @@
     "semantic_hash": ""
   },
   "vscode-extension/package.json": {
-    "mtime": 1785597522.2072008,
-    "ast_hash": "7d7475d6ef8323223e41584a1b0e1f43",
+    "mtime": 1785601098.2479036,
+    "ast_hash": "68f3c9a54d422b643f66872a28bd43f1",
     "semantic_hash": ""
   },
   "vscode-extension/src/author.ts": {
@@ -647,6 +647,11 @@
   "chrome-extension/STORE_DESCRIPTION.txt": {
     "mtime": 1785595582.5259318,
     "ast_hash": "87b02211942813c4496d0925b13477e5",
+    "semantic_hash": ""
+  },
+  "vscode-extension/README.md": {
+    "mtime": 1785601031.14203,
+    "ast_hash": "d07f18b1e4b81f84c1e4a0ddb948646d",
     "semantic_hash": ""
   }
 }
