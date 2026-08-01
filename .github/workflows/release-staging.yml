@@ -31,8 +31,8 @@ jobs:
         with:
           draft: false
           prerelease: true
-          tag_name: v${{ needs.build.outputs.version }}-rc
-          name: Release v${{ needs.build.outputs.version }}-rc (Staging Pre-release)
+          tag_name: v${{ needs.build.outputs.version }}
+          name: Release v${{ needs.build.outputs.version }}
           files: |
             artifacts/**/*.vsix
             artifacts/obsidian-plugin.zip
