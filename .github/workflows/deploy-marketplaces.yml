@@ -45,6 +45,19 @@ jobs:
           echo "Publishing VS Code Extension: $VSIX_FILE"
           pnpm dlx @vscode/vsce publish --packagePath "$VSIX_FILE" -p "$VSCE_PAT"
 
+      - name: Deploy to Open VSX Registry
+        env:
+          OVSX_PAT: ${{ secrets.OVSX_PAT }}
+        run: |
+          # Find the .vsix file in downloaded artifacts
+          VSIX_FILE=$(find artifacts -name "*.vsix" | head -n 1)
+          if [ -z "$VSIX_FILE" ]; then
+            echo "Error: No .vsix file found in release assets!"
+            exit 1
+          fi
+          echo "Publishing to Open VSX: $VSIX_FILE"
+          npx ovsx publish "$VSIX_FILE" -p "$OVSX_PAT"
+
       - name: Deploy Chrome Extension
         uses: hziegler/chrome-extension-deploy@v2
         with:
