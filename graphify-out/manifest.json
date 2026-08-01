@@ -225,8 +225,8 @@
     "semantic_hash": "0bc020d491fca99550c1ea3de0a5f862"
   },
   "README.md": {
-    "mtime": 1785464858.3234723,
-    "ast_hash": "dc69174a0b17900507e291eafd552398",
+    "mtime": 1785595425.156342,
+    "ast_hash": "30216e2768260ff378787ee514a8d33c",
     "semantic_hash": ""
   },
   "chrome-extension/options.html": {
@@ -620,8 +620,8 @@
     "semantic_hash": ""
   },
   "website/index.html": {
-    "mtime": 1785594833.6804867,
-    "ast_hash": "8a8406636350cc22b350b49b6319a72d",
+    "mtime": 1785595724.7491136,
+    "ast_hash": "3dfe19536736aaef679815a74bb8f6c5",
     "semantic_hash": ""
   },
   "website/privacy.html": {
@@ -640,8 +640,13 @@
     "semantic_hash": ""
   },
   "website/main.js": {
-    "mtime": 1785594752.3820124,
-    "ast_hash": "7a736b2707eb1cb8a2cb01f374623313",
+    "mtime": 1785595439.5229063,
+    "ast_hash": "cb83ad30c2498a1b04e4880ea5d9a4e8",
+    "semantic_hash": ""
+  },
+  "chrome-extension/STORE_DESCRIPTION.txt": {
+    "mtime": 1785595582.5259318,
+    "ast_hash": "87b02211942813c4496d0925b13477e5",
     "semantic_hash": ""
   }
 }

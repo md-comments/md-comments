@@ -523,6 +523,18 @@ h6 {
   color: var(--success);
 }
 
+.integration-buttons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-chrome svg {
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
 /* Rich Interface Mockups */
 .mockup-window {
   background-color: var(--bg-tertiary);
@@ -1169,5 +1181,23 @@ h6 {
   .footer-grid {
     grid-template-columns: 1fr;
     gap: 32px;
+  }
+
+  .mockup-body {
+    flex-direction: column;
+  }
+
+  .vscode-editor {
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .vscode-sidebar {
+    width: 100%;
+    height: 190px;
+  }
+
+  .vscode-sidebar-title span:last-child {
+    display: none;
   }
 }

@@ -2,7 +2,7 @@
 
 [![FOSSA Status](https://app.fossa.com/api/projects/custom%2B63574%2Fgithub.com%2Fmd-comments%2Fmd-comments.svg?type=shield&issueType=license)](https://app.fossa.com/projects/custom%2B63574%2Fgithub.com%2Fmd-comments%2Fmd-comments?ref=badge_shield&issueType=license)
 
-🌐 **Website & Demo:** [md-comments.github.io/md-comments](https://md-comments.github.io/md-comments)
+🌐 **Website & Demo:** [md-comments.com](https://md-comments.com/)
 
 A collaboration tool for Markdown documentation. Markdown excels at authoring, version control, and agent workflows, but it has no built-in way to highlight a passage and leave feedback inline. **Markdown Comments** closes that gap with a visual commenting UI while keeping comments in companion `*.comments.yml` files next to each document — making them easy to grep, diff, and sync. If your local files are backed up by Git, this allows seamless collaboration; however, you can also use any other synchronization mechanism, such as Obsidian Sync, Google Drive, or Dropbox, to share comments across devices.
 

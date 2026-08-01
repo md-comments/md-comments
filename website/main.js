@@ -41,16 +41,16 @@ const initTheme = () => {
   const tabButtons = document.querySelectorAll('.tab-btn');
   const tabContents = document.querySelectorAll('.tab-content');
 
-  tabButtons.forEach(btn => {
+  tabButtons.forEach((btn) => {
     btn.addEventListener('click', () => {
       const targetTab = btn.getAttribute('data-tab');
 
       // Update active button
-      tabButtons.forEach(b => b.classList.remove('active'));
+      tabButtons.forEach((b) => b.classList.remove('active'));
       btn.classList.add('active');
 
       // Update active content
-      tabContents.forEach(content => {
+      tabContents.forEach((content) => {
         if (content.id === targetTab) {
           content.classList.add('active');
         } else {
