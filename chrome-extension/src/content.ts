@@ -3426,7 +3426,11 @@ function showSelectionButton(
     const selection = window.getSelection();
     const anchorText = selection ? selection.toString().trim() : paragraphEl.innerText;
     const text = normalizeAnchorText(paragraphEl.innerText);
-    const hash = fnv1aHash(text);
+    const matchHash = fnv1aHash(text);
+    const block = fileAnchors.find(
+      (b) => b.anchor_hash === matchHash || fuzzyMatch(text, b.anchor_text)
+    );
+    const hash = block ? block.anchor_hash : matchHash;
 
     setActiveFile(filePath, fileAnchors, fileComments);
     openSidebarForNewInline({
