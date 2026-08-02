@@ -78,7 +78,7 @@ jobs:
           npm install --no-save chrome-webstore-upload
           node -e '
           const fs = require("fs");
-          const chromeWebstoreUpload = require("chrome-webstore-upload");
+          const chromeWebstoreUpload = require("chrome-webstore-upload").default;
           
           const store = chromeWebstoreUpload({
             extensionId: process.env.EXTENSION_ID,
