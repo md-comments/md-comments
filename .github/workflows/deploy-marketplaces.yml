@@ -9,6 +9,7 @@ jobs:
     name: Deploy VS Code Extension
     if: github.event.release.draft == false && github.event.release.prerelease == false
     runs-on: ubuntu-latest
+    environment: Production
     steps:
       - name: Checkout Code
         uses: actions/checkout@v6
@@ -52,6 +53,7 @@ jobs:
     name: Deploy to Open VSX Registry
     if: github.event.release.draft == false && github.event.release.prerelease == false
     runs-on: ubuntu-latest
+    environment: Production
     steps:
       - name: Checkout Code
         uses: actions/checkout@v6
@@ -105,6 +107,7 @@ jobs:
     name: Deploy Chrome Extension
     if: github.event.release.draft == false && github.event.release.prerelease == false
     runs-on: ubuntu-latest
+    environment: Production
     steps:
       - name: Checkout Code
         uses: actions/checkout@v6
@@ -180,6 +183,7 @@ jobs:
     name: Deploy Obsidian Plugin
     if: github.event.release.draft == false && github.event.release.prerelease == false
     runs-on: ubuntu-latest
+    environment: Production
     steps:
       - name: Deploy Obsidian Plugin
         run: |
