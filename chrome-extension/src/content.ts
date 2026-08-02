@@ -449,7 +449,7 @@ async function processPRMarkdownFiles() {
       let customView = htmlEl.querySelector('.md-comments-inline-view') as HTMLElement;
       if (!customView) {
         customView = document.createElement('div');
-        customView.className = 'md-comments-inline-view';
+        customView.className = 'md-comments-inline-view md-comments-scope';
         customView.innerHTML = `<div class="inline-loading">Loading Markdown comments view...</div>`;
         htmlEl.appendChild(customView);
 
@@ -1034,7 +1034,7 @@ function injectSidebar() {
       transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       box-shadow: -8px 0 32px rgba(0,0,0,0.35);
     `;
-    activeSidebarHost.className = 'sidebar-container';
+    activeSidebarHost.className = 'sidebar-container md-comments-scope';
     document.body.appendChild(activeSidebarHost);
   }
 
@@ -1748,12 +1748,42 @@ function injectPRTab() {
     </svg>
   `;
 
-  const counterTemplate =
-    conversationTab.querySelector('[data-component="CounterLabel"]') ||
-    conversationTab.querySelector('.Counter');
+  // Find an unselected counter template if possible so our inactive tab count matches other inactive tabs
+  const allTabsOnLoad = tabList.querySelectorAll('a[role="tab"], a[class*="TabNavLink"], a');
+  let unselectedCounterTemplate: Element | null = null;
+  let selectedCounterTemplate: Element | null = null;
+
+  for (const tab of Array.from(allTabsOnLoad)) {
+    if (tab.id !== 'md-comments-tab') {
+      const hasSelectedClass = Array.from(tab.classList).some(
+        (c) => c.toLowerCase().includes('selected') || c === 'selected'
+      );
+      const isSelected =
+        hasSelectedClass ||
+        tab.getAttribute('aria-selected') === 'true' ||
+        tab.getAttribute('aria-current') === 'page';
+
+      const counter =
+        tab.querySelector('[data-component="CounterLabel"]') || tab.querySelector('.Counter');
+
+      if (counter) {
+        if (isSelected) {
+          selectedCounterTemplate = counter;
+        } else {
+          unselectedCounterTemplate = counter;
+        }
+      }
+    }
+  }
+
+  const templateToUse = unselectedCounterTemplate || selectedCounterTemplate;
   let counterHtml = '';
-  if (counterTemplate) {
-    counterHtml = `<span aria-hidden="true" data-variant="secondary" data-component="CounterLabel" class="${counterTemplate.className} md-comments-tab-count">0</span>`;
+  if (templateToUse) {
+    const attrs = Array.from(templateToUse.attributes)
+      .filter((attr) => attr.name !== 'class')
+      .map((attr) => `${attr.name}="${attr.value}"`)
+      .join(' ');
+    counterHtml = `<span ${attrs} class="${templateToUse.className} md-comments-tab-count">0</span>`;
   } else {
     counterHtml = `<span class="ml-2 md-comments-tab-count" style="font-weight: normal; font-size: 11px;">0</span>`;
   }
@@ -1806,11 +1836,29 @@ function getNativeContentContainer(): HTMLElement | null {
   return null;
 }
 
+function syncCounterStyle(customCounter: Element, templateCounter: Element) {
+  const style = customCounter.getAttribute('style');
+  while (customCounter.attributes.length > 0) {
+    customCounter.removeAttribute(customCounter.attributes[0].name);
+  }
+  customCounter.className = `${templateCounter.className} md-comments-tab-count`;
+  if (style) {
+    customCounter.setAttribute('style', style);
+  }
+  for (const attr of Array.from(templateCounter.attributes)) {
+    if (attr.name !== 'class') {
+      customCounter.setAttribute(attr.name, attr.value);
+    }
+  }
+}
+
 function handleTabVisibility() {
   const active = isCustomTabActive();
   const tabEl = document.getElementById('md-comments-tab');
 
   if (!tabEl) return;
+
+  const customCounter = tabEl.querySelector('.md-comments-tab-count');
 
   if (active) {
     document.documentElement.classList.add('md-comments-tab-active');
@@ -1820,6 +1868,8 @@ function handleTabVisibility() {
       'nav[aria-label*="Pull request navigation"] a[role="tab"], nav[aria-label*="Pull request navigation"] a[class*="TabNavLink"], nav[aria-label*="Pull request navigation"] a'
     );
     let foundSelectedClasses: string[] = [];
+    let selectedCounterTemplate: Element | null = null;
+
     for (const tab of Array.from(allTabs)) {
       if (tab.id !== 'md-comments-tab') {
         const hasSelectedClass = Array.from(tab.classList).some(
@@ -1835,6 +1885,13 @@ function handleTabVisibility() {
           );
           if (classes.length > 0) {
             foundSelectedClasses = classes;
+          }
+          const counter =
+            tab.querySelector('[data-component="CounterLabel"]') || tab.querySelector('.Counter');
+          if (counter) {
+            selectedCounterTemplate = counter;
+          }
+          if (selectedCounterTemplate && foundSelectedClasses.length > 0) {
             break;
           }
         }
@@ -1850,6 +1907,10 @@ function handleTabVisibility() {
     tabEl.setAttribute('aria-selected', 'true');
     tabEl.setAttribute('aria-current', 'page');
     tabEl.setAttribute('tabindex', '0');
+
+    if (customCounter && selectedCounterTemplate) {
+      syncCounterStyle(customCounter, selectedCounterTemplate);
+    }
 
     const otherTabs = document.querySelectorAll(
       'nav[aria-label*="Pull request navigation"] a[role="tab"], nav[aria-label*="Pull request navigation"] a[class*="TabNavLink"], nav[aria-label*="Pull request navigation"] a'
@@ -1902,6 +1963,36 @@ function handleTabVisibility() {
     tabEl.removeAttribute('aria-current');
     tabEl.setAttribute('tabindex', '-1');
 
+    // Find an unselected counter template to match other inactive tabs
+    const allTabs = document.querySelectorAll(
+      'nav[aria-label*="Pull request navigation"] a[role="tab"], nav[aria-label*="Pull request navigation"] a[class*="TabNavLink"], nav[aria-label*="Pull request navigation"] a'
+    );
+    let unselectedCounterTemplate: Element | null = null;
+    for (const tab of Array.from(allTabs)) {
+      if (tab.id !== 'md-comments-tab') {
+        const hasSelectedClass = Array.from(tab.classList).some(
+          (c) => c.toLowerCase().includes('selected') || c === 'selected'
+        );
+        const isSelected =
+          hasSelectedClass ||
+          tab.getAttribute('aria-selected') === 'true' ||
+          tab.getAttribute('aria-current') === 'page';
+
+        if (!isSelected) {
+          const counter =
+            tab.querySelector('[data-component="CounterLabel"]') || tab.querySelector('.Counter');
+          if (counter) {
+            unselectedCounterTemplate = counter;
+            break;
+          }
+        }
+      }
+    }
+
+    if (customCounter && unselectedCounterTemplate) {
+      syncCounterStyle(customCounter, unselectedCounterTemplate);
+    }
+
     const nativeContent = getNativeContentContainer();
     if (nativeContent) {
       nativeContent.style.display = '';
@@ -1924,7 +2015,7 @@ async function renderTabContent() {
   const customView = document.getElementById('md-comments-tab-content');
   if (!customView) return;
 
-  customView.className = 'md-comments-tab-layout';
+  customView.className = 'md-comments-tab-layout md-comments-scope';
   customView.innerHTML = `
     <div class="md-files-browser-pane">
       <div class="files-browser-header">
@@ -1939,7 +2030,7 @@ async function renderTabContent() {
       <div class="tab-loading-state">Loading modified Markdown files...</div>
     </div>
     <div class="md-sidebar-pane">
-      <div id="md-comments-sidebar-embedded" class="sidebar-container embedded"></div>
+      <div id="md-comments-sidebar-embedded" class="sidebar-container embedded md-comments-scope"></div>
     </div>
   `;
 

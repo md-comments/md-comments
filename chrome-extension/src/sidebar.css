@@ -1,4 +1,4 @@
-:root {
+.md-comments-scope {
   --sidebar-bg: rgba(22, 27, 34, 0.85);
   --sidebar-fg: #c9d1d9;
   --sidebar-border: #30363d;
@@ -16,7 +16,7 @@
 }
 
 @media (prefers-color-scheme: light) {
-  :root {
+  .md-comments-scope {
     --sidebar-bg: rgba(255, 255, 255, 0.9);
     --sidebar-fg: #24292f;
     --sidebar-border: #d0d7de;
@@ -67,7 +67,7 @@
   color: var(--text-primary);
 }
 
-.badge {
+.md-comments-scope .badge {
   font-size: 10px;
   padding: 2px 6px;
   border-radius: 10px;
@@ -75,19 +75,19 @@
   width: fit-content;
 }
 
-.badge.write {
+.md-comments-scope .badge.write {
   background-color: rgba(63, 185, 80, 0.15);
   color: var(--success-color);
   border: 1px solid rgba(63, 185, 80, 0.3);
 }
 
-.badge.readonly {
+.md-comments-scope .badge.readonly {
   background-color: rgba(139, 148, 158, 0.15);
   color: var(--text-secondary);
   border: 1px solid rgba(139, 148, 158, 0.3);
 }
 
-.close-btn {
+.md-comments-scope .close-btn {
   background: transparent;
   border: none;
   color: var(--text-secondary);
@@ -100,7 +100,7 @@
   justify-content: center;
 }
 
-.close-btn:hover {
+.md-comments-scope .close-btn:hover {
   color: var(--text-primary);
 }
 
@@ -176,7 +176,7 @@
   white-space: nowrap;
 }
 
-textarea {
+.md-comments-scope textarea {
   width: 100%;
   box-sizing: border-box;
   min-height: 80px;
@@ -191,7 +191,7 @@ textarea {
   outline: none;
 }
 
-textarea:focus {
+.md-comments-scope textarea:focus {
   border-color: var(--accent-color);
 }
 
@@ -203,7 +203,7 @@ textarea:focus {
   margin-top: 8px;
 }
 
-.btn {
+.md-comments-scope .btn {
   padding: 6px 12px;
   font-size: 12px;
   font-weight: 500;
@@ -212,22 +212,22 @@ textarea:focus {
   border: 1px solid transparent;
 }
 
-.btn-primary {
+.md-comments-scope .btn-primary {
   background: var(--accent-color);
   color: #ffffff;
 }
 
-.btn-primary:hover {
+.md-comments-scope .btn-primary:hover {
   background: var(--accent-hover);
 }
 
-.btn-secondary {
+.md-comments-scope .btn-secondary {
   background: transparent;
   color: var(--text-secondary);
   border-color: var(--sidebar-border);
 }
 
-.btn-secondary:hover {
+.md-comments-scope .btn-secondary:hover {
   color: var(--text-primary);
   border-color: var(--text-secondary);
 }
@@ -304,7 +304,7 @@ textarea:focus {
   gap: 8px;
 }
 
-.avatar {
+.md-comments-scope .avatar {
   width: var(--avatar-size, 32px);
   height: var(--avatar-size, 32px);
   border-radius: 50%;
@@ -317,19 +317,19 @@ textarea:focus {
   flex: 1;
 }
 
-.username {
+.md-comments-scope .username {
   font-size: 13px;
   font-weight: 600;
   color: var(--text-primary);
   text-decoration: none;
 }
 
-.username:hover {
+.md-comments-scope .username:hover {
   text-decoration: underline;
   color: var(--accent-color);
 }
 
-.time {
+.md-comments-scope .time {
   font-size: 11px;
   color: var(--text-secondary);
 }
