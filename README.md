@@ -5,7 +5,6 @@
 [![Open VSX](https://img.shields.io/open-vsx/v/md-comments/md-preview-comments?label=Open%20VSX)](https://open-vsx.org/extension/md-comments/md-preview-comments)
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/mjlhdjonjfcedkbpajkfeidfebefhkpp?label=Chrome%20Web%20Store)](https://chromewebstore.google.com/detail/markdown-comments/mjlhdjonjfcedkbpajkfeidfebefhkpp)
 
-
 🌐 **Website & Demo:** [md-comments.com](https://md-comments.com/)
 
 A collaboration tool for Markdown documentation. Markdown excels at authoring, version control, and agent workflows, but it has no built-in way to highlight a passage and leave feedback inline. **Markdown Comments** closes that gap with a visual commenting UI while keeping comments in companion `*.comments.yml` files next to each document — making them easy to grep, diff, and sync. If your local files are backed up by Git, this allows seamless collaboration; however, you can also use any other synchronization mechanism, such as Obsidian Sync, Google Drive, or Dropbox, to share comments across devices.
