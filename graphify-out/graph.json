@@ -5174,6 +5174,36 @@
       "norm_label": "main()"
     },
     {
+      "label": "test-publish-local.sh",
+      "file_type": "code",
+      "source_file": "scripts/test-publish-local.sh",
+      "source_location": "L1",
+      "metadata": {
+        "language": "bash",
+        "kind": "file"
+      },
+      "_origin": "ast",
+      "id": "scripts_test_publish_local",
+      "community": 76,
+      "community_name": "test-publish-local.sh",
+      "norm_label": "test-publish-local.sh"
+    },
+    {
+      "label": "test-publish-local.sh script",
+      "file_type": "code",
+      "source_file": "scripts/test-publish-local.sh",
+      "source_location": "L1",
+      "metadata": {
+        "language": "bash",
+        "kind": "bash_entrypoint"
+      },
+      "_origin": "ast",
+      "id": "scripts_test_publish_local_sh__entry",
+      "community": 76,
+      "community_name": "test-publish-local.sh",
+      "norm_label": "test-publish-local.sh script"
+    },
+    {
       "label": "anchor.ts",
       "file_type": "code",
       "source_file": "shared/anchor.ts",
@@ -5246,8 +5276,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_author",
-      "community": 12,
-      "community_name": "CommentsSidebarView",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "shared/author.ts"
     },
     {
@@ -5257,8 +5287,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "shared_author_clearauthorcache",
-      "community": 12,
-      "community_name": "CommentsSidebarView",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "clearauthorcache()"
     },
     {
@@ -5279,8 +5309,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "shared_author_setcachedauthor",
-      "community": 12,
-      "community_name": "CommentsSidebarView",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "setcachedauthor()"
     },
     {
@@ -5290,8 +5320,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "shared_author_iscachevalid",
-      "community": 12,
-      "community_name": "CommentsSidebarView",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "iscachevalid()"
     },
     {
@@ -5301,8 +5331,8 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "shared_author_fallbackauthor",
-      "community": 12,
-      "community_name": "CommentsSidebarView",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "fallbackauthor()"
     },
     {
@@ -5334,8 +5364,8 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "shared_author_githubavatarurl",
-      "community": 12,
-      "community_name": "CommentsSidebarView",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "githubavatarurl()"
     },
     {
@@ -7897,8 +7927,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_author",
-      "community": 12,
-      "community_name": "CommentsSidebarView",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "src/author.ts"
     },
     {
@@ -7908,8 +7938,8 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "vscode_extension_src_author_execfileasync",
-      "community": 12,
-      "community_name": "CommentsSidebarView",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "execfileasync"
     },
     {
@@ -7930,8 +7960,8 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "vscode_extension_src_author_getauthor",
-      "community": 3,
-      "community_name": "commentStore.ts",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "getauthor()"
     },
     {
@@ -7941,8 +7971,8 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "vscode_extension_src_author_resolvegithubusername",
-      "community": 12,
-      "community_name": "CommentsSidebarView",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "resolvegithubusername()"
     },
     {
@@ -7952,8 +7982,8 @@
       "source_location": "L58",
       "_origin": "ast",
       "id": "vscode_extension_src_author_getusernamefromgithubsession",
-      "community": 12,
-      "community_name": "CommentsSidebarView",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "getusernamefromgithubsession()"
     },
     {
@@ -7963,8 +7993,8 @@
       "source_location": "L74",
       "_origin": "ast",
       "id": "vscode_extension_src_author_parsegithubusernamefromremote",
-      "community": 12,
-      "community_name": "CommentsSidebarView",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "parsegithubusernamefromremote()"
     },
     {
@@ -7974,8 +8004,8 @@
       "source_location": "L84",
       "_origin": "ast",
       "id": "vscode_extension_src_author_getusernamefromgitremote",
-      "community": 12,
-      "community_name": "CommentsSidebarView",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "getusernamefromgitremote()"
     },
     {
@@ -7985,8 +8015,8 @@
       "source_location": "L99",
       "_origin": "ast",
       "id": "vscode_extension_src_author_getusernamefromghcli",
-      "community": 12,
-      "community_name": "CommentsSidebarView",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "getusernamefromghcli()"
     },
     {
@@ -7996,8 +8026,8 @@
       "source_location": "L111",
       "_origin": "ast",
       "id": "vscode_extension_src_author_getusernamefromgitconfig",
-      "community": 12,
-      "community_name": "CommentsSidebarView",
+      "community": 0,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "getusernamefromgitconfig()"
     },
     {
@@ -9129,8 +9159,8 @@
       "source_location": "L662",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_loadcontext",
-      "community": 0,
-      "community_name": "markdownItPlugin.ts",
+      "community": 13,
+      "community_name": "main.ts",
       "norm_label": "loadcontext()"
     },
     {
@@ -23161,6 +23191,17 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/test-publish-local.sh",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "scripts_test_publish_local",
+      "target": "scripts_test_publish_local_sh__entry",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "references",
       "confidence": "INFERRED",
       "confidence_score": 0.85,
@@ -35414,5 +35455,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "ffdf1b48223c03e734ac949a7ddbf45bf39727ce"
+  "built_at_commit": "7962b144065412f6718d29f24130503c6ead3f65"
 }
