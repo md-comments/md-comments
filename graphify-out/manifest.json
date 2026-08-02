@@ -85,7 +85,7 @@
     "semantic_hash": ""
   },
   "package.json": {
-    "mtime": 1785630146.6178133,
+    "mtime": 1785634086.2256744,
     "ast_hash": "a9daa618f8f76230b91b805efe466bc8",
     "semantic_hash": ""
   },
@@ -145,8 +145,8 @@
     "semantic_hash": ""
   },
   "vscode-extension/package.json": {
-    "mtime": 1785631859.433863,
-    "ast_hash": "a30b8afa6dd138b380d5dfbf08766d71",
+    "mtime": 1785634289.4075408,
+    "ast_hash": "ef4523e7a1b7f3fa1334e69568753f20",
     "semantic_hash": ""
   },
   "vscode-extension/src/author.ts": {
@@ -555,8 +555,8 @@
     "semantic_hash": ""
   },
   ".github/workflows/deploy-marketplaces.yml": {
-    "mtime": 1785632399.8940659,
-    "ast_hash": "2b1222e840704445ef711e33ab76d035",
+    "mtime": 1785634307.804751,
+    "ast_hash": "82cd9a0bd9925266aaaa6df6cb27a604",
     "semantic_hash": ""
   },
   ".github/workflows/release-dev.yml": {
@@ -652,6 +652,16 @@
   "vscode-extension/README.md": {
     "mtime": 1785601112.342666,
     "ast_hash": "c37da81df4dce63d0cb80173879a9811",
+    "semantic_hash": ""
+  },
+  "scripts/test-publish-local.sh": {
+    "mtime": 1785633866.9302428,
+    "ast_hash": "92f059fa0537dd46946245155c12b2d5",
+    "semantic_hash": ""
+  },
+  "event.json": {
+    "mtime": 1785634289.4473088,
+    "ast_hash": "dc4458a0726640ae352bae7c4a487f92",
     "semantic_hash": ""
   }
 }

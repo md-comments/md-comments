@@ -19,7 +19,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mkdir -p artifacts
-          gh release download ${{ github.event.release.tag_name }} --pattern "*" --dir artifacts
+          if [ "$ACT" = "true" ]; then
+            echo "Running under local runner (act). Skipping asset download and using local artifacts."
+          else
+            gh release download ${{ github.event.release.tag_name }} --pattern "*" --dir artifacts
+          fi
 
       - name: Install pnpm
         uses: pnpm/action-setup@v6
@@ -57,8 +61,8 @@ jobs:
           fi
           echo "Publishing to Open VSX: $VSIX_FILE"
           # Capture output to check for duplicate/already published errors
-          OUTPUT=$(npx ovsx publish "$VSIX_FILE" -p "$OVSX_PAT" 2>&1)
-          STATUS=$?
+          STATUS=0
+          OUTPUT=$(pnpm dlx ovsx publish "$VSIX_FILE" -p "$OVSX_PAT" 2>&1) || STATUS=$?
           echo "$OUTPUT"
           if [ $STATUS -ne 0 ]; then
             if echo "$OUTPUT" | grep -qi -E "already published|already exists|conflict|409"; then
@@ -75,7 +79,7 @@ jobs:
           CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
           REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
         run: |
-          npm install --no-save chrome-webstore-upload
+          npm install --no-save chrome-webstore-upload@3.2.0
           node -e '
           const fs = require("fs");
           const chromeWebstoreUpload = require("chrome-webstore-upload").default;
