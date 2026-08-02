@@ -5,9 +5,8 @@ on:
     types: [published, edited]
 
 jobs:
-  deploy:
-    name: Deploy to Marketplaces
-    # Only run when release is NOT a draft and NOT a pre-release
+  deploy-vscode:
+    name: Deploy VS Code Extension
     if: github.event.release.draft == false && github.event.release.prerelease == false
     runs-on: ubuntu-latest
     steps:
@@ -49,6 +48,36 @@ jobs:
           echo "Publishing VS Code Extension: $VSIX_FILE"
           pnpm dlx @vscode/vsce publish --packagePath "$VSIX_FILE" -p "$VSCE_PAT" --skip-duplicate
 
+  deploy-openvsx:
+    name: Deploy to Open VSX Registry
+    if: github.event.release.draft == false && github.event.release.prerelease == false
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - name: Download Release Assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p artifacts
+          if [ "$ACT" = "true" ]; then
+            echo "Running under local runner (act). Skipping asset download and using local artifacts."
+          else
+            gh release download ${{ github.event.release.tag_name }} --pattern "*" --dir artifacts
+          fi
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 9
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
       - name: Deploy to Open VSX Registry
         env:
           OVSX_PAT: ${{ secrets.OVSX_PAT }}
@@ -71,6 +100,30 @@ jobs:
               exit $STATUS
             fi
           fi
+
+  deploy-chrome:
+    name: Deploy Chrome Extension
+    if: github.event.release.draft == false && github.event.release.prerelease == false
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - name: Download Release Assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p artifacts
+          if [ "$ACT" = "true" ]; then
+            echo "Running under local runner (act). Skipping asset download and using local artifacts."
+          else
+            gh release download ${{ github.event.release.tag_name }} --pattern "*" --dir artifacts
+          fi
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 20
 
       - name: Deploy Chrome Extension
         env:
@@ -123,6 +176,11 @@ jobs:
           run();
           '
 
+  deploy-obsidian:
+    name: Deploy Obsidian Plugin
+    if: github.event.release.draft == false && github.event.release.prerelease == false
+    runs-on: ubuntu-latest
+    steps:
       - name: Deploy Obsidian Plugin
         run: |
           echo "Obsidian plugins are published by uploading manifest.json, main.js, and styles.css as assets to the GitHub Release."

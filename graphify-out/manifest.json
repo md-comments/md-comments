@@ -15,7 +15,7 @@
     "semantic_hash": ""
   },
   "chrome-extension/manifest.json": {
-    "mtime": 1785634917.0771935,
+    "mtime": 1785634957.0508823,
     "ast_hash": "6844e75ed2e1eb7ddab572cf4ee090a9",
     "semantic_hash": ""
   },
@@ -45,7 +45,7 @@
     "semantic_hash": "406bb0cd9a4b8c76f9f0f1a23552ae33"
   },
   "obsidian-plugin/manifest.json": {
-    "mtime": 1785634920.4506233,
+    "mtime": 1785634957.0513427,
     "ast_hash": "d816a94c747ad8960dc5c3083063477b",
     "semantic_hash": ""
   },
@@ -145,8 +145,8 @@
     "semantic_hash": ""
   },
   "vscode-extension/package.json": {
-    "mtime": 1785634913.4870374,
-    "ast_hash": "65b5e476ac217a3a3fed7e5bf577e599",
+    "mtime": 1785635371.8724744,
+    "ast_hash": "eef6c1fe18cdd3710872c8e7c4b0b139",
     "semantic_hash": ""
   },
   "vscode-extension/src/author.ts": {
@@ -225,8 +225,8 @@
     "semantic_hash": "0bc020d491fca99550c1ea3de0a5f862"
   },
   "README.md": {
-    "mtime": 1785613352.0181444,
-    "ast_hash": "bb9bd1e46dc3f9141511d641794d5580",
+    "mtime": 1785635327.719651,
+    "ast_hash": "e8e0b150570721e549242be10bf41582",
     "semantic_hash": ""
   },
   "chrome-extension/options.html": {
@@ -555,8 +555,8 @@
     "semantic_hash": ""
   },
   ".github/workflows/deploy-marketplaces.yml": {
-    "mtime": 1785634531.3333387,
-    "ast_hash": "d6be4b9c8c4d9077e4b40d336fe2b534",
+    "mtime": 1785635364.4597416,
+    "ast_hash": "435e152879c1916a399d4c7e2ddc0908",
     "semantic_hash": ""
   },
   ".github/workflows/release-dev.yml": {
@@ -620,8 +620,8 @@
     "semantic_hash": ""
   },
   "website/index.html": {
-    "mtime": 1785613535.2992094,
-    "ast_hash": "2210228f8338007fd772defa8af115d4",
+    "mtime": 1785635327.7200098,
+    "ast_hash": "fd9889c2104891824e40ddb3450f6f98",
     "semantic_hash": ""
   },
   "website/privacy.html": {
