@@ -25,8 +25,8 @@
     "semantic_hash": ""
   },
   "chrome-extension/src/content.ts": {
-    "mtime": 1785462310.4264433,
-    "ast_hash": "599775ca9e47be9cf3c15783eef86ce1",
+    "mtime": 1785699573.944647,
+    "ast_hash": "e654ecb5d2736af3e28528d00a22643a",
     "semantic_hash": ""
   },
   "chrome-extension/src/githubApi.ts": {
@@ -190,8 +190,8 @@
     "semantic_hash": ""
   },
   "vscode-extension/src/markdownItPlugin.ts": {
-    "mtime": 1785373697.9368806,
-    "ast_hash": "b1200015e00ddb000885a092699c89e1",
+    "mtime": 1785699879.2853017,
+    "ast_hash": "5f3b31cac366a0ed83a855eeea6da77c",
     "semantic_hash": ""
   },
   "vscode-extension/src/markdownRender.ts": {

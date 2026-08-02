@@ -13,8 +13,8 @@ import {
   schedulePreviewRefreshAfterDisplayNames,
   warmGitHubDisplayNames,
 } from './githubDisplayNames';
-import { parseMarkdownAnchors } from '../../shared/anchor';
-import { placeInlineComments, isOrphanedPlacement } from '../../shared/placement';
+import { parseMarkdownAnchors, fnv1aHash, normalizeAnchorText } from '../../shared/anchor';
+import { placeInlineComments, isOrphanedPlacement, fuzzyMatch } from '../../shared/placement';
 import type { CommentsFile, PlacementResult } from '../../shared/types';
 import { escapeHtml } from '../../shared/html';
 
@@ -708,14 +708,22 @@ export function extendMarkdownIt(md: any): any {
     self: any
   ) => {
     if (renderCtx) {
-      const block = renderCtx.blocks[paragraphBlockIdx++];
-      if (block) {
-        const token = tokens[idx];
-        token.attrJoin('class', 'md-comments-paragraph');
-        token.attrSet('data-md-paragraph-index', String(block.paragraph_index));
-        token.attrSet('data-md-anchor-hash', block.anchor_hash);
-        token.attrSet('data-md-heading', block.heading_context);
-        token.attrSet('data-md-anchor-text', block.anchor_text);
+      const token = tokens[idx];
+      const nextToken = tokens[idx + 1];
+      if (nextToken && nextToken.type === 'inline' && nextToken.content) {
+        const text = normalizeAnchorText(nextToken.content);
+        const hash = fnv1aHash(text);
+        let block = renderCtx.blocks.find((b) => b.anchor_hash === hash);
+        if (!block) {
+          block = renderCtx.blocks.find((b) => fuzzyMatch(text, b.anchor_text));
+        }
+        if (block) {
+          token.attrJoin('class', 'md-comments-paragraph');
+          token.attrSet('data-md-paragraph-index', String(block.paragraph_index));
+          token.attrSet('data-md-anchor-hash', block.anchor_hash);
+          token.attrSet('data-md-heading', block.heading_context);
+          token.attrSet('data-md-anchor-text', block.anchor_text);
+        }
       }
     }
     return defaultParagraphOpen(tokens, idx, options, env, self);
@@ -727,6 +735,12 @@ export function extendMarkdownIt(md: any): any {
       return self.renderToken(tokens, idx, options);
     };
 
+  function getAttr(token: any, name: string): string | null {
+    if (!token.attrs) return null;
+    const attr = token.attrs.find((a: any) => a[0] === name);
+    return attr ? attr[1] : null;
+  }
+
   md.renderer.rules.paragraph_close = (
     tokens: any,
     idx: number,
@@ -735,15 +749,24 @@ export function extendMarkdownIt(md: any): any {
     self: any
   ) => {
     let paraBtn = '';
-    if (renderCtx && paragraphBlockIdx > 0) {
-      const block = renderCtx.blocks[paragraphBlockIdx - 1];
-      if (block) {
-        paraBtn = `<span class="md-comments-para-actions">${actionIconBtn(
-          'comment-paragraph',
-          'Comment on paragraph',
-          ICON_PARAGRAPH_COMMENT,
-          { id: String(block.paragraph_index) }
-        )}</span>`;
+    if (renderCtx) {
+      let openToken = null;
+      for (let i = idx - 1; i >= 0; i--) {
+        if (tokens[i].type === 'paragraph_open') {
+          openToken = tokens[i];
+          break;
+        }
+      }
+      if (openToken) {
+        const paragraphIndex = getAttr(openToken, 'data-md-paragraph-index');
+        if (paragraphIndex !== null) {
+          paraBtn = `<span class="md-comments-para-actions">${actionIconBtn(
+            'comment-paragraph',
+            'Comment on paragraph',
+            ICON_PARAGRAPH_COMMENT,
+            { id: paragraphIndex }
+          )}</span>`;
+        }
       }
     }
     return defaultParagraphClose(tokens, idx, options, env, self) + paraBtn;
