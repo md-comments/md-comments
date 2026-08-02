@@ -1,6 +1,6 @@
 {
   "name": "md-preview-comments",
-  "displayName": "MD-Comments",
+  "displayName": "Markdown Preview Comments",
   "description": "Rich inline commenting on Markdown preview with companion YAML file persistence",
   "version": "1.0.1",
   "publisher": "md-comments",
