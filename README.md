@@ -1,6 +1,10 @@
 # Markdown Comments
 
 [![FOSSA Status](https://app.fossa.com/api/projects/custom%2B63574%2Fgithub.com%2Fmd-comments%2Fmd-comments.svg?type=shield&issueType=license)](https://app.fossa.com/projects/custom%2B63574%2Fgithub.com%2Fmd-comments%2Fmd-comments?ref=badge_shield&issueType=license)
+[![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-blue?logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=md-comments.md-preview-comments)
+[![Open VSX](https://img.shields.io/open-vsx/v/md-comments/md-preview-comments?label=Open%20VSX)](https://open-vsx.org/extension/md-comments/md-preview-comments)
+[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/mjlhdjonjfcedkbpajkfeidfebefhkpp?label=Chrome%20Web%20Store)](https://chromewebstore.google.com/detail/markdown-comments/mjlhdjonjfcedkbpajkfeidfebefhkpp)
+
 
 🌐 **Website & Demo:** [md-comments.com](https://md-comments.com/)
 
