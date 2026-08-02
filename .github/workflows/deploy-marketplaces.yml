@@ -43,7 +43,7 @@ jobs:
             exit 1
           fi
           echo "Publishing VS Code Extension: $VSIX_FILE"
-          pnpm dlx @vscode/vsce publish --packagePath "$VSIX_FILE" -p "$VSCE_PAT"
+          pnpm dlx @vscode/vsce publish --packagePath "$VSIX_FILE" -p "$VSCE_PAT" --skip-duplicate
 
       - name: Deploy to Open VSX Registry
         env:
@@ -56,16 +56,68 @@ jobs:
             exit 1
           fi
           echo "Publishing to Open VSX: $VSIX_FILE"
-          npx ovsx publish "$VSIX_FILE" -p "$OVSX_PAT"
+          # Capture output to check for duplicate/already published errors
+          OUTPUT=$(npx ovsx publish "$VSIX_FILE" -p "$OVSX_PAT" 2>&1)
+          STATUS=$?
+          echo "$OUTPUT"
+          if [ $STATUS -ne 0 ]; then
+            if echo "$OUTPUT" | grep -qi -E "already published|already exists|conflict|409"; then
+              echo "Extension version already published to Open VSX. Skipping."
+            else
+              exit $STATUS
+            fi
+          fi
 
       - name: Deploy Chrome Extension
-        uses: mnao305/chrome-extension-upload@v6.0.0
-        with:
-          file-path: artifacts/chrome-extension.zip
-          extension-id: ${{ secrets.CHROME_EXTENSION_ID }}
-          client-id: ${{ secrets.CHROME_CLIENT_ID }}
-          client-secret: ${{ secrets.CHROME_CLIENT_SECRET }}
-          refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
+        env:
+          EXTENSION_ID: ${{ secrets.CHROME_EXTENSION_ID }}
+          CLIENT_ID: ${{ secrets.CHROME_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
+        run: |
+          npm install --no-save chrome-webstore-upload
+          node -e '
+          const fs = require("fs");
+          const chromeWebstoreUpload = require("chrome-webstore-upload");
+          
+          const store = chromeWebstoreUpload({
+            extensionId: process.env.EXTENSION_ID,
+            clientId: process.env.CLIENT_ID,
+            clientSecret: process.env.CLIENT_SECRET,
+            refreshToken: process.env.REFRESH_TOKEN,
+          });
+          
+          async function run() {
+            try {
+              console.log("Uploading Chrome Extension...");
+              const zipFile = fs.createReadStream("artifacts/chrome-extension.zip");
+              const uploadResponse = await store.uploadExisting(zipFile);
+              console.log("Upload response:", JSON.stringify(uploadResponse));
+              
+              if (uploadResponse.uploadState === "FAILURE" && uploadResponse.itemError) {
+                const errors = uploadResponse.itemError;
+                const isDuplicate = errors.some(e => e.errorCode === "ITEM_VERSION_ALREADY_EXISTS" || e.error_code === "ITEM_VERSION_ALREADY_EXISTS");
+                if (isDuplicate) {
+                  console.log("Chrome Extension version already published/exists. Skipping.");
+                  process.exit(0);
+                }
+                throw new Error("Upload failed: " + JSON.stringify(errors));
+              }
+              
+              console.log("Publishing Chrome Extension...");
+              const publishResponse = await store.publish();
+              console.log("Publish response:", JSON.stringify(publishResponse));
+            } catch (err) {
+              if (err.message && (err.message.includes("ITEM_VERSION_ALREADY_EXISTS") || err.message.includes("already exists") || err.message.includes("already published"))) {
+                console.log("Chrome Extension version already published. Skipping.");
+                process.exit(0);
+              }
+              console.error("Deployment failed:", err);
+              process.exit(1);
+            }
+          }
+          run();
+          '
 
       - name: Deploy Obsidian Plugin
         run: |
