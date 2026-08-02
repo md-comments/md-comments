@@ -15,8 +15,8 @@
     "semantic_hash": ""
   },
   "chrome-extension/manifest.json": {
-    "mtime": 1785602423.927209,
-    "ast_hash": "b8f68dd620775b05cf0bd3f65f7e8bd6",
+    "mtime": 1785634917.0771935,
+    "ast_hash": "6844e75ed2e1eb7ddab572cf4ee090a9",
     "semantic_hash": ""
   },
   "chrome-extension/package.json": {
@@ -45,8 +45,8 @@
     "semantic_hash": "406bb0cd9a4b8c76f9f0f1a23552ae33"
   },
   "obsidian-plugin/manifest.json": {
-    "mtime": 1785602431.3199651,
-    "ast_hash": "e1f61dbfb7ae5b179e4e78c688dff1dd",
+    "mtime": 1785634920.4506233,
+    "ast_hash": "d816a94c747ad8960dc5c3083063477b",
     "semantic_hash": ""
   },
   "obsidian-plugin/package.json": {
@@ -145,8 +145,8 @@
     "semantic_hash": ""
   },
   "vscode-extension/package.json": {
-    "mtime": 1785634289.4075408,
-    "ast_hash": "ef4523e7a1b7f3fa1334e69568753f20",
+    "mtime": 1785634913.4870374,
+    "ast_hash": "65b5e476ac217a3a3fed7e5bf577e599",
     "semantic_hash": ""
   },
   "vscode-extension/src/author.ts": {
@@ -555,8 +555,8 @@
     "semantic_hash": ""
   },
   ".github/workflows/deploy-marketplaces.yml": {
-    "mtime": 1785634307.804751,
-    "ast_hash": "82cd9a0bd9925266aaaa6df6cb27a604",
+    "mtime": 1785634531.3333387,
+    "ast_hash": "d6be4b9c8c4d9077e4b40d336fe2b534",
     "semantic_hash": ""
   },
   ".github/workflows/release-dev.yml": {
@@ -655,13 +655,8 @@
     "semantic_hash": ""
   },
   "scripts/test-publish-local.sh": {
-    "mtime": 1785633866.9302428,
-    "ast_hash": "92f059fa0537dd46946245155c12b2d5",
-    "semantic_hash": ""
-  },
-  "event.json": {
-    "mtime": 1785634289.4473088,
-    "ast_hash": "dc4458a0726640ae352bae7c4a487f92",
+    "mtime": 1785634531.3362486,
+    "ast_hash": "66efba43146b53de8dad4243c282686d",
     "semantic_hash": ""
   }
 }
