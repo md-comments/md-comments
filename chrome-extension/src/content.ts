@@ -50,6 +50,24 @@ let isTabContentRendered = false;
 let cachedSelectedClasses: string[] = [];
 let currentDisplayAuthor = '';
 
+let draftsStore: Record<string, string> = {};
+
+function getDraftKey(suffix: string): string {
+  const meta = parseGitHubUrl(window.location.href);
+  if (!meta) return '';
+  return `draft:${meta.owner}/${meta.repo}/${meta.pullNumber}:${suffix}`;
+}
+
+function saveDraft(key: string, value: string) {
+  if (!key) return;
+  if (value.trim()) {
+    draftsStore[key] = value;
+  } else {
+    delete draftsStore[key];
+  }
+  chrome.storage.local.set({ drafts: draftsStore });
+}
+
 type ParsedUrl = { type: 'pull'; owner: string; repo: string; pullNumber: number };
 
 function parseGitHubUrl(urlStr: string): ParsedUrl | null {
@@ -338,6 +356,7 @@ async function handlePageLoad() {
         squashCommits: true,
         useFixupCommits: true,
         batchCommentsMode: true,
+        drafts: {},
       },
       (items) => {
         useConventionalCommits = items.useConventionalCommits;
@@ -345,6 +364,7 @@ async function handlePageLoad() {
         squashCommits = items.squashCommits;
         useFixupCommits = items.useFixupCommits;
         batchCommentsMode = items.batchCommentsMode;
+        draftsStore = items.drafts || {};
         resolve();
       }
     );
@@ -747,7 +767,8 @@ async function triggerAndMoveNativeComposer(
   line: number,
   targetContainer: HTMLElement,
   onSubmit: (body: string) => Promise<void>,
-  onCancel: () => void
+  onCancel: () => void,
+  draftKey?: string
 ) {
   const fileContainers = document.querySelectorAll('.js-file, .file');
   let targetFileContainer: HTMLElement | null = null;
@@ -816,7 +837,18 @@ async function triggerAndMoveNativeComposer(
   renameReplyButtonsToOK();
 
   const textarea = nativeForm.querySelector('textarea');
-  textarea?.focus();
+  if (textarea) {
+    if (draftKey && draftsStore[draftKey]) {
+      textarea.value = draftsStore[draftKey];
+    }
+    textarea.focus();
+
+    if (draftKey) {
+      textarea.addEventListener('input', () => {
+        saveDraft(draftKey, textarea.value);
+      });
+    }
+  }
 
   const interceptSubmit = async (e: Event) => {
     e.preventDefault();
@@ -831,6 +863,9 @@ async function triggerAndMoveNativeComposer(
       if (textarea) textarea.disabled = true;
 
       await onSubmit(body);
+      if (draftKey) {
+        saveDraft(draftKey, '');
+      }
       nativeForm?.remove();
       cleanupListeners();
     } catch (err) {
@@ -844,6 +879,9 @@ async function triggerAndMoveNativeComposer(
   const interceptCancel = (e: Event) => {
     e.preventDefault();
     e.stopPropagation();
+    if (draftKey) {
+      saveDraft(draftKey, '');
+    }
     nativeForm?.remove();
     cleanupListeners();
     onCancel();
@@ -877,7 +915,8 @@ async function triggerAndMoveNativeComposer(
 function showFallbackReplyComposer(
   replyWrapper: HTMLElement,
   onSubmit: (body: string) => Promise<void>,
-  onCancel: () => void
+  onCancel: () => void,
+  draftKey?: string
 ) {
   replyWrapper.innerHTML = `
     <div class="fallback-reply-composer" style="margin-top: 8px; display: flex; flex-direction: column; gap: 8px;">
@@ -893,11 +932,24 @@ function showFallbackReplyComposer(
   const submitBtn = replyWrapper.querySelector('.fallback-submit-btn') as HTMLButtonElement;
   const cancelBtn = replyWrapper.querySelector('.fallback-cancel-btn') as HTMLButtonElement;
 
+  if (draftKey && draftsStore[draftKey]) {
+    textarea.value = draftsStore[draftKey];
+  }
+
   textarea.focus();
+
+  if (draftKey) {
+    textarea.addEventListener('input', () => {
+      saveDraft(draftKey, textarea.value);
+    });
+  }
 
   const handleCancel = (e: Event) => {
     e.preventDefault();
     e.stopPropagation();
+    if (draftKey) {
+      saveDraft(draftKey, '');
+    }
     onCancel();
   };
 
@@ -910,6 +962,9 @@ function showFallbackReplyComposer(
     textarea.disabled = true;
     try {
       await onSubmit(body);
+      if (draftKey) {
+        saveDraft(draftKey, '');
+      }
     } catch (e) {
       alert('Failed to save reply: ' + e);
       submitBtn.disabled = false;
@@ -1157,12 +1212,26 @@ function injectSidebar() {
     try {
       await saveNewPageComment(body);
       textarea.value = '';
+      const pageDraftKey = getDraftKey('page');
+      saveDraft(pageDraftKey, '');
     } catch (e) {
       alert('Failed to save comment: ' + e);
     } finally {
       textarea.disabled = false;
     }
   });
+
+  // Page comment draft handling
+  const pageTextarea = activeSidebarHost.querySelector('.page-textarea') as HTMLTextAreaElement;
+  if (pageTextarea) {
+    const pageDraftKey = getDraftKey('page');
+    if (pageDraftKey && draftsStore[pageDraftKey]) {
+      pageTextarea.value = draftsStore[pageDraftKey];
+    }
+    pageTextarea.addEventListener('input', () => {
+      saveDraft(pageDraftKey, pageTextarea.value);
+    });
+  }
 
   // Load batch comments panel state and setup event listeners
   updateBatchPanel();
@@ -1376,7 +1445,10 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
     const replyInput = card.querySelector('.reply-input') as HTMLInputElement;
     const replyWrapper = card.querySelector('.reply-composer-wrapper') as HTMLElement;
     if (replyInput && replyWrapper) {
-      replyInput.addEventListener('click', async () => {
+      const replyDraftKey = getDraftKey('reply:' + commentId);
+      const hasReplyDraft = replyDraftKey && draftsStore[replyDraftKey];
+
+      const handleReplyClick = async () => {
         replyInput.style.display = 'none';
         replyWrapper.style.display = 'block';
 
@@ -1391,7 +1463,8 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
             () => {
               replyWrapper.style.display = 'none';
               replyInput.style.display = 'block';
-            }
+            },
+            replyDraftKey
           );
         } else {
           // Find the matching block line
@@ -1413,7 +1486,8 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
               () => {
                 replyWrapper.style.display = 'none';
                 replyInput.style.display = 'block';
-              }
+              },
+              replyDraftKey
             );
           } catch (err) {
             console.warn(
@@ -1430,11 +1504,18 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
               () => {
                 replyWrapper.style.display = 'none';
                 replyInput.style.display = 'block';
-              }
+              },
+              replyDraftKey
             );
           }
         }
-      });
+      };
+
+      replyInput.addEventListener('click', handleReplyClick);
+
+      if (hasReplyDraft) {
+        handleReplyClick();
+      }
     }
 
     // Resolve button
@@ -1458,7 +1539,10 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
     // Edit comment button
     const editBtn = card.querySelector('.edit-comment-btn') as HTMLButtonElement;
     if (editBtn) {
-      editBtn.addEventListener('click', () => {
+      const editDraftKey = getDraftKey('edit:' + commentId);
+      const hasEditDraft = editDraftKey && draftsStore[editDraftKey];
+
+      const handleEditClick = (initialValue?: string) => {
         const bodyEl = card.querySelector('.comment-body') as HTMLElement;
         if (!bodyEl) return;
 
@@ -1467,9 +1551,11 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
         const originalBody = bodyEl.innerText;
         const originalContent = bodyEl.innerHTML;
 
+        const draftValue = initialValue !== undefined ? initialValue : originalBody;
+
         bodyEl.innerHTML = `
           <div class="comment-edit-form" style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
-            <textarea class="comment-edit-textarea form-control" style="width: 100%; min-height: 80px; padding: 8px; border-radius: 6px; border: 1px solid var(--sidebar-border); background-color: var(--composer-bg); color: var(--text-primary); font-size: 13px; resize: vertical; outline: none; font-family: inherit; box-sizing: border-box;">${escapeHtml(originalBody)}</textarea>
+            <textarea class="comment-edit-textarea form-control" style="width: 100%; min-height: 80px; padding: 8px; border-radius: 6px; border: 1px solid var(--sidebar-border); background-color: var(--composer-bg); color: var(--text-primary); font-size: 13px; resize: vertical; outline: none; font-family: inherit; box-sizing: border-box;">${escapeHtml(draftValue)}</textarea>
             <div style="display: flex; gap: 8px; justify-content: flex-end;">
               <button class="edit-cancel-btn btn btn-sm" style="padding: 4px 10px; border-radius: 6px; border: 1px solid var(--sidebar-border); background-color: transparent; color: var(--text-secondary); font-size: 12px; cursor: pointer;">Cancel</button>
               <button class="edit-save-btn btn btn-sm btn-primary" style="padding: 4px 14px; border-radius: 6px; border: none; background-color: var(--accent-color); color: #fff; font-size: 12px; font-weight: 500; cursor: pointer;">Save</button>
@@ -1483,10 +1569,19 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
 
         textarea.focus();
 
+        if (editDraftKey) {
+          textarea.addEventListener('input', () => {
+            saveDraft(editDraftKey, textarea.value);
+          });
+        }
+
         cancelBtn.addEventListener('click', (e) => {
           e.preventDefault();
           e.stopPropagation();
           bodyEl.innerHTML = originalContent;
+          if (editDraftKey) {
+            saveDraft(editDraftKey, '');
+          }
         });
 
         saveBtn.addEventListener('click', async (e) => {
@@ -1499,13 +1594,22 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
           textarea.disabled = true;
           try {
             await editComment(commentId, type, newBody);
+            if (editDraftKey) {
+              saveDraft(editDraftKey, '');
+            }
           } catch (err) {
             alert('Failed to edit comment: ' + err);
             saveBtn.disabled = false;
             textarea.disabled = false;
           }
         });
-      });
+      };
+
+      editBtn.addEventListener('click', () => handleEditClick());
+
+      if (hasEditDraft) {
+        handleEditClick(draftsStore[editDraftKey]);
+      }
     }
 
     // Delete comment button
@@ -1532,7 +1636,10 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
 
       const editReplyBtn = replyItem.querySelector('.edit-reply-btn') as HTMLButtonElement;
       if (editReplyBtn) {
-        editReplyBtn.addEventListener('click', () => {
+        const editReplyDraftKey = getDraftKey('edit_reply:' + commentId + ':' + replyId);
+        const hasEditReplyDraft = editReplyDraftKey && draftsStore[editReplyDraftKey];
+
+        const handleEditReplyClick = (initialValue?: string) => {
           const bodyEl = replyItem.querySelector('.reply-body') as HTMLElement;
           if (!bodyEl) return;
           if (replyItem.querySelector('.reply-edit-textarea')) return;
@@ -1540,9 +1647,11 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
           const originalBody = bodyEl.innerText;
           const originalContent = bodyEl.innerHTML;
 
+          const draftValue = initialValue !== undefined ? initialValue : originalBody;
+
           bodyEl.innerHTML = `
             <div class="reply-edit-form" style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
-              <textarea class="reply-edit-textarea form-control" style="width: 100%; min-height: 60px; padding: 6px; border-radius: 6px; border: 1px solid var(--sidebar-border); background-color: var(--composer-bg); color: var(--text-primary); font-size: 12px; resize: vertical; outline: none; font-family: inherit; box-sizing: border-box;">${escapeHtml(originalBody)}</textarea>
+              <textarea class="reply-edit-textarea form-control" style="width: 100%; min-height: 60px; padding: 6px; border-radius: 6px; border: 1px solid var(--sidebar-border); background-color: var(--composer-bg); color: var(--text-primary); font-size: 12px; resize: vertical; outline: none; font-family: inherit; box-sizing: border-box;">${escapeHtml(draftValue)}</textarea>
               <div style="display: flex; gap: 6px; justify-content: flex-end;">
                 <button class="reply-edit-cancel-btn btn btn-sm" style="padding: 2px 8px; border-radius: 4px; border: 1px solid var(--sidebar-border); background-color: transparent; color: var(--text-secondary); font-size: 11px; cursor: pointer;">Cancel</button>
                 <button class="reply-edit-save-btn btn btn-sm btn-primary" style="padding: 2px 10px; border-radius: 4px; border: none; background-color: var(--accent-color); color: #fff; font-size: 11px; font-weight: 500; cursor: pointer;">Save</button>
@@ -1556,10 +1665,19 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
 
           textarea.focus();
 
+          if (editReplyDraftKey) {
+            textarea.addEventListener('input', () => {
+              saveDraft(editReplyDraftKey, textarea.value);
+            });
+          }
+
           cancelBtn.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
             bodyEl.innerHTML = originalContent;
+            if (editReplyDraftKey) {
+              saveDraft(editReplyDraftKey, '');
+            }
           });
 
           saveBtn.addEventListener('click', async (e) => {
@@ -1572,13 +1690,22 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
             textarea.disabled = true;
             try {
               await editReply(commentId, replyId, type, newBody);
+              if (editReplyDraftKey) {
+                saveDraft(editReplyDraftKey, '');
+              }
             } catch (err) {
               alert('Failed to edit reply: ' + err);
               saveBtn.disabled = false;
               textarea.disabled = false;
             }
           });
-        });
+        };
+
+        editReplyBtn.addEventListener('click', () => handleEditReplyClick());
+
+        if (hasEditReplyDraft) {
+          handleEditReplyClick(draftsStore[editReplyDraftKey]);
+        }
       }
 
       const deleteReplyBtn = replyItem.querySelector('.delete-reply-btn') as HTMLButtonElement;
@@ -1632,6 +1759,8 @@ function openSidebarForNewInline(fields: {
   const block = parsedAnchors.find((a) => a.paragraph_index === fields.paragraph_index);
   const line = block && block.line_number !== undefined ? block.line_number + 1 : 1;
 
+  const draftKey = getDraftKey(`new_inline:${currentMetadata?.filePath}:${fields.paragraph_index}`);
+
   triggerAndMoveNativeComposer(
     currentMetadata!.filePath,
     line,
@@ -1645,10 +1774,13 @@ function openSidebarForNewInline(fields: {
         fields.heading_context
       );
       composer.style.display = 'none';
+      saveDraft(draftKey, '');
     },
     () => {
       composer.style.display = 'none';
-    }
+      saveDraft(draftKey, '');
+    },
+    draftKey
   ).catch((err) => {
     console.warn('[md-comments] Trigger native composer for new inline failed, falling back:', err);
     showFallbackReplyComposer(
@@ -1662,10 +1794,13 @@ function openSidebarForNewInline(fields: {
           fields.heading_context
         );
         composer.style.display = 'none';
+        saveDraft(draftKey, '');
       },
       () => {
         composer.style.display = 'none';
-      }
+        saveDraft(draftKey, '');
+      },
+      draftKey
     );
   });
 }

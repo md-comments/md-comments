@@ -1,16 +1,16 @@
 # Graph Report - md-comments  (2026-08-02)
 
 ## Corpus Check
-- 104 files · ~103,967 words
+- 104 files · ~104,291 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1105 nodes · 2040 edges · 79 communities (57 shown, 22 thin omitted)
+- 1108 nodes · 2052 edges · 80 communities (58 shown, 22 thin omitted)
 - Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 130 edges (avg confidence: 0.79)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `20c8d3c7`
+- Built from commit: `ef7eccd6`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -90,6 +90,7 @@
 - Website Assets
 - Markdown Comments for VS Code
 - test-publish-local.sh
+- CommentStore
 - Context Pack
 - Workflow: context-pack
 
@@ -120,11 +121,11 @@
 ## Import Cycles
 - None detected.
 
-## Communities (79 total, 22 thin omitted)
+## Communities (80 total, 22 thin omitted)
 
 ### Community 0 - "markdownItPlugin.ts"
-Cohesion: 0.06
-Nodes (82): clearAuthorCache(), extractMentionLogins(), fallbackAuthor(), getCachedAuthor(), githubAvatarUrl(), githubProfileUrl(), isCacheValid(), isGitHubLogin() (+74 more)
+Cohesion: 0.08
+Nodes (68): extractMentionLogins(), githubProfileUrl(), isGitHubLogin(), escapeHtml(), warmAuthorCache(), CommentActionMessage, CommentPreviewPanel, activate() (+60 more)
 
 ### Community 1 - "content.ts"
 Cohesion: 0.08
@@ -135,8 +136,8 @@ Cohesion: 0.11
 Nodes (25): main(), print_usage(), backup_dir_for(), build_compress_prompt(), build_fix_prompt(), call_claude(), compress_file(), is_sensitive_path() (+17 more)
 
 ### Community 3 - "commentStore.ts"
-Cohesion: 0.21
-Nodes (27): getAuthor(), executeCommentAction(), resolveText(), savedToast(), addInlineComment(), addPageComment(), addReply(), applyReactionToggle() (+19 more)
+Cohesion: 0.13
+Nodes (40): clearAuthorCache(), fallbackAuthor(), getCachedAuthor(), githubAvatarUrl(), isCacheValid(), setCachedAuthor(), execFileAsync, getAuthor() (+32 more)
 
 ### Community 4 - "validate.py"
 Cohesion: 0.17
@@ -167,8 +168,8 @@ Cohesion: 0.08
 Nodes (25): author, dependencies, js-yaml, description, devDependencies, esbuild, tslib, @types/chrome (+17 more)
 
 ### Community 13 - "main.ts"
-Cohesion: 0.10
-Nodes (36): CacheEntry, createLivePreviewExtension(), fuzzyMatch(), highlightTextInElement(), registerReadingViewProcessor(), displayNameCache, pendingFetches, CommentStore (+28 more)
+Cohesion: 0.12
+Nodes (37): CacheEntry, handleTextSelection(), hideSelectionButton(), showSelectionButton(), createLivePreviewExtension(), fuzzyMatch(), highlightTextInElement(), registerReadingViewProcessor() (+29 more)
 
 ### Community 14 - "previewActions.js"
 Cohesion: 0.16
@@ -338,29 +339,33 @@ Nodes (4): draw_text_centered(), draw_text_with_shadow(), main(), make_rounded_c
 Cohesion: 0.20
 Nodes (9): Commands, From VS Code Marketplace / Open VSX, From VSIX, Installation, Key Features, License, Markdown Comments for VS Code, Settings (+1 more)
 
+### Community 77 - "CommentStore"
+Cohesion: 0.33
+Nodes (3): CommentStore, newId(), CommentRootType
+
 ### Community 102 - "Context Pack"
 Cohesion: 0.33
 Nodes (5): Context Pack, Guardrails, Output Focus, Patterns, Workflow
 
 ## Knowledge Gaps
-- **415 isolated node(s):** `root`, `parser`, `browser`, `node`, `es2022` (+410 more)
+- **416 isolated node(s):** `root`, `parser`, `browser`, `node`, `es2022` (+411 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **22 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `keywords` connect `obsidian-plugin/package.json` to `main.ts`?**
-  _High betweenness centrality (0.025) - this node is a cross-community bridge._
 - **Why does `obsidian` connect `main.ts` to `obsidian-plugin/package.json`?**
-  _High betweenness centrality (0.025) - this node is a cross-community bridge._
-- **Why does `isGitHubLogin()` connect `markdownItPlugin.ts` to `content.ts`, `CommentsSidebarView`, `main.ts`?**
-  _High betweenness centrality (0.011) - this node is a cross-community bridge._
+  _High betweenness centrality (0.024) - this node is a cross-community bridge._
+- **Why does `keywords` connect `obsidian-plugin/package.json` to `main.ts`?**
+  _High betweenness centrality (0.024) - this node is a cross-community bridge._
+- **Why does `escapeHtml()` connect `markdownItPlugin.ts` to `content.ts`, `CommentsSidebarView`, `main.ts`?**
+  _High betweenness centrality (0.014) - this node is a cross-community bridge._
 - **Are the 65 inferred relationships involving `Chrome Extension Options UI` (e.g. with `Chrome Extension Icon SVG` and `content.ts`) actually correct?**
   _`Chrome Extension Options UI` has 65 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 28 inferred relationships involving `Obsidian Plugin Guide` (e.g. with `main.ts` and `CommentComposerModal`) actually correct?**
   _`Obsidian Plugin Guide` has 28 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `root`, `parser`, `browser` to the rest of the system?**
-  _415 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _416 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `markdownItPlugin.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.061855670103092786 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07527853056308341 - nodes in this community are weakly interconnected._
