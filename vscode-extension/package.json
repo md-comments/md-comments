@@ -101,7 +101,7 @@
     "@types/node": "^20.14.0",
     "@types/vscode": "^1.85.0",
     "@vscode/vsce": "^3.2.1",
-    "typescript": "^5.5.0"
+    "typescript": "^7.0.2"
   },
   "dependencies": {
     "js-yaml": "^4.3.0",
