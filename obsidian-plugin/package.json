@@ -17,7 +17,7 @@
   "author": "mstrelex",
   "license": "MIT",
   "dependencies": {
-    "js-yaml": "^4.3.0"
+    "js-yaml": "^5.2.3"
   },
   "devDependencies": {
     "@codemirror/language": "^6.10.1",
