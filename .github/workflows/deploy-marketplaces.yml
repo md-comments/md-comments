@@ -172,6 +172,10 @@ jobs:
                 console.log("Chrome Extension version already published. Skipping.");
                 process.exit(0);
               }
+              if (err.response && err.response.error === "invalid_grant") {
+                console.error("\n::error::Google OAuth Refresh Token expired or revoked (invalid_grant).");
+                console.error("Fix: Set your OAuth Consent Screen in Google Cloud Console to 'In Production' (Testing status causes tokens to expire every 7 days).\n");
+              }
               console.error("Deployment failed:", err);
               process.exit(1);
             }

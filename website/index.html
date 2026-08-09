@@ -70,7 +70,7 @@
             >
           </h1>
           <p class="hero-subtitle">
-            Highlight text and collaborate directly on Markdown documentation. Auto-saved to GitHub Issues per document. Supported across VS Code, Cursor, Antigravity, Obsidian, and Chrome.
+            Highlight text and collaborate directly on Markdown documentation. Auto-saved to GitHub via custom git refs (<code>refs/md-comments/data</code>) outside the standard <code>refs/heads/</code> branch namespace. Supported across VS Code, Cursor, Antigravity, Obsidian, and Chrome.
           </p>
           <div class="hero-buttons">
             <a href="#integrations" class="btn btn-primary">See Integrations</a>
@@ -166,9 +166,9 @@
                 />
               </svg>
             </div>
-            <h3>Zero-Commit GitHub Issues Backend</h3>
+            <h3>Zero-Commit Custom Git Refs Backend</h3>
             <p>
-              Comments auto-save instantly to a dedicated GitHub Issue per document (<code>[md-comments] &lt;filepath&gt;</code>). No branches, no PRs, no git commits needed. Anyone on GitHub can review and comment instantly.
+              Comments auto-save instantly via custom git refs (<code>refs/md-comments/data</code>) placed outside the standard <code>refs/heads/</code> branch namespace. No branches, no PRs, no manual git commits needed.
             </p>
           </div>
 

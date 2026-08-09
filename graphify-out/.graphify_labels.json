@@ -2,7 +2,6 @@
   "0": "markdownItPlugin.ts",
   "1": "content.ts",
   "2": "compress.py",
-  "3": "get-device-page-html.mjs",
   "4": "validate.py",
   "5": "vscode-extension/package.json",
   "6": "obsidian-plugin/package.json",
@@ -25,11 +24,10 @@
   "23": "preview-webview.js",
   "24": "scripts",
   "25": "GitHubApi",
-  "26": "Obsidian Plugin Guide",
+  "26": "types.ts",
   "27": "obsidian-plugin/manifest.json",
   "28": "esbuild.js",
   "29": "mentionAutocomplete.js",
-  "30": "CommentStore",
   "31": "compilerOptions",
   "32": "esbuild.config.mjs",
   "33": "avatarFallback.js",
@@ -80,7 +78,5 @@
   "102": "Context Pack",
   "105": "Chrome Extension Icon SVG",
   "110": "Workflow: context-pack",
-  "111": "commentStore.ts",
-  "112": "inspect-extension-storage.mjs",
-  "114": "test-debug-replies.mjs"
+  "111": "commentStore.ts"
 }
