@@ -13,10 +13,10 @@ export function initializeLogger(context: any): void {
 
 export function logDebug(message: string, ...args: any[]): void {
   const timestamp = new Date().toISOString();
-  const formattedArgs = args.map(arg => 
-    typeof arg === 'object' ? JSON.stringify(arg) : String(arg)
-  ).join(' ');
-  
+  const formattedArgs = args
+    .map((arg) => (typeof arg === 'object' ? JSON.stringify(arg) : String(arg)))
+    .join(' ');
+
   const line = `[${timestamp}] [DEBUG] ${message} ${formattedArgs}`.trim();
   console.log(line);
   if (outputChannel) {
@@ -26,10 +26,10 @@ export function logDebug(message: string, ...args: any[]): void {
 
 export function logInfo(message: string, ...args: any[]): void {
   const timestamp = new Date().toISOString();
-  const formattedArgs = args.map(arg => 
-    typeof arg === 'object' ? JSON.stringify(arg) : String(arg)
-  ).join(' ');
-  
+  const formattedArgs = args
+    .map((arg) => (typeof arg === 'object' ? JSON.stringify(arg) : String(arg)))
+    .join(' ');
+
   const line = `[${timestamp}] [INFO] ${message} ${formattedArgs}`.trim();
   console.info(line);
   if (outputChannel) {

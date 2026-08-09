@@ -528,7 +528,10 @@ async function loadDocumentComments(meta: ParsedUrl & { type: 'blob' }) {
       loadedComments = mergeLocalComments(loadedComments, fetched);
     } catch (err) {
       console.warn('[md-comments] Error reading comments from GitHubIssueBackend:', err);
-      loadedComments = mergeLocalComments(loadedComments, { page_comments: [], inline_comments: [] });
+      loadedComments = mergeLocalComments(loadedComments, {
+        page_comments: [],
+        inline_comments: [],
+      });
     }
   }
 
@@ -564,7 +567,7 @@ function mergeLocalComments(local: CommentsFile, fetched: CommentsFile): Comment
 
   for (const localC of local.inline_comments) {
     if (localCreatedIds.has(localC.id)) {
-      const exists = fetched.inline_comments.some(c => c.id === localC.id);
+      const exists = fetched.inline_comments.some((c) => c.id === localC.id);
       if (!exists) {
         mergedInline.push(localC);
       }
@@ -573,7 +576,7 @@ function mergeLocalComments(local: CommentsFile, fetched: CommentsFile): Comment
 
   for (const localC of local.page_comments) {
     if (localCreatedIds.has(localC.id)) {
-      const exists = fetched.page_comments.some(c => c.id === localC.id);
+      const exists = fetched.page_comments.some((c) => c.id === localC.id);
       if (!exists) {
         mergedPage.push(localC);
       }
@@ -581,11 +584,11 @@ function mergeLocalComments(local: CommentsFile, fetched: CommentsFile): Comment
   }
 
   for (const fetchedC of mergedInline) {
-    const localC = local.inline_comments.find(c => c.id === fetchedC.id);
+    const localC = local.inline_comments.find((c) => c.id === fetchedC.id);
     if (localC) {
       for (const localR of localC.replies) {
         if (localCreatedIds.has(localR.id)) {
-          const exists = fetchedC.replies.some(r => r.id === localR.id);
+          const exists = fetchedC.replies.some((r) => r.id === localR.id);
           if (!exists) {
             fetchedC.replies.push(localR);
           }
@@ -595,11 +598,11 @@ function mergeLocalComments(local: CommentsFile, fetched: CommentsFile): Comment
   }
 
   for (const fetchedC of mergedPage) {
-    const localC = local.page_comments.find(c => c.id === fetchedC.id);
+    const localC = local.page_comments.find((c) => c.id === fetchedC.id);
     if (localC) {
       for (const localR of localC.replies) {
         if (localCreatedIds.has(localR.id)) {
-          const exists = fetchedC.replies.some(r => r.id === localR.id);
+          const exists = fetchedC.replies.some((r) => r.id === localR.id);
           if (!exists) {
             fetchedC.replies.push(localR);
           }
@@ -610,7 +613,7 @@ function mergeLocalComments(local: CommentsFile, fetched: CommentsFile): Comment
 
   return {
     inline_comments: mergedInline,
-    page_comments: mergedPage
+    page_comments: mergedPage,
   };
 }
 
@@ -1134,7 +1137,8 @@ async function triggerAndMoveNativeComposer(
     const submitBtn =
       (nativeForm?.querySelector(
         'button[type="submit"], button.btn-primary, button.js-addition-comment-submit, button.js-comment-submit-button, input[type="submit"]'
-      ) as HTMLElement | null) || ((e.target as HTMLElement | null)?.closest('button') as HTMLElement | null);
+      ) as HTMLElement | null) ||
+      ((e.target as HTMLElement | null)?.closest('button') as HTMLElement | null);
     try {
       submitBtn?.setAttribute('disabled', 'true');
       submitBtn?.classList.add('loading');

@@ -16,7 +16,9 @@ describe('GitHubOrphanRefBackend', () => {
     });
 
     it('leaves existing .comments.yml paths unchanged', () => {
-      expect(commentsFilePathForMarkdown('docs/intro.comments.yml')).toBe('docs/intro.comments.yml');
+      expect(commentsFilePathForMarkdown('docs/intro.comments.yml')).toBe(
+        'docs/intro.comments.yml'
+      );
     });
   });
 
@@ -56,7 +58,15 @@ describe('GitHubOrphanRefBackend', () => {
             orphaned: false,
             resolved: false,
             reactions: [],
-            replies: [{ id: 'r1', author: 'bob', body: 'Remote reply', created_at: '2026-08-04T12:05:00Z', reactions: [] }],
+            replies: [
+              {
+                id: 'r1',
+                author: 'bob',
+                body: 'Remote reply',
+                created_at: '2026-08-04T12:05:00Z',
+                reactions: [],
+              },
+            ],
           },
           {
             id: 'c2',
@@ -176,7 +186,10 @@ describe('GitHubOrphanRefBackend', () => {
 
       // Attempt 2:
       // GET ref -> ok
-      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ object: { sha: 'c2-new' } }) });
+      fetchMock.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ object: { sha: 'c2-new' } }),
+      });
       // POST tree -> ok
       fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ sha: 't3' }) });
       // POST commit -> ok

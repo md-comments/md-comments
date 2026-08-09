@@ -134,15 +134,11 @@ export async function pollForAccessToken(
           return data.access_token;
         }
 
-        if (
-          data.error &&
-          data.error !== 'authorization_pending' &&
-          data.error !== 'slow_down'
-        ) {
+        if (data.error && data.error !== 'authorization_pending' && data.error !== 'slow_down') {
           logError(`pollForAccessToken error: ${data.error_description || data.error}`);
           throw new Error(data.error_description || data.error);
         }
-        
+
         logDebug(`pollForAccessToken status: ${data.error || 'authorization_pending'}`);
       } else {
         logError(`pollForAccessToken HTTP non-ok status: ${res.status}`);
@@ -174,9 +170,7 @@ export async function signIn(): Promise<string | null> {
     });
     if (session?.accessToken) {
       logInfo(`signIn native success: user=${session.account.label}`);
-      vscode.window.showInformationMessage(
-        `Signed in to GitHub as ${session.account.label}`
-      );
+      vscode.window.showInformationMessage(`Signed in to GitHub as ${session.account.label}`);
       cachedTokenState = true;
       return session.accessToken;
     }

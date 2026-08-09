@@ -28,14 +28,18 @@ export class OptimisticCommentStore {
     const cachedTime = this.cacheTime.get(kStr) || 0;
     const isStale = now - cachedTime > DEFAULT_TTL_MS;
 
-    logDebug(`OptimisticStore.getComments for key: ${kStr}, forceRefresh=${forceRefresh}, isStale=${isStale}`);
+    logDebug(
+      `OptimisticStore.getComments for key: ${kStr}, forceRefresh=${forceRefresh}, isStale=${isStale}`
+    );
 
     if (!forceRefresh && !isStale && this.cache.has(kStr)) {
       logDebug(`OptimisticStore.getComments Cache Hit (fresh) for key: ${kStr}`);
       return this.cache.get(kStr)!;
     }
 
-    logDebug(`OptimisticStore.getComments Cache ${forceRefresh ? 'Force Bypass' : isStale ? 'Stale (TTL expired)' : 'Miss'}. Fetching remote...`);
+    logDebug(
+      `OptimisticStore.getComments Cache ${forceRefresh ? 'Force Bypass' : isStale ? 'Stale (TTL expired)' : 'Miss'}. Fetching remote...`
+    );
     const remoteData = await fetchRemote();
     logDebug(`OptimisticStore.getComments Fetch Complete. comments loaded:`, {
       inline: remoteData?.inline_comments?.length || 0,

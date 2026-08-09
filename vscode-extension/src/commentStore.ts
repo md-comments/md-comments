@@ -53,7 +53,9 @@ export async function readComments(mdUri: vscode.Uri, forceRefresh = false): Pro
     },
     forceRefresh
   );
-  logDebug(`readComments data loaded successfully, inline count: ${fileData.inline_comments.length}`);
+  logDebug(
+    `readComments data loaded successfully, inline count: ${fileData.inline_comments.length}`
+  );
   return normalizeCommentsFile(fileData);
 }
 

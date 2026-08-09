@@ -691,11 +691,15 @@ function loadContext(uri: vscode.Uri): RenderContext | null {
       } else {
         logDebug(`loadContext cache cold. Launching async readComments for: ${uri.toString()}`);
         void readComments(uri).then((fetched) => {
-          logDebug(`loadContext async readComments returned. inline count: ${fetched.inline_comments.length}`);
+          logDebug(
+            `loadContext async readComments returned. inline count: ${fetched.inline_comments.length}`
+          );
         });
       }
     } else {
-      logDebug(`loadContext storage key is null for URI: ${uri.toString()}. Remote features will be unavailable.`);
+      logDebug(
+        `loadContext storage key is null for URI: ${uri.toString()}. Remote features will be unavailable.`
+      );
     }
 
     const placements = placeInlineComments(blocks, comments.inline_comments);

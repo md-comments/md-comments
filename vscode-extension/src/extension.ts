@@ -133,7 +133,9 @@ export function activate(context: vscode.ExtensionContext): {
         void warmAuthorCache();
         void updateStatusBar();
         void readComments(doc.uri, true).then((comments) => {
-          logDebug(`Pre-warmed comments onDidOpenTextDocument, count: inline=${comments.inline_comments.length}, page=${comments.page_comments.length}`);
+          logDebug(
+            `Pre-warmed comments onDidOpenTextDocument, count: inline=${comments.inline_comments.length}, page=${comments.page_comments.length}`
+          );
         });
       }
     }),
@@ -141,7 +143,9 @@ export function activate(context: vscode.ExtensionContext): {
       if (editor?.document.languageId === 'markdown') {
         logDebug('onDidChangeActiveTextEditor:', editor.document.uri.toString());
         void readComments(editor.document.uri, true).then((comments) => {
-          logDebug(`Pre-warmed comments onDidChangeActiveTextEditor, count: inline=${comments.inline_comments.length}, page=${comments.page_comments.length}`);
+          logDebug(
+            `Pre-warmed comments onDidChangeActiveTextEditor, count: inline=${comments.inline_comments.length}, page=${comments.page_comments.length}`
+          );
         });
       }
     }),
@@ -152,7 +156,9 @@ export function activate(context: vscode.ExtensionContext): {
           await handleUri(uri);
         } catch (err) {
           logError('URI handler failed', err);
-          vscode.window.showErrorMessage(`Markdown Comments: ${err instanceof Error ? err.message : String(err)}`);
+          vscode.window.showErrorMessage(
+            `Markdown Comments: ${err instanceof Error ? err.message : String(err)}`
+          );
         }
       },
     }),
@@ -184,7 +190,9 @@ export function activate(context: vscode.ExtensionContext): {
           await handlePreviewAction(args[0]);
         } catch (err) {
           logError('Command mdComments.handlePreviewAction failed', err);
-          vscode.window.showErrorMessage(`Markdown Comments: ${err instanceof Error ? err.message : String(err)}`);
+          vscode.window.showErrorMessage(
+            `Markdown Comments: ${err instanceof Error ? err.message : String(err)}`
+          );
         }
       }
     ),

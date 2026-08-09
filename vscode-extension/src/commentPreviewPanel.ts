@@ -82,7 +82,9 @@ export class CommentPreviewPanel {
   }
 
   async refresh(forceRemote = false): Promise<void> {
-    logDebug(`CommentPreviewPanel.refresh invoked for ${this.mdUri.toString()}, forceRemote=${forceRemote}`);
+    logDebug(
+      `CommentPreviewPanel.refresh invoked for ${this.mdUri.toString()}, forceRemote=${forceRemote}`
+    );
     const doc = await vscode.workspace.openTextDocument(this.mdUri);
     const bodyHtml = await renderMarkdownWithComments(doc.getText(), this.mdUri, forceRemote);
     const nonce = String(Date.now());

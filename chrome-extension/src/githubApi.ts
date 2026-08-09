@@ -452,7 +452,12 @@ export class GitHubApi {
       }
 
       if (installation.repository_selection === 'all') {
-        const result = { installed: true, repoAccess: true, appSlug, installationId: installation.id };
+        const result = {
+          installed: true,
+          repoAccess: true,
+          appSlug,
+          installationId: installation.id,
+        };
         this.appInstallationCache.set(cacheKey, result);
         return result;
       }
@@ -463,7 +468,12 @@ export class GitHubApi {
       );
 
       if (!reposRes.ok) {
-        const result = { installed: true, repoAccess: false, appSlug, installationId: installation.id };
+        const result = {
+          installed: true,
+          repoAccess: false,
+          appSlug,
+          installationId: installation.id,
+        };
         this.appInstallationCache.set(cacheKey, result);
         return result;
       }

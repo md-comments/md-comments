@@ -107,10 +107,7 @@ export class GitHubOrphanRefBackend implements CommentBackend {
       if (res.ok) {
         const data = (await res.json()) as { content?: string; encoding?: string };
         if (data.content) {
-          const rawText =
-            data.encoding === 'base64'
-              ? decodeBase64(data.content)
-              : data.content;
+          const rawText = data.encoding === 'base64' ? decodeBase64(data.content) : data.content;
           const parsed = (yaml.load(rawText) as Partial<CommentsFile>) || {};
           return {
             inline_comments: parsed.inline_comments || [],
@@ -163,9 +160,7 @@ export class GitHubOrphanRefBackend implements CommentBackend {
             const oldData = (await oldRes.json()) as { content?: string; encoding?: string };
             if (oldData.content) {
               const rawText =
-                oldData.encoding === 'base64'
-                  ? decodeBase64(oldData.content)
-                  : oldData.content;
+                oldData.encoding === 'base64' ? decodeBase64(oldData.content) : oldData.content;
               const parsed = (yaml.load(rawText) as Partial<CommentsFile>) || {};
               const commentsFile: CommentsFile = {
                 inline_comments: parsed.inline_comments || [],
@@ -189,7 +184,11 @@ export class GitHubOrphanRefBackend implements CommentBackend {
   /**
    * Deletes a file entry from the orphan ref.
    */
-  private async deleteFileFromRef(owner: string, repo: string, pathToDelete: string): Promise<void> {
+  private async deleteFileFromRef(
+    owner: string,
+    repo: string,
+    pathToDelete: string
+  ): Promise<void> {
     try {
       const refUrl = `https://api.github.com/repos/${owner}/${repo}/git/refs/md-comments/data`;
       const refRes = await this.fetchApi(refUrl);
@@ -248,7 +247,9 @@ export class GitHubOrphanRefBackend implements CommentBackend {
         if (success) return;
       } catch (err: any) {
         if (attempt === maxRetries) {
-          throw new Error(`Failed to write comments to orphan ref after ${maxRetries} attempts: ${err?.message || err}`);
+          throw new Error(
+            `Failed to write comments to orphan ref after ${maxRetries} attempts: ${err?.message || err}`
+          );
         }
       }
       await new Promise((r) => setTimeout(r, 100 * attempt));

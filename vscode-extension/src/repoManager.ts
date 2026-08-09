@@ -37,7 +37,9 @@ export async function getGitRemoteUrl(cwd: string): Promise<string | null> {
     return remoteUrlCache.get(cwd)!;
   }
   try {
-    const { stdout } = await execFileAsync('git', ['config', '--get', 'remote.origin.url'], { cwd });
+    const { stdout } = await execFileAsync('git', ['config', '--get', 'remote.origin.url'], {
+      cwd,
+    });
     const url = stdout.trim() || null;
     logDebug(`getGitRemoteUrl resolved remote.origin.url: ${url}`);
     remoteUrlCache.set(cwd, url);
@@ -53,7 +55,9 @@ export function resolveStorageKeyForUriSync(mdUri: vscode.Uri): CommentStorageKe
   logDebug(`resolveStorageKeyForUriSync mdUri: ${mdUri.toString()}`);
   const workspaceFolder = vscode.workspace.getWorkspaceFolder(mdUri);
   const cwd = workspaceFolder ? workspaceFolder.uri.fsPath : path.dirname(mdUri.fsPath);
-  logDebug(`resolveStorageKeyForUriSync workspaceFolder: ${workspaceFolder?.uri.toString() || 'none'}, cwd: ${cwd}`);
+  logDebug(
+    `resolveStorageKeyForUriSync workspaceFolder: ${workspaceFolder?.uri.toString() || 'none'}, cwd: ${cwd}`
+  );
 
   const remoteUrl = getGitRemoteUrlSync(cwd);
   logDebug(`resolveStorageKeyForUriSync remoteUrl: ${remoteUrl}`);
@@ -61,7 +65,9 @@ export function resolveStorageKeyForUriSync(mdUri: vscode.Uri): CommentStorageKe
   logDebug(`resolveStorageKeyForUriSync parseGitHubRemote result:`, repoInfo);
 
   if (!repoInfo) {
-    logDebug(`resolveStorageKeyForUriSync failed to resolve repoInfo for mdUri: ${mdUri.toString()}`);
+    logDebug(
+      `resolveStorageKeyForUriSync failed to resolve repoInfo for mdUri: ${mdUri.toString()}`
+    );
     return null;
   }
 
@@ -82,11 +88,15 @@ export function resolveStorageKeyForUriSync(mdUri: vscode.Uri): CommentStorageKe
   };
 }
 
-export async function resolveStorageKeyForUri(mdUri: vscode.Uri): Promise<CommentStorageKey | null> {
+export async function resolveStorageKeyForUri(
+  mdUri: vscode.Uri
+): Promise<CommentStorageKey | null> {
   logDebug(`resolveStorageKeyForUri mdUri: ${mdUri.toString()}`);
   const workspaceFolder = vscode.workspace.getWorkspaceFolder(mdUri);
   const cwd = workspaceFolder ? workspaceFolder.uri.fsPath : path.dirname(mdUri.fsPath);
-  logDebug(`resolveStorageKeyForUri workspaceFolder: ${workspaceFolder?.uri.toString() || 'none'}, cwd: ${cwd}`);
+  logDebug(
+    `resolveStorageKeyForUri workspaceFolder: ${workspaceFolder?.uri.toString() || 'none'}, cwd: ${cwd}`
+  );
 
   const remoteUrl = await getGitRemoteUrl(cwd);
   logDebug(`resolveStorageKeyForUri remoteUrl: ${remoteUrl}`);
