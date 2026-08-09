@@ -12,4 +12,4 @@ Comments use your GitHub username when you are signed in to GitHub in the editor
 
 ## Next steps
 
-Open the preview to the side, select a sentence, and add a comment. Comments auto-save to the GitHub backend (or create a companion `example.comments.yml` file when offline).
+Open the preview to the side, select a sentence, and add a comment. Comments auto-save to GitHub via custom git refs.

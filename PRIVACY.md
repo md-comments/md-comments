@@ -20,7 +20,7 @@ Your privacy is extremely important to us. This Privacy Policy describes how the
 
 ### VS Code Extension & Obsidian Plugin
 
-- **Comment Data:** All comments, replies, and reactions are stored directly on GitHub as the primary backend (via GitHub API using dedicated orphan git references `refs/md-comments/data`). When working offline or in local non-GitHub repositories, comments seamlessly fall back to local companion `<filename>.comments.yml` files right next to your markdown documents.
+- **Comment Data:** All comments, replies, and reactions are stored directly on GitHub as the primary backend (via GitHub API using dedicated orphan git references `refs/md-comments/data`).
 - **Local Settings:** Settings such as preferred sidebar width, emoji lists, or your custom author name are stored locally using the host application's configuration mechanism (VS Code native workspace settings or Obsidian plugin data folder).
 - **GitHub Profile Lookup:** To display GitHub profile pictures (avatars) and usernames in the comment sidebar, the VS Code extension and Obsidian plugin query public GitHub endpoints (`https://api.github.com/users/*`). These requests do not transmit personal data and are used solely to fetch public avatar URLs and display names.
 
@@ -42,11 +42,11 @@ The Software requests only the necessary permissions required to operate:
 
 ### VS Code Extension
 
-- **File System Access**: Required to read and write companion `.comments.yml` files when working in local offline mode.
+- **File System Access**: Required for reading workspace configuration and file paths to associate comments with Markdown documents.
 
 ### Obsidian Plugin
 
-- **Vault Access**: Required to read and write companion `.comments.yml` files when working in local offline mode.
+- **Vault Access**: Required for reading vault structure and note files to associate comments with Markdown documents.
 
 ---
 

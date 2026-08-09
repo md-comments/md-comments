@@ -122,9 +122,7 @@
             <li>
               <strong>Comment Data:</strong> All comments, replies, and reactions are stored directly
               on GitHub as the primary backend (via GitHub API using dedicated orphan git references
-              <code>refs/md-comments/data</code>). When working offline or in local non-GitHub repositories,
-              comments seamlessly fall back to local companion <code>&lt;filename&gt;.comments.yml</code>
-              files right next to your markdown documents.
+              <code>refs/md-comments/data</code>).
             </li>
             <li>
               <strong>Local Settings:</strong> Settings such as preferred sidebar width, emoji
@@ -179,15 +177,14 @@
           <h3>VS Code Extension</h3>
           <ul>
             <li>
-              File System Access: Required to read and write companion
-              <code>.comments.yml</code> files when working in local offline mode.
+              File System Access: Required for reading workspace configuration and file paths to associate comments with Markdown documents.
             </li>
           </ul>
 
           <h3>Obsidian Plugin</h3>
           <ul>
             <li>
-              Vault Access: Required to read and write companion <code>.comments.yml</code> files when working in local offline mode.
+              Vault Access: Required for reading vault structure and note files to associate comments with Markdown documents.
             </li>
           </ul>
 

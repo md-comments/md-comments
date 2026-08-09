@@ -2,14 +2,14 @@
 
 Bring rich inline commenting to Markdown files directly inside VS Code, Cursor, or Antigravity, powered by GitHub as the primary backend.
 
-All comments, replies, and reactions are stored directly on GitHub (in dedicated orphan git references `refs/md-comments/data`), requiring **zero commits, zero branches, and zero PR overhead** in your workspace codebase. For offline or non-GitHub repositories, comments seamlessly fall back to local companion `<filename>.comments.yml` files.
+All comments, replies, and reactions are stored directly on GitHub (in dedicated orphan git references `refs/md-comments/data`), requiring **zero commits, zero branches, and zero PR overhead** in your workspace codebase.
 
 ---
 
 ## Key Features
 
 - **Inline Highlights & Comments**: Leave comments on specific text selections or paragraphs.
-- **GitHub Backend with Local Fallback**: Comments auto-save live to GitHub (`refs/md-comments/data`), with graceful local fallback to `<filename>.comments.yml` when working offline.
+- **Custom Git Refs Backend**: Comments auto-save live to GitHub (`refs/md-comments/data`) with zero commits or branch overhead.
 - **Fuzzy Anchoring Cascade**: Comments are robustly anchored using a cascade matching strategy:
   1. **Paragraph Hash**: Exact match of the normalized FNV-1a hash of the text.
   2. **Fuzzy Text Match**: Selection-based substring search to identify the text even if slightly edited.
@@ -51,7 +51,7 @@ cursor --install-extension md-comments-<version>.vsix
 2. Click the **Comment Icon** (💬) in the editor title menu (top-right), or open the Command Palette (`Cmd+Shift+P` / `Ctrl+Shift+P`) and search for **Markdown Comments: Open Comment Preview**.
 3. Select any text in the editor, click the **Add comment** button in the sidebar (or use editor hover actions) to start a new discussion.
 4. Replies and emoji reactions can be managed directly in the preview sidebar.
-5. Comments auto-save live to the GitHub backend in real time (or fall back to a companion `<filename>.comments.yml` file when offline).
+5. Comments auto-save live to the GitHub backend in real time via custom git refs.
 6. If paragraphs are drastically edited, comments might become "orphaned". You can scan for them by running **Markdown Comments: Scan for Orphaned Comments** from the Command Palette.
 
 ---

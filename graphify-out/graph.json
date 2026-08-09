@@ -1731,15 +1731,15 @@
       "norm_label": "content.ts"
     },
     {
-      "label": "issueBackend",
+      "label": "gitRefBackend",
       "file_type": "code",
       "source_file": "chrome-extension/src/content.ts",
       "source_location": "L22",
       "_origin": "ast",
-      "id": "chrome_extension_src_content_issuebackend",
+      "id": "chrome_extension_src_content_gitrefbackend",
       "community": 1,
       "community_name": "content.ts",
-      "norm_label": "issuebackend"
+      "norm_label": "gitrefbackend"
     },
     {
       "label": "displayNameCache",
@@ -12456,7 +12456,7 @@
       "label": "Added",
       "file_type": "document",
       "source_file": "CHANGELOG.md",
-      "source_location": "L18",
+      "source_location": "L17",
       "_origin": "ast",
       "id": "changelog_added",
       "community": 68,
@@ -15868,6 +15868,17 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "chrome-extension/src/content.ts",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "chrome_extension_src_content",
+      "target": "chrome_extension_src_content_gitrefbackend",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "chrome-extension/src/content.ts",
       "source_location": "L386",
       "weight": 1.0,
       "_origin": "ast",
@@ -16018,17 +16029,6 @@
       "_origin": "ast",
       "source": "chrome_extension_src_content",
       "target": "chrome_extension_src_content_iscustomtabactive",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "chrome-extension/src/content.ts",
-      "source_location": "L22",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "chrome_extension_src_content",
-      "target": "chrome_extension_src_content_issuebackend",
       "confidence_score": 1.0
     },
     {
@@ -38952,7 +38952,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CHANGELOG.md",
-      "source_location": "L18",
+      "source_location": "L17",
       "weight": 1.0,
       "_origin": "ast",
       "source": "changelog_1_1_0_2026_08_09",
@@ -39624,5 +39624,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "e5efe7b2b134c88c5f551852f05a2f12e3762782"
+  "built_at_commit": "37dccdd74d8a9238d494a0e295499fbe3019b0d7"
 }

@@ -1,8 +1,8 @@
 # Markdown Comments — Obsidian Plugin
 
-An Obsidian plugin that brings inline commenting to Markdown files, using GitHub as the primary backend with local YAML companion file fallback.
+An Obsidian plugin that brings inline commenting to Markdown files, powered by custom git refs (`refs/md-comments/data`).
 
-Comments are stored directly on GitHub via dedicated orphan git references (`refs/md-comments/data`), enabling zero-commit, zero-PR collaboration across your notes. For offline vaults or non-GitHub notes, comments gracefully fall back to companion `<filename>.comments.yml` files next to your documents.
+Comments are stored directly on GitHub via dedicated orphan git references (`refs/md-comments/data`), enabling zero-commit, zero-PR collaboration across your notes.
 
 ---
 
@@ -10,7 +10,7 @@ Comments are stored directly on GitHub via dedicated orphan git references (`ref
 
 - **Inline Highlights & Comments**: Works in both **Reading View** (via post-processor) and **Editing/Live Preview Mode** (via CodeMirror 6 plugin).
 - **Custom Sidebar**: Dedicated right sidebar tab displaying Page comments, Inline comments, Resolved comments, and Orphaned comments.
-- **GitHub Backend & Sync Friendly**: Auto-saves comments to GitHub without cluttering your Git repository tree, while supporting offline fallback to local companion YAML files syncable via Obsidian Sync, Google Drive, or Dropbox.
+- **Custom Git Refs Backend**: Auto-saves comments to GitHub without cluttering your Git repository tree, requiring zero commits or PR overhead.
 - **Emoji Reactions & Thread Replies**: Fully supports threaded replies and toggleable emoji reaction chips.
 - **Theme Native**: Integrates with standard Obsidian CSS theme variables to fit perfectly with light, dark, or custom themes.
 

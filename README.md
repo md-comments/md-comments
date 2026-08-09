@@ -7,7 +7,7 @@
 
 🌐 **Website & Demo:** [md-comments.com](https://md-comments.com/)
 
-A collaboration tool for Markdown documentation. Markdown excels at authoring, version control, and agent workflows, but it has no built-in way to highlight a passage and leave feedback inline. **Markdown Comments** closes that gap with a visual commenting UI. Comments auto-save live via custom git refs (`refs/md-comments/data`) placed outside the standard `refs/heads/` branch namespace — requiring **zero commits, zero branches, and zero PR overhead**. Anyone logged into GitHub can review and comment on Markdown documents instantly. For offline or non-GitHub workflows, comments gracefully fall back to companion `*.comments.yml` files.
+A collaboration tool for Markdown documentation. Markdown excels at authoring, version control, and agent workflows, but it has no built-in way to highlight a passage and leave feedback inline. **Markdown Comments** closes that gap with a visual commenting UI. Comments auto-save live via custom git refs (`refs/md-comments/data`) placed outside the standard `refs/heads/` branch namespace — requiring **zero commits, zero branches, and zero PR overhead**. Anyone logged into GitHub can review and comment on Markdown documents instantly.
 
 Works in **VS Code** ([Marketplace](https://marketplace.visualstudio.com/items?itemName=md-comments.md-preview-comments) or [Open VSX](https://open-vsx.org/extension/md-comments/md-preview-comments)), **Cursor**, **Antigravity**, **Obsidian**, and **GitHub** ([Chrome Extension](https://chromewebstore.google.com/detail/markdown-comments/mjlhdjonjfcedkbpajkfeidfebefhkpp)).
 
@@ -16,7 +16,6 @@ Works in **VS Code** ([Marketplace](https://marketplace.visualstudio.com/items?i
 ## 🚀 Key Features
 
 - **Zero-Commit Custom Git Refs Backend**: All comments, replies, and reactions auto-save instantly via custom git refs (`refs/md-comments/data`) outside standard branch namespace. No manual git commits or branches needed.
-- **Companion File Fallback**: When working offline or in local non-GitHub repositories, comments seamlessly persist in local `<filename>.comments.yml` files next to your Markdown document.
 - **Fuzzy Anchoring Cascade**: Comments are robustly anchored using a cascade matching strategy:
   1. **Paragraph Hash**: Exact match of the normalized FNV-1a hash of the text.
   2. **Fuzzy Text Match**: Selection-based substring search to identify the text even if slightly edited.
@@ -81,7 +80,7 @@ Alternatively, to run the extension locally for development:
 1. Open a `.md` file.
 2. Open the **Comments Side Panel** by clicking the comment icon in the Editor Title bar (top right) or running **Markdown Comments: Open Comment Preview** from the Command Palette (`Cmd/Ctrl+Shift+P`).
 3. Select any text in the editor or preview, click **Comment** or **Add comment** to open the composer.
-4. Comments auto-save to GitHub in real time with zero commits on your source tree (or fall back to companion `*.comments.yml` files for offline or non-GitHub workspaces).
+4. Comments auto-save to GitHub in real time via custom git refs (`refs/md-comments/data`) with zero commits on your source tree.
 5. Review or manage orphaned comments by running **Markdown Comments: Scan for Orphaned Comments** from the Command Palette.
 
 ### Obsidian
@@ -99,9 +98,7 @@ Alternatively, to run the extension locally for development:
 3. Click the **Comments** tab to view the dedicated Markdown Comments workspace.
 4. When viewing file diffs, hover over any Markdown paragraph to reveal the **+** (Add Comment) button next to it, or select a specific range of text to add an inline selection comment.
 5. You can also click the floating message bubble icon in the bottom-right corner of the page to toggle the **Comments Sidebar** from any PR tab.
-6. Compose your comment:
-   - On standard branches with write access, comments are committed directly to the active branch.
-   - On protected branches, a `comments/<branch-name>` branch is created automatically and updated with the comment files.
+6. Compose your comment: comments auto-save instantly via custom git refs (`refs/md-comments/data`) with zero commits or branch overhead.
 7. Read, reply to, and resolve comment threads directly from the sidebar or the Comments workspace tab.
 
 ---
