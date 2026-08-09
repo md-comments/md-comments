@@ -1,10 +1,11 @@
-import * as fs from 'fs';
-import * as path from 'path';
-/* eslint-disable security/detect-non-literal-fs-filename */
 import * as vscode from 'vscode';
-import * as yaml from 'js-yaml';
 import { getAuthor } from './author';
 import { authorsMatch } from './githubDisplayNames';
+import { getOAuthToken } from './githubAuth';
+import { resolveStorageKeyForUri } from './repoManager';
+import { globalOptimisticStore } from './optimisticStore';
+import { GitHubOrphanRefBackend } from '../../shared/gitRefBackend';
+import { logDebug } from './logger';
 import type {
   CommentsFile,
   CommentRootType,
@@ -13,6 +14,8 @@ import type {
   Reaction,
   Reply,
 } from '../../shared/types';
+
+const gitRefBackend = new GitHubOrphanRefBackend(() => getOAuthToken());
 
 const EMPTY: CommentsFile = { page_comments: [], inline_comments: [] };
 
@@ -33,35 +36,41 @@ export function commentsFsPathForMarkdown(mdUri: vscode.Uri): string {
   return uri.path;
 }
 
-async function readCommentsFile(commentsPath: string): Promise<CommentsFile> {
-  try {
-    const data = await fs.promises.readFile(commentsPath, 'utf8');
-    const parsed = yaml.load(data) as Partial<CommentsFile>;
-    return normalizeCommentsFile(parsed ?? {});
-  } catch (err) {
-    const code = (err as { code?: string }).code;
-    if (code === 'ENOENT') {
-      return { ...EMPTY };
-    }
-    throw err;
+export async function readComments(mdUri: vscode.Uri, forceRefresh = false): Promise<CommentsFile> {
+  logDebug(`readComments called for: ${mdUri.toString()}, forceRefresh=${forceRefresh}`);
+  const key = await resolveStorageKeyForUri(mdUri);
+  logDebug(`readComments resolved storage key:`, key);
+  if (!key) {
+    logDebug('readComments key is null, returning empty comments');
+    return { ...EMPTY };
   }
-}
 
-async function writeCommentsFile(commentsPath: string, data: CommentsFile): Promise<void> {
-  const dir = path.dirname(commentsPath);
-  await fs.promises.mkdir(dir, { recursive: true });
-  const text = yaml.dump(data, { lineWidth: -1, noRefs: true });
-  await fs.promises.writeFile(commentsPath, text, 'utf8');
-}
-
-export async function readComments(mdUri: vscode.Uri): Promise<CommentsFile> {
-  return readCommentsFile(commentsFsPathForMarkdown(mdUri));
+  const fileData = await globalOptimisticStore.getComments(
+    key,
+    () => {
+      logDebug(`readComments fetching remote data from gitRefBackend for key:`, key);
+      return gitRefBackend.read(key);
+    },
+    forceRefresh
+  );
+  logDebug(`readComments data loaded successfully, inline count: ${fileData.inline_comments.length}`);
+  return normalizeCommentsFile(fileData);
 }
 
 export async function writeComments(mdUri: vscode.Uri, data: CommentsFile): Promise<string> {
-  const commentsPath = commentsFsPathForMarkdown(mdUri);
-  await writeCommentsFile(commentsPath, data);
-  return commentsPath;
+  logDebug(`writeComments called for: ${mdUri.toString()}`);
+  const key = await resolveStorageKeyForUri(mdUri);
+  logDebug(`writeComments resolved storage key:`, key);
+  if (!key) {
+    throw new Error('Markdown Comments: Document is not in a valid GitHub repository workspace.');
+  }
+
+  const normalized = normalizeCommentsFile(data);
+  globalOptimisticStore.updateComments(key, normalized, () => {
+    logDebug(`writeComments triggering remote write for key:`, key);
+    return gitRefBackend.write(key, normalized);
+  });
+  return `${key.owner}/${key.repo}/${key.filePath}`;
 }
 
 function newId(prefix: string): string {

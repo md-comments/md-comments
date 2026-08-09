@@ -1,6 +1,6 @@
 {
   "name": "@md-comments/shared",
-  "version": "1.0.1",
+  "version": "1.2.0",
   "private": true,
   "license": "MIT",
   "main": "./dist/index.js",
@@ -8,7 +8,11 @@
   "scripts": {
     "build": "tsc"
   },
+  "dependencies": {
+    "js-yaml": "^4.3.0"
+  },
   "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
     "@types/node": "^20.14.0",
     "typescript": "^5.5.0"
   }

@@ -1,11 +1,20 @@
 {
   "name": "md-preview-comments",
   "displayName": "Markdown Preview Comments",
-  "description": "Rich inline commenting on Markdown preview with companion YAML file persistence",
-  "version": "1.0.2",
+  "description": "Rich inline commenting on Markdown preview with GitHub Issues backend & local fallback. Fully compatible with VS Code, Cursor, and Antigravity.",
+  "version": "1.2.0",
   "publisher": "md-comments",
   "license": "MIT",
   "icon": "icon.png",
+  "keywords": [
+    "markdown",
+    "comments",
+    "cursor",
+    "antigravity",
+    "vscode",
+    "review",
+    "github"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/md-comments/md-comments.git",
@@ -40,6 +49,14 @@
         "command": "mdComments.openCommentPreview",
         "title": "Markdown Comments: Open Comment Preview",
         "icon": "$(comment-discussion)"
+      },
+      {
+        "command": "mdComments.signIn",
+        "title": "Markdown Comments: Sign In to GitHub"
+      },
+      {
+        "command": "mdComments.signOut",
+        "title": "Markdown Comments: Sign Out of GitHub"
       },
       {
         "command": "mdComments.handlePreviewAction",

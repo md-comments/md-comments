@@ -18,10 +18,11 @@ export function getMarkdownEngine(): MarkdownIt {
 
 export async function renderMarkdownWithComments(
   markdown: string,
-  documentUri: vscode.Uri
+  documentUri: vscode.Uri,
+  forceRefresh = false
 ): Promise<string> {
   try {
-    const comments = await readComments(documentUri);
+    const comments = await readComments(documentUri, forceRefresh);
     const logins = collectGitHubLogins(comments);
     await warmGitHubDisplayNames(logins);
     await warmGitHubAvatars(collectAvatarLogins(comments));

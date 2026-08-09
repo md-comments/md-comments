@@ -8,10 +8,18 @@ import type {
   Reply,
   AnchorBlock,
 } from '../../shared/types';
+import { GitHubOrphanRefBackend } from '../../shared/gitRefBackend';
+import {
+  getStoredToken,
+  startOAuthDeviceFlow,
+  saveOAuthToken,
+  clearOAuthToken,
+} from './githubAuth';
 import { GitHubApi, RepoMetadata } from './githubApi';
 import { isGitHubLogin } from '../../shared/author';
 import { escapeHtml } from '../../shared/html';
 
+const issueBackend = new GitHubOrphanRefBackend(() => getStoredToken());
 const displayNameCache = new Map<string, string>();
 const pendingFetches = new Set<string>();
 
@@ -25,7 +33,16 @@ let activeIndicators: HTMLElement[] = [];
 let prInfoHeadBranch = '';
 const loadedFileContexts = new Map<string, { anchors: AnchorBlock[]; comments: CommentsFile }>();
 let loadedComments: CommentsFile = { page_comments: [], inline_comments: [] };
+const localCreatedIds = new Set<string>();
 let parsedAnchors: AnchorBlock[] = [];
+let useConventionalCommits = false;
+let commitPattern = '';
+
+// Load settings at startup
+chrome.storage.local.get({ useConventionalCommits: false, commitPattern: '' }, (items) => {
+  useConventionalCommits = !!items.useConventionalCommits;
+  commitPattern = items.commitPattern || '';
+});
 let currentMetadata: RepoMetadata | null = null;
 let repoInfo: {
   id: string;
@@ -37,25 +54,28 @@ let repoInfo: {
 } | null = null;
 let currentToken: string | null = null;
 let githubApi: GitHubApi | null = null;
+let appInstallationStatus: {
+  checked: boolean;
+  installed: boolean;
+  repoAccess: boolean;
+  appSlug?: string;
+  installationId?: number;
+} = { checked: false, installed: true, repoAccess: true };
 let isWritable = false;
 let writeBranch = '';
 let lastAuthError: string | null = null;
 let activeSelectionButton: HTMLButtonElement | null = null;
-let useConventionalCommits = true;
-let commitPattern = 'docs(comments): {action}';
-let squashCommits = true;
-let useFixupCommits = true;
-let batchCommentsMode = true;
 let isTabContentRendered = false;
 let cachedSelectedClasses: string[] = [];
 let currentDisplayAuthor = '';
 
-let draftsStore: Record<string, string> = {};
+const draftsStore: Record<string, string> = {};
 
 function getDraftKey(suffix: string): string {
   const meta = parseGitHubUrl(window.location.href);
   if (!meta) return '';
-  return `draft:${meta.owner}/${meta.repo}/${meta.pullNumber}:${suffix}`;
+  const pullNumber = meta.type === 'pull' ? meta.pullNumber : 0;
+  return `draft:${meta.owner}/${meta.repo}/${pullNumber}:${suffix}`;
 }
 
 function saveDraft(key: string, value: string) {
@@ -68,7 +88,9 @@ function saveDraft(key: string, value: string) {
   chrome.storage.local.set({ drafts: draftsStore });
 }
 
-type ParsedUrl = { type: 'pull'; owner: string; repo: string; pullNumber: number };
+type ParsedUrl =
+  | { type: 'pull'; owner: string; repo: string; pullNumber: number }
+  | { type: 'blob'; owner: string; repo: string; branch: string; filePath: string };
 
 function parseGitHubUrl(urlStr: string): ParsedUrl | null {
   try {
@@ -84,6 +106,14 @@ function parseGitHubUrl(urlStr: string): ParsedUrl | null {
       const pullNumber = parseInt(parts[3], 10);
       if (isNaN(pullNumber)) return null;
       return { type: 'pull', owner, repo, pullNumber };
+    }
+
+    if (parts[2] === 'blob' || parts[2] === 'raw') {
+      if (parts.length < 5) return null;
+      const branch = parts[3];
+      const filePath = parts.slice(4).join('/');
+      if (!filePath.endsWith('.md') && !filePath.endsWith('.markdown')) return null;
+      return { type: 'blob', owner, repo, branch, filePath };
     }
 
     return null;
@@ -167,13 +197,14 @@ function getPRHeadBranchFromDom(): string | null {
 
 async function getAuthToken(): Promise<string | null> {
   return new Promise((resolve) => {
-    chrome.storage.local.get({ fallbackToken: '' }, (items) => {
-      if (items.fallbackToken) {
-        console.log('[md-comments] Found GitHub PAT in local storage');
+    chrome.storage.local.get({ fallbackToken: '', oauthToken: '' }, (items) => {
+      const token = items.oauthToken || items.fallbackToken || null;
+      if (token) {
+        console.log('[md-comments] Found GitHub token in local storage');
       } else {
-        console.log('[md-comments] No GitHub PAT found in local storage');
+        console.log('[md-comments] No GitHub token found in local storage');
       }
-      resolve(items.fallbackToken || null);
+      resolve(token);
     });
   });
 }
@@ -321,18 +352,19 @@ function renameReplyButtonsToOK() {
 
 // Check navigation changes
 let lastUrl = '';
-function checkPageChange() {
+async function checkPageChange() {
   const currentUrl = window.location.href;
   if (currentUrl !== lastUrl) {
     lastUrl = currentUrl;
     cleanupInjections();
-    handlePageLoad().catch(console.error);
+    await handlePageLoad().catch(console.error);
   } else {
     const meta = parseGitHubUrl(currentUrl);
-    if (meta && meta.type === 'pull') {
-      injectPRTab();
-      handleTabVisibility();
-      processPRMarkdownFiles().catch(console.error);
+    if (meta && meta.type === 'blob') {
+      const totalCount =
+        loadedComments.inline_comments.length + loadedComments.page_comments.length;
+      injectFABButton(totalCount);
+      injectToolbarButton(totalCount);
     }
   }
   renameReplyButtonsToOK();
@@ -344,48 +376,281 @@ document.addEventListener('pjax:end', checkPageChange);
 window.addEventListener('popstate', checkPageChange);
 setInterval(checkPageChange, 1000);
 
-async function handlePageLoad() {
-  const meta = parseGitHubUrl(window.location.href);
-  if (!meta || meta.type !== 'pull') return;
+document.addEventListener('keydown', (e) => {
+  if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key.toLowerCase() === 'c') {
+    e.preventDefault();
+    toggleSidebar();
+  }
+});
 
-  await new Promise<void>((resolve) => {
-    chrome.storage.local.get(
-      {
-        useConventionalCommits: true,
-        commitPattern: 'docs(comments): {action}',
-        squashCommits: true,
-        useFixupCommits: true,
-        batchCommentsMode: true,
-        drafts: {},
-      },
-      (items) => {
-        useConventionalCommits = items.useConventionalCommits;
-        commitPattern = items.commitPattern;
-        squashCommits = items.squashCommits;
-        useFixupCommits = items.useFixupCommits;
-        batchCommentsMode = items.batchCommentsMode;
-        draftsStore = items.drafts || {};
-        resolve();
+async function handleDevicePageAutofill() {
+  try {
+    const result = await new Promise<{ pendingUserCode?: string }>((resolve) => {
+      chrome.storage.local.get({ pendingUserCode: '' }, (items) => {
+        resolve(items as any);
+      });
+    });
+    const userCode = result?.pendingUserCode;
+    if (!userCode) return;
+
+    const cleanCode = userCode.replace(/-/g, '').toUpperCase();
+    const inputIds = [
+      'user-code-0',
+      'user-code-1',
+      'user-code-2',
+      'user-code-3',
+      'user-code-5',
+      'user-code-6',
+      'user-code-7',
+      'user-code-8',
+    ];
+
+    let filled = false;
+    for (let i = 0; i < cleanCode.length && i < inputIds.length; i++) {
+      const input = document.getElementById(inputIds[i]) as HTMLInputElement | null;
+      if (input) {
+        input.value = cleanCode[i];
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+        filled = true;
       }
-    );
-  });
+    }
 
+    if (filled) {
+      console.log('[md-comments] Autofilled device code:', userCode);
+      chrome.storage.local.remove('pendingUserCode').catch(() => {});
+
+      const commitBtn = document.querySelector('input[name="commit"]') as HTMLInputElement | null;
+      if (commitBtn && !commitBtn.disabled) {
+        commitBtn.focus();
+        commitBtn.click();
+      }
+    }
+  } catch (e) {
+    console.error('[md-comments] Error during device page autofill:', e);
+  }
+}
+
+async function handlePageLoad() {
+  if (window.location.pathname === '/login/device') {
+    await handleDevicePageAutofill();
+    return;
+  }
+
+  const meta = parseGitHubUrl(window.location.href);
+  if (!meta) return;
+
+  injectGlobalStyles();
   lastAuthError = null;
 
-  // Extract auth token
   currentToken = await getAuthToken();
   currentDisplayAuthor = await getDisplayAuthor();
-  githubApi = new GitHubApi(currentToken);
-  console.log(
-    '[md-comments] Auth token loaded:',
-    currentToken ? `${currentToken.slice(0, 8)}...` : 'NONE'
-  );
 
-  prInfoHeadBranch = '';
+  // Validate token in background if present
+  if (currentToken) {
+    const api = new GitHubApi(currentToken);
+    api
+      .getViewer()
+      .then((viewer) => {
+        console.log('[md-comments] Stored GitHub token is valid. User:', viewer.login);
+      })
+      .catch((err) => {
+        const errMsg = err instanceof Error ? err.message : String(err);
+        if (
+          errMsg.includes('401') ||
+          errMsg.includes('Unauthorized') ||
+          errMsg.includes('Bad credentials')
+        ) {
+          console.warn('[md-comments] Stored token is revoked or expired. Clearing token.');
+          currentToken = null;
+          githubApi = new GitHubApi(null);
+          clearOAuthToken().catch(() => {});
+          // Re-render components to show the login prompt
+          injectSidebar();
+          renderSidebarComments();
+        }
+      });
+  }
 
-  injectPRTab();
-  handleTabVisibility();
-  processPRMarkdownFiles().catch(console.error);
+  // Writing comments is enabled by default via browser session / PAT
+  isWritable = true;
+
+  if (meta.type === 'blob') {
+    await loadDocumentComments(meta);
+  }
+}
+
+async function loadDocumentComments(meta: ParsedUrl & { type: 'blob' }) {
+  currentMetadata = {
+    owner: meta.owner,
+    repo: meta.repo,
+    branch: meta.branch,
+    filePath: meta.filePath,
+  };
+
+  const key = {
+    owner: meta.owner,
+    repo: meta.repo,
+    branch: meta.branch,
+    filePath: meta.filePath,
+  };
+
+  if (currentToken) {
+    if (!githubApi) {
+      githubApi = new GitHubApi(currentToken);
+    }
+    try {
+      const status = await githubApi.checkAppInstallation(meta.owner, meta.repo);
+      appInstallationStatus = {
+        checked: true,
+        installed: status.installed,
+        repoAccess: status.repoAccess,
+        appSlug: status.appSlug,
+        installationId: status.installationId,
+      };
+    } catch (err) {
+      console.warn('[md-comments] Failed to verify app installation:', err);
+      appInstallationStatus = { checked: true, installed: true, repoAccess: true };
+    }
+  } else {
+    appInstallationStatus = { checked: false, installed: true, repoAccess: true };
+  }
+
+  if (
+    currentToken &&
+    appInstallationStatus.checked &&
+    (!appInstallationStatus.installed || !appInstallationStatus.repoAccess)
+  ) {
+    loadedComments = { page_comments: [], inline_comments: [] };
+  } else {
+    try {
+      const fetched = await issueBackend.read(key);
+      loadedComments = mergeLocalComments(loadedComments, fetched);
+    } catch (err) {
+      console.warn('[md-comments] Error reading comments from GitHubIssueBackend:', err);
+      loadedComments = mergeLocalComments(loadedComments, { page_comments: [], inline_comments: [] });
+    }
+  }
+
+  try {
+    const rawMarkdown = await fetchFileContent(
+      meta.owner,
+      meta.repo,
+      meta.branch,
+      meta.filePath,
+      currentToken
+    );
+    if (rawMarkdown) {
+      parsedAnchors = parseMarkdownAnchors(rawMarkdown);
+    }
+  } catch (err) {
+    console.warn('[md-comments] Failed to fetch raw file anchors:', err);
+  }
+
+  const totalCount = loadedComments.inline_comments.length + loadedComments.page_comments.length;
+  injectFABButton(totalCount);
+  injectToolbarButton(totalCount);
+
+  const markdownBody = document.querySelector('.markdown-body') as HTMLElement;
+  if (markdownBody) {
+    renderDOMIndicatorsForFile(markdownBody, meta.filePath, parsedAnchors, loadedComments);
+  }
+  renderSidebarComments();
+}
+
+function mergeLocalComments(local: CommentsFile, fetched: CommentsFile): CommentsFile {
+  const mergedInline = [...fetched.inline_comments];
+  const mergedPage = [...fetched.page_comments];
+
+  for (const localC of local.inline_comments) {
+    if (localCreatedIds.has(localC.id)) {
+      const exists = fetched.inline_comments.some(c => c.id === localC.id);
+      if (!exists) {
+        mergedInline.push(localC);
+      }
+    }
+  }
+
+  for (const localC of local.page_comments) {
+    if (localCreatedIds.has(localC.id)) {
+      const exists = fetched.page_comments.some(c => c.id === localC.id);
+      if (!exists) {
+        mergedPage.push(localC);
+      }
+    }
+  }
+
+  for (const fetchedC of mergedInline) {
+    const localC = local.inline_comments.find(c => c.id === fetchedC.id);
+    if (localC) {
+      for (const localR of localC.replies) {
+        if (localCreatedIds.has(localR.id)) {
+          const exists = fetchedC.replies.some(r => r.id === localR.id);
+          if (!exists) {
+            fetchedC.replies.push(localR);
+          }
+        }
+      }
+    }
+  }
+
+  for (const fetchedC of mergedPage) {
+    const localC = local.page_comments.find(c => c.id === fetchedC.id);
+    if (localC) {
+      for (const localR of localC.replies) {
+        if (localCreatedIds.has(localR.id)) {
+          const exists = fetchedC.replies.some(r => r.id === localR.id);
+          if (!exists) {
+            fetchedC.replies.push(localR);
+          }
+        }
+      }
+    }
+  }
+
+  return {
+    inline_comments: mergedInline,
+    page_comments: mergedPage
+  };
+}
+
+function injectFABButton(count: number = 0) {
+  let fab = document.getElementById('md-comments-fab-toggle');
+  if (!fab) {
+    fab = document.createElement('button');
+    fab.id = 'md-comments-fab-toggle';
+    fab.title = 'Markdown Comments (Cmd/Ctrl+Shift+C)';
+    fab.innerHTML = `
+      <svg viewBox="0 0 512 512" width="30" height="30">
+        <path fill="#24292f" stroke="#ffffff" stroke-width="20" stroke-linejoin="round" d="M 136 64 L 376 64 C 424 64 456 96 456 144 L 456 304 C 456 352 424 384 376 384 L 216 384 C 184 384 150 404 126 428 C 118 436 104 430 104 418 L 104 384 C 72 380 56 352 56 304 L 56 144 C 56 96 88 64 136 64 Z"/>
+        <path fill="#ffffff" d="M 132 168 L 164 168 L 192 232 L 220 168 L 252 168 L 252 280 L 226 280 L 226 212 L 201 268 L 183 268 L 158 212 L 158 280 L 132 280 Z M 276 168 L 324 168 C 358 168 380 188 380 224 C 380 260 358 280 324 280 L 276 280 Z M 302 192 L 302 256 L 322 256 C 342 256 352 246 352 224 C 352 202 342 192 322 192 Z"/>
+      </svg>
+      <span class="badge-count" style="display: ${count > 0 ? 'inline-block' : 'none'}">${count}</span>
+    `;
+    fab.addEventListener('click', () => {
+      toggleSidebar('inline');
+    });
+    document.body.appendChild(fab);
+  } else {
+    const badge = fab.querySelector('.badge-count');
+    if (badge) {
+      badge.textContent = String(count);
+      (badge as HTMLElement).style.display = count > 0 ? 'inline-block' : 'none';
+    }
+  }
+}
+
+function injectToolbarButton(count: number = 0) {
+  const existing = document.querySelector('.md-comments-toolbar-btn');
+  if (existing) existing.remove();
+}
+
+function toggleSidebar(tab: 'inline' | 'page' = 'inline') {
+  if (activeSidebarHost && activeSidebarHost.style.transform === 'translateX(0px)') {
+    closeSidebar();
+  } else {
+    openSidebar(tab);
+  }
 }
 
 function getFilePathFromFileContainer(fileEl: HTMLElement): string | null {
@@ -549,7 +814,8 @@ async function loadAndRenderCommentsForContainer(
     } else {
       try {
         console.log('[md-comments] Fetching head branch via API...');
-        const prInfo = await githubApi.getPullRequestInfo(meta.owner, meta.repo, meta.pullNumber);
+        const pullNum = meta.type === 'pull' ? meta.pullNumber : 0;
+        const prInfo = await githubApi.getPullRequestInfo(meta.owner, meta.repo, pullNum);
         prInfoHeadBranch = prInfo.headBranch;
         console.log('[md-comments] Resolved head branch via API:', prInfoHeadBranch);
       } catch (err) {
@@ -600,14 +866,6 @@ async function loadAndRenderCommentsForContainer(
     );
   } catch (err) {
     console.error(`Failed to fetch comments file for ${filePath}:`, err);
-  }
-
-  // Check if we have cached pending comments for this file
-  const cache = await getPendingCommentsCache();
-  if (cache[filePath]) {
-    cache[filePath].original = fileComments;
-    await savePendingCommentsCache(cache);
-    fileComments = cache[filePath].current;
   }
 
   loadedFileContexts.set(filePath, { anchors: fileAnchors, comments: fileComments });
@@ -723,6 +981,7 @@ async function initRepoAndMetadata(owner: string, repo: string, branch: string) 
       );
       currentToken = null;
       githubApi = new GitHubApi(null);
+      clearOAuthToken().catch(() => {});
     }
   }
 }
@@ -848,6 +1107,14 @@ async function triggerAndMoveNativeComposer(
         saveDraft(draftKey, textarea.value);
       });
     }
+
+    textarea.addEventListener('keydown', (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        e.stopPropagation();
+        interceptSubmit(e);
+      }
+    });
   }
 
   const interceptSubmit = async (e: Event) => {
@@ -857,21 +1124,37 @@ async function triggerAndMoveNativeComposer(
     const body = textarea?.value.trim() || '';
     if (!body) return;
 
-    const submitBtn = nativeForm?.querySelector('button[type="submit"]');
+    if (textarea) {
+      textarea.value = '';
+    }
+    if (draftKey) {
+      saveDraft(draftKey, '');
+    }
+
+    const submitBtn =
+      (nativeForm?.querySelector(
+        'button[type="submit"], button.btn-primary, button.js-addition-comment-submit, button.js-comment-submit-button, input[type="submit"]'
+      ) as HTMLElement | null) || ((e.target as HTMLElement | null)?.closest('button') as HTMLElement | null);
     try {
       submitBtn?.setAttribute('disabled', 'true');
+      submitBtn?.classList.add('loading');
       if (textarea) textarea.disabled = true;
 
       await onSubmit(body);
-      if (draftKey) {
-        saveDraft(draftKey, '');
-      }
       nativeForm?.remove();
       cleanupListeners();
     } catch (err) {
       alert('Failed to save comment: ' + err);
+      if (textarea) {
+        textarea.value = body;
+        textarea.disabled = false;
+      }
+      if (draftKey) {
+        saveDraft(draftKey, body);
+      }
     } finally {
       submitBtn?.removeAttribute('disabled');
+      submitBtn?.classList.remove('loading');
       if (textarea) textarea.disabled = false;
     }
   };
@@ -881,6 +1164,9 @@ async function triggerAndMoveNativeComposer(
     e.stopPropagation();
     if (draftKey) {
       saveDraft(draftKey, '');
+    }
+    if (textarea) {
+      textarea.value = '';
     }
     nativeForm?.remove();
     cleanupListeners();
@@ -893,7 +1179,9 @@ async function triggerAndMoveNativeComposer(
 
   nativeForm.addEventListener('submit', formSubmitHandler);
 
-  const submitButtons = nativeForm.querySelectorAll('button[type="submit"]');
+  const submitButtons = nativeForm.querySelectorAll(
+    'button[type="submit"], button.btn-primary, button.js-addition-comment-submit, button.js-comment-submit-button, input[type="submit"], button[data-confirm-text]'
+  );
   submitButtons.forEach((btn) => {
     btn.addEventListener('click', formSubmitHandler);
   });
@@ -944,12 +1232,21 @@ function showFallbackReplyComposer(
     });
   }
 
+  textarea.addEventListener('keydown', (e: KeyboardEvent) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      e.preventDefault();
+      e.stopPropagation();
+      handleSubmit(e);
+    }
+  });
+
   const handleCancel = (e: Event) => {
     e.preventDefault();
     e.stopPropagation();
     if (draftKey) {
       saveDraft(draftKey, '');
     }
+    textarea.value = '';
     onCancel();
   };
 
@@ -958,16 +1255,25 @@ function showFallbackReplyComposer(
     e.stopPropagation();
     const body = textarea.value.trim();
     if (!body) return;
+
+    textarea.value = '';
+    if (draftKey) {
+      saveDraft(draftKey, '');
+    }
+
     submitBtn.disabled = true;
+    submitBtn.classList.add('loading');
     textarea.disabled = true;
     try {
       await onSubmit(body);
-      if (draftKey) {
-        saveDraft(draftKey, '');
-      }
     } catch (e) {
       alert('Failed to save reply: ' + e);
+      textarea.value = body;
+      if (draftKey) {
+        saveDraft(draftKey, body);
+      }
       submitBtn.disabled = false;
+      submitBtn.classList.remove('loading');
       textarea.disabled = false;
     }
   };
@@ -1099,36 +1405,12 @@ function injectSidebar() {
     <div class="sidebar-header">
       <div class="title-section">
         <h3>Markdown Comments</h3>
-        <span class="badge ${isWritable ? 'write' : 'readonly'}">${isWritable ? 'Write Access' : 'Read Only'}</span>
       </div>
       ${isEmbedded ? '' : '<button class="close-btn">&times;</button>'}
     </div>
 
-    ${
-      !isWritable
-        ? `
-      <div class="pat-auth-wrapper">
-        <div class="pat-auth-message">Comments are read-only. Provide a Personal Access Token (PAT) with <code>repo</code> scope to enable writing.</div>
-        ${
-          lastAuthError
-            ? `
-          <div class="pat-auth-error">
-            <strong>Authentication Error:</strong> ${lastAuthError}
-          </div>
-        `
-            : ''
-        }
-        <div class="pat-auth-input-group">
-          <input type="password" class="pat-auth-input" placeholder="ghp_..." />
-          <button class="pat-auth-submit-btn">Save</button>
-        </div>
-      </div>
-    `
-        : ''
-    }
+    <div class="unauthorized-container" style="display: none; flex-direction: column; flex: 1; padding: 16px;"></div>
 
-    <div id="batch-comments-container"></div>
-    
     <div class="tab-header">
       <button class="tab-btn active" data-tab="inline">Inline Comments</button>
       <button class="tab-btn" data-tab="page">Page Discussion</button>
@@ -1144,18 +1426,12 @@ function injectSidebar() {
 
     <div class="tab-content" id="tab-page" style="display: none; flex-direction: column; flex: 1; min-height: 0;">
       <div class="threads-list" id="page-threads" style="padding: 16px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto; flex: 1;"></div>
-      ${
-        isWritable
-          ? `
-        <div class="page-composer" style="padding: 16px; border-top: 1px solid var(--sidebar-border); display: flex; flex-direction: column; gap: 8px;">
-          <textarea placeholder="Write a page comment..." class="page-textarea" style="width: 100%; box-sizing: border-box; padding: 8px; border-radius: 6px; border: 1px solid var(--sidebar-border); background-color: var(--composer-bg); color: var(--text-primary); font-size: 13px; min-height: 80px; font-family: inherit; resize: vertical; outline: none;"></textarea>
-          <div style="display: flex; justify-content: flex-end;">
-            <button class="btn btn-primary submit-page-btn" style="padding: 6px 12px; font-size: 12px; font-weight: 600; border-radius: 6px; border: none; background-color: var(--accent-color); color: white; cursor: pointer;">Send</button>
-          </div>
+      <div class="page-composer" style="padding: 16px; border-top: 1px solid var(--sidebar-border); display: flex; flex-direction: column; gap: 8px;">
+        <textarea placeholder="Write a page comment..." class="page-textarea" style="width: 100%; box-sizing: border-box; padding: 8px; border-radius: 6px; border: 1px solid var(--sidebar-border); background-color: var(--composer-bg); color: var(--text-primary); font-size: 13px; min-height: 80px; font-family: inherit; resize: vertical; outline: none;"></textarea>
+        <div style="display: flex; justify-content: flex-end;">
+          <button class="btn btn-primary submit-page-btn" style="padding: 6px 12px; font-size: 12px; font-weight: 600; border-radius: 6px; border: none; background-color: var(--accent-color); color: white; cursor: pointer;">Send</button>
         </div>
-      `
-          : ''
-      }
+      </div>
     </div>
   `;
 
@@ -1163,24 +1439,6 @@ function injectSidebar() {
   if (!isEmbedded) {
     activeSidebarHost.querySelector('.close-btn')?.addEventListener('click', closeSidebar);
   }
-
-  // Submit PAT Token directly from Sidebar
-  activeSidebarHost.querySelector('.pat-auth-submit-btn')?.addEventListener('click', () => {
-    const input = activeSidebarHost?.querySelector('.pat-auth-input') as HTMLInputElement;
-    const token = input?.value.trim();
-    if (!token) return;
-
-    input.disabled = true;
-    const btn = activeSidebarHost?.querySelector('.pat-auth-submit-btn') as HTMLButtonElement;
-    if (btn) btn.disabled = true;
-
-    chrome.storage.local.set({ fallbackToken: token }, () => {
-      cleanupInjections();
-      handlePageLoad().catch((err) => {
-        console.error('[md-comments] Error reloading comments with new PAT:', err);
-      });
-    });
-  });
 
   const tabButtons = activeSidebarHost.querySelectorAll('.tab-btn');
   tabButtons.forEach((btn) => {
@@ -1204,20 +1462,32 @@ function injectSidebar() {
 
   // Submit new page comment
   activeSidebarHost.querySelector('.submit-page-btn')?.addEventListener('click', async () => {
+    const btn = activeSidebarHost?.querySelector('.submit-page-btn') as HTMLButtonElement;
     const textarea = activeSidebarHost?.querySelector('.page-textarea') as HTMLTextAreaElement;
     const body = textarea?.value.trim();
     if (!body) return;
 
+    textarea.value = '';
+    const pageDraftKey = getDraftKey('page');
+    saveDraft(pageDraftKey, '');
+
     textarea.disabled = true;
+    if (btn) {
+      btn.disabled = true;
+      btn.classList.add('loading');
+    }
     try {
       await saveNewPageComment(body);
-      textarea.value = '';
-      const pageDraftKey = getDraftKey('page');
-      saveDraft(pageDraftKey, '');
     } catch (e) {
       alert('Failed to save comment: ' + e);
+      if (textarea) textarea.value = body;
+      saveDraft(pageDraftKey, body);
     } finally {
-      textarea.disabled = false;
+      if (textarea) textarea.disabled = false;
+      if (btn) {
+        btn.disabled = false;
+        btn.classList.remove('loading');
+      }
     }
   });
 
@@ -1231,27 +1501,28 @@ function injectSidebar() {
     pageTextarea.addEventListener('input', () => {
       saveDraft(pageDraftKey, pageTextarea.value);
     });
+    pageTextarea.addEventListener('keydown', (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        e.stopPropagation();
+        activeSidebarHost
+          ?.querySelector('.submit-page-btn')
+          ?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      }
+    });
   }
-
-  // Load batch comments panel state and setup event listeners
-  updateBatchPanel();
 
   if (!isEmbedded) {
     document.body.appendChild(activeSidebarHost);
   }
 }
 
-function openSidebar(tab: 'inline' | 'page', highlightCommentId?: string) {
+function openSidebar(tab: 'inline' | 'page' = 'inline', highlightCommentId?: string) {
   injectSidebar();
   if (!activeSidebarHost) return;
 
-  if (activeSidebarHost.id !== 'md-comments-sidebar-embedded') {
-    document.body.style.transition = 'width 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
-    document.body.style.width = 'calc(100% - 380px)';
-    activeSidebarHost.style.transform = 'translateX(0px)';
-  } else {
-    activeSidebarHost.style.transform = 'none';
-  }
+  document.body.classList.add('md-comments-push-active');
+  activeSidebarHost.style.transform = 'translateX(0px)';
 
   // Set tab
   const tabBtn = activeSidebarHost.querySelector(
@@ -1278,39 +1549,422 @@ function openSidebar(tab: 'inline' | 'page', highlightCommentId?: string) {
 }
 
 function closeSidebar() {
-  if (!activeSidebarHost || activeSidebarHost.id === 'md-comments-sidebar-embedded') return;
+  if (!activeSidebarHost) return;
   activeSidebarHost.style.transform = 'translateX(100%)';
-  document.body.style.width = '';
+  document.body.classList.remove('md-comments-push-active');
+}
+
+function renderInstallationPrompt(
+  owner: string,
+  repo: string,
+  installed: boolean,
+  appSlug?: string,
+  installationId?: number
+): string {
+  const slug = appSlug || 'markdown-comments';
+  const installUrl = `https://github.com/apps/${slug}/installations/new`;
+  const configureUrl = installationId
+    ? `https://github.com/settings/installations/${installationId}`
+    : `https://github.com/apps/${slug}/installations/new`;
+
+  const githubIcon = `<svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor" style="vertical-align: middle;"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>`;
+  const gearIcon = `<svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor" style="vertical-align: middle;"><path d="M8 0a8.2 8.2 0 0 1 .701.031C9.402.09 10 .652 10 1.36v.057c0 .825.568 1.528 1.378 1.71a1.86 1.86 0 0 0 1.597-.478c.517-.463 1.332-.424 1.815.115l.009.01c.484.538.484 1.353-.004 1.89l-.01.011a1.86 1.86 0 0 0-.47 1.595c.18.808.88 1.376 1.706 1.376h.057c.71 0 1.272.597 1.33 1.298C16 9.176 16 9.587 16 10a8.2 8.2 0 0 1-.031.704c-.058.699-.62 1.261-1.33 1.261h-.057c-.825 0-1.528.568-1.71 1.378a1.86 1.86 0 0 0 .478 1.597c.463.517.424 1.332-.115 1.815l-.01.009c-.538.484-1.353.484-1.89-.004l-.011-.01a1.86 1.86 0 0 0-1.595-.47c-.808.18-1.376.88-1.376 1.706v.057c0 .71-.597 1.272-1.298 1.33C9.176 16 8.587 16 8 16a8.2 8.2 0 0 1-.704-.031c-.699-.058-1.261-.62-1.261-1.33v-.057c0-.825-.568-1.528-1.378-1.71a1.86 1.86 0 0 0-1.597.478c-.517.463-1.332.424-1.815-.115l-.009-.01c-.484-.538-.484-1.353.004-1.89l.01-.011a1.86 1.86 0 0 0 .47-1.595c-.18-.808-.88-1.376-1.706-1.376h-.057c-.71 0-1.272-.597-1.33-1.298C0 10.824 0 10.413 0 10a8.2 8.2 0 0 1 .031-.704c.058-.699.62-1.261 1.33-1.261h.057c.825 0 1.528-.568 1.71-1.378a1.86 1.86 0 0 0-.478-1.597c-.463-.517-.424-.115-1.815-.115h-.01c-.538-.484-1.353-.484-1.89.004l-.011.01a1.86 1.86 0 0 0 1.595.47c.808-.18 1.376-.88 1.376-1.706v-.057c0-.71.597-1.272 1.298-1.33C6.824 0 7.413 0 8 0Zm0 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4Z"/></svg>`;
+
+  if (!installed) {
+    return `
+      <div class="oauth-prompt-banner" style="margin: 12px 16px; padding: 14px; border-radius: 8px; background: rgba(240, 180, 0, 0.1); border: 1px solid rgba(240, 180, 0, 0.3); display: flex; flex-direction: column; gap: 10px;">
+        <div style="font-size: 13px; color: var(--text-primary); font-weight: 600; display: flex; align-items: center; gap: 6px;">
+          ⚠️ GitHub App Not Installed
+        </div>
+        <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.4;">
+          The Markdown Comments GitHub App must be installed on the <strong>${escapeHtml(owner)}</strong> account to store and load comments.
+        </div>
+        <a href="${installUrl}" target="_blank" style="text-decoration: none;">
+          <button class="btn btn-primary" style="background-color: #238636; color: white; border: none; padding: 8px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%;">
+            ${githubIcon}
+            Install
+          </button>
+        </a>
+        <button class="btn check-installation-btn" style="background: none; border: 1px solid var(--sidebar-border); color: var(--text-primary); padding: 6px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; width: 100%;">
+          Check installation status again
+        </button>
+      </div>
+    `;
+  } else {
+    return `
+      <div class="oauth-prompt-banner" style="margin: 12px 16px; padding: 14px; border-radius: 8px; background: rgba(240, 180, 0, 0.1); border: 1px solid rgba(240, 180, 0, 0.3); display: flex; flex-direction: column; gap: 10px;">
+        <div style="font-size: 13px; color: var(--text-primary); font-weight: 600; display: flex; align-items: center; gap: 6px;">
+          ⚠️ Access Not Authorized
+        </div>
+        <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.4;">
+          The Markdown Comments GitHub App is installed on <strong>${escapeHtml(owner)}</strong>, but does not have access to <strong>${escapeHtml(repo)}</strong>.
+        </div>
+        <a href="${configureUrl}" target="_blank" style="text-decoration: none;">
+          <button class="btn" style="background-color: var(--accent-color); color: white; border: none; padding: 8px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%;">
+            ${gearIcon}
+            Configure
+          </button>
+        </a>
+        <button class="btn check-installation-btn" style="background: none; border: 1px solid var(--sidebar-border); color: var(--text-primary); padding: 6px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; width: 100%;">
+          Check installation status again
+        </button>
+      </div>
+    `;
+  }
+}
+
+function attachInstallationPromptEvents(container: HTMLElement) {
+  const checkBtn = container.querySelector('.check-installation-btn') as HTMLButtonElement | null;
+  if (!checkBtn) return;
+
+  checkBtn.addEventListener('click', async () => {
+    checkBtn.disabled = true;
+    const originalText = checkBtn.innerText;
+    checkBtn.innerText = 'Checking...';
+
+    if (currentMetadata && currentToken) {
+      if (!githubApi) {
+        githubApi = new GitHubApi(currentToken);
+      }
+      try {
+        const status = await githubApi.checkAppInstallation(
+          currentMetadata.owner,
+          currentMetadata.repo
+        );
+        appInstallationStatus = {
+          checked: true,
+          installed: status.installed,
+          repoAccess: status.repoAccess,
+          appSlug: status.appSlug,
+          installationId: status.installationId,
+        };
+
+        if (appInstallationStatus.installed && appInstallationStatus.repoAccess) {
+          const meta = parseGitHubUrl(window.location.href);
+          if (meta && meta.type === 'blob') {
+            await loadDocumentComments(meta);
+          } else {
+            renderSidebarComments();
+          }
+        } else {
+          renderSidebarComments();
+        }
+      } catch (err) {
+        console.error('[md-comments] Error checking installation status:', err);
+        checkBtn.disabled = false;
+        checkBtn.innerText = originalText;
+      }
+    } else {
+      checkBtn.disabled = false;
+      checkBtn.innerText = originalText;
+    }
+  });
+}
+
+function renderOAuthPrompt(owner: string): string {
+  if (currentToken) return '';
+  const githubIcon = `<svg height="12" width="12" viewBox="0 0 16 16" fill="currentColor" style="vertical-align: middle;"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>`;
+
+  return `
+    <div class="oauth-prompt-banner" style="margin: 12px 16px; padding: 14px; border-radius: 8px; background: rgba(56, 139, 253, 0.1); border: 1px solid rgba(56, 139, 253, 0.3); display: flex; flex-direction: column; gap: 10px;">
+      <div style="font-size: 13px; color: var(--text-primary); font-weight: 600; display: flex; align-items: center; gap: 6px;">
+        🔒 Permission Required
+      </div>
+      <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.4;">
+        Authorize to create issues and reply to comments on your behalf.
+      </div>
+      <button class="btn oauth-login-btn" style="background-color: #238636; color: white; border: none; padding: 8px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%;">
+        <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+        Authorize
+      </button>
+      <div class="oauth-status-text" style="font-size: 11px; color: var(--text-secondary); display: none;"></div>
+      
+      <div style="border-top: 1px solid rgba(56, 139, 253, 0.2); margin-top: 10px; padding-top: 10px; opacity: 0.85;">
+        <div style="font-size: 13px; color: var(--text-primary); font-weight: 600; display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+          ⚙️ GitHub App
+        </div>
+        <div style="font-size: 11px; color: var(--text-secondary); line-height: 1.4; margin-bottom: 10px;">
+          The <a href="https://github.com/apps/markdown-comments" target="_blank" style="text-decoration: underline; color: inherit; font-weight: 500;">MD Comments</a> GitHub App must also be installed in the <strong>${escapeHtml(owner)}</strong> organization/repository to allow the extension to store and sync comments (as issues) for collaboration.
+        </div>
+        <button class="btn" disabled style="background-color: var(--sidebar-border); color: var(--text-secondary); border: none; padding: 6px 12px; border-radius: 6px; font-size: 11px; cursor: not-allowed; display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%;">
+          ${githubIcon}
+          Install
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function attachOAuthEvents(container: HTMLElement) {
+  const oauthBtn = container.querySelector('.oauth-login-btn') as HTMLButtonElement;
+  const statusEl = container.querySelector('.oauth-status-text') as HTMLElement;
+
+  if (oauthBtn) {
+    oauthBtn.addEventListener('click', () => {
+      oauthBtn.disabled = true;
+      oauthBtn.classList.add('loading');
+      if (statusEl) {
+        statusEl.style.display = 'none';
+      }
+
+      const clientId = 'Iv23li9t461keXDcVS0T';
+
+      chrome.runtime.sendMessage(
+        {
+          type: 'START_DEVICE_FLOW',
+          clientId,
+        },
+        (response) => {
+          oauthBtn.classList.remove('loading');
+          if (
+            response &&
+            response.success &&
+            response.userCode &&
+            response.verificationUri &&
+            response.deviceCode
+          ) {
+            if (oauthBtn) {
+              oauthBtn.style.display = 'none';
+            }
+            const { userCode, verificationUri, deviceCode, interval } = response;
+            // Copy to clipboard
+            navigator.clipboard.writeText(userCode).catch(() => {});
+
+            // Store code in local storage so it can be autofilled on the device page
+            chrome.storage.local.set({ pendingUserCode: userCode }).catch(() => {});
+
+            const prefilledUrl = `${verificationUri}?user_code=${userCode}`;
+            if (statusEl) {
+              statusEl.style.display = 'block';
+              statusEl.innerHTML = `
+                <div class="auth-status-flow" style="display: flex; flex-direction: column; gap: 14px; margin-top: 14px; padding: 12px; background: rgba(255, 255, 255, 0.03); border-radius: 6px; border: 1px solid var(--sidebar-border);">
+                  <div style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">1. Verification Code</div>
+                  <div style="display: flex; align-items: center; justify-content: space-between; background: var(--composer-bg); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--sidebar-border);">
+                    <code id="auth-user-code" style="font-family: monospace; font-size: 18px; font-weight: bold; color: var(--accent-color); letter-spacing: 1px;">${userCode}</code>
+                    <button id="auth-copy-btn" class="btn" style="background: none; border: none; color: var(--text-secondary); cursor: pointer; padding: 4px 8px; font-size: 11px; display: flex; align-items: center; gap: 6px;" title="Copy to clipboard">
+                      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"/><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"/></svg>
+                      <span id="auth-copy-text">Copy</span>
+                    </button>
+                  </div>
+                  <div style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-top: 4px;">2. Complete Activation</div>
+                  <a href="${prefilledUrl}" target="_blank" style="text-decoration: none;" id="auth-activation-link">
+                    <button class="btn" style="background-color: var(--accent-color); color: white; border: none; padding: 8px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%;">
+                      Open Activation Page
+                      <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5A1.75 1.75 0 0 1 3.75 2Z"/><path d="M9 1.75A.75.75 0 0 1 9.75 1h5.25a.75.75 0 0 1 .75.75v5.25a.75.75 0 0 1-1.5 0V3.56L9.53 8.28a.75.75 0 0 1-1.06-1.06l4.72-4.72H9.75A.75.75 0 0 1 9 1.75Z"/></svg>
+                    </button>
+                  </a>
+                  <div style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-top: 4px;">3. Click <span style="color: var(--accent-color);">Continue</span> on GitHub</div>
+                  <div style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-top: 4px;">4. Click <span style="color: var(--accent-color);">Authorize</span> on GitHub</div>
+                </div>
+              `;
+
+              const copyBtn = statusEl.querySelector('#auth-copy-btn');
+              if (copyBtn) {
+                copyBtn.addEventListener('click', (e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  navigator.clipboard
+                    .writeText(userCode)
+                    .then(() => {
+                      const copyText = statusEl.querySelector('#auth-copy-text');
+                      if (copyText) copyText.textContent = 'Copied!';
+                      setTimeout(() => {
+                        if (copyText) copyText.textContent = 'Copy';
+                      }, 2000);
+                    })
+                    .catch(() => {});
+                });
+              }
+            }
+            window.open(prefilledUrl, '_blank');
+
+            // Start polling directly in active content script context using recursive setTimeout
+            let currentInterval = Math.max(interval || 5, 5) * 1000;
+            let pollTimeoutId: any = null;
+
+            const poll = () => {
+              console.log('[md-comments] Sending CHECK_DEVICE_TOKEN message to background...');
+              chrome.runtime.sendMessage(
+                {
+                  type: 'CHECK_DEVICE_TOKEN',
+                  clientId,
+                  deviceCode,
+                },
+                async (pollRes) => {
+                  console.log('[md-comments] CHECK_DEVICE_TOKEN response:', pollRes);
+                  if (pollRes && pollRes.success && pollRes.data) {
+                    const data = pollRes.data;
+                    if (data.access_token) {
+                      console.log('[md-comments] Successfully obtained access token!');
+                      await saveOAuthToken(data.access_token);
+                      currentToken = data.access_token;
+                      githubApi = new GitHubApi(data.access_token);
+                      if (statusEl) statusEl.innerText = '✅ Authorized with GitHub!';
+                      setTimeout(() => {
+                        const meta = parseGitHubUrl(window.location.href);
+                        if (meta && meta.type === 'blob') loadDocumentComments(meta);
+                      }, 500);
+                      return; // Stop polling
+                    }
+
+                    if (data.error) {
+                      if (data.error === 'slow_down') {
+                        // Increase interval as requested by GitHub
+                        const newIntervalSec = data.interval || currentInterval / 1000 + 5;
+                        currentInterval = newIntervalSec * 1000;
+                        console.log(
+                          `[md-comments] GitHub requested slow_down. Increasing polling interval to ${newIntervalSec} seconds.`
+                        );
+                      } else if (data.error !== 'authorization_pending') {
+                        console.warn(
+                          '[md-comments] Polling aborted due to error:',
+                          data.error_description || data.error
+                        );
+                        if (statusEl) {
+                          statusEl.innerHTML = `<span style="color: var(--warn-color); font-size: 11px;">Error: ${data.error_description || data.error}</span>`;
+                        }
+                        oauthBtn.disabled = false;
+                        oauthBtn.style.display = 'block';
+                        oauthBtn.classList.remove('loading');
+                        return; // Stop polling
+                      } else {
+                        console.log('[md-comments] Authorization still pending...');
+                      }
+                    }
+                  } else {
+                    console.error(
+                      '[md-comments] Background poll failed:',
+                      pollRes?.error || 'Unknown error'
+                    );
+                  }
+
+                  // Schedule next poll
+                  pollTimeoutId = setTimeout(poll, currentInterval);
+                }
+              );
+            };
+
+            // Schedule first poll
+            pollTimeoutId = setTimeout(poll, currentInterval);
+          } else {
+            const err = response?.error || 'Failed to start device flow authorization.';
+            console.error('[md-comments] START_DEVICE_FLOW failed:', err);
+            if (statusEl) {
+              statusEl.innerHTML = `<span style="color: var(--warn-color); font-size: 11px;">Error: ${err}</span>`;
+            }
+            oauthBtn.disabled = false;
+          }
+        }
+      );
+    });
+  }
 }
 
 function renderSidebarComments() {
   if (!activeSidebarHost) return;
+  console.log(
+    '[md-comments-debug] renderSidebarComments loadedComments:',
+    JSON.stringify(loadedComments)
+  );
 
   getDisplayAuthor().then((author) => {
     currentDisplayAuthor = author;
 
+    const unauthContainer = activeSidebarHost!.querySelector(
+      '.unauthorized-container'
+    ) as HTMLElement | null;
+    const tabHeader = activeSidebarHost!.querySelector('.tab-header') as HTMLElement | null;
+    const tabInline = activeSidebarHost!.querySelector('#tab-inline') as HTMLElement | null;
+    const tabPage = activeSidebarHost!.querySelector('#tab-page') as HTMLElement | null;
+
     const inlineList = activeSidebarHost!.querySelector('#inline-threads');
     const pageList = activeSidebarHost!.querySelector('#page-threads');
 
-    if (inlineList) {
-      if (loadedComments.inline_comments.length === 0) {
-        inlineList.innerHTML = `<div class="empty-state" style="padding: 24px; text-align: center; color: var(--text-secondary); font-size: 13px;">No inline comments yet. Hover over paragraphs to add feedback.</div>`;
-      } else {
-        inlineList.innerHTML = loadedComments.inline_comments
-          .map((c) => renderCommentCard(c, 'inline'))
-          .join('');
-        attachCommentCardEvents(inlineList as HTMLElement, 'inline');
-      }
-    }
+    const metaForOwner = parseGitHubUrl(window.location.href);
+    const ownerName = metaForOwner?.owner || currentMetadata?.owner || 'organization';
+    const oauthPromptHtml = renderOAuthPrompt(ownerName);
 
-    if (pageList) {
-      if (loadedComments.page_comments.length === 0) {
-        pageList.innerHTML = `<div class="empty-state" style="padding: 24px; text-align: center; color: var(--text-secondary); font-size: 13px;">No page discussion comments yet. Use the composer below to start.</div>`;
+    if (currentToken) {
+      if (
+        appInstallationStatus.checked &&
+        (!appInstallationStatus.installed || !appInstallationStatus.repoAccess)
+      ) {
+        if (unauthContainer) {
+          unauthContainer.style.display = 'flex';
+          unauthContainer.innerHTML = renderInstallationPrompt(
+            currentMetadata?.owner || '',
+            currentMetadata?.repo || '',
+            appInstallationStatus.installed,
+            appInstallationStatus.appSlug,
+            appInstallationStatus.installationId
+          );
+          attachInstallationPromptEvents(unauthContainer);
+        }
+        if (tabHeader) tabHeader.style.display = 'none';
+        if (tabInline) tabInline.style.display = 'none';
+        if (tabPage) tabPage.style.display = 'none';
+
+        const pageComposer = activeSidebarHost!.querySelector(
+          '.page-composer'
+        ) as HTMLElement | null;
+        if (pageComposer) {
+          pageComposer.style.display = 'none';
+        }
       } else {
-        pageList.innerHTML = loadedComments.page_comments
-          .map((c) => renderCommentCard(c, 'page'))
-          .join('');
-        attachCommentCardEvents(pageList as HTMLElement, 'page');
+        if (unauthContainer) unauthContainer.style.display = 'none';
+        if (tabHeader) tabHeader.style.display = 'flex';
+
+        const activeTabBtn = activeSidebarHost!.querySelector(
+          '.tab-btn.active'
+        ) as HTMLElement | null;
+        const activeTab = activeTabBtn?.getAttribute('data-tab') || 'inline';
+        if (tabInline) tabInline.style.display = activeTab === 'inline' ? 'flex' : 'none';
+        if (tabPage) tabPage.style.display = activeTab === 'page' ? 'flex' : 'none';
+
+        const pageComposer = activeSidebarHost!.querySelector(
+          '.page-composer'
+        ) as HTMLElement | null;
+        if (pageComposer) {
+          pageComposer.style.display = 'flex';
+        }
+
+        if (inlineList) {
+          if (loadedComments.inline_comments.length === 0) {
+            inlineList.innerHTML =
+              '<div class="empty-state" style="padding: 24px; text-align: center; color: var(--text-secondary); font-size: 13px;">No inline comments yet. Hover over paragraphs to add feedback.</div>';
+          } else {
+            inlineList.innerHTML = loadedComments.inline_comments
+              .map((c) => renderCommentCard(c, 'inline'))
+              .join('');
+            attachCommentCardEvents(inlineList as HTMLElement, 'inline');
+          }
+        }
+
+        if (pageList) {
+          if (loadedComments.page_comments.length === 0) {
+            pageList.innerHTML =
+              '<div class="empty-state" style="padding: 24px; text-align: center; color: var(--text-secondary); font-size: 13px;">No page discussion comments yet. Use the composer below to start.</div>';
+          } else {
+            pageList.innerHTML = loadedComments.page_comments
+              .map((c) => renderCommentCard(c, 'page'))
+              .join('');
+            attachCommentCardEvents(pageList as HTMLElement, 'page');
+          }
+        }
+      }
+    } else {
+      if (unauthContainer) {
+        unauthContainer.style.display = 'flex';
+        unauthContainer.innerHTML = oauthPromptHtml;
+        attachOAuthEvents(unauthContainer);
+      }
+      if (tabHeader) tabHeader.style.display = 'none';
+      if (tabInline) tabInline.style.display = 'none';
+      if (tabPage) tabPage.style.display = 'none';
+
+      const pageComposer = activeSidebarHost!.querySelector('.page-composer') as HTMLElement | null;
+      if (pageComposer) {
+        pageComposer.style.display = 'none';
       }
     }
   });
@@ -1448,6 +2102,18 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
       const replyDraftKey = getDraftKey('reply:' + commentId);
       const hasReplyDraft = replyDraftKey && draftsStore[replyDraftKey];
 
+      const resetReplyUI = () => {
+        replyInput.value = '';
+        if (replyDraftKey) {
+          saveDraft(replyDraftKey, '');
+        }
+        const ta = replyWrapper.querySelector('textarea') as HTMLTextAreaElement | null;
+        if (ta) ta.value = '';
+        replyWrapper.innerHTML = '';
+        replyWrapper.style.display = 'none';
+        replyInput.style.display = 'block';
+      };
+
       const handleReplyClick = async () => {
         replyInput.style.display = 'none';
         replyWrapper.style.display = 'block';
@@ -1457,12 +2123,10 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
             replyWrapper,
             async (body) => {
               await saveReply(commentId, type, body);
-              replyWrapper.style.display = 'none';
-              replyInput.style.display = 'block';
+              resetReplyUI();
             },
             () => {
-              replyWrapper.style.display = 'none';
-              replyInput.style.display = 'block';
+              resetReplyUI();
             },
             replyDraftKey
           );
@@ -1473,41 +2137,42 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
           const block = parsedAnchors.find((a) => a.paragraph_index === pIndex);
           const line = block && block.line_number !== undefined ? block.line_number + 1 : 1;
 
-          try {
-            await triggerAndMoveNativeComposer(
-              currentMetadata!.filePath,
-              line,
-              replyWrapper,
-              async (body) => {
-                await saveReply(commentId, type, body);
-                replyWrapper.style.display = 'none';
-                replyInput.style.display = 'block';
-              },
-              () => {
-                replyWrapper.style.display = 'none';
-                replyInput.style.display = 'block';
-              },
-              replyDraftKey
-            );
-          } catch (err) {
-            console.warn(
-              '[md-comments] Trigger native composer for reply failed, falling back:',
-              err
-            );
-            showFallbackReplyComposer(
-              replyWrapper,
-              async (body) => {
-                await saveReply(commentId, type, body);
-                replyWrapper.style.display = 'none';
-                replyInput.style.display = 'block';
-              },
-              () => {
-                replyWrapper.style.display = 'none';
-                replyInput.style.display = 'block';
-              },
-              replyDraftKey
-            );
+          const meta = parseGitHubUrl(window.location.href);
+          if (meta && meta.type === 'pull') {
+            try {
+              await triggerAndMoveNativeComposer(
+                currentMetadata!.filePath,
+                line,
+                replyWrapper,
+                async (body) => {
+                  await saveReply(commentId, type, body);
+                  resetReplyUI();
+                },
+                () => {
+                  resetReplyUI();
+                },
+                replyDraftKey
+              );
+              return;
+            } catch (err) {
+              console.warn(
+                '[md-comments] Trigger native composer for reply failed, falling back:',
+                err
+              );
+            }
           }
+
+          showFallbackReplyComposer(
+            replyWrapper,
+            async (body) => {
+              await saveReply(commentId, type, body);
+              resetReplyUI();
+            },
+            () => {
+              resetReplyUI();
+            },
+            replyDraftKey
+          );
         }
       };
 
@@ -1590,17 +2255,16 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
           const newBody = textarea.value.trim();
           if (!newBody) return;
 
-          saveBtn.disabled = true;
-          textarea.disabled = true;
+          textarea.value = '';
+          if (editDraftKey) {
+            saveDraft(editDraftKey, '');
+          }
+          bodyEl.innerHTML = escapeHtml(newBody);
+
           try {
             await editComment(commentId, type, newBody);
-            if (editDraftKey) {
-              saveDraft(editDraftKey, '');
-            }
           } catch (err) {
             alert('Failed to edit comment: ' + err);
-            saveBtn.disabled = false;
-            textarea.disabled = false;
           }
         });
       };
@@ -1620,10 +2284,12 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
         e.stopPropagation();
         if (confirm('Are you sure you want to delete this comment thread?')) {
           deleteBtn.disabled = true;
+          (card as HTMLElement).style.display = 'none';
           try {
             await deleteComment(commentId, type);
           } catch (err) {
             alert('Failed to delete comment: ' + err);
+            (card as HTMLElement).style.display = 'flex';
             deleteBtn.disabled = false;
           }
         }
@@ -1686,17 +2352,16 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
             const newBody = textarea.value.trim();
             if (!newBody) return;
 
-            saveBtn.disabled = true;
-            textarea.disabled = true;
+            textarea.value = '';
+            if (editReplyDraftKey) {
+              saveDraft(editReplyDraftKey, '');
+            }
+            bodyEl.innerHTML = escapeHtml(newBody);
+
             try {
               await editReply(commentId, replyId, type, newBody);
-              if (editReplyDraftKey) {
-                saveDraft(editReplyDraftKey, '');
-              }
             } catch (err) {
               alert('Failed to edit reply: ' + err);
-              saveBtn.disabled = false;
-              textarea.disabled = false;
             }
           });
         };
@@ -1715,10 +2380,12 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
           e.stopPropagation();
           if (confirm('Are you sure you want to delete this reply?')) {
             deleteReplyBtn.disabled = true;
+            (replyItem as HTMLElement).style.display = 'none';
             try {
               await deleteReply(commentId, replyId, type);
             } catch (err) {
               alert('Failed to delete reply: ' + err);
+              (replyItem as HTMLElement).style.display = 'flex';
               deleteReplyBtn.disabled = false;
             }
           }
@@ -1761,6 +2428,16 @@ function openSidebarForNewInline(fields: {
 
   const draftKey = getDraftKey(`new_inline:${currentMetadata?.filePath}:${fields.paragraph_index}`);
 
+  const resetInlineComposerUI = () => {
+    const ta = container.querySelector('textarea') as HTMLTextAreaElement | null;
+    if (ta) ta.value = '';
+    container.innerHTML = '';
+    composer.style.display = 'none';
+    if (draftKey) {
+      saveDraft(draftKey, '');
+    }
+  };
+
   triggerAndMoveNativeComposer(
     currentMetadata!.filePath,
     line,
@@ -1773,12 +2450,10 @@ function openSidebarForNewInline(fields: {
         fields.anchor_text,
         fields.heading_context
       );
-      composer.style.display = 'none';
-      saveDraft(draftKey, '');
+      resetInlineComposerUI();
     },
     () => {
-      composer.style.display = 'none';
-      saveDraft(draftKey, '');
+      resetInlineComposerUI();
     },
     draftKey
   ).catch((err) => {
@@ -1793,12 +2468,10 @@ function openSidebarForNewInline(fields: {
           fields.anchor_text,
           fields.heading_context
         );
-        composer.style.display = 'none';
-        saveDraft(draftKey, '');
+        resetInlineComposerUI();
       },
       () => {
-        composer.style.display = 'none';
-        saveDraft(draftKey, '');
+        resetInlineComposerUI();
       },
       draftKey
     );
@@ -2187,7 +2860,8 @@ async function renderTabContent() {
     } else {
       try {
         filesPane.innerHTML = `<div class="tab-loading-state">Resolving Pull Request info...</div>`;
-        const prInfo = await githubApi.getPullRequestInfo(meta.owner, meta.repo, meta.pullNumber);
+        const pullNum = meta.type === 'pull' ? meta.pullNumber : 0;
+        const prInfo = await githubApi.getPullRequestInfo(meta.owner, meta.repo, pullNum);
         prInfoHeadBranch = prInfo.headBranch;
       } catch (err) {
         filesPane.innerHTML = `<div class="tab-error-state">Failed to load PR branch info: ${err}</div>`;
@@ -2200,7 +2874,8 @@ async function renderTabContent() {
 
   let changedFiles: string[] = [];
   try {
-    const prInfo = await githubApi.getPullRequestInfo(meta.owner, meta.repo, meta.pullNumber);
+    const pullNum = meta.type === 'pull' ? meta.pullNumber : 0;
+    const prInfo = await githubApi.getPullRequestInfo(meta.owner, meta.repo, pullNum);
     changedFiles = prInfo.changedFiles;
   } catch (err) {
     filesPane.innerHTML = `<div class="tab-error-state">Failed to fetch Pull Request files: ${err}</div>`;
@@ -2604,151 +3279,50 @@ function findHeadingContext(el: HTMLElement): string {
   return '';
 }
 
-// Data Saving Flow
-async function commitCommentFileChanges(updatedComments: CommentsFile, action: string) {
-  if (!githubApi || !currentMetadata || !repoInfo) {
-    throw new Error('GitHub API client is not initialized or repo metadata is missing');
-  }
-
-  const { owner, repo, filePath } = currentMetadata;
-  const commentsPath = filePath.replace(/\.md$/i, '.comments.yml');
-
-  const fileCtx = loadedFileContexts.get(filePath);
-  const anchors = fileCtx ? fileCtx.anchors : parsedAnchors;
-  if (anchors && updatedComments.inline_comments) {
-    const placements = placeInlineComments(anchors, updatedComments.inline_comments);
-    updatedComments.inline_comments.forEach((c) => {
-      const placement = placements.find((p) => p.comment.id === c.id);
-      if (placement) {
-        c.orphaned = isOrphanedPlacement(anchors, placement);
-      }
-    });
-  }
-
-  if (batchCommentsMode) {
-    const cache = await getPendingCommentsCache();
-    if (!cache[filePath]) {
-      cache[filePath] = {
-        original: JSON.parse(JSON.stringify(loadedComments)),
-        current: updatedComments,
-      };
-    } else {
-      cache[filePath].current = updatedComments;
-    }
-    await savePendingCommentsCache(cache);
-
+async function commitCommentFileChanges(updatedComments: CommentsFile, _action: string) {
+  const meta = parseGitHubUrl(window.location.href);
+  if (!meta || meta.type !== 'blob') {
     loadedComments = updatedComments;
-    if (fileCtx) {
-      fileCtx.comments = loadedComments;
-    }
-
     renderSidebarComments();
-    updateTabCommentsCount();
-    updateBatchPanel();
-
-    if (currentMetadata) {
-      const fileContainers = document.querySelectorAll('.js-file, .file');
-      for (const fileEl of Array.from(fileContainers)) {
-        const htmlEl = fileEl as HTMLElement;
-        const path = getFilePathFromFileContainer(htmlEl);
-        if (path === currentMetadata.filePath) {
-          const markdownBody = htmlEl.querySelector('.markdown-body') as HTMLElement;
-          if (markdownBody) {
-            renderDOMIndicatorsForFile(
-              markdownBody,
-              path,
-              anchors || parsedAnchors,
-              loadedComments
-            );
-          }
-          break;
-        }
-      }
-    }
     return;
   }
 
-  const yamlContent = yaml.dump(updatedComments, { lineWidth: -1, noRefs: true });
+  const key = {
+    owner: meta.owner,
+    repo: meta.repo,
+    branch: meta.branch,
+    filePath: meta.filePath,
+  };
 
-  // 1. Get head commit OID of write branch
-  const targetBranchInfo = await githubApi.checkBranchExists(owner, repo, writeBranch);
-  let targetBranchHeadOid = targetBranchInfo ? targetBranchInfo.oid : null;
-  let lastCommitMessage = targetBranchInfo ? targetBranchInfo.message : null;
-
-  const isCommentsBranch = writeBranch.startsWith('comments/');
-  if (squashCommits && isCommentsBranch && targetBranchHeadOid) {
-    console.log(`Squashing comments commits. Deleting and recreating branch ${writeBranch}...`);
-    try {
-      await githubApi.deleteBranch(owner, repo, writeBranch);
-      targetBranchHeadOid = null;
-      lastCommitMessage = null;
-    } catch (err) {
-      console.warn(`Failed to delete branch ${writeBranch} for squashing:`, err);
-    }
+  // Optimistically update local comments state and render UI immediately
+  loadedComments = updatedComments;
+  const markdownBody = document.querySelector('.markdown-body') as HTMLElement;
+  if (markdownBody && meta && meta.type === 'blob') {
+    renderDOMIndicatorsForFile(markdownBody, meta.filePath, parsedAnchors, loadedComments);
   }
+  renderSidebarComments();
 
-  if (!targetBranchHeadOid) {
-    if (repoInfo.isProtected && writeBranch.startsWith('comments/')) {
-      console.log(`Creating branch ${writeBranch}...`);
-      if (!repoInfo.headOid) {
-        throw new Error('Original branch head OID is unknown');
-      }
-      targetBranchHeadOid = await githubApi.createBranch(
-        repoInfo.id,
-        writeBranch,
-        repoInfo.headOid
+  try {
+    await issueBackend.write(key, updatedComments);
+  } catch (err: any) {
+    console.error('[md-comments] Error writing comment to GitHub orphan ref:', err);
+    const errMsg = String(err?.message || err);
+    if (errMsg.includes('401') || errMsg.includes('Unauthorized')) {
+      lastAuthError =
+        'GitHub authorization failed (401). Please enter a valid Personal Access Token (PAT) with repo scope below.';
+      isWritable = false;
+      currentToken = null;
+      githubApi = new GitHubApi(null);
+      clearOAuthToken().catch(() => {});
+      injectSidebar();
+      renderSidebarComments();
+      alert(
+        'Authentication error (401). Please enter your GitHub Personal Access Token (PAT) in the sidebar to post comments.'
       );
     } else {
-      throw new Error(`Target branch ${writeBranch} does not exist`);
+      alert('Failed to save comment to GitHub: ' + errMsg);
     }
-  }
-
-  let commitMessage = '';
-  if (useFixupCommits && lastCommitMessage && isCommentCommit(lastCommitMessage)) {
-    commitMessage = lastCommitMessage.startsWith('fixup! ')
-      ? lastCommitMessage
-      : `fixup! ${lastCommitMessage}`;
-  } else {
-    commitMessage = formatCommitMessage(action);
-  }
-
-  // 2. Commit the comments file to write branch
-  console.log(`Committing updates to branch ${writeBranch}...`);
-  await githubApi.commitFile(
-    owner,
-    repo,
-    writeBranch,
-    commentsPath,
-    yamlContent,
-    commitMessage,
-    targetBranchHeadOid
-  );
-
-  // Update local comments cache and re-render
-  loadedComments = updatedComments;
-
-  // Re-render sidebar comments
-  renderSidebarComments();
-  updateTabCommentsCount();
-
-  // Re-render indicators in case comments were resolved, added, etc.
-  if (currentMetadata) {
-    const fileContainers = document.querySelectorAll('.js-file, .file');
-    for (const fileEl of Array.from(fileContainers)) {
-      const htmlEl = fileEl as HTMLElement;
-      const path = getFilePathFromFileContainer(htmlEl);
-      if (path === currentMetadata.filePath) {
-        const markdownBody = htmlEl.querySelector('.markdown-body') as HTMLElement;
-        if (markdownBody) {
-          const fileCtx = loadedFileContexts.get(path);
-          if (fileCtx) {
-            fileCtx.comments = loadedComments;
-          }
-          renderDOMIndicatorsForFile(markdownBody, path, parsedAnchors, loadedComments);
-        }
-        break;
-      }
-    }
+    throw err;
   }
 }
 
@@ -2775,6 +3349,8 @@ async function saveNewInlineComment(
     replies: [],
   };
 
+  localCreatedIds.add(newComment.id);
+
   const updated = {
     ...loadedComments,
     inline_comments: [...loadedComments.inline_comments, newComment],
@@ -2795,6 +3371,8 @@ async function saveNewPageComment(body: string) {
     replies: [],
   };
 
+  localCreatedIds.add(newComment.id);
+
   const updated = {
     ...loadedComments,
     page_comments: [...loadedComments.page_comments, newComment],
@@ -2813,6 +3391,8 @@ async function saveReply(commentId: string, type: 'inline' | 'page', body: strin
     reactions: [],
   };
 
+  localCreatedIds.add(reply.id);
+
   const updated = { ...loadedComments };
   if (type === 'inline') {
     updated.inline_comments = updated.inline_comments.map((c) => {
@@ -2830,7 +3410,7 @@ async function saveReply(commentId: string, type: 'inline' | 'page', body: strin
     });
   }
 
-  await commitCommentFileChanges(updated, 'reply to comment');
+  await commitCommentFileChanges(updated, 'add reply:' + commentId);
 }
 
 async function editComment(commentId: string, type: 'inline' | 'page', body: string) {
@@ -2854,12 +3434,12 @@ async function editComment(commentId: string, type: 'inline' | 'page', body: str
 }
 
 async function deleteComment(commentId: string, type: 'inline' | 'page') {
-  const updated = { ...loadedComments };
-  if (type === 'inline') {
-    updated.inline_comments = updated.inline_comments.filter((c) => c.id !== commentId);
-  } else {
-    updated.page_comments = updated.page_comments.filter((c) => c.id !== commentId);
-  }
+  localCreatedIds.delete(commentId);
+  const targetId = commentId.trim();
+  const updated = {
+    inline_comments: loadedComments.inline_comments.filter((c) => c.id.trim() !== targetId),
+    page_comments: loadedComments.page_comments.filter((c) => c.id.trim() !== targetId),
+  };
   await commitCommentFileChanges(updated, 'delete comment');
 }
 
@@ -2901,24 +3481,23 @@ async function editReply(
 }
 
 async function deleteReply(commentId: string, replyId: string, type: 'inline' | 'page') {
-  const updated = { ...loadedComments };
-  if (type === 'inline') {
-    updated.inline_comments = updated.inline_comments.map((c) => {
-      if (c.id === commentId) {
-        const updatedReplies = c.replies.filter((r) => r.id !== replyId);
+  localCreatedIds.delete(replyId);
+  const targetCommentId = commentId.trim();
+  const targetReplyId = replyId.trim();
+
+  const filterReplies = (comments: Array<any>) =>
+    comments.map((c) => {
+      if (c.id.trim() === targetCommentId) {
+        const updatedReplies = c.replies.filter((r: any) => r.id.trim() !== targetReplyId);
         return { ...c, replies: updatedReplies };
       }
       return c;
     });
-  } else {
-    updated.page_comments = updated.page_comments.map((c) => {
-      if (c.id === commentId) {
-        const updatedReplies = c.replies.filter((r) => r.id !== replyId);
-        return { ...c, replies: updatedReplies };
-      }
-      return c;
-    });
-  }
+
+  const updated = {
+    inline_comments: filterReplies(loadedComments.inline_comments),
+    page_comments: filterReplies(loadedComments.page_comments),
+  };
   await commitCommentFileChanges(updated, 'delete reply');
 }
 
@@ -2952,378 +3531,6 @@ async function toggleResolve(commentId: string, type: 'inline' | 'page', resolve
 
   const action = resolved ? 'resolve' : 'reopen';
   await commitCommentFileChanges(updated, `${action} comment thread`);
-}
-
-interface CacheEntry {
-  original: CommentsFile;
-  current: CommentsFile;
-}
-
-interface PendingCommentsCache {
-  [filePath: string]: CacheEntry;
-}
-
-function getCacheKey(): string {
-  const meta = parseGitHubUrl(window.location.href);
-  if (!meta || meta.type !== 'pull') return '';
-  return `pending_comments_${meta.owner}_${meta.repo}_${meta.pullNumber}`;
-}
-
-async function getPendingCommentsCache(): Promise<PendingCommentsCache> {
-  const key = getCacheKey();
-  if (!key) return {};
-  return new Promise((resolve) => {
-    chrome.storage.local.get({ [key]: {} }, (items) => {
-      resolve(items[key] || {});
-    });
-  });
-}
-
-async function savePendingCommentsCache(cache: PendingCommentsCache): Promise<void> {
-  const key = getCacheKey();
-  if (!key) return;
-  return new Promise((resolve) => {
-    chrome.storage.local.set({ [key]: cache }, () => {
-      resolve();
-    });
-  });
-}
-
-async function clearPendingCommentsCache(): Promise<void> {
-  const key = getCacheKey();
-  if (!key) return;
-  return new Promise((resolve) => {
-    chrome.storage.local.remove(key, () => {
-      resolve();
-    });
-  });
-}
-
-function countPendingChangesForFile(original: CommentsFile, current: CommentsFile): number {
-  let count = 0;
-
-  // Inline comments
-  const originalInlineMap = new Map((original.inline_comments || []).map((c) => [c.id, c]));
-  for (const c of current.inline_comments || []) {
-    const orig = originalInlineMap.get(c.id);
-    if (!orig) {
-      count++; // New comment
-    } else {
-      if (orig.body !== c.body || orig.resolved !== c.resolved) {
-        count++; // Edited or resolved state changed
-      }
-
-      // Count reply changes
-      const origReplyMap = new Map((orig.replies || []).map((r) => [r.id, r]));
-      for (const r of c.replies || []) {
-        const origR = origReplyMap.get(r.id);
-        if (!origR) {
-          count++; // New reply
-        } else if (origR.body !== r.body) {
-          count++; // Edited reply
-        }
-      }
-      for (const r of orig.replies || []) {
-        if (!(c.replies || []).some((currR) => currR.id === r.id)) {
-          count++; // Deleted reply
-        }
-      }
-    }
-  }
-
-  for (const c of original.inline_comments || []) {
-    if (!(current.inline_comments || []).some((currC) => currC.id === c.id)) {
-      count++; // Deleted inline comment
-    }
-  }
-
-  // Page comments
-  const originalPageMap = new Map((original.page_comments || []).map((c) => [c.id, c]));
-  for (const c of current.page_comments || []) {
-    const orig = originalPageMap.get(c.id);
-    if (!orig) {
-      count++;
-    } else {
-      if (orig.body !== c.body || orig.resolved !== c.resolved) {
-        count++;
-      }
-
-      const origReplyMap = new Map((orig.replies || []).map((r) => [r.id, r]));
-      for (const r of c.replies || []) {
-        const origR = origReplyMap.get(r.id);
-        if (!origR) {
-          count++;
-        } else if (origR.body !== r.body) {
-          count++;
-        }
-      }
-      for (const r of orig.replies || []) {
-        if (!(c.replies || []).some((currR) => currR.id === r.id)) {
-          count++;
-        }
-      }
-    }
-  }
-
-  for (const c of original.page_comments || []) {
-    if (!(current.page_comments || []).some((currC) => currC.id === c.id)) {
-      count++;
-    }
-  }
-
-  return count;
-}
-
-async function submitBatchComments() {
-  if (!githubApi || !currentMetadata || !repoInfo) {
-    throw new Error('GitHub API client is not initialized or repo metadata is missing');
-  }
-
-  const { owner, repo } = currentMetadata;
-  const cache = await getPendingCommentsCache();
-
-  const additions: { filePath: string; content: string }[] = [];
-  for (const filePath of Object.keys(cache)) {
-    const entry = cache[filePath];
-    const commentsPath = filePath.replace(/\.md$/i, '.comments.yml');
-
-    const fileCtx = loadedFileContexts.get(filePath);
-    const anchors = fileCtx ? fileCtx.anchors : parsedAnchors;
-    if (anchors && entry.current.inline_comments) {
-      const placements = placeInlineComments(anchors, entry.current.inline_comments);
-      entry.current.inline_comments.forEach((c) => {
-        const placement = placements.find((p) => p.comment.id === c.id);
-        if (placement) {
-          c.orphaned = isOrphanedPlacement(anchors, placement);
-        }
-      });
-    }
-
-    const yamlContent = yaml.dump(entry.current, { lineWidth: -1, noRefs: true });
-    additions.push({
-      filePath: commentsPath,
-      content: yamlContent,
-    });
-  }
-
-  if (additions.length === 0) {
-    console.log('[md-comments] No pending comments to submit');
-    return;
-  }
-
-  const submitBtn = activeSidebarHost?.querySelector('.submit-batch-btn') as HTMLButtonElement;
-  const discardBtn = activeSidebarHost?.querySelector('.discard-batch-btn') as HTMLButtonElement;
-  if (submitBtn) {
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Submitting...';
-  }
-  if (discardBtn) {
-    discardBtn.disabled = true;
-  }
-
-  try {
-    const targetBranchInfo = await githubApi.checkBranchExists(owner, repo, writeBranch);
-    let targetBranchHeadOid = targetBranchInfo ? targetBranchInfo.oid : null;
-    let lastCommitMessage = targetBranchInfo ? targetBranchInfo.message : null;
-
-    const isCommentsBranch = writeBranch.startsWith('comments/');
-    if (squashCommits && isCommentsBranch && targetBranchHeadOid) {
-      console.log(`Squashing comments commits. Deleting and recreating branch ${writeBranch}...`);
-      try {
-        await githubApi.deleteBranch(owner, repo, writeBranch);
-        targetBranchHeadOid = null;
-        lastCommitMessage = null;
-      } catch (err) {
-        console.warn(`Failed to delete branch ${writeBranch} for squashing:`, err);
-      }
-    }
-
-    if (!targetBranchHeadOid) {
-      if (repoInfo.isProtected && writeBranch.startsWith('comments/')) {
-        console.log(`Creating branch ${writeBranch}...`);
-        if (!repoInfo.headOid) {
-          throw new Error('Original branch head OID is unknown');
-        }
-        targetBranchHeadOid = await githubApi.createBranch(
-          repoInfo.id,
-          writeBranch,
-          repoInfo.headOid
-        );
-      } else {
-        throw new Error(`Target branch ${writeBranch} does not exist`);
-      }
-    }
-
-    let commitMessage = '';
-    const action = 'submit batch of comments';
-    if (useFixupCommits && lastCommitMessage && isCommentCommit(lastCommitMessage)) {
-      commitMessage = lastCommitMessage.startsWith('fixup! ')
-        ? lastCommitMessage
-        : `fixup! ${lastCommitMessage}`;
-    } else {
-      commitMessage = formatCommitMessage(action);
-    }
-
-    console.log(`Committing updates for ${additions.length} files to branch ${writeBranch}...`);
-    await githubApi.commitFiles(
-      owner,
-      repo,
-      writeBranch,
-      additions,
-      commitMessage,
-      targetBranchHeadOid
-    );
-
-    await clearPendingCommentsCache();
-
-    if (currentMetadata) {
-      const activeFilePath = currentMetadata.filePath;
-      if (cache[activeFilePath]) {
-        loadedComments = cache[activeFilePath].current;
-      }
-
-      for (const filePath of Object.keys(cache)) {
-        const fileCtx = loadedFileContexts.get(filePath);
-        if (fileCtx) {
-          fileCtx.comments = cache[filePath].current;
-        }
-      }
-    }
-
-    renderSidebarComments();
-    updateTabCommentsCount();
-    updateBatchPanel();
-  } catch (err) {
-    console.error('[md-comments] Failed to submit comments batch:', err);
-    alert('Failed to submit comments batch: ' + (err instanceof Error ? err.message : String(err)));
-  } finally {
-    if (submitBtn) {
-      submitBtn.disabled = false;
-      submitBtn.textContent = `Submit All`;
-    }
-    if (discardBtn) {
-      discardBtn.disabled = false;
-    }
-  }
-}
-
-async function discardBatchComments() {
-  if (
-    !confirm(
-      'Are you sure you want to discard all pending comments in this batch? This cannot be undone.'
-    )
-  ) {
-    return;
-  }
-
-  const cache = await getPendingCommentsCache();
-  await clearPendingCommentsCache();
-
-  if (currentMetadata) {
-    const activeFilePath = currentMetadata.filePath;
-    if (cache[activeFilePath]) {
-      loadedComments = cache[activeFilePath].original;
-    }
-
-    for (const filePath of Object.keys(cache)) {
-      const fileCtx = loadedFileContexts.get(filePath);
-      if (fileCtx) {
-        fileCtx.comments = cache[filePath].original;
-      }
-    }
-  }
-
-  renderSidebarComments();
-  updateTabCommentsCount();
-  updateBatchPanel();
-
-  if (currentMetadata) {
-    const fileContainers = document.querySelectorAll('.js-file, .file');
-    for (const fileEl of Array.from(fileContainers)) {
-      const htmlEl = fileEl as HTMLElement;
-      const path = getFilePathFromFileContainer(htmlEl);
-      if (path === currentMetadata.filePath) {
-        const markdownBody = htmlEl.querySelector('.markdown-body') as HTMLElement;
-        if (markdownBody) {
-          const fileCtx = loadedFileContexts.get(path);
-          renderDOMIndicatorsForFile(
-            markdownBody,
-            path,
-            fileCtx ? fileCtx.anchors : parsedAnchors,
-            loadedComments
-          );
-        }
-        break;
-      }
-    }
-  }
-}
-
-async function updateBatchPanel() {
-  const container = activeSidebarHost?.querySelector('#batch-comments-container') as HTMLElement;
-  if (!container || !isWritable) return;
-
-  const cache = await getPendingCommentsCache();
-  let totalPending = 0;
-  for (const filePath of Object.keys(cache)) {
-    totalPending += countPendingChangesForFile(cache[filePath].original, cache[filePath].current);
-  }
-
-  const hasPending = totalPending > 0;
-
-  container.innerHTML = `
-    <div class="batch-comments-panel" style="padding: 12px 16px; border-bottom: 1px solid var(--sidebar-border); background-color: var(--card-bg); display: flex; flex-direction: column; gap: 8px;">
-      <div style="display: flex; align-items: center; justify-content: space-between;">
-        <label style="display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 13px; cursor: pointer; margin: 0; color: var(--text-primary);">
-          <input type="checkbox" id="batch-mode-toggle" style="margin: 0; cursor: pointer;" ${batchCommentsMode ? 'checked' : ''} />
-          Batch Commenting
-        </label>
-        <span class="batch-status-badge" style="font-size: 11px; padding: 2px 6px; border-radius: 4px; font-weight: 500; background-color: ${hasPending ? 'rgba(210, 153, 34, 0.15)' : 'rgba(139, 148, 158, 0.1)'}; color: ${hasPending ? 'var(--warn-color)' : 'var(--text-secondary)'};">
-          ${totalPending} pending
-        </span>
-      </div>
-      ${
-        hasPending
-          ? `
-        <div class="batch-actions" style="display: flex; gap: 8px; margin-top: 4px;">
-          <button class="btn btn-primary submit-batch-btn" style="flex: 1; padding: 6px 12px; font-size: 12px; font-weight: 600; border: none; border-radius: 6px; background-color: var(--success-color); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
-            Submit All (${totalPending})
-          </button>
-          <button class="btn btn-secondary discard-batch-btn" style="padding: 6px 12px; font-size: 12px; border: 1px solid var(--sidebar-border); border-radius: 6px; background-color: transparent; color: #ff7b72; cursor: pointer;">
-            Discard
-          </button>
-        </div>
-      `
-          : ''
-      }
-    </div>
-  `;
-
-  container.querySelector('#batch-mode-toggle')?.addEventListener('change', async (e) => {
-    const checked = (e.target as HTMLInputElement).checked;
-    if (!checked && hasPending) {
-      if (
-        confirm(
-          'You have pending comments in your batch. Turning off Batch Commenting will keep them in draft state. Submit them now?'
-        )
-      ) {
-        await submitBatchComments();
-        return;
-      }
-    }
-    batchCommentsMode = checked;
-    chrome.storage.local.set({ batchCommentsMode: checked }, () => {
-      updateBatchPanel();
-    });
-  });
-
-  container.querySelector('.submit-batch-btn')?.addEventListener('click', async () => {
-    await submitBatchComments();
-  });
-
-  container.querySelector('.discard-batch-btn')?.addEventListener('click', async () => {
-    await discardBatchComments();
-  });
 }
 
 // --- Helpers ---
@@ -3674,6 +3881,26 @@ function handleTextSelection() {
     hideSelectionButton();
   }
 }
+
+chrome.storage.onChanged.addListener((changes, areaName) => {
+  if (areaName === 'local') {
+    if (changes.oauthToken || changes.fallbackToken) {
+      const newToken = changes.oauthToken?.newValue || changes.fallbackToken?.newValue || null;
+      currentToken = newToken;
+      githubApi = new GitHubApi(newToken);
+      const meta = parseGitHubUrl(window.location.href);
+      if (meta && meta.type === 'blob') {
+        loadDocumentComments(meta);
+      }
+    }
+    if (changes.useConventionalCommits) {
+      useConventionalCommits = !!changes.useConventionalCommits.newValue;
+    }
+    if (changes.commitPattern) {
+      commitPattern = changes.commitPattern.newValue || '';
+    }
+  }
+});
 
 document.addEventListener('mouseup', handleTextSelection);
 document.addEventListener('keyup', handleTextSelection);

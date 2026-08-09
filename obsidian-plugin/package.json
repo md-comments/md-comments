@@ -1,7 +1,7 @@
 {
   "name": "obsidian-md-comments",
-  "version": "1.0.1",
-  "description": "Rich inline commenting on Markdown preview with companion YAML file persistence for Obsidian",
+  "version": "1.2.0",
+  "description": "Rich inline commenting on Markdown preview powered by GitHub backend with local companion YAML fallback for Obsidian",
   "main": "main.js",
   "scripts": {
     "dev": "node esbuild.config.mjs",

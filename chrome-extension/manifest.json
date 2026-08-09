@@ -1,10 +1,17 @@
 {
   "manifest_version": 3,
   "name": "Markdown Comments",
-  "version": "1.0.2",
-  "description": "Visual inline comments for Markdown documents on GitHub using companion YAML files.",
-  "permissions": ["storage"],
-  "host_permissions": ["https://github.com/*", "https://raw.githubusercontent.com/*"],
+  "version": "1.2.0",
+  "description": "Visual inline comments for Markdown documents on GitHub powered by GitHub Issues backend.",
+  "permissions": ["storage", "identity", "tabs"],
+  "host_permissions": [
+    "https://github.com/*",
+    "https://api.github.com/*",
+    "https://raw.githubusercontent.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
   "icons": {
     "16": "icons/icon16.png",
     "32": "icons/icon32.png",
@@ -19,10 +26,6 @@
       "128": "icons/icon128.png"
     },
     "default_title": "Markdown Comments"
-  },
-  "options_ui": {
-    "page": "options.html",
-    "open_in_tab": true
   },
   "content_scripts": [
     {

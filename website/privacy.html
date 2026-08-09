@@ -120,10 +120,11 @@
           <h3>VS Code Extension & Obsidian Plugin</h3>
           <ul>
             <li>
-              <strong>Comment Data:</strong> All comments, replies, and reactions are stored locally
-              on your device in companion <code>&lt;filename&gt;.comments.yml</code> files right
-              next to your markdown documents. They are read from and written to your local file
-              system (or Obsidian Vault) directly.
+              <strong>Comment Data:</strong> All comments, replies, and reactions are stored directly
+              on GitHub as the primary backend (via GitHub API using dedicated orphan git references
+              <code>refs/md-comments/data</code>). When working offline or in local non-GitHub repositories,
+              comments seamlessly fall back to local companion <code>&lt;filename&gt;.comments.yml</code>
+              files right next to your markdown documents.
             </li>
             <li>
               <strong>Local Settings:</strong> Settings such as preferred sidebar width, emoji
@@ -153,8 +154,8 @@
             <li>
               <strong>GitHub Repository & Comment Data:</strong> The Chrome extension reads
               repository structure, pull requests, files in pull requests, and commit data from
-              GitHub repositories you visit. It reads and writes comments by committing YAML files
-              directly to your GitHub branches using the GitHub API on your behalf.
+              GitHub repositories you visit. It reads and writes comments using the GitHub API on
+              your behalf.
             </li>
           </ul>
 
@@ -179,15 +180,14 @@
           <ul>
             <li>
               File System Access: Required to read and write companion
-              <code>.comments.yml</code> files in your workspace.
+              <code>.comments.yml</code> files when working in local offline mode.
             </li>
           </ul>
 
           <h3>Obsidian Plugin</h3>
           <ul>
             <li>
-              Vault Access: Required to read and write companion <code>.comments.yml</code> files in
-              your active Obsidian vault.
+              Vault Access: Required to read and write companion <code>.comments.yml</code> files when working in local offline mode.
             </li>
           </ul>
 
@@ -259,7 +259,7 @@
           <div class="footer-brand">
             <h4>Markdown Comments</h4>
             <p>
-              Collaborative inline comments for Markdown documents, stored in YAML companion files.
+              Collaborative inline comments for Markdown documents, powered by GitHub as the backend.
             </p>
           </div>
           <div class="footer-links-col">

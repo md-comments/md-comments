@@ -9,8 +9,8 @@ import { executeCommentAction, type CommentActionMessage } from './commentAction
 import { parsePreviewCommandArg } from './previewCommand';
 import { scanOrphansForMarkdown } from './orphan';
 import { MarkdownCommentsCodeLensProvider } from './codeLensProvider';
-
-const OUTPUT_CHANNEL = 'Markdown Comments';
+import { initializeAuth, signIn, signOut, getOAuthToken } from './githubAuth';
+import { initializeLogger, logDebug, logInfo, logError } from './logger';
 
 function mdUriFromMessage(msg: CommentActionMessage): vscode.Uri {
   const md = msg.md?.trim();
@@ -28,14 +28,35 @@ function mdUriFromMessage(msg: CommentActionMessage): vscode.Uri {
 }
 
 let globalCodeLensProvider: MarkdownCommentsCodeLensProvider | undefined;
+let statusBarItem: vscode.StatusBarItem | undefined;
+
+async function updateStatusBar(): Promise<void> {
+  if (!statusBarItem) return;
+  const token = await getOAuthToken();
+  logDebug('updateStatusBar token exists:', !!token);
+  if (token) {
+    const author = await getAuthor();
+    statusBarItem.text = `$(github) ${author}`;
+    statusBarItem.tooltip = 'Markdown Comments: Remote GitHub storage active';
+    statusBarItem.command = undefined;
+  } else {
+    statusBarItem.text = '$(warning) Not Logged In to GitHub';
+    statusBarItem.tooltip = 'Markdown Comments: You are not logged in to GitHub. Click to sign in.';
+    statusBarItem.command = 'mdComments.signIn';
+  }
+  statusBarItem.show();
+}
 
 async function refreshPreview(): Promise<void> {
+  logDebug('refreshPreview triggered');
   await warmAuthorCache();
+  await updateStatusBar();
   await vscode.commands.executeCommand('markdown.preview.refresh');
   globalCodeLensProvider?.refresh();
 }
 
 async function handlePreviewAction(raw: unknown): Promise<void> {
+  logDebug('handlePreviewAction raw msg:', raw);
   const msg = parsePreviewCommandArg(raw);
   const mdUri = mdUriFromMessage(msg);
   await executeCommentAction(mdUri, msg);
@@ -44,14 +65,15 @@ async function handlePreviewAction(raw: unknown): Promise<void> {
     const logins = collectGitHubLogins(comments);
     await warmGitHubDisplayNames(logins);
     await warmGitHubAvatars(collectAvatarLogins(comments));
-  } catch {
-    /* optional */
+  } catch (err) {
+    logError('handlePreviewAction warming avatars/names failed', err);
   }
   CommentPreviewPanel.refreshForUri(mdUri);
   await refreshPreview();
 }
 
 async function handleUri(uri: vscode.Uri): Promise<void> {
+  logDebug('handleUri query:', uri.query);
   const params = new URLSearchParams(uri.query);
   const action = params.get('action');
   if (!action) {
@@ -79,67 +101,97 @@ async function handleUri(uri: vscode.Uri): Promise<void> {
 export function activate(context: vscode.ExtensionContext): {
   extendMarkdownIt: typeof extendMarkdownIt;
 } {
-  const output = vscode.window.createOutputChannel(OUTPUT_CHANNEL);
-  output.appendLine(`[${new Date().toISOString()}] Markdown Comments extension activated`);
-  output.show(true);
+  initializeLogger(context);
+  logInfo('Markdown Comments extension activate() invoked');
+  initializeAuth(context);
+
+  statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
+  void updateStatusBar();
+
   void (async () => {
-    await warmAuthorCache();
-    const name = await getAuthor();
-    output.appendLine(`Comment author: ${name}`);
-    if (isGitHubLogin(name)) {
-      await warmGitHubDisplayNames([name]);
-      await warmGitHubAvatars([name]);
+    try {
+      await warmAuthorCache();
+      const name = await getAuthor();
+      logInfo(`Comment author resolved: ${name}`);
+      if (isGitHubLogin(name)) {
+        await warmGitHubDisplayNames([name]);
+        await warmGitHubAvatars([name]);
+      }
+    } catch (err) {
+      logError('Error preloading author/names/avatars', err);
     }
   })();
 
   globalCodeLensProvider = new MarkdownCommentsCodeLensProvider();
 
   context.subscriptions.push(
+    statusBarItem,
     vscode.languages.registerCodeLensProvider({ language: 'markdown' }, globalCodeLensProvider),
     vscode.workspace.onDidOpenTextDocument((doc) => {
       if (doc.languageId === 'markdown') {
+        logDebug('onDidOpenTextDocument:', doc.uri.toString());
         void warmAuthorCache();
+        void updateStatusBar();
+        void readComments(doc.uri, true).then((comments) => {
+          logDebug(`Pre-warmed comments onDidOpenTextDocument, count: inline=${comments.inline_comments.length}, page=${comments.page_comments.length}`);
+        });
       }
     }),
-    output,
+    vscode.window.onDidChangeActiveTextEditor((editor) => {
+      if (editor?.document.languageId === 'markdown') {
+        logDebug('onDidChangeActiveTextEditor:', editor.document.uri.toString());
+        void readComments(editor.document.uri, true).then((comments) => {
+          logDebug(`Pre-warmed comments onDidChangeActiveTextEditor, count: inline=${comments.inline_comments.length}, page=${comments.page_comments.length}`);
+        });
+      }
+    }),
     vscode.window.registerUriHandler({
       handleUri: async (uri) => {
         try {
-          output.appendLine(`URI: ${uri.toString()}`);
+          logInfo(`URI handler invoked: ${uri.toString()}`);
           await handleUri(uri);
         } catch (err) {
-          const text = err instanceof Error ? err.message : String(err);
-          output.appendLine(`URI failed: ${text}`);
-          vscode.window.showErrorMessage(`Markdown Comments: ${text}`);
+          logError('URI handler failed', err);
+          vscode.window.showErrorMessage(`Markdown Comments: ${err instanceof Error ? err.message : String(err)}`);
         }
       },
     }),
+    vscode.commands.registerCommand('mdComments.signIn', async () => {
+      logInfo('Command mdComments.signIn invoked');
+      await signIn();
+      await refreshPreview();
+    }),
+    vscode.commands.registerCommand('mdComments.signOut', async () => {
+      logInfo('Command mdComments.signOut invoked');
+      await signOut();
+      await refreshPreview();
+    }),
     vscode.commands.registerCommand('mdComments.openCommentPreview', () => {
       const editor = vscode.window.activeTextEditor;
+      logInfo('Command mdComments.openCommentPreview invoked, activeEditor exists:', !!editor);
       if (!editor || editor.document.languageId !== 'markdown') {
         vscode.window.showWarningMessage('Open a Markdown (.md) file first');
         return;
       }
       CommentPreviewPanel.show(context.extensionUri, editor.document, vscode.ViewColumn.Beside);
-      output.appendLine(`Opened comment preview for ${editor.document.uri.fsPath}`);
+      logInfo(`Opened comment preview panel for ${editor.document.uri.fsPath}`);
     }),
     vscode.commands.registerCommand(
       'mdComments.handlePreviewAction',
       async (...args: unknown[]) => {
         try {
-          output.appendLine(`Command invoked, args: ${JSON.stringify(args).slice(0, 200)}`);
+          logDebug('Command mdComments.handlePreviewAction invoked, args:', args);
           await handlePreviewAction(args[0]);
-          output.appendLine('Command completed OK');
         } catch (err) {
-          const text = err instanceof Error ? err.message : String(err);
-          output.appendLine(`Command failed: ${text}`);
-          vscode.window.showErrorMessage(`Markdown Comments: ${text}`);
+          logError('Command mdComments.handlePreviewAction failed', err);
+          vscode.window.showErrorMessage(`Markdown Comments: ${err instanceof Error ? err.message : String(err)}`);
         }
       }
     ),
     vscode.commands.registerCommand('mdComments.refreshPreview', refreshPreview),
     vscode.commands.registerCommand('mdComments.scanOrphans', async () => {
       const editor = vscode.window.activeTextEditor;
+      logInfo('Command mdComments.scanOrphans invoked');
       if (!editor || editor.document.languageId !== 'markdown') {
         vscode.window.showWarningMessage('Open a Markdown file to scan for orphans');
         return;
@@ -156,6 +208,7 @@ export function activate(context: vscode.ExtensionContext): {
       if (doc.languageId !== 'markdown') {
         return;
       }
+      logDebug('onDidSaveTextDocument:', doc.uri.toString());
       const count = await scanOrphansForMarkdown(doc.uri);
       if (count > 0) {
         vscode.window.showWarningMessage(
@@ -164,15 +217,6 @@ export function activate(context: vscode.ExtensionContext): {
       }
       CommentPreviewPanel.refreshForUri(doc.uri);
       await refreshPreview();
-    }),
-    vscode.workspace.createFileSystemWatcher('**/*.comments.yml').onDidChange((uri) => {
-      output.appendLine(`Comments file changed: ${uri.fsPath}`);
-      void refreshPreview();
-      for (const editor of vscode.window.visibleTextEditors) {
-        if (editor.document.uri.fsPath.replace(/\.md$/i, '.comments.yml') === uri.fsPath) {
-          CommentPreviewPanel.refreshForUri(editor.document.uri);
-        }
-      }
     })
   );
 

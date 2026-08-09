@@ -7,7 +7,7 @@
 
 🌐 **Website & Demo:** [md-comments.com](https://md-comments.com/)
 
-A collaboration tool for Markdown documentation. Markdown excels at authoring, version control, and agent workflows, but it has no built-in way to highlight a passage and leave feedback inline. **Markdown Comments** closes that gap with a visual commenting UI while keeping comments in companion `*.comments.yml` files next to each document — making them easy to grep, diff, and sync. If your local files are backed up by Git, this allows seamless collaboration; however, you can also use any other synchronization mechanism, such as Obsidian Sync, Google Drive, or Dropbox, to share comments across devices.
+A collaboration tool for Markdown documentation. Markdown excels at authoring, version control, and agent workflows, but it has no built-in way to highlight a passage and leave feedback inline. **Markdown Comments** closes that gap with a visual commenting UI. Comments auto-save live to a GitHub Issue per document (`[md-comments] <filepath>`) — requiring **zero commits, zero branches, and zero PR overhead**. Anyone logged into GitHub can review and comment on Markdown documents instantly. For offline or non-GitHub workflows, comments gracefully fall back to companion `*.comments.yml` files.
 
 Works in **VS Code** ([Marketplace](https://marketplace.visualstudio.com/items?itemName=md-comments.md-preview-comments) or [Open VSX](https://open-vsx.org/extension/md-comments/md-preview-comments)), **Cursor**, **Antigravity**, **Obsidian**, and **GitHub** ([Chrome Extension](https://chromewebstore.google.com/detail/markdown-comments/mjlhdjonjfcedkbpajkfeidfebefhkpp)).
 
@@ -15,13 +15,14 @@ Works in **VS Code** ([Marketplace](https://marketplace.visualstudio.com/items?i
 
 ## 🚀 Key Features
 
-- **Companion File Persistence**: All comments, replies, and reactions are stored in a matching `<filename>.comments.yml` file alongside your markdown document. No database required. If your files are tracked by Git, this enables easy version-controlled collaboration. You can also sync them using Obsidian Sync, Google Drive, Dropbox, or any other file synchronization mechanism.
+- **Zero-Commit GitHub Issues Backend**: All comments, replies, and reactions auto-save instantly as Issue Comments under a dedicated GitHub Issue per document (`[md-comments] <filepath>`). No git commits or branches needed.
+- **Companion File Fallback**: When working offline or in local non-GitHub repositories, comments seamlessly persist in local `<filename>.comments.yml` files next to your Markdown document.
 - **Fuzzy Anchoring Cascade**: Comments are robustly anchored using a cascade matching strategy:
   1. **Paragraph Hash**: Exact match of the normalized FNV-1a hash of the text.
   2. **Fuzzy Text Match**: Selection-based substring search to identify the text even if slightly edited.
   3. **Heading + Paragraph Index**: Contextual paragraph offset within the closest heading.
 - **Threaded Conversations**: Support for nested replies, emoji reactions, and thread status (Open / Resolved) for page-level and text-selection comments.
-- **GitHub Integration**: Resolves local Git/GitHub configuration to display actual GitHub display names and avatars. Mentions using `@username` link to GitHub profiles.
+- **Direct GitHub File & Line Linking**: Every Issue Comment contains clickable links back to the target file and line range (`docs/architecture.md#L15`).
 - **Orphan Detection**: Detect and manage comments whose anchors are lost due to drastic document changes.
 
 ---
@@ -80,7 +81,7 @@ Alternatively, to run the extension locally for development:
 1. Open a `.md` file.
 2. Open the **Comments Side Panel** by clicking the comment icon in the Editor Title bar (top right) or running **Markdown Comments: Open Comment Preview** from the Command Palette (`Cmd/Ctrl+Shift+P`).
 3. Select any text in the editor or preview, click **Comment** or **Add comment** to open the composer.
-4. Comments are written to `*.comments.yml`. Commit the `.md` and `.comments.yml` files together to version-control the discussion.
+4. Comments auto-save to GitHub in real time with zero commits on your source tree (or fall back to companion `*.comments.yml` files for offline or non-GitHub workspaces).
 5. Review or manage orphaned comments by running **Markdown Comments: Scan for Orphaned Comments** from the Command Palette.
 
 ### Obsidian

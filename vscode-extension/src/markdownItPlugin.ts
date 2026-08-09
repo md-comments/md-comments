@@ -17,6 +17,11 @@ import { parseMarkdownAnchors, fnv1aHash, normalizeAnchorText } from '../../shar
 import { placeInlineComments, isOrphanedPlacement, fuzzyMatch } from '../../shared/placement';
 import type { CommentsFile, PlacementResult } from '../../shared/types';
 import { escapeHtml } from '../../shared/html';
+import { readComments } from './commentStore';
+import { globalOptimisticStore } from './optimisticStore';
+import { resolveStorageKeyForUriSync } from './repoManager';
+import { logDebug } from './logger';
+import { hasTokenSync } from './githubAuth';
 
 function formatTime(iso: string): string {
   try {
@@ -599,8 +604,16 @@ function renderDocumentLayout(
   const sidebarBody = buildSidebarHtml(ctx);
   const sidebarWidth = getDefaultSidebarWidth();
 
+  const authBanner = hasTokenSync()
+    ? ''
+    : `<div class="md-comments-auth-banner" style="background: rgba(234, 179, 8, 0.15); border: 1px solid rgba(234, 179, 8, 0.4); padding: 8px 12px; margin: 8px; border-radius: 6px; font-size: 12px; color: var(--vscode-foreground);">
+        ⚠️ <strong>Not Logged In to GitHub</strong>. Sign in to view and post comments for private repositories.
+        <a href="command:mdComments.signIn" style="color: var(--vscode-textLink-foreground); font-weight: bold; margin-left: 6px; text-decoration: underline;">Sign In to GitHub</a>
+      </div>`;
+
   return `<div id="md-comments-layout" class="md-comments-layout" data-md-default-open="${defaultOpen}" data-md-thread-count="${threadCount}" style="--gc-sidebar-width: ${sidebarWidth}px">
     <div class="md-comments-main">
+      ${authBanner}
       ${saveHint}
       <div class="md-comments-document">${docHtml}</div>
     </div>
@@ -621,6 +634,7 @@ function renderDocumentLayout(
            <button type="button" class="md-comments-sidebar-icon-btn" id="md-comments-sidebar-close" title="Close comments" aria-label="Close comments">×</button>
          </div>
       </header>
+      ${authBanner}
       <div class="md-comments-sidebar-body">${sidebarBody}</div>
       <footer class="md-comments-sidebar-footer">
         <button type="button" class="md-comments-sidebar-add" data-md-action="addPage">
@@ -661,20 +675,29 @@ function getMdUri(env: Record<string, unknown>): vscode.Uri | undefined {
 
 function loadContext(uri: vscode.Uri): RenderContext | null {
   try {
+    logDebug(`loadContext invoked for URI: ${uri.toString()}`);
     const mdPath = uri.fsPath || uri.path;
     const markdown = fs.readFileSync(mdPath, 'utf8');
     const blocks = parseMarkdownAnchors(markdown);
-    const commentsPath = mdPath.replace(/\.md$/i, '.comments.yml');
+
     let comments: CommentsFile = { page_comments: [], inline_comments: [] };
-    if (fs.existsSync(commentsPath)) {
-      comments = yaml.load(fs.readFileSync(commentsPath, 'utf8')) as CommentsFile;
-      if (!comments.page_comments) {
-        comments.page_comments = [];
+    const key = resolveStorageKeyForUriSync(uri);
+    logDebug(`loadContext resolved storage key:`, key);
+    if (key) {
+      const cached = globalOptimisticStore.getCached(key);
+      if (cached) {
+        logDebug(`loadContext cache hit. Loaded inline count: ${cached.inline_comments.length}`);
+        comments = cached;
+      } else {
+        logDebug(`loadContext cache cold. Launching async readComments for: ${uri.toString()}`);
+        void readComments(uri).then((fetched) => {
+          logDebug(`loadContext async readComments returned. inline count: ${fetched.inline_comments.length}`);
+        });
       }
-      if (!comments.inline_comments) {
-        comments.inline_comments = [];
-      }
+    } else {
+      logDebug(`loadContext storage key is null for URI: ${uri.toString()}. Remote features will be unavailable.`);
     }
+
     const placements = placeInlineComments(blocks, comments.inline_comments);
     return {
       blocks,
@@ -684,6 +707,7 @@ function loadContext(uri: vscode.Uri): RenderContext | null {
     };
   } catch (err) {
     console.error('[md-comments] failed to load comment context for', uri.toString(), err);
+    logDebug('[md-comments] failed to load comment context for', uri.toString(), err);
     return null;
   }
 }

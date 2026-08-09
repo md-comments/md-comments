@@ -13,9 +13,6 @@ function copyStaticFiles() {
   // Copy manifest
   fs.copyFileSync(path.join(__dirname, 'manifest.json'), path.join(outdir, 'manifest.json'));
 
-  // Copy options page
-  fs.copyFileSync(path.join(__dirname, 'options.html'), path.join(outdir, 'options.html'));
-
   // Copy CSS styles
   const cssSrc = path.join(__dirname, 'src', 'sidebar.css');
   if (fs.existsSync(cssSrc)) {
@@ -51,7 +48,7 @@ async function main() {
   const context = await esbuild.context({
     entryPoints: [
       path.join(__dirname, 'src', 'content.ts'),
-      path.join(__dirname, 'src', 'options.ts'),
+      path.join(__dirname, 'src', 'background.ts'),
     ],
     bundle: true,
     outdir: outdir,

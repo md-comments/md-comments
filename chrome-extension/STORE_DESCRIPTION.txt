@@ -1,5 +1,5 @@
 Markdown Comments is a privacy-first browser extension that enables seamless collaboration on Markdown documentation directly inside GitHub Pull Requests.
 
-It bridges the gap in documentation reviews by allowing you to highlight text, start nested discussion threads, and leave emoji reactions inline on file diffs—all saved natively as companion `.comments.yml` files in your Git repository.
+It bridges the gap in documentation reviews by allowing you to highlight text, start nested discussion threads, and leave emoji reactions inline on file diffs—all powered by the GitHub backend with zero-commit overhead on your main branch.
 
 With no databases or external servers, your conversations remain fully version-controlled, secure, and synced alongside your codebase, featuring a dedicated Pull Request workspace tab, conventional commit formatting, protected branch support, and robust fuzzy anchoring to keep comment positions accurate as files evolve.

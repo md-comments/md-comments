@@ -20,14 +20,14 @@ Your privacy is extremely important to us. This Privacy Policy describes how the
 
 ### VS Code Extension & Obsidian Plugin
 
-- **Comment Data:** All comments, replies, and reactions are stored locally on your device in companion `<filename>.comments.yml` files right next to your markdown documents. They are read from and written to your local file system (or Obsidian Vault) directly.
+- **Comment Data:** All comments, replies, and reactions are stored directly on GitHub as the primary backend (via GitHub API using dedicated orphan git references `refs/md-comments/data`). When working offline or in local non-GitHub repositories, comments seamlessly fall back to local companion `<filename>.comments.yml` files right next to your markdown documents.
 - **Local Settings:** Settings such as preferred sidebar width, emoji lists, or your custom author name are stored locally using the host application's configuration mechanism (VS Code native workspace settings or Obsidian plugin data folder).
 - **GitHub Profile Lookup:** To display GitHub profile pictures (avatars) and usernames in the comment sidebar, the VS Code extension and Obsidian plugin query public GitHub endpoints (`https://api.github.com/users/*`). These requests do not transmit personal data and are used solely to fetch public avatar URLs and display names.
 
 ### Chrome Extension (GitHub Integration)
 
 - **GitHub Personal Access Tokens (PAT):** If you configure a GitHub Personal Access Token (PAT) in the Extension options (required for accessing private repositories or bypassing rate limits), it is stored securely on your local device using `chrome.storage.local`. It is only sent to the official GitHub API (`https://api.github.com`) to authenticate your actions and is never sent to any third party.
-- **GitHub Repository & Comment Data:** The Chrome extension reads repository structure, pull requests, files in pull requests, and commit data from GitHub repositories you visit. It reads and writes comments by committing YAML files directly to your GitHub branches using the GitHub API on your behalf.
+- **GitHub Repository & Comment Data:** The Chrome extension reads repository structure, pull requests, files in pull requests, and commit data from GitHub repositories you visit. It reads and writes comments using the GitHub API on your behalf.
 
 ---
 
@@ -42,11 +42,11 @@ The Software requests only the necessary permissions required to operate:
 
 ### VS Code Extension
 
-- **File System Access**: Required to read and write companion `.comments.yml` files in your workspace.
+- **File System Access**: Required to read and write companion `.comments.yml` files when working in local offline mode.
 
 ### Obsidian Plugin
 
-- **Vault Access**: Required to read and write companion `.comments.yml` files in your active Obsidian vault.
+- **Vault Access**: Required to read and write companion `.comments.yml` files when working in local offline mode.
 
 ---
 

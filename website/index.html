@@ -6,7 +6,7 @@
     <title>Markdown Comments | Inline Feedback for Markdown Docs</title>
     <meta
       name="description"
-      content="Collaborative inline comments for Markdown files stored in YAML companion files. Support for VS Code, Obsidian, and GitHub via Chrome Extension."
+      content="Collaborative inline comments for Markdown files powered by GitHub backend with local companion fallback. Support for VS Code, Obsidian, and GitHub via Chrome Extension."
     />
     <link rel="icon" type="image/svg+xml" href="assets/icon.svg" />
     <link rel="stylesheet" href="styles.css" />
@@ -65,13 +65,12 @@
       <div class="container hero-grid">
         <div class="hero-content">
           <h1 class="hero-title">
-            Version-Controlled Comments,<br /><span class="gradient-text"
-              >Inside Your Rendered Markdown</span
+            Inline Document Collaboration,<br /><span class="gradient-text"
+              >Zero Commits Required</span
             >
           </h1>
           <p class="hero-subtitle">
-            Highlight text and collaborate directly on Markdown documentation. Stored locally in
-            companion YAML files, enabling native Git review, grep, and synchronization.
+            Highlight text and collaborate directly on Markdown documentation. Auto-saved to GitHub Issues per document. Supported across VS Code, Cursor, Antigravity, Obsidian, and Chrome.
           </p>
           <div class="hero-buttons">
             <a href="#integrations" class="btn btn-primary">See Integrations</a>
@@ -112,7 +111,7 @@
                   >
                   for modern performance.
                 </p>
-                <p style="margin-bottom: 12px">YAML companion files sync changes seamlessly.</p>
+                <p style="margin-bottom: 12px">GitHub backend stores comments without cluttering your git tree.</p>
               </div>
             </div>
             <div class="vscode-sidebar">
@@ -167,11 +166,9 @@
                 />
               </svg>
             </div>
-            <h3>Companion File Persistence</h3>
+            <h3>Zero-Commit GitHub Issues Backend</h3>
             <p>
-              Comments are stored in <code>&lt;filename&gt;.comments.yml</code> right next to your
-              Markdown. No centralized database, no lock-in. Track reviews alongside content in Git
-              branches.
+              Comments auto-save instantly to a dedicated GitHub Issue per document (<code>[md-comments] &lt;filepath&gt;</code>). No branches, no PRs, no git commits needed. Anyone on GitHub can review and comment instantly.
             </p>
           </div>
 
@@ -406,7 +403,7 @@
               <h3>Obsidian Plugin</h3>
               <p>
                 Bring native collaboration to your personal knowledge base. Right-click any block in
-                Live Preview or Reading Mode to write comment logs in companion files.
+                Live Preview or Reading Mode to start inline comment discussions powered by GitHub.
               </p>
               <ul class="integration-features">
                 <li>
@@ -459,7 +456,7 @@
           <div class="footer-brand">
             <h4>Markdown Comments</h4>
             <p>
-              Collaborative inline comments for Markdown documents, stored in YAML companion files.
+              Collaborative inline comments for Markdown documents, powered by GitHub as the backend.
             </p>
           </div>
           <div class="footer-links-col">

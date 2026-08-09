@@ -20,3 +20,10 @@ coverage/
 
 # Local environment variables
 .env
+
+# Temporary profiles & artifacts
+temp-chrome-profile/
+temp-chrome-profile-clean/
+scratch/
+artifacts/
+docs/.vscode/

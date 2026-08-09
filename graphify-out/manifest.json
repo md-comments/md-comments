@@ -10,33 +10,28 @@
     "semantic_hash": "0f775d05f346f68b66f592ca9cb26efd"
   },
   "chrome-extension/esbuild.js": {
-    "mtime": 1785357756.748862,
-    "ast_hash": "39fd3698c65f48751ea8368bef50abe0",
+    "mtime": 1785859981.8491464,
+    "ast_hash": "91aeffaa317161f819d89918d14fe83f",
     "semantic_hash": ""
   },
   "chrome-extension/manifest.json": {
-    "mtime": 1785634957.0508823,
-    "ast_hash": "6844e75ed2e1eb7ddab572cf4ee090a9",
+    "mtime": 1786296379.728513,
+    "ast_hash": "2fa6ee9731786f8be434ff4a38abaa6c",
     "semantic_hash": ""
   },
   "chrome-extension/package.json": {
-    "mtime": 1785602420.0549114,
-    "ast_hash": "94248890718ebbd6a887a1c6343c6182",
+    "mtime": 1786296383.8501768,
+    "ast_hash": "37b36ad2c2a4989a576be77d7e2b0307",
     "semantic_hash": ""
   },
   "chrome-extension/src/content.ts": {
-    "mtime": 1785700435.6516802,
-    "ast_hash": "1fad4b59f7285b6750246ceaed7b4bbe",
+    "mtime": 1785894984.6106699,
+    "ast_hash": "496f46c612f4cbe0b1ace23b5eb2afed",
     "semantic_hash": ""
   },
   "chrome-extension/src/githubApi.ts": {
-    "mtime": 1785377735.3354268,
-    "ast_hash": "48b7d51c9ad6fa35ad34a62728b62a11",
-    "semantic_hash": ""
-  },
-  "chrome-extension/src/options.ts": {
-    "mtime": 1785357756.8803563,
-    "ast_hash": "959157498c411bb015aef1cfdff0c2b6",
+    "mtime": 1785893711.6603997,
+    "ast_hash": "49b8e96cf6b4869dbfda7fe38fdcce4a",
     "semantic_hash": ""
   },
   "obsidian-plugin/esbuild.config.mjs": {
@@ -45,13 +40,13 @@
     "semantic_hash": "406bb0cd9a4b8c76f9f0f1a23552ae33"
   },
   "obsidian-plugin/manifest.json": {
-    "mtime": 1785634957.0513427,
-    "ast_hash": "d816a94c747ad8960dc5c3083063477b",
+    "mtime": 1786296388.3182297,
+    "ast_hash": "dbfa09f8402927c14436b40b99e7edee",
     "semantic_hash": ""
   },
   "obsidian-plugin/package.json": {
-    "mtime": 1785602428.2494283,
-    "ast_hash": "80e1f87f896a55ef298451b8d27ffee6",
+    "mtime": 1786296392.2331789,
+    "ast_hash": "09a3c0904b57a671708967178e0e2038",
     "semantic_hash": ""
   },
   "obsidian-plugin/src/livePreview.ts": {
@@ -85,8 +80,8 @@
     "semantic_hash": ""
   },
   "package.json": {
-    "mtime": 1785634086.2256744,
-    "ast_hash": "a9daa618f8f76230b91b805efe466bc8",
+    "mtime": 1785893069.3569233,
+    "ast_hash": "c8fda87f1c5445031ad88be63a5bbcd1",
     "semantic_hash": ""
   },
   "shared/anchor.ts": {
@@ -145,8 +140,8 @@
     "semantic_hash": ""
   },
   "vscode-extension/package.json": {
-    "mtime": 1785635412.5509453,
-    "ast_hash": "65b5e476ac217a3a3fed7e5bf577e599",
+    "mtime": 1786296371.5149193,
+    "ast_hash": "451915e3c91756978b07c21970d8daf9",
     "semantic_hash": ""
   },
   "vscode-extension/src/author.ts": {
@@ -165,18 +160,18 @@
     "semantic_hash": ""
   },
   "vscode-extension/src/commentPreviewPanel.ts": {
-    "mtime": 1785357757.7546434,
-    "ast_hash": "4a81d9b8c63d9d3546a7e4569f5e7cf3",
+    "mtime": 1786294250.1279187,
+    "ast_hash": "7e07d8cdd553fef71b57765328432c88",
     "semantic_hash": ""
   },
   "vscode-extension/src/commentStore.ts": {
-    "mtime": 1785373097.0782108,
-    "ast_hash": "79cf0bf10014d9fe0b0074d7966bb7dc",
+    "mtime": 1786294091.6824186,
+    "ast_hash": "f82d34726d49ad29faa966a822035baa",
     "semantic_hash": ""
   },
   "vscode-extension/src/extension.ts": {
-    "mtime": 1785357757.774623,
-    "ast_hash": "569ba070aca6f15f0f17189daa5a41a6",
+    "mtime": 1786294260.3620434,
+    "ast_hash": "76758fef6da2605de916ff7117db2002",
     "semantic_hash": ""
   },
   "vscode-extension/src/githubAvatars.ts": {
@@ -190,14 +185,14 @@
     "semantic_hash": ""
   },
   "vscode-extension/src/markdownItPlugin.ts": {
-    "mtime": 1785699879.2853017,
-    "ast_hash": "5f3b31cac366a0ed83a855eeea6da77c",
+    "mtime": 1786294255.4681394,
+    "ast_hash": "19a3789792d3187fe7bcd251c153d233",
     "semantic_hash": ""
   },
   "vscode-extension/src/markdownRender.ts": {
-    "mtime": 1782342619.8848188,
-    "ast_hash": "257709b0e30fe335e0a5ce99886f4703",
-    "semantic_hash": "257709b0e30fe335e0a5ce99886f4703"
+    "mtime": 1786294098.1570432,
+    "ast_hash": "8029874407f1d5016ecf293c8d4382d0",
+    "semantic_hash": ""
   },
   "vscode-extension/src/orphan.ts": {
     "mtime": 1785357757.8176107,
@@ -225,28 +220,18 @@
     "semantic_hash": "0bc020d491fca99550c1ea3de0a5f862"
   },
   "README.md": {
-    "mtime": 1785698934.6290834,
-    "ast_hash": "c31316b36c7081b79beab2cf4ef01c30",
+    "mtime": 1786295750.7709434,
+    "ast_hash": "f42e118d3bb02340e67cdd6d1fb6f311",
     "semantic_hash": ""
-  },
-  "chrome-extension/options.html": {
-    "mtime": 1785353446.3844097,
-    "ast_hash": "540cf5ad21be17d722e158e949c51a26",
-    "semantic_hash": ""
-  },
-  "docs/example.comments.yml": {
-    "mtime": 1779495031.0,
-    "ast_hash": "543a384d542fddaaf61c3d184eb59ef4",
-    "semantic_hash": "543a384d542fddaaf61c3d184eb59ef4"
   },
   "docs/example.md": {
-    "mtime": 1782342798.9171793,
-    "ast_hash": "36dfa375b87877c05d0048fc876003d6",
-    "semantic_hash": "36dfa375b87877c05d0048fc876003d6"
+    "mtime": 1786295754.5749671,
+    "ast_hash": "ffd2434c0d4d509da50da6d0da98713e",
+    "semantic_hash": ""
   },
   "obsidian-plugin/README.md": {
-    "mtime": 1785357757.5454204,
-    "ast_hash": "51dc9105dfcc3963bb95695a95792cec",
+    "mtime": 1786295763.2531106,
+    "ast_hash": "cf1d730157ae847d2959ef728d75f1dc",
     "semantic_hash": ""
   },
   "pnpm-workspace.yaml": {
@@ -460,8 +445,8 @@
     "semantic_hash": ""
   },
   "shared/package.json": {
-    "mtime": 1785602414.3489025,
-    "ast_hash": "1ff63430bcff090e7d3a9c1aa889ac9c",
+    "mtime": 1786296375.7017105,
+    "ast_hash": "52b79bd15ae461dab368e9bb8df1bd26",
     "semantic_hash": ""
   },
   "shared/tsconfig.json": {
@@ -535,8 +520,8 @@
     "semantic_hash": ""
   },
   "CHANGELOG.md": {
-    "mtime": 1785361444.6577656,
-    "ast_hash": "5c7b8f0ac1a7560ea05ba090d250703a",
+    "mtime": 1786296396.3440528,
+    "ast_hash": "648e0953c05f2a31fce79f1b3fb0b857",
     "semantic_hash": ""
   },
   "CODE_OF_CONDUCT.md": {
@@ -590,8 +575,8 @@
     "semantic_hash": ""
   },
   "PRIVACY.md": {
-    "mtime": 1785461117.0675368,
-    "ast_hash": "94bb0a52030ea85fbfcbe11beb31f875",
+    "mtime": 1786295786.1020985,
+    "ast_hash": "e163d9beab51b323997fbe3dfc358e95",
     "semantic_hash": ""
   },
   "scripts/generate_cws_tiles.py": {
@@ -620,13 +605,13 @@
     "semantic_hash": ""
   },
   "website/index.html": {
-    "mtime": 1785635327.7200098,
-    "ast_hash": "fd9889c2104891824e40ddb3450f6f98",
+    "mtime": 1786295780.9667797,
+    "ast_hash": "f468869e2681a4774db7d36565f82dd8",
     "semantic_hash": ""
   },
   "website/privacy.html": {
-    "mtime": 1785597994.9039814,
-    "ast_hash": "91b96220a4e1757f19aee8ffb1aceb23",
+    "mtime": 1786295795.6769907,
+    "ast_hash": "290457e885d44b67093515e1bbfa0828",
     "semantic_hash": ""
   },
   "website/assets/icon.png": {
@@ -645,18 +630,413 @@
     "semantic_hash": ""
   },
   "chrome-extension/STORE_DESCRIPTION.txt": {
-    "mtime": 1785595582.5259318,
-    "ast_hash": "87b02211942813c4496d0925b13477e5",
+    "mtime": 1786295774.6354084,
+    "ast_hash": "bf86826b9d40e69a3c4a45d225a0691e",
     "semantic_hash": ""
   },
   "vscode-extension/README.md": {
-    "mtime": 1785601112.342666,
-    "ast_hash": "c37da81df4dce63d0cb80173879a9811",
+    "mtime": 1786295759.1275403,
+    "ast_hash": "c58d0ceca058e0eaccdc7da99d4766f7",
     "semantic_hash": ""
   },
   "scripts/test-publish-local.sh": {
     "mtime": 1785634531.3362486,
     "ast_hash": "66efba43146b53de8dad4243c282686d",
+    "semantic_hash": ""
+  },
+  "chrome-extension/src/background.ts": {
+    "mtime": 1785874781.6148484,
+    "ast_hash": "c349652396582ba0632a955b2e2cbbad",
+    "semantic_hash": ""
+  },
+  "chrome-extension/src/githubAuth.ts": {
+    "mtime": 1785874781.7296252,
+    "ast_hash": "9cb3473177351df1016453aa383c0785",
+    "semantic_hash": ""
+  },
+  "shared/commentStorage.ts": {
+    "mtime": 1785708744.3866267,
+    "ast_hash": "1d2076eb4ab591c3df4c644622427512",
+    "semantic_hash": ""
+  },
+  "shared/index.ts": {
+    "mtime": 1785892960.6376843,
+    "ast_hash": "f9acb6a270caf58e30cc5d28f1681ca0",
+    "semantic_hash": ""
+  },
+  "shared/localFileBackend.ts": {
+    "mtime": 1785708752.3543825,
+    "ast_hash": "8ea728c2fdcd1f0dbddb971ea6bd410b",
+    "semantic_hash": ""
+  },
+  "shared/repoDetector.ts": {
+    "mtime": 1785708741.1805704,
+    "ast_hash": "7964625d62bd4f4016175ef888da5e6f",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile-clean/component_crx_cache/metadata.json": {
+    "mtime": 1785874781.9143004,
+    "ast_hash": "e4329e45815f6c46bcbb4bf13a8b3461",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile-clean/extensions_crx_cache/metadata.json": {
+    "mtime": 1785874781.9156907,
+    "ast_hash": "e4329e45815f6c46bcbb4bf13a8b3461",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/DNR Extension Rules/cfhdojbkjhnklbpkdaibdccddilifddb/rules.json": {
+    "mtime": 1785874781.98437,
+    "ast_hash": "ed96981195cd94c6287d613b71889091",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/component_crx_cache/metadata.json": {
+    "mtime": 1785874781.917172,
+    "ast_hash": "e4329e45815f6c46bcbb4bf13a8b3461",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/extensions_crx_cache/metadata.json": {
+    "mtime": 1785874781.9860005,
+    "ast_hash": "e4329e45815f6c46bcbb4bf13a8b3461",
+    "semantic_hash": ""
+  },
+  "tests/repoDetector.test.ts": {
+    "mtime": 1785708777.6610723,
+    "ast_hash": "3b0e040e51099beb663d9ef2c97886cb",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/faolnafnngnfdaknnbpnkhgohbobgegn/Icons/128.png": {
+    "mtime": 1785711780.8788972,
+    "ast_hash": "886057cf12c89040940c8f3b4b6571c4",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/faolnafnngnfdaknnbpnkhgohbobgegn/Icons/16.png": {
+    "mtime": 1785711780.8790138,
+    "ast_hash": "18c47df30cb4cffa51bf979dec151af7",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/faolnafnngnfdaknnbpnkhgohbobgegn/Icons/180.png": {
+    "mtime": 1785711780.879846,
+    "ast_hash": "30f1ed00e45d15c47212eb60b7887189",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/faolnafnngnfdaknnbpnkhgohbobgegn/Icons/24.png": {
+    "mtime": 1785711780.87956,
+    "ast_hash": "945c19b8fa9e75fdf107bf90e58aa7f3",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/faolnafnngnfdaknnbpnkhgohbobgegn/Icons/256.png": {
+    "mtime": 1785711780.879292,
+    "ast_hash": "7dddea4264b6d99b1489bad7147153bd",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/faolnafnngnfdaknnbpnkhgohbobgegn/Icons/32.png": {
+    "mtime": 1785711780.8794312,
+    "ast_hash": "d1646e06e7fcee4cfaae0c60004132dc",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/faolnafnngnfdaknnbpnkhgohbobgegn/Icons/48.png": {
+    "mtime": 1785711780.8784533,
+    "ast_hash": "1d67f7f3d46b2ddf4bc81bcb395a87d0",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/faolnafnngnfdaknnbpnkhgohbobgegn/Icons/64.png": {
+    "mtime": 1785711780.8786767,
+    "ast_hash": "8ad02b89c8dda110d94141d623cf3880",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/faolnafnngnfdaknnbpnkhgohbobgegn/Icons/96.png": {
+    "mtime": 1785711780.8801315,
+    "ast_hash": "548f5cc452b11b414dcf4af930b5540f",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/hnpfjngllnobngcgfapefoaidbinmjnm/Icons Maskable/512.png": {
+    "mtime": 1785711780.8436909,
+    "ast_hash": "32357311881131792861bb31cb98cbb3",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/hnpfjngllnobngcgfapefoaidbinmjnm/Icons/128.png": {
+    "mtime": 1785711780.8452635,
+    "ast_hash": "8bba98d40bcea8244aaea592d5908b6e",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/hnpfjngllnobngcgfapefoaidbinmjnm/Icons/16.png": {
+    "mtime": 1785711780.8457448,
+    "ast_hash": "8b1bfed8783533b9dde26354aec5df05",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/hnpfjngllnobngcgfapefoaidbinmjnm/Icons/192.png": {
+    "mtime": 1785711780.8466873,
+    "ast_hash": "df8f0cf7863cb2972f430ad45beed11d",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/hnpfjngllnobngcgfapefoaidbinmjnm/Icons/256.png": {
+    "mtime": 1785711780.8459342,
+    "ast_hash": "47e567a42f1c7aa8af766f14e1d66276",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/hnpfjngllnobngcgfapefoaidbinmjnm/Icons/32.png": {
+    "mtime": 1785711780.846237,
+    "ast_hash": "e7a2964c760664bbf44c1f60931e02a1",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/hnpfjngllnobngcgfapefoaidbinmjnm/Icons/48.png": {
+    "mtime": 1785711780.8446472,
+    "ast_hash": "41454c700a441bb149a2da0f2d71a1d6",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/hnpfjngllnobngcgfapefoaidbinmjnm/Icons/512.png": {
+    "mtime": 1785711780.8455057,
+    "ast_hash": "eaa44b270bd51ca97b1f29dea94491ac",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/hnpfjngllnobngcgfapefoaidbinmjnm/Icons/60.png": {
+    "mtime": 1785711780.8444026,
+    "ast_hash": "317e740c80afc2c1111f0e2833c4aa51",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/hnpfjngllnobngcgfapefoaidbinmjnm/Icons/64.png": {
+    "mtime": 1785711780.8449295,
+    "ast_hash": "0de01bfefbd74bc599e3320dbf28acb8",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/hnpfjngllnobngcgfapefoaidbinmjnm/Icons/90.png": {
+    "mtime": 1785711780.846956,
+    "ast_hash": "4b22259d6f38a419aa1083d471d2b0bd",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/hnpfjngllnobngcgfapefoaidbinmjnm/Icons/96.png": {
+    "mtime": 1785711780.846474,
+    "ast_hash": "bdd792b13fe5b399532989e4d8faad3d",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/hnpfjngllnobngcgfapefoaidbinmjnm/Trusted Icons/Icons/128.png": {
+    "mtime": 1785711780.8416502,
+    "ast_hash": "0926de7522de3bf3a21d595af18c4c28",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/hnpfjngllnobngcgfapefoaidbinmjnm/Trusted Icons/Icons/256.png": {
+    "mtime": 1785711780.8425748,
+    "ast_hash": "47e567a42f1c7aa8af766f14e1d66276",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/hnpfjngllnobngcgfapefoaidbinmjnm/Trusted Icons/Icons/32.png": {
+    "mtime": 1785711780.8428478,
+    "ast_hash": "0b9246dea215a203fad6f12d7be9cc72",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/hnpfjngllnobngcgfapefoaidbinmjnm/Trusted Icons/Icons/48.png": {
+    "mtime": 1785711780.8410878,
+    "ast_hash": "ed02cd5c6558037be4137c520be9d839",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/hnpfjngllnobngcgfapefoaidbinmjnm/Trusted Icons/Icons/512.png": {
+    "mtime": 1785711780.8423312,
+    "ast_hash": "eaa44b270bd51ca97b1f29dea94491ac",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/hnpfjngllnobngcgfapefoaidbinmjnm/Trusted Icons/Icons/64.png": {
+    "mtime": 1785711780.8413818,
+    "ast_hash": "6b201e71369b90a2e52969f4e0a0220a",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/hnpfjngllnobngcgfapefoaidbinmjnm/Trusted Icons/Icons/96.png": {
+    "mtime": 1785711780.8430886,
+    "ast_hash": "f8561cd60f319e6d8f668c9d7c55be6c",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/ibblmnobmgdmpoeblocemifbpglakpoi/Icons/128.png": {
+    "mtime": 1785711780.8637877,
+    "ast_hash": "90a360e24acd3f6338eded94f306a1d8",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/ibblmnobmgdmpoeblocemifbpglakpoi/Icons/192.png": {
+    "mtime": 1785711780.8651733,
+    "ast_hash": "c5e7b063031e4b69917808b8a0dcb7de",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/ibblmnobmgdmpoeblocemifbpglakpoi/Icons/256.png": {
+    "mtime": 1785711780.864424,
+    "ast_hash": "a766b463fd2274191dd33e4bb12045b2",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/ibblmnobmgdmpoeblocemifbpglakpoi/Icons/32.png": {
+    "mtime": 1785711780.864563,
+    "ast_hash": "1dff67e18d857a440778b3559ec1ff1e",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/ibblmnobmgdmpoeblocemifbpglakpoi/Icons/384.png": {
+    "mtime": 1785711780.8649404,
+    "ast_hash": "43e7bbb7d4003b6336e5c73c0b7ca11e",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/ibblmnobmgdmpoeblocemifbpglakpoi/Icons/48.png": {
+    "mtime": 1785711780.8632326,
+    "ast_hash": "6086a9347aa2d2ecb3945616b85d20f0",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/ibblmnobmgdmpoeblocemifbpglakpoi/Icons/512.png": {
+    "mtime": 1785711780.8641148,
+    "ast_hash": "6c2b2787fea4b669145cbfbeb4a223b4",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/ibblmnobmgdmpoeblocemifbpglakpoi/Icons/64.png": {
+    "mtime": 1785711780.8635247,
+    "ast_hash": "9c387a3e1328860284e7ca2eca17d0a8",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/ibblmnobmgdmpoeblocemifbpglakpoi/Icons/96.png": {
+    "mtime": 1785711780.8648033,
+    "ast_hash": "889e73267020cf37ad9db8e5262463fa",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/kajebgjangihfbkjfejcanhanjmmbcfd/Icons/128.png": {
+    "mtime": 1785711780.866454,
+    "ast_hash": "ccfb90574d2c1be9393c114f36351ec1",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/kajebgjangihfbkjfejcanhanjmmbcfd/Icons/180.png": {
+    "mtime": 1785711780.8674135,
+    "ast_hash": "d9ec699739377c818cbe1bb010d843f8",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/kajebgjangihfbkjfejcanhanjmmbcfd/Icons/256.png": {
+    "mtime": 1785711780.8669572,
+    "ast_hash": "d292e66b4f1e93c3dc0dd69eeebeba97",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/kajebgjangihfbkjfejcanhanjmmbcfd/Icons/32.png": {
+    "mtime": 1785711780.8671827,
+    "ast_hash": "e89f4e4a9723a8576ddb243bc260cb1b",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/kajebgjangihfbkjfejcanhanjmmbcfd/Icons/48.png": {
+    "mtime": 1785711780.8659647,
+    "ast_hash": "78c17192156d3e3b5c4808ac30cbc5be",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/kajebgjangihfbkjfejcanhanjmmbcfd/Icons/64.png": {
+    "mtime": 1785711780.8662236,
+    "ast_hash": "3945cd245a59f524f65d2912d947b505",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/kajebgjangihfbkjfejcanhanjmmbcfd/Icons/96.png": {
+    "mtime": 1785711780.8677106,
+    "ast_hash": "5a1d05c41346577400e4f43c0ac1af7c",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/kmekmjmfbkecjdmbegeikimbolbpemji/Icons/128.png": {
+    "mtime": 1785711780.8560934,
+    "ast_hash": "15e9dd219727700310361e44b717b53f",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/kmekmjmfbkecjdmbegeikimbolbpemji/Icons/256.png": {
+    "mtime": 1785711780.8563628,
+    "ast_hash": "578ba7f1a148aaa53be4187de14a5318",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/kmekmjmfbkecjdmbegeikimbolbpemji/Icons/32.png": {
+    "mtime": 1785711780.8565285,
+    "ast_hash": "f4a0401e5986274d5766d07476a143d3",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/kmekmjmfbkecjdmbegeikimbolbpemji/Icons/48.png": {
+    "mtime": 1785711780.855624,
+    "ast_hash": "cf046c3079d7c460233c11f84462d03d",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/kmekmjmfbkecjdmbegeikimbolbpemji/Icons/64.png": {
+    "mtime": 1785711780.8558798,
+    "ast_hash": "429859f87b82cd6e901ab910ede74874",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/kmekmjmfbkecjdmbegeikimbolbpemji/Icons/96.png": {
+    "mtime": 1785711780.8566778,
+    "ast_hash": "ac52d6b2434bae2f3800036ba1073313",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/ocdlmjhbenodhlknglojajgokahchlkk/Icons/128.png": {
+    "mtime": 1785711780.8534176,
+    "ast_hash": "7455c549a587ca76bf5073557a569130",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/ocdlmjhbenodhlknglojajgokahchlkk/Icons/256.png": {
+    "mtime": 1785711780.8539932,
+    "ast_hash": "660a471b41f0978ef6b489841be47428",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/ocdlmjhbenodhlknglojajgokahchlkk/Icons/32.png": {
+    "mtime": 1785711780.8542597,
+    "ast_hash": "ac050f7d73f31c85edcdd83a6007a723",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/ocdlmjhbenodhlknglojajgokahchlkk/Icons/48.png": {
+    "mtime": 1785711780.8527794,
+    "ast_hash": "bcdde2a25a679ec3833f41bf36434304",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/ocdlmjhbenodhlknglojajgokahchlkk/Icons/64.png": {
+    "mtime": 1785711780.8530097,
+    "ast_hash": "eb8bf1015ee85bea22a74fb8cf551d9e",
+    "semantic_hash": ""
+  },
+  "temp-chrome-profile/Default/Web Applications/Manifest Resources/ocdlmjhbenodhlknglojajgokahchlkk/Icons/96.png": {
+    "mtime": 1785711780.8546104,
+    "ast_hash": "776721f475a60e100d9d4c4c1e9551b9",
+    "semantic_hash": ""
+  },
+  "scratch/get-device-page-html.mjs": {
+    "mtime": 1785876409.407356,
+    "ast_hash": "8b9e908c7f3aee84ae74ad7891aa005d",
+    "semantic_hash": ""
+  },
+  "scratch/inspect-extension-storage.mjs": {
+    "mtime": 1785877556.7793853,
+    "ast_hash": "bfb103e79d3fa52c5fc3aee2c76ebb9c",
+    "semantic_hash": ""
+  },
+  "scratch/test-debug-replies.mjs": {
+    "mtime": 1785881176.950726,
+    "ast_hash": "57d048000678110737488ca7e858e088",
+    "semantic_hash": ""
+  },
+  "shared/gitRefBackend.ts": {
+    "mtime": 1785894978.0412369,
+    "ast_hash": "586797c3903156f7ebaee7c89e119ca8",
+    "semantic_hash": ""
+  },
+  "tests/gitRefBackend.test.ts": {
+    "mtime": 1785895037.8764994,
+    "ast_hash": "50f0e831e7f460d9fc1abec39ef84674",
+    "semantic_hash": ""
+  },
+  "tests/vscodeStorage.test.ts": {
+    "mtime": 1785896207.0161808,
+    "ast_hash": "3c1afbd6c3564d119455a8212852afac",
+    "semantic_hash": ""
+  },
+  "vscode-extension/src/githubAuth.ts": {
+    "mtime": 1786293791.4338622,
+    "ast_hash": "ed34efe5c0035a016884dfc60e02b0f7",
+    "semantic_hash": ""
+  },
+  "vscode-extension/src/optimisticStore.ts": {
+    "mtime": 1786294086.7005613,
+    "ast_hash": "8211c8def567f2a9ebc47453d263c31e",
+    "semantic_hash": ""
+  },
+  "vscode-extension/src/repoManager.ts": {
+    "mtime": 1786208362.4865024,
+    "ast_hash": "a9b96f742e5fe8d1b4df14a61e2ee86c",
+    "semantic_hash": ""
+  },
+  "docs/.vscode/settings.json": {
+    "mtime": 1786206837.2514274,
+    "ast_hash": "ca6ff0a3b50988fc76c2c4e0a92a3320",
+    "semantic_hash": ""
+  },
+  "vscode-extension/src/logger.ts": {
+    "mtime": 1786208750.8032575,
+    "ast_hash": "989dca15b7b61f4859991492fb423d89",
     "semantic_hash": ""
   }
 }

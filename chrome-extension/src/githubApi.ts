@@ -399,6 +399,93 @@ export class GitHubApi {
     return await res.text();
   }
 
+  private appInstallationCache = new Map<
+    string,
+    { installed: boolean; repoAccess: boolean; appSlug?: string; installationId?: number }
+  >();
+
+  async checkAppInstallation(
+    owner: string,
+    repoName: string
+  ): Promise<{
+    installed: boolean;
+    repoAccess: boolean;
+    appSlug?: string;
+    installationId?: number;
+  }> {
+    const cacheKey = `${owner.toLowerCase()}/${repoName.toLowerCase()}`;
+    if (this.appInstallationCache.has(cacheKey)) {
+      return this.appInstallationCache.get(cacheKey)!;
+    }
+
+    const headers: Record<string, string> = {
+      Accept: 'application/vnd.github.v3+json',
+      'Content-Type': 'application/json',
+    };
+    if (this.token) {
+      headers['Authorization'] = `Bearer ${this.token}`;
+    }
+
+    try {
+      const res = await fetch('https://api.github.com/user/installations', {
+        headers,
+      });
+
+      if (!res.ok) {
+        throw new Error(`Failed to fetch installations: ${res.status}`);
+      }
+
+      const data = await res.json();
+      const installations = data.installations || [];
+
+      // Find the installation for this owner (login)
+      const installation = installations.find(
+        (inst: any) => inst.account.login.toLowerCase() === owner.toLowerCase()
+      );
+
+      const appSlug = installations[0]?.app_slug;
+
+      if (!installation) {
+        const result = { installed: false, repoAccess: false, appSlug };
+        this.appInstallationCache.set(cacheKey, result);
+        return result;
+      }
+
+      if (installation.repository_selection === 'all') {
+        const result = { installed: true, repoAccess: true, appSlug, installationId: installation.id };
+        this.appInstallationCache.set(cacheKey, result);
+        return result;
+      }
+
+      const reposRes = await fetch(
+        `https://api.github.com/user/installations/${installation.id}/repositories`,
+        { headers }
+      );
+
+      if (!reposRes.ok) {
+        const result = { installed: true, repoAccess: false, appSlug, installationId: installation.id };
+        this.appInstallationCache.set(cacheKey, result);
+        return result;
+      }
+
+      const reposData = await reposRes.json();
+      const repos = reposData.repositories || [];
+      const hasRepo = repos.some((r: any) => r.name.toLowerCase() === repoName.toLowerCase());
+
+      const result = {
+        installed: true,
+        repoAccess: hasRepo,
+        appSlug,
+        installationId: installation.id,
+      };
+      this.appInstallationCache.set(cacheKey, result);
+      return result;
+    } catch (err) {
+      console.warn('[md-comments] Error checking app installation:', err);
+      return { installed: true, repoAccess: true };
+    }
+  }
+
   private toBase64Unicode(str: string): string {
     // Correct base64 encoding for unicode string in browser environment
     return btoa(

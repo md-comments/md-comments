@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { executeCommentAction, type CommentActionMessage } from './commentActions';
 import { renderMarkdownWithComments } from './markdownRender';
 import { escapeHtml } from '../../shared/html';
+import { logDebug } from './logger';
 
 const VIEW_TYPE = 'mdComments.commentPreview';
 
@@ -17,14 +18,14 @@ export class CommentPreviewPanel {
     const existing = CommentPreviewPanel.panels.get(key);
     if (existing) {
       existing.panel.reveal(column);
-      void existing.refresh();
+      void existing.refresh(true); // Fetch remote comments on panel open
       return;
     }
     new CommentPreviewPanel(extensionUri, document, column);
   }
 
-  static refreshForUri(uri: vscode.Uri): void {
-    CommentPreviewPanel.panels.get(uri.toString())?.refresh();
+  static refreshForUri(uri: vscode.Uri, forceRemote = false): void {
+    CommentPreviewPanel.panels.get(uri.toString())?.refresh(forceRemote);
   }
 
   private readonly panel: vscode.WebviewPanel;
@@ -56,8 +57,9 @@ export class CommentPreviewPanel {
 
     this.panel.webview.onDidReceiveMessage(
       async (msg: CommentActionMessage) => {
+        logDebug('CommentPreviewPanel webview message received:', msg);
         await executeCommentAction(this.mdUri, msg);
-        await this.refresh();
+        await this.refresh(false); // optimistic UI refresh
         await vscode.commands.executeCommand('markdown.preview.refresh');
       },
       undefined,
@@ -66,6 +68,7 @@ export class CommentPreviewPanel {
 
     this.panel.onDidDispose(
       () => {
+        logDebug('CommentPreviewPanel disposed for:', this.mdUri.toString());
         CommentPreviewPanel.panels.delete(this.mdUri.toString());
         while (this.disposables.length) {
           this.disposables.pop()?.dispose();
@@ -75,12 +78,13 @@ export class CommentPreviewPanel {
       this.disposables
     );
 
-    void this.refresh();
+    void this.refresh(true); // Fetch remote comments on initial panel open
   }
 
-  async refresh(): Promise<void> {
+  async refresh(forceRemote = false): Promise<void> {
+    logDebug(`CommentPreviewPanel.refresh invoked for ${this.mdUri.toString()}, forceRemote=${forceRemote}`);
     const doc = await vscode.workspace.openTextDocument(this.mdUri);
-    const bodyHtml = await renderMarkdownWithComments(doc.getText(), this.mdUri);
+    const bodyHtml = await renderMarkdownWithComments(doc.getText(), this.mdUri, forceRemote);
     const nonce = String(Date.now());
     const cssUri = this.panel.webview.asWebviewUri(
       vscode.Uri.joinPath(this.extensionUri, 'media', 'preview.css')

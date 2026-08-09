@@ -1,16 +1,16 @@
-# Graph Report - md-comments  (2026-08-02)
+# Graph Report - md-comments  (2026-08-09)
 
 ## Corpus Check
-- 104 files · ~104,291 words
+- 126 files · ~164,230 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1108 nodes · 2052 edges · 80 communities (58 shown, 22 thin omitted)
-- Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 130 edges (avg confidence: 0.79)
+- 1217 nodes · 2287 edges · 84 communities (59 shown, 25 thin omitted)
+- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 63 edges (avg confidence: 0.74)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `ef7eccd6`
+- Built from commit: `c2c7057d`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -18,7 +18,7 @@
 - markdownItPlugin.ts
 - content.ts
 - compress.py
-- commentStore.ts
+- get-device-page-html.mjs
 - validate.py
 - vscode-extension/package.json
 - obsidian-plugin/package.json
@@ -28,7 +28,7 @@
 - chrome-extension/manifest.json
 - chrome-extension/package.json
 - CommentsSidebarView
-- main.ts
+- CommentsFile
 - previewActions.js
 - inlineAnchors.js
 - .eslintrc.json
@@ -45,7 +45,7 @@
 - obsidian-plugin/manifest.json
 - esbuild.js
 - mentionAutocomplete.js
-- options.ts
+- CommentStore
 - compilerOptions
 - esbuild.config.mjs
 - avatarFallback.js
@@ -82,7 +82,7 @@
 - tsconfig.json
 - Contributor Covenant Code of Conduct
 - Project Governance
-- Changelog
+- [1.1.0] - 2026-08-09
 - Authors
 - Reporting a Vulnerability
 - Privacy Policy
@@ -90,21 +90,25 @@
 - Website Assets
 - Markdown Comments for VS Code
 - test-publish-local.sh
-- CommentStore
+- background.ts
 - Context Pack
+- Chrome Extension Icon SVG
 - Workflow: context-pack
+- commentStore.ts
+- inspect-extension-storage.mjs
+- test-debug-replies.mjs
 
 ## God Nodes (most connected - your core abstractions)
-1. `Chrome Extension Options UI` - 65 edges
-2. `escapeHtml()` - 33 edges
-3. `Obsidian Plugin Guide` - 28 edges
-4. `CommentsSidebarView` - 25 edges
-5. `isGitHubLogin()` - 25 edges
-6. `placeInlineComments()` - 22 edges
-7. `extendMarkdownIt()` - 22 edges
-8. `commitCommentFileChanges()` - 21 edges
-9. `readComments()` - 21 edges
-10. `isOrphanedPlacement()` - 19 edges
+1. `escapeHtml()` - 35 edges
+2. `logDebug()` - 33 edges
+3. `CommentsFile` - 31 edges
+4. `Obsidian Plugin Guide` - 28 edges
+5. `readComments()` - 26 edges
+6. `CommentsSidebarView` - 25 edges
+7. `isGitHubLogin()` - 25 edges
+8. `activate()` - 22 edges
+9. `extendMarkdownIt()` - 22 edges
+10. `placeInlineComments()` - 20 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Markdown Comments Key Features` --references--> `findBlockByIndex()`  [INFERRED]
@@ -121,31 +125,27 @@
 ## Import Cycles
 - None detected.
 
-## Communities (80 total, 22 thin omitted)
+## Communities (84 total, 25 thin omitted)
 
 ### Community 0 - "markdownItPlugin.ts"
-Cohesion: 0.08
-Nodes (68): extractMentionLogins(), githubProfileUrl(), isGitHubLogin(), escapeHtml(), warmAuthorCache(), CommentActionMessage, CommentPreviewPanel, activate() (+60 more)
+Cohesion: 0.16
+Nodes (31): githubProfileUrl(), escapeHtml(), PlacementResult, hasTokenSync(), actionIconBtn(), authorInitials(), buildSidebarHtml(), canEditComment() (+23 more)
 
 ### Community 1 - "content.ts"
-Cohesion: 0.08
-Nodes (83): Chrome Extension Icon SVG, Chrome Extension Options UI, activeIndicators, attachCommentCardEvents(), cachedSelectedClasses, checkPageChange(), cleanupInjections(), clearPendingCommentsCache() (+75 more)
+Cohesion: 0.05
+Nodes (89): activeIndicators, appInstallationStatus, attachCommentCardEvents(), attachInstallationPromptEvents(), attachOAuthEvents(), cachedSelectedClasses, checkPageChange(), cleanupInjections() (+81 more)
 
 ### Community 2 - "compress.py"
 Cohesion: 0.11
 Nodes (25): main(), print_usage(), backup_dir_for(), build_compress_prompt(), build_fix_prompt(), call_claude(), compress_file(), is_sensitive_path() (+17 more)
-
-### Community 3 - "commentStore.ts"
-Cohesion: 0.13
-Nodes (40): clearAuthorCache(), fallbackAuthor(), getCachedAuthor(), githubAvatarUrl(), isCacheValid(), setCachedAuthor(), execFileAsync, getAuthor() (+32 more)
 
 ### Community 4 - "validate.py"
 Cohesion: 0.17
 Nodes (20): benchmark_pair(), count_tokens(), main(), print_table(), count_bullets(), extract_code_blocks(), extract_headings(), extract_inline_codes() (+12 more)
 
 ### Community 5 - "vscode-extension/package.json"
-Cohesion: 0.05
-Nodes (41): markdown-it, onLanguage:markdown, onStartupFinished, Other, @types/markdown-it, @types/vscode, activationEvents, categories (+33 more)
+Cohesion: 0.04
+Nodes (48): markdown-it, antigravity, cursor, github, onLanguage:markdown, onStartupFinished, Other, review (+40 more)
 
 ### Community 6 - "obsidian-plugin/package.json"
 Cohesion: 0.05
@@ -161,15 +161,15 @@ Nodes (30): 👍, ./media/avatarFallback.js, ./media/inlineAnchors.js, ./media/m
 
 ### Community 10 - "chrome-extension/manifest.json"
 Cohesion: 0.07
-Nodes (26): action, default_icon, default_title, content_scripts, 128, 16, 32, 48 (+18 more)
+Nodes (28): action, default_icon, default_title, background, service_worker, content_scripts, 128, 16 (+20 more)
 
 ### Community 11 - "chrome-extension/package.json"
 Cohesion: 0.08
 Nodes (25): author, dependencies, js-yaml, description, devDependencies, esbuild, tslib, @types/chrome (+17 more)
 
-### Community 13 - "main.ts"
-Cohesion: 0.12
-Nodes (37): CacheEntry, handleTextSelection(), hideSelectionButton(), showSelectionButton(), createLivePreviewExtension(), fuzzyMatch(), highlightTextInElement(), registerReadingViewProcessor() (+29 more)
+### Community 13 - "CommentsFile"
+Cohesion: 0.13
+Nodes (12): CommentBackend, CommentStorageKey, commentsFilePathForMarkdown(), decodeBase64(), GitHubOrphanRefBackend, mergeCommentsFiles(), LocalFileAdapter, LocalFileBackend (+4 more)
 
 ### Community 14 - "previewActions.js"
 Cohesion: 0.16
@@ -212,12 +212,12 @@ Cohesion: 0.27
 Nodes (14): findParagraphFromNode(), getAnchorFromParagraph(), getAnchorFromSelection(), getMdPath(), getSelectedText(), handleTextSelection(), loadAnchorBlocks(), postAction() (+6 more)
 
 ### Community 24 - "scripts"
-Cohesion: 0.05
-Nodes (38): eslint, eslint-plugin-security, devDependencies, eslint, eslint-plugin-security, prettier, typescript, @typescript-eslint/eslint-plugin (+30 more)
+Cohesion: 0.04
+Nodes (44): eslint, eslint-plugin-security, devDependencies, eslint, eslint-plugin-security, js-yaml, playwright, prettier (+36 more)
 
 ### Community 26 - "Obsidian Plugin Guide"
-Cohesion: 0.12
-Nodes (15): App Icon PNG, App Icon SVG, Example YML Comments Storage, Comments Example Note, Obsidian Plugin Guide, CommentComposerModal, DEFAULT_SETTINGS, MarkdownCommentsPlugin (+7 more)
+Cohesion: 0.08
+Nodes (38): App Icon PNG, App Icon SVG, findParagraphForNode(), handleTextSelection(), hideSelectionButton(), showSelectionButton(), Comments Example Note, Obsidian Plugin Guide (+30 more)
 
 ### Community 27 - "obsidian-plugin/manifest.json"
 Cohesion: 0.22
@@ -231,9 +231,9 @@ Nodes (5): copyPlugin, esbuild, fs, outdir, path
 Cohesion: 0.50
 Nodes (7): bindTextarea(), getMentionQuery(), loadDisplayNames(), loadMentionUsers(), removeMentionMenu(), scan(), showMentionMenu()
 
-### Community 30 - "options.ts"
-Cohesion: 0.50
-Nodes (3): restoreSettings(), saveBtn, updatePatternVisibility()
+### Community 30 - "CommentStore"
+Cohesion: 0.21
+Nodes (9): CommentStore, EMPTY, newId(), normalizeCommentsFile(), normalizeInlineComment(), normalizePageComment(), normalizeReply(), CommentRootType (+1 more)
 
 ### Community 31 - "compilerOptions"
 Cohesion: 0.13
@@ -252,8 +252,8 @@ Cohesion: 0.20
 Nodes (7): chromeDestDir, chromeSrcDir, fs, path, rootDir, vscodeDest, vscodeSrc
 
 ### Community 43 - "shared/package.json"
-Cohesion: 0.14
-Nodes (13): devDependencies, @types/node, typescript, @types/node, typescript, license, main, name (+5 more)
+Cohesion: 0.11
+Nodes (18): dependencies, js-yaml, devDependencies, @types/js-yaml, @types/node, typescript, js-yaml, @types/js-yaml (+10 more)
 
 ### Community 44 - "Caveman Compress"
 Cohesion: 0.17
@@ -319,9 +319,9 @@ Nodes (12): 1. Correction, 2. Warning, 3. Temporary Ban, 4. Permanent Ban, Attri
 Cohesion: 0.25
 Nodes (7): Contributors, Decision Making, Governance Model, Maintainers, Project Governance, Project Lead, Roles
 
-### Community 68 - "Changelog"
-Cohesion: 0.50
-Nodes (3): Added, Changelog, [Unreleased]
+### Community 68 - "[1.1.0] - 2026-08-09"
+Cohesion: 0.33
+Nodes (5): [1.1.0] - 2026-08-09, Added, Changed, Changelog, [Unreleased]
 
 ### Community 70 - "Reporting a Vulnerability"
 Cohesion: 0.29
@@ -339,33 +339,41 @@ Nodes (4): draw_text_centered(), draw_text_with_shadow(), main(), make_rounded_c
 Cohesion: 0.20
 Nodes (9): Commands, From VS Code Marketplace / Open VSX, From VSIX, Installation, Key Features, License, Markdown Comments for VS Code, Settings (+1 more)
 
-### Community 77 - "CommentStore"
-Cohesion: 0.33
-Nodes (3): CommentStore, newId(), CommentRootType
-
 ### Community 102 - "Context Pack"
 Cohesion: 0.33
 Nodes (5): Context Pack, Guardrails, Output Focus, Patterns, Workflow
 
+### Community 111 - "commentStore.ts"
+Cohesion: 0.05
+Nodes (104): vscode, clearAuthorCache(), extractMentionLogins(), fallbackAuthor(), getCachedAuthor(), githubAvatarUrl(), isCacheValid(), isGitHubLogin() (+96 more)
+
+### Community 112 - "inspect-extension-storage.mjs"
+Cohesion: 0.50
+Nodes (3): extensionPath, serviceWorkers, testProfileDir
+
+### Community 114 - "test-debug-replies.mjs"
+Cohesion: 0.50
+Nodes (3): extensionPath, fab, testProfileDir
+
 ## Knowledge Gaps
-- **416 isolated node(s):** `root`, `parser`, `browser`, `node`, `es2022` (+411 more)
+- **451 isolated node(s):** `root`, `parser`, `browser`, `node`, `es2022` (+446 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **22 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **25 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `obsidian` connect `main.ts` to `obsidian-plugin/package.json`?**
-  _High betweenness centrality (0.024) - this node is a cross-community bridge._
-- **Why does `keywords` connect `obsidian-plugin/package.json` to `main.ts`?**
-  _High betweenness centrality (0.024) - this node is a cross-community bridge._
-- **Why does `escapeHtml()` connect `markdownItPlugin.ts` to `content.ts`, `CommentsSidebarView`, `main.ts`?**
-  _High betweenness centrality (0.014) - this node is a cross-community bridge._
-- **Are the 65 inferred relationships involving `Chrome Extension Options UI` (e.g. with `Chrome Extension Icon SVG` and `content.ts`) actually correct?**
-  _`Chrome Extension Options UI` has 65 INFERRED edges - model-reasoned connections that need verification._
+- **Why does `vscode` connect `commentStore.ts` to `markdownItPlugin.ts`, `Obsidian Plugin Guide`, `vscode-extension/package.json`?**
+  _High betweenness centrality (0.058) - this node is a cross-community bridge._
+- **Why does `keywords` connect `vscode-extension/package.json` to `commentStore.ts`?**
+  _High betweenness centrality (0.057) - this node is a cross-community bridge._
+- **Why does `CommentsFile` connect `CommentsFile` to `markdownItPlugin.ts`, `content.ts`, `commentStore.ts`, `Obsidian Plugin Guide`, `CommentStore`?**
+  _High betweenness centrality (0.030) - this node is a cross-community bridge._
 - **Are the 28 inferred relationships involving `Obsidian Plugin Guide` (e.g. with `main.ts` and `CommentComposerModal`) actually correct?**
   _`Obsidian Plugin Guide` has 28 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `root`, `parser`, `browser` to the rest of the system?**
-  _416 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `markdownItPlugin.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.07527853056308341 - nodes in this community are weakly interconnected._
+  _451 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `content.ts` be split into smaller, more focused modules?**
+  _Cohesion score 0.05444978265843056 - nodes in this community are weakly interconnected._
+- **Should `compress.py` be split into smaller, more focused modules?**
+  _Cohesion score 0.11330049261083744 - nodes in this community are weakly interconnected._

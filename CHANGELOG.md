@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-08-09
+
+### Changed
+
+- Transitioned primary comment persistence from local YAML files to GitHub as the backend (`refs/md-comments/data` orphan git ref / GitHub API) with zero-commit and zero-PR overhead.
+- Maintained local companion `*.comments.yml` files as offline/non-GitHub fallback.
+- Updated all plugin descriptions, privacy policies, and commercial website (`md-comments.com`) documentation.
+
 ### Added
 
 - Initial project layout and monorepo structure.
