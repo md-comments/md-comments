@@ -1148,28 +1148,6 @@
       "norm_label": "storage"
     },
     {
-      "label": "identity",
-      "file_type": "concept",
-      "source_file": "chrome-extension/manifest.json",
-      "source_location": "L6",
-      "_origin": "ast",
-      "id": "ref_identity",
-      "community": 10,
-      "community_name": "chrome-extension/manifest.json",
-      "norm_label": "identity"
-    },
-    {
-      "label": "tabs",
-      "file_type": "concept",
-      "source_file": "chrome-extension/manifest.json",
-      "source_location": "L6",
-      "_origin": "ast",
-      "id": "ref_tabs",
-      "community": 10,
-      "community_name": "chrome-extension/manifest.json",
-      "norm_label": "tabs"
-    },
-    {
       "label": "host_permissions",
       "file_type": "code",
       "source_file": "chrome-extension/manifest.json",
@@ -2430,8 +2408,8 @@
       "source_location": "L3252",
       "_origin": "ast",
       "id": "chrome_extension_src_content_finddomparagraphs",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 26,
+      "community_name": "types.ts",
       "norm_label": "finddomparagraphs()"
     },
     {
@@ -2441,8 +2419,8 @@
       "source_location": "L3275",
       "_origin": "ast",
       "id": "chrome_extension_src_content_findheadingcontext",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 26,
+      "community_name": "types.ts",
       "norm_label": "findheadingcontext()"
     },
     {
@@ -2639,8 +2617,8 @@
       "source_location": "L3680",
       "_origin": "ast",
       "id": "chrome_extension_src_content_findparagraphfornode",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 26,
+      "community_name": "types.ts",
       "norm_label": "findparagraphfornode()"
     },
     {
@@ -2650,8 +2628,8 @@
       "source_location": "L3695",
       "_origin": "ast",
       "id": "chrome_extension_src_content_showselectionbutton",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 26,
+      "community_name": "types.ts",
       "norm_label": "showselectionbutton()"
     },
     {
@@ -2661,8 +2639,8 @@
       "source_location": "L3793",
       "_origin": "ast",
       "id": "chrome_extension_src_content_hideselectionbutton",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 26,
+      "community_name": "types.ts",
       "norm_label": "hideselectionbutton()"
     },
     {
@@ -2672,8 +2650,8 @@
       "source_location": "L3799",
       "_origin": "ast",
       "id": "chrome_extension_src_content_handletextselection",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 26,
+      "community_name": "types.ts",
       "norm_label": "handletextselection()"
     },
     {
@@ -4366,8 +4344,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_newid",
-      "community": 26,
-      "community_name": "types.ts",
+      "community": 3,
+      "community_name": "CommentStore",
       "norm_label": "newid()"
     },
     {
@@ -4421,8 +4399,8 @@
       "source_location": "L74",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore",
-      "community": 26,
-      "community_name": "types.ts",
+      "community": 3,
+      "community_name": "CommentStore",
       "norm_label": "commentstore"
     },
     {
@@ -4432,8 +4410,8 @@
       "source_location": "L75",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_constructor",
-      "community": 26,
-      "community_name": "types.ts",
+      "community": 3,
+      "community_name": "CommentStore",
       "norm_label": ".constructor()"
     },
     {
@@ -4443,8 +4421,8 @@
       "source_location": "L80",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_getcommentspath",
-      "community": 26,
-      "community_name": "types.ts",
+      "community": 3,
+      "community_name": "CommentStore",
       "norm_label": ".getcommentspath()"
     },
     {
@@ -4454,8 +4432,8 @@
       "source_location": "L84",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_readcomments",
-      "community": 26,
-      "community_name": "types.ts",
+      "community": 3,
+      "community_name": "CommentStore",
       "norm_label": ".readcomments()"
     },
     {
@@ -4465,8 +4443,8 @@
       "source_location": "L100",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_writecomments",
-      "community": 26,
-      "community_name": "types.ts",
+      "community": 3,
+      "community_name": "CommentStore",
       "norm_label": ".writecomments()"
     },
     {
@@ -4476,8 +4454,8 @@
       "source_location": "L112",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_addinlinecomment",
-      "community": 26,
-      "community_name": "types.ts",
+      "community": 3,
+      "community_name": "CommentStore",
       "norm_label": ".addinlinecomment()"
     },
     {
@@ -4487,8 +4465,8 @@
       "source_location": "L142",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_addpagecomment",
-      "community": 26,
-      "community_name": "types.ts",
+      "community": 3,
+      "community_name": "CommentStore",
       "norm_label": ".addpagecomment()"
     },
     {
@@ -4498,8 +4476,8 @@
       "source_location": "L158",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_addreply",
-      "community": 26,
-      "community_name": "types.ts",
+      "community": 3,
+      "community_name": "CommentStore",
       "norm_label": ".addreply()"
     },
     {
@@ -4509,8 +4487,8 @@
       "source_location": "L182",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_deletecomment",
-      "community": 26,
-      "community_name": "types.ts",
+      "community": 3,
+      "community_name": "CommentStore",
       "norm_label": ".deletecomment()"
     },
     {
@@ -4520,8 +4498,8 @@
       "source_location": "L221",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_editcomment",
-      "community": 26,
-      "community_name": "types.ts",
+      "community": 3,
+      "community_name": "CommentStore",
       "norm_label": ".editcomment()"
     },
     {
@@ -4531,8 +4509,8 @@
       "source_location": "L269",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_resolvecomment",
-      "community": 26,
-      "community_name": "types.ts",
+      "community": 3,
+      "community_name": "CommentStore",
       "norm_label": ".resolvecomment()"
     },
     {
@@ -4542,8 +4520,8 @@
       "source_location": "L283",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_unresolvecomment",
-      "community": 26,
-      "community_name": "types.ts",
+      "community": 3,
+      "community_name": "CommentStore",
       "norm_label": ".unresolvecomment()"
     },
     {
@@ -4553,8 +4531,8 @@
       "source_location": "L297",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_togglereaction",
-      "community": 26,
-      "community_name": "types.ts",
+      "community": 3,
+      "community_name": "CommentStore",
       "norm_label": ".togglereaction()"
     },
     {
@@ -4564,8 +4542,8 @@
       "source_location": "L345",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_reanchorcomment",
-      "community": 26,
-      "community_name": "types.ts",
+      "community": 3,
+      "community_name": "CommentStore",
       "norm_label": ".reanchorcomment()"
     },
     {
@@ -4575,8 +4553,8 @@
       "source_location": "L369",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_updateorphanflags",
-      "community": 26,
-      "community_name": "types.ts",
+      "community": 3,
+      "community_name": "CommentStore",
       "norm_label": ".updateorphanflags()"
     },
     {
@@ -6211,8 +6189,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "shared_placement_fuzzymatch",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 26,
+      "community_name": "types.ts",
       "norm_label": "fuzzymatch()"
     },
     {
@@ -6552,8 +6530,8 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "shared_types_commentroottype",
-      "community": 26,
-      "community_name": "types.ts",
+      "community": 3,
+      "community_name": "CommentStore",
       "norm_label": "commentroottype"
     },
     {
@@ -8840,8 +8818,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_codelensprovider",
-      "community": 111,
-      "community_name": "commentStore.ts",
+      "community": 26,
+      "community_name": "types.ts",
       "norm_label": "codelensprovider.ts"
     },
     {
@@ -8851,8 +8829,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "vscode_extension_src_codelensprovider_markdowncommentscodelensprovider",
-      "community": 111,
-      "community_name": "commentStore.ts",
+      "community": 26,
+      "community_name": "types.ts",
       "norm_label": "markdowncommentscodelensprovider"
     },
     {
@@ -8862,8 +8840,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "vscode_extension_src_codelensprovider_markdowncommentscodelensprovider_refresh",
-      "community": 111,
-      "community_name": "commentStore.ts",
+      "community": 26,
+      "community_name": "types.ts",
       "norm_label": ".refresh()"
     },
     {
@@ -10116,8 +10094,8 @@
       "source_location": "L676",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_loadcontext",
-      "community": 0,
-      "community_name": "markdownItPlugin.ts",
+      "community": 111,
+      "community_name": "commentStore.ts",
       "norm_label": "loadcontext()"
     },
     {
@@ -12405,7 +12383,7 @@
       "_origin": "ast",
       "id": "changelog",
       "community": 68,
-      "community_name": "[1.1.0] - 2026-08-09",
+      "community_name": "Changelog",
       "norm_label": "changelog.md"
     },
     {
@@ -12416,7 +12394,7 @@
       "_origin": "ast",
       "id": "changelog_changelog",
       "community": 68,
-      "community_name": "[1.1.0] - 2026-08-09",
+      "community_name": "Changelog",
       "norm_label": "changelog"
     },
     {
@@ -12427,40 +12405,84 @@
       "_origin": "ast",
       "id": "changelog_unreleased",
       "community": 68,
-      "community_name": "[1.1.0] - 2026-08-09",
+      "community_name": "Changelog",
       "norm_label": "[unreleased]"
+    },
+    {
+      "label": "[1.1.2] - 2026-08-17",
+      "file_type": "document",
+      "source_file": "CHANGELOG.md",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "changelog_1_1_2_2026_08_17",
+      "community": 68,
+      "community_name": "Changelog",
+      "norm_label": "[1.1.2] - 2026-08-17"
+    },
+    {
+      "label": "Fixed",
+      "file_type": "document",
+      "source_file": "CHANGELOG.md",
+      "source_location": "L12",
+      "_origin": "ast",
+      "id": "changelog_fixed",
+      "community": 68,
+      "community_name": "Changelog",
+      "norm_label": "fixed"
+    },
+    {
+      "label": "[1.1.1] - 2026-08-09",
+      "file_type": "document",
+      "source_file": "CHANGELOG.md",
+      "source_location": "L16",
+      "_origin": "ast",
+      "id": "changelog_1_1_1_2026_08_09",
+      "community": 68,
+      "community_name": "Changelog",
+      "norm_label": "[1.1.1] - 2026-08-09"
+    },
+    {
+      "label": "Changed",
+      "file_type": "document",
+      "source_file": "CHANGELOG.md",
+      "source_location": "L18",
+      "_origin": "ast",
+      "id": "changelog_changed",
+      "community": 68,
+      "community_name": "Changelog",
+      "norm_label": "changed"
     },
     {
       "label": "[1.1.0] - 2026-08-09",
       "file_type": "document",
       "source_file": "CHANGELOG.md",
-      "source_location": "L10",
+      "source_location": "L22",
       "_origin": "ast",
       "id": "changelog_1_1_0_2026_08_09",
       "community": 68,
-      "community_name": "[1.1.0] - 2026-08-09",
+      "community_name": "Changelog",
       "norm_label": "[1.1.0] - 2026-08-09"
     },
     {
       "label": "Changed",
       "file_type": "document",
       "source_file": "CHANGELOG.md",
-      "source_location": "L12",
+      "source_location": "L24",
       "_origin": "ast",
-      "id": "changelog_changed",
+      "id": "changelog_changed_24",
       "community": 68,
-      "community_name": "[1.1.0] - 2026-08-09",
+      "community_name": "Changelog",
       "norm_label": "changed"
     },
     {
       "label": "Added",
       "file_type": "document",
       "source_file": "CHANGELOG.md",
-      "source_location": "L17",
+      "source_location": "L29",
       "_origin": "ast",
       "id": "changelog_added",
       "community": 68,
-      "community_name": "[1.1.0] - 2026-08-09",
+      "community_name": "Changelog",
       "norm_label": "added"
     },
     {
@@ -15001,31 +15023,7 @@
       "context": "import",
       "_origin": "ast",
       "source": "chrome_extension_manifest_permissions",
-      "target": "ref_identity",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "extends",
-      "confidence": "EXTRACTED",
-      "source_file": "chrome-extension/manifest.json",
-      "source_location": "L6",
-      "weight": 1.0,
-      "context": "import",
-      "_origin": "ast",
-      "source": "chrome_extension_manifest_permissions",
       "target": "ref_storage",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "extends",
-      "confidence": "EXTRACTED",
-      "source_file": "chrome-extension/manifest.json",
-      "source_location": "L6",
-      "weight": 1.0,
-      "context": "import",
-      "_origin": "ast",
-      "source": "chrome_extension_manifest_permissions",
-      "target": "ref_tabs",
       "confidence_score": 1.0
     },
     {
@@ -38930,11 +38928,33 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CHANGELOG.md",
-      "source_location": "L10",
+      "source_location": "L22",
       "weight": 1.0,
       "_origin": "ast",
       "source": "changelog_changelog",
       "target": "changelog_1_1_0_2026_08_09",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CHANGELOG.md",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "changelog_changelog",
+      "target": "changelog_1_1_1_2026_08_09",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CHANGELOG.md",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "changelog_changelog",
+      "target": "changelog_1_1_2_2026_08_17",
       "confidence_score": 1.0
     },
     {
@@ -38952,7 +38972,29 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CHANGELOG.md",
-      "source_location": "L17",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "changelog_1_1_2_2026_08_17",
+      "target": "changelog_fixed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CHANGELOG.md",
+      "source_location": "L18",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "changelog_1_1_1_2026_08_09",
+      "target": "changelog_changed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CHANGELOG.md",
+      "source_location": "L29",
       "weight": 1.0,
       "_origin": "ast",
       "source": "changelog_1_1_0_2026_08_09",
@@ -38963,11 +39005,11 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CHANGELOG.md",
-      "source_location": "L12",
+      "source_location": "L24",
       "weight": 1.0,
       "_origin": "ast",
       "source": "changelog_1_1_0_2026_08_09",
-      "target": "changelog_changed",
+      "target": "changelog_changed_24",
       "confidence_score": 1.0
     },
     {
@@ -39624,5 +39666,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "37dccdd74d8a9238d494a0e295499fbe3019b0d7"
+  "built_at_commit": "a1e35d0ba2beffdf47be042bcac5438cdec8494c"
 }

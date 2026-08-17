@@ -1,16 +1,16 @@
-# Graph Report - md-comments  (2026-08-09)
+# Graph Report - md-comments  (2026-08-17)
 
 ## Corpus Check
-- 117 files · ~110,618 words
+- 117 files · ~110,675 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1207 nodes · 2280 edges · 80 communities (56 shown, 24 thin omitted)
+- 1209 nodes · 2282 edges · 81 communities (57 shown, 24 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 63 edges (avg confidence: 0.74)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `37dccdd7`
+- Built from commit: `a1e35d0b`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -18,6 +18,7 @@
 - markdownItPlugin.ts
 - content.ts
 - compress.py
+- CommentStore
 - validate.py
 - vscode-extension/package.json
 - obsidian-plugin/package.json
@@ -80,7 +81,7 @@
 - tsconfig.json
 - Contributor Covenant Code of Conduct
 - Project Governance
-- [1.1.0] - 2026-08-09
+- Changelog
 - Authors
 - Reporting a Vulnerability
 - Privacy Policy
@@ -111,29 +112,33 @@
   README.md → shared/anchor.ts
 - `Markdown Comments Key Features` --references--> `findBlockByHash()`  [INFERRED]
   README.md → shared/anchor.ts
-- `Markdown Comments Key Features` --references--> `fuzzyMatch()`  [INFERRED]
-  README.md → shared/placement.ts
 - `App Icon PNG` --conceptually_related_to--> `Markdown Comments Overview`  [INFERRED]
   assets/icon.png → README.md
 - `App Icon SVG` --conceptually_related_to--> `Markdown Comments Overview`  [INFERRED]
   assets/icon.svg → README.md
+- `VS Code Extension Icon PNG` --conceptually_related_to--> `Markdown Comments Overview`  [INFERRED]
+  vscode-extension/icon.png → README.md
 
 ## Import Cycles
 - None detected.
 
-## Communities (80 total, 24 thin omitted)
+## Communities (81 total, 24 thin omitted)
 
 ### Community 0 - "markdownItPlugin.ts"
 Cohesion: 0.07
-Nodes (73): clearAuthorCache(), extractMentionLogins(), fallbackAuthor(), getCachedAuthor(), githubAvatarUrl(), githubProfileUrl(), isCacheValid(), isGitHubLogin() (+65 more)
+Nodes (72): clearAuthorCache(), extractMentionLogins(), fallbackAuthor(), getCachedAuthor(), githubAvatarUrl(), githubProfileUrl(), isCacheValid(), isGitHubLogin() (+64 more)
 
 ### Community 1 - "content.ts"
-Cohesion: 0.05
-Nodes (94): activeIndicators, appInstallationStatus, attachCommentCardEvents(), attachInstallationPromptEvents(), attachOAuthEvents(), cachedSelectedClasses, checkPageChange(), cleanupInjections() (+86 more)
+Cohesion: 0.06
+Nodes (87): activeIndicators, appInstallationStatus, attachCommentCardEvents(), attachInstallationPromptEvents(), attachOAuthEvents(), cachedSelectedClasses, checkPageChange(), cleanupInjections() (+79 more)
 
 ### Community 2 - "compress.py"
 Cohesion: 0.11
 Nodes (25): main(), print_usage(), backup_dir_for(), build_compress_prompt(), build_fix_prompt(), call_claude(), compress_file(), is_sensitive_path() (+17 more)
+
+### Community 3 - "CommentStore"
+Cohesion: 0.33
+Nodes (3): CommentStore, newId(), CommentRootType
 
 ### Community 4 - "validate.py"
 Cohesion: 0.17
@@ -157,7 +162,7 @@ Nodes (30): 👍, ./media/avatarFallback.js, ./media/inlineAnchors.js, ./media/m
 
 ### Community 10 - "chrome-extension/manifest.json"
 Cohesion: 0.07
-Nodes (28): action, default_icon, default_title, background, service_worker, content_scripts, 128, 16 (+20 more)
+Nodes (26): action, default_icon, default_title, background, service_worker, content_scripts, 128, 16 (+18 more)
 
 ### Community 11 - "chrome-extension/package.json"
 Cohesion: 0.08
@@ -212,8 +217,8 @@ Cohesion: 0.04
 Nodes (44): eslint, eslint-plugin-security, devDependencies, eslint, eslint-plugin-security, js-yaml, playwright, prettier (+36 more)
 
 ### Community 26 - "types.ts"
-Cohesion: 0.06
-Nodes (45): App Icon PNG, App Icon SVG, Comments Example Note, Obsidian Plugin Guide, createLivePreviewExtension(), CommentComposerModal, DEFAULT_SETTINGS, MarkdownCommentsPlugin (+37 more)
+Cohesion: 0.07
+Nodes (50): App Icon PNG, App Icon SVG, findDomParagraphs(), findHeadingContext(), findParagraphForNode(), handleTextSelection(), hideSelectionButton(), showSelectionButton() (+42 more)
 
 ### Community 27 - "obsidian-plugin/manifest.json"
 Cohesion: 0.22
@@ -311,9 +316,9 @@ Nodes (12): 1. Correction, 2. Warning, 3. Temporary Ban, 4. Permanent Ban, Attri
 Cohesion: 0.25
 Nodes (7): Contributors, Decision Making, Governance Model, Maintainers, Project Governance, Project Lead, Roles
 
-### Community 68 - "[1.1.0] - 2026-08-09"
-Cohesion: 0.33
-Nodes (5): [1.1.0] - 2026-08-09, Added, Changed, Changelog, [Unreleased]
+### Community 68 - "Changelog"
+Cohesion: 0.20
+Nodes (9): [1.1.0] - 2026-08-09, [1.1.1] - 2026-08-09, [1.1.2] - 2026-08-17, Added, Changed, Changed, Changelog, Fixed (+1 more)
 
 ### Community 70 - "Reporting a Vulnerability"
 Cohesion: 0.29
@@ -336,8 +341,8 @@ Cohesion: 0.33
 Nodes (5): Context Pack, Guardrails, Output Focus, Patterns, Workflow
 
 ### Community 111 - "commentStore.ts"
-Cohesion: 0.08
-Nodes (60): vscode, GitHubRepoInfo, parseGitHubPageUrl(), parseGitHubRemote(), getAuthor(), warmAuthorCache(), MarkdownCommentsCodeLensProvider, CommentActionMessage (+52 more)
+Cohesion: 0.09
+Nodes (60): vscode, GitHubRepoInfo, parseGitHubPageUrl(), parseGitHubRemote(), getAuthor(), warmAuthorCache(), CommentActionMessage, executeCommentAction() (+52 more)
 
 ## Knowledge Gaps
 - **444 isolated node(s):** `root`, `parser`, `browser`, `node`, `es2022` (+439 more)
@@ -348,16 +353,16 @@ Nodes (60): vscode, GitHubRepoInfo, parseGitHubPageUrl(), parseGitHubRemote(), g
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `keywords` connect `vscode-extension/package.json` to `commentStore.ts`?**
-  _High betweenness centrality (0.062) - this node is a cross-community bridge._
-- **Why does `vscode` connect `commentStore.ts` to `markdownItPlugin.ts`, `vscode-extension/package.json`?**
-  _High betweenness centrality (0.062) - this node is a cross-community bridge._
-- **Why does `CommentsFile` connect `CommentsFile` to `markdownItPlugin.ts`, `content.ts`, `types.ts`, `commentStore.ts`?**
-  _High betweenness centrality (0.030) - this node is a cross-community bridge._
+  _High betweenness centrality (0.058) - this node is a cross-community bridge._
+- **Why does `vscode` connect `commentStore.ts` to `markdownItPlugin.ts`, `types.ts`, `vscode-extension/package.json`?**
+  _High betweenness centrality (0.058) - this node is a cross-community bridge._
+- **Why does `contributes` connect `contributes` to `vscode-extension/package.json`?**
+  _High betweenness centrality (0.028) - this node is a cross-community bridge._
 - **Are the 28 inferred relationships involving `Obsidian Plugin Guide` (e.g. with `main.ts` and `CommentComposerModal`) actually correct?**
   _`Obsidian Plugin Guide` has 28 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `root`, `parser`, `browser` to the rest of the system?**
   _444 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `markdownItPlugin.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.07222222222222222 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07341772151898734 - nodes in this community are weakly interconnected._
 - **Should `content.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.05256648113790971 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.055900621118012424 - nodes in this community are weakly interconnected._

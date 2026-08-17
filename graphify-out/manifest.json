@@ -15,13 +15,13 @@
     "semantic_hash": ""
   },
   "chrome-extension/manifest.json": {
-    "mtime": 1786302803.0286882,
-    "ast_hash": "ac6a63cc047dc018c33ee59fcf72af2f",
+    "mtime": 1786971667.7348373,
+    "ast_hash": "eac78555c0c45b9481a2cac9b8e4b556",
     "semantic_hash": ""
   },
   "chrome-extension/package.json": {
-    "mtime": 1786298697.0010993,
-    "ast_hash": "2a0cac6ca7c88cf1fc5f819854fee060",
+    "mtime": 1786971671.226116,
+    "ast_hash": "8af4c6acf63f21e105159a2d826d328f",
     "semantic_hash": ""
   },
   "chrome-extension/src/content.ts": {
@@ -40,13 +40,13 @@
     "semantic_hash": "406bb0cd9a4b8c76f9f0f1a23552ae33"
   },
   "obsidian-plugin/manifest.json": {
-    "mtime": 1786303217.4504206,
-    "ast_hash": "072a0a6b238db2cb7d46aed4c5dbdd87",
+    "mtime": 1786971677.3373456,
+    "ast_hash": "ed89189ac546554825c72f7860059602",
     "semantic_hash": ""
   },
   "obsidian-plugin/package.json": {
-    "mtime": 1786303220.318049,
-    "ast_hash": "a2588b3c73bb497d303678e6292753fa",
+    "mtime": 1786971680.1333554,
+    "ast_hash": "1abdceff55c06b622f16a74623ac1a7b",
     "semantic_hash": ""
   },
   "obsidian-plugin/src/livePreview.ts": {
@@ -140,8 +140,8 @@
     "semantic_hash": ""
   },
   "vscode-extension/package.json": {
-    "mtime": 1786302799.6344151,
-    "ast_hash": "ecde3a358ec48c565183737c85a80316",
+    "mtime": 1786971674.4138699,
+    "ast_hash": "79ae8859724e0cfc3a98da0f344126ec",
     "semantic_hash": ""
   },
   "vscode-extension/src/author.ts": {
@@ -445,8 +445,8 @@
     "semantic_hash": ""
   },
   "shared/package.json": {
-    "mtime": 1786298688.9852848,
-    "ast_hash": "982263b8e9e768cf35f30eddc2ce96dd",
+    "mtime": 1786971682.9542456,
+    "ast_hash": "e11b4da9c90dc2dafb43d5257c2f489f",
     "semantic_hash": ""
   },
   "shared/tsconfig.json": {
@@ -520,8 +520,8 @@
     "semantic_hash": ""
   },
   "CHANGELOG.md": {
-    "mtime": 1786303241.1861763,
-    "ast_hash": "8fa89bc339202813278c2cf717de0ad1",
+    "mtime": 1786971686.9583013,
+    "ast_hash": "80c4efa34f31717d6c19a614f1a87a0a",
     "semantic_hash": ""
   },
   "CODE_OF_CONDUCT.md": {
