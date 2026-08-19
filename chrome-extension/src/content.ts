@@ -3126,6 +3126,7 @@ function renderDOMIndicatorsForFile(
   fileAnchors: AnchorBlock[],
   fileComments: CommentsFile
 ) {
+  loadedFileContexts.set(filePath, { anchors: fileAnchors, comments: fileComments });
   const domElements = findDomParagraphs(markdownBody);
 
   markdownBody.querySelectorAll('.md-comments-indicator-container').forEach((el) => el.remove());
@@ -3734,6 +3735,7 @@ function showSelectionButton(
     document.documentElement.appendChild(activeSelectionButton);
   }
 
+  const selectedText = range.toString().trim();
   const rect = range.getBoundingClientRect();
   activeSelectionButton.style.display = 'flex';
   activeSelectionButton.style.left = `${rect.left + rect.width / 2}px`;
@@ -3770,7 +3772,8 @@ function showSelectionButton(
     e.stopPropagation();
 
     const selection = window.getSelection();
-    const anchorText = selection ? selection.toString().trim() : paragraphEl.innerText;
+    const currentSel = selection ? selection.toString().trim() : '';
+    const anchorText = currentSel || selectedText || paragraphEl.innerText;
     const text = normalizeAnchorText(paragraphEl.innerText);
     const matchHash = fnv1aHash(text);
     const block = fileAnchors.find(
@@ -3841,12 +3844,14 @@ function handleTextSelection() {
       fileEl = fileEl.parentNode as HTMLElement;
     }
 
-    if (!fileEl || fileEl.nodeType !== Node.ELEMENT_NODE) {
-      hideSelectionButton();
-      return;
+    let filePath: string | null = null;
+    if (fileEl && fileEl.nodeType === Node.ELEMENT_NODE && fileEl !== document.body) {
+      filePath = getFilePathFromFileContainer(fileEl);
+    }
+    if (!filePath && currentMetadata?.filePath) {
+      filePath = currentMetadata.filePath;
     }
 
-    const filePath = getFilePathFromFileContainer(fileEl);
     if (!filePath) {
       hideSelectionButton();
       return;

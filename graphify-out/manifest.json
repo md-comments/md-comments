@@ -25,8 +25,8 @@
     "semantic_hash": ""
   },
   "chrome-extension/src/content.ts": {
-    "mtime": 1786303250.8403242,
-    "ast_hash": "f979fe61255eaf5872d5616448934147",
+    "mtime": 1787161652.700831,
+    "ast_hash": "869ae849427bb75f08ef69c27f166a72",
     "semantic_hash": ""
   },
   "chrome-extension/src/githubApi.ts": {
