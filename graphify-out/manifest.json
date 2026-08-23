@@ -140,7 +140,7 @@
     "semantic_hash": ""
   },
   "vscode-extension/package.json": {
-    "mtime": 1787496337.4180639,
+    "mtime": 1787498277.8609731,
     "ast_hash": "c04f8e130bbd8ffba5429d4d416efacf",
     "semantic_hash": ""
   },
@@ -540,8 +540,8 @@
     "semantic_hash": ""
   },
   ".github/workflows/deploy-marketplaces.yml": {
-    "mtime": 1786301607.3670323,
-    "ast_hash": "987efdf48ba852695f6d97b9ec798ea9",
+    "mtime": 1787498273.6831648,
+    "ast_hash": "71557404cd28f0aa169bff4a6e8ad929",
     "semantic_hash": ""
   },
   ".github/workflows/release-dev.yml": {
