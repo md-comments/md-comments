@@ -9,12 +9,7 @@ import type {
   AnchorBlock,
 } from '../../shared/types';
 import { GitHubOrphanRefBackend } from '../../shared/gitRefBackend';
-import {
-  getStoredToken,
-  startOAuthDeviceFlow,
-  saveOAuthToken,
-  clearOAuthToken,
-} from './githubAuth';
+import { getStoredToken, saveOAuthToken, clearOAuthToken } from './githubAuth';
 import { GitHubApi, RepoMetadata } from './githubApi';
 import { isGitHubLogin } from '../../shared/author';
 import { escapeHtml } from '../../shared/html';
@@ -643,7 +638,7 @@ function injectFABButton(count: number = 0) {
   }
 }
 
-function injectToolbarButton(count: number = 0) {
+function injectToolbarButton(_count: number = 0) {
   const existing = document.querySelector('.md-comments-toolbar-btn');
   if (existing) existing.remove();
 }
@@ -679,6 +674,7 @@ function injectGlobalStyles() {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function processPRMarkdownFiles() {
   injectGlobalStyles();
   const fileContainers = document.querySelectorAll('.js-file, .file');
@@ -1784,7 +1780,8 @@ function attachOAuthEvents(container: HTMLElement) {
 
             // Start polling directly in active content script context using recursive setTimeout
             let currentInterval = Math.max(interval || 5, 5) * 1000;
-            let pollTimeoutId: any = null;
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            let _pollTimeoutId: any = null;
 
             const poll = () => {
               console.log('[md-comments] Sending CHECK_DEVICE_TOKEN message to background...');
@@ -1843,13 +1840,13 @@ function attachOAuthEvents(container: HTMLElement) {
                   }
 
                   // Schedule next poll
-                  pollTimeoutId = setTimeout(poll, currentInterval);
+                  _pollTimeoutId = setTimeout(poll, currentInterval);
                 }
               );
             };
 
             // Schedule first poll
-            pollTimeoutId = setTimeout(poll, currentInterval);
+            _pollTimeoutId = setTimeout(poll, currentInterval);
           } else {
             const err = response?.error || 'Failed to start device flow authorization.';
             console.error('[md-comments] START_DEVICE_FLOW failed:', err);
@@ -2510,6 +2507,7 @@ function renameOriginalConversationTab() {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function injectPRTab() {
   renameOriginalConversationTab();
 
@@ -3438,7 +3436,7 @@ async function editComment(commentId: string, type: 'inline' | 'page', body: str
   await commitCommentFileChanges(updated, 'edit comment');
 }
 
-async function deleteComment(commentId: string, type: 'inline' | 'page') {
+async function deleteComment(commentId: string, _type: 'inline' | 'page') {
   localCreatedIds.delete(commentId);
   const targetId = commentId.trim();
   const updated = {
@@ -3485,7 +3483,7 @@ async function editReply(
   await commitCommentFileChanges(updated, 'edit reply');
 }
 
-async function deleteReply(commentId: string, replyId: string, type: 'inline' | 'page') {
+async function deleteReply(commentId: string, replyId: string, _type: 'inline' | 'page') {
   localCreatedIds.delete(replyId);
   const targetCommentId = commentId.trim();
   const targetReplyId = replyId.trim();
@@ -3648,6 +3646,7 @@ function warmDisplayNames(comments: CommentsFile) {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function formatCommitMessage(action: string): string {
   if (useConventionalCommits) {
     return `docs(comments): ${action}`;
@@ -3659,6 +3658,7 @@ function formatCommitMessage(action: string): string {
   return `${action.charAt(0).toUpperCase() + action.slice(1)} via Markdown Comments Extension`;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function isCommentCommit(message: string): boolean {
   const cleanMsg = message.startsWith('fixup! ') ? message.slice(7) : message;
   if (cleanMsg.startsWith('docs(comments):')) {

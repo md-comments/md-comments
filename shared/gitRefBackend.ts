@@ -1,3 +1,4 @@
+/* global RequestInit, Response */
 import * as yaml from 'js-yaml';
 import type { CommentBackend, CommentStorageKey } from './commentStorage';
 import type { CommentsFile, InlineComment, PageComment, Reply } from './types';

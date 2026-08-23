@@ -1,16 +1,16 @@
 # Graph Report - md-comments  (2026-08-23)
 
 ## Corpus Check
-- 117 files · ~110,802 words
+- 117 files · ~110,808 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1210 nodes · 2284 edges · 81 communities (57 shown, 24 thin omitted)
+- 1210 nodes · 2283 edges · 81 communities (57 shown, 24 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 63 edges (avg confidence: 0.74)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `1f5564ad`
+- Built from commit: `c427d5f0`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -365,4 +365,4 @@ _Questions this graph is uniquely positioned to answer:_
 - **Should `markdownItPlugin.ts` be split into smaller, more focused modules?**
   _Cohesion score 0.0707618187292984 - nodes in this community are weakly interconnected._
 - **Should `content.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.05542283803153368 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05518394648829431 - nodes in this community are weakly interconnected._

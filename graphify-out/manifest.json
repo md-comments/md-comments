@@ -25,8 +25,8 @@
     "semantic_hash": ""
   },
   "chrome-extension/src/content.ts": {
-    "mtime": 1787161652.700831,
-    "ast_hash": "869ae849427bb75f08ef69c27f166a72",
+    "mtime": 1787498511.6093802,
+    "ast_hash": "91060816df0f5eb16eb34d26c5b35964",
     "semantic_hash": ""
   },
   "chrome-extension/src/githubApi.ts": {
@@ -140,7 +140,7 @@
     "semantic_hash": ""
   },
   "vscode-extension/package.json": {
-    "mtime": 1787498277.8609731,
+    "mtime": 1787498508.005798,
     "ast_hash": "c04f8e130bbd8ffba5429d4d416efacf",
     "semantic_hash": ""
   },
@@ -185,8 +185,8 @@
     "semantic_hash": ""
   },
   "vscode-extension/src/markdownItPlugin.ts": {
-    "mtime": 1786298605.5583377,
-    "ast_hash": "2fb3ef10d36740bc46913aaefca6fb4a",
+    "mtime": 1787498460.9651456,
+    "ast_hash": "a85c1dff54e9ebdf72cfbfe7b31ef448",
     "semantic_hash": ""
   },
   "vscode-extension/src/markdownRender.ts": {
@@ -680,8 +680,8 @@
     "semantic_hash": ""
   },
   "shared/gitRefBackend.ts": {
-    "mtime": 1786298605.4001968,
-    "ast_hash": "8486f93282f2b12e146ea2fc3a4dd6ba",
+    "mtime": 1787498464.2489424,
+    "ast_hash": "d2770e452ac578ed440530bd55be889d",
     "semantic_hash": ""
   },
   "tests/gitRefBackend.test.ts": {

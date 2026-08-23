@@ -1,7 +1,6 @@
 /* eslint-disable security/detect-non-literal-fs-filename */
 import * as fs from 'fs';
 import * as vscode from 'vscode';
-import * as yaml from 'js-yaml';
 import { extractMentionLogins, getCachedAuthor, githubProfileUrl, isGitHubLogin } from './author';
 import { collectAvatarLogins, getAvatarDataUrl, warmGitHubAvatars } from './githubAvatars';
 import {
@@ -718,7 +717,6 @@ function loadContext(uri: vscode.Uri): RenderContext | null {
 
 /** Per-render state (VS Code caches tokens — attrs must be applied at render time). */
 let renderCtx: RenderContext | null = null;
-let paragraphBlockIdx = 0;
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export function extendMarkdownIt(md: any): any {
@@ -810,7 +808,6 @@ export function extendMarkdownIt(md: any): any {
     const currentAuthor = fromEnv || getCachedAuthor()?.trim() || '';
     renderCurrentAuthor = currentAuthor || undefined;
     renderCtx = uri ? loadContext(uri) : null;
-    paragraphBlockIdx = 0;
 
     const html = defaultRender(tokens, options, env);
 
