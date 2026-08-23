@@ -1,16 +1,16 @@
-# Graph Report - md-comments  (2026-08-19)
+# Graph Report - md-comments  (2026-08-23)
 
 ## Corpus Check
-- 117 files · ~110,764 words
+- 117 files · ~110,802 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1208 nodes · 2282 edges · 81 communities (57 shown, 24 thin omitted)
+- 1210 nodes · 2284 edges · 81 communities (57 shown, 24 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 63 edges (avg confidence: 0.74)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `a3ba03c9`
+- Built from commit: `1f5564ad`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -125,20 +125,20 @@
 ## Communities (81 total, 24 thin omitted)
 
 ### Community 0 - "markdownItPlugin.ts"
-Cohesion: 0.17
-Nodes (30): githubProfileUrl(), escapeHtml(), PlacementResult, hasTokenSync(), actionIconBtn(), authorInitials(), buildSidebarHtml(), canEditComment() (+22 more)
+Cohesion: 0.07
+Nodes (74): renderAuthor(), resolveDisplayName(), clearAuthorCache(), extractMentionLogins(), fallbackAuthor(), getCachedAuthor(), githubAvatarUrl(), githubProfileUrl() (+66 more)
 
 ### Community 1 - "content.ts"
-Cohesion: 0.05
-Nodes (93): activeIndicators, appInstallationStatus, attachCommentCardEvents(), attachInstallationPromptEvents(), attachOAuthEvents(), cachedSelectedClasses, checkPageChange(), cleanupInjections() (+85 more)
+Cohesion: 0.06
+Nodes (87): activeIndicators, appInstallationStatus, attachCommentCardEvents(), attachInstallationPromptEvents(), attachOAuthEvents(), cachedSelectedClasses, checkPageChange(), cleanupInjections() (+79 more)
 
 ### Community 2 - "compress.py"
 Cohesion: 0.11
 Nodes (25): main(), print_usage(), backup_dir_for(), build_compress_prompt(), build_fix_prompt(), call_claude(), compress_file(), is_sensitive_path() (+17 more)
 
 ### Community 3 - "CommentStore"
-Cohesion: 0.23
-Nodes (8): CommentStore, EMPTY, newId(), normalizeCommentsFile(), normalizeInlineComment(), normalizePageComment(), normalizeReply(), CommentRootType
+Cohesion: 0.21
+Nodes (9): CommentStore, EMPTY, newId(), normalizeCommentsFile(), normalizeInlineComment(), normalizePageComment(), normalizeReply(), CommentRootType (+1 more)
 
 ### Community 4 - "validate.py"
 Cohesion: 0.17
@@ -169,8 +169,8 @@ Cohesion: 0.08
 Nodes (25): author, dependencies, js-yaml, description, devDependencies, esbuild, tslib, @types/chrome (+17 more)
 
 ### Community 13 - "CommentsFile"
-Cohesion: 0.13
-Nodes (12): CommentBackend, CommentStorageKey, commentsFilePathForMarkdown(), decodeBase64(), GitHubOrphanRefBackend, mergeCommentsFiles(), LocalFileAdapter, LocalFileBackend (+4 more)
+Cohesion: 0.12
+Nodes (15): CommentBackend, CommentStorageKey, commentsFilePathForMarkdown(), decodeBase64(), GitHubOrphanRefBackend, mergeCommentsFiles(), LocalFileAdapter, LocalFileBackend (+7 more)
 
 ### Community 14 - "previewActions.js"
 Cohesion: 0.16
@@ -217,8 +217,8 @@ Cohesion: 0.04
 Nodes (44): eslint, eslint-plugin-security, devDependencies, eslint, eslint-plugin-security, js-yaml, playwright, prettier (+36 more)
 
 ### Community 26 - "Obsidian Plugin Guide"
-Cohesion: 0.09
-Nodes (35): App Icon PNG, App Icon SVG, Comments Example Note, Obsidian Plugin Guide, createLivePreviewExtension(), CommentComposerModal, DEFAULT_SETTINGS, MarkdownCommentsPlugin (+27 more)
+Cohesion: 0.08
+Nodes (38): App Icon PNG, App Icon SVG, findParagraphForNode(), handleTextSelection(), hideSelectionButton(), showSelectionButton(), Comments Example Note, Obsidian Plugin Guide (+30 more)
 
 ### Community 27 - "obsidian-plugin/manifest.json"
 Cohesion: 0.22
@@ -317,8 +317,8 @@ Cohesion: 0.25
 Nodes (7): Contributors, Decision Making, Governance Model, Maintainers, Project Governance, Project Lead, Roles
 
 ### Community 68 - "Changelog"
-Cohesion: 0.20
-Nodes (9): [1.1.0] - 2026-08-09, [1.1.1] - 2026-08-09, [1.1.2] - 2026-08-17, Added, Changed, Changed, Changelog, Fixed (+1 more)
+Cohesion: 0.17
+Nodes (11): [1.1.0] - 2026-08-09, [1.1.1] - 2026-08-09, [1.1.2] - 2026-08-17, [1.1.3] - 2026-08-23, Added, Changed, Changed, Changelog (+3 more)
 
 ### Community 70 - "Reporting a Vulnerability"
 Cohesion: 0.29
@@ -341,11 +341,11 @@ Cohesion: 0.33
 Nodes (5): Context Pack, Guardrails, Output Focus, Patterns, Workflow
 
 ### Community 111 - "commentStore.ts"
-Cohesion: 0.05
-Nodes (104): vscode, clearAuthorCache(), extractMentionLogins(), fallbackAuthor(), getCachedAuthor(), githubAvatarUrl(), isCacheValid(), isGitHubLogin() (+96 more)
+Cohesion: 0.09
+Nodes (59): vscode, GitHubRepoInfo, parseGitHubPageUrl(), parseGitHubRemote(), getAuthor(), warmAuthorCache(), CommentActionMessage, executeCommentAction() (+51 more)
 
 ## Knowledge Gaps
-- **444 isolated node(s):** `root`, `parser`, `browser`, `node`, `es2022` (+439 more)
+- **445 isolated node(s):** `root`, `parser`, `browser`, `node`, `es2022` (+440 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **24 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -361,8 +361,8 @@ _Questions this graph is uniquely positioned to answer:_
 - **Are the 28 inferred relationships involving `Obsidian Plugin Guide` (e.g. with `main.ts` and `CommentComposerModal`) actually correct?**
   _`Obsidian Plugin Guide` has 28 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `root`, `parser`, `browser` to the rest of the system?**
-  _444 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _445 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `markdownItPlugin.ts` be split into smaller, more focused modules?**
+  _Cohesion score 0.0707618187292984 - nodes in this community are weakly interconnected._
 - **Should `content.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.05280875236692615 - nodes in this community are weakly interconnected._
-- **Should `compress.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.11330049261083744 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05542283803153368 - nodes in this community are weakly interconnected._

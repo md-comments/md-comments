@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.3] - 2026-08-23
+
+### Fixed
+
+- Support text range selection commenting on single file GitHub view in Chrome extension.
+- Improve author resolution in VS Code extension via GitHub OAuth token user profile and git config fallback.
+
 ## [1.1.2] - 2026-08-17
 
 ### Fixed
