@@ -145,9 +145,9 @@
     "semantic_hash": ""
   },
   "vscode-extension/src/author.ts": {
-    "mtime": 1782344536.7357006,
-    "ast_hash": "0f4ef6145b7ca97995ef0f6842f13a19",
-    "semantic_hash": "0f4ef6145b7ca97995ef0f6842f13a19"
+    "mtime": 1787162194.6450152,
+    "ast_hash": "72b55945346087edf27eded656624667",
+    "semantic_hash": ""
   },
   "vscode-extension/src/codeLensProvider.ts": {
     "mtime": 1785373088.9696662,

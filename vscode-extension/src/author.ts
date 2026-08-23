@@ -7,6 +7,7 @@ import {
   getCachedAuthor,
   fallbackAuthor,
 } from '../../shared/author';
+import { getOAuthToken } from './githubAuth';
 
 // Re-export shared functions for compatibility
 export {
@@ -44,9 +45,9 @@ async function resolveGitHubUsername(): Promise<string | undefined> {
   if (fromSession) {
     return fromSession;
   }
-  const fromRemote = await getUsernameFromGitRemote();
-  if (fromRemote) {
-    return fromRemote;
+  const fromToken = await getUsernameFromOAuthToken();
+  if (fromToken) {
+    return fromToken;
   }
   const fromGh = await getUsernameFromGhCli();
   if (fromGh) {
@@ -57,10 +58,16 @@ async function resolveGitHubUsername(): Promise<string | undefined> {
 
 async function getUsernameFromGitHubSession(): Promise<string | undefined> {
   try {
-    const session = await vscode.authentication.getSession('github', ['read:user'], {
+    let session = await vscode.authentication.getSession('github', ['read:user'], {
       createIfNone: false,
       silent: true,
     });
+    if (!session) {
+      session = await vscode.authentication.getSession('github', ['repo'], {
+        createIfNone: false,
+        silent: true,
+      });
+    }
     const label = session?.account?.label?.trim();
     if (label) {
       return label;
@@ -71,29 +78,29 @@ async function getUsernameFromGitHubSession(): Promise<string | undefined> {
   return undefined;
 }
 
-function parseGitHubUsernameFromRemote(url: string): string | undefined {
-  const trimmed = url.trim();
-  const match = trimmed.match(/github\.com[/:]([^/]+?)(?:\/|$)/i);
-  const user = match?.[1]?.replace(/\.git$/i, '');
-  if (!user || user === 'git') {
-    return undefined;
-  }
-  return user;
-}
-
-async function getUsernameFromGitRemote(): Promise<string | undefined> {
-  const cwd = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
-  if (!cwd) {
-    return undefined;
-  }
+async function getUsernameFromOAuthToken(): Promise<string | undefined> {
   try {
-    const { stdout } = await execFileAsync('git', ['config', '--get', 'remote.origin.url'], {
-      cwd,
+    const token = await getOAuthToken();
+    if (!token) {
+      return undefined;
+    }
+    const res = await fetch('https://api.github.com/user', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
+        'User-Agent': 'VSCode-MD-Comments-Extension',
+      },
     });
-    return parseGitHubUsernameFromRemote(stdout);
+    if (res.ok) {
+      const data = (await res.json()) as { login?: string };
+      if (data.login) {
+        return data.login;
+      }
+    }
   } catch {
-    return undefined;
+    /* ignore fetch error */
   }
+  return undefined;
 }
 
 async function getUsernameFromGhCli(): Promise<string | undefined> {
@@ -116,8 +123,20 @@ async function getUsernameFromGitConfig(): Promise<string | undefined> {
   try {
     const { stdout } = await execFileAsync('git', ['config', '--get', 'github.user'], { cwd });
     const user = stdout.trim();
-    return user || undefined;
+    if (user) {
+      return user;
+    }
   } catch {
-    return undefined;
+    /* ignore */
   }
+  try {
+    const { stdout } = await execFileAsync('git', ['config', '--get', 'user.name'], { cwd });
+    const user = stdout.trim();
+    if (user) {
+      return user;
+    }
+  } catch {
+    /* ignore */
+  }
+  return undefined;
 }
