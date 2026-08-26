@@ -82,6 +82,8 @@ const ICON_COLLAPSE_REPLIES =
   '<svg class="md-comments-icon-svg md-comments-icon-collapse" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 15l4-4 4 4M8 9l4 4 4-4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const ICON_REANCHOR =
   '<svg class="md-comments-icon-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
+const ICON_REFRESH =
+  '<svg class="md-comments-icon-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.5-5.5M20 12a8 8 0 0 1-13.5 5.5M16 6.5V10h-3.5M8 17.5V14H11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
 function actionIconBtn(
   action: string,
@@ -630,6 +632,7 @@ function renderDocumentLayout(
       <header class="md-comments-sidebar-header">
          <h2 class="md-comments-sidebar-title">Comments</h2>
          <div class="md-comments-sidebar-header-actions">
+           <button type="button" class="md-comments-sidebar-icon-btn" id="md-comments-sidebar-refresh" data-md-action="refresh" title="Refresh comments" aria-label="Refresh comments">${ICON_REFRESH}</button>
            <button type="button" class="md-comments-sidebar-icon-btn" id="md-comments-sidebar-close" title="Close comments" aria-label="Close comments">×</button>
          </div>
       </header>

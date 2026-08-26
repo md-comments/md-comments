@@ -511,6 +511,11 @@
       return;
     }
 
+    if (action === 'refresh') {
+      postAction({ action: 'refresh' });
+      return;
+    }
+
     if (action === 'addPage') {
       showSidebarNewCommentComposer(null, true);
       return;

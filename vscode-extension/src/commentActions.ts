@@ -6,11 +6,14 @@ import {
   addReply,
   deleteComment,
   editComment,
+  readComments,
   reanchorComment,
   resolveComment,
   toggleReaction,
   unresolveComment,
 } from './commentStore';
+import { globalOptimisticStore } from './optimisticStore';
+import { resolveStorageKeyForUri } from './repoManager';
 import type { CommentRootType } from '../../shared/types';
 
 /** Plain text from command bridge, or legacy base64url from URI handler. */
@@ -150,6 +153,16 @@ export async function executeCommentAction(
         heading_context: resolveText(msg.heading),
       });
       savedToast(savedPath, 'comment re-anchored');
+      break;
+    }
+    case 'refresh': {
+      const key = await resolveStorageKeyForUri(mdUri);
+      if (key) {
+        globalOptimisticStore.invalidate(key);
+      }
+      await readComments(mdUri, true);
+      await vscode.commands.executeCommand('markdown.preview.refresh');
+      vscode.window.showInformationMessage('Markdown Comments: Comments refreshed');
       break;
     }
     default:
