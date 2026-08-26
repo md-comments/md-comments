@@ -568,6 +568,12 @@ async function loadDocumentComments(meta: ParsedUrl & { type: 'blob' }) {
   if (wasOpenBeforePageChange && lastDocPath === meta.filePath) {
     openSidebar('inline');
     wasOpenBeforePageChange = false;
+  } else {
+    chrome.storage.local.get({ sidebarOpenState: false }, (items) => {
+      if (items.sidebarOpenState && totalCount > 0 && !isSidebarOpen()) {
+        openSidebar('inline');
+      }
+    });
   }
 }
 
@@ -1655,6 +1661,7 @@ function injectSidebar() {
 }
 
 function openSidebar(tab: 'inline' | 'page' = 'inline', highlightCommentId?: string) {
+  chrome.storage.local.set({ sidebarOpenState: true }).catch(() => {});
   injectSidebar();
   if (!activeSidebarHost) return;
 
@@ -1686,6 +1693,7 @@ function openSidebar(tab: 'inline' | 'page' = 'inline', highlightCommentId?: str
 }
 
 function closeSidebar() {
+  chrome.storage.local.set({ sidebarOpenState: false }).catch(() => {});
   if (!activeSidebarHost) return;
   activeSidebarHost.style.transform = 'translateX(100%)';
   document.body.classList.remove('md-comments-push-active');
