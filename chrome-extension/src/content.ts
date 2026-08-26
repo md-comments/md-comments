@@ -346,12 +346,21 @@ function renameReplyButtonsToOK() {
   });
 }
 
+function isSidebarOpen(): boolean {
+  return !!(activeSidebarHost && activeSidebarHost.style.transform === 'translateX(0px)');
+}
+
 // Check navigation changes
 let lastUrl = '';
+let wasOpenBeforePageChange = false;
+let lastDocPath = '';
+
 async function checkPageChange() {
   const currentUrl = window.location.href;
   if (currentUrl !== lastUrl) {
     lastUrl = currentUrl;
+    wasOpenBeforePageChange = isSidebarOpen();
+    lastDocPath = currentMetadata?.filePath || '';
     cleanupInjections();
     await handlePageLoad().catch(console.error);
   } else {
@@ -555,6 +564,11 @@ async function loadDocumentComments(meta: ParsedUrl & { type: 'blob' }) {
     renderDOMIndicatorsForFile(markdownBody, meta.filePath, parsedAnchors, loadedComments);
   }
   renderSidebarComments();
+
+  if (wasOpenBeforePageChange && lastDocPath === meta.filePath) {
+    openSidebar('inline');
+    wasOpenBeforePageChange = false;
+  }
 }
 
 function mergeLocalComments(local: CommentsFile, fetched: CommentsFile): CommentsFile {
