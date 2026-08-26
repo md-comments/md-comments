@@ -2166,9 +2166,64 @@ function renderCommentCard(comment: InlineComment | PageComment, type: 'inline' 
   `;
 }
 
+function scrollToCommentText(commentId: string) {
+  if (!commentId) return;
+
+  // 1. Check for specific highlighted span node with data-comment-id
+  let targetEl = document.querySelector(
+    `.md-comments-highlight[data-comment-id="${commentId}"]`
+  ) as HTMLElement | null;
+
+  // 2. Fallback to paragraph element by index
+  if (!targetEl) {
+    const inlineComment = loadedComments.inline_comments.find((c) => c.id === commentId);
+    if (inlineComment) {
+      const pIndex = inlineComment.paragraph_index;
+      const markdownBody = document.querySelector('.markdown-body') as HTMLElement;
+      if (markdownBody) {
+        const paragraphs = findDomParagraphs(markdownBody);
+        if (paragraphs[pIndex]) {
+          targetEl = paragraphs[pIndex];
+        }
+      }
+      if (!targetEl) {
+        const lineEl = document.querySelector(`[data-line="${pIndex + 1}"]`) as HTMLElement;
+        if (lineEl) targetEl = lineEl;
+      }
+    }
+  }
+
+  if (targetEl) {
+    targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    targetEl.classList.add('md-comments-highlight-flash');
+    setTimeout(() => {
+      targetEl?.classList.remove('md-comments-highlight-flash');
+    }, 2000);
+  }
+}
+
 function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page') {
   container.querySelectorAll('.comment-card').forEach((card) => {
     const commentId = card.getAttribute('data-id') || '';
+
+    // Scroll to text when clicking an inline comment card
+    if (type === 'inline') {
+      card.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        if (
+          target.closest('button') ||
+          target.closest('input') ||
+          target.closest('textarea') ||
+          target.closest('a') ||
+          target.closest('.comment-edit-form') ||
+          target.closest('.reply-composer') ||
+          target.closest('.reply-item')
+        ) {
+          return;
+        }
+        scrollToCommentText(commentId);
+      });
+    }
 
     // Reply click handler
     const replyInput = card.querySelector('.reply-input') as HTMLInputElement;

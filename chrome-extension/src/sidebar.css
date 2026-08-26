@@ -644,7 +644,7 @@
   border-bottom: 2px solid rgba(218, 165, 32, 0.7);
   cursor: pointer;
   border-radius: 2px;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, box-shadow 0.2s;
 }
 
 .md-comments-highlight:hover {
@@ -661,6 +661,25 @@
   background-color: rgba(255, 215, 0, 0.45);
   border-bottom: 2px dashed #e6a100;
   box-shadow: 0 0 4px rgba(255, 215, 0, 0.5);
+}
+
+@keyframes md-comments-flash-anim {
+  0% {
+    background-color: rgba(88, 166, 255, 0.6);
+    box-shadow: 0 0 12px rgba(88, 166, 255, 0.8);
+  }
+  50% {
+    background-color: rgba(88, 166, 255, 0.35);
+    box-shadow: 0 0 8px rgba(88, 166, 255, 0.6);
+  }
+  100% {
+    background-color: rgba(218, 165, 32, 0.22);
+    box-shadow: none;
+  }
+}
+
+.md-comments-highlight-flash {
+  animation: md-comments-flash-anim 2s ease-in-out;
 }
 
 /* Custom Tab Split Layout styles */
