@@ -10,11 +10,17 @@ export function commentsFilePathForMarkdown(filePath: string): string {
   return filePath.replace(/\.md$/i, '') + '.comments.yml';
 }
 
-function decodeBase64(base64Str: string): string {
-  if (typeof atob === 'function') {
-    return atob(base64Str.replace(/\s/g, ''));
+export function decodeBase64(base64Str: string): string {
+  const clean = base64Str.replace(/\s/g, '');
+  if (typeof Buffer !== 'undefined') {
+    return Buffer.from(clean, 'base64').toString('utf-8');
   }
-  return Buffer.from(base64Str.replace(/\s/g, ''), 'base64').toString('utf-8');
+  const binary = atob(clean);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return new TextDecoder('utf-8').decode(bytes);
 }
 
 export function mergeCommentsFiles(local: CommentsFile, remote: CommentsFile): CommentsFile {
@@ -136,13 +142,14 @@ export class GitHubOrphanRefBackend implements CommentBackend {
     try {
       const commitsUrl = `https://api.github.com/repos/${key.owner}/${key.repo}/commits?path=${encodeURIComponent(key.filePath)}&per_page=5`;
       const res = await this.fetchApi(commitsUrl);
-      if (!res.ok) return null;
+      if (!res?.ok) return null;
 
       const commits = (await res.json()) as Array<{ sha: string }>;
+      if (!Array.isArray(commits)) return null;
       for (const c of commits) {
         const commitDetailUrl = `https://api.github.com/repos/${key.owner}/${key.repo}/commits/${c.sha}`;
         const detailRes = await this.fetchApi(commitDetailUrl);
-        if (!detailRes.ok) continue;
+        if (!detailRes?.ok) continue;
 
         const detail = (await detailRes.json()) as {
           files?: Array<{ filename: string; previous_filename?: string; status?: string }>;
@@ -241,11 +248,19 @@ export class GitHubOrphanRefBackend implements CommentBackend {
   async write(key: CommentStorageKey, data: CommentsFile): Promise<void> {
     const commentsPath = commentsFilePathForMarkdown(key.filePath);
     const maxRetries = 5;
+    let currentData = data;
 
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
-        const success = await this.tryWriteCommit(key, commentsPath, data);
+        const success = await this.tryWriteCommit(key, commentsPath, currentData);
         if (success) return;
+
+        try {
+          const remote = await this.read(key);
+          currentData = mergeCommentsFiles(currentData, remote);
+        } catch {
+          /* ignore read failure on retry */
+        }
       } catch (err: any) {
         if (attempt === maxRetries) {
           throw new Error(

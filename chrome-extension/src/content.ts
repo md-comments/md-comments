@@ -3597,6 +3597,13 @@ async function commitCommentFileChanges(updatedComments: CommentsFile, _action: 
 
   // Optimistically update local comments state and render UI immediately
   loadedComments = updatedComments;
+  if (meta.filePath) {
+    const existing = loadedFileContexts.get(meta.filePath);
+    loadedFileContexts.set(meta.filePath, {
+      anchors: existing?.anchors || parsedAnchors,
+      comments: updatedComments,
+    });
+  }
   const markdownBody = document.querySelector('.markdown-body') as HTMLElement;
   if (markdownBody && meta && meta.type === 'blob') {
     renderDOMIndicatorsForFile(markdownBody, meta.filePath, parsedAnchors, loadedComments);

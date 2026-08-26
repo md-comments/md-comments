@@ -122,17 +122,17 @@ describe('GitHubOrphanRefBackend', () => {
       expect(result).toEqual({ page_comments: [], inline_comments: [] });
     });
 
-    it('reads and decodes YAML content from base64 when file exists', async () => {
+    it('reads and decodes YAML content with multi-byte UTF-8 emojis from base64', async () => {
       const mockComments: CommentsFile = {
         inline_comments: [],
         page_comments: [
           {
             id: 'p1',
             author: 'user1',
-            body: 'Page level feedback',
+            body: 'Emoji test 👍 👀 ❤️ 🎉 ❓',
             created_at: '2026-08-04T10:00:00Z',
             resolved: false,
-            reactions: [],
+            reactions: [{ emoji: '👍', users: ['user1'] }],
             replies: [],
           },
         ],
@@ -152,7 +152,8 @@ describe('GitHubOrphanRefBackend', () => {
       });
 
       expect(result.page_comments.length).toBe(1);
-      expect(result.page_comments[0].id).toBe('p1');
+      expect(result.page_comments[0].body).toBe('Emoji test 👍 👀 ❤️ 🎉 ❓');
+      expect(result.page_comments[0].reactions[0].emoji).toBe('👍');
     });
 
     it('creates a new orphan ref when writing for the first time', async () => {
@@ -184,6 +185,12 @@ describe('GitHubOrphanRefBackend', () => {
       // PATCH ref -> 422 conflict!
       fetchMock.mockResolvedValueOnce({ ok: false, status: 422 });
 
+      // Retry read attempt:
+      // GET content -> 404
+      fetchMock.mockResolvedValueOnce({ ok: false, status: 404 });
+      // GET commits for rename trace -> 404
+      fetchMock.mockResolvedValueOnce({ ok: false, status: 404 });
+
       // Attempt 2:
       // GET ref -> ok
       fetchMock.mockResolvedValueOnce({
@@ -202,7 +209,7 @@ describe('GitHubOrphanRefBackend', () => {
         { inline_comments: [], page_comments: [] }
       );
 
-      expect(fetchMock.mock.calls.length).toBe(8);
+      expect(fetchMock.mock.calls.length).toBe(10);
     });
   });
 });
