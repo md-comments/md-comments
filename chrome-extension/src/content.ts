@@ -1282,7 +1282,12 @@ function showFallbackReplyComposer(
   submitBtn.addEventListener('click', handleSubmit);
 }
 
-function highlightTextInElement(el: HTMLElement, searchText: string, commentId: string) {
+function highlightTextInElement(
+  el: HTMLElement,
+  searchText: string,
+  commentId: string,
+  isPending = false
+) {
   if (!searchText) return;
   const normalizedSearch = searchText.replace(/\s+/g, ' ').trim().toLowerCase();
   if (!normalizedSearch) return;
@@ -1357,7 +1362,12 @@ function highlightTextInElement(el: HTMLElement, searchText: string, commentId: 
       }
 
       const span = document.createElement('span');
-      span.className = 'md-comments-highlight';
+      span.className = isPending
+        ? 'md-comments-highlight pending'
+        : 'md-comments-highlight';
+      if (isPending) {
+        span.setAttribute('data-pending', 'true');
+      }
       span.dataset.commentId = commentId;
       span.textContent = val.slice(localStart, localEnd);
       newNodes.push(span);
@@ -1374,6 +1384,70 @@ function highlightTextInElement(el: HTMLElement, searchText: string, commentId: 
     }
     n.remove();
   }
+}
+
+let activePendingHighlightParams: {
+  filePath?: string;
+  paragraphIndex?: number;
+  anchorHash?: string;
+  anchorText?: string;
+} | null = null;
+
+function clearPendingHighlights() {
+  document.querySelectorAll('.md-comments-highlight.pending, [data-pending="true"]').forEach((node) => {
+    const parent = node.parentNode;
+    if (parent) {
+      while (node.firstChild) {
+        parent.insertBefore(node.firstChild, node);
+      }
+      parent.removeChild(node);
+      parent.normalize();
+    }
+  });
+  activePendingHighlightParams = null;
+}
+
+function applyPendingHighlight(
+  filePath: string,
+  paragraphIndex: number,
+  anchorHash: string,
+  anchorText: string
+) {
+  clearPendingHighlights();
+  if (!anchorText || !anchorText.trim()) return;
+
+  activePendingHighlightParams = { filePath, paragraphIndex, anchorHash, anchorText };
+
+  const markdownBodies = document.querySelectorAll('.markdown-body');
+  markdownBodies.forEach((markdownBody) => {
+    const domElements = findDomParagraphs(markdownBody as HTMLElement);
+    let targetEl: HTMLElement | null = null;
+
+    const ctx = loadedFileContexts.get(filePath);
+    if (ctx && ctx.anchors) {
+      const block = ctx.anchors.find(
+        (b) => b.paragraph_index === paragraphIndex || b.anchor_hash === anchorHash
+      );
+      if (block) {
+        for (const el of domElements) {
+          const text = normalizeAnchorText(el.innerText);
+          const hash = fnv1aHash(text);
+          if (hash === block.anchor_hash || fuzzyMatch(text, block.anchor_text)) {
+            targetEl = el;
+            break;
+          }
+        }
+      }
+    }
+
+    if (!targetEl && domElements[paragraphIndex]) {
+      targetEl = domElements[paragraphIndex];
+    }
+
+    if (targetEl) {
+      highlightTextInElement(targetEl, anchorText, 'pending-new-inline', true);
+    }
+  });
 }
 
 let activeSidebarHost: HTMLElement | null = null;
@@ -2405,6 +2479,15 @@ function openSidebarForNewInline(fields: {
   injectSidebar();
   openSidebar('inline');
 
+  if (currentMetadata?.filePath) {
+    applyPendingHighlight(
+      currentMetadata.filePath,
+      fields.paragraph_index,
+      fields.anchor_hash,
+      fields.anchor_text
+    );
+  }
+
   if (!activeSidebarHost) return;
 
   const composer = activeSidebarHost.querySelector('.new-inline-composer-wrapper') as HTMLElement;
@@ -2430,6 +2513,7 @@ function openSidebarForNewInline(fields: {
   const draftKey = getDraftKey(`new_inline:${currentMetadata?.filePath}:${fields.paragraph_index}`);
 
   const resetInlineComposerUI = () => {
+    clearPendingHighlights();
     const ta = container.querySelector('textarea') as HTMLTextAreaElement | null;
     if (ta) ta.value = '';
     container.innerHTML = '';
@@ -3246,6 +3330,19 @@ function renderDOMIndicatorsForFile(
     el.appendChild(container);
     activeIndicators.push(container);
   });
+
+  if (
+    activePendingHighlightParams &&
+    activePendingHighlightParams.filePath === filePath &&
+    activePendingHighlightParams.anchorText
+  ) {
+    applyPendingHighlight(
+      filePath,
+      activePendingHighlightParams.paragraphIndex ?? 0,
+      activePendingHighlightParams.anchorHash ?? '',
+      activePendingHighlightParams.anchorText
+    );
+  }
 }
 
 function findDomParagraphs(markdownBody: HTMLElement): HTMLElement[] {

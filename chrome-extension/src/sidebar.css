@@ -656,6 +656,13 @@
   box-shadow: 0 0 4px rgba(218, 165, 32, 0.8);
 }
 
+.md-comments-highlight.pending,
+.md-comments-highlight-pending {
+  background-color: rgba(255, 215, 0, 0.45);
+  border-bottom: 2px dashed #e6a100;
+  box-shadow: 0 0 4px rgba(255, 215, 0, 0.5);
+}
+
 /* Custom Tab Split Layout styles */
 .md-comments-tab-layout {
   display: flex;

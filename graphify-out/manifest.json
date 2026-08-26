@@ -25,8 +25,8 @@
     "semantic_hash": ""
   },
   "chrome-extension/src/content.ts": {
-    "mtime": 1787498511.6093802,
-    "ast_hash": "91060816df0f5eb16eb34d26c5b35964",
+    "mtime": 1787705932.6794686,
+    "ast_hash": "7d65c8896ff6bfc606ee8ed90ee55f68",
     "semantic_hash": ""
   },
   "chrome-extension/src/githubApi.ts": {
@@ -120,8 +120,8 @@
     "semantic_hash": ""
   },
   "vscode-extension/media/preview-webview.js": {
-    "mtime": 1785357757.6879373,
-    "ast_hash": "61d101d30179d2eec7eea06f99f1b491",
+    "mtime": 1787705943.5513563,
+    "ast_hash": "c5e624f4da3ea0f88f56e496ec6a0c64",
     "semantic_hash": ""
   },
   "vscode-extension/media/preview.js": {

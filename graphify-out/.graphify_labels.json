@@ -25,7 +25,7 @@
   "23": "preview-webview.js",
   "24": "scripts",
   "25": "GitHubApi",
-  "26": "Obsidian Plugin Guide",
+  "26": "types.ts",
   "27": "obsidian-plugin/manifest.json",
   "28": "esbuild.js",
   "29": "mentionAutocomplete.js",

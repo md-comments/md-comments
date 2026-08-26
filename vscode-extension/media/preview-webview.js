@@ -54,7 +54,74 @@
     }
   }
 
+  function clearPendingAnchorHighlight() {
+    document.querySelectorAll('.md-comments-text-anchor.pending, [data-md-pending="true"]').forEach(function (node) {
+      const parent = node.parentNode;
+      if (parent) {
+        while (node.firstChild) {
+          parent.insertBefore(node.firstChild, node);
+        }
+        parent.removeChild(node);
+        parent.normalize();
+      }
+    });
+  }
+
+  function applyPendingAnchorHighlight(anchor) {
+    clearPendingAnchorHighlight();
+    if (!anchor || !anchor.text || !anchor.text.trim()) return;
+
+    const searchText = anchor.text.replace(/\s+/g, ' ').trim();
+    const paragraphs = document.querySelectorAll('p');
+    let targetP = null;
+
+    if (anchor.index !== undefined) {
+      for (let i = 0; i < paragraphs.length; i++) {
+        const p = paragraphs[i];
+        if (p.getAttribute('data-md-paragraph-index') === String(anchor.index)) {
+          targetP = p;
+          break;
+        }
+      }
+      if (!targetP && paragraphs[Number(anchor.index)]) {
+        targetP = paragraphs[Number(anchor.index)];
+      }
+    }
+
+    if (!targetP) return;
+
+    const walker = document.createTreeWalker(targetP, NodeFilter.SHOW_TEXT, null);
+    let textNode = null;
+    while ((textNode = walker.nextNode())) {
+      const parent = textNode.parentNode;
+      if (parent && (parent.classList.contains('md-comments-text-anchor') || parent.classList.contains('md-comments-para-actions'))) {
+        continue;
+      }
+      const val = textNode.nodeValue || '';
+      const idx = val.indexOf(searchText);
+      if (idx !== -1) {
+        const before = val.slice(0, idx);
+        const matchText = val.slice(idx, idx + searchText.length);
+        const after = val.slice(idx + searchText.length);
+
+        const span = document.createElement('span');
+        span.className = 'md-comments-text-anchor pending';
+        span.setAttribute('data-md-pending', 'true');
+        span.textContent = matchText;
+
+        const frag = document.createDocumentFragment();
+        if (before) frag.appendChild(document.createTextNode(before));
+        frag.appendChild(span);
+        if (after) frag.appendChild(document.createTextNode(after));
+
+        parent.replaceChild(frag, textNode);
+        break;
+      }
+    }
+  }
+
   function removeOverlays() {
+    clearPendingAnchorHighlight();
     removeEl('md-comments-selection-bar');
     removeEl('md-comments-composer');
     removeEl('md-comments-emoji-popover');
@@ -85,6 +152,9 @@
   function showInlineComposer(rect, anchor, options) {
     options = options || {};
     removeOverlays();
+    if (anchor) {
+      applyPendingAnchorHighlight(anchor);
+    }
     const submitLabel = options.submitLabel || 'Add comment';
     const onSubmit = options.onSubmit;
 
