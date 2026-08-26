@@ -12,14 +12,14 @@ export function fnv1aHash(text: string): string {
 }
 
 export function normalizeAnchorText(text: string): string {
-  let cleaned = text
+  const cleaned = text
     .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
     .replace(/(\*\*|__)(.*?)\1/g, '$2')
     .replace(/(\*|_)(.*?)\1/g, '$2')
     .replace(/~~(.*?)~~/g, '$1')
     .replace(/`([^`]+)`/g, '$1')
     .replace(/<[^>]+>/g, '')
-    .replace(/^(\s*[-*+]|\s*\d+\.|\s*>\s*)+/, '');
+    .replace(/^[\s\-*+>\d.]+/g, '');
 
   return cleaned.replace(/\s+/g, ' ').trim();
 }

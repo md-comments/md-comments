@@ -1430,9 +1430,7 @@ function highlightTextInElement(
       }
 
       const span = document.createElement('span');
-      span.className = isPending
-        ? 'md-comments-highlight pending'
-        : 'md-comments-highlight';
+      span.className = isPending ? 'md-comments-highlight pending' : 'md-comments-highlight';
       if (isPending) {
         span.setAttribute('data-pending', 'true');
       }
@@ -1462,16 +1460,18 @@ let activePendingHighlightParams: {
 } | null = null;
 
 function clearPendingHighlights() {
-  document.querySelectorAll('.md-comments-highlight.pending, [data-pending="true"]').forEach((node) => {
-    const parent = node.parentNode;
-    if (parent) {
-      while (node.firstChild) {
-        parent.insertBefore(node.firstChild, node);
+  document
+    .querySelectorAll('.md-comments-highlight.pending, [data-pending="true"]')
+    .forEach((node) => {
+      const parent = node.parentNode;
+      if (parent) {
+        while (node.firstChild) {
+          parent.insertBefore(node.firstChild, node);
+        }
+        parent.removeChild(node);
+        parent.normalize();
       }
-      parent.removeChild(node);
-      parent.normalize();
-    }
-  });
+    });
   activePendingHighlightParams = null;
 }
 
@@ -1925,8 +1925,6 @@ function attachOAuthEvents(container: HTMLElement) {
 
             // Start polling directly in active content script context using recursive setTimeout
             let currentInterval = Math.max(interval || 5, 5) * 1000;
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            let _pollTimeoutId: any = null;
 
             const poll = () => {
               console.log('[md-comments] Sending CHECK_DEVICE_TOKEN message to background...');
@@ -1985,13 +1983,13 @@ function attachOAuthEvents(container: HTMLElement) {
                   }
 
                   // Schedule next poll
-                  _pollTimeoutId = setTimeout(poll, currentInterval);
+                  setTimeout(poll, currentInterval);
                 }
               );
             };
 
             // Schedule first poll
-            _pollTimeoutId = setTimeout(poll, currentInterval);
+            setTimeout(poll, currentInterval);
           } else {
             const err = response?.error || 'Failed to start device flow authorization.';
             console.error('[md-comments] START_DEVICE_FLOW failed:', err);

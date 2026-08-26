@@ -25,8 +25,8 @@
     "semantic_hash": ""
   },
   "chrome-extension/src/content.ts": {
-    "mtime": 1787705932.6794686,
-    "ast_hash": "7d65c8896ff6bfc606ee8ed90ee55f68",
+    "mtime": 1787708408.5684552,
+    "ast_hash": "3fdbfb6ac491e43c3f19d5d714759fa6",
     "semantic_hash": ""
   },
   "chrome-extension/src/githubApi.ts": {
@@ -85,8 +85,8 @@
     "semantic_hash": ""
   },
   "shared/anchor.ts": {
-    "mtime": 1785357757.6421075,
-    "ast_hash": "d97b7c330673392065a80cb41528d400",
+    "mtime": 1787708285.9623394,
+    "ast_hash": "114f3b5fca7d141ed6334faa2ab7b45f",
     "semantic_hash": ""
   },
   "shared/author.ts": {
@@ -120,19 +120,19 @@
     "semantic_hash": ""
   },
   "vscode-extension/media/preview-webview.js": {
-    "mtime": 1787705943.5513563,
-    "ast_hash": "c5e624f4da3ea0f88f56e496ec6a0c64",
+    "mtime": 1787708384.638592,
+    "ast_hash": "9445a3fded95e6b809427795a7dc7071",
     "semantic_hash": ""
   },
   "vscode-extension/media/preview.js": {
-    "mtime": 1785373085.7940803,
-    "ast_hash": "59a608e401f1baf508ad7322656678ae",
+    "mtime": 1787708307.2909634,
+    "ast_hash": "5c34696dba3f0fe08742bc9effdff636",
     "semantic_hash": ""
   },
   "vscode-extension/media/previewActions.js": {
-    "mtime": 1782342798.9179187,
-    "ast_hash": "77a2a27c73c5f240c733bb9955648832",
-    "semantic_hash": "77a2a27c73c5f240c733bb9955648832"
+    "mtime": 1787708330.6951106,
+    "ast_hash": "a422d3213a7e932416069dd22530301d",
+    "semantic_hash": ""
   },
   "vscode-extension/media/previewSidebar.js": {
     "mtime": 1785357757.735972,
@@ -140,8 +140,8 @@
     "semantic_hash": ""
   },
   "vscode-extension/package.json": {
-    "mtime": 1787498508.005798,
-    "ast_hash": "c04f8e130bbd8ffba5429d4d416efacf",
+    "mtime": 1787708453.5158536,
+    "ast_hash": "f9934e6af63ea550b541c162203fcc7f",
     "semantic_hash": ""
   },
   "vscode-extension/src/author.ts": {
@@ -155,8 +155,8 @@
     "semantic_hash": ""
   },
   "vscode-extension/src/commentActions.ts": {
-    "mtime": 1785357757.7502022,
-    "ast_hash": "3edb462a6b53b2b152095980677d824e",
+    "mtime": 1787708380.747948,
+    "ast_hash": "47cd848f2207e06bf1dcdaab6a26c1ff",
     "semantic_hash": ""
   },
   "vscode-extension/src/commentPreviewPanel.ts": {
@@ -185,8 +185,8 @@
     "semantic_hash": ""
   },
   "vscode-extension/src/markdownItPlugin.ts": {
-    "mtime": 1787498460.9651456,
-    "ast_hash": "a85c1dff54e9ebdf72cfbfe7b31ef448",
+    "mtime": 1787708371.2119472,
+    "ast_hash": "7e5656d7584d1974b7a5d309efa0024c",
     "semantic_hash": ""
   },
   "vscode-extension/src/markdownRender.ts": {
@@ -455,8 +455,8 @@
     "semantic_hash": ""
   },
   "tests/anchor.test.ts": {
-    "mtime": 1785358379.6609216,
-    "ast_hash": "8e8d67649b949ff574d6b17b4733a534",
+    "mtime": 1787708318.2955432,
+    "ast_hash": "9bb181ebbe5d580e45ccac7704b2b7f9",
     "semantic_hash": ""
   },
   "tests/placement.test.ts": {
@@ -680,13 +680,13 @@
     "semantic_hash": ""
   },
   "shared/gitRefBackend.ts": {
-    "mtime": 1787498464.2489424,
-    "ast_hash": "d2770e452ac578ed440530bd55be889d",
+    "mtime": 1787708437.9354897,
+    "ast_hash": "06367199ea0387a66540bde4a86b999a",
     "semantic_hash": ""
   },
   "tests/gitRefBackend.test.ts": {
-    "mtime": 1786298605.4186883,
-    "ast_hash": "33b9f3defb38f7259567725ab89a5aa4",
+    "mtime": 1787708444.3428426,
+    "ast_hash": "ca4ae751989dcb115a6486c5d3bc63ab",
     "semantic_hash": ""
   },
   "tests/vscodeStorage.test.ts": {

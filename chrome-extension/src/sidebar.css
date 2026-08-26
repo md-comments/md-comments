@@ -1,6 +1,6 @@
 .md-comments-scope,
-.md-comments-scope[data-md-theme="dark"],
-html[data-color-mode="dark"] .md-comments-scope {
+.md-comments-scope[data-md-theme='dark'],
+html[data-color-mode='dark'] .md-comments-scope {
   --sidebar-bg: rgba(22, 27, 34, 0.85);
   --sidebar-fg: #c9d1d9;
   --sidebar-border: #30363d;
@@ -17,8 +17,8 @@ html[data-color-mode="dark"] .md-comments-scope {
   --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
 }
 
-.md-comments-scope[data-md-theme="light"],
-html[data-color-mode="light"] .md-comments-scope {
+.md-comments-scope[data-md-theme='light'],
+html[data-color-mode='light'] .md-comments-scope {
   --sidebar-bg: rgba(255, 255, 255, 0.9);
   --sidebar-fg: #24292f;
   --sidebar-border: #d0d7de;
@@ -645,7 +645,9 @@ html[data-color-mode="light"] .md-comments-scope {
   border-bottom: 2px solid rgba(218, 165, 32, 0.7);
   cursor: pointer;
   border-radius: 2px;
-  transition: background-color 0.2s, box-shadow 0.2s;
+  transition:
+    background-color 0.2s,
+    box-shadow 0.2s;
 }
 
 .md-comments-highlight:hover {
@@ -929,7 +931,9 @@ body.md-comments-push-active .application-main {
   pointer-events: none;
   opacity: 0;
   transform: translateY(4px);
-  transition: opacity 0.15s ease-out, transform 0.15s ease-out;
+  transition:
+    opacity 0.15s ease-out,
+    transform 0.15s ease-out;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }

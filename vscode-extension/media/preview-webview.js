@@ -5,7 +5,16 @@
   let anchorBlocks = null;
   let selectionTimer = null;
   let pendingAnchor = null;
-  let pendingRect = null;
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
 
   function getMdPath() {
     const footer = document.querySelector('.md-comments-footer');
@@ -55,16 +64,18 @@
   }
 
   function clearPendingAnchorHighlight() {
-    document.querySelectorAll('.md-comments-text-anchor.pending, [data-md-pending="true"]').forEach(function (node) {
-      const parent = node.parentNode;
-      if (parent) {
-        while (node.firstChild) {
-          parent.insertBefore(node.firstChild, node);
+    document
+      .querySelectorAll('.md-comments-text-anchor.pending, [data-md-pending="true"]')
+      .forEach(function (node) {
+        const parent = node.parentNode;
+        if (parent) {
+          while (node.firstChild) {
+            parent.insertBefore(node.firstChild, node);
+          }
+          parent.removeChild(node);
+          parent.normalize();
         }
-        parent.removeChild(node);
-        parent.normalize();
-      }
-    });
+      });
   }
 
   function applyPendingAnchorHighlight(anchor) {
@@ -94,7 +105,11 @@
     let textNode = null;
     while ((textNode = walker.nextNode())) {
       const parent = textNode.parentNode;
-      if (parent && (parent.classList.contains('md-comments-text-anchor') || parent.classList.contains('md-comments-para-actions'))) {
+      if (
+        parent &&
+        (parent.classList.contains('md-comments-text-anchor') ||
+          parent.classList.contains('md-comments-para-actions'))
+      ) {
         continue;
       }
       const val = textNode.nodeValue || '';
@@ -262,14 +277,18 @@
     }
 
     const panelId = isPage ? 'md-comments-sidebar-page' : 'md-comments-sidebar-inline';
-    const panelEl = document.getElementById(panelId) || document.querySelector('.md-comments-tab-panel-active');
+    const panelEl =
+      document.getElementById(panelId) || document.querySelector('.md-comments-tab-panel-active');
     if (!panelEl) {
       return;
     }
 
     const composer = document.createElement('div');
     composer.className = 'md-comments-panel-composer md-comments-new-comment-composer';
-    const quoteHtml = anchor && anchor.text ? '<div class="md-comments-quote-excerpt">"' + escapeHtml(anchor.text) + '"</div>' : '';
+    const quoteHtml =
+      anchor && anchor.text
+        ? '<div class="md-comments-quote-excerpt">"' + escapeHtml(anchor.text) + '"</div>'
+        : '';
     composer.innerHTML =
       quoteHtml +
       '<div class="md-comments-editor-shell">' +
@@ -308,96 +327,6 @@
       }
       composer.remove();
     });
-  }
-
-  function showInlineComposer(rect, anchor, options) {
-    options = options || {};
-    removeOverlays();
-    if (anchor) {
-      applyPendingAnchorHighlight(anchor);
-    }
-    const submitLabel = options.submitLabel || 'Add comment';
-    const onSubmit = options.onSubmit;
-
-    const box = document.createElement('div');
-    box.id = 'md-comments-composer';
-    box.className = 'md-comments-composer md-comments-composer-inline';
-    box.innerHTML =
-      '<div class="md-comments-composer-layout">' +
-      '<div class="md-comments-composer-main">' +
-      '<div class="md-comments-editor-shell">' +
-      '<textarea class="md-comments-editor-input" rows="4" placeholder="Add a comment… Use @username to mention someone on GitHub."></textarea>' +
-      '</div>' +
-      '<div class="md-comments-composer-footer">' +
-      '<button type="button" class="md-comments-btn-primary" data-action="submit">' +
-      submitLabel +
-      '</button>' +
-      '<button type="button" class="md-comments-btn-text" data-action="cancel">Cancel</button>' +
-      '</div></div></div>';
-    document.body.appendChild(box);
-
-    if (options.modal) {
-      box.classList.add('md-comments-composer-modal');
-      const backdrop = document.createElement('div');
-      backdrop.className = 'md-comments-backdrop';
-      backdrop.id = 'md-comments-backdrop';
-      document.body.appendChild(backdrop);
-      backdrop.addEventListener('click', removeOverlays);
-    } else {
-      box.style.top =
-        Math.min(rect.bottom + window.scrollY + 12, window.scrollY + window.innerHeight - 280) +
-        'px';
-      box.style.left =
-        Math.min(
-          Math.max(8, rect.left + window.scrollX - 40),
-          window.scrollX + window.innerWidth - 420
-        ) + 'px';
-    }
-
-    const textarea = box.querySelector('textarea');
-    if (options.initialBody) {
-      textarea.value = options.initialBody;
-    }
-    textarea.focus();
-
-    function finishSubmit(body) {
-      if (onSubmit) {
-        onSubmit(body);
-      } else if (anchor) {
-        postAction({
-          action: 'add',
-          body: body,
-          index: String(anchor.index),
-          hash: anchor.hash,
-          text: anchor.text,
-          heading: anchor.heading,
-        });
-      }
-      removeOverlays();
-      window.getSelection()?.removeAllRanges();
-    }
-
-    box.querySelector('[data-action="cancel"]').addEventListener('click', function () {
-      if (window.mdCommentsClearReplyNav) {
-        window.mdCommentsClearReplyNav();
-      }
-      removeOverlays();
-    });
-    box.querySelector('[data-action="submit"]').addEventListener('click', function () {
-      const body = textarea.value.trim();
-      if (!body) {
-        return;
-      }
-      finishSubmit(body);
-    });
-  }
-
-  function showPromptComposer(title, submitLabel, onSubmit, extraOptions) {
-    const opts = extraOptions || {};
-    opts.modal = true;
-    opts.submitLabel = submitLabel;
-    opts.onSubmit = onSubmit;
-    showInlineComposer({ top: 0, left: 0, bottom: 0, right: 0, width: 0, height: 0 }, null, opts);
   }
 
   const BLOCK_SELECTOR = 'p, h1, h2, h3, h4, h5, h6, li, tr, td, th, blockquote, details, summary';
@@ -478,7 +407,6 @@
       return;
     }
     pendingAnchor = getAnchorFromSelection(range, p);
-    pendingRect = rect;
     showSelectionBar(rect);
   }
 

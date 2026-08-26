@@ -282,8 +282,12 @@ body.md-comments-resizing {
   color: var(--gc-text);
 }
 
-.md-comments-resolved-collapse[open] > .md-comments-resolved-summary .md-comments-resolved-summary-author,
-.md-comments-resolved-collapse[open] > .md-comments-resolved-summary .md-comments-resolved-summary-time {
+.md-comments-resolved-collapse[open]
+  > .md-comments-resolved-summary
+  .md-comments-resolved-summary-author,
+.md-comments-resolved-collapse[open]
+  > .md-comments-resolved-summary
+  .md-comments-resolved-summary-time {
   display: none;
 }
 

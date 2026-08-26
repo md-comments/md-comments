@@ -1,7 +1,7 @@
 {
   "id": "md-comments",
   "name": "Markdown Comments",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "minAppVersion": "1.0.0",
   "description": "Rich inline commenting on Markdown preview powered by custom git refs backend",
   "author": "md-comments",
