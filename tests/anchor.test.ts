@@ -10,6 +10,12 @@ describe('normalizeAnchorText', () => {
   it('handles empty strings', () => {
     expect(normalizeAnchorText('')).toBe('');
   });
+
+  it('strips inline markdown formatting tokens', () => {
+    expect(normalizeAnchorText('**bold** *italic* ~~strike~~ `code` [link](http://x.com)')).toBe(
+      'bold italic strike code link'
+    );
+  });
 });
 
 describe('escapeHtml', () => {
@@ -54,7 +60,7 @@ This is more prose.
     expect(anchors[1].anchor_text).toBe('This is more prose.');
   });
 
-  it('extracts heading context correctly', () => {
+  it('extracts heading context correctly and includes headings as anchors', () => {
     const md = `
 # Main Header
 Paragraph under header.
@@ -63,8 +69,14 @@ Paragraph under header.
 Paragraph under sub header.
     `;
     const anchors = parseMarkdownAnchors(md);
-    expect(anchors).toHaveLength(2);
+    expect(anchors).toHaveLength(4);
+    expect(anchors[0].anchor_text).toBe('Main Header');
     expect(anchors[0].heading_context).toBe('Main Header');
-    expect(anchors[1].heading_context).toBe('Sub Header');
+    expect(anchors[1].anchor_text).toBe('Paragraph under header.');
+    expect(anchors[1].heading_context).toBe('Main Header');
+    expect(anchors[2].anchor_text).toBe('Sub Header');
+    expect(anchors[2].heading_context).toBe('Sub Header');
+    expect(anchors[3].anchor_text).toBe('Paragraph under sub header.');
+    expect(anchors[3].heading_context).toBe('Sub Header');
   });
 });

@@ -232,6 +232,8 @@
     );
   }
 
+  const BLOCK_SELECTOR = 'p, h1, h2, h3, h4, h5, h6, li, tr, td, th, blockquote, details, summary';
+
   function findParagraphFromNode(node) {
     if (!node) {
       return null;
@@ -242,7 +244,7 @@
         : node.nodeType === Node.ELEMENT_NODE
           ? node
           : null;
-    return el?.closest?.('p') || null;
+    return el?.closest?.(BLOCK_SELECTOR) || null;
   }
 
   function getSelectedText(range) {
@@ -277,7 +279,7 @@
       };
     }
     const blocks = loadAnchorBlocks();
-    const paragraphs = document.querySelectorAll('p');
+    const paragraphs = document.querySelectorAll(BLOCK_SELECTOR);
     const domIndex = Array.prototype.indexOf.call(paragraphs, p);
     const block = blocks[domIndex];
     if (block) {

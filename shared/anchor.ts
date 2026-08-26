@@ -12,7 +12,16 @@ export function fnv1aHash(text: string): string {
 }
 
 export function normalizeAnchorText(text: string): string {
-  return text.replace(/\s+/g, ' ').trim();
+  let cleaned = text
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/(\*\*|__)(.*?)\1/g, '$2')
+    .replace(/(\*|_)(.*?)\1/g, '$2')
+    .replace(/~~(.*?)~~/g, '$1')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/<[^>]+>/g, '')
+    .replace(/^(\s*[-*+]|\s*\d+\.|\s*>\s*)+/, '');
+
+  return cleaned.replace(/\s+/g, ' ').trim();
 }
 
 /**
@@ -75,6 +84,19 @@ export function parseMarkdownAnchors(markdown: string): AnchorBlock[] {
     if (heading) {
       flush();
       headingContext = heading[2].trim();
+      pushToBuffer(i, heading[2].trim());
+      flush();
+      continue;
+    }
+
+    if (/^\s*\|/.test(line)) {
+      if (/^\s*\|[\s:-|-]+\|\s*$/.test(line)) {
+        flush();
+        continue;
+      }
+      flush();
+      pushToBuffer(i, line);
+      flush();
       continue;
     }
 

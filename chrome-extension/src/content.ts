@@ -3538,14 +3538,32 @@ function findDomParagraphs(markdownBody: HTMLElement): HTMLElement[] {
       continue;
     }
 
-    if (['p', 'blockquote', 'ul', 'ol'].includes(tagName)) {
-      if (tagName === 'ul' || tagName === 'ol') {
-        for (const li of Array.from(htmlChild.querySelectorAll('li'))) {
-          elements.push(li as HTMLElement);
-        }
+    if (/^h[1-6]$/.test(tagName) || tagName === 'p') {
+      elements.push(htmlChild);
+    } else if (tagName === 'ul' || tagName === 'ol') {
+      for (const li of Array.from(htmlChild.querySelectorAll('li'))) {
+        elements.push(li as HTMLElement);
+      }
+    } else if (tagName === 'table') {
+      for (const tr of Array.from(htmlChild.querySelectorAll('tr'))) {
+        elements.push(tr as HTMLElement);
+      }
+    } else if (tagName === 'blockquote') {
+      const children = Array.from(htmlChild.querySelectorAll('p, li'));
+      if (children.length > 0) {
+        children.forEach((c) => elements.push(c as HTMLElement));
       } else {
         elements.push(htmlChild);
       }
+    } else if (tagName === 'details') {
+      const children = Array.from(htmlChild.querySelectorAll('p, li, summary'));
+      if (children.length > 0) {
+        children.forEach((c) => elements.push(c as HTMLElement));
+      } else {
+        elements.push(htmlChild);
+      }
+    } else {
+      elements.push(htmlChild);
     }
   }
   return elements;
