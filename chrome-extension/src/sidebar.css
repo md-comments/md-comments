@@ -1,4 +1,6 @@
-.md-comments-scope {
+.md-comments-scope,
+.md-comments-scope[data-md-theme="dark"],
+html[data-color-mode="dark"] .md-comments-scope {
   --sidebar-bg: rgba(22, 27, 34, 0.85);
   --sidebar-fg: #c9d1d9;
   --sidebar-border: #30363d;
@@ -15,22 +17,21 @@
   --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
 }
 
-@media (prefers-color-scheme: light) {
-  .md-comments-scope {
-    --sidebar-bg: rgba(255, 255, 255, 0.9);
-    --sidebar-fg: #24292f;
-    --sidebar-border: #d0d7de;
-    --accent-color: #0969da;
-    --accent-hover: #0969da;
-    --card-bg: rgba(246, 248, 250, 0.7);
-    --card-border: #d0d7de;
-    --composer-bg: #ffffff;
-    --replies-bg: rgba(0, 0, 0, 0.03);
-    --text-primary: #24292f;
-    --text-secondary: #57606a;
-    --success-color: #1a7f37;
-    --warn-color: #9a6700;
-  }
+.md-comments-scope[data-md-theme="light"],
+html[data-color-mode="light"] .md-comments-scope {
+  --sidebar-bg: rgba(255, 255, 255, 0.9);
+  --sidebar-fg: #24292f;
+  --sidebar-border: #d0d7de;
+  --accent-color: #0969da;
+  --accent-hover: #0969da;
+  --card-bg: rgba(246, 248, 250, 0.7);
+  --card-border: #d0d7de;
+  --composer-bg: #ffffff;
+  --replies-bg: rgba(0, 0, 0, 0.03);
+  --text-primary: #24292f;
+  --text-secondary: #57606a;
+  --success-color: #1a7f37;
+  --warn-color: #9a6700;
 }
 
 .sidebar-container {

@@ -665,6 +665,52 @@ function getFilePathFromFileContainer(fileEl: HTMLElement): string | null {
   return null;
 }
 
+function isGitHubDarkTheme(): boolean {
+  const html = document.documentElement;
+  const colorMode = html.getAttribute('data-color-mode');
+  const darkTheme = html.getAttribute('data-dark-theme');
+
+  if (colorMode === 'dark') return true;
+  if (colorMode === 'light') return false;
+
+  if (darkTheme && darkTheme.includes('dark')) return true;
+
+  const bg = window.getComputedStyle(document.body).backgroundColor;
+  if (bg) {
+    const match = bg.match(/\d+/g);
+    if (match && match.length >= 3) {
+      const r = parseInt(match[0], 10);
+      const g = parseInt(match[1], 10);
+      const b = parseInt(match[2], 10);
+      const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+      return brightness < 128;
+    }
+  }
+
+  return window.matchMedia('(prefers-color-scheme: dark)').matches;
+}
+
+function syncTheme() {
+  const isDark = isGitHubDarkTheme();
+  const themeVal = isDark ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-md-theme', themeVal);
+  document.querySelectorAll('.md-comments-scope').forEach((el) => {
+    el.setAttribute('data-md-theme', themeVal);
+  });
+}
+
+try {
+  const themeObserver = new MutationObserver(() => {
+    syncTheme();
+  });
+  themeObserver.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-color-mode', 'data-dark-theme', 'data-light-theme', 'class'],
+  });
+} catch (e) {
+  // Ignore observer error if document not ready
+}
+
 function injectGlobalStyles() {
   if (!document.getElementById('md-comments-global-styles')) {
     const link = document.createElement('link');
@@ -673,6 +719,7 @@ function injectGlobalStyles() {
     link.href = chrome.runtime.getURL('sidebar.css');
     document.head.appendChild(link);
   }
+  syncTheme();
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -1454,6 +1501,7 @@ function applyPendingHighlight(
 let activeSidebarHost: HTMLElement | null = null;
 
 function injectSidebar() {
+  syncTheme();
   const isEmbedded = activeSidebarHost && activeSidebarHost.id === 'md-comments-sidebar-embedded';
 
   if (!activeSidebarHost) {
