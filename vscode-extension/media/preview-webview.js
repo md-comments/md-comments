@@ -143,9 +143,170 @@
     bar.querySelector('[data-bar-action="comment"]').addEventListener('click', function (e) {
       e.preventDefault();
       removeEl('md-comments-selection-bar');
-      if (pendingAnchor && pendingRect) {
-        showInlineComposer(pendingRect, pendingAnchor);
+      if (pendingAnchor) {
+        showSidebarNewCommentComposer(pendingAnchor, false);
       }
+    });
+  }
+
+  function removePanelComposers() {
+    document.querySelectorAll('.md-comments-panel-composer').forEach(function (el) {
+      el.remove();
+    });
+  }
+
+  function showInlineCardReplyComposer(target, id, type) {
+    removePanelComposers();
+    const rootEl = target.closest('.md-comments-card');
+    if (!rootEl) {
+      return;
+    }
+
+    const composer = document.createElement('div');
+    composer.className = 'md-comments-panel-composer';
+    composer.innerHTML =
+      '<div class="md-comments-editor-shell">' +
+      '<textarea class="md-comments-editor-input" rows="3" placeholder="Write a reply… Use @username to mention."></textarea>' +
+      '</div>' +
+      '<div class="md-comments-composer-footer">' +
+      '<button type="button" class="md-comments-btn-primary" data-action="submit">Add comment</button>' +
+      '<button type="button" class="md-comments-btn-text" data-action="cancel">Cancel</button>' +
+      '</div>';
+
+    rootEl.appendChild(composer);
+    const textarea = composer.querySelector('textarea');
+    if (textarea) {
+      textarea.focus();
+    }
+
+    composer.querySelector('[data-action="cancel"]').addEventListener('click', function () {
+      composer.remove();
+    });
+    composer.querySelector('[data-action="submit"]').addEventListener('click', function () {
+      const body = textarea ? textarea.value.trim() : '';
+      if (!body) {
+        return;
+      }
+      if (window.mdCommentsMarkReplySubmitted) {
+        window.mdCommentsMarkReplySubmitted();
+      }
+      postAction({ action: 'reply', rootId: id, type: type, body: body });
+      composer.remove();
+    });
+  }
+
+  function showInlineCardEditComposer(target, id, rootId, type, kind, initialBody) {
+    removePanelComposers();
+    const itemEl = target.closest('.md-comments-reply, .md-comments-card');
+    if (!itemEl) {
+      return;
+    }
+
+    const bodyEl = itemEl.querySelector('.md-comments-body');
+    if (bodyEl) {
+      bodyEl.style.display = 'none';
+    }
+
+    const composer = document.createElement('div');
+    composer.className = 'md-comments-panel-composer';
+    composer.innerHTML =
+      '<div class="md-comments-editor-shell">' +
+      '<textarea class="md-comments-editor-input" rows="3"></textarea>' +
+      '</div>' +
+      '<div class="md-comments-composer-footer">' +
+      '<button type="button" class="md-comments-btn-primary" data-action="submit">Save</button>' +
+      '<button type="button" class="md-comments-btn-text" data-action="cancel">Cancel</button>' +
+      '</div>';
+
+    itemEl.appendChild(composer);
+    const textarea = composer.querySelector('textarea');
+    if (textarea) {
+      textarea.value = initialBody;
+      textarea.focus();
+    }
+
+    function cleanup() {
+      composer.remove();
+      if (bodyEl) {
+        bodyEl.style.display = '';
+      }
+    }
+
+    composer.querySelector('[data-action="cancel"]').addEventListener('click', cleanup);
+    composer.querySelector('[data-action="submit"]').addEventListener('click', function () {
+      const body = textarea ? textarea.value.trim() : '';
+      if (!body) {
+        return;
+      }
+      postAction({
+        action: 'edit',
+        id: id,
+        rootId: rootId,
+        type: type,
+        kind: kind,
+        body: body,
+      });
+      cleanup();
+    });
+  }
+
+  function showSidebarNewCommentComposer(anchor, isPage) {
+    removeOverlays();
+    removePanelComposers();
+    document.dispatchEvent(
+      new CustomEvent('md-comments:open-sidebar', { detail: { commentId: null } })
+    );
+
+    if (window.mdCommentsActivateTab) {
+      window.mdCommentsActivateTab(isPage ? 'page' : 'inline');
+    }
+
+    const panelId = isPage ? 'md-comments-sidebar-page' : 'md-comments-sidebar-inline';
+    const panelEl = document.getElementById(panelId) || document.querySelector('.md-comments-tab-panel-active');
+    if (!panelEl) {
+      return;
+    }
+
+    const composer = document.createElement('div');
+    composer.className = 'md-comments-panel-composer md-comments-new-comment-composer';
+    const quoteHtml = anchor && anchor.text ? '<div class="md-comments-quote-excerpt">"' + escapeHtml(anchor.text) + '"</div>' : '';
+    composer.innerHTML =
+      quoteHtml +
+      '<div class="md-comments-editor-shell">' +
+      '<textarea class="md-comments-editor-input" rows="3" placeholder="Add a comment… Use @username to mention."></textarea>' +
+      '</div>' +
+      '<div class="md-comments-composer-footer">' +
+      '<button type="button" class="md-comments-btn-primary" data-action="submit">Add comment</button>' +
+      '<button type="button" class="md-comments-btn-text" data-action="cancel">Cancel</button>' +
+      '</div>';
+
+    panelEl.prepend(composer);
+    const textarea = composer.querySelector('textarea');
+    if (textarea) {
+      textarea.focus();
+    }
+
+    composer.querySelector('[data-action="cancel"]').addEventListener('click', function () {
+      composer.remove();
+    });
+    composer.querySelector('[data-action="submit"]').addEventListener('click', function () {
+      const body = textarea ? textarea.value.trim() : '';
+      if (!body) {
+        return;
+      }
+      if (isPage) {
+        postAction({ action: 'addPage', body: body });
+      } else if (anchor) {
+        postAction({
+          action: 'add',
+          body: body,
+          index: String(anchor.index),
+          hash: anchor.hash,
+          text: anchor.text,
+          heading: anchor.heading,
+        });
+      }
+      composer.remove();
     });
   }
 
@@ -351,9 +512,7 @@
     }
 
     if (action === 'addPage') {
-      showPromptComposer('Page comment', 'Add comment', function (body) {
-        postAction({ action: 'addPage', body: body });
-      });
+      showSidebarNewCommentComposer(null, true);
       return;
     }
     if (action === 'edit') {
@@ -364,21 +523,7 @@
       const initialBody = window.mdCommentsExtractEditBody
         ? window.mdCommentsExtractEditBody(target)
         : '';
-      showPromptComposer(
-        'Edit comment',
-        'Save',
-        function (body) {
-          postAction({
-            action: 'edit',
-            id: id,
-            rootId: rootId,
-            type: type,
-            kind: kind,
-            body: body,
-          });
-        },
-        { initialBody: initialBody }
-      );
+      showInlineCardEditComposer(target, id, rootId, type, kind, initialBody);
       return;
     }
     if (action === 'reply') {
@@ -388,12 +533,7 @@
       if (window.mdCommentsPrepareReplyNav && tab) {
         window.mdCommentsPrepareReplyNav(id, tab);
       }
-      showPromptComposer('Reply', 'Add comment', function (body) {
-        if (window.mdCommentsMarkReplySubmitted) {
-          window.mdCommentsMarkReplySubmitted();
-        }
-        postAction({ action: 'reply', rootId: id, type: type, body: body });
-      });
+      showInlineCardReplyComposer(target, id, type);
       return;
     }
     if (action === 'resolve') {
@@ -425,14 +565,11 @@
     if (action === 'comment-paragraph') {
       const idx = target.getAttribute('data-md-id');
       const p =
-        target.closest('p[data-md-paragraph-index]') ||
-        (idx ? document.querySelector('p[data-md-paragraph-index="' + idx + '"]') : null);
+        target.closest('[data-md-paragraph-index]') ||
+        (idx ? document.querySelector('[data-md-paragraph-index="' + idx + '"]') : null);
       if (p) {
         const anchor = getAnchorFromParagraph(p);
-        showInlineComposer(target.getBoundingClientRect(), anchor);
-        document.dispatchEvent(
-          new CustomEvent('md-comments:open-sidebar', { detail: { commentId: null } })
-        );
+        showSidebarNewCommentComposer(anchor, false);
       }
       return;
     }

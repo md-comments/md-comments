@@ -300,7 +300,27 @@
   window.mdCommentsActivateTab = activateTab;
   window.mdCommentsTabForReply = tabForReplyButton;
 
+  const ACTIVE_TAB_PREFIX = 'md-comments-active-tab:';
+
+  function activeTabKey() {
+    const footer = document.querySelector('.md-comments-footer');
+    return ACTIVE_TAB_PREFIX + (footer?.getAttribute('data-md-md-path') || 'default');
+  }
+
+  function getSavedActiveTab() {
+    try {
+      return sessionStorage.getItem(activeTabKey());
+    } catch {
+      return null;
+    }
+  }
+
   function activateTab(tabId) {
+    try {
+      sessionStorage.setItem(activeTabKey(), tabId);
+    } catch {
+      /* ignore */
+    }
     document.querySelectorAll('.md-comments-tab').forEach(function (btn) {
       const active = btn.getAttribute('data-tab') === tabId;
       btn.classList.toggle('md-comments-tab-active', active);
@@ -334,6 +354,11 @@
     const pending = peekReplyNav();
     if (pending && pending.afterReply && pending.tab) {
       activateTab(pending.tab);
+      return;
+    }
+    const saved = getSavedActiveTab();
+    if (saved) {
+      activateTab(saved);
       return;
     }
     const first =
