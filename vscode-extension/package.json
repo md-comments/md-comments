@@ -78,6 +78,20 @@
           "when": "editorLangId == markdown",
           "group": "navigation@99"
         }
+      ],
+      "editor/context": [
+        {
+          "command": "mdComments.openCommentPreview",
+          "when": "editorLangId == markdown",
+          "group": "navigation@1"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "mdComments.openCommentPreview",
+          "when": "resourceLangId == markdown || resourceExtname == .md",
+          "group": "navigation@1"
+        }
       ]
     },
     "configuration": {
