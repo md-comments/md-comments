@@ -282,6 +282,11 @@ body.md-comments-resizing {
   color: var(--gc-text);
 }
 
+.md-comments-resolved-collapse[open] > .md-comments-resolved-summary .md-comments-resolved-summary-author,
+.md-comments-resolved-collapse[open] > .md-comments-resolved-summary .md-comments-resolved-summary-time {
+  display: none;
+}
+
 .md-comments-resolved-summary-excerpt {
   flex: 1 1 100%;
   font-size: 0.75rem;
