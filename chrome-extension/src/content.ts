@@ -265,6 +265,7 @@ async function fetchCommentsFile(
 }
 
 function cleanupInjections() {
+  hideCommentTooltip();
   const customToggle = document.getElementById('md-comments-custom-toggle');
   if (customToggle) customToggle.remove();
 
@@ -2166,6 +2167,60 @@ function renderCommentCard(comment: InlineComment | PageComment, type: 'inline' 
   `;
 }
 
+let activeTooltipEl: HTMLElement | null = null;
+
+function hideCommentTooltip() {
+  if (activeTooltipEl) {
+    activeTooltipEl.remove();
+    activeTooltipEl = null;
+  }
+}
+
+function showCommentTooltip(targetEl: HTMLElement, commentId: string) {
+  hideCommentTooltip();
+  const comment = loadedComments.inline_comments.find((c) => c.id === commentId);
+  if (!comment) return;
+
+  const tooltip = document.createElement('div');
+  tooltip.className = 'md-comments-tooltip md-comments-scope arrow-bottom';
+  const bodyText = comment.body.length > 150 ? comment.body.slice(0, 150) + '…' : comment.body;
+  tooltip.innerHTML = `
+    <div class="tooltip-header">
+      <img class="tooltip-avatar" src="https://github.com/${encodeURIComponent(comment.author)}.png?size=32" alt="${escapeHtml(comment.author)}">
+      <span class="tooltip-author">${escapeHtml(comment.author)}</span>
+      <span class="tooltip-time">${formatRelativeTime(comment.created_at)}</span>
+    </div>
+    <div class="tooltip-body">${escapeHtml(bodyText)}</div>
+  `;
+
+  document.body.appendChild(tooltip);
+  activeTooltipEl = tooltip;
+
+  const rect = targetEl.getBoundingClientRect();
+  const tooltipRect = tooltip.getBoundingClientRect();
+
+  let top = rect.top + window.scrollY - tooltipRect.height - 8;
+  let left = rect.left + window.scrollX + rect.width / 2 - tooltipRect.width / 2;
+
+  if (top < window.scrollY + 8) {
+    top = rect.bottom + window.scrollY + 8;
+    tooltip.classList.remove('arrow-bottom');
+    tooltip.classList.add('arrow-top');
+  }
+
+  if (left < 8) left = 8;
+  if (left + tooltipRect.width > window.innerWidth - 8) {
+    left = window.innerWidth - tooltipRect.width - 8;
+  }
+
+  tooltip.style.top = `${top}px`;
+  tooltip.style.left = `${left}px`;
+
+  requestAnimationFrame(() => {
+    tooltip.classList.add('visible');
+  });
+}
+
 function scrollToCommentText(commentId: string) {
   if (!commentId) return;
 
@@ -3302,14 +3357,17 @@ function renderDOMIndicatorsForFile(
 
     el.querySelectorAll('.md-comments-highlight').forEach((hlNode) => {
       const hl = hlNode as HTMLElement;
-      hl.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        const commentId = hl.dataset.commentId;
-        if (commentId) {
+      const commentId = hl.dataset.commentId;
+      if (commentId) {
+        hl.addEventListener('mouseenter', () => showCommentTooltip(hl, commentId));
+        hl.addEventListener('mouseleave', () => hideCommentTooltip());
+        hl.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          hideCommentTooltip();
           openSidebar('inline', commentId);
-        }
-      });
+        });
+      }
     });
 
     el.style.position = 'relative';
