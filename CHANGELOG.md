@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.5] - 2026-08-27
+
+### Breaking Changes
+
+- Comment files are now stored with the 7-character git commit short SHA of the original file revision in the filename (`doc.<commit_sha>.comments.yml`).
+- Legacy un-hashed comment files (`doc.comments.yml`) are read as base data for initial migration, but new comment writes will generate commit-hashed files (`doc.<commit_sha>.comments.yml`) and will no longer update legacy files. Older extension versions will not see comments stored in hashed filenames.
+- Confluence-style comment aggregation: When viewing or rolling back a file to a specific commit, page comments across historical comment files remain intact and visible, while inline comments re-anchor to restored text segments.
+
 ## [1.1.3] - 2026-08-23
 
 ### Fixed

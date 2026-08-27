@@ -51,6 +51,32 @@ export async function getGitRemoteUrl(cwd: string): Promise<string | null> {
   }
 }
 
+const commitHashCache = new Map<string, string | null>();
+
+export function getGitCommitHashSync(cwd: string): string | null {
+  try {
+    const stdout = execFileSync('git', ['rev-parse', 'HEAD'], {
+      cwd,
+      encoding: 'utf8',
+      timeout: 2000,
+    });
+    const hash = stdout.trim() || null;
+    return hash;
+  } catch (err) {
+    return null;
+  }
+}
+
+export async function getGitCommitHash(cwd: string): Promise<string | null> {
+  try {
+    const { stdout } = await execFileAsync('git', ['rev-parse', 'HEAD'], { cwd });
+    const hash = stdout.trim() || null;
+    return hash;
+  } catch (err) {
+    return null;
+  }
+}
+
 export function resolveStorageKeyForUriSync(mdUri: vscode.Uri): CommentStorageKey | null {
   logDebug(`resolveStorageKeyForUriSync mdUri: ${mdUri.toString()}`);
   const workspaceFolder = vscode.workspace.getWorkspaceFolder(mdUri);
@@ -80,11 +106,13 @@ export function resolveStorageKeyForUriSync(mdUri: vscode.Uri): CommentStorageKe
 
   const posixPath = relativePath.split(path.sep).join('/');
   logDebug(`resolveStorageKeyForUriSync posix relativePath: ${posixPath}`);
+  const commitHash = getGitCommitHashSync(cwd) || undefined;
 
   return {
     owner: repoInfo.owner,
     repo: repoInfo.repo,
     filePath: posixPath,
+    commitHash,
   };
 }
 
@@ -117,10 +145,12 @@ export async function resolveStorageKeyForUri(
 
   const posixPath = relativePath.split(path.sep).join('/');
   logDebug(`resolveStorageKeyForUri posix relativePath: ${posixPath}`);
+  const commitHash = (await getGitCommitHash(cwd)) || undefined;
 
   return {
     owner: repoInfo.owner,
     repo: repoInfo.repo,
     filePath: posixPath,
+    commitHash,
   };
 }
