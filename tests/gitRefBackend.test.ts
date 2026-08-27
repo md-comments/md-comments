@@ -15,9 +15,21 @@ describe('GitHubOrphanRefBackend', () => {
       expect(commentsFilePathForMarkdown('docs/intro.md')).toBe('docs/intro.comments.yml');
     });
 
-    it('leaves existing .comments.yml paths unchanged', () => {
+    it('formats path with 7-character short commit SHA when commitHash is provided', () => {
+      expect(commentsFilePathForMarkdown('README.md', 'a1b2c3d4e5f6789')).toBe(
+        'README.a1b2c3d.comments.yml'
+      );
+      expect(commentsFilePathForMarkdown('docs/intro.md', '7f8e9d0')).toBe(
+        'docs/intro.7f8e9d0.comments.yml'
+      );
+    });
+
+    it('leaves existing .comments.yml paths unchanged or updates with commit hash', () => {
       expect(commentsFilePathForMarkdown('docs/intro.comments.yml')).toBe(
         'docs/intro.comments.yml'
+      );
+      expect(commentsFilePathForMarkdown('docs/intro.comments.yml', 'a1b2c3d')).toBe(
+        'docs/intro.a1b2c3d.comments.yml'
       );
     });
   });
@@ -210,6 +222,62 @@ describe('GitHubOrphanRefBackend', () => {
       );
 
       expect(fetchMock.mock.calls.length).toBe(10);
+    });
+
+    it('merges comments from commit-hashed file and legacy un-hashed file on read', async () => {
+      const commitComments: CommentsFile = {
+        inline_comments: [],
+        page_comments: [
+          {
+            id: 'p-commit',
+            author: 'alice',
+            body: 'Comment from commit SHA file',
+            created_at: '2026-08-26T12:00:00Z',
+            resolved: false,
+            reactions: [],
+            replies: [],
+          },
+        ],
+      };
+      const legacyComments: CommentsFile = {
+        inline_comments: [],
+        page_comments: [
+          {
+            id: 'p-legacy',
+            author: 'bob',
+            body: 'Comment from legacy base file',
+            created_at: '2026-08-25T12:00:00Z',
+            resolved: false,
+            reactions: [],
+            replies: [],
+          },
+        ],
+      };
+
+      const base64Commit = Buffer.from(yaml.dump(commitComments)).toString('base64');
+      const base64Legacy = Buffer.from(yaml.dump(legacyComments)).toString('base64');
+
+      // 1. Fetch target commit-hashed file (docs/test.a1b2c3d.comments.yml)
+      fetchMock.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ content: base64Commit, encoding: 'base64' }),
+      });
+      // 2. Fetch legacy file (docs/test.comments.yml)
+      fetchMock.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ content: base64Legacy, encoding: 'base64' }),
+      });
+
+      const result = await backend.read({
+        owner: 'test-owner',
+        repo: 'test-repo',
+        filePath: 'docs/test.md',
+        commitHash: 'a1b2c3d4e5f',
+      });
+
+      expect(result.page_comments.length).toBe(2);
+      expect(result.page_comments.map((c) => c.id)).toContain('p-commit');
+      expect(result.page_comments.map((c) => c.id)).toContain('p-legacy');
     });
   });
 });

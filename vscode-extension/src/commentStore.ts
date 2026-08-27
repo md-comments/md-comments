@@ -4,7 +4,6 @@ import { authorsMatch } from './githubDisplayNames';
 import { getOAuthToken } from './githubAuth';
 import { resolveStorageKeyForUri } from './repoManager';
 import { globalOptimisticStore } from './optimisticStore';
-import { GitHubOrphanRefBackend } from '../../shared/gitRefBackend';
 import { logDebug } from './logger';
 import type {
   CommentsFile,
@@ -15,21 +14,23 @@ import type {
   Reply,
 } from '../../shared/types';
 
+import { GitHubOrphanRefBackend, commentsFilePathForMarkdown } from '../../shared/gitRefBackend';
+
 const gitRefBackend = new GitHubOrphanRefBackend(() => getOAuthToken());
 
 const EMPTY: CommentsFile = { page_comments: [], inline_comments: [] };
 
-export function commentsUriForMarkdown(mdUri: vscode.Uri): vscode.Uri {
+export function commentsUriForMarkdown(mdUri: vscode.Uri, commitHash?: string): vscode.Uri {
   if (mdUri.scheme === 'file') {
-    const commentsPath = mdUri.fsPath.replace(/\.md$/i, '.comments.yml');
+    const commentsPath = commentsFilePathForMarkdown(mdUri.fsPath, commitHash);
     return vscode.Uri.file(commentsPath);
   }
-  const base = mdUri.path.replace(/\.md$/i, '');
-  return mdUri.with({ path: `${base}.comments.yml` });
+  const commentsPath = commentsFilePathForMarkdown(mdUri.path, commitHash);
+  return mdUri.with({ path: commentsPath });
 }
 
-export function commentsFsPathForMarkdown(mdUri: vscode.Uri): string {
-  const uri = commentsUriForMarkdown(mdUri);
+export function commentsFsPathForMarkdown(mdUri: vscode.Uri, commitHash?: string): string {
+  const uri = commentsUriForMarkdown(mdUri, commitHash);
   if (uri.scheme === 'file') {
     return uri.fsPath;
   }

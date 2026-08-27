@@ -71,34 +71,54 @@ function normalizeCommentsFile(parsed: Partial<CommentsFile>): CommentsFile {
   };
 }
 
+import { commentsFilePathForMarkdown, mergeCommentsFiles } from '../../shared/gitRefBackend';
+
 export class CommentStore {
   constructor(
     private app: App,
     private getAuthorName: () => string
   ) {}
 
-  getCommentsPath(mdFile: TFile): string {
-    return mdFile.path.replace(/\.md$/i, '.comments.yml');
+  getCommentsPath(mdFile: TFile, commitHash?: string): string {
+    return commentsFilePathForMarkdown(mdFile.path, commitHash);
   }
 
-  async readComments(mdFile: TFile): Promise<CommentsFile> {
-    const commentsPath = this.getCommentsPath(mdFile);
-    const abstractFile = this.app.vault.getAbstractFileByPath(commentsPath);
-    if (!abstractFile || !(abstractFile instanceof TFile)) {
-      return { ...EMPTY };
+  async readComments(mdFile: TFile, commitHash?: string): Promise<CommentsFile> {
+    const commentsPath = this.getCommentsPath(mdFile, commitHash);
+    const legacyPath = this.getCommentsPath(mdFile);
+
+    let accumulated: CommentsFile = { ...EMPTY };
+
+    const readPath = async (path: string): Promise<CommentsFile | null> => {
+      const abstractFile = this.app.vault.getAbstractFileByPath(path);
+      if (!abstractFile || !(abstractFile instanceof TFile)) return null;
+      try {
+        const data = await this.app.vault.read(abstractFile);
+        const parsed = yaml.load(data) as Partial<CommentsFile>;
+        return normalizeCommentsFile(parsed ?? {});
+      } catch (err) {
+        console.error('[md-comments] failed to read comments file', err);
+        return null;
+      }
+    };
+
+    const targetComments = await readPath(commentsPath);
+    if (targetComments) {
+      accumulated = mergeCommentsFiles(accumulated, targetComments);
     }
-    try {
-      const data = await this.app.vault.read(abstractFile);
-      const parsed = yaml.load(data) as Partial<CommentsFile>;
-      return normalizeCommentsFile(parsed ?? {});
-    } catch (err) {
-      console.error('[md-comments] failed to read comments file', err);
-      return { ...EMPTY };
+
+    if (legacyPath !== commentsPath) {
+      const legacyComments = await readPath(legacyPath);
+      if (legacyComments) {
+        accumulated = mergeCommentsFiles(accumulated, legacyComments);
+      }
     }
+
+    return accumulated;
   }
 
-  async writeComments(mdFile: TFile, data: CommentsFile): Promise<void> {
-    const commentsPath = this.getCommentsPath(mdFile);
+  async writeComments(mdFile: TFile, data: CommentsFile, commitHash?: string): Promise<void> {
+    const commentsPath = this.getCommentsPath(mdFile, commitHash);
     const text = yaml.dump(data, { lineWidth: -1, noRefs: true });
     const abstractFile = this.app.vault.getAbstractFileByPath(commentsPath);
 

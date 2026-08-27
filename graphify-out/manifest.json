@@ -15,18 +15,18 @@
     "semantic_hash": ""
   },
   "chrome-extension/manifest.json": {
-    "mtime": 1787496322.8890843,
-    "ast_hash": "bfd9c557f6e10a60da05234c75315dbb",
+    "mtime": 1787791624.800321,
+    "ast_hash": "08e056148ec03ac35bce6b46fcedfd54",
     "semantic_hash": ""
   },
   "chrome-extension/package.json": {
-    "mtime": 1787496319.107279,
-    "ast_hash": "46f42108ae9649310c7bb84cf5aaa2e5",
+    "mtime": 1787791622.017569,
+    "ast_hash": "6473d3140ad20fa37426a3e40c01f7e6",
     "semantic_hash": ""
   },
   "chrome-extension/src/content.ts": {
-    "mtime": 1787708408.5684552,
-    "ast_hash": "3fdbfb6ac491e43c3f19d5d714759fa6",
+    "mtime": 1787791647.2246187,
+    "ast_hash": "8d75825696381c11dd0439c1a167f60a",
     "semantic_hash": ""
   },
   "chrome-extension/src/githubApi.ts": {
@@ -40,13 +40,13 @@
     "semantic_hash": "406bb0cd9a4b8c76f9f0f1a23552ae33"
   },
   "obsidian-plugin/manifest.json": {
-    "mtime": 1787496330.3644512,
-    "ast_hash": "7fddad154a923c6682eec7fa71b26d61",
+    "mtime": 1787791619.2711437,
+    "ast_hash": "06be8bc4c166d1ac8b257e0607452885",
     "semantic_hash": ""
   },
   "obsidian-plugin/package.json": {
-    "mtime": 1787496326.481413,
-    "ast_hash": "af24915fdde4b1c227ecf6d1b4e2cfee",
+    "mtime": 1787791616.5833821,
+    "ast_hash": "e14f14420e7384f0fbccdf028579953b",
     "semantic_hash": ""
   },
   "obsidian-plugin/src/livePreview.ts": {
@@ -70,8 +70,8 @@
     "semantic_hash": ""
   },
   "obsidian-plugin/src/storage.ts": {
-    "mtime": 1785357757.6009958,
-    "ast_hash": "3a8d1ab3ac0f3049fa76cfb07a2b26d5",
+    "mtime": 1787791111.6104825,
+    "ast_hash": "910cce8ff0de17b4054b5dce1c52d5ce",
     "semantic_hash": ""
   },
   "obsidian-plugin/tsconfig.json": {
@@ -85,8 +85,8 @@
     "semantic_hash": ""
   },
   "shared/anchor.ts": {
-    "mtime": 1787708285.9623394,
-    "ast_hash": "114f3b5fca7d141ed6334faa2ab7b45f",
+    "mtime": 1787708518.7472866,
+    "ast_hash": "648855c7c28e30c1fab0562d2f4e31f9",
     "semantic_hash": ""
   },
   "shared/author.ts": {
@@ -120,8 +120,8 @@
     "semantic_hash": ""
   },
   "vscode-extension/media/preview-webview.js": {
-    "mtime": 1787708384.638592,
-    "ast_hash": "9445a3fded95e6b809427795a7dc7071",
+    "mtime": 1787708602.095449,
+    "ast_hash": "46caed74eacb77435eca93cf5d6f9aab",
     "semantic_hash": ""
   },
   "vscode-extension/media/preview.js": {
@@ -140,8 +140,8 @@
     "semantic_hash": ""
   },
   "vscode-extension/package.json": {
-    "mtime": 1787708453.5158536,
-    "ast_hash": "f9934e6af63ea550b541c162203fcc7f",
+    "mtime": 1787791611.1030273,
+    "ast_hash": "97061eae4be64fa50130f28f7c619a81",
     "semantic_hash": ""
   },
   "vscode-extension/src/author.ts": {
@@ -165,8 +165,8 @@
     "semantic_hash": ""
   },
   "vscode-extension/src/commentStore.ts": {
-    "mtime": 1786298605.5144026,
-    "ast_hash": "c92a65117023f2c8e3e1cc9a7e349ec6",
+    "mtime": 1787791638.4404402,
+    "ast_hash": "8137d0d8867acb23e9abedbba4633034",
     "semantic_hash": ""
   },
   "vscode-extension/src/extension.ts": {
@@ -220,8 +220,8 @@
     "semantic_hash": "0bc020d491fca99550c1ea3de0a5f862"
   },
   "README.md": {
-    "mtime": 1786303205.5983565,
-    "ast_hash": "62ab1cb27f6a3553da0d3a0cb42ebd7c",
+    "mtime": 1787791334.8439023,
+    "ast_hash": "6d577df43a548fce414959c847e57160",
     "semantic_hash": ""
   },
   "docs/example.md": {
@@ -230,8 +230,8 @@
     "semantic_hash": ""
   },
   "obsidian-plugin/README.md": {
-    "mtime": 1786303214.5423303,
-    "ast_hash": "b03c2eebb0032142f3dae260990290fd",
+    "mtime": 1787791341.4100697,
+    "ast_hash": "f226d17df9d649c0a7cf3c9921bf803b",
     "semantic_hash": ""
   },
   "pnpm-workspace.yaml": {
@@ -445,8 +445,8 @@
     "semantic_hash": ""
   },
   "shared/package.json": {
-    "mtime": 1787496334.0646935,
-    "ast_hash": "303647138aa222960cf99340bce3c7c2",
+    "mtime": 1787791613.7997751,
+    "ast_hash": "b7cd877ff371ca55cb963400e7291505",
     "semantic_hash": ""
   },
   "shared/tsconfig.json": {
@@ -520,8 +520,8 @@
     "semantic_hash": ""
   },
   "CHANGELOG.md": {
-    "mtime": 1787496340.8541553,
-    "ast_hash": "3914c008d8e26f5b2dfeb07c8f7c071b",
+    "mtime": 1787791628.4272585,
+    "ast_hash": "85519ab2e03cc28d3e407c9f45b68560",
     "semantic_hash": ""
   },
   "CODE_OF_CONDUCT.md": {
@@ -635,8 +635,8 @@
     "semantic_hash": ""
   },
   "vscode-extension/README.md": {
-    "mtime": 1786303209.7660925,
-    "ast_hash": "69d1df7720df8e5728e340ead2cbf8da",
+    "mtime": 1787791338.0268102,
+    "ast_hash": "4a5fc74a83d6a9b2842a588d6d21f045",
     "semantic_hash": ""
   },
   "scripts/test-publish-local.sh": {
@@ -655,8 +655,8 @@
     "semantic_hash": ""
   },
   "shared/commentStorage.ts": {
-    "mtime": 1785708744.3866267,
-    "ast_hash": "1d2076eb4ab591c3df4c644622427512",
+    "mtime": 1787791068.8223336,
+    "ast_hash": "a20757bb7aef7855ca4ef8cec3d30d0f",
     "semantic_hash": ""
   },
   "shared/index.ts": {
@@ -665,8 +665,8 @@
     "semantic_hash": ""
   },
   "shared/localFileBackend.ts": {
-    "mtime": 1785708752.3543825,
-    "ast_hash": "8ea728c2fdcd1f0dbddb971ea6bd410b",
+    "mtime": 1787791085.261327,
+    "ast_hash": "d63be1e2b169fbe34f818c1f362a1204",
     "semantic_hash": ""
   },
   "shared/repoDetector.ts": {
@@ -680,13 +680,13 @@
     "semantic_hash": ""
   },
   "shared/gitRefBackend.ts": {
-    "mtime": 1787708437.9354897,
-    "ast_hash": "06367199ea0387a66540bde4a86b999a",
+    "mtime": 1787791647.416779,
+    "ast_hash": "4b3c7fd2920830339a1bac3e096b2a9f",
     "semantic_hash": ""
   },
   "tests/gitRefBackend.test.ts": {
-    "mtime": 1787708444.3428426,
-    "ast_hash": "ca4ae751989dcb115a6486c5d3bc63ab",
+    "mtime": 1787791125.924975,
+    "ast_hash": "63ae74a25eba8da587a080e5952943e4",
     "semantic_hash": ""
   },
   "tests/vscodeStorage.test.ts": {
@@ -705,8 +705,8 @@
     "semantic_hash": ""
   },
   "vscode-extension/src/repoManager.ts": {
-    "mtime": 1786298605.5707307,
-    "ast_hash": "9b36629958e0c1c5d68d7449060ce8a8",
+    "mtime": 1787791090.341541,
+    "ast_hash": "b06acf0e24fff1e3c63727aff60f8a7a",
     "semantic_hash": ""
   },
   "vscode-extension/src/logger.ts": {

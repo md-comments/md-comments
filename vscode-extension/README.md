@@ -10,6 +10,7 @@ All comments, replies, and reactions are stored directly on GitHub (in dedicated
 
 - **Inline Highlights & Comments**: Leave comments on specific text selections or paragraphs.
 - **Custom Git Refs Backend**: Comments auto-save live to GitHub (`refs/md-comments/data`) with zero commits or branch overhead.
+- **Git Commit-Hashed Storage**: Stores comment files with 7-character commit short SHAs (`doc.<commit_sha>.comments.yml`) and aggregates historical page comments across file rollbacks.
 - **Fuzzy Anchoring Cascade**: Comments are robustly anchored using a cascade matching strategy:
   1. **Paragraph Hash**: Exact match of the normalized FNV-1a hash of the text.
   2. **Fuzzy Text Match**: Selection-based substring search to identify the text even if slightly edited.

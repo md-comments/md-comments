@@ -5,9 +5,15 @@ import type { CommentsFile, InlineComment, PageComment, Reply } from './types';
 
 export const ORPHAN_REF_NAME = 'refs/md-comments/data';
 
-export function commentsFilePathForMarkdown(filePath: string): string {
-  if (filePath.endsWith('.comments.yml')) return filePath;
-  return filePath.replace(/\.md$/i, '') + '.comments.yml';
+export function commentsFilePathForMarkdown(filePath: string, commitHash?: string): string {
+  const cleanPath = filePath
+    .replace(/\.(?:[a-f0-9]{7,40}\.)?comments\.(?:yml|yaml)$/i, '')
+    .replace(/\.md$/i, '');
+  if (commitHash) {
+    const shortHash = commitHash.slice(0, 7).toLowerCase();
+    return `${cleanPath}.${shortHash}.comments.yml`;
+  }
+  return `${cleanPath}.comments.yml`;
 }
 
 export function decodeBase64(base64Str: string): string {
@@ -101,14 +107,12 @@ export class GitHubOrphanRefBackend implements CommentBackend {
     return fetch(url, fetchOptions);
   }
 
-  /**
-   * Reads all comments for a file from the orphan ref refs/md-comments/data.
-   * If not found, falls back to checking file rename history via GitHub Commits API.
-   */
-  async read(key: CommentStorageKey): Promise<CommentsFile> {
-    const commentsPath = commentsFilePathForMarkdown(key.filePath);
-    const contentUrl = `https://api.github.com/repos/${key.owner}/${key.repo}/contents/${commentsPath}?ref=${ORPHAN_REF_NAME}`;
-
+  private async fetchPathContent(
+    owner: string,
+    repo: string,
+    path: string
+  ): Promise<CommentsFile | null> {
+    const contentUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${ORPHAN_REF_NAME}`;
     try {
       const res = await this.fetchApi(contentUrl);
       if (res.ok) {
@@ -123,16 +127,48 @@ export class GitHubOrphanRefBackend implements CommentBackend {
         }
       }
     } catch {
-      /* ignore and try rename fallback */
+      /* ignore */
+    }
+    return null;
+  }
+
+  /**
+   * Reads all comments for a file from the orphan ref refs/md-comments/data.
+   * Merges commit-specific and legacy base files (Confluence-style aggregation).
+   * If not found, falls back to checking file rename history via GitHub Commits API.
+   */
+  async read(key: CommentStorageKey): Promise<CommentsFile> {
+    const targetPath = commentsFilePathForMarkdown(key.filePath, key.commitHash);
+    const legacyPath = commentsFilePathForMarkdown(key.filePath);
+
+    let accumulated: CommentsFile = { page_comments: [], inline_comments: [] };
+
+    // 1. Fetch target commit-hashed comments file if specified
+    const targetComments = await this.fetchPathContent(key.owner, key.repo, targetPath);
+    if (targetComments) {
+      accumulated = mergeCommentsFiles(accumulated, targetComments);
     }
 
-    // Strategy 1: Rename trace fallback via GitHub Commits API
+    // 2. Fetch legacy un-hashed comments file if different from targetPath
+    if (legacyPath !== targetPath) {
+      const legacyComments = await this.fetchPathContent(key.owner, key.repo, legacyPath);
+      if (legacyComments) {
+        accumulated = mergeCommentsFiles(accumulated, legacyComments);
+      }
+    }
+
+    // If comments were loaded, return the merged set
+    if (accumulated.page_comments.length > 0 || accumulated.inline_comments.length > 0) {
+      return accumulated;
+    }
+
+    // 3. Rename trace fallback via GitHub Commits API
     const traceResult = await this.traceAndMigrateRename(key);
     if (traceResult) {
-      return traceResult;
+      return mergeCommentsFiles(accumulated, traceResult);
     }
 
-    return { page_comments: [], inline_comments: [] };
+    return accumulated;
   }
 
   /**
@@ -246,7 +282,7 @@ export class GitHubOrphanRefBackend implements CommentBackend {
    * Writes comments to the orphan ref using compare-and-swap (CAS) retry logic.
    */
   async write(key: CommentStorageKey, data: CommentsFile): Promise<void> {
-    const commentsPath = commentsFilePathForMarkdown(key.filePath);
+    const commentsPath = commentsFilePathForMarkdown(key.filePath, key.commitHash);
     const maxRetries = 5;
     let currentData = data;
 

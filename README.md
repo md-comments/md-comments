@@ -16,6 +16,7 @@ Works in **VS Code** ([Marketplace](https://marketplace.visualstudio.com/items?i
 ## 🚀 Key Features
 
 - **Zero-Commit Custom Git Refs Backend**: All comments, replies, and reactions auto-save instantly via custom git refs (`refs/md-comments/data`) outside standard branch namespace. No manual git commits or branches needed.
+- **Git Commit-Hashed Storage & Rollback Preservation**: Comment files are stored with the 7-character short commit SHA (`doc.<commit_sha>.comments.yml`). When checking out or rolling back a file to an earlier commit, page (footer) comments across revisions remain intact and aggregated (Confluence-style page rollback), while inline comments re-anchor to matching text in the active revision. Legacy `doc.comments.yml` files are automatically migrated upon write.
 - **Fuzzy Anchoring Cascade**: Comments are robustly anchored using a cascade matching strategy:
   1. **Paragraph Hash**: Exact match of the normalized FNV-1a hash of the text.
   2. **Fuzzy Text Match**: Selection-based substring search to identify the text even if slightly edited.

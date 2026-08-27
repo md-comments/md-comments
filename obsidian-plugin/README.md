@@ -11,6 +11,7 @@ Comments are stored directly on GitHub via dedicated orphan git references (`ref
 - **Inline Highlights & Comments**: Works in both **Reading View** (via post-processor) and **Editing/Live Preview Mode** (via CodeMirror 6 plugin).
 - **Custom Sidebar**: Dedicated right sidebar tab displaying Page comments, Inline comments, Resolved comments, and Orphaned comments.
 - **Custom Git Refs Backend**: Auto-saves comments to GitHub without cluttering your Git repository tree, requiring zero commits or PR overhead.
+- **Commit-Hashed Storage**: Supports 7-character commit short SHA comment filenames (`doc.<commit_sha>.comments.yml`) and merges historical page comments across file revisions.
 - **Emoji Reactions & Thread Replies**: Fully supports threaded replies and toggleable emoji reaction chips.
 - **Theme Native**: Integrates with standard Obsidian CSS theme variables to fit perfectly with light, dark, or custom themes.
 

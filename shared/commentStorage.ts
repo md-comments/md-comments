@@ -5,6 +5,7 @@ export interface CommentStorageKey {
   repo: string;
   filePath: string;
   branch?: string;
+  commitHash?: string;
 }
 
 export interface CommentBackend {

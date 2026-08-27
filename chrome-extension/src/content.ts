@@ -493,11 +493,16 @@ async function loadDocumentComments(meta: ParsedUrl & { type: 'blob' }) {
     filePath: meta.filePath,
   };
 
+  const commitHash = /^[0-9a-f]{7,40}$/i.test(meta.branch)
+    ? meta.branch
+    : repoInfo?.headOid || undefined;
+
   const key = {
     owner: meta.owner,
     repo: meta.repo,
     branch: meta.branch,
     filePath: meta.filePath,
+    commitHash,
   };
 
   if (currentToken) {
@@ -3586,11 +3591,17 @@ async function commitCommentFileChanges(updatedComments: CommentsFile, _action: 
     return;
   }
 
+  const commitHash =
+    meta && 'branch' in meta && /^[0-9a-f]{7,40}$/i.test(meta.branch)
+      ? meta.branch
+      : repoInfo?.headOid || undefined;
+
   const key = {
     owner: meta.owner,
     repo: meta.repo,
     branch: meta.branch,
     filePath: meta.filePath,
+    commitHash,
   };
 
   // Optimistically update local comments state and render UI immediately
