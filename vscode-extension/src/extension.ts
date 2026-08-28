@@ -199,6 +199,22 @@ export function activate(context: vscode.ExtensionContext): {
       }
     ),
     vscode.commands.registerCommand(
+      'mdComments.toggleCommentPreview',
+      async (uriArg?: vscode.Uri) => {
+        const editor = vscode.window.activeTextEditor;
+        const targetUri = uriArg || editor?.document.uri;
+        if (!targetUri) {
+          vscode.window.showWarningMessage('Open a Markdown (.md) file first');
+          return;
+        }
+        if (CommentPreviewPanel.isOpenForUri(targetUri)) {
+          CommentPreviewPanel.closeForUri(targetUri);
+        } else {
+          await vscode.commands.executeCommand('mdComments.openCommentPreview', targetUri);
+        }
+      }
+    ),
+    vscode.commands.registerCommand(
       'mdComments.handlePreviewAction',
       async (...args: unknown[]) => {
         try {

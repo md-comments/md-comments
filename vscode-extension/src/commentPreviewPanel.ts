@@ -28,6 +28,17 @@ export class CommentPreviewPanel {
     CommentPreviewPanel.panels.get(uri.toString())?.refresh(forceRemote);
   }
 
+  static isOpenForUri(uri: vscode.Uri): boolean {
+    return CommentPreviewPanel.panels.has(uri.toString());
+  }
+
+  static closeForUri(uri: vscode.Uri): void {
+    const p = CommentPreviewPanel.panels.get(uri.toString());
+    if (p) {
+      p.panel.dispose();
+    }
+  }
+
   static closeAll(): void {
     for (const panelObj of CommentPreviewPanel.panels.values()) {
       panelObj.panel.dispose();

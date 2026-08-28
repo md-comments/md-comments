@@ -69,14 +69,19 @@
       {
         "command": "mdComments.scanOrphans",
         "title": "Markdown Comments: Scan for Orphaned Comments"
+      },
+      {
+        "command": "mdComments.toggleCommentPreview",
+        "title": "Markdown Comments: Toggle Comment Preview",
+        "icon": "$(comment-discussion)"
       }
     ],
     "menus": {
       "editor/title": [
         {
-          "command": "mdComments.openCommentPreview",
+          "command": "mdComments.toggleCommentPreview",
           "when": "editorLangId == markdown",
-          "group": "navigation@99"
+          "group": "navigation@1"
         }
       ],
       "editor/context": [
