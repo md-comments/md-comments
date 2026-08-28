@@ -3600,12 +3600,13 @@ async function saveNewInlineComment(
 
   localCreatedIds.add(newComment.id);
 
-  const updated = {
-    ...loadedComments,
-    inline_comments: [...loadedComments.inline_comments, newComment],
-  };
-
   await commitCommentFileChanges(updated, 'add inline comment');
+  setTimeout(() => {
+    const el = document.getElementById(`comment-${newComment.id}`);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }, 100);
 }
 
 async function saveNewPageComment(body: string) {
