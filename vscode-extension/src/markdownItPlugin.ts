@@ -287,6 +287,7 @@ function renderCard(
 ): string {
   const badges = [
     orphaned ? '<span class="md-comments-badge md-comments-badge-orphan">orphaned</span>' : '',
+    resolved ? '<span class="md-comments-badge md-comments-badge-resolved">resolved</span>' : '',
   ]
     .filter(Boolean)
     .join(' ');
@@ -452,10 +453,14 @@ function buildSidebarHtml(ctx: RenderContext): string {
     }),
   ].sort((a, b) => b.created_at.localeCompare(a.created_at));
 
-  const inlineHtml = inlineOpen.length
-    ? inlineOpen
-        .map((p) => {
-          const c = p.comment;
+  const allInline = ctx.comments.inline_comments || [];
+  const allPage = ctx.comments.page_comments || [];
+
+  const inlineHtml = allInline.length
+    ? allInline
+        .map((c) => {
+          const placement = ctx.placements.find((p) => p.comment.id === c.id);
+          const isOrphan = placement ? isOrphanedPlacement(ctx.blocks, placement) : !!c.orphaned;
           return renderSidebarThread(
             renderCard(
               c.id,
@@ -465,21 +470,19 @@ function buildSidebarHtml(ctx: RenderContext): string {
               'inline',
               c.reactions,
               c.replies,
-              c.orphaned,
+              isOrphan,
               { paragraphIndex: c.paragraph_index, anchorText: c.anchor_text },
-              false,
+              c.resolved,
               c.updated_at
             ),
             { quote: c.anchor_text, heading: c.heading_context || undefined }
           );
         })
         .join('')
-    : panelEmpty(
-        'No open inline comments. Select text or use the comment icon beside a paragraph.'
-      );
+    : panelEmpty('No inline comments.');
 
-  const pageHtml = pageActive.length
-    ? pageActive
+  const pageHtml = allPage.length
+    ? allPage
         .map((c) =>
           renderSidebarThread(
             renderCard(
@@ -492,57 +495,15 @@ function buildSidebarHtml(ctx: RenderContext): string {
               c.replies,
               false,
               undefined,
-              false,
+              c.resolved,
               c.updated_at
             )
           )
         )
         .join('')
-    : panelEmpty('No open page comments. Use “Add a comment” below.');
+    : panelEmpty('No page comments. Use “Add a comment” below.');
 
-  const orphanHtml = orphans.length
-    ? orphans
-        .map((p) => {
-          const c = p.comment;
-          return renderSidebarThread(
-            renderCard(
-              c.id,
-              c.author,
-              c.created_at,
-              c.body,
-              'inline',
-              c.reactions,
-              c.replies,
-              true,
-              { paragraphIndex: c.paragraph_index, anchorText: c.anchor_text },
-              false,
-              c.updated_at,
-              true
-            ),
-            {
-              quote: c.anchor_text,
-              heading: c.heading_context || undefined,
-            }
-          );
-        })
-        .join('')
-    : panelEmpty('No orphaned comments.');
-
-  const resolvedHtml = resolvedAll.length
-    ? resolvedAll
-        .map((r) => renderResolvedThread(r.card, r.author, r.created_at, r.excerpt))
-        .join('')
-    : panelEmpty('No resolved comments.');
-
-  const defaultTab = inlineOpen.length
-    ? 'inline'
-    : pageActive.length
-      ? 'page'
-      : orphans.length
-        ? 'orphan'
-        : resolvedAll.length
-          ? 'resolved'
-          : 'inline';
+  const defaultTab = 'inline';
 
   const tab = (id: string, label: string, count: number) =>
     `<button type="button" class="md-comments-tab${id === defaultTab ? ' md-comments-tab-active' : ''}" role="tab" data-tab="${id}" aria-selected="${id === defaultTab ? 'true' : 'false'}">${escapeHtml(label)} <span class="md-comments-tab-count">${count}</span></button>`;
@@ -553,16 +514,12 @@ function buildSidebarHtml(ctx: RenderContext): string {
   };
 
   return `<nav class="md-comments-tabs" role="tablist">
-      ${tab('inline', 'Inline', inlineOpen.length)}
-      ${tab('page', 'Page', pageActive.length)}
-      ${tab('orphan', 'Orphan', orphans.length)}
-      ${tab('resolved', 'Resolved', resolvedAll.length)}
+      ${tab('inline', 'Inline', allInline.length)}
+      ${tab('page', 'Document', allPage.length)}
     </nav>
     <div class="md-comments-tab-panels">
       ${panel('inline', inlineHtml)}
       ${panel('page', pageHtml)}
-      ${panel('orphan', orphanHtml)}
-      ${panel('resolved', resolvedHtml)}
     </div>`;
 }
 
