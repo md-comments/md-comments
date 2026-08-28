@@ -6,7 +6,7 @@
     <title>Markdown Comments | Inline Feedback for Markdown Docs</title>
     <meta
       name="description"
-      content="Collaborative inline comments for Markdown files powered by custom git refs backend. Support for VS Code, Obsidian, and GitHub via Chrome Extension."
+      content="Collaborative inline comments for Markdown files powered by custom git refs backend. Support for VS Code, Astro / Starlight, Obsidian, and GitHub via Chrome Extension."
     />
     <link rel="icon" type="image/svg+xml" href="assets/icon.svg" />
     <link rel="stylesheet" href="styles.css" />
@@ -26,6 +26,7 @@
           <span>Markdown Comments</span>
         </a>
         <nav class="nav">
+          <a href="#why-git-docs" class="nav-link">Why Native Docs</a>
           <a href="#features" class="nav-link">Features</a>
           <a href="#integrations" class="nav-link">Integrations</a>
           <a href="privacy.html" class="nav-link">Privacy Policy</a>
@@ -65,15 +66,17 @@
       <div class="container hero-grid">
         <div class="hero-content">
           <h1 class="hero-title">
-            Inline Document Collaboration,<br /><span class="gradient-text"
-              >Zero Commits Required</span
+            Stop Siloing Docs in Confluence.<br /><span class="gradient-text"
+              >Bring Them Home to Git.</span
             >
           </h1>
           <p class="hero-subtitle">
-            Highlight text and collaborate directly on Markdown documentation. Auto-saved to GitHub via custom git refs (<code>refs/md-comments/data</code>) outside the standard <code>refs/heads/</code> branch namespace. Supported across VS Code, Cursor, Antigravity, Obsidian, and Chrome.
+            Documentation locked in external SaaS tools creates broken context and stale specs. Markdown Comments keeps your docs native in Git for AI agents to parse and update, while giving humans rich, interactive visual variants to review and discuss.
           </p>
           <div class="hero-buttons">
             <a href="#integrations" class="btn btn-primary">See Integrations</a>
+            <a href="#why-git-docs" class="btn btn-secondary">Why Native Docs?</a>
+            <a href="demo-astro/" class="btn btn-secondary btn-hero-demo">🚀 Launch Astro Demo</a>
           </div>
         </div>
 
@@ -136,6 +139,105 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Marketing Section: AI-Era Documentation -->
+    <section id="why-git-docs" class="ai-docs-section">
+      <div class="container">
+        <div class="section-header-center">
+          <span class="section-tagline">DOCUMENTATION FOR THE AI ERA</span>
+          <h2 class="section-title">The Best of Both Worlds: AI-Accessible & Human-Commentable</h2>
+          <p class="section-subtitle">
+            External documentation tools disconnect knowledge from your repository. Markdown Comments bridges the gap: keep raw Markdown where AI agents can read and update it, and rendered interactive views where humans review it.
+          </p>
+        </div>
+
+        <div class="ai-docs-grid">
+          <!-- Card 1 -->
+          <div class="ai-docs-card">
+            <div class="ai-card-badge red-accent">The Problem</div>
+            <div class="ai-card-icon red-icon">
+              <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
+              </svg>
+            </div>
+            <h3>External Docs Silo Knowledge</h3>
+            <p>
+              Tools like <strong>Notion</strong> or <strong>Confluence</strong> isolate specs and architecture docs outside your codebase. AI coding assistants cannot access or update them seamlessly during development, leaving knowledge fragmented and stale.
+            </p>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="ai-docs-card highlight-card">
+            <div class="ai-card-badge green-accent">AI Ready</div>
+            <div class="ai-card-icon green-icon">
+              <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+              </svg>
+            </div>
+            <h3>Docs Belong in Your Codebase</h3>
+            <p>
+              Markdown files in your repository serve as <strong>native, indexable context for AI agents</strong>. AI assistants like Cursor, Copilot, and Antigravity can inspect, query, generate, and edit your docs directly alongside your source code.
+            </p>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="ai-docs-card">
+            <div class="ai-card-badge purple-accent">Human Friendly</div>
+            <div class="ai-card-icon purple-icon">
+              <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"/>
+              </svg>
+            </div>
+            <h3>Humans Read & Comment Rendered Views</h3>
+            <p>
+              Humans shouldn't have to review raw text markup. Markdown Comments renders <strong>beautiful visual variants</strong> where teammates highlight text, start threaded discussions, and leave feedback across VS Code, Cursor, Astro / Starlight, Obsidian, and Chrome.
+            </p>
+          </div>
+        </div>
+
+        <!-- Both Worlds Banner -->
+        <div class="both-worlds-banner">
+          <div class="both-worlds-content">
+            <div class="banner-pill">⚡ Dual Advantage</div>
+            <h3>Enjoy Both Worlds Without Compromise</h3>
+            <p>
+              Get <strong>AI-accessible Markdown documents</strong> living in your git repo for LLM agents, and <strong>human-commentable rendered variants</strong> for your team. Zero external SaaS lock-in, zero context switching.
+            </p>
+          </div>
+          <div class="both-worlds-visual">
+            <div class="dual-pill-box">
+              <span class="dual-pill ai-pill">🤖 AI-Accessible Markdown</span>
+              <span class="dual-connector">+</span>
+              <span class="dual-pill human-pill">💬 Human-Commentable UI</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Technical Architecture Callout Section -->
+    <section class="tech-overview-section">
+      <div class="container">
+        <div class="tech-card">
+          <div class="tech-card-header">
+            <span class="tech-badge">TECHNICAL FOUNDATION</span>
+            <h3 class="tech-card-title">Zero-Commit Custom Git Refs Architecture</h3>
+          </div>
+          <p class="tech-card-body">
+            Highlight text and collaborate directly on Markdown documentation. Auto-saved to GitHub via custom git refs (<code>refs/md-comments/data</code>) outside the standard <code>refs/heads/</code> branch namespace. Supported across VS Code, Cursor, Antigravity, Astro / Starlight, Obsidian, and Chrome.
+          </p>
+          <div class="tech-tags">
+            <span class="tech-tag">VS Code</span>
+            <span class="tech-tag">Cursor</span>
+            <span class="tech-tag">Antigravity</span>
+            <span class="tech-tag">Astro / Starlight</span>
+            <span class="tech-tag">Obsidian</span>
+            <span class="tech-tag">Chrome Extension</span>
+            <span class="tech-tag"><code>refs/md-comments/data</code></span>
           </div>
         </div>
       </div>
@@ -224,7 +326,7 @@
       <div class="container">
         <h2 class="section-title">Integrations for Your Workflow</h2>
         <p class="section-subtitle">
-          Use Markdown Comments natively in your favorite editors and GitHub.
+          Use Markdown Comments natively in your favorite editors, documentation websites, and GitHub.
         </p>
 
         <div class="tabs-container">
@@ -233,6 +335,9 @@
           </button>
           <button class="tab-btn" data-tab="tab-github">
             <span>GitHub Chrome Extension</span>
+          </button>
+          <button class="tab-btn" data-tab="tab-starlight">
+            <span>Astro / Starlight Plugin</span>
           </button>
           <button class="tab-btn" data-tab="tab-obsidian">
             <span>Obsidian Plugin</span>
@@ -323,6 +428,141 @@
                   target="_blank"
                   rel="noopener"
                   >Setup Instructions</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- GitHub Tab Content -->
+        <div id="tab-github" class="tab-content">
+          <div class="integration-layout">
+            <div class="integration-info">
+              <h3>GitHub Integration (Chrome Extension)</h3>
+              <p>
+                Collaborate natively on GitHub PRs. Renders a dedicated "Comments" workspace and
+                lets you comment inline on Markdown diff lines using direct Git commits.
+              </p>
+              <ul class="integration-features">
+                <li>
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span>Automated PR tab integration alongside code review.</span>
+                </li>
+                <li>
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span>Direct commits back to target repository or comments branches.</span>
+                </li>
+                <li>
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span>Supports Personal Access Tokens (PAT) for rate-limit bypass.</span>
+                </li>
+              </ul>
+              <div class="integration-buttons">
+                <a
+                  href="https://chromewebstore.google.com/detail/markdown-comments/mjlhdjonjfcedkbpajkfeidfebefhkpp"
+                  class="btn btn-primary btn-chrome"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                      d="M20.5 11H19V7c0-1.1-.9-2-2-2h-4V3.5c0-1.38-1.12-2.5-2.5-2.5S8 2.12 8 3.5V5H4c-1.1 0-1.99.9-1.99 2v3.8H3.5c1.49 0 2.7 1.21 2.7 2.7s-1.21 2.7-2.7 2.7H2V20c0 1.1.9 2 2 2h3.8v-1.5c0-1.49 1.21-2.7 2.7-2.7s2.7 1.21 2.7 2.7V22H17c1.1 0 2-.9 2-2v-4h1.5c1.38 0 2.5-1.12 2.5-2.5S21.88 11 20.5 11z"
+                    />
+                  </svg>
+                  Install Extension
+                </a>
+                <a
+                  href="https://github.com/md-comments/md-comments#github-chrome-extension"
+                  class="btn btn-secondary"
+                  target="_blank"
+                  rel="noopener"
+                  >Setup Instructions</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Astro / Starlight Tab Content -->
+        <div id="tab-starlight" class="tab-content">
+          <div class="integration-layout">
+            <div class="integration-info">
+              <h3>Astro & Starlight Plugin</h3>
+              <p>
+                Embed Markdown Comments directly into your documentation websites. Zero browser
+                extensions required for readers and reviewers; seamless GitHub OAuth Device Flow.
+              </p>
+              <ul class="integration-features">
+                <li>
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span>Highlight prose to comment with floating selection bubble and margin pins.</span>
+                </li>
+                <li>
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span>Built-in GitHub OAuth Device Flow with zero server infrastructure.</span>
+                </li>
+                <li>
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span>Shared Git ref sync compatible with VS Code, Cursor, Antigravity, Obsidian & Chrome.</span>
+                </li>
+              </ul>
+              <div class="integration-buttons">
+                <a
+                  href="demo-astro/"
+                  class="btn btn-primary"
+                >
+                  🚀 Try Live Astro Demo
+                </a>
+                <a
+                  href="https://www.npmjs.com/package/@md-comments/starlight"
+                  class="btn btn-secondary"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  View on npm (@md-comments/starlight)
+                </a>
+                <a
+                  href="https://github.com/md-comments/md-comments/blob/main/docs/starlight-plugin.md"
+                  class="btn btn-secondary"
+                  target="_blank"
+                  rel="noopener"
+                  >Plugin Guide</a
                 >
               </div>
             </div>
