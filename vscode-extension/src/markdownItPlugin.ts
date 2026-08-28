@@ -202,21 +202,12 @@ function renderRepliesBlock(
 ): string {
   const count = replies.length;
   const replyHtml = replies.map((r) => renderReply(r, rootId, type)).join('');
-  const hideLabel = replyCountLabel(count, false);
-  const showLabel = replyCountLabel(count, true);
   const replyFooter = showReplyInFooter
     ? threadFooterBtn('reply', 'Reply', ICON_REPLY, { id: rootId, type, kind: 'root' })
     : '';
   return `<div class="md-comments-replies-block" data-md-root-id="${escapeHtml(rootId)}" data-md-reply-count="${count}">
     <div class="md-comments-replies-list" data-md-replies-panel>${replyHtml}</div>
-    <footer class="md-comments-thread-footer${showReplyInFooter ? '' : ' md-comments-thread-footer-toggle-only'}">
-      ${replyFooter}
-      <button type="button" class="md-comments-thread-footer-btn md-comments-toggle-replies" data-md-action="toggle-replies" data-md-root-id="${escapeHtml(rootId)}" aria-expanded="true">
-        ${ICON_COLLAPSE_REPLIES}
-        <span class="md-comments-toggle-hide">${escapeHtml(hideLabel)}</span>
-        <span class="md-comments-toggle-show" hidden>${escapeHtml(showLabel)}</span>
-      </button>
-    </footer>
+    ${showReplyInFooter ? `<footer class="md-comments-thread-footer">${replyFooter}</footer>` : ''}
   </div>`;
 }
 

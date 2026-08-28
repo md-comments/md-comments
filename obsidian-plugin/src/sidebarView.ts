@@ -339,21 +339,12 @@ export class CommentsSidebarView extends ItemView {
     if (hasReplies) {
       const replyList = comment.replies.map((r) => this.renderReply(r, comment.id, type)).join('');
 
-      const hideLabel =
-        comment.replies.length === 1 ? 'Hide reply' : `Hide ${comment.replies.length} replies`;
-      const showLabel =
-        comment.replies.length === 1 ? 'Show reply' : `Show ${comment.replies.length} replies`;
-
       repliesHtml = `
-        <div class="md-comments-replies-block ${isCollapsed ? 'md-comments-replies-collapsed' : ''}" data-root-id="${comment.id}">
+        <div class="md-comments-replies-block" data-root-id="${comment.id}">
           <div class="md-comments-replies-list">${replyList}</div>
           <footer class="md-comments-thread-footer">
             <button type="button" class="md-comments-thread-footer-btn" data-action="show-reply-form" data-root-id="${comment.id}" data-type="${type}">
               ${ICON_REPLY}<span>Reply</span>
-            </button>
-            <button type="button" class="md-comments-thread-footer-btn" data-action="toggle-replies" data-root-id="${comment.id}">
-              <span class="md-comments-toggle-hide">${hideLabel}</span>
-              <span class="md-comments-toggle-show" hidden>${showLabel}</span>
             </button>
           </footer>
         </div>
