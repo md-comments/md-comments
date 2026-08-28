@@ -777,28 +777,7 @@ export function extendMarkdownIt(md: any): any {
     env: any,
     self: any
   ) => {
-    let paraBtn = '';
-    if (renderCtx) {
-      let openToken = null;
-      for (let i = idx - 1; i >= 0; i--) {
-        if (tokens[i].type === 'paragraph_open') {
-          openToken = tokens[i];
-          break;
-        }
-      }
-      if (openToken) {
-        const paragraphIndex = getAttr(openToken, 'data-md-paragraph-index');
-        if (paragraphIndex !== null) {
-          paraBtn = `<span class="md-comments-para-actions">${actionIconBtn(
-            'comment-paragraph',
-            'Comment on paragraph',
-            ICON_PARAGRAPH_COMMENT,
-            { id: paragraphIndex }
-          )}</span>`;
-        }
-      }
-    }
-    return defaultParagraphClose(tokens, idx, options, env, self) + paraBtn;
+    return defaultParagraphClose(tokens, idx, options, env, self);
   };
 
   const defaultRender = md.renderer.render.bind(md.renderer);
