@@ -23,10 +23,11 @@
     "lint": "eslint .",
     "format:check": "prettier --check \"**/*.{ts,js,json,css,md}\"",
     "format": "prettier --write \"**/*.{ts,js,json,css,md}\"",
-    "typecheck": "pnpm build:shared && tsc --noEmit && pnpm --recursive exec tsc --noEmit",
+    "typecheck": "pnpm build:shared && pnpm --recursive run typecheck && tsc --noEmit -p tsconfig.tests.json",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "check": "pnpm audit --prod --audit-level high && pnpm lint && pnpm format:check && pnpm typecheck && pnpm test:coverage && pnpm build"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^7.18.0",

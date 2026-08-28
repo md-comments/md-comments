@@ -129,6 +129,7 @@
   "scripts": {
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
+    "typecheck": "tsc --noEmit",
     "package": "pnpm dlx vsce-pnpm package --pnpm"
   },
   "devDependencies": {

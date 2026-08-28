@@ -20,8 +20,8 @@
     "semantic_hash": ""
   },
   "chrome-extension/package.json": {
-    "mtime": 1787791668.945298,
-    "ast_hash": "6473d3140ad20fa37426a3e40c01f7e6",
+    "mtime": 1787883690.6033957,
+    "ast_hash": "6695178972ba668852ad6ffeb46096ca",
     "semantic_hash": ""
   },
   "chrome-extension/src/content.ts": {
@@ -45,8 +45,8 @@
     "semantic_hash": ""
   },
   "obsidian-plugin/package.json": {
-    "mtime": 1787791668.9490862,
-    "ast_hash": "e14f14420e7384f0fbccdf028579953b",
+    "mtime": 1787883694.1619833,
+    "ast_hash": "a266f27fc94e8ac0a0c0dfecc6d35525",
     "semantic_hash": ""
   },
   "obsidian-plugin/src/livePreview.ts": {
@@ -80,8 +80,8 @@
     "semantic_hash": ""
   },
   "package.json": {
-    "mtime": 1787883060.0681734,
-    "ast_hash": "7c781c8edf2eb0a4bc2ce9c8ee8c4029",
+    "mtime": 1787883751.9816155,
+    "ast_hash": "31afb84e8163f50af85489ba4db5c1fc",
     "semantic_hash": ""
   },
   "shared/anchor.ts": {
@@ -140,8 +140,8 @@
     "semantic_hash": ""
   },
   "vscode-extension/package.json": {
-    "mtime": 1787875968.9871686,
-    "ast_hash": "a863c1c64a268cc8af9d02707e29873d",
+    "mtime": 1787883697.622652,
+    "ast_hash": "a70401148930e2889986803407a6ee1b",
     "semantic_hash": ""
   },
   "vscode-extension/src/author.ts": {
@@ -445,8 +445,8 @@
     "semantic_hash": ""
   },
   "shared/package.json": {
-    "mtime": 1787879015.1112,
-    "ast_hash": "cacced3a1eae5d8c67ba9cd6cc677a4e",
+    "mtime": 1787883681.9000452,
+    "ast_hash": "543a2f0aa11ba993d55edb73a119518d",
     "semantic_hash": ""
   },
   "shared/tsconfig.json": {
@@ -465,7 +465,7 @@
     "semantic_hash": ""
   },
   "tsconfig.json": {
-    "mtime": 1787883052.0286658,
+    "mtime": 1787883770.0690756,
     "ast_hash": "a17717b9cbfeae90b650790a56003e8d",
     "semantic_hash": ""
   },
@@ -555,8 +555,8 @@
     "semantic_hash": ""
   },
   ".agents/skills/pre-commit-checks/SKILL.md": {
-    "mtime": 1785373929.3222828,
-    "ast_hash": "7cdce111883d8338f7040984325b9dfe",
+    "mtime": 1787883812.1543028,
+    "ast_hash": "b530b3524bd9697fe42e488ecabae220",
     "semantic_hash": ""
   },
   "fossa-deps.json": {
@@ -715,8 +715,8 @@
     "semantic_hash": ""
   },
   "starlight-plugin/package.json": {
-    "mtime": 1787879215.0910726,
-    "ast_hash": "a1c94a233b46065ab2bdd3c487d86309",
+    "mtime": 1787883687.3233469,
+    "ast_hash": "4c60edebca4bcf1c1a4a81dfcd8cb19c",
     "semantic_hash": ""
   },
   "starlight-plugin/src/astro.ts": {
@@ -800,8 +800,8 @@
     "semantic_hash": ""
   },
   "demo-astro/package.json": {
-    "mtime": 1787882482.5732522,
-    "ast_hash": "4e8b7458f339c8b1b702d3087c57a1e7",
+    "mtime": 1787883701.237302,
+    "ast_hash": "b9ff1bac75c361f5fa6c807e8902e328",
     "semantic_hash": ""
   },
   "demo-astro/src/content.config.ts": {
@@ -847,6 +847,11 @@
   "demo-astro/src/components/Banner.astro": {
     "mtime": 1787880897.3148134,
     "ast_hash": "4b62ca85c3eb0e77ecb107870f64e37b",
+    "semantic_hash": ""
+  },
+  "tsconfig.tests.json": {
+    "mtime": 1787883678.5413895,
+    "ast_hash": "92bd5b42c5579ac9d289a29c7b9e2b5b",
     "semantic_hash": ""
   }
 }

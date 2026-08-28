@@ -5,7 +5,8 @@
   "main": "dist/content.js",
   "scripts": {
     "dev": "node esbuild.js",
-    "build": "node esbuild.js production"
+    "build": "node esbuild.js production",
+    "typecheck": "tsc --noEmit"
   },
   "author": "mstrelex",
   "license": "MIT",

@@ -37,13 +37,13 @@ Run the following checks from the root directory:
 
    _This automatically formats files using Prettier. Any formatted files must be restaged (e.g., `git add .` or specifically adding the files) before committing._
 
-4. **TypeScript Typecheck**:
+4. **TypeScript & Astro Static Typecheck**:
 
    ```bash
    pnpm typecheck
    ```
 
-   _Ensures compiler-level type safety across all projects._
+   _Ensures compiler-level type safety across all workspace projects (`shared`, `vscode-extension`, `obsidian-plugin`, `chrome-extension`, `starlight-plugin`, `demo-astro`, and test files)._
 
 5. **Unit Tests**:
 
@@ -59,7 +59,10 @@ Run the following checks from the root directory:
    pnpm build
    ```
 
-   _Verifies that the bundles for all extensions (VS Code, Chrome, Obsidian) successfully compile._
+   _Verifies that the bundles for all extensions and integrations (`vscode-extension`, `chrome-extension`, `obsidian-plugin`, `@md-comments/starlight`, `demo-astro`) successfully compile._
+
+> [!TIP]
+> You can run the entire diagnostic suite in a single command with `pnpm check`.
 
 7. **FOSSA Scan (SCA / License & Vulnerability Compliance)**:
    ```bash
