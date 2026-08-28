@@ -15,18 +15,18 @@
     "semantic_hash": ""
   },
   "chrome-extension/manifest.json": {
-    "mtime": 1787791624.800321,
+    "mtime": 1787791668.945168,
     "ast_hash": "08e056148ec03ac35bce6b46fcedfd54",
     "semantic_hash": ""
   },
   "chrome-extension/package.json": {
-    "mtime": 1787791622.017569,
+    "mtime": 1787791668.945298,
     "ast_hash": "6473d3140ad20fa37426a3e40c01f7e6",
     "semantic_hash": ""
   },
   "chrome-extension/src/content.ts": {
-    "mtime": 1787791647.2246187,
-    "ast_hash": "8d75825696381c11dd0439c1a167f60a",
+    "mtime": 1787877888.4325705,
+    "ast_hash": "ebdf92468979c205436d42c8d539d090",
     "semantic_hash": ""
   },
   "chrome-extension/src/githubApi.ts": {
@@ -40,12 +40,12 @@
     "semantic_hash": "406bb0cd9a4b8c76f9f0f1a23552ae33"
   },
   "obsidian-plugin/manifest.json": {
-    "mtime": 1787791619.2711437,
+    "mtime": 1787791668.9489622,
     "ast_hash": "06be8bc4c166d1ac8b257e0607452885",
     "semantic_hash": ""
   },
   "obsidian-plugin/package.json": {
-    "mtime": 1787791616.5833821,
+    "mtime": 1787791668.9490862,
     "ast_hash": "e14f14420e7384f0fbccdf028579953b",
     "semantic_hash": ""
   },
@@ -65,12 +65,12 @@
     "semantic_hash": ""
   },
   "obsidian-plugin/src/sidebarView.ts": {
-    "mtime": 1785373155.8697326,
-    "ast_hash": "846d7a324f12cec61a08ea50454a6713",
+    "mtime": 1787875905.3815944,
+    "ast_hash": "a4507cb20d03b3d6d5483d406eb65516",
     "semantic_hash": ""
   },
   "obsidian-plugin/src/storage.ts": {
-    "mtime": 1787791111.6104825,
+    "mtime": 1787791668.9492607,
     "ast_hash": "910cce8ff0de17b4054b5dce1c52d5ce",
     "semantic_hash": ""
   },
@@ -80,27 +80,27 @@
     "semantic_hash": ""
   },
   "package.json": {
-    "mtime": 1786298601.2361333,
-    "ast_hash": "5ea234ba8ad43df3fe390e3ab7fc3cbb",
+    "mtime": 1787880065.0264711,
+    "ast_hash": "973dcf6b2b5b62f5f62184288bf0ab1c",
     "semantic_hash": ""
   },
   "shared/anchor.ts": {
-    "mtime": 1787708518.7472866,
-    "ast_hash": "648855c7c28e30c1fab0562d2f4e31f9",
+    "mtime": 1787879984.1879885,
+    "ast_hash": "3f2ffe6c1192d5716106e02b2810f69f",
     "semantic_hash": ""
   },
   "shared/author.ts": {
-    "mtime": 1785373042.4187727,
+    "mtime": 1787879068.6647818,
     "ast_hash": "7bd2afd4f32e00ac6efd412a6a9035ed",
     "semantic_hash": ""
   },
   "shared/placement.ts": {
-    "mtime": 1785357757.6514506,
-    "ast_hash": "21ecf86aaf139b8587ff3688a79faaaf",
+    "mtime": 1787879984.210058,
+    "ast_hash": "25ff2100983d5f5a47af6a03c1bfa8ed",
     "semantic_hash": ""
   },
   "shared/types.ts": {
-    "mtime": 1782267156.9908013,
+    "mtime": 1787879068.666755,
     "ast_hash": "f4a6c8e6f24d40f9d04c89086602af62",
     "semantic_hash": "f4a6c8e6f24d40f9d04c89086602af62"
   },
@@ -140,8 +140,8 @@
     "semantic_hash": ""
   },
   "vscode-extension/package.json": {
-    "mtime": 1787791611.1030273,
-    "ast_hash": "97061eae4be64fa50130f28f7c619a81",
+    "mtime": 1787875968.9871686,
+    "ast_hash": "a863c1c64a268cc8af9d02707e29873d",
     "semantic_hash": ""
   },
   "vscode-extension/src/author.ts": {
@@ -160,18 +160,18 @@
     "semantic_hash": ""
   },
   "vscode-extension/src/commentPreviewPanel.ts": {
-    "mtime": 1786298605.5061615,
-    "ast_hash": "5574047587e871356634bfd6264b494a",
+    "mtime": 1787875972.3293474,
+    "ast_hash": "e7c4cedb2f15d963e63f0d14809c693e",
     "semantic_hash": ""
   },
   "vscode-extension/src/commentStore.ts": {
-    "mtime": 1787791638.4404402,
+    "mtime": 1787791668.9505506,
     "ast_hash": "8137d0d8867acb23e9abedbba4633034",
     "semantic_hash": ""
   },
   "vscode-extension/src/extension.ts": {
-    "mtime": 1786298605.5206583,
-    "ast_hash": "6a0676d547aebc13a2479c9f81ed219c",
+    "mtime": 1787875975.7258418,
+    "ast_hash": "40d9dde9ac5005b1e1eef13dbb919ea9",
     "semantic_hash": ""
   },
   "vscode-extension/src/githubAvatars.ts": {
@@ -185,8 +185,8 @@
     "semantic_hash": ""
   },
   "vscode-extension/src/markdownItPlugin.ts": {
-    "mtime": 1787708371.2119472,
-    "ast_hash": "7e5656d7584d1974b7a5d309efa0024c",
+    "mtime": 1787875935.5826204,
+    "ast_hash": "187f9433e42e3a75a0d442829e5b5748",
     "semantic_hash": ""
   },
   "vscode-extension/src/markdownRender.ts": {
@@ -220,8 +220,8 @@
     "semantic_hash": "0bc020d491fca99550c1ea3de0a5f862"
   },
   "README.md": {
-    "mtime": 1787791334.8439023,
-    "ast_hash": "6d577df43a548fce414959c847e57160",
+    "mtime": 1787877915.515086,
+    "ast_hash": "1d8382c0ae3264baeaecff7aee32bc3b",
     "semantic_hash": ""
   },
   "docs/example.md": {
@@ -230,14 +230,14 @@
     "semantic_hash": ""
   },
   "obsidian-plugin/README.md": {
-    "mtime": 1787791341.4100697,
+    "mtime": 1787791668.948833,
     "ast_hash": "f226d17df9d649c0a7cf3c9921bf803b",
     "semantic_hash": ""
   },
   "pnpm-workspace.yaml": {
-    "mtime": 1782423505.0769606,
-    "ast_hash": "598cb9ddc3b6264e2435deda0caefc0a",
-    "semantic_hash": "598cb9ddc3b6264e2435deda0caefc0a"
+    "mtime": 1787879580.6163309,
+    "ast_hash": "7e700cf60298fe507fef4dc167d07a25",
+    "semantic_hash": ""
   },
   "assets/icon.png": {
     "mtime": 1785277335.7291286,
@@ -440,18 +440,18 @@
     "semantic_hash": ""
   },
   "shared/html.ts": {
-    "mtime": 1785357478.3217983,
+    "mtime": 1787879068.6653645,
     "ast_hash": "17460e4f5905941ea3ee16b11ced3463",
     "semantic_hash": ""
   },
   "shared/package.json": {
-    "mtime": 1787791613.7997751,
-    "ast_hash": "b7cd877ff371ca55cb963400e7291505",
+    "mtime": 1787879015.1112,
+    "ast_hash": "cacced3a1eae5d8c67ba9cd6cc677a4e",
     "semantic_hash": ""
   },
   "shared/tsconfig.json": {
-    "mtime": 1785357451.1786034,
-    "ast_hash": "ed0e9697e811007026f6c89da5228007",
+    "mtime": 1787879984.212987,
+    "ast_hash": "d7778247360e794db567666bec22aa41",
     "semantic_hash": ""
   },
   "tests/anchor.test.ts": {
@@ -520,8 +520,8 @@
     "semantic_hash": ""
   },
   "CHANGELOG.md": {
-    "mtime": 1787791628.4272585,
-    "ast_hash": "85519ab2e03cc28d3e407c9f45b68560",
+    "mtime": 1787877920.6121154,
+    "ast_hash": "994051c721a608b0669dc2de13033434",
     "semantic_hash": ""
   },
   "CODE_OF_CONDUCT.md": {
@@ -540,8 +540,8 @@
     "semantic_hash": ""
   },
   ".github/workflows/deploy-marketplaces.yml": {
-    "mtime": 1787498273.6831648,
-    "ast_hash": "71557404cd28f0aa169bff4a6e8ad929",
+    "mtime": 1787877900.7674494,
+    "ast_hash": "6437d52561e88ea8523a51c48b1b7c8e",
     "semantic_hash": ""
   },
   ".github/workflows/release-dev.yml": {
@@ -595,8 +595,8 @@
     "semantic_hash": ""
   },
   ".github/workflows/deploy-pages.yml": {
-    "mtime": 1785463304.3170168,
-    "ast_hash": "5b502bd5c6c77a531ceb87fc2c59ce7c",
+    "mtime": 1787879565.5553532,
+    "ast_hash": "2398752690505083e1fad616876bbd55",
     "semantic_hash": ""
   },
   "website/assets/README.md": {
@@ -605,8 +605,8 @@
     "semantic_hash": ""
   },
   "website/index.html": {
-    "mtime": 1786303228.4270043,
-    "ast_hash": "3f279539579d2fbe4ce78b9256134988",
+    "mtime": 1787880379.6505368,
+    "ast_hash": "efee1abe65224500d8bb50d06dfe9157",
     "semantic_hash": ""
   },
   "website/privacy.html": {
@@ -635,7 +635,7 @@
     "semantic_hash": ""
   },
   "vscode-extension/README.md": {
-    "mtime": 1787791338.0268102,
+    "mtime": 1787791668.9501984,
     "ast_hash": "4a5fc74a83d6a9b2842a588d6d21f045",
     "semantic_hash": ""
   },
@@ -655,22 +655,22 @@
     "semantic_hash": ""
   },
   "shared/commentStorage.ts": {
-    "mtime": 1787791068.8223336,
-    "ast_hash": "a20757bb7aef7855ca4ef8cec3d30d0f",
+    "mtime": 1787879984.1919925,
+    "ast_hash": "5688ff3f26e2655922a067664f9b2e56",
     "semantic_hash": ""
   },
   "shared/index.ts": {
-    "mtime": 1785892960.6376843,
-    "ast_hash": "f9acb6a270caf58e30cc5d28f1681ca0",
+    "mtime": 1787879984.2042062,
+    "ast_hash": "b77ca913c7062fdee9ebd42a3ca6a790",
     "semantic_hash": ""
   },
   "shared/localFileBackend.ts": {
-    "mtime": 1787791085.261327,
-    "ast_hash": "d63be1e2b169fbe34f818c1f362a1204",
+    "mtime": 1787879984.2067533,
+    "ast_hash": "96b6b8986ace836ecd8fe8717fe44651",
     "semantic_hash": ""
   },
   "shared/repoDetector.ts": {
-    "mtime": 1785708741.1805704,
+    "mtime": 1787879068.6663077,
     "ast_hash": "7964625d62bd4f4016175ef888da5e6f",
     "semantic_hash": ""
   },
@@ -680,13 +680,13 @@
     "semantic_hash": ""
   },
   "shared/gitRefBackend.ts": {
-    "mtime": 1787791647.416779,
-    "ast_hash": "4b3c7fd2920830339a1bac3e096b2a9f",
+    "mtime": 1787881390.3231504,
+    "ast_hash": "c68c834339651c0b7de0b7ec73f85676",
     "semantic_hash": ""
   },
   "tests/gitRefBackend.test.ts": {
-    "mtime": 1787791125.924975,
-    "ast_hash": "63ae74a25eba8da587a080e5952943e4",
+    "mtime": 1787876013.5822961,
+    "ast_hash": "d14a345a4e862625569cf876adc4b4ab",
     "semantic_hash": ""
   },
   "tests/vscodeStorage.test.ts": {
@@ -705,13 +705,148 @@
     "semantic_hash": ""
   },
   "vscode-extension/src/repoManager.ts": {
-    "mtime": 1787791090.341541,
+    "mtime": 1787791668.9507263,
     "ast_hash": "b06acf0e24fff1e3c63727aff60f8a7a",
     "semantic_hash": ""
   },
   "vscode-extension/src/logger.ts": {
     "mtime": 1786298605.537362,
     "ast_hash": "c2fec3ede144c314c169b47c69f0a664",
+    "semantic_hash": ""
+  },
+  "starlight-plugin/package.json": {
+    "mtime": 1787879215.0910726,
+    "ast_hash": "a1c94a233b46065ab2bdd3c487d86309",
+    "semantic_hash": ""
+  },
+  "starlight-plugin/src/astro.ts": {
+    "mtime": 1787881134.4725387,
+    "ast_hash": "76d87b661f10defdfb31359a8b67735e",
+    "semantic_hash": ""
+  },
+  "starlight-plugin/src/client/components/AuthModal.ts": {
+    "mtime": 1787881475.9702263,
+    "ast_hash": "6debbf223566d60f2c0502a97b183eda",
+    "semantic_hash": ""
+  },
+  "starlight-plugin/src/client/components/CommentsOverlay.ts": {
+    "mtime": 1787882046.5792158,
+    "ast_hash": "e4464c75f6855f59d0b39287f3a84890",
+    "semantic_hash": ""
+  },
+  "starlight-plugin/src/client/domAnchors.ts": {
+    "mtime": 1787879068.6672342,
+    "ast_hash": "334412941966b91a62d09f5ca1a48c3e",
+    "semantic_hash": ""
+  },
+  "starlight-plugin/src/client/githubAuth.ts": {
+    "mtime": 1787881470.0134163,
+    "ast_hash": "7ffd2b84d233c0add4fa45f0f6117e0d",
+    "semantic_hash": ""
+  },
+  "starlight-plugin/src/client/placement.ts": {
+    "mtime": 1787879984.2418165,
+    "ast_hash": "f0966071e0835312910ca570201674d8",
+    "semantic_hash": ""
+  },
+  "starlight-plugin/src/components/MdCommentsIntegration.astro": {
+    "mtime": 1787877779.8863852,
+    "ast_hash": "758a4d525ebbd8547ea2cbd151c1e171",
+    "semantic_hash": ""
+  },
+  "starlight-plugin/src/components/PageComments.astro": {
+    "mtime": 1787877776.2441149,
+    "ast_hash": "4112b90a35b4d4315d5fafc68abfda5b",
+    "semantic_hash": ""
+  },
+  "starlight-plugin/src/index.ts": {
+    "mtime": 1787879984.252794,
+    "ast_hash": "20db7ac2ee4d09f88feba7acadc9ebec",
+    "semantic_hash": ""
+  },
+  "starlight-plugin/src/starlight.ts": {
+    "mtime": 1787881129.764224,
+    "ast_hash": "7fe7f6caffb7d6850743b26e6fcfe5b3",
+    "semantic_hash": ""
+  },
+  "starlight-plugin/src/types.ts": {
+    "mtime": 1787880560.7626593,
+    "ast_hash": "fea488a01c635a2ee903ae41b0b483d2",
+    "semantic_hash": ""
+  },
+  "starlight-plugin/tsconfig.json": {
+    "mtime": 1787877862.5867236,
+    "ast_hash": "c6326475f7cb7965c232a594f23023c2",
+    "semantic_hash": ""
+  },
+  "tests/starlight-plugin.test.ts": {
+    "mtime": 1787882051.6774693,
+    "ast_hash": "ef9a58776cb7d992441e01b59823749e",
+    "semantic_hash": ""
+  },
+  "docs/starlight-plugin.md": {
+    "mtime": 1787878114.5630617,
+    "ast_hash": "104ad1cde1d7c564bd760705b61b5cbd",
+    "semantic_hash": ""
+  },
+  "starlight-plugin/src/client/bootstrap.ts": {
+    "mtime": 1787879226.6980114,
+    "ast_hash": "6b42cccf7a6ce6cdc64be3ab41a9d0b0",
+    "semantic_hash": ""
+  },
+  "demo-astro/astro.config.mjs": {
+    "mtime": 1787881530.325249,
+    "ast_hash": "43e8603534f2c6b2c09138c65fc4ec8b",
+    "semantic_hash": ""
+  },
+  "demo-astro/package.json": {
+    "mtime": 1787879507.650268,
+    "ast_hash": "0e64c5fbaf8c4c4d0793dea622923575",
+    "semantic_hash": ""
+  },
+  "demo-astro/src/content.config.ts": {
+    "mtime": 1787879715.192508,
+    "ast_hash": "6d071952dcf424a9b20029d10d4c8f57",
+    "semantic_hash": ""
+  },
+  "demo-astro/tsconfig.json": {
+    "mtime": 1787879510.6958458,
+    "ast_hash": "b82d305f115ecef5084a5596e8bd643d",
+    "semantic_hash": ""
+  },
+  "demo-astro/src/content/docs/guides/architecture.md": {
+    "mtime": 1787880855.7491252,
+    "ast_hash": "904f626b78414e02d08b3e3813613191",
+    "semantic_hash": ""
+  },
+  "demo-astro/src/content/docs/guides/how-it-works.md": {
+    "mtime": 1787879984.0475998,
+    "ast_hash": "8894ef703e26d3d4738c17c8267f59c2",
+    "semantic_hash": ""
+  },
+  "demo-astro/src/content/docs/guides/sandbox.md": {
+    "mtime": 1787879984.0520623,
+    "ast_hash": "d93b1b15468e24afd153d06ccab60f6c",
+    "semantic_hash": ""
+  },
+  "demo-astro/src/content/docs/index.md": {
+    "mtime": 1787880852.4566422,
+    "ast_hash": "abc215b551919318c29c192d8aca84a4",
+    "semantic_hash": ""
+  },
+  "demo-astro/public/favicon.svg": {
+    "mtime": 1787879529.8277316,
+    "ast_hash": "28d8e517c917eab50fef42655a8a60be",
+    "semantic_hash": ""
+  },
+  "starlight-plugin/src/server/authProxy.ts": {
+    "mtime": 1787881124.9393263,
+    "ast_hash": "5f32f7cf6d0da53f3bf173a8adf63c6a",
+    "semantic_hash": ""
+  },
+  "demo-astro/src/components/Banner.astro": {
+    "mtime": 1787880897.3148134,
+    "ast_hash": "4b62ca85c3eb0e77ecb107870f64e37b",
     "semantic_hash": ""
   }
 }
