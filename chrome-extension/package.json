@@ -11,7 +11,7 @@
   "author": "mstrelex",
   "license": "MIT",
   "dependencies": {
-    "js-yaml": "^4.3.1"
+    "js-yaml": "^5.3.0"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.263",
