@@ -1564,8 +1564,8 @@ function injectSidebar() {
     <div class="unauthorized-container" style="display: none; flex-direction: column; flex: 1; padding: 16px;"></div>
 
     <div class="tab-header">
-      <button class="tab-btn active" data-tab="inline">Inline Comments</button>
-      <button class="tab-btn" data-tab="page">Page Discussion</button>
+      <button class="tab-btn active" data-tab="inline">Inline</button>
+      <button class="tab-btn" data-tab="page">Document</button>
     </div>
 
     <div class="tab-content" id="tab-inline" style="display: flex; flex-direction: column; flex: 1; min-height: 0;">
