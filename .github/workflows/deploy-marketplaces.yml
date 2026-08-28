@@ -5,11 +5,49 @@ on:
     types: [published, edited]
 
 jobs:
+  deploy-npm:
+    name: Publish Packages to npm (OIDC Trusted Publishing)
+    if: github.event.release.draft == false && github.event.release.prerelease == false
+    runs-on: ubuntu-latest
+    environment: Production
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 9
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 20
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install & Build Packages
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm --filter @md-comments/shared run build
+          pnpm --filter @md-comments/starlight run build
+
+      - name: Publish to npm with Provenance
+        run: |
+          echo "Publishing @md-comments/shared with OIDC provenance..."
+          pnpm --filter @md-comments/shared publish --provenance --no-git-checks --access public || echo "Shared package already published or up to date."
+          echo "Publishing @md-comments/starlight with OIDC provenance..."
+          pnpm --filter @md-comments/starlight publish --provenance --no-git-checks --access public || echo "Starlight plugin already published or up to date."
+
   deploy-vscode:
     name: Deploy VS Code Extension
     if: github.event.release.draft == false && github.event.release.prerelease == false
     runs-on: ubuntu-latest
     environment: Production
+    permissions:
+      contents: read
     steps:
       - name: Checkout Code
         uses: actions/checkout@v6
@@ -54,6 +92,8 @@ jobs:
     if: github.event.release.draft == false && github.event.release.prerelease == false
     runs-on: ubuntu-latest
     environment: Production
+    permissions:
+      contents: read
     steps:
       - name: Checkout Code
         uses: actions/checkout@v6
@@ -91,7 +131,6 @@ jobs:
             exit 1
           fi
           echo "Publishing to Open VSX: $VSIX_FILE"
-          # Capture output to check for duplicate/already published errors
           STATUS=0
           OUTPUT=$(pnpm dlx ovsx publish "$VSIX_FILE" -p "$OVSX_PAT" 2>&1) || STATUS=$?
           echo "$OUTPUT"
@@ -108,6 +147,8 @@ jobs:
     if: github.event.release.draft == false && github.event.release.prerelease == false
     runs-on: ubuntu-latest
     environment: Production
+    permissions:
+      contents: read
     steps:
       - name: Checkout Code
         uses: actions/checkout@v6
@@ -188,6 +229,8 @@ jobs:
     if: github.event.release.draft == false && github.event.release.prerelease == false
     runs-on: ubuntu-latest
     environment: Production
+    permissions:
+      contents: read
     steps:
       - name: Deploy Obsidian Plugin
         run: |

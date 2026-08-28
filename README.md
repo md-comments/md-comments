@@ -9,7 +9,7 @@
 
 A collaboration tool for Markdown documentation. Markdown excels at authoring, version control, and agent workflows, but it has no built-in way to highlight a passage and leave feedback inline. **Markdown Comments** closes that gap with a visual commenting UI. Comments auto-save live via custom git refs (`refs/md-comments/data`) placed outside the standard `refs/heads/` branch namespace — requiring **zero commits, zero branches, and zero PR overhead**. Anyone logged into GitHub can review and comment on Markdown documents instantly.
 
-Works in **VS Code** ([Marketplace](https://marketplace.visualstudio.com/items?itemName=md-comments.md-preview-comments) or [Open VSX](https://open-vsx.org/extension/md-comments/md-preview-comments)), **Cursor**, **Antigravity**, **Obsidian**, and **GitHub** ([Chrome Extension](https://chromewebstore.google.com/detail/markdown-comments/mjlhdjonjfcedkbpajkfeidfebefhkpp)).
+Works in **VS Code** ([Marketplace](https://marketplace.visualstudio.com/items?itemName=md-comments.md-preview-comments) or [Open VSX](https://open-vsx.org/extension/md-comments/md-preview-comments)), **Cursor**, **Antigravity**, **Obsidian**, **Astro / Starlight** ([@md-comments/starlight](https://www.npmjs.com/package/@md-comments/starlight)), and **GitHub** ([Chrome Extension](https://chromewebstore.google.com/detail/markdown-comments/mjlhdjonjfcedkbpajkfeidfebefhkpp)).
 
 ---
 
@@ -24,6 +24,8 @@ Works in **VS Code** ([Marketplace](https://marketplace.visualstudio.com/items?i
 - **Threaded Conversations**: Support for nested replies, emoji reactions, and thread status (Open / Resolved) for page-level and text-selection comments.
 - **Direct GitHub File & Line Linking**: Every comment entry contains clickable links back to the target file and line range (`docs/architecture.md#L15`).
 - **Orphan Detection**: Detect and manage comments whose anchors are lost due to drastic document changes.
+- **Astro & Starlight Integration**: Embed in documentation sites with zero extensions required for readers.
+- **OIDC & Trusted Publishing**: Automated npm releases with verifiable build provenance.
 
 ---
 
@@ -32,6 +34,7 @@ Works in **VS Code** ([Marketplace](https://marketplace.visualstudio.com/items?i
 This repository is organized as a monorepo separating editor-specific wrappers from shared logic:
 
 - **[shared/](./shared/)**: Shared platform-independent core logic (parsing, fuzzy placement logic, avatar/author caching, and types).
+- **[starlight-plugin/](./starlight-plugin/)**: Official Astro integration and Starlight plugin (`@md-comments/starlight`).
 - **[vscode-extension/](./vscode-extension/)**: VS Code, Cursor, and Antigravity extension implementation.
 - **[obsidian-plugin/](./obsidian-plugin/)**: Obsidian native plugin implementation.
 - **[chrome-extension/](./chrome-extension/)**: Chrome Extension implementation for GitHub integration.

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Astro & Starlight Plugin (`@md-comments/starlight`)**: Official Starlight plugin and Astro integration bringing inline Markdown Comments to documentation websites without requiring browser extensions.
+- **Client-Side GitHub OAuth Device Flow**: Zero-server browser authentication for documentation readers and reviewers.
+- **OIDC & Trusted Publishing Release Workflow**: Automated npm publishing using OpenID Connect (OIDC) tokens with verifiable cryptographic build provenance (`--provenance`).
+
 ## [1.1.5] - 2026-08-27
 
 ### Breaking Changes

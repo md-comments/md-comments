@@ -1,10 +1,14 @@
-name: Deploy Static Website to Pages
+name: Deploy Static Website & Astro Demo to Pages
 
 on:
   push:
     branches: ["main"]
     paths:
       - 'website/**'
+      - 'demo-astro/**'
+      - 'starlight-plugin/**'
+      - 'shared/**'
+      - '.github/workflows/deploy-pages.yml'
   workflow_dispatch:
 
 permissions:
@@ -26,13 +30,41 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 9
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Core Libraries
+        run: |
+          pnpm --filter @md-comments/shared run build
+          pnpm --filter @md-comments/starlight run build
+
+      - name: Build Astro Demo Site
+        run: pnpm --filter md-comments-demo-astro run build
+
+      - name: Assemble Combined Site
+        run: |
+          mkdir -p _site/demo-astro
+          cp -r website/* _site/
+          cp -r demo-astro/dist/* _site/demo-astro/
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './website'
+          path: './_site'
 
       - name: Deploy to GitHub Pages
         id: deployment
