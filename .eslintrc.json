@@ -24,5 +24,17 @@
     "no-undef": "warn",
     "security/detect-object-injection": "off"
   },
-  "ignorePatterns": ["dist", "node_modules", "main.js"]
+  "ignorePatterns": [
+    "dist",
+    "out",
+    "_site",
+    ".astro",
+    "node_modules",
+    "main.js",
+    "coverage",
+    "graphify-out",
+    "artifacts",
+    "scratch",
+    "temp-chrome-profile*"
+  ]
 }

@@ -225,7 +225,11 @@ export async function pollForAccessToken(
         throw new Error(data.error_description || data.error);
       }
     } catch (err: any) {
-      if (err?.message?.includes('cancelled') || err?.message?.includes('expired') || err?.message?.includes('denied')) {
+      if (
+        err?.message?.includes('cancelled') ||
+        err?.message?.includes('expired') ||
+        err?.message?.includes('denied')
+      ) {
         throw err;
       }
       // Transient error, continue loop
@@ -259,4 +263,3 @@ export async function getViewer(token: string): Promise<GitHubViewer | null> {
   }
   return null;
 }
-

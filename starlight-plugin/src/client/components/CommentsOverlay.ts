@@ -56,7 +56,6 @@ export class CommentsOverlay {
   }
 
   private initDOM(): void {
-
     // 2. Selection Bubble
     this.selectionBubbleEl = document.createElement('button');
     this.selectionBubbleEl.className = 'md-comments-selection-bubble';
@@ -275,7 +274,10 @@ export class CommentsOverlay {
     if (!this.drawerEl) return;
     const drawerWidth = this.options.ui?.drawerWidth || 360;
     if (typeof document !== 'undefined' && document.documentElement) {
-      document.documentElement.style?.setProperty?.('--md-comments-drawer-width', `${drawerWidth}px`);
+      document.documentElement.style?.setProperty?.(
+        '--md-comments-drawer-width',
+        `${drawerWidth}px`
+      );
       document.documentElement.classList?.add?.('md-comments-panel-open');
     }
     this.drawerEl.classList.add('md-comments-drawer-open');

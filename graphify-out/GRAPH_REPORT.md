@@ -1,20 +1,21 @@
 # Graph Report - md-comments  (2026-08-27)
 
 ## Corpus Check
-- 143 files · ~121,884 words
+- 143 files · ~121,910 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1408 nodes · 2624 edges · 98 communities (69 shown, 29 thin omitted)
+- 1417 nodes · 2633 edges · 104 communities (75 shown, 29 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 65 edges (avg confidence: 0.74)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `a185a4e2`
+- Built from commit: `aed80400`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
+- openSidebarForNewInline
 - content.ts
 - validate.py
 - CommentsSidebarView
@@ -26,11 +27,11 @@
 - pre-commit-checks/SKILL.md
 - chrome-extension/manifest.json
 - chrome-extension/package.json
-- Obsidian Plugin Guide
-- eslint-plugin-security
+- shared/types.ts
+- renderSidebarComments
 - previewActions.js
 - inlineAnchors.js
-- .eslintrc.json
+- ignorePatterns
 - compilerOptions
 - compilerOptions
 - preview.js
@@ -89,12 +90,17 @@
 - Website Assets
 - Markdown Comments for VS Code
 - test-publish-local.sh
-- dependencies
+- demo-astro/package.json
 - devDependencies
 - compilerOptions
 - background.ts
+- renderDOMIndicatorsForFile
 - Astro & Starlight Plugin (`@md-comments/starlight`)
+- attachCommentCardEvents
 - CommentsFile
+- chrome-extension/src/githubAuth.ts
+- handlePageLoad
+- @typescript-eslint/eslint-plugin
 - Sample Technical Specification
 - demo-astro/tsconfig.json
 - architecture.md
@@ -136,11 +142,15 @@
 ## Import Cycles
 - None detected.
 
-## Communities (98 total, 29 thin omitted)
+## Communities (104 total, 29 thin omitted)
+
+### Community 0 - "openSidebarForNewInline"
+Cohesion: 0.17
+Nodes (16): applyPendingHighlight(), clearPendingHighlights(), findDiffGutterCell(), findDomParagraphs(), findHeadingContext(), findParagraphForNode(), getFilePathFromFileContainer(), handleTextSelection() (+8 more)
 
 ### Community 1 - "content.ts"
-Cohesion: 0.05
-Nodes (99): activeIndicators, appInstallationStatus, applyPendingHighlight(), attachCommentCardEvents(), attachInstallationPromptEvents(), attachOAuthEvents(), cachedSelectedClasses, checkPageChange() (+91 more)
+Cohesion: 0.09
+Nodes (27): activeIndicators, appInstallationStatus, cachedSelectedClasses, collectCommentAuthors(), displayNameCache, draftsStore, fetchDisplayName(), formatRelativeTime() (+19 more)
 
 ### Community 2 - "validate.py"
 Cohesion: 0.07
@@ -174,9 +184,13 @@ Nodes (26): action, default_icon, default_title, background, service_worker, con
 Cohesion: 0.08
 Nodes (25): author, dependencies, js-yaml, description, devDependencies, esbuild, tslib, @types/chrome (+17 more)
 
-### Community 12 - "Obsidian Plugin Guide"
-Cohesion: 0.09
-Nodes (35): App Icon PNG, App Icon SVG, Comments Example Note, Obsidian Plugin Guide, createLivePreviewExtension(), CommentComposerModal, DEFAULT_SETTINGS, MarkdownCommentsPlugin (+27 more)
+### Community 12 - "shared/types.ts"
+Cohesion: 0.06
+Nodes (48): App Icon PNG, App Icon SVG, Comments Example Note, Obsidian Plugin Guide, createLivePreviewExtension(), CommentComposerModal, DEFAULT_SETTINGS, MarkdownCommentsPlugin (+40 more)
+
+### Community 13 - "renderSidebarComments"
+Cohesion: 0.28
+Nodes (15): attachInstallationPromptEvents(), attachOAuthEvents(), fetchCommentsFile(), fetchFileContent(), getPRHeadBranchFromDom(), loadAndRenderCommentsForContainer(), loadAndRenderFileInTab(), parseGitHubUrl() (+7 more)
 
 ### Community 14 - "previewActions.js"
 Cohesion: 0.15
@@ -186,9 +200,9 @@ Nodes (24): activateTab(), activeTabKey(), applyCollapsedState(), authorsMatchCl
 Cohesion: 0.21
 Nodes (20): activatePair(), activateParagraphComments(), bindCardHover(), bindClick(), bindHover(), bindParagraphMarked(), clearActive(), createDomRange() (+12 more)
 
-### Community 16 - ".eslintrc.json"
-Cohesion: 0.07
-Nodes (28): env, browser, es2022, node, extends, globals, acquireVsCodeApi, chrome (+20 more)
+### Community 16 - "ignorePatterns"
+Cohesion: 0.05
+Nodes (36): env, browser, es2022, node, extends, globals, acquireVsCodeApi, chrome (+28 more)
 
 ### Community 17 - "compilerOptions"
 Cohesion: 0.11
@@ -239,8 +253,8 @@ Cohesion: 0.50
 Nodes (7): bindTextarea(), getMentionQuery(), loadDisplayNames(), loadMentionUsers(), removeMentionMenu(), scan(), showMentionMenu()
 
 ### Community 30 - "commentStore.ts"
-Cohesion: 0.08
-Nodes (62): GitHubRepoInfo, parseGitHubPageUrl(), parseGitHubRemote(), getAuthor(), warmAuthorCache(), CommentActionMessage, executeCommentAction(), resolveText() (+54 more)
+Cohesion: 0.12
+Nodes (39): GitHubRepoInfo, parseGitHubPageUrl(), parseGitHubRemote(), executeCommentAction(), resolveText(), savedToast(), addInlineComment(), addPageComment() (+31 more)
 
 ### Community 31 - "compilerOptions"
 Cohesion: 0.13
@@ -346,25 +360,41 @@ Nodes (4): draw_text_centered(), draw_text_with_shadow(), main(), make_rounded_c
 Cohesion: 0.20
 Nodes (9): Commands, From VS Code Marketplace / Open VSX, From VSIX, Installation, Key Features, License, Markdown Comments for VS Code, Settings (+1 more)
 
-### Community 77 - "dependencies"
+### Community 77 - "demo-astro/package.json"
 Cohesion: 0.08
-Nodes (23): astro, @astrojs/check, @astrojs/starlight, dependencies, astro, @astrojs/check, @astrojs/starlight, @md-comments/shared (+15 more)
+Nodes (24): astro, @astrojs/check, @astrojs/starlight, dependencies, @md-comments/shared, @md-comments/starlight, devDependencies, astro (+16 more)
 
 ### Community 78 - "devDependencies"
 Cohesion: 0.12
-Nodes (17): eslint, devDependencies, eslint, js-yaml, playwright, prettier, typescript, @typescript-eslint/eslint-plugin (+9 more)
+Nodes (17): eslint, eslint-plugin-security, devDependencies, eslint, eslint-plugin-security, js-yaml, playwright, prettier (+9 more)
 
 ### Community 79 - "compilerOptions"
 Cohesion: 0.14
 Nodes (13): compilerOptions, declaration, esModuleInterop, forceConsistentCasingInFileNames, module, moduleResolution, outDir, rootDir (+5 more)
 
+### Community 82 - "renderDOMIndicatorsForFile"
+Cohesion: 0.21
+Nodes (14): checkPageChange(), cleanupInjections(), getNativeContentContainer(), hideCommentTooltip(), highlightTextInElement(), injectFABButton(), injectToolbarButton(), isSidebarOpen() (+6 more)
+
 ### Community 83 - "Astro & Starlight Plugin (`@md-comments/starlight`)"
 Cohesion: 0.20
 Nodes (9): 1. Configure in `astro.config.mjs`, 2. Standard Astro Sites (Non-Starlight), Astro & Starlight Plugin (`@md-comments/starlight`), Authentication: GitHub OAuth Device Flow, Configuration Options, Custom Page-Level Comments, Features, Installation (+1 more)
 
+### Community 84 - "attachCommentCardEvents"
+Cohesion: 0.30
+Nodes (12): attachCommentCardEvents(), commitCommentFileChanges(), deleteComment(), deleteReply(), editComment(), editReply(), getDisplayAuthor(), saveNewInlineComment() (+4 more)
+
 ### Community 86 - "CommentsFile"
-Cohesion: 0.08
-Nodes (22): CommentStore, EMPTY, newId(), normalizeCommentsFile(), normalizeInlineComment(), normalizePageComment(), normalizeReply(), CommentBackend (+14 more)
+Cohesion: 0.13
+Nodes (11): CommentBackend, CommentStorageKey, commentsFilePathForMarkdown(), decodeBase64(), GitHubOrphanRefBackend, mergeCommentsFiles(), LocalFileAdapter, LocalFileBackend (+3 more)
+
+### Community 87 - "chrome-extension/src/githubAuth.ts"
+Cohesion: 0.27
+Nodes (9): getBranchFromDom(), initRepoAndMetadata(), clearOAuthToken(), DeviceCodeResponse, getStoredToken(), pollForAccessToken(), requestDeviceCode(), saveOAuthToken() (+1 more)
+
+### Community 88 - "handlePageLoad"
+Cohesion: 0.28
+Nodes (9): closeSidebar(), getAuthToken(), getDraftKey(), handleDevicePageAutofill(), handlePageLoad(), injectGlobalStyles(), injectSidebar(), isGitHubDarkTheme() (+1 more)
 
 ### Community 92 - "Sample Technical Specification"
 Cohesion: 0.40
@@ -391,28 +421,28 @@ Cohesion: 0.33
 Nodes (5): Context Pack, Guardrails, Output Focus, Patterns, Workflow
 
 ### Community 111 - "markdownItPlugin.ts"
-Cohesion: 0.07
-Nodes (76): renderAuthor(), renderCommentCard(), resolveDisplayName(), vscode, clearAuthorCache(), extractMentionLogins(), fallbackAuthor(), getCachedAuthor() (+68 more)
+Cohesion: 0.06
+Nodes (95): vscode, clearAuthorCache(), extractMentionLogins(), fallbackAuthor(), getCachedAuthor(), githubAvatarUrl(), githubProfileUrl(), isCacheValid() (+87 more)
 
 ## Knowledge Gaps
-- **526 isolated node(s):** `root`, `parser`, `browser`, `node`, `es2022` (+521 more)
+- **534 isolated node(s):** `root`, `parser`, `browser`, `node`, `es2022` (+529 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **29 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `vscode` connect `markdownItPlugin.ts` to `Obsidian Plugin Guide`, `vscode-extension/package.json`, `commentStore.ts`?**
-  _High betweenness centrality (0.033) - this node is a cross-community bridge._
+- **Why does `vscode` connect `markdownItPlugin.ts` to `shared/types.ts`, `vscode-extension/package.json`, `commentStore.ts`?**
+  _High betweenness centrality (0.031) - this node is a cross-community bridge._
 - **Why does `keywords` connect `vscode-extension/package.json` to `markdownItPlugin.ts`?**
-  _High betweenness centrality (0.033) - this node is a cross-community bridge._
+  _High betweenness centrality (0.031) - this node is a cross-community bridge._
 - **Why does `contributes` connect `contributes` to `vscode-extension/package.json`?**
-  _High betweenness centrality (0.016) - this node is a cross-community bridge._
+  _High betweenness centrality (0.019) - this node is a cross-community bridge._
 - **Are the 28 inferred relationships involving `Obsidian Plugin Guide` (e.g. with `main.ts` and `CommentComposerModal`) actually correct?**
   _`Obsidian Plugin Guide` has 28 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `root`, `parser`, `browser` to the rest of the system?**
-  _526 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _534 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `content.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.05041075429424944 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.09032258064516129 - nodes in this community are weakly interconnected._
 - **Should `validate.py` be split into smaller, more focused modules?**
   _Cohesion score 0.06848357791754019 - nodes in this community are weakly interconnected._

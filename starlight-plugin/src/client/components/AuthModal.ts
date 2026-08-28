@@ -1,8 +1,4 @@
-import {
-  requestDeviceCode,
-  pollForAccessToken,
-  DEFAULT_CLIENT_ID,
-} from '../githubAuth.js';
+import { requestDeviceCode, pollForAccessToken, DEFAULT_CLIENT_ID } from '../githubAuth.js';
 import type { MdCommentsPluginOptions } from '../../types.js';
 
 export class AuthModal {
@@ -94,7 +90,8 @@ export class AuthModal {
           /* browser blocked auto popup */
         }
 
-        if (statusText) statusText.textContent = 'Code copied to clipboard! Waiting for GitHub approval...';
+        if (statusText)
+          statusText.textContent = 'Code copied to clipboard! Waiting for GitHub approval...';
         if (verifyBtn) {
           verifyBtn.disabled = false;
           verifyBtn.textContent = `Open GitHub (${data.user_code})`;
@@ -148,4 +145,3 @@ export class AuthModal {
     }
   }
 }
-

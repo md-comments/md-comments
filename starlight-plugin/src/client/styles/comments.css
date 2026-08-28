@@ -37,7 +37,9 @@ html.md-comments-panel-open header[class*='header'],
 html.md-comments-panel-open .header {
   right: var(--md-comments-drawer-width, 360px) !important;
   width: calc(100% - var(--md-comments-drawer-width, 360px)) !important;
-  transition: right 0.25s cubic-bezier(0.4, 0, 0.2, 1), width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    right 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 html.md-comments-panel-open .right-sidebar {
@@ -503,4 +505,3 @@ html.md-comments-panel-open .md-comments-fab-toggle {
     transform: rotate(360deg);
   }
 }
-

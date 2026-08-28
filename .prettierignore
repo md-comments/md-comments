@@ -10,4 +10,6 @@ pnpm-lock.yaml
 # Exclude build output directories
 dist/
 out/
+_site/
+.astro/
 node_modules/

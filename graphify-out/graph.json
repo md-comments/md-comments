@@ -671,7 +671,7 @@
       "_origin": "ast",
       "id": "eslintrc",
       "community": 16,
-      "community_name": ".eslintrc.json",
+      "community_name": "ignorePatterns",
       "norm_label": ".eslintrc.json"
     },
     {
@@ -682,7 +682,7 @@
       "_origin": "ast",
       "id": "eslintrc_root",
       "community": 16,
-      "community_name": ".eslintrc.json",
+      "community_name": "ignorePatterns",
       "norm_label": "root"
     },
     {
@@ -693,7 +693,7 @@
       "_origin": "ast",
       "id": "eslintrc_parser",
       "community": 16,
-      "community_name": ".eslintrc.json",
+      "community_name": "ignorePatterns",
       "norm_label": "parser"
     },
     {
@@ -704,7 +704,7 @@
       "_origin": "ast",
       "id": "eslintrc_env",
       "community": 16,
-      "community_name": ".eslintrc.json",
+      "community_name": "ignorePatterns",
       "norm_label": "env"
     },
     {
@@ -715,7 +715,7 @@
       "_origin": "ast",
       "id": "eslintrc_env_browser",
       "community": 16,
-      "community_name": ".eslintrc.json",
+      "community_name": "ignorePatterns",
       "norm_label": "browser"
     },
     {
@@ -726,7 +726,7 @@
       "_origin": "ast",
       "id": "eslintrc_env_node",
       "community": 16,
-      "community_name": ".eslintrc.json",
+      "community_name": "ignorePatterns",
       "norm_label": "node"
     },
     {
@@ -737,7 +737,7 @@
       "_origin": "ast",
       "id": "eslintrc_env_es2022",
       "community": 16,
-      "community_name": ".eslintrc.json",
+      "community_name": "ignorePatterns",
       "norm_label": "es2022"
     },
     {
@@ -748,7 +748,7 @@
       "_origin": "ast",
       "id": "eslintrc_globals",
       "community": 16,
-      "community_name": ".eslintrc.json",
+      "community_name": "ignorePatterns",
       "norm_label": "globals"
     },
     {
@@ -759,7 +759,7 @@
       "_origin": "ast",
       "id": "eslintrc_globals_acquirevscodeapi",
       "community": 16,
-      "community_name": ".eslintrc.json",
+      "community_name": "ignorePatterns",
       "norm_label": "acquirevscodeapi"
     },
     {
@@ -770,7 +770,7 @@
       "_origin": "ast",
       "id": "eslintrc_globals_chrome",
       "community": 16,
-      "community_name": ".eslintrc.json",
+      "community_name": "ignorePatterns",
       "norm_label": "chrome"
     },
     {
@@ -781,7 +781,7 @@
       "_origin": "ast",
       "id": "eslintrc_plugins",
       "community": 16,
-      "community_name": ".eslintrc.json",
+      "community_name": "ignorePatterns",
       "norm_label": "plugins"
     },
     {
@@ -792,7 +792,7 @@
       "_origin": "ast",
       "id": "ref_typescript_eslint",
       "community": 16,
-      "community_name": ".eslintrc.json",
+      "community_name": "ignorePatterns",
       "norm_label": "@typescript-eslint"
     },
     {
@@ -803,7 +803,7 @@
       "_origin": "ast",
       "id": "ref_security",
       "community": 16,
-      "community_name": ".eslintrc.json",
+      "community_name": "ignorePatterns",
       "norm_label": "security"
     },
     {
@@ -814,7 +814,7 @@
       "_origin": "ast",
       "id": "eslintrc_extends",
       "community": 16,
-      "community_name": ".eslintrc.json",
+      "community_name": "ignorePatterns",
       "norm_label": "extends"
     },
     {
@@ -825,7 +825,7 @@
       "_origin": "ast",
       "id": "ref_eslint_recommended",
       "community": 16,
-      "community_name": ".eslintrc.json",
+      "community_name": "ignorePatterns",
       "norm_label": "eslint:recommended"
     },
     {
@@ -836,7 +836,7 @@
       "_origin": "ast",
       "id": "ref_plugin_typescript_eslint_recommended",
       "community": 16,
-      "community_name": ".eslintrc.json",
+      "community_name": "ignorePatterns",
       "norm_label": "plugin:@typescript-eslint/recommended"
     },
     {
@@ -847,7 +847,7 @@
       "_origin": "ast",
       "id": "ref_plugin_security_recommended_legacy",
       "community": 16,
-      "community_name": ".eslintrc.json",
+      "community_name": "ignorePatterns",
       "norm_label": "plugin:security/recommended-legacy"
     },
     {
@@ -858,7 +858,7 @@
       "_origin": "ast",
       "id": "eslintrc_rules",
       "community": 16,
-      "community_name": ".eslintrc.json",
+      "community_name": "ignorePatterns",
       "norm_label": "rules"
     },
     {
@@ -869,7 +869,7 @@
       "_origin": "ast",
       "id": "eslintrc_rules_typescript_eslint_no_explicit_any",
       "community": 16,
-      "community_name": ".eslintrc.json",
+      "community_name": "ignorePatterns",
       "norm_label": "@typescript-eslint/no-explicit-any"
     },
     {
@@ -880,7 +880,7 @@
       "_origin": "ast",
       "id": "eslintrc_rules_typescript_eslint_no_unused_vars",
       "community": 16,
-      "community_name": ".eslintrc.json",
+      "community_name": "ignorePatterns",
       "norm_label": "@typescript-eslint/no-unused-vars"
     },
     {
@@ -891,7 +891,7 @@
       "_origin": "ast",
       "id": "ref_warn",
       "community": 16,
-      "community_name": ".eslintrc.json",
+      "community_name": "ignorePatterns",
       "norm_label": "warn"
     },
     {
@@ -902,7 +902,7 @@
       "_origin": "ast",
       "id": "eslintrc_rules_typescript_eslint_no_var_requires",
       "community": 16,
-      "community_name": ".eslintrc.json",
+      "community_name": "ignorePatterns",
       "norm_label": "@typescript-eslint/no-var-requires"
     },
     {
@@ -913,7 +913,7 @@
       "_origin": "ast",
       "id": "eslintrc_rules_no_useless_escape",
       "community": 16,
-      "community_name": ".eslintrc.json",
+      "community_name": "ignorePatterns",
       "norm_label": "no-useless-escape"
     },
     {
@@ -924,7 +924,7 @@
       "_origin": "ast",
       "id": "eslintrc_rules_no_undef",
       "community": 16,
-      "community_name": ".eslintrc.json",
+      "community_name": "ignorePatterns",
       "norm_label": "no-undef"
     },
     {
@@ -935,7 +935,7 @@
       "_origin": "ast",
       "id": "eslintrc_rules_security_detect_object_injection",
       "community": 16,
-      "community_name": ".eslintrc.json",
+      "community_name": "ignorePatterns",
       "norm_label": "security/detect-object-injection"
     },
     {
@@ -946,7 +946,7 @@
       "_origin": "ast",
       "id": "eslintrc_ignorepatterns",
       "community": 16,
-      "community_name": ".eslintrc.json",
+      "community_name": "ignorePatterns",
       "norm_label": "ignorepatterns"
     },
     {
@@ -957,8 +957,41 @@
       "_origin": "ast",
       "id": "eslintrc_json_ref_dist",
       "community": 16,
-      "community_name": ".eslintrc.json",
+      "community_name": "ignorePatterns",
       "norm_label": "dist"
+    },
+    {
+      "label": "out",
+      "file_type": "concept",
+      "source_file": ".eslintrc.json",
+      "source_location": "L27",
+      "_origin": "ast",
+      "id": "ref_out",
+      "community": 16,
+      "community_name": "ignorePatterns",
+      "norm_label": "out"
+    },
+    {
+      "label": "_site",
+      "file_type": "concept",
+      "source_file": ".eslintrc.json",
+      "source_location": "L27",
+      "_origin": "ast",
+      "id": "ref_site",
+      "community": 16,
+      "community_name": "ignorePatterns",
+      "norm_label": "_site"
+    },
+    {
+      "label": ".astro",
+      "file_type": "concept",
+      "source_file": ".eslintrc.json",
+      "source_location": "L27",
+      "_origin": "ast",
+      "id": "ref_astro",
+      "community": 16,
+      "community_name": "ignorePatterns",
+      "norm_label": ".astro"
     },
     {
       "label": "node_modules",
@@ -968,7 +1001,7 @@
       "_origin": "ast",
       "id": "eslintrc_json_ref_node_modules",
       "community": 16,
-      "community_name": ".eslintrc.json",
+      "community_name": "ignorePatterns",
       "norm_label": "node_modules"
     },
     {
@@ -979,8 +1012,63 @@
       "_origin": "ast",
       "id": "ref_main_js",
       "community": 16,
-      "community_name": ".eslintrc.json",
+      "community_name": "ignorePatterns",
       "norm_label": "main.js"
+    },
+    {
+      "label": "coverage",
+      "file_type": "concept",
+      "source_file": ".eslintrc.json",
+      "source_location": "L27",
+      "_origin": "ast",
+      "id": "ref_coverage",
+      "community": 16,
+      "community_name": "ignorePatterns",
+      "norm_label": "coverage"
+    },
+    {
+      "label": "graphify-out",
+      "file_type": "concept",
+      "source_file": ".eslintrc.json",
+      "source_location": "L27",
+      "_origin": "ast",
+      "id": "ref_graphify_out",
+      "community": 16,
+      "community_name": "ignorePatterns",
+      "norm_label": "graphify-out"
+    },
+    {
+      "label": "artifacts",
+      "file_type": "concept",
+      "source_file": ".eslintrc.json",
+      "source_location": "L27",
+      "_origin": "ast",
+      "id": "ref_artifacts",
+      "community": 16,
+      "community_name": "ignorePatterns",
+      "norm_label": "artifacts"
+    },
+    {
+      "label": "scratch",
+      "file_type": "concept",
+      "source_file": ".eslintrc.json",
+      "source_location": "L27",
+      "_origin": "ast",
+      "id": "ref_scratch",
+      "community": 16,
+      "community_name": "ignorePatterns",
+      "norm_label": "scratch"
+    },
+    {
+      "label": "temp-chrome-profile*",
+      "file_type": "concept",
+      "source_file": ".eslintrc.json",
+      "source_location": "L27",
+      "_origin": "ast",
+      "id": "ref_temp_chrome_profile",
+      "community": 16,
+      "community_name": "ignorePatterns",
+      "norm_label": "temp-chrome-profile*"
     },
     {
       "label": "esbuild.js",
@@ -1836,8 +1924,8 @@
       "source_location": "L70",
       "_origin": "ast",
       "id": "chrome_extension_src_content_getdraftkey",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 88,
+      "community_name": "handlePageLoad",
       "norm_label": "getdraftkey()"
     },
     {
@@ -1847,8 +1935,8 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "chrome_extension_src_content_savedraft",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 0,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "savedraft()"
     },
     {
@@ -1869,8 +1957,8 @@
       "source_location": "L91",
       "_origin": "ast",
       "id": "chrome_extension_src_content_parsegithuburl",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 13,
+      "community_name": "renderSidebarComments",
       "norm_label": "parsegithuburl()"
     },
     {
@@ -1880,8 +1968,8 @@
       "source_location": "L121",
       "_origin": "ast",
       "id": "chrome_extension_src_content_getbranchfromdom",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 87,
+      "community_name": "chrome-extension/src/githubAuth.ts",
       "norm_label": "getbranchfromdom()"
     },
     {
@@ -1891,8 +1979,8 @@
       "source_location": "L148",
       "_origin": "ast",
       "id": "chrome_extension_src_content_getprheadbranchfromdom",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 13,
+      "community_name": "renderSidebarComments",
       "norm_label": "getprheadbranchfromdom()"
     },
     {
@@ -1902,8 +1990,8 @@
       "source_location": "L194",
       "_origin": "ast",
       "id": "chrome_extension_src_content_getauthtoken",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 88,
+      "community_name": "handlePageLoad",
       "norm_label": "getauthtoken()"
     },
     {
@@ -1913,8 +2001,8 @@
       "source_location": "L208",
       "_origin": "ast",
       "id": "chrome_extension_src_content_getdisplayauthor",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 84,
+      "community_name": "attachCommentCardEvents",
       "norm_label": "getdisplayauthor()"
     },
     {
@@ -1924,8 +2012,8 @@
       "source_location": "L213",
       "_origin": "ast",
       "id": "chrome_extension_src_content_fetchfilecontent",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 13,
+      "community_name": "renderSidebarComments",
       "norm_label": "fetchfilecontent()"
     },
     {
@@ -1935,8 +2023,8 @@
       "source_location": "L247",
       "_origin": "ast",
       "id": "chrome_extension_src_content_fetchcommentsfile",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 13,
+      "community_name": "renderSidebarComments",
       "norm_label": "fetchcommentsfile()"
     },
     {
@@ -1946,8 +2034,8 @@
       "source_location": "L268",
       "_origin": "ast",
       "id": "chrome_extension_src_content_cleanupinjections",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 82,
+      "community_name": "renderDOMIndicatorsForFile",
       "norm_label": "cleanupinjections()"
     },
     {
@@ -1957,8 +2045,8 @@
       "source_location": "L327",
       "_origin": "ast",
       "id": "chrome_extension_src_content_renamereplybuttonstook",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 0,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "renamereplybuttonstook()"
     },
     {
@@ -1968,8 +2056,8 @@
       "source_location": "L350",
       "_origin": "ast",
       "id": "chrome_extension_src_content_issidebaropen",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 82,
+      "community_name": "renderDOMIndicatorsForFile",
       "norm_label": "issidebaropen()"
     },
     {
@@ -1979,8 +2067,8 @@
       "source_location": "L359",
       "_origin": "ast",
       "id": "chrome_extension_src_content_checkpagechange",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 82,
+      "community_name": "renderDOMIndicatorsForFile",
       "norm_label": "checkpagechange()"
     },
     {
@@ -1990,8 +2078,8 @@
       "source_location": "L392",
       "_origin": "ast",
       "id": "chrome_extension_src_content_handledevicepageautofill",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 88,
+      "community_name": "handlePageLoad",
       "norm_label": "handledevicepageautofill()"
     },
     {
@@ -2001,8 +2089,8 @@
       "source_location": "L440",
       "_origin": "ast",
       "id": "chrome_extension_src_content_handlepageload",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 88,
+      "community_name": "handlePageLoad",
       "norm_label": "handlepageload()"
     },
     {
@@ -2012,8 +2100,8 @@
       "source_location": "L493",
       "_origin": "ast",
       "id": "chrome_extension_src_content_loaddocumentcomments",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 82,
+      "community_name": "renderDOMIndicatorsForFile",
       "norm_label": "loaddocumentcomments()"
     },
     {
@@ -2023,8 +2111,8 @@
       "source_location": "L590",
       "_origin": "ast",
       "id": "chrome_extension_src_content_mergelocalcomments",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 82,
+      "community_name": "renderDOMIndicatorsForFile",
       "norm_label": "mergelocalcomments()"
     },
     {
@@ -2034,8 +2122,8 @@
       "source_location": "L646",
       "_origin": "ast",
       "id": "chrome_extension_src_content_injectfabbutton",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 82,
+      "community_name": "renderDOMIndicatorsForFile",
       "norm_label": "injectfabbutton()"
     },
     {
@@ -2045,8 +2133,8 @@
       "source_location": "L672",
       "_origin": "ast",
       "id": "chrome_extension_src_content_injecttoolbarbutton",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 82,
+      "community_name": "renderDOMIndicatorsForFile",
       "norm_label": "injecttoolbarbutton()"
     },
     {
@@ -2056,8 +2144,8 @@
       "source_location": "L677",
       "_origin": "ast",
       "id": "chrome_extension_src_content_togglesidebar",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 82,
+      "community_name": "renderDOMIndicatorsForFile",
       "norm_label": "togglesidebar()"
     },
     {
@@ -2067,8 +2155,8 @@
       "source_location": "L685",
       "_origin": "ast",
       "id": "chrome_extension_src_content_getfilepathfromfilecontainer",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 0,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "getfilepathfromfilecontainer()"
     },
     {
@@ -2078,8 +2166,8 @@
       "source_location": "L698",
       "_origin": "ast",
       "id": "chrome_extension_src_content_isgithubdarktheme",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 88,
+      "community_name": "handlePageLoad",
       "norm_label": "isgithubdarktheme()"
     },
     {
@@ -2089,8 +2177,8 @@
       "source_location": "L723",
       "_origin": "ast",
       "id": "chrome_extension_src_content_synctheme",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 88,
+      "community_name": "handlePageLoad",
       "norm_label": "synctheme()"
     },
     {
@@ -2100,8 +2188,8 @@
       "source_location": "L744",
       "_origin": "ast",
       "id": "chrome_extension_src_content_injectglobalstyles",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 88,
+      "community_name": "handlePageLoad",
       "norm_label": "injectglobalstyles()"
     },
     {
@@ -2111,8 +2199,8 @@
       "source_location": "L756",
       "_origin": "ast",
       "id": "chrome_extension_src_content_processprmarkdownfiles",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 13,
+      "community_name": "renderSidebarComments",
       "norm_label": "processprmarkdownfiles()"
     },
     {
@@ -2122,8 +2210,8 @@
       "source_location": "L834",
       "_origin": "ast",
       "id": "chrome_extension_src_content_rendercustommarkdownsourceview",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 13,
+      "community_name": "renderSidebarComments",
       "norm_label": "rendercustommarkdownsourceview()"
     },
     {
@@ -2133,8 +2221,8 @@
       "source_location": "L878",
       "_origin": "ast",
       "id": "chrome_extension_src_content_loadandrendercommentsforcontainer",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 13,
+      "community_name": "renderSidebarComments",
       "norm_label": "loadandrendercommentsforcontainer()"
     },
     {
@@ -2144,8 +2232,8 @@
       "source_location": "L954",
       "_origin": "ast",
       "id": "chrome_extension_src_content_initrepoandmetadata",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 87,
+      "community_name": "chrome-extension/src/githubAuth.ts",
       "norm_label": "initrepoandmetadata()"
     },
     {
@@ -2155,8 +2243,8 @@
       "source_location": "L1066",
       "_origin": "ast",
       "id": "chrome_extension_src_content_setactivefile",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 13,
+      "community_name": "renderSidebarComments",
       "norm_label": "setactivefile()"
     },
     {
@@ -2166,8 +2254,8 @@
       "source_location": "L1093",
       "_origin": "ast",
       "id": "chrome_extension_src_content_finddiffguttercell",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 0,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "finddiffguttercell()"
     },
     {
@@ -2177,8 +2265,8 @@
       "source_location": "L1101",
       "_origin": "ast",
       "id": "chrome_extension_src_content_triggerandmovenativecomposer",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 0,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "triggerandmovenativecomposer()"
     },
     {
@@ -2188,8 +2276,8 @@
       "source_location": "L1281",
       "_origin": "ast",
       "id": "chrome_extension_src_content_showfallbackreplycomposer",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 0,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "showfallbackreplycomposer()"
     },
     {
@@ -2199,8 +2287,8 @@
       "source_location": "L1363",
       "_origin": "ast",
       "id": "chrome_extension_src_content_highlighttextinelement",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 82,
+      "community_name": "renderDOMIndicatorsForFile",
       "norm_label": "highlighttextinelement()"
     },
     {
@@ -2210,8 +2298,8 @@
       "source_location": "L1472",
       "_origin": "ast",
       "id": "chrome_extension_src_content_clearpendinghighlights",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 0,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "clearpendinghighlights()"
     },
     {
@@ -2221,8 +2309,8 @@
       "source_location": "L1488",
       "_origin": "ast",
       "id": "chrome_extension_src_content_applypendinghighlight",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 0,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "applypendinghighlight()"
     },
     {
@@ -2232,8 +2320,8 @@
       "source_location": "L1533",
       "_origin": "ast",
       "id": "chrome_extension_src_content_injectsidebar",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 88,
+      "community_name": "handlePageLoad",
       "norm_label": "injectsidebar()"
     },
     {
@@ -2243,8 +2331,8 @@
       "source_location": "L1673",
       "_origin": "ast",
       "id": "chrome_extension_src_content_opensidebar",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 82,
+      "community_name": "renderDOMIndicatorsForFile",
       "norm_label": "opensidebar()"
     },
     {
@@ -2254,8 +2342,8 @@
       "source_location": "L1705",
       "_origin": "ast",
       "id": "chrome_extension_src_content_closesidebar",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 88,
+      "community_name": "handlePageLoad",
       "norm_label": "closesidebar()"
     },
     {
@@ -2265,8 +2353,8 @@
       "source_location": "L1712",
       "_origin": "ast",
       "id": "chrome_extension_src_content_renderinstallationprompt",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 13,
+      "community_name": "renderSidebarComments",
       "norm_label": "renderinstallationprompt()"
     },
     {
@@ -2276,8 +2364,8 @@
       "source_location": "L1771",
       "_origin": "ast",
       "id": "chrome_extension_src_content_attachinstallationpromptevents",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 13,
+      "community_name": "renderSidebarComments",
       "norm_label": "attachinstallationpromptevents()"
     },
     {
@@ -2287,8 +2375,8 @@
       "source_location": "L1819",
       "_origin": "ast",
       "id": "chrome_extension_src_content_renderoauthprompt",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 13,
+      "community_name": "renderSidebarComments",
       "norm_label": "renderoauthprompt()"
     },
     {
@@ -2298,8 +2386,8 @@
       "source_location": "L1853",
       "_origin": "ast",
       "id": "chrome_extension_src_content_attachoauthevents",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 13,
+      "community_name": "renderSidebarComments",
       "norm_label": "attachoauthevents()"
     },
     {
@@ -2309,8 +2397,8 @@
       "source_location": "L2017",
       "_origin": "ast",
       "id": "chrome_extension_src_content_rendersidebarcomments",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 13,
+      "community_name": "renderSidebarComments",
       "norm_label": "rendersidebarcomments()"
     },
     {
@@ -2320,8 +2408,8 @@
       "source_location": "L2127",
       "_origin": "ast",
       "id": "chrome_extension_src_content_rendercommentcard",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 1,
+      "community_name": "content.ts",
       "norm_label": "rendercommentcard()"
     },
     {
@@ -2331,8 +2419,8 @@
       "source_location": "L2271",
       "_origin": "ast",
       "id": "chrome_extension_src_content_toggleemojireaction",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 84,
+      "community_name": "attachCommentCardEvents",
       "norm_label": "toggleemojireaction()"
     },
     {
@@ -2342,8 +2430,8 @@
       "source_location": "L2296",
       "_origin": "ast",
       "id": "chrome_extension_src_content_hidecommenttooltip",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 82,
+      "community_name": "renderDOMIndicatorsForFile",
       "norm_label": "hidecommenttooltip()"
     },
     {
@@ -2353,8 +2441,8 @@
       "source_location": "L2303",
       "_origin": "ast",
       "id": "chrome_extension_src_content_showcommenttooltip",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 82,
+      "community_name": "renderDOMIndicatorsForFile",
       "norm_label": "showcommenttooltip()"
     },
     {
@@ -2364,8 +2452,8 @@
       "source_location": "L2348",
       "_origin": "ast",
       "id": "chrome_extension_src_content_scrolltocommenttext",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 0,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "scrolltocommenttext()"
     },
     {
@@ -2375,8 +2463,8 @@
       "source_location": "L2384",
       "_origin": "ast",
       "id": "chrome_extension_src_content_attachcommentcardevents",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 84,
+      "community_name": "attachCommentCardEvents",
       "norm_label": "attachcommentcardevents()"
     },
     {
@@ -2386,8 +2474,8 @@
       "source_location": "L2738",
       "_origin": "ast",
       "id": "chrome_extension_src_content_opensidebarfornewinline",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 0,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "opensidebarfornewinline()"
     },
     {
@@ -2441,8 +2529,8 @@
       "source_location": "L2974",
       "_origin": "ast",
       "id": "chrome_extension_src_content_getnativecontentcontainer",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 82,
+      "community_name": "renderDOMIndicatorsForFile",
       "norm_label": "getnativecontentcontainer()"
     },
     {
@@ -2474,8 +2562,8 @@
       "source_location": "L3172",
       "_origin": "ast",
       "id": "chrome_extension_src_content_rendertabcontent",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 13,
+      "community_name": "renderSidebarComments",
       "norm_label": "rendertabcontent()"
     },
     {
@@ -2485,8 +2573,8 @@
       "source_location": "L3383",
       "_origin": "ast",
       "id": "chrome_extension_src_content_loadandrenderfileintab",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 13,
+      "community_name": "renderSidebarComments",
       "norm_label": "loadandrenderfileintab()"
     },
     {
@@ -2496,8 +2584,8 @@
       "source_location": "L3470",
       "_origin": "ast",
       "id": "chrome_extension_src_content_renderdomindicatorsforfile",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 82,
+      "community_name": "renderDOMIndicatorsForFile",
       "norm_label": "renderdomindicatorsforfile()"
     },
     {
@@ -2507,8 +2595,8 @@
       "source_location": "L3543",
       "_origin": "ast",
       "id": "chrome_extension_src_content_finddomparagraphs",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 0,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "finddomparagraphs()"
     },
     {
@@ -2518,8 +2606,8 @@
       "source_location": "L3584",
       "_origin": "ast",
       "id": "chrome_extension_src_content_findheadingcontext",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 0,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "findheadingcontext()"
     },
     {
@@ -2529,8 +2617,8 @@
       "source_location": "L3595",
       "_origin": "ast",
       "id": "chrome_extension_src_content_commitcommentfilechanges",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 84,
+      "community_name": "attachCommentCardEvents",
       "norm_label": "commitcommentfilechanges()"
     },
     {
@@ -2540,8 +2628,8 @@
       "source_location": "L3655",
       "_origin": "ast",
       "id": "chrome_extension_src_content_savenewinlinecomment",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 84,
+      "community_name": "attachCommentCardEvents",
       "norm_label": "savenewinlinecomment()"
     },
     {
@@ -2551,8 +2639,8 @@
       "source_location": "L3694",
       "_origin": "ast",
       "id": "chrome_extension_src_content_savenewpagecomment",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 84,
+      "community_name": "attachCommentCardEvents",
       "norm_label": "savenewpagecomment()"
     },
     {
@@ -2562,8 +2650,8 @@
       "source_location": "L3716",
       "_origin": "ast",
       "id": "chrome_extension_src_content_savereply",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 84,
+      "community_name": "attachCommentCardEvents",
       "norm_label": "savereply()"
     },
     {
@@ -2573,8 +2661,8 @@
       "source_location": "L3748",
       "_origin": "ast",
       "id": "chrome_extension_src_content_editcomment",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 84,
+      "community_name": "attachCommentCardEvents",
       "norm_label": "editcomment()"
     },
     {
@@ -2584,8 +2672,8 @@
       "source_location": "L3768",
       "_origin": "ast",
       "id": "chrome_extension_src_content_deletecomment",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 84,
+      "community_name": "attachCommentCardEvents",
       "norm_label": "deletecomment()"
     },
     {
@@ -2595,8 +2683,8 @@
       "source_location": "L3778",
       "_origin": "ast",
       "id": "chrome_extension_src_content_editreply",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 84,
+      "community_name": "attachCommentCardEvents",
       "norm_label": "editreply()"
     },
     {
@@ -2606,8 +2694,8 @@
       "source_location": "L3815",
       "_origin": "ast",
       "id": "chrome_extension_src_content_deletereply",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 84,
+      "community_name": "attachCommentCardEvents",
       "norm_label": "deletereply()"
     },
     {
@@ -2617,8 +2705,8 @@
       "source_location": "L3836",
       "_origin": "ast",
       "id": "chrome_extension_src_content_toggleresolve",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 84,
+      "community_name": "attachCommentCardEvents",
       "norm_label": "toggleresolve()"
     },
     {
@@ -2639,8 +2727,8 @@
       "source_location": "L3892",
       "_origin": "ast",
       "id": "chrome_extension_src_content_resolvedisplayname",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 1,
+      "community_name": "content.ts",
       "norm_label": "resolvedisplayname()"
     },
     {
@@ -2661,8 +2749,8 @@
       "source_location": "L3938",
       "_origin": "ast",
       "id": "chrome_extension_src_content_renderauthor",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 1,
+      "community_name": "content.ts",
       "norm_label": "renderauthor()"
     },
     {
@@ -2716,8 +2804,8 @@
       "source_location": "L4010",
       "_origin": "ast",
       "id": "chrome_extension_src_content_findparagraphfornode",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 0,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "findparagraphfornode()"
     },
     {
@@ -2727,8 +2815,8 @@
       "source_location": "L4025",
       "_origin": "ast",
       "id": "chrome_extension_src_content_showselectionbutton",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 0,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "showselectionbutton()"
     },
     {
@@ -2738,8 +2826,8 @@
       "source_location": "L4125",
       "_origin": "ast",
       "id": "chrome_extension_src_content_hideselectionbutton",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 0,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "hideselectionbutton()"
     },
     {
@@ -2749,8 +2837,8 @@
       "source_location": "L4131",
       "_origin": "ast",
       "id": "chrome_extension_src_content_handletextselection",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 0,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "handletextselection()"
     },
     {
@@ -2947,8 +3035,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "chrome_extension_src_githubauth",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 87,
+      "community_name": "chrome-extension/src/githubAuth.ts",
       "norm_label": "chrome-extension/src/githubauth.ts"
     },
     {
@@ -2958,8 +3046,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "chrome_extension_src_githubauth_getstoredtoken",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 87,
+      "community_name": "chrome-extension/src/githubAuth.ts",
       "norm_label": "getstoredtoken()"
     },
     {
@@ -2969,8 +3057,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "chrome_extension_src_githubauth_saveoauthtoken",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 87,
+      "community_name": "chrome-extension/src/githubAuth.ts",
       "norm_label": "saveoauthtoken()"
     },
     {
@@ -2980,8 +3068,8 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "chrome_extension_src_githubauth_clearoauthtoken",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 87,
+      "community_name": "chrome-extension/src/githubAuth.ts",
       "norm_label": "clearoauthtoken()"
     },
     {
@@ -2991,8 +3079,8 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "chrome_extension_src_githubauth_devicecoderesponse",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 87,
+      "community_name": "chrome-extension/src/githubAuth.ts",
       "norm_label": "devicecoderesponse"
     },
     {
@@ -3002,8 +3090,8 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "chrome_extension_src_githubauth_requestdevicecode",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 87,
+      "community_name": "chrome-extension/src/githubAuth.ts",
       "norm_label": "requestdevicecode()"
     },
     {
@@ -3013,8 +3101,8 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "chrome_extension_src_githubauth_pollforaccesstoken",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 87,
+      "community_name": "chrome-extension/src/githubAuth.ts",
       "norm_label": "pollforaccesstoken()"
     },
     {
@@ -3024,8 +3112,8 @@
       "source_location": "L119",
       "_origin": "ast",
       "id": "chrome_extension_src_githubauth_startoauthdeviceflow",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 87,
+      "community_name": "chrome-extension/src/githubAuth.ts",
       "norm_label": "startoauthdeviceflow()"
     },
     {
@@ -3212,7 +3300,7 @@
       "_origin": "ast",
       "id": "demo_astro_package",
       "community": 77,
-      "community_name": "dependencies",
+      "community_name": "demo-astro/package.json",
       "norm_label": "demo-astro/package.json"
     },
     {
@@ -3223,7 +3311,7 @@
       "_origin": "ast",
       "id": "demo_astro_package_name",
       "community": 77,
-      "community_name": "dependencies",
+      "community_name": "demo-astro/package.json",
       "norm_label": "name"
     },
     {
@@ -3234,7 +3322,7 @@
       "_origin": "ast",
       "id": "demo_astro_package_version",
       "community": 77,
-      "community_name": "dependencies",
+      "community_name": "demo-astro/package.json",
       "norm_label": "version"
     },
     {
@@ -3245,7 +3333,7 @@
       "_origin": "ast",
       "id": "demo_astro_package_private",
       "community": 77,
-      "community_name": "dependencies",
+      "community_name": "demo-astro/package.json",
       "norm_label": "private"
     },
     {
@@ -3256,7 +3344,7 @@
       "_origin": "ast",
       "id": "demo_astro_package_type",
       "community": 77,
-      "community_name": "dependencies",
+      "community_name": "demo-astro/package.json",
       "norm_label": "type"
     },
     {
@@ -3267,7 +3355,7 @@
       "_origin": "ast",
       "id": "demo_astro_package_scripts",
       "community": 77,
-      "community_name": "dependencies",
+      "community_name": "demo-astro/package.json",
       "norm_label": "scripts"
     },
     {
@@ -3278,7 +3366,7 @@
       "_origin": "ast",
       "id": "demo_astro_package_scripts_dev",
       "community": 77,
-      "community_name": "dependencies",
+      "community_name": "demo-astro/package.json",
       "norm_label": "dev"
     },
     {
@@ -3289,7 +3377,7 @@
       "_origin": "ast",
       "id": "demo_astro_package_scripts_start",
       "community": 77,
-      "community_name": "dependencies",
+      "community_name": "demo-astro/package.json",
       "norm_label": "start"
     },
     {
@@ -3300,7 +3388,7 @@
       "_origin": "ast",
       "id": "demo_astro_package_scripts_build",
       "community": 77,
-      "community_name": "dependencies",
+      "community_name": "demo-astro/package.json",
       "norm_label": "build"
     },
     {
@@ -3311,7 +3399,7 @@
       "_origin": "ast",
       "id": "demo_astro_package_scripts_preview",
       "community": 77,
-      "community_name": "dependencies",
+      "community_name": "demo-astro/package.json",
       "norm_label": "preview"
     },
     {
@@ -3322,7 +3410,7 @@
       "_origin": "ast",
       "id": "demo_astro_package_scripts_astro",
       "community": 77,
-      "community_name": "dependencies",
+      "community_name": "demo-astro/package.json",
       "norm_label": "astro"
     },
     {
@@ -3333,139 +3421,150 @@
       "_origin": "ast",
       "id": "demo_astro_package_dependencies",
       "community": 77,
-      "community_name": "dependencies",
+      "community_name": "demo-astro/package.json",
       "norm_label": "dependencies"
     },
     {
-      "label": "@astrojs/check",
-      "file_type": "code",
-      "source_file": "demo-astro/package.json",
-      "source_location": "L14",
-      "_origin": "ast",
-      "id": "demo_astro_package_dependencies_astrojs_check",
-      "community": 77,
-      "community_name": "dependencies",
-      "norm_label": "@astrojs/check"
-    },
-    {
-      "label": "@astrojs/check",
-      "file_type": "concept",
-      "source_file": "demo-astro/package.json",
-      "source_location": "L14",
-      "_origin": "ast",
-      "id": "astrojs_check",
-      "community": 77,
-      "community_name": "dependencies",
-      "norm_label": "@astrojs/check"
-    },
-    {
-      "label": "@astrojs/starlight",
-      "file_type": "code",
-      "source_file": "demo-astro/package.json",
-      "source_location": "L15",
-      "_origin": "ast",
-      "id": "demo_astro_package_dependencies_astrojs_starlight",
-      "community": 77,
-      "community_name": "dependencies",
-      "norm_label": "@astrojs/starlight"
-    },
-    {
-      "label": "@astrojs/starlight",
-      "file_type": "concept",
-      "source_file": "demo-astro/package.json",
-      "source_location": "L15",
-      "_origin": "ast",
-      "id": "astrojs_starlight",
-      "community": 77,
-      "community_name": "dependencies",
-      "norm_label": "@astrojs/starlight"
-    },
-    {
       "label": "@md-comments/shared",
       "file_type": "code",
       "source_file": "demo-astro/package.json",
-      "source_location": "L16",
+      "source_location": "L14",
       "_origin": "ast",
       "id": "demo_astro_package_dependencies_md_comments_shared",
       "community": 77,
-      "community_name": "dependencies",
+      "community_name": "demo-astro/package.json",
       "norm_label": "@md-comments/shared"
     },
     {
       "label": "@md-comments/shared",
       "file_type": "concept",
       "source_file": "demo-astro/package.json",
-      "source_location": "L16",
+      "source_location": "L14",
       "_origin": "ast",
       "id": "demo_astro_package_json_md_comments_shared",
       "community": 77,
-      "community_name": "dependencies",
+      "community_name": "demo-astro/package.json",
       "norm_label": "@md-comments/shared"
     },
     {
       "label": "@md-comments/starlight",
       "file_type": "code",
       "source_file": "demo-astro/package.json",
-      "source_location": "L17",
+      "source_location": "L15",
       "_origin": "ast",
       "id": "demo_astro_package_dependencies_md_comments_starlight",
       "community": 77,
-      "community_name": "dependencies",
+      "community_name": "demo-astro/package.json",
       "norm_label": "@md-comments/starlight"
     },
     {
       "label": "@md-comments/starlight",
       "file_type": "concept",
       "source_file": "demo-astro/package.json",
-      "source_location": "L17",
+      "source_location": "L15",
       "_origin": "ast",
       "id": "md_comments_starlight",
       "community": 77,
-      "community_name": "dependencies",
+      "community_name": "demo-astro/package.json",
       "norm_label": "@md-comments/starlight"
+    },
+    {
+      "label": "devDependencies",
+      "file_type": "code",
+      "source_file": "demo-astro/package.json",
+      "source_location": "L17",
+      "_origin": "ast",
+      "id": "demo_astro_package_devdependencies",
+      "community": 77,
+      "community_name": "demo-astro/package.json",
+      "norm_label": "devdependencies"
+    },
+    {
+      "label": "@astrojs/check",
+      "file_type": "code",
+      "source_file": "demo-astro/package.json",
+      "source_location": "L18",
+      "_origin": "ast",
+      "id": "demo_astro_package_devdependencies_astrojs_check",
+      "community": 77,
+      "community_name": "demo-astro/package.json",
+      "norm_label": "@astrojs/check"
+    },
+    {
+      "label": "@astrojs/check",
+      "file_type": "concept",
+      "source_file": "demo-astro/package.json",
+      "source_location": "L18",
+      "_origin": "ast",
+      "id": "astrojs_check",
+      "community": 77,
+      "community_name": "demo-astro/package.json",
+      "norm_label": "@astrojs/check"
+    },
+    {
+      "label": "@astrojs/starlight",
+      "file_type": "code",
+      "source_file": "demo-astro/package.json",
+      "source_location": "L19",
+      "_origin": "ast",
+      "id": "demo_astro_package_devdependencies_astrojs_starlight",
+      "community": 77,
+      "community_name": "demo-astro/package.json",
+      "norm_label": "@astrojs/starlight"
+    },
+    {
+      "label": "@astrojs/starlight",
+      "file_type": "concept",
+      "source_file": "demo-astro/package.json",
+      "source_location": "L19",
+      "_origin": "ast",
+      "id": "astrojs_starlight",
+      "community": 77,
+      "community_name": "demo-astro/package.json",
+      "norm_label": "@astrojs/starlight"
     },
     {
       "label": "astro",
       "file_type": "code",
       "source_file": "demo-astro/package.json",
-      "source_location": "L18",
+      "source_location": "L20",
       "_origin": "ast",
-      "id": "demo_astro_package_dependencies_astro",
+      "id": "demo_astro_package_devdependencies_astro",
       "community": 77,
-      "community_name": "dependencies",
+      "community_name": "demo-astro/package.json",
       "norm_label": "astro"
     },
     {
       "label": "astro",
       "file_type": "concept",
       "source_file": "demo-astro/package.json",
-      "source_location": "L18",
+      "source_location": "L20",
       "_origin": "ast",
       "id": "astro",
       "community": 77,
-      "community_name": "dependencies",
+      "community_name": "demo-astro/package.json",
       "norm_label": "astro"
     },
     {
       "label": "typescript",
       "file_type": "code",
       "source_file": "demo-astro/package.json",
-      "source_location": "L19",
+      "source_location": "L21",
       "_origin": "ast",
-      "id": "demo_astro_package_dependencies_typescript",
+      "id": "demo_astro_package_devdependencies_typescript",
       "community": 77,
-      "community_name": "dependencies",
+      "community_name": "demo-astro/package.json",
       "norm_label": "typescript"
     },
     {
       "label": "typescript",
       "file_type": "concept",
       "source_file": "demo-astro/package.json",
-      "source_location": "L19",
+      "source_location": "L21",
       "_origin": "ast",
       "id": "demo_astro_package_json_typescript",
       "community": 77,
-      "community_name": "dependencies",
+      "community_name": "demo-astro/package.json",
       "norm_label": "typescript"
     },
     {
@@ -3806,7 +3905,7 @@
       "_origin": "ast",
       "id": "ref_obsidian",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "obsidian"
     },
     {
@@ -4125,7 +4224,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_livepreview",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "livepreview.ts"
     },
     {
@@ -4136,7 +4235,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_livepreview_createlivepreviewextension",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "createlivepreviewextension()"
     },
     {
@@ -4147,7 +4246,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "main.ts"
     },
     {
@@ -4158,7 +4257,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentssettings",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "markdowncommentssettings"
     },
     {
@@ -4169,7 +4268,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_default_settings",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "default_settings"
     },
     {
@@ -4180,7 +4279,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "markdowncommentsplugin"
     },
     {
@@ -4191,7 +4290,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_onload",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": ".onload()"
     },
     {
@@ -4202,7 +4301,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_triggerrefreshes",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": ".triggerrefreshes()"
     },
     {
@@ -4213,7 +4312,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_getanchorblocks",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": ".getanchorblocks()"
     },
     {
@@ -4224,7 +4323,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_opencomposerforparagraph",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": ".opencomposerforparagraph()"
     },
     {
@@ -4235,7 +4334,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_opencomposerforselection",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": ".opencomposerforselection()"
     },
     {
@@ -4246,7 +4345,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_opencomposerforcursorline",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": ".opencomposerforcursorline()"
     },
     {
@@ -4257,7 +4356,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_opensidebarandfocus",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": ".opensidebarandfocus()"
     },
     {
@@ -4268,7 +4367,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_activatesidebarview",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": ".activatesidebarview()"
     },
     {
@@ -4279,7 +4378,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_initsidebarview",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": ".initsidebarview()"
     },
     {
@@ -4290,7 +4389,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_resolvedefaultauthor",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": ".resolvedefaultauthor()"
     },
     {
@@ -4301,7 +4400,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_loadsettings",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": ".loadsettings()"
     },
     {
@@ -4312,7 +4411,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_savesettings",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": ".savesettings()"
     },
     {
@@ -4323,7 +4422,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_commentcomposermodal",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "commentcomposermodal"
     },
     {
@@ -4334,7 +4433,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_commentcomposermodal_constructor",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": ".constructor()"
     },
     {
@@ -4345,7 +4444,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_commentcomposermodal_onopen",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": ".onopen()"
     },
     {
@@ -4356,7 +4455,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_commentcomposermodal_onclose",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": ".onclose()"
     },
     {
@@ -4367,7 +4466,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_successmodal",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "successmodal"
     },
     {
@@ -4378,7 +4477,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_successmodal_constructor",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": ".constructor()"
     },
     {
@@ -4389,7 +4488,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_successmodal_onopen",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": ".onopen()"
     },
     {
@@ -4400,7 +4499,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_successmodal_onclose",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": ".onclose()"
     },
     {
@@ -4411,7 +4510,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentssettingtab",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "markdowncommentssettingtab"
     },
     {
@@ -4422,7 +4521,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentssettingtab_constructor",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": ".constructor()"
     },
     {
@@ -4433,7 +4532,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentssettingtab_display",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": ".display()"
     },
     {
@@ -4444,7 +4543,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_readingview",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "readingview.ts"
     },
     {
@@ -4455,7 +4554,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_readingview_fuzzymatch",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "fuzzymatch()"
     },
     {
@@ -4466,7 +4565,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_readingview_highlighttextinelement",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "highlighttextinelement()"
     },
     {
@@ -4477,7 +4576,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_readingview_registerreadingviewprocessor",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "registerreadingviewprocessor()"
     },
     {
@@ -4488,7 +4587,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "sidebarview.ts"
     },
     {
@@ -4499,7 +4598,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_displaynamecache",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "displaynamecache"
     },
     {
@@ -4510,7 +4609,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_pendingfetches",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "pendingfetches"
     },
     {
@@ -4784,8 +4883,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage",
-      "community": 86,
-      "community_name": "CommentsFile",
+      "community": 12,
+      "community_name": "shared/types.ts",
       "norm_label": "storage.ts"
     },
     {
@@ -4795,8 +4894,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_empty",
-      "community": 86,
-      "community_name": "CommentsFile",
+      "community": 12,
+      "community_name": "shared/types.ts",
       "norm_label": "empty"
     },
     {
@@ -4806,8 +4905,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_newid",
-      "community": 86,
-      "community_name": "CommentsFile",
+      "community": 12,
+      "community_name": "shared/types.ts",
       "norm_label": "newid()"
     },
     {
@@ -4817,8 +4916,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_normalizereply",
-      "community": 86,
-      "community_name": "CommentsFile",
+      "community": 12,
+      "community_name": "shared/types.ts",
       "norm_label": "normalizereply()"
     },
     {
@@ -4828,8 +4927,8 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_normalizepagecomment",
-      "community": 86,
-      "community_name": "CommentsFile",
+      "community": 12,
+      "community_name": "shared/types.ts",
       "norm_label": "normalizepagecomment()"
     },
     {
@@ -4839,8 +4938,8 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_normalizeinlinecomment",
-      "community": 86,
-      "community_name": "CommentsFile",
+      "community": 12,
+      "community_name": "shared/types.ts",
       "norm_label": "normalizeinlinecomment()"
     },
     {
@@ -4850,8 +4949,8 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_normalizecommentsfile",
-      "community": 86,
-      "community_name": "CommentsFile",
+      "community": 12,
+      "community_name": "shared/types.ts",
       "norm_label": "normalizecommentsfile()"
     },
     {
@@ -4861,8 +4960,8 @@
       "source_location": "L76",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore",
-      "community": 86,
-      "community_name": "CommentsFile",
+      "community": 12,
+      "community_name": "shared/types.ts",
       "norm_label": "commentstore"
     },
     {
@@ -4872,8 +4971,8 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_constructor",
-      "community": 86,
-      "community_name": "CommentsFile",
+      "community": 12,
+      "community_name": "shared/types.ts",
       "norm_label": ".constructor()"
     },
     {
@@ -4883,8 +4982,8 @@
       "source_location": "L82",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_getcommentspath",
-      "community": 86,
-      "community_name": "CommentsFile",
+      "community": 12,
+      "community_name": "shared/types.ts",
       "norm_label": ".getcommentspath()"
     },
     {
@@ -4894,8 +4993,8 @@
       "source_location": "L86",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_readcomments",
-      "community": 86,
-      "community_name": "CommentsFile",
+      "community": 12,
+      "community_name": "shared/types.ts",
       "norm_label": ".readcomments()"
     },
     {
@@ -4905,8 +5004,8 @@
       "source_location": "L120",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_writecomments",
-      "community": 86,
-      "community_name": "CommentsFile",
+      "community": 12,
+      "community_name": "shared/types.ts",
       "norm_label": ".writecomments()"
     },
     {
@@ -4916,8 +5015,8 @@
       "source_location": "L132",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_addinlinecomment",
-      "community": 86,
-      "community_name": "CommentsFile",
+      "community": 12,
+      "community_name": "shared/types.ts",
       "norm_label": ".addinlinecomment()"
     },
     {
@@ -4927,8 +5026,8 @@
       "source_location": "L162",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_addpagecomment",
-      "community": 86,
-      "community_name": "CommentsFile",
+      "community": 12,
+      "community_name": "shared/types.ts",
       "norm_label": ".addpagecomment()"
     },
     {
@@ -4938,8 +5037,8 @@
       "source_location": "L178",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_addreply",
-      "community": 86,
-      "community_name": "CommentsFile",
+      "community": 12,
+      "community_name": "shared/types.ts",
       "norm_label": ".addreply()"
     },
     {
@@ -4949,8 +5048,8 @@
       "source_location": "L202",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_deletecomment",
-      "community": 86,
-      "community_name": "CommentsFile",
+      "community": 12,
+      "community_name": "shared/types.ts",
       "norm_label": ".deletecomment()"
     },
     {
@@ -4960,8 +5059,8 @@
       "source_location": "L241",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_editcomment",
-      "community": 86,
-      "community_name": "CommentsFile",
+      "community": 12,
+      "community_name": "shared/types.ts",
       "norm_label": ".editcomment()"
     },
     {
@@ -4971,8 +5070,8 @@
       "source_location": "L289",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_resolvecomment",
-      "community": 86,
-      "community_name": "CommentsFile",
+      "community": 12,
+      "community_name": "shared/types.ts",
       "norm_label": ".resolvecomment()"
     },
     {
@@ -4982,8 +5081,8 @@
       "source_location": "L303",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_unresolvecomment",
-      "community": 86,
-      "community_name": "CommentsFile",
+      "community": 12,
+      "community_name": "shared/types.ts",
       "norm_label": ".unresolvecomment()"
     },
     {
@@ -4993,8 +5092,8 @@
       "source_location": "L317",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_togglereaction",
-      "community": 86,
-      "community_name": "CommentsFile",
+      "community": 12,
+      "community_name": "shared/types.ts",
       "norm_label": ".togglereaction()"
     },
     {
@@ -5004,8 +5103,8 @@
       "source_location": "L365",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_reanchorcomment",
-      "community": 86,
-      "community_name": "CommentsFile",
+      "community": 12,
+      "community_name": "shared/types.ts",
       "norm_label": ".reanchorcomment()"
     },
     {
@@ -5015,8 +5114,8 @@
       "source_location": "L389",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_updateorphanflags",
-      "community": 86,
-      "community_name": "CommentsFile",
+      "community": 12,
+      "community_name": "shared/types.ts",
       "norm_label": ".updateorphanflags()"
     },
     {
@@ -5532,8 +5631,8 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "package_devdependencies_typescript_eslint_eslint_plugin",
-      "community": 78,
-      "community_name": "devDependencies",
+      "community": 89,
+      "community_name": "@typescript-eslint/eslint-plugin",
       "norm_label": "@typescript-eslint/eslint-plugin"
     },
     {
@@ -5543,8 +5642,8 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "typescript_eslint_eslint_plugin",
-      "community": 78,
-      "community_name": "devDependencies",
+      "community": 89,
+      "community_name": "@typescript-eslint/eslint-plugin",
       "norm_label": "@typescript-eslint/eslint-plugin"
     },
     {
@@ -5620,8 +5719,8 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "package_devdependencies_eslint_plugin_security",
-      "community": 13,
-      "community_name": "eslint-plugin-security",
+      "community": 78,
+      "community_name": "devDependencies",
       "norm_label": "eslint-plugin-security"
     },
     {
@@ -5631,8 +5730,8 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "eslint_plugin_security",
-      "community": 13,
-      "community_name": "eslint-plugin-security",
+      "community": 78,
+      "community_name": "devDependencies",
       "norm_label": "eslint-plugin-security"
     },
     {
@@ -5970,7 +6069,7 @@
       "_origin": "ast",
       "id": "shared_anchor",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "anchor.ts"
     },
     {
@@ -5981,7 +6080,7 @@
       "_origin": "ast",
       "id": "shared_anchor_fnv1ahash",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "fnv1ahash()"
     },
     {
@@ -5992,7 +6091,7 @@
       "_origin": "ast",
       "id": "shared_anchor_computeanchorid",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "computeanchorid()"
     },
     {
@@ -6003,7 +6102,7 @@
       "_origin": "ast",
       "id": "shared_anchor_normalizeanchortext",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "normalizeanchortext()"
     },
     {
@@ -6014,7 +6113,7 @@
       "_origin": "ast",
       "id": "shared_anchor_parsemarkdownanchors",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "parsemarkdownanchors()"
     },
     {
@@ -6025,7 +6124,7 @@
       "_origin": "ast",
       "id": "shared_anchor_findblockbyindex",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "findblockbyindex()"
     },
     {
@@ -6036,7 +6135,7 @@
       "_origin": "ast",
       "id": "shared_anchor_findblockbyhash",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "findblockbyhash()"
     },
     {
@@ -6751,7 +6850,7 @@
       "_origin": "ast",
       "id": "shared_placement",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "shared/placement.ts"
     },
     {
@@ -6762,7 +6861,7 @@
       "_origin": "ast",
       "id": "shared_placement_fuzzymatch",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "fuzzymatch()"
     },
     {
@@ -6773,7 +6872,7 @@
       "_origin": "ast",
       "id": "shared_placement_placeinlinecomments",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "placeinlinecomments()"
     },
     {
@@ -6784,7 +6883,7 @@
       "_origin": "ast",
       "id": "shared_placement_isorphanedplacement",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "isorphanedplacement()"
     },
     {
@@ -6795,7 +6894,7 @@
       "_origin": "ast",
       "id": "shared_placement_unplacedororphan",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "unplacedororphan()"
     },
     {
@@ -7047,8 +7146,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_types",
-      "community": 86,
-      "community_name": "CommentsFile",
+      "community": 12,
+      "community_name": "shared/types.ts",
       "norm_label": "shared/types.ts"
     },
     {
@@ -7058,8 +7157,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_types_reaction",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 12,
+      "community_name": "shared/types.ts",
       "norm_label": "reaction"
     },
     {
@@ -7069,8 +7168,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "shared_types_reply",
-      "community": 86,
-      "community_name": "CommentsFile",
+      "community": 12,
+      "community_name": "shared/types.ts",
       "norm_label": "reply"
     },
     {
@@ -7080,8 +7179,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "shared_types_pagecomment",
-      "community": 3,
-      "community_name": "CommentsSidebarView",
+      "community": 12,
+      "community_name": "shared/types.ts",
       "norm_label": "pagecomment"
     },
     {
@@ -7092,7 +7191,7 @@
       "_origin": "ast",
       "id": "shared_types_inlinecomment",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "inlinecomment"
     },
     {
@@ -7113,8 +7212,8 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "shared_types_commentroottype",
-      "community": 86,
-      "community_name": "CommentsFile",
+      "community": 12,
+      "community_name": "shared/types.ts",
       "norm_label": "commentroottype"
     },
     {
@@ -7125,7 +7224,7 @@
       "_origin": "ast",
       "id": "shared_types_anchorblock",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "anchorblock"
     },
     {
@@ -7135,8 +7234,8 @@
       "source_location": "L60",
       "_origin": "ast",
       "id": "shared_types_placementresult",
-      "community": 86,
-      "community_name": "CommentsFile",
+      "community": 12,
+      "community_name": "shared/types.ts",
       "norm_label": "placementresult"
     },
     {
@@ -7517,7 +7616,7 @@
       "label": "AuthModal",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/AuthModal.ts",
-      "source_location": "L8",
+      "source_location": "L4",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_authmodal_authmodal",
       "community": 4,
@@ -7528,7 +7627,7 @@
       "label": ".constructor()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/AuthModal.ts",
-      "source_location": "L14",
+      "source_location": "L10",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_authmodal_authmodal_constructor",
       "community": 4,
@@ -7539,7 +7638,7 @@
       "label": ".show()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/AuthModal.ts",
-      "source_location": "L23",
+      "source_location": "L19",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_authmodal_authmodal_show",
       "community": 4,
@@ -7550,7 +7649,7 @@
       "label": ".close()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/AuthModal.ts",
-      "source_location": "L143",
+      "source_location": "L140",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_authmodal_authmodal_close",
       "community": 4,
@@ -7616,7 +7715,7 @@
       "label": ".updateAuthUserUI()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L136",
+      "source_location": "L135",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_updateauthuserui",
       "community": 4,
@@ -7627,7 +7726,7 @@
       "label": ".bindSelectionEvents()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L167",
+      "source_location": "L166",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_bindselectionevents",
       "community": 4,
@@ -7638,7 +7737,7 @@
       "label": ".showSelectionBubble()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L217",
+      "source_location": "L216",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_showselectionbubble",
       "community": 4,
@@ -7649,7 +7748,7 @@
       "label": ".hideSelectionBubble()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L224",
+      "source_location": "L223",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_hideselectionbubble",
       "community": 4,
@@ -7660,7 +7759,7 @@
       "label": ".loadComments()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L230",
+      "source_location": "L229",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_loadcomments",
       "community": 4,
@@ -7671,7 +7770,7 @@
       "label": ".updateFABCount()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L248",
+      "source_location": "L247",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_updatefabcount",
       "community": 4,
@@ -7682,7 +7781,7 @@
       "label": ".getDocumentFilePath()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L259",
+      "source_location": "L258",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_getdocumentfilepath",
       "community": 4,
@@ -7693,7 +7792,7 @@
       "label": ".toggleDrawer()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L266",
+      "source_location": "L265",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_toggledrawer",
       "community": 4,
@@ -7704,7 +7803,7 @@
       "label": ".openDrawer()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L274",
+      "source_location": "L273",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_opendrawer",
       "community": 4,
@@ -7715,7 +7814,7 @@
       "label": ".closeDrawer()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L285",
+      "source_location": "L287",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_closedrawer",
       "community": 4,
@@ -7726,7 +7825,7 @@
       "label": ".openNewCommentDrawer()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L295",
+      "source_location": "L297",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_opennewcommentdrawer",
       "community": 4,
@@ -7737,7 +7836,7 @@
       "label": ".openThreadDrawer()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L300",
+      "source_location": "L302",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_openthreaddrawer",
       "community": 4,
@@ -7748,7 +7847,7 @@
       "label": ".renderDrawerContent()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L306",
+      "source_location": "L308",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_renderdrawercontent",
       "community": 4,
@@ -7759,7 +7858,7 @@
       "label": ".submitComment()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L480",
+      "source_location": "L482",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_submitcomment",
       "community": 4,
@@ -7770,7 +7869,7 @@
       "label": ".submitReply()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L531",
+      "source_location": "L533",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_submitreply",
       "community": 4,
@@ -7913,7 +8012,7 @@
       "label": "getViewer()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/githubAuth.ts",
-      "source_location": "L241",
+      "source_location": "L245",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_githubauth_getviewer",
       "community": 4,
@@ -8236,7 +8335,7 @@
       "_origin": "ast",
       "id": "tests_anchor_test",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "anchor.test.ts"
     },
     {
@@ -8258,7 +8357,7 @@
       "_origin": "ast",
       "id": "tests_placement_test",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "placement.test.ts"
     },
     {
@@ -10534,8 +10633,8 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "vscode_extension_src_author_warmauthorcache",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "warmauthorcache()"
     },
     {
@@ -10545,8 +10644,8 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "vscode_extension_src_author_getauthor",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "getauthor()"
     },
     {
@@ -10612,7 +10711,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_codelensprovider",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "codelensprovider.ts"
     },
     {
@@ -10623,7 +10722,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_codelensprovider_markdowncommentscodelensprovider",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": "markdowncommentscodelensprovider"
     },
     {
@@ -10634,7 +10733,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_codelensprovider_markdowncommentscodelensprovider_refresh",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": ".refresh()"
     },
     {
@@ -10645,7 +10744,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_codelensprovider_markdowncommentscodelensprovider_providecodelenses",
       "community": 12,
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "norm_label": ".providecodelenses()"
     },
     {
@@ -10677,8 +10776,8 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "vscode_extension_src_commentactions_commentactionmessage",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "commentactionmessage"
     },
     {
@@ -10721,8 +10820,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "commentpreviewpanel"
     },
     {
@@ -10732,8 +10831,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_show",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": ".show()"
     },
     {
@@ -10743,8 +10842,8 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_refreshforuri",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": ".refreshforuri()"
     },
     {
@@ -10754,8 +10853,8 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_isopenforuri",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": ".isopenforuri()"
     },
     {
@@ -10765,8 +10864,8 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_closeforuri",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": ".closeforuri()"
     },
     {
@@ -10776,8 +10875,8 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_closeall",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": ".closeall()"
     },
     {
@@ -10787,8 +10886,8 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_constructor",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": ".constructor()"
     },
     {
@@ -10798,8 +10897,8 @@
       "source_location": "L102",
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_refresh",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": ".refresh()"
     },
     {
@@ -11062,8 +11161,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_extension",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "extension.ts"
     },
     {
@@ -11073,8 +11172,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "vscode_extension_src_extension_mdurifrommessage",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "mdurifrommessage()"
     },
     {
@@ -11084,8 +11183,8 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "vscode_extension_src_extension_updatestatusbar",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "updatestatusbar()"
     },
     {
@@ -11095,8 +11194,8 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "vscode_extension_src_extension_refreshpreview",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "refreshpreview()"
     },
     {
@@ -11106,8 +11205,8 @@
       "source_location": "L58",
       "_origin": "ast",
       "id": "vscode_extension_src_extension_handlepreviewaction",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "handlepreviewaction()"
     },
     {
@@ -11117,8 +11216,8 @@
       "source_location": "L75",
       "_origin": "ast",
       "id": "vscode_extension_src_extension_handleuri",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "handleuri()"
     },
     {
@@ -11128,8 +11227,8 @@
       "source_location": "L101",
       "_origin": "ast",
       "id": "vscode_extension_src_extension_activate",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "activate()"
     },
     {
@@ -11139,8 +11238,8 @@
       "source_location": "L266",
       "_origin": "ast",
       "id": "vscode_extension_src_extension_deactivate",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "deactivate()"
     },
     {
@@ -11150,8 +11249,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "vscode-extension/src/githubauth.ts"
     },
     {
@@ -11161,8 +11260,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth_initializeauth",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "initializeauth()"
     },
     {
@@ -11183,8 +11282,8 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth_getoauthtoken",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "getoauthtoken()"
     },
     {
@@ -11194,8 +11293,8 @@
       "source_location": "L60",
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth_devicecoderesponse",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "devicecoderesponse"
     },
     {
@@ -11205,8 +11304,8 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth_requestdevicecode",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "requestdevicecode()"
     },
     {
@@ -11216,8 +11315,8 @@
       "source_location": "L96",
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth_pollforaccesstoken",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "pollforaccesstoken()"
     },
     {
@@ -11227,8 +11326,8 @@
       "source_location": "L163",
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth_signin",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "signin()"
     },
     {
@@ -11238,8 +11337,8 @@
       "source_location": "L225",
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth_signout",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "signout()"
     },
     {
@@ -11557,8 +11656,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_logger",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "logger.ts"
     },
     {
@@ -11568,8 +11667,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "vscode_extension_src_logger_initializelogger",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "initializelogger()"
     },
     {
@@ -11579,8 +11678,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "vscode_extension_src_logger_logdebug",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "logdebug()"
     },
     {
@@ -11590,8 +11689,8 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "vscode_extension_src_logger_loginfo",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "loginfo()"
     },
     {
@@ -11601,8 +11700,8 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "vscode_extension_src_logger_logerror",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "logerror()"
     },
     {
@@ -11799,8 +11898,8 @@
       "source_location": "L349",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_rendercontext",
-      "community": 86,
-      "community_name": "CommentsFile",
+      "community": 12,
+      "community_name": "shared/types.ts",
       "norm_label": "rendercontext"
     },
     {
@@ -12096,8 +12195,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_previewcommand",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "previewcommand.ts"
     },
     {
@@ -12107,8 +12206,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "vscode_extension_src_previewcommand_parsepreviewcommandarg",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "parsepreviewcommandarg()"
     },
     {
@@ -12118,8 +12217,8 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "vscode_extension_src_previewcommand_normalizeobject",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "normalizeobject()"
     },
     {
@@ -15334,7 +15433,7 @@
       "contributor": null,
       "community": 12,
       "norm_label": "markdown comments overview",
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "id": "readme_main"
     },
     {
@@ -15348,7 +15447,7 @@
       "contributor": null,
       "community": 12,
       "norm_label": "markdown comments key features",
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "id": "readme_features"
     },
     {
@@ -15362,7 +15461,7 @@
       "contributor": null,
       "community": 12,
       "norm_label": "monorepo package structure",
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "id": "readme_monorepo"
     },
     {
@@ -15404,7 +15503,7 @@
       "contributor": null,
       "community": 12,
       "norm_label": "comments example note",
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "id": "docs_example_file"
     },
     {
@@ -15418,7 +15517,7 @@
       "contributor": null,
       "community": 12,
       "norm_label": "obsidian plugin guide",
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "id": "obsidian_plugin_readme_file"
     },
     {
@@ -15432,7 +15531,7 @@
       "contributor": null,
       "community": 12,
       "norm_label": "pnpm monorepo configuration",
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "id": "pnpm_workspace_file"
     },
     {
@@ -15446,7 +15545,7 @@
       "contributor": null,
       "community": 12,
       "norm_label": "app icon png",
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "id": "assets_icon_png_node"
     },
     {
@@ -15460,7 +15559,7 @@
       "contributor": null,
       "community": 12,
       "norm_label": "app icon svg",
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "id": "assets_icon_svg_node"
     },
     {
@@ -15544,7 +15643,7 @@
       "contributor": null,
       "community": 12,
       "norm_label": "vs code extension icon png",
-      "community_name": "Obsidian Plugin Guide",
+      "community_name": "shared/types.ts",
       "id": "vscode_extension_icon_png_node"
     }
   ],
@@ -17002,7 +17101,103 @@
       "context": "import",
       "_origin": "ast",
       "source": "eslintrc_ignorepatterns",
+      "target": "ref_artifacts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "extends",
+      "confidence": "EXTRACTED",
+      "source_file": ".eslintrc.json",
+      "source_location": "L27",
+      "weight": 1.0,
+      "context": "import",
+      "_origin": "ast",
+      "source": "eslintrc_ignorepatterns",
+      "target": "ref_astro",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "extends",
+      "confidence": "EXTRACTED",
+      "source_file": ".eslintrc.json",
+      "source_location": "L27",
+      "weight": 1.0,
+      "context": "import",
+      "_origin": "ast",
+      "source": "eslintrc_ignorepatterns",
+      "target": "ref_coverage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "extends",
+      "confidence": "EXTRACTED",
+      "source_file": ".eslintrc.json",
+      "source_location": "L27",
+      "weight": 1.0,
+      "context": "import",
+      "_origin": "ast",
+      "source": "eslintrc_ignorepatterns",
+      "target": "ref_graphify_out",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "extends",
+      "confidence": "EXTRACTED",
+      "source_file": ".eslintrc.json",
+      "source_location": "L27",
+      "weight": 1.0,
+      "context": "import",
+      "_origin": "ast",
+      "source": "eslintrc_ignorepatterns",
       "target": "ref_main_js",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "extends",
+      "confidence": "EXTRACTED",
+      "source_file": ".eslintrc.json",
+      "source_location": "L27",
+      "weight": 1.0,
+      "context": "import",
+      "_origin": "ast",
+      "source": "eslintrc_ignorepatterns",
+      "target": "ref_out",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "extends",
+      "confidence": "EXTRACTED",
+      "source_file": ".eslintrc.json",
+      "source_location": "L27",
+      "weight": 1.0,
+      "context": "import",
+      "_origin": "ast",
+      "source": "eslintrc_ignorepatterns",
+      "target": "ref_scratch",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "extends",
+      "confidence": "EXTRACTED",
+      "source_file": ".eslintrc.json",
+      "source_location": "L27",
+      "weight": 1.0,
+      "context": "import",
+      "_origin": "ast",
+      "source": "eslintrc_ignorepatterns",
+      "target": "ref_site",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "extends",
+      "confidence": "EXTRACTED",
+      "source_file": ".eslintrc.json",
+      "source_location": "L27",
+      "weight": 1.0,
+      "context": "import",
+      "_origin": "ast",
+      "source": "eslintrc_ignorepatterns",
+      "target": "ref_temp_chrome_profile",
       "confidence_score": 1.0
     },
     {
@@ -22005,6 +22200,17 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "demo-astro/package.json",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "demo_astro_package",
+      "target": "demo_astro_package_devdependencies",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "demo-astro/package.json",
       "source_location": "L2",
       "weight": 1.0,
       "_origin": "ast",
@@ -22115,40 +22321,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "demo-astro/package.json",
-      "source_location": "L18",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "demo_astro_package_dependencies",
-      "target": "demo_astro_package_dependencies_astro",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "demo-astro/package.json",
       "source_location": "L14",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "demo_astro_package_dependencies",
-      "target": "demo_astro_package_dependencies_astrojs_check",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "demo-astro/package.json",
-      "source_location": "L15",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "demo_astro_package_dependencies",
-      "target": "demo_astro_package_dependencies_astrojs_starlight",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "demo-astro/package.json",
-      "source_location": "L16",
       "weight": 1.0,
       "_origin": "ast",
       "source": "demo_astro_package_dependencies",
@@ -22159,7 +22332,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "demo-astro/package.json",
-      "source_location": "L17",
+      "source_location": "L15",
       "weight": 1.0,
       "_origin": "ast",
       "source": "demo_astro_package_dependencies",
@@ -22167,45 +22340,10 @@
       "confidence_score": 1.0
     },
     {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "demo-astro/package.json",
-      "source_location": "L19",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "demo_astro_package_dependencies",
-      "target": "demo_astro_package_dependencies_typescript",
-      "confidence_score": 1.0
-    },
-    {
       "relation": "imports",
       "confidence": "EXTRACTED",
       "source_file": "demo-astro/package.json",
       "source_location": "L14",
-      "weight": 1.0,
-      "context": "import",
-      "_origin": "ast",
-      "source": "demo_astro_package_dependencies_astrojs_check",
-      "target": "astrojs_check",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "confidence": "EXTRACTED",
-      "source_file": "demo-astro/package.json",
-      "source_location": "L15",
-      "weight": 1.0,
-      "context": "import",
-      "_origin": "ast",
-      "source": "demo_astro_package_dependencies_astrojs_starlight",
-      "target": "astrojs_starlight",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "confidence": "EXTRACTED",
-      "source_file": "demo-astro/package.json",
-      "source_location": "L16",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -22217,12 +22355,56 @@
       "relation": "imports",
       "confidence": "EXTRACTED",
       "source_file": "demo-astro/package.json",
-      "source_location": "L17",
+      "source_location": "L15",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
       "source": "demo_astro_package_dependencies_md_comments_starlight",
       "target": "md_comments_starlight",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "demo-astro/package.json",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "demo_astro_package_devdependencies",
+      "target": "demo_astro_package_devdependencies_astro",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "demo-astro/package.json",
+      "source_location": "L18",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "demo_astro_package_devdependencies",
+      "target": "demo_astro_package_devdependencies_astrojs_check",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "demo-astro/package.json",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "demo_astro_package_devdependencies",
+      "target": "demo_astro_package_devdependencies_astrojs_starlight",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "demo-astro/package.json",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "demo_astro_package_devdependencies",
+      "target": "demo_astro_package_devdependencies_typescript",
       "confidence_score": 1.0
     },
     {
@@ -22233,8 +22415,8 @@
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
-      "source": "demo_astro_package_dependencies_astro",
-      "target": "astro",
+      "source": "demo_astro_package_devdependencies_astrojs_check",
+      "target": "astrojs_check",
       "confidence_score": 1.0
     },
     {
@@ -22245,7 +22427,31 @@
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
-      "source": "demo_astro_package_dependencies_typescript",
+      "source": "demo_astro_package_devdependencies_astrojs_starlight",
+      "target": "astrojs_starlight",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "source_file": "demo-astro/package.json",
+      "source_location": "L20",
+      "weight": 1.0,
+      "context": "import",
+      "_origin": "ast",
+      "source": "demo_astro_package_devdependencies_astro",
+      "target": "astro",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "source_file": "demo-astro/package.json",
+      "source_location": "L21",
+      "weight": 1.0,
+      "context": "import",
+      "_origin": "ast",
+      "source": "demo_astro_package_devdependencies_typescript",
       "target": "demo_astro_package_json_typescript",
       "confidence_score": 1.0
     },
@@ -31751,7 +31957,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/AuthModal.ts",
-      "source_location": "L8",
+      "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_authmodal",
@@ -31799,7 +32005,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/AuthModal.ts",
-      "source_location": "L6",
+      "source_location": "L2",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_authmodal",
@@ -31811,7 +32017,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/AuthModal.ts",
-      "source_location": "L6",
+      "source_location": "L2",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_authmodal",
@@ -31846,7 +32052,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/AuthModal.ts",
-      "source_location": "L143",
+      "source_location": "L140",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_authmodal_authmodal",
@@ -31857,7 +32063,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/AuthModal.ts",
-      "source_location": "L14",
+      "source_location": "L10",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_authmodal_authmodal",
@@ -31868,7 +32074,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/AuthModal.ts",
-      "source_location": "L23",
+      "source_location": "L19",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_authmodal_authmodal",
@@ -31892,7 +32098,7 @@
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/AuthModal.ts",
-      "source_location": "L14",
+      "source_location": "L10",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_authmodal_authmodal_constructor",
@@ -31904,7 +32110,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/AuthModal.ts",
-      "source_location": "L65",
+      "source_location": "L61",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_authmodal_authmodal_show",
@@ -31917,7 +32123,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "starlight-plugin/src/client/components/AuthModal.ts",
-      "source_location": "L109",
+      "source_location": "L106",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_authmodal_authmodal_show",
@@ -31929,7 +32135,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "starlight-plugin/src/client/components/AuthModal.ts",
-      "source_location": "L74",
+      "source_location": "L70",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_authmodal_authmodal_show",
@@ -31941,7 +32147,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L484",
+      "source_location": "L486",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_submitcomment",
@@ -31953,7 +32159,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L535",
+      "source_location": "L537",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_submitreply",
@@ -31965,7 +32171,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L158",
+      "source_location": "L157",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_updateauthuserui",
@@ -32151,7 +32357,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L167",
+      "source_location": "L166",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
@@ -32162,7 +32368,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L285",
+      "source_location": "L287",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
@@ -32184,7 +32390,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L259",
+      "source_location": "L258",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
@@ -32195,7 +32401,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L224",
+      "source_location": "L223",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
@@ -32228,7 +32434,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L230",
+      "source_location": "L229",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
@@ -32239,7 +32445,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L274",
+      "source_location": "L273",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
@@ -32250,7 +32456,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L295",
+      "source_location": "L297",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
@@ -32261,7 +32467,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L300",
+      "source_location": "L302",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
@@ -32272,7 +32478,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L306",
+      "source_location": "L308",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
@@ -32283,7 +32489,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L217",
+      "source_location": "L216",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
@@ -32294,7 +32500,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L480",
+      "source_location": "L482",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
@@ -32305,7 +32511,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L531",
+      "source_location": "L533",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
@@ -32316,7 +32522,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L266",
+      "source_location": "L265",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
@@ -32327,7 +32533,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L136",
+      "source_location": "L135",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
@@ -32338,7 +32544,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L248",
+      "source_location": "L247",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
@@ -32506,7 +32712,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L131",
+      "source_location": "L130",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_initdom",
@@ -32518,7 +32724,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L78",
+      "source_location": "L77",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_initdom",
@@ -32530,7 +32736,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L96",
+      "source_location": "L95",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_initdom",
@@ -32542,7 +32748,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L133",
+      "source_location": "L132",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_initdom",
@@ -32554,7 +32760,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L486",
+      "source_location": "L488",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_submitcomment",
@@ -32566,7 +32772,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L537",
+      "source_location": "L539",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_submitreply",
@@ -32578,7 +32784,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L150",
+      "source_location": "L149",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_updateauthuserui",
@@ -32591,7 +32797,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L147",
+      "source_location": "L146",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_updateauthuserui",
@@ -32603,7 +32809,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L159",
+      "source_location": "L158",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_updateauthuserui",
@@ -32614,7 +32820,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L171",
+      "source_location": "L170",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_bindselectionevents",
@@ -32626,7 +32832,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L210",
+      "source_location": "L209",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_bindselectionevents",
@@ -32638,7 +32844,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L235",
+      "source_location": "L234",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_loadcomments",
@@ -32650,7 +32856,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L245",
+      "source_location": "L244",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_loadcomments",
@@ -32662,7 +32868,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L528",
+      "source_location": "L530",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_submitcomment",
@@ -32674,7 +32880,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L572",
+      "source_location": "L574",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_submitreply",
@@ -32686,7 +32892,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L513",
+      "source_location": "L515",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_submitcomment",
@@ -32698,7 +32904,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L561",
+      "source_location": "L563",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_submitreply",
@@ -32710,7 +32916,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L268",
+      "source_location": "L267",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_toggledrawer",
@@ -32722,7 +32928,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L270",
+      "source_location": "L269",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_toggledrawer",
@@ -32734,7 +32940,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L282",
+      "source_location": "L284",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_opendrawer",
@@ -32746,7 +32952,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L297",
+      "source_location": "L299",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_opennewcommentdrawer",
@@ -32758,7 +32964,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L303",
+      "source_location": "L305",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_openthreaddrawer",
@@ -32770,7 +32976,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L475",
+      "source_location": "L477",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_renderdrawercontent",
@@ -32782,7 +32988,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L339",
+      "source_location": "L341",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_renderdrawercontent",
@@ -32794,7 +33000,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L403",
+      "source_location": "L405",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_renderdrawercontent",
@@ -32807,7 +33013,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L464",
+      "source_location": "L466",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_renderdrawercontent",
@@ -32819,7 +33025,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L481",
+      "source_location": "L483",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_submitcomment",
@@ -32831,7 +33037,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L485",
+      "source_location": "L487",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_submitcomment",
@@ -32843,7 +33049,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L532",
+      "source_location": "L534",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_submitreply",
@@ -32855,7 +33061,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L536",
+      "source_location": "L538",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_submitreply",
@@ -32991,7 +33197,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/githubAuth.ts",
-      "source_location": "L241",
+      "source_location": "L245",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_githubauth",
@@ -45798,5 +46004,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "a185a4e2715d13100b4ff3ff4eddecabb2ddd310"
+  "built_at_commit": "aed80400a0faae5323bce690f20a92aca3c16c2a"
 }

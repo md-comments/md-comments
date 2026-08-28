@@ -80,8 +80,8 @@
     "semantic_hash": ""
   },
   "package.json": {
-    "mtime": 1787880065.0264711,
-    "ast_hash": "973dcf6b2b5b62f5f62184288bf0ab1c",
+    "mtime": 1787882517.2653222,
+    "ast_hash": "85c8955427fafe914ad71b27375720dd",
     "semantic_hash": ""
   },
   "shared/anchor.ts": {
@@ -235,8 +235,8 @@
     "semantic_hash": ""
   },
   "pnpm-workspace.yaml": {
-    "mtime": 1787879580.6163309,
-    "ast_hash": "7e700cf60298fe507fef4dc167d07a25",
+    "mtime": 1787882490.9635262,
+    "ast_hash": "44b254c7e4ba91dafb76bbedce2fc99d",
     "semantic_hash": ""
   },
   "assets/icon.png": {
@@ -430,8 +430,8 @@
     "semantic_hash": ""
   },
   ".eslintrc.json": {
-    "mtime": 1785357802.228405,
-    "ast_hash": "a4e16fe92da7de6f0b819d95353c5ec7",
+    "mtime": 1787882447.8300645,
+    "ast_hash": "92b2ef0cc693ba81902b6c8854aeb1bd",
     "semantic_hash": ""
   },
   "chrome-extension/tsconfig.json": {
@@ -725,13 +725,13 @@
     "semantic_hash": ""
   },
   "starlight-plugin/src/client/components/AuthModal.ts": {
-    "mtime": 1787881475.9702263,
-    "ast_hash": "6debbf223566d60f2c0502a97b183eda",
+    "mtime": 1787882461.2774324,
+    "ast_hash": "11256a81379e791b490caefdacacfd2c",
     "semantic_hash": ""
   },
   "starlight-plugin/src/client/components/CommentsOverlay.ts": {
-    "mtime": 1787882046.5792158,
-    "ast_hash": "e4464c75f6855f59d0b39287f3a84890",
+    "mtime": 1787882461.2871206,
+    "ast_hash": "30aa14a53651b930b08aa2f47455fea0",
     "semantic_hash": ""
   },
   "starlight-plugin/src/client/domAnchors.ts": {
@@ -740,8 +740,8 @@
     "semantic_hash": ""
   },
   "starlight-plugin/src/client/githubAuth.ts": {
-    "mtime": 1787881470.0134163,
-    "ast_hash": "7ffd2b84d233c0add4fa45f0f6117e0d",
+    "mtime": 1787882461.2953339,
+    "ast_hash": "f4fb40467e99e61b76cf246717176815",
     "semantic_hash": ""
   },
   "starlight-plugin/src/client/placement.ts": {
@@ -800,8 +800,8 @@
     "semantic_hash": ""
   },
   "demo-astro/package.json": {
-    "mtime": 1787879507.650268,
-    "ast_hash": "0e64c5fbaf8c4c4d0793dea622923575",
+    "mtime": 1787882482.5732522,
+    "ast_hash": "4e8b7458f339c8b1b702d3087c57a1e7",
     "semantic_hash": ""
   },
   "demo-astro/src/content.config.ts": {
