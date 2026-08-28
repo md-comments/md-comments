@@ -1,0 +1,47 @@
+/* Custom styles for Starlight demo */
+:root {
+  --sl-color-accent-low: #1e1b4b;
+  --sl-color-accent: #6366f1;
+  --sl-color-accent-high: #c7d2fe;
+}
+
+[data-theme='light'] {
+  --sl-color-accent-low: #e0e7ff;
+  --sl-color-accent: #4f46e5;
+  --sl-color-accent-high: #312e81;
+}
+
+/* Back to main website button in header */
+.back-to-main-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-decoration: none;
+  background-color: var(--sl-color-gray-5);
+  color: var(--sl-color-white);
+  border: 1px solid var(--sl-color-gray-4);
+  transition: all 0.2s ease;
+}
+
+.back-to-main-link:hover {
+  background-color: var(--sl-color-accent);
+  color: white;
+}
+
+/* Callout box highlight for demo instructions */
+.demo-banner {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.demo-banner h3 {
+  margin-top: 0 !important;
+  color: var(--sl-color-accent-high);
+}

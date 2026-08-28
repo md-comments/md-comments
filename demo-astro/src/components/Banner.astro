@@ -1,0 +1,52 @@
+---
+// Global announcement banner for demo website
+---
+
+<div class="sl-banner demo-site-banner" role="region" aria-label="Demo environment notice">
+  <div class="demo-banner-inner">
+    <span class="demo-banner-badge">Demo Notice</span>
+    <span class="demo-banner-text">
+      All comments are automatically wiped every day at <strong>midnight (00:00 UTC)</strong> to keep the demo clean and unmoderated.
+    </span>
+  </div>
+</div>
+
+<style>
+  .demo-site-banner {
+    background: linear-gradient(90deg, #1e1b4b, #312e81, #1e293b);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    color: #f1f5f9;
+    padding: 8px 16px;
+    font-size: 0.84rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 50;
+  }
+
+  .demo-banner-inner {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .demo-banner-badge {
+    background: rgba(99, 102, 241, 0.35);
+    border: 1px solid rgba(165, 180, 252, 0.4);
+    color: #e0e7ff;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .demo-banner-text strong {
+    color: #38bdf8;
+    font-weight: 600;
+  }
+</style>

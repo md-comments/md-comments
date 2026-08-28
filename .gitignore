@@ -4,6 +4,8 @@ node_modules/
 # Build outputs
 dist/
 out/
+_site/
+.astro/
 *.vsix
 obsidian-plugin/main.js
 

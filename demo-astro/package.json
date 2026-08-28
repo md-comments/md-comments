@@ -1,0 +1,21 @@
+{
+  "name": "md-comments-demo-astro",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/starlight": "^0.32.0",
+    "@md-comments/shared": "workspace:*",
+    "@md-comments/starlight": "workspace:*",
+    "astro": "^5.1.0",
+    "typescript": "^5.5.4"
+  }
+}
