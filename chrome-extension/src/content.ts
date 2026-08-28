@@ -480,8 +480,12 @@ async function handlePageLoad() {
   // Writing comments is enabled by default via browser session / PAT
   isWritable = true;
 
-  if (meta.type === 'blob') {
-    await loadDocumentComments(meta);
+  if (meta.type === 'blob' && meta.filePath && meta.filePath.toLowerCase().endsWith('.md')) {
+    await loadDocumentComments(meta as ParsedUrl & { type: 'blob' });
+  } else {
+    closeSidebar();
+    const floatingBadge = document.querySelector('.md-comments-floating-badge');
+    if (floatingBadge) (floatingBadge as HTMLElement).style.display = 'none';
   }
 }
 

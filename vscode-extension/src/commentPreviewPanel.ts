@@ -28,6 +28,13 @@ export class CommentPreviewPanel {
     CommentPreviewPanel.panels.get(uri.toString())?.refresh(forceRemote);
   }
 
+  static closeAll(): void {
+    for (const panelObj of CommentPreviewPanel.panels.values()) {
+      panelObj.panel.dispose();
+    }
+    CommentPreviewPanel.panels.clear();
+  }
+
   private readonly panel: vscode.WebviewPanel;
   private readonly extensionUri: vscode.Uri;
   private readonly mdUri: vscode.Uri;

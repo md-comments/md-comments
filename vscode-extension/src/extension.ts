@@ -140,13 +140,15 @@ export function activate(context: vscode.ExtensionContext): {
       }
     }),
     vscode.window.onDidChangeActiveTextEditor((editor) => {
-      if (editor?.document.languageId === 'markdown') {
+      if (editor?.document.languageId === 'markdown' || editor?.document.uri.path.endsWith('.md')) {
         logDebug('onDidChangeActiveTextEditor:', editor.document.uri.toString());
         void readComments(editor.document.uri, true).then((comments) => {
           logDebug(
             `Pre-warmed comments onDidChangeActiveTextEditor, count: inline=${comments.inline_comments.length}, page=${comments.page_comments.length}`
           );
         });
+      } else {
+        CommentPreviewPanel.closeAll();
       }
     }),
     vscode.window.registerUriHandler({
