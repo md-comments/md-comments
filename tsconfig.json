@@ -4,6 +4,7 @@
     { "path": "./shared" },
     { "path": "./vscode-extension" },
     { "path": "./obsidian-plugin" },
-    { "path": "./chrome-extension" }
+    { "path": "./chrome-extension" },
+    { "path": "./starlight-plugin" }
   ]
 }

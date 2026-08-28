@@ -3905,7 +3905,7 @@
       "_origin": "ast",
       "id": "ref_obsidian",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "obsidian"
     },
     {
@@ -4224,7 +4224,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_livepreview",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "livepreview.ts"
     },
     {
@@ -4235,7 +4235,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_livepreview_createlivepreviewextension",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "createlivepreviewextension()"
     },
     {
@@ -4246,7 +4246,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "main.ts"
     },
     {
@@ -4256,8 +4256,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentssettings",
-      "community": 12,
-      "community_name": "shared/types.ts",
+      "community": 86,
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": "markdowncommentssettings"
     },
     {
@@ -4267,8 +4267,8 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_default_settings",
-      "community": 12,
-      "community_name": "shared/types.ts",
+      "community": 86,
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": "default_settings"
     },
     {
@@ -4278,8 +4278,8 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin",
-      "community": 12,
-      "community_name": "shared/types.ts",
+      "community": 86,
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": "markdowncommentsplugin"
     },
     {
@@ -4289,8 +4289,8 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_onload",
-      "community": 12,
-      "community_name": "shared/types.ts",
+      "community": 86,
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".onload()"
     },
     {
@@ -4300,8 +4300,8 @@
       "source_location": "L169",
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_triggerrefreshes",
-      "community": 12,
-      "community_name": "shared/types.ts",
+      "community": 86,
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".triggerrefreshes()"
     },
     {
@@ -4311,8 +4311,8 @@
       "source_location": "L184",
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_getanchorblocks",
-      "community": 12,
-      "community_name": "shared/types.ts",
+      "community": 86,
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".getanchorblocks()"
     },
     {
@@ -4322,8 +4322,8 @@
       "source_location": "L196",
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_opencomposerforparagraph",
-      "community": 12,
-      "community_name": "shared/types.ts",
+      "community": 86,
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".opencomposerforparagraph()"
     },
     {
@@ -4333,8 +4333,8 @@
       "source_location": "L214",
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_opencomposerforselection",
-      "community": 12,
-      "community_name": "shared/types.ts",
+      "community": 86,
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".opencomposerforselection()"
     },
     {
@@ -4344,8 +4344,8 @@
       "source_location": "L231",
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_opencomposerforcursorline",
-      "community": 12,
-      "community_name": "shared/types.ts",
+      "community": 86,
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".opencomposerforcursorline()"
     },
     {
@@ -4355,8 +4355,8 @@
       "source_location": "L249",
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_opensidebarandfocus",
-      "community": 12,
-      "community_name": "shared/types.ts",
+      "community": 86,
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".opensidebarandfocus()"
     },
     {
@@ -4366,8 +4366,8 @@
       "source_location": "L257",
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_activatesidebarview",
-      "community": 12,
-      "community_name": "shared/types.ts",
+      "community": 86,
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".activatesidebarview()"
     },
     {
@@ -4377,8 +4377,8 @@
       "source_location": "L274",
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_initsidebarview",
-      "community": 12,
-      "community_name": "shared/types.ts",
+      "community": 86,
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".initsidebarview()"
     },
     {
@@ -4388,8 +4388,8 @@
       "source_location": "L287",
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_resolvedefaultauthor",
-      "community": 12,
-      "community_name": "shared/types.ts",
+      "community": 86,
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".resolvedefaultauthor()"
     },
     {
@@ -4399,8 +4399,8 @@
       "source_location": "L337",
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_loadsettings",
-      "community": 12,
-      "community_name": "shared/types.ts",
+      "community": 86,
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".loadsettings()"
     },
     {
@@ -4410,8 +4410,8 @@
       "source_location": "L341",
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_savesettings",
-      "community": 12,
-      "community_name": "shared/types.ts",
+      "community": 86,
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".savesettings()"
     },
     {
@@ -4421,8 +4421,8 @@
       "source_location": "L346",
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_commentcomposermodal",
-      "community": 12,
-      "community_name": "shared/types.ts",
+      "community": 86,
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": "commentcomposermodal"
     },
     {
@@ -4432,8 +4432,8 @@
       "source_location": "L347",
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_commentcomposermodal_constructor",
-      "community": 12,
-      "community_name": "shared/types.ts",
+      "community": 86,
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".constructor()"
     },
     {
@@ -4443,8 +4443,8 @@
       "source_location": "L355",
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_commentcomposermodal_onopen",
-      "community": 12,
-      "community_name": "shared/types.ts",
+      "community": 86,
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".onopen()"
     },
     {
@@ -4454,8 +4454,8 @@
       "source_location": "L393",
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_commentcomposermodal_onclose",
-      "community": 12,
-      "community_name": "shared/types.ts",
+      "community": 86,
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".onclose()"
     },
     {
@@ -4465,8 +4465,8 @@
       "source_location": "L398",
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_successmodal",
-      "community": 12,
-      "community_name": "shared/types.ts",
+      "community": 86,
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": "successmodal"
     },
     {
@@ -4476,8 +4476,8 @@
       "source_location": "L399",
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_successmodal_constructor",
-      "community": 12,
-      "community_name": "shared/types.ts",
+      "community": 86,
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".constructor()"
     },
     {
@@ -4487,8 +4487,8 @@
       "source_location": "L406",
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_successmodal_onopen",
-      "community": 12,
-      "community_name": "shared/types.ts",
+      "community": 86,
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".onopen()"
     },
     {
@@ -4498,8 +4498,8 @@
       "source_location": "L423",
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_successmodal_onclose",
-      "community": 12,
-      "community_name": "shared/types.ts",
+      "community": 86,
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".onclose()"
     },
     {
@@ -4509,8 +4509,8 @@
       "source_location": "L428",
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentssettingtab",
-      "community": 12,
-      "community_name": "shared/types.ts",
+      "community": 86,
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": "markdowncommentssettingtab"
     },
     {
@@ -4520,8 +4520,8 @@
       "source_location": "L431",
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentssettingtab_constructor",
-      "community": 12,
-      "community_name": "shared/types.ts",
+      "community": 86,
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".constructor()"
     },
     {
@@ -4531,8 +4531,8 @@
       "source_location": "L436",
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentssettingtab_display",
-      "community": 12,
-      "community_name": "shared/types.ts",
+      "community": 86,
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".display()"
     },
     {
@@ -4543,7 +4543,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_readingview",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "readingview.ts"
     },
     {
@@ -4554,7 +4554,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_readingview_fuzzymatch",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "fuzzymatch()"
     },
     {
@@ -4565,7 +4565,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_readingview_highlighttextinelement",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "highlighttextinelement()"
     },
     {
@@ -4576,7 +4576,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_readingview_registerreadingviewprocessor",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "registerreadingviewprocessor()"
     },
     {
@@ -4587,7 +4587,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "sidebarview.ts"
     },
     {
@@ -4598,7 +4598,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_displaynamecache",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "displaynamecache"
     },
     {
@@ -4609,7 +4609,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_pendingfetches",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "pendingfetches"
     },
     {
@@ -4884,7 +4884,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "storage.ts"
     },
     {
@@ -4895,7 +4895,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_empty",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "empty"
     },
     {
@@ -4906,7 +4906,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_newid",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "newid()"
     },
     {
@@ -4917,7 +4917,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_normalizereply",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "normalizereply()"
     },
     {
@@ -4928,7 +4928,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_normalizepagecomment",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "normalizepagecomment()"
     },
     {
@@ -4939,7 +4939,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_normalizeinlinecomment",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "normalizeinlinecomment()"
     },
     {
@@ -4950,7 +4950,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_normalizecommentsfile",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "normalizecommentsfile()"
     },
     {
@@ -4961,7 +4961,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "commentstore"
     },
     {
@@ -4972,7 +4972,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_constructor",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": ".constructor()"
     },
     {
@@ -4983,7 +4983,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_getcommentspath",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": ".getcommentspath()"
     },
     {
@@ -4994,7 +4994,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_readcomments",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": ".readcomments()"
     },
     {
@@ -5005,7 +5005,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_writecomments",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": ".writecomments()"
     },
     {
@@ -5016,7 +5016,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_addinlinecomment",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": ".addinlinecomment()"
     },
     {
@@ -5027,7 +5027,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_addpagecomment",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": ".addpagecomment()"
     },
     {
@@ -5038,7 +5038,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_addreply",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": ".addreply()"
     },
     {
@@ -5049,7 +5049,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_deletecomment",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": ".deletecomment()"
     },
     {
@@ -5060,7 +5060,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_editcomment",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": ".editcomment()"
     },
     {
@@ -5071,7 +5071,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_resolvecomment",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": ".resolvecomment()"
     },
     {
@@ -5082,7 +5082,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_unresolvecomment",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": ".unresolvecomment()"
     },
     {
@@ -5093,7 +5093,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_togglereaction",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": ".togglereaction()"
     },
     {
@@ -5104,7 +5104,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_reanchorcomment",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": ".reanchorcomment()"
     },
     {
@@ -5115,7 +5115,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_updateorphanflags",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": ".updateorphanflags()"
     },
     {
@@ -5438,10 +5438,21 @@
       "norm_label": "watch:demo-astro"
     },
     {
-      "label": "build:vscode",
+      "label": "build:shared",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L13",
+      "_origin": "ast",
+      "id": "package_scripts_build_shared",
+      "community": 24,
+      "community_name": "scripts",
+      "norm_label": "build:shared"
+    },
+    {
+      "label": "build:vscode",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L14",
       "_origin": "ast",
       "id": "package_scripts_build_vscode",
       "community": 24,
@@ -5452,7 +5463,7 @@
       "label": "build:obsidian",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L14",
+      "source_location": "L15",
       "_origin": "ast",
       "id": "package_scripts_build_obsidian",
       "community": 24,
@@ -5463,7 +5474,7 @@
       "label": "build:chrome",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L15",
+      "source_location": "L16",
       "_origin": "ast",
       "id": "package_scripts_build_chrome",
       "community": 24,
@@ -5474,7 +5485,7 @@
       "label": "build:starlight",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L16",
+      "source_location": "L17",
       "_origin": "ast",
       "id": "package_scripts_build_starlight",
       "community": 24,
@@ -5485,7 +5496,7 @@
       "label": "build:demo-astro",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L17",
+      "source_location": "L18",
       "_origin": "ast",
       "id": "package_scripts_build_demo_astro",
       "community": 24,
@@ -5496,7 +5507,7 @@
       "label": "build:pages",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L18",
+      "source_location": "L19",
       "_origin": "ast",
       "id": "package_scripts_build_pages",
       "community": 24,
@@ -5507,7 +5518,7 @@
       "label": "preview:pages",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L19",
+      "source_location": "L20",
       "_origin": "ast",
       "id": "package_scripts_preview_pages",
       "community": 24,
@@ -5518,7 +5529,7 @@
       "label": "build",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L20",
+      "source_location": "L21",
       "_origin": "ast",
       "id": "package_scripts_build",
       "community": 24,
@@ -5529,7 +5540,7 @@
       "label": "package:vscode",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L21",
+      "source_location": "L22",
       "_origin": "ast",
       "id": "package_scripts_package_vscode",
       "community": 24,
@@ -5540,7 +5551,7 @@
       "label": "lint",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L22",
+      "source_location": "L23",
       "_origin": "ast",
       "id": "package_scripts_lint",
       "community": 24,
@@ -5551,7 +5562,7 @@
       "label": "format:check",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L23",
+      "source_location": "L24",
       "_origin": "ast",
       "id": "package_scripts_format_check",
       "community": 24,
@@ -5562,7 +5573,7 @@
       "label": "format",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L24",
+      "source_location": "L25",
       "_origin": "ast",
       "id": "package_scripts_format",
       "community": 24,
@@ -5573,7 +5584,7 @@
       "label": "typecheck",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L25",
+      "source_location": "L26",
       "_origin": "ast",
       "id": "package_scripts_typecheck",
       "community": 24,
@@ -5584,7 +5595,7 @@
       "label": "test",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L26",
+      "source_location": "L27",
       "_origin": "ast",
       "id": "package_scripts_test",
       "community": 24,
@@ -5595,7 +5606,7 @@
       "label": "test:watch",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L27",
+      "source_location": "L28",
       "_origin": "ast",
       "id": "package_scripts_test_watch",
       "community": 24,
@@ -5606,7 +5617,7 @@
       "label": "test:coverage",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L28",
+      "source_location": "L29",
       "_origin": "ast",
       "id": "package_scripts_test_coverage",
       "community": 24,
@@ -5617,7 +5628,7 @@
       "label": "devDependencies",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L30",
+      "source_location": "L31",
       "_origin": "ast",
       "id": "package_devdependencies",
       "community": 78,
@@ -5628,73 +5639,73 @@
       "label": "@typescript-eslint/eslint-plugin",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L31",
+      "source_location": "L32",
       "_origin": "ast",
       "id": "package_devdependencies_typescript_eslint_eslint_plugin",
-      "community": 89,
-      "community_name": "@typescript-eslint/eslint-plugin",
+      "community": 78,
+      "community_name": "devDependencies",
       "norm_label": "@typescript-eslint/eslint-plugin"
     },
     {
       "label": "@typescript-eslint/eslint-plugin",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L31",
+      "source_location": "L32",
       "_origin": "ast",
       "id": "typescript_eslint_eslint_plugin",
-      "community": 89,
-      "community_name": "@typescript-eslint/eslint-plugin",
+      "community": 78,
+      "community_name": "devDependencies",
       "norm_label": "@typescript-eslint/eslint-plugin"
     },
     {
       "label": "@typescript-eslint/parser",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L32",
+      "source_location": "L33",
       "_origin": "ast",
       "id": "package_devdependencies_typescript_eslint_parser",
-      "community": 78,
-      "community_name": "devDependencies",
+      "community": 90,
+      "community_name": "@typescript-eslint/parser",
       "norm_label": "@typescript-eslint/parser"
     },
     {
       "label": "@typescript-eslint/parser",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L32",
+      "source_location": "L33",
       "_origin": "ast",
       "id": "typescript_eslint_parser",
-      "community": 78,
-      "community_name": "devDependencies",
+      "community": 90,
+      "community_name": "@typescript-eslint/parser",
       "norm_label": "@typescript-eslint/parser"
     },
     {
       "label": "@vitest/coverage-v8",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L33",
+      "source_location": "L34",
       "_origin": "ast",
       "id": "package_devdependencies_vitest_coverage_v8",
-      "community": 104,
-      "community_name": "@vitest/coverage-v8",
+      "community": 78,
+      "community_name": "devDependencies",
       "norm_label": "@vitest/coverage-v8"
     },
     {
       "label": "@vitest/coverage-v8",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L33",
+      "source_location": "L34",
       "_origin": "ast",
       "id": "vitest_coverage_v8",
-      "community": 104,
-      "community_name": "@vitest/coverage-v8",
+      "community": 78,
+      "community_name": "devDependencies",
       "norm_label": "@vitest/coverage-v8"
     },
     {
       "label": "eslint",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L34",
+      "source_location": "L35",
       "_origin": "ast",
       "id": "package_devdependencies_eslint",
       "community": 78,
@@ -5705,7 +5716,7 @@
       "label": "eslint",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L34",
+      "source_location": "L35",
       "_origin": "ast",
       "id": "eslint",
       "community": 78,
@@ -5716,7 +5727,7 @@
       "label": "eslint-plugin-security",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L35",
+      "source_location": "L36",
       "_origin": "ast",
       "id": "package_devdependencies_eslint_plugin_security",
       "community": 78,
@@ -5727,7 +5738,7 @@
       "label": "eslint-plugin-security",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L35",
+      "source_location": "L36",
       "_origin": "ast",
       "id": "eslint_plugin_security",
       "community": 78,
@@ -5738,7 +5749,7 @@
       "label": "js-yaml",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L36",
+      "source_location": "L37",
       "_origin": "ast",
       "id": "package_devdependencies_js_yaml",
       "community": 78,
@@ -5749,7 +5760,7 @@
       "label": "js-yaml",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L36",
+      "source_location": "L37",
       "_origin": "ast",
       "id": "package_json_js_yaml",
       "community": 78,
@@ -5760,29 +5771,29 @@
       "label": "@types/js-yaml",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L37",
+      "source_location": "L38",
       "_origin": "ast",
       "id": "package_devdependencies_types_js_yaml",
-      "community": 101,
-      "community_name": "@types/js-yaml",
+      "community": 78,
+      "community_name": "devDependencies",
       "norm_label": "@types/js-yaml"
     },
     {
       "label": "@types/js-yaml",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L37",
+      "source_location": "L38",
       "_origin": "ast",
       "id": "package_json_types_js_yaml",
-      "community": 101,
-      "community_name": "@types/js-yaml",
+      "community": 78,
+      "community_name": "devDependencies",
       "norm_label": "@types/js-yaml"
     },
     {
       "label": "playwright",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L38",
+      "source_location": "L39",
       "_origin": "ast",
       "id": "package_devdependencies_playwright",
       "community": 78,
@@ -5793,7 +5804,7 @@
       "label": "playwright",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L38",
+      "source_location": "L39",
       "_origin": "ast",
       "id": "playwright",
       "community": 78,
@@ -5804,7 +5815,7 @@
       "label": "prettier",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L39",
+      "source_location": "L40",
       "_origin": "ast",
       "id": "package_devdependencies_prettier",
       "community": 78,
@@ -5815,7 +5826,7 @@
       "label": "prettier",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L39",
+      "source_location": "L40",
       "_origin": "ast",
       "id": "prettier",
       "community": 78,
@@ -5826,29 +5837,29 @@
       "label": "typescript",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L40",
+      "source_location": "L41",
       "_origin": "ast",
       "id": "package_devdependencies_typescript",
-      "community": 78,
-      "community_name": "devDependencies",
+      "community": 89,
+      "community_name": "typescript",
       "norm_label": "typescript"
     },
     {
       "label": "typescript",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L40",
+      "source_location": "L41",
       "_origin": "ast",
       "id": "package_json_typescript",
-      "community": 78,
-      "community_name": "devDependencies",
+      "community": 89,
+      "community_name": "typescript",
       "norm_label": "typescript"
     },
     {
       "label": "vitest",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L41",
+      "source_location": "L42",
       "_origin": "ast",
       "id": "package_devdependencies_vitest",
       "community": 78,
@@ -5859,12 +5870,78 @@
       "label": "vitest",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L41",
+      "source_location": "L42",
       "_origin": "ast",
       "id": "vitest",
       "community": 78,
       "community_name": "devDependencies",
       "norm_label": "vitest"
+    },
+    {
+      "label": "pnpm",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L44",
+      "_origin": "ast",
+      "id": "package_pnpm",
+      "community": 100,
+      "community_name": "package.json",
+      "norm_label": "pnpm"
+    },
+    {
+      "label": "overrides",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L45",
+      "_origin": "ast",
+      "id": "package_pnpm_overrides",
+      "community": 100,
+      "community_name": "package.json",
+      "norm_label": "overrides"
+    },
+    {
+      "label": "nanoid",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L46",
+      "_origin": "ast",
+      "id": "package_overrides_nanoid",
+      "community": 100,
+      "community_name": "package.json",
+      "norm_label": "nanoid"
+    },
+    {
+      "label": "fast-uri",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L47",
+      "_origin": "ast",
+      "id": "package_overrides_fast_uri",
+      "community": 100,
+      "community_name": "package.json",
+      "norm_label": "fast-uri"
+    },
+    {
+      "label": "undici",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L48",
+      "_origin": "ast",
+      "id": "package_overrides_undici",
+      "community": 100,
+      "community_name": "package.json",
+      "norm_label": "undici"
+    },
+    {
+      "label": "esbuild",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L49",
+      "_origin": "ast",
+      "id": "package_overrides_esbuild",
+      "community": 100,
+      "community_name": "package.json",
+      "norm_label": "esbuild"
     },
     {
       "label": "copy-icons.js",
@@ -6069,7 +6146,7 @@
       "_origin": "ast",
       "id": "shared_anchor",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "anchor.ts"
     },
     {
@@ -6080,7 +6157,7 @@
       "_origin": "ast",
       "id": "shared_anchor_fnv1ahash",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "fnv1ahash()"
     },
     {
@@ -6091,7 +6168,7 @@
       "_origin": "ast",
       "id": "shared_anchor_computeanchorid",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "computeanchorid()"
     },
     {
@@ -6102,7 +6179,7 @@
       "_origin": "ast",
       "id": "shared_anchor_normalizeanchortext",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "normalizeanchortext()"
     },
     {
@@ -6113,7 +6190,7 @@
       "_origin": "ast",
       "id": "shared_anchor_parsemarkdownanchors",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "parsemarkdownanchors()"
     },
     {
@@ -6124,7 +6201,7 @@
       "_origin": "ast",
       "id": "shared_anchor_findblockbyindex",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "findblockbyindex()"
     },
     {
@@ -6135,7 +6212,7 @@
       "_origin": "ast",
       "id": "shared_anchor_findblockbyhash",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "findblockbyhash()"
     },
     {
@@ -6255,7 +6332,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_commentstorage",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": "commentstorage.ts"
     },
@@ -6266,7 +6343,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "shared_commentstorage_commentstoragekey",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": "commentstoragekey"
     },
@@ -6277,7 +6354,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "shared_commentstorage_commentbackend",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": "commentbackend"
     },
@@ -6288,7 +6365,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "shared_commentstorage_commentbackend_read",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": ".read()"
     },
@@ -6299,7 +6376,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "shared_commentstorage_commentbackend_write",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": ".write()"
     },
@@ -6310,7 +6387,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "shared_commentstorage_commentbackend_addcomment",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": ".addcomment()"
     },
@@ -6321,7 +6398,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_gitrefbackend",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": "gitrefbackend.ts"
     },
@@ -6332,7 +6409,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "shared_gitrefbackend_commentsfilepathformarkdown",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": "commentsfilepathformarkdown()"
     },
@@ -6343,7 +6420,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "shared_gitrefbackend_decodebase64",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": "decodebase64()"
     },
@@ -6354,7 +6431,7 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "shared_gitrefbackend_mergecommentsfiles",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": "mergecommentsfiles()"
     },
@@ -6365,7 +6442,7 @@
       "source_location": "L84",
       "_origin": "ast",
       "id": "shared_gitrefbackend_githuborphanrefbackend",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": "githuborphanrefbackend"
     },
@@ -6376,7 +6453,7 @@
       "source_location": "L85",
       "_origin": "ast",
       "id": "shared_gitrefbackend_githuborphanrefbackend_constructor",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": ".constructor()"
     },
@@ -6387,7 +6464,7 @@
       "source_location": "L87",
       "_origin": "ast",
       "id": "shared_gitrefbackend_githuborphanrefbackend_fetchapi",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": ".fetchapi()"
     },
@@ -6398,7 +6475,7 @@
       "source_location": "L107",
       "_origin": "ast",
       "id": "shared_gitrefbackend_githuborphanrefbackend_fetchpathcontent",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": ".fetchpathcontent()"
     },
@@ -6409,7 +6486,7 @@
       "source_location": "L136",
       "_origin": "ast",
       "id": "shared_gitrefbackend_githuborphanrefbackend_read",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": ".read()"
     },
@@ -6420,7 +6497,7 @@
       "source_location": "L176",
       "_origin": "ast",
       "id": "shared_gitrefbackend_githuborphanrefbackend_traceandmigraterename",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": ".traceandmigraterename()"
     },
@@ -6431,7 +6508,7 @@
       "source_location": "L230",
       "_origin": "ast",
       "id": "shared_gitrefbackend_githuborphanrefbackend_deletefilefromref",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": ".deletefilefromref()"
     },
@@ -6442,7 +6519,7 @@
       "source_location": "L283",
       "_origin": "ast",
       "id": "shared_gitrefbackend_githuborphanrefbackend_write",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": ".write()"
     },
@@ -6453,7 +6530,7 @@
       "source_location": "L310",
       "_origin": "ast",
       "id": "shared_gitrefbackend_githuborphanrefbackend_trywritecommit",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": ".trywritecommit()"
     },
@@ -6486,7 +6563,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_index",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": "shared/index.ts"
     },
@@ -6497,7 +6574,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_localfilebackend",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": "localfilebackend.ts"
     },
@@ -6508,7 +6585,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "shared_localfilebackend_localfileadapter",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": "localfileadapter"
     },
@@ -6519,7 +6596,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "shared_localfilebackend_localfileadapter_readtext",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": ".readtext()"
     },
@@ -6530,7 +6607,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "shared_localfilebackend_localfileadapter_writetext",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": ".writetext()"
     },
@@ -6541,7 +6618,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "shared_localfilebackend_localfileadapter_pathformarkdown",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": ".pathformarkdown()"
     },
@@ -6552,7 +6629,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "shared_localfilebackend_localfileadapter_parseyaml",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": ".parseyaml()"
     },
@@ -6563,7 +6640,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "shared_localfilebackend_localfileadapter_dumpyaml",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": ".dumpyaml()"
     },
@@ -6574,7 +6651,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "shared_localfilebackend_localfilebackend",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": "localfilebackend"
     },
@@ -6585,7 +6662,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "shared_localfilebackend_localfilebackend_constructor",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": ".constructor()"
     },
@@ -6596,7 +6673,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "shared_localfilebackend_localfilebackend_read",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": ".read()"
     },
@@ -6607,7 +6684,7 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "shared_localfilebackend_localfilebackend_write",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": ".write()"
     },
@@ -6850,7 +6927,7 @@
       "_origin": "ast",
       "id": "shared_placement",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "shared/placement.ts"
     },
     {
@@ -6861,7 +6938,7 @@
       "_origin": "ast",
       "id": "shared_placement_fuzzymatch",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "fuzzymatch()"
     },
     {
@@ -6872,7 +6949,7 @@
       "_origin": "ast",
       "id": "shared_placement_placeinlinecomments",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "placeinlinecomments()"
     },
     {
@@ -6883,7 +6960,7 @@
       "_origin": "ast",
       "id": "shared_placement_isorphanedplacement",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "isorphanedplacement()"
     },
     {
@@ -6894,7 +6971,7 @@
       "_origin": "ast",
       "id": "shared_placement_unplacedororphan",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "unplacedororphan()"
     },
     {
@@ -7147,7 +7224,7 @@
       "_origin": "ast",
       "id": "shared_types",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "shared/types.ts"
     },
     {
@@ -7158,7 +7235,7 @@
       "_origin": "ast",
       "id": "shared_types_reaction",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "reaction"
     },
     {
@@ -7169,7 +7246,7 @@
       "_origin": "ast",
       "id": "shared_types_reply",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "reply"
     },
     {
@@ -7180,7 +7257,7 @@
       "_origin": "ast",
       "id": "shared_types_pagecomment",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "pagecomment"
     },
     {
@@ -7191,7 +7268,7 @@
       "_origin": "ast",
       "id": "shared_types_inlinecomment",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "inlinecomment"
     },
     {
@@ -7201,7 +7278,7 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "shared_types_commentsfile",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": "commentsfile"
     },
@@ -7213,7 +7290,7 @@
       "_origin": "ast",
       "id": "shared_types_commentroottype",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "commentroottype"
     },
     {
@@ -7224,7 +7301,7 @@
       "_origin": "ast",
       "id": "shared_types_anchorblock",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "anchorblock"
     },
     {
@@ -7235,7 +7312,7 @@
       "_origin": "ast",
       "id": "shared_types_placementresult",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "placementresult"
     },
     {
@@ -8335,7 +8412,7 @@
       "_origin": "ast",
       "id": "tests_anchor_test",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "anchor.test.ts"
     },
     {
@@ -8345,7 +8422,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_gitrefbackend_test",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": "gitrefbackend.test.ts"
     },
@@ -8357,7 +8434,7 @@
       "_origin": "ast",
       "id": "tests_placement_test",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "placement.test.ts"
     },
     {
@@ -8411,7 +8488,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_vscodestorage_test",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": "vscodestorage.test.ts"
     },
@@ -9852,8 +9929,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "ref_vscode",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": "vscode"
     },
     {
@@ -10633,8 +10710,8 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "vscode_extension_src_author_warmauthorcache",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": "warmauthorcache()"
     },
     {
@@ -10644,8 +10721,8 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "vscode_extension_src_author_getauthor",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": "getauthor()"
     },
     {
@@ -10711,7 +10788,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_codelensprovider",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "codelensprovider.ts"
     },
     {
@@ -10722,7 +10799,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_codelensprovider_markdowncommentscodelensprovider",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "markdowncommentscodelensprovider"
     },
     {
@@ -10733,7 +10810,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_codelensprovider_markdowncommentscodelensprovider_refresh",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": ".refresh()"
     },
     {
@@ -10744,7 +10821,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_codelensprovider_markdowncommentscodelensprovider_providecodelenses",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": ".providecodelenses()"
     },
     {
@@ -10776,8 +10853,8 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "vscode_extension_src_commentactions_commentactionmessage",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": "commentactionmessage"
     },
     {
@@ -10809,8 +10886,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": "commentpreviewpanel.ts"
     },
     {
@@ -10820,8 +10897,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": "commentpreviewpanel"
     },
     {
@@ -10831,8 +10908,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_show",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": ".show()"
     },
     {
@@ -10842,8 +10919,8 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_refreshforuri",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": ".refreshforuri()"
     },
     {
@@ -10853,8 +10930,8 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_isopenforuri",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": ".isopenforuri()"
     },
     {
@@ -10864,8 +10941,8 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_closeforuri",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": ".closeforuri()"
     },
     {
@@ -10875,8 +10952,8 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_closeall",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": ".closeall()"
     },
     {
@@ -10886,8 +10963,8 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_constructor",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": ".constructor()"
     },
     {
@@ -10897,8 +10974,8 @@
       "source_location": "L102",
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_refresh",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": ".refresh()"
     },
     {
@@ -11161,8 +11238,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_extension",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": "extension.ts"
     },
     {
@@ -11172,8 +11249,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "vscode_extension_src_extension_mdurifrommessage",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": "mdurifrommessage()"
     },
     {
@@ -11183,8 +11260,8 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "vscode_extension_src_extension_updatestatusbar",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": "updatestatusbar()"
     },
     {
@@ -11194,8 +11271,8 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "vscode_extension_src_extension_refreshpreview",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": "refreshpreview()"
     },
     {
@@ -11205,8 +11282,8 @@
       "source_location": "L58",
       "_origin": "ast",
       "id": "vscode_extension_src_extension_handlepreviewaction",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": "handlepreviewaction()"
     },
     {
@@ -11216,8 +11293,8 @@
       "source_location": "L75",
       "_origin": "ast",
       "id": "vscode_extension_src_extension_handleuri",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": "handleuri()"
     },
     {
@@ -11227,8 +11304,8 @@
       "source_location": "L101",
       "_origin": "ast",
       "id": "vscode_extension_src_extension_activate",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": "activate()"
     },
     {
@@ -11238,8 +11315,8 @@
       "source_location": "L266",
       "_origin": "ast",
       "id": "vscode_extension_src_extension_deactivate",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": "deactivate()"
     },
     {
@@ -11249,8 +11326,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": "vscode-extension/src/githubauth.ts"
     },
     {
@@ -11260,8 +11337,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth_initializeauth",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": "initializeauth()"
     },
     {
@@ -11282,8 +11359,8 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth_getoauthtoken",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": "getoauthtoken()"
     },
     {
@@ -11293,8 +11370,8 @@
       "source_location": "L60",
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth_devicecoderesponse",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": "devicecoderesponse"
     },
     {
@@ -11304,8 +11381,8 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth_requestdevicecode",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": "requestdevicecode()"
     },
     {
@@ -11315,8 +11392,8 @@
       "source_location": "L96",
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth_pollforaccesstoken",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": "pollforaccesstoken()"
     },
     {
@@ -11326,8 +11403,8 @@
       "source_location": "L163",
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth_signin",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": "signin()"
     },
     {
@@ -11337,8 +11414,8 @@
       "source_location": "L225",
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth_signout",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": "signout()"
     },
     {
@@ -11656,8 +11733,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_logger",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": "logger.ts"
     },
     {
@@ -11667,8 +11744,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "vscode_extension_src_logger_initializelogger",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": "initializelogger()"
     },
     {
@@ -11678,8 +11755,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "vscode_extension_src_logger_logdebug",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": "logdebug()"
     },
     {
@@ -11689,8 +11766,8 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "vscode_extension_src_logger_loginfo",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": "loginfo()"
     },
     {
@@ -11700,8 +11777,8 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "vscode_extension_src_logger_logerror",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": "logerror()"
     },
     {
@@ -11899,7 +11976,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_rendercontext",
       "community": 12,
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "norm_label": "rendercontext"
     },
     {
@@ -12019,8 +12096,8 @@
       "source_location": "L626",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_loadcontext",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": "loadcontext()"
     },
     {
@@ -12074,7 +12151,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_optimisticstore",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": "optimisticstore.ts"
     },
@@ -12085,7 +12162,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "vscode_extension_src_optimisticstore_keytostring",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": "keytostring()"
     },
@@ -12096,7 +12173,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "vscode_extension_src_optimisticstore_optimisticcommentstore",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": "optimisticcommentstore"
     },
@@ -12107,7 +12184,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "vscode_extension_src_optimisticstore_optimisticcommentstore_getcomments",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": ".getcomments()"
     },
@@ -12118,7 +12195,7 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "vscode_extension_src_optimisticstore_optimisticcommentstore_updatecomments",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": ".updatecomments()"
     },
@@ -12129,7 +12206,7 @@
       "source_location": "L85",
       "_origin": "ast",
       "id": "vscode_extension_src_optimisticstore_optimisticcommentstore_getcached",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": ".getcached()"
     },
@@ -12140,7 +12217,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "vscode_extension_src_optimisticstore_optimisticcommentstore_invalidate",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": ".invalidate()"
     },
@@ -12151,7 +12228,7 @@
       "source_location": "L105",
       "_origin": "ast",
       "id": "vscode_extension_src_optimisticstore_optimisticcommentstore_clearall",
-      "community": 86,
+      "community": 12,
       "community_name": "CommentsFile",
       "norm_label": ".clearall()"
     },
@@ -12195,8 +12272,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_previewcommand",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": "previewcommand.ts"
     },
     {
@@ -12206,8 +12283,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "vscode_extension_src_previewcommand_parsepreviewcommandarg",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": "parsepreviewcommandarg()"
     },
     {
@@ -12217,8 +12294,8 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "vscode_extension_src_previewcommand_normalizeobject",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "commentStore.ts",
       "norm_label": "normalizeobject()"
     },
     {
@@ -15431,9 +15508,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 12,
+      "community": 86,
       "norm_label": "markdown comments overview",
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "id": "readme_main"
     },
     {
@@ -15447,7 +15524,7 @@
       "contributor": null,
       "community": 12,
       "norm_label": "markdown comments key features",
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "id": "readme_features"
     },
     {
@@ -15459,9 +15536,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 12,
+      "community": 86,
       "norm_label": "monorepo package structure",
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "id": "readme_monorepo"
     },
     {
@@ -15501,9 +15578,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 12,
+      "community": 86,
       "norm_label": "comments example note",
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "id": "docs_example_file"
     },
     {
@@ -15515,9 +15592,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 12,
+      "community": 86,
       "norm_label": "obsidian plugin guide",
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "id": "obsidian_plugin_readme_file"
     },
     {
@@ -15529,9 +15606,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 12,
+      "community": 86,
       "norm_label": "pnpm monorepo configuration",
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "id": "pnpm_workspace_file"
     },
     {
@@ -15543,9 +15620,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 12,
+      "community": 86,
       "norm_label": "app icon png",
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "id": "assets_icon_png_node"
     },
     {
@@ -15557,9 +15634,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 12,
+      "community": 86,
       "norm_label": "app icon svg",
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "id": "assets_icon_svg_node"
     },
     {
@@ -15641,9 +15718,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 12,
+      "community": 86,
       "norm_label": "vs code extension icon png",
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "id": "vscode_extension_icon_png_node"
     }
   ],
@@ -26575,7 +26652,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L30",
+      "source_location": "L31",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package",
@@ -26608,6 +26685,17 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
+      "source_location": "L44",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "package",
+      "target": "package_pnpm",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
       "source_location": "L3",
       "weight": 1.0,
       "_origin": "ast",
@@ -26630,7 +26718,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L20",
+      "source_location": "L21",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_scripts",
@@ -26641,7 +26729,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L15",
+      "source_location": "L16",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_scripts",
@@ -26652,7 +26740,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L17",
+      "source_location": "L18",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_scripts",
@@ -26663,7 +26751,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L14",
+      "source_location": "L15",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_scripts",
@@ -26674,7 +26762,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L18",
+      "source_location": "L19",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_scripts",
@@ -26685,7 +26773,18 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L16",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "package_scripts",
+      "target": "package_scripts_build_shared",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L17",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_scripts",
@@ -26696,7 +26795,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L13",
+      "source_location": "L14",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_scripts",
@@ -26718,7 +26817,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L24",
+      "source_location": "L25",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_scripts",
@@ -26729,7 +26828,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L23",
+      "source_location": "L24",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_scripts",
@@ -26740,7 +26839,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L22",
+      "source_location": "L23",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_scripts",
@@ -26751,7 +26850,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L21",
+      "source_location": "L22",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_scripts",
@@ -26762,7 +26861,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L19",
+      "source_location": "L20",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_scripts",
@@ -26773,7 +26872,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L26",
+      "source_location": "L27",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_scripts",
@@ -26784,7 +26883,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L28",
+      "source_location": "L29",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_scripts",
@@ -26795,7 +26894,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L27",
+      "source_location": "L28",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_scripts",
@@ -26806,7 +26905,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L25",
+      "source_location": "L26",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_scripts",
@@ -26883,7 +26982,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L34",
+      "source_location": "L35",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_devdependencies",
@@ -26894,7 +26993,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L35",
+      "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_devdependencies",
@@ -26905,7 +27004,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L36",
+      "source_location": "L37",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_devdependencies",
@@ -26916,7 +27015,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L38",
+      "source_location": "L39",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_devdependencies",
@@ -26927,7 +27026,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L39",
+      "source_location": "L40",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_devdependencies",
@@ -26938,7 +27037,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L37",
+      "source_location": "L38",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_devdependencies",
@@ -26949,7 +27048,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L40",
+      "source_location": "L41",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_devdependencies",
@@ -26960,7 +27059,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L31",
+      "source_location": "L32",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_devdependencies",
@@ -26971,7 +27070,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L32",
+      "source_location": "L33",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_devdependencies",
@@ -26982,7 +27081,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L41",
+      "source_location": "L42",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_devdependencies",
@@ -26993,7 +27092,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L33",
+      "source_location": "L34",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_devdependencies",
@@ -27004,7 +27103,7 @@
       "relation": "imports",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L31",
+      "source_location": "L32",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -27016,7 +27115,7 @@
       "relation": "imports",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L32",
+      "source_location": "L33",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -27028,7 +27127,7 @@
       "relation": "imports",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L33",
+      "source_location": "L34",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -27040,7 +27139,7 @@
       "relation": "imports",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L34",
+      "source_location": "L35",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -27052,7 +27151,7 @@
       "relation": "imports",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L35",
+      "source_location": "L36",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -27064,7 +27163,7 @@
       "relation": "imports",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L36",
+      "source_location": "L37",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -27076,7 +27175,7 @@
       "relation": "imports",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L37",
+      "source_location": "L38",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -27088,7 +27187,7 @@
       "relation": "imports",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L38",
+      "source_location": "L39",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -27100,7 +27199,7 @@
       "relation": "imports",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L39",
+      "source_location": "L40",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -27112,7 +27211,7 @@
       "relation": "imports",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L40",
+      "source_location": "L41",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -27124,12 +27223,67 @@
       "relation": "imports",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L41",
+      "source_location": "L42",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
       "source": "package_devdependencies_vitest",
       "target": "vitest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L45",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "package_pnpm",
+      "target": "package_pnpm_overrides",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L49",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "package_pnpm_overrides",
+      "target": "package_overrides_esbuild",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L47",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "package_pnpm_overrides",
+      "target": "package_overrides_fast_uri",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L46",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "package_pnpm_overrides",
+      "target": "package_overrides_nanoid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L48",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "package_pnpm_overrides",
+      "target": "package_overrides_undici",
       "confidence_score": 1.0
     },
     {
@@ -46004,5 +46158,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "aed80400a0faae5323bce690f20a92aca3c16c2a"
+  "built_at_commit": "fbd99faed3a36b61b885d2ea5b55956de9c50b3c"
 }
