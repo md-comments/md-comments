@@ -172,16 +172,30 @@ export function activate(context: vscode.ExtensionContext): {
       await signOut();
       await refreshPreview();
     }),
-    vscode.commands.registerCommand('mdComments.openCommentPreview', () => {
-      const editor = vscode.window.activeTextEditor;
-      logInfo('Command mdComments.openCommentPreview invoked, activeEditor exists:', !!editor);
-      if (!editor || editor.document.languageId !== 'markdown') {
-        vscode.window.showWarningMessage('Open a Markdown (.md) file first');
-        return;
+    vscode.commands.registerCommand(
+      'mdComments.openCommentPreview',
+      async (uriArg?: vscode.Uri) => {
+        let doc: vscode.TextDocument | undefined;
+        if (uriArg && uriArg instanceof vscode.Uri) {
+          try {
+            doc = await vscode.workspace.openTextDocument(uriArg);
+          } catch (err) {
+            logError('Failed to open document from URI arg:', err);
+          }
+        }
+        if (!doc) {
+          doc = vscode.window.activeTextEditor?.document;
+        }
+
+        logInfo('Command mdComments.openCommentPreview invoked, doc exists:', !!doc);
+        if (!doc || (doc.languageId !== 'markdown' && !doc.uri.path.endsWith('.md'))) {
+          vscode.window.showWarningMessage('Open a Markdown (.md) file first');
+          return;
+        }
+        CommentPreviewPanel.show(context.extensionUri, doc, vscode.ViewColumn.Beside);
+        logInfo(`Opened comment preview panel for ${doc.uri.fsPath}`);
       }
-      CommentPreviewPanel.show(context.extensionUri, editor.document, vscode.ViewColumn.Beside);
-      logInfo(`Opened comment preview panel for ${editor.document.uri.fsPath}`);
-    }),
+    ),
     vscode.commands.registerCommand(
       'mdComments.handlePreviewAction',
       async (...args: unknown[]) => {
