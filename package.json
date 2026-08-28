@@ -23,7 +23,7 @@
     "lint": "eslint .",
     "format:check": "prettier --check \"**/*.{ts,js,json,css,md}\"",
     "format": "prettier --write \"**/*.{ts,js,json,css,md}\"",
-    "typecheck": "pnpm build:shared && pnpm --recursive run typecheck && tsc --noEmit -p tsconfig.tests.json",
+    "typecheck": "pnpm build:shared && pnpm build:starlight && pnpm --recursive run typecheck && tsc --noEmit -p tsconfig.tests.json",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
