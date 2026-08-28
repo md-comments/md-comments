@@ -752,6 +752,19 @@ export function extendMarkdownIt(md: any): any {
           token.attrSet('data-md-anchor-hash', block.anchor_hash);
           token.attrSet('data-md-heading', block.heading_context);
           token.attrSet('data-md-anchor-text', block.anchor_text);
+
+          if (renderCtx.comments && renderCtx.comments.inline_comments) {
+            const placements = placeInlineComments(
+              renderCtx.blocks,
+              renderCtx.comments.inline_comments
+            );
+            const hasInlineComments = placements.some(
+              (p) => p.placed && p.paragraphIndex === block.paragraph_index && !p.comment.resolved
+            );
+            if (hasInlineComments) {
+              token.attrJoin('class', 'md-comments-paragraph-marked');
+            }
+          }
         }
       }
     }
