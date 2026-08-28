@@ -22,6 +22,7 @@ const ICON_EDIT = `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path
 const ICON_DELETE = `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 7h14M9 7V5h6v2M8 7l1 12h6l1-12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 const ICON_RESOLVE = `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 12.5l3.5 3.5L18 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 const ICON_REOPEN = `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.5-5.5M20 12a8 8 0 0 1-13.5 5.5M16 6.5V10h-3.5M8 17.5V14H11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const ICON_REACT = `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.5"/><path d="M9.25 10.25h.01M14.75 10.25h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9.25 14.25c.85 1.15 2 1.75 2.75 1.75s1.9-.6 2.75-1.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`;
 
 // Global references to injected elements for cleanup
 let activeIndicators: HTMLElement[] = [];
@@ -2203,7 +2204,17 @@ function renderCommentCard(comment: InlineComment | PageComment, type: 'inline' 
         ${
           isWritable
             ? `
-          <div class="comment-actions" style="display: flex; gap: 6px; align-items: center;">
+            <div class="emoji-picker-container" style="position: relative; display: inline-block;">
+              <button class="icon-action-btn emoji-picker-btn" title="Add Reaction">${ICON_REACT}</button>
+              <div class="emoji-popover" style="display: none; position: absolute; right: 0; top: 100%; background: var(--composer-bg); border: 1px solid var(--sidebar-border); border-radius: 6px; padding: 4px; z-index: 100; gap: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+                ${['👍', '👀', '❤️', '🎉', '❓']
+                  .map(
+                    (e) =>
+                      `<button class="emoji-opt-btn" data-id="${comment.id}" data-type="${type}" data-emoji="${e}" style="background: transparent; border: none; cursor: pointer; font-size: 14px; padding: 4px;">${e}</button>`
+                  )
+                  .join('')}
+              </div>
+            </div>
             ${
               isAuthor
                 ? `
@@ -2228,6 +2239,19 @@ function renderCommentCard(comment: InlineComment | PageComment, type: 'inline' 
       </div>
       <div class="comment-body" style="font-size: 13px; color: var(--text-primary); white-space: pre-wrap; line-height: 1.4; margin-top: 4px;">${escapeHtml(comment.body)}</div>
       
+      ${
+        comment.reactions && comment.reactions.length > 0
+          ? `<div class="reactions-row" style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px;">
+              ${comment.reactions
+                .map(
+                  (r) =>
+                    `<button class="reaction-chip" data-id="${comment.id}" data-type="${type}" data-emoji="${escapeHtml(r.emoji)}" style="background: var(--composer-bg); border: 1px solid var(--sidebar-border); border-radius: 12px; padding: 2px 8px; font-size: 12px; cursor: pointer; color: var(--text-primary); display: inline-flex; align-items: center; gap: 4px;">${escapeHtml(r.emoji)} <span>${r.users.length}</span></button>`
+                )
+                .join('')}
+            </div>`
+          : ''
+      }
+
       ${comment.replies.length > 0 ? `<div class="replies-section">${repliesHtml}</div>` : ''}
 
       ${
@@ -2242,6 +2266,29 @@ function renderCommentCard(comment: InlineComment | PageComment, type: 'inline' 
       }
     </div>
   `;
+}
+
+async function toggleEmojiReaction(commentId: string, type: 'inline' | 'page', emoji: string) {
+  const author = await getDisplayAuthor();
+  const updated = { ...loadedComments };
+  const targetList = type === 'inline' ? updated.inline_comments : updated.page_comments;
+  const comment = targetList.find((c) => c.id === commentId);
+  if (!comment) return;
+
+  if (!comment.reactions) comment.reactions = [];
+  const existing = comment.reactions.find((r) => r.emoji === emoji);
+  if (existing) {
+    if (existing.users.includes(author)) {
+      existing.users = existing.users.filter((u) => u !== author);
+    } else {
+      existing.users.push(author);
+    }
+    comment.reactions = comment.reactions.filter((r) => r.users.length > 0);
+  } else {
+    comment.reactions.push({ emoji, users: [author] });
+  }
+
+  await commitCommentFileChanges(updated, 'toggle reaction');
 }
 
 let activeTooltipEl: HTMLElement | null = null;
@@ -2337,6 +2384,37 @@ function scrollToCommentText(commentId: string) {
 function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page') {
   container.querySelectorAll('.comment-card').forEach((card) => {
     const commentId = card.getAttribute('data-id') || '';
+
+    const emojiPickerBtn = card.querySelector('.emoji-picker-btn');
+    const emojiPopover = card.querySelector('.emoji-popover') as HTMLElement | null;
+    if (emojiPickerBtn && emojiPopover) {
+      emojiPickerBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isHidden = emojiPopover.style.display === 'none';
+        emojiPopover.style.display = isHidden ? 'flex' : 'none';
+      });
+    }
+
+    card.querySelectorAll('.emoji-opt-btn').forEach((btn) => {
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        const emoji = btn.getAttribute('data-emoji');
+        if (emoji) {
+          if (emojiPopover) emojiPopover.style.display = 'none';
+          await toggleEmojiReaction(commentId, type, emoji);
+        }
+      });
+    });
+
+    card.querySelectorAll('.reaction-chip').forEach((btn) => {
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        const emoji = btn.getAttribute('data-emoji');
+        if (emoji) {
+          await toggleEmojiReaction(commentId, type, emoji);
+        }
+      });
+    });
 
     // Scroll to text when clicking an inline comment card
     if (type === 'inline') {
