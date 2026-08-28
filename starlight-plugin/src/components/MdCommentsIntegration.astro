@@ -1,0 +1,31 @@
+---
+export interface Props {
+  optionsJson?: string;
+}
+
+const { optionsJson = '{}' } = Astro.props;
+---
+
+<script define:vars={{ optionsJson }}>
+  window.__MD_COMMENTS_OPTIONS__ = JSON.parse(optionsJson || '{}');
+</script>
+<script>
+  import { CommentsOverlay } from '../client/components/CommentsOverlay';
+
+  function setupMdComments() {
+    const article = document.querySelector('main, article, .sl-markdown-content');
+    if (article && !document.querySelector('.md-comments-drawer')) {
+      const options = (window as any).__MD_COMMENTS_OPTIONS__ || {};
+      const overlay = new CommentsOverlay(article as HTMLElement, options);
+      overlay.init().catch(console.error);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupMdComments);
+  } else {
+    setupMdComments();
+  }
+
+  document.addEventListener('astro:page-load', setupMdComments);
+</script>

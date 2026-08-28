@@ -1,0 +1,16 @@
+---
+export interface Props {
+  repo?: string;
+  branch?: string;
+  path?: string;
+}
+
+const { repo = '', branch = 'main', path = '' } = Astro.props;
+---
+
+<div class="md-comments-page-container" data-repo={repo} data-branch={branch} data-path={path}>
+  <div class="md-comments-page-header">
+    <h4>Discussion & Page Comments</h4>
+  </div>
+  <div class="md-comments-page-stream"></div>
+</div>

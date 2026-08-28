@@ -3,8 +3,11 @@ packages:
   - 'vscode-extension'
   - 'obsidian-plugin'
   - 'chrome-extension'
+  - 'starlight-plugin'
+  - 'demo-astro'
 
 allowBuilds:
   "@vscode/vsce-sign": true
   keytar: true
   esbuild: true
+  sharp: true

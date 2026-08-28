@@ -1,0 +1,32 @@
+{
+  "name": "@md-comments/starlight",
+  "version": "1.1.5",
+  "description": "Astro integration and Starlight plugin for Markdown Comments with GitHub backend & zero-extension client discussions.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./styles.css": "./src/client/styles/comments.css",
+    "./client/bootstrap": "./dist/client/bootstrap.js",
+    "./components/PageComments.astro": "./src/components/PageComments.astro",
+    "./components/MdCommentsIntegration.astro": "./src/components/MdCommentsIntegration.astro"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "@md-comments/shared": "workspace:*",
+    "js-yaml": "^4.3.1"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^20.14.0",
+    "typescript": "^5.5.0"
+  }
+}
