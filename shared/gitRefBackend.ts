@@ -9,11 +9,8 @@ export function commentsFilePathForMarkdown(filePath: string, commitHash?: strin
   const cleanPath = filePath
     .replace(/\.(?:[a-f0-9]{7,40}\.)?comments\.(?:yml|yaml)$/i, '')
     .replace(/\.md$/i, '');
-  if (commitHash) {
-    const shortHash = commitHash.slice(0, 7).toLowerCase();
-    return `${cleanPath}.${shortHash}.comments.yml`;
-  }
-  return `${cleanPath}.comments.yml`;
+  const hash = (commitHash && commitHash.trim() ? commitHash : '0000000').slice(0, 7).toLowerCase();
+  return `${cleanPath}.${hash}.comments.yml`;
 }
 
 export function decodeBase64(base64Str: string): string {
@@ -134,27 +131,29 @@ export class GitHubOrphanRefBackend implements CommentBackend {
 
   /**
    * Reads all comments for a file from the orphan ref refs/md-comments/data.
-   * Merges commit-specific and legacy base files (Confluence-style aggregation).
-   * If not found, falls back to checking file rename history via GitHub Commits API.
+   * Enforces commit-hashed comment files. Migrates and immediately deletes legacy un-hashed files.
    */
   async read(key: CommentStorageKey): Promise<CommentsFile> {
     const targetPath = commentsFilePathForMarkdown(key.filePath, key.commitHash);
-    const legacyPath = commentsFilePathForMarkdown(key.filePath);
+    const cleanPath = key.filePath
+      .replace(/\.(?:[a-f0-9]{7,40}\.)?comments\.(?:yml|yaml)$/i, '')
+      .replace(/\.md$/i, '');
+    const legacyPath = `${cleanPath}.comments.yml`;
 
     let accumulated: CommentsFile = { page_comments: [], inline_comments: [] };
 
-    // 1. Fetch target commit-hashed comments file if specified
+    // 1. Fetch target commit-hashed comments file
     const targetComments = await this.fetchPathContent(key.owner, key.repo, targetPath);
     if (targetComments) {
       accumulated = mergeCommentsFiles(accumulated, targetComments);
     }
 
-    // 2. Fetch legacy un-hashed comments file if different from targetPath
-    if (legacyPath !== targetPath) {
-      const legacyComments = await this.fetchPathContent(key.owner, key.repo, legacyPath);
-      if (legacyComments) {
-        accumulated = mergeCommentsFiles(accumulated, legacyComments);
-      }
+    // 2. Fetch legacy un-hashed comments file if present; migrate & DELETE immediately!
+    const legacyComments = await this.fetchPathContent(key.owner, key.repo, legacyPath);
+    if (legacyComments) {
+      accumulated = mergeCommentsFiles(accumulated, legacyComments);
+      await this.write(key, accumulated);
+      await this.deleteFileFromRef(key.owner, key.repo, legacyPath);
     }
 
     // If comments were loaded, return the merged set
