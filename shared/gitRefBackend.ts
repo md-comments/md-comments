@@ -1,7 +1,7 @@
 /* global RequestInit, Response */
 import * as yaml from 'js-yaml';
-import type { CommentBackend, CommentStorageKey } from './commentStorage';
-import type { CommentsFile, InlineComment, PageComment, Reply } from './types';
+import type { CommentBackend, CommentStorageKey } from './commentStorage.js';
+import type { CommentsFile, InlineComment, PageComment, Reply } from './types.js';
 
 export const ORPHAN_REF_NAME = 'refs/md-comments/data';
 
@@ -335,7 +335,12 @@ export class GitHubOrphanRefBackend implements CommentBackend {
       method: 'POST',
       body: JSON.stringify(treeBody),
     });
-    if (!treeRes.ok) throw new Error(`Tree creation failed: ${treeRes.status}`);
+    if (!treeRes.ok) {
+      const errText = await treeRes.text().catch(() => '');
+      throw new Error(
+        `Tree creation failed (${treeRes.status}): Ensure repository "${key.owner}/${key.repo}" exists and authorized user has push permissions. ${errText}`
+      );
+    }
     const treeData = (await treeRes.json()) as { sha: string };
 
     // Create commit
@@ -351,7 +356,12 @@ export class GitHubOrphanRefBackend implements CommentBackend {
       method: 'POST',
       body: JSON.stringify(commitBody),
     });
-    if (!commitRes.ok) throw new Error(`Commit creation failed: ${commitRes.status}`);
+    if (!commitRes.ok) {
+      const errText = await commitRes.text().catch(() => '');
+      throw new Error(
+        `Commit creation failed (${commitRes.status}): Ensure authorized user has push permissions to "${key.owner}/${key.repo}". ${errText}`
+      );
+    }
     const createdCommitData = (await commitRes.json()) as { sha: string };
 
     // Update or Create Ref

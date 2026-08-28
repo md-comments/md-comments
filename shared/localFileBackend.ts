@@ -1,6 +1,6 @@
-import type { CommentBackend, CommentStorageKey } from './commentStorage';
-import type { CommentsFile } from './types';
-import { mergeCommentsFiles } from './gitRefBackend';
+import type { CommentBackend, CommentStorageKey } from './commentStorage.js';
+import type { CommentsFile } from './types.js';
+import { mergeCommentsFiles } from './gitRefBackend.js';
 
 export interface LocalFileAdapter {
   readText(commentsPath: string): Promise<string | null>;

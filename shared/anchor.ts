@@ -1,4 +1,4 @@
-import type { AnchorBlock } from './types';
+import type { AnchorBlock } from './types.js';
 
 /** FNV-1a 32-bit hash as lowercase hex (matches plan anchor_hash). */
 export function fnv1aHash(text: string): string {
@@ -9,6 +9,11 @@ export function fnv1aHash(text: string): string {
     hash = Math.imul(hash, 0x01000193) >>> 0;
   }
   return hash.toString(16).padStart(8, '0');
+}
+
+export function computeAnchorId(text: string, index?: number): string {
+  const hash = fnv1aHash(text);
+  return typeof index === 'number' ? `a_${index}_${hash}` : `a_${hash}`;
 }
 
 export function normalizeAnchorText(text: string): string {

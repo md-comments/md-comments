@@ -1,5 +1,5 @@
-import type { AnchorBlock, InlineComment, PlacementResult } from './types';
-import { normalizeAnchorText } from './anchor';
+import type { AnchorBlock, InlineComment, PlacementResult } from './types.js';
+import { normalizeAnchorText } from './anchor.js';
 
 export function fuzzyMatch(anchorText: string, blockText: string): boolean {
   const a = normalizeAnchorText(anchorText).toLowerCase();

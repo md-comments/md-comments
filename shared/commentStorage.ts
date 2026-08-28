@@ -1,4 +1,4 @@
-import type { CommentsFile } from './types';
+import type { CommentsFile } from './types.js';
 
 export interface CommentStorageKey {
   owner: string;
