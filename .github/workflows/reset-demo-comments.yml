@@ -1,0 +1,129 @@
+name: Reset Demo Comments
+
+on:
+  schedule:
+    # Runs every day at 00:00 UTC to enforce 24-hour demo comment retention
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+    inputs:
+      target_repos:
+        description: 'Comma-separated repositories to reset (owner/repo). Leave empty for default demo repos.'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+jobs:
+  reset-demo-refs:
+    name: Reset refs/md-comments/data
+    runs-on: ubuntu-latest
+    steps:
+      - name: Reset Demo Orphan Ref
+        uses: actions/github-script@v7
+        env:
+          CUSTOM_TOKEN: ${{ secrets.DEMO_RESET_PAT || secrets.GITHUB_TOKEN }}
+          INPUT_REPOS: ${{ github.event.inputs.target_repos }}
+          CURRENT_REPO: ${{ github.repository }}
+        with:
+          github-token: ${{ secrets.DEMO_RESET_PAT || secrets.GITHUB_TOKEN }}
+          script: |
+            const defaultRepos = [
+              process.env.CURRENT_REPO,
+              'md-comments/demo-comments',
+              'md-comments/astro-demo-comments'
+            ];
+
+            const inputRepos = process.env.INPUT_REPOS
+              ? process.env.INPUT_REPOS.split(',').map((r) => r.trim()).filter(Boolean)
+              : defaultRepos;
+
+            const repos = Array.from(new Set(inputRepos));
+            const refName = 'refs/md-comments/data';
+            const subRef = 'md-comments/data';
+
+            for (const repoFullName of repos) {
+              const [owner, repo] = repoFullName.split('/');
+              if (!owner || !repo) {
+                console.log(`⚠️ Invalid repo name: ${repoFullName}, skipping.`);
+                continue;
+              }
+
+              console.log(`\n========================================`);
+              console.log(`🔄 Processing reset for: ${owner}/${repo}`);
+              console.log(`========================================`);
+
+              try {
+                // 1. Delete existing ref if present
+                console.log(`Deleting existing ${refName} on ${owner}/${repo}...`);
+                try {
+                  await github.rest.git.deleteRef({
+                    owner,
+                    repo,
+                    ref: subRef,
+                  });
+                  console.log(`✅ Successfully deleted ${refName}`);
+                } catch (delErr) {
+                  if (delErr.status === 404) {
+                    console.log(`ℹ️ ${refName} does not exist on ${owner}/${repo} (nothing to delete).`);
+                  } else {
+                    console.warn(`⚠️ Could not delete ref directly: ${delErr.message}`);
+                  }
+                }
+
+                // 2. Create empty tree
+                console.log(`Creating fresh empty git tree...`);
+                const treeRes = await github.rest.git.createTree({
+                  owner,
+                  repo,
+                  tree: [],
+                });
+                const treeSha = treeRes.data.sha;
+                console.log(`✅ Created empty tree with SHA: ${treeSha}`);
+
+                // 3. Create initial empty commit with no parents (orphan commit)
+                console.log(`Creating initial orphan commit...`);
+                const commitRes = await github.rest.git.createCommit({
+                  owner,
+                  repo,
+                  message: `chore: daily reset demo comments [skip ci]\n\nAutomated daily reset at 00:00 UTC.`,
+                  tree: treeSha,
+                  parents: [],
+                });
+                const commitSha = commitRes.data.sha;
+                console.log(`✅ Created orphan commit with SHA: ${commitSha}`);
+
+                // 4. Create or update the ref pointing to the new commit
+                console.log(`Creating ${refName} pointing to ${commitSha}...`);
+                try {
+                  await github.rest.git.createRef({
+                    owner,
+                    repo,
+                    ref: refName,
+                    sha: commitSha,
+                  });
+                  console.log(`✅ Successfully recreated ${refName} on ${owner}/${repo}`);
+                } catch (createErr) {
+                  // If ref already exists or recreation race condition, force update via updateRef
+                  console.log(`Create ref returned (${createErr.message}), attempting force update...`);
+                  await github.rest.git.updateRef({
+                    owner,
+                    repo,
+                    ref: subRef,
+                    sha: commitSha,
+                    force: true,
+                  });
+                  console.log(`✅ Successfully force-updated ${refName} on ${owner}/${repo}`);
+                }
+              } catch (err) {
+                console.error(`❌ Failed to reset ${refName} on ${owner}/${repo}:`, err.message);
+                if (repoFullName !== process.env.CURRENT_REPO) {
+                  console.warn(
+                    `👉 Note: Cross-repository resets require DEMO_RESET_PAT secret with repo permissions on ${repoFullName}.`
+                  );
+                } else {
+                  throw err;
+                }
+              }
+            }
+            console.log('\n🎉 Demo comments reset workflow finished.');
