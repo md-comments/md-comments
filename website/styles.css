@@ -1140,11 +1140,12 @@ h6 {
 }
 
 .integration-features {
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
   margin: 0 auto 32px;
+  width: fit-content;
 }
 
 .integration-features li {
@@ -1176,6 +1177,143 @@ h6 {
 .btn-openvsx svg {
   margin-right: 8px;
   flex-shrink: 0;
+}
+
+/* Browser Icon Dock */
+.browser-icon-dock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 6px 10px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  margin: 16px auto 28px;
+  width: fit-content;
+}
+
+.browser-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  transition: all var(--transition-fast);
+  position: relative;
+}
+
+.browser-icon-btn.active {
+  color: var(--accent);
+  border-color: var(--accent);
+  background-color: var(--bg-tertiary);
+  box-shadow: 0 0 14px -2px var(--accent-glow);
+}
+
+.browser-icon-btn.disabled {
+  opacity: 0.35;
+  color: var(--text-muted);
+  filter: grayscale(100%);
+  border-style: dashed;
+  cursor: not-allowed;
+}
+
+.browser-icon-btn.disabled:hover {
+  opacity: 0.45;
+}
+
+[data-theme='light'] .browser-icon-btn.disabled {
+  opacity: 0.38;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+/* Common Setup for All Extensions */
+.common-setup-box {
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.common-setup-label {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.common-setup-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* NPM Brand Button (Subdued Tint) */
+.btn-npm {
+  background-color: rgba(203, 56, 55, 0.08);
+  color: var(--text-primary);
+  border: 1px solid rgba(203, 56, 55, 0.28);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all var(--transition-fast);
+}
+
+.btn-npm:hover {
+  background-color: rgba(203, 56, 55, 0.16);
+  border-color: rgba(203, 56, 55, 0.5);
+  color: var(--text-primary);
+  box-shadow: 0 4px 16px -2px rgba(203, 56, 55, 0.2);
+  transform: translateY(-1px);
+}
+
+.btn-npm svg {
+  flex-shrink: 0;
+  margin-right: 4px;
+  color: #cb3837;
+}
+
+[data-theme='light'] .btn-npm {
+  background-color: rgba(203, 56, 55, 0.06);
+  border-color: rgba(203, 56, 55, 0.22);
+}
+
+[data-theme='light'] .btn-npm:hover {
+  background-color: rgba(203, 56, 55, 0.12);
+  border-color: rgba(203, 56, 55, 0.45);
+}
+
+/* Website Documentation Guides Row */
+.guides-row {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.guides-label {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.guides-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 /* Rich Interface Mockups */
