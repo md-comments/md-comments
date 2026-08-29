@@ -1935,8 +1935,8 @@
       "source_location": "L70",
       "_origin": "ast",
       "id": "chrome_extension_src_content_getdraftkey",
-      "community": 103,
-      "community_name": "attachCommentCardEvents",
+      "community": 116,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "getdraftkey()"
     },
     {
@@ -1946,8 +1946,8 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "chrome_extension_src_content_savedraft",
-      "community": 103,
-      "community_name": "attachCommentCardEvents",
+      "community": 116,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "savedraft()"
     },
     {
@@ -1969,7 +1969,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_parsegithuburl",
       "community": 106,
-      "community_name": "renderSidebarComments",
+      "community_name": "parseGitHubUrl",
       "norm_label": "parsegithuburl()"
     },
     {
@@ -1979,8 +1979,8 @@
       "source_location": "L121",
       "_origin": "ast",
       "id": "chrome_extension_src_content_getbranchfromdom",
-      "community": 113,
-      "community_name": "chrome-extension/src/githubAuth.ts",
+      "community": 106,
+      "community_name": "parseGitHubUrl",
       "norm_label": "getbranchfromdom()"
     },
     {
@@ -1991,7 +1991,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_getprheadbranchfromdom",
       "community": 106,
-      "community_name": "renderSidebarComments",
+      "community_name": "parseGitHubUrl",
       "norm_label": "getprheadbranchfromdom()"
     },
     {
@@ -2001,8 +2001,8 @@
       "source_location": "L194",
       "_origin": "ast",
       "id": "chrome_extension_src_content_getauthtoken",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 114,
+      "community_name": "loadDocumentComments",
       "norm_label": "getauthtoken()"
     },
     {
@@ -2024,7 +2024,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_fetchfilecontent",
       "community": 106,
-      "community_name": "renderSidebarComments",
+      "community_name": "parseGitHubUrl",
       "norm_label": "fetchfilecontent()"
     },
     {
@@ -2035,7 +2035,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_fetchcommentsfile",
       "community": 106,
-      "community_name": "renderSidebarComments",
+      "community_name": "parseGitHubUrl",
       "norm_label": "fetchcommentsfile()"
     },
     {
@@ -2045,8 +2045,8 @@
       "source_location": "L268",
       "_origin": "ast",
       "id": "chrome_extension_src_content_cleanupinjections",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 112,
+      "community_name": "renderDOMIndicatorsForFile",
       "norm_label": "cleanupinjections()"
     },
     {
@@ -2056,8 +2056,8 @@
       "source_location": "L327",
       "_origin": "ast",
       "id": "chrome_extension_src_content_renamereplybuttonstook",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 116,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "renamereplybuttonstook()"
     },
     {
@@ -2067,8 +2067,8 @@
       "source_location": "L350",
       "_origin": "ast",
       "id": "chrome_extension_src_content_issidebaropen",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 114,
+      "community_name": "loadDocumentComments",
       "norm_label": "issidebaropen()"
     },
     {
@@ -2078,8 +2078,8 @@
       "source_location": "L359",
       "_origin": "ast",
       "id": "chrome_extension_src_content_checkpagechange",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 114,
+      "community_name": "loadDocumentComments",
       "norm_label": "checkpagechange()"
     },
     {
@@ -2089,8 +2089,8 @@
       "source_location": "L392",
       "_origin": "ast",
       "id": "chrome_extension_src_content_handledevicepageautofill",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 114,
+      "community_name": "loadDocumentComments",
       "norm_label": "handledevicepageautofill()"
     },
     {
@@ -2100,8 +2100,8 @@
       "source_location": "L440",
       "_origin": "ast",
       "id": "chrome_extension_src_content_handlepageload",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 114,
+      "community_name": "loadDocumentComments",
       "norm_label": "handlepageload()"
     },
     {
@@ -2111,8 +2111,8 @@
       "source_location": "L493",
       "_origin": "ast",
       "id": "chrome_extension_src_content_loaddocumentcomments",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 114,
+      "community_name": "loadDocumentComments",
       "norm_label": "loaddocumentcomments()"
     },
     {
@@ -2122,8 +2122,8 @@
       "source_location": "L590",
       "_origin": "ast",
       "id": "chrome_extension_src_content_mergelocalcomments",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 114,
+      "community_name": "loadDocumentComments",
       "norm_label": "mergelocalcomments()"
     },
     {
@@ -2133,8 +2133,8 @@
       "source_location": "L646",
       "_origin": "ast",
       "id": "chrome_extension_src_content_injectfabbutton",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 114,
+      "community_name": "loadDocumentComments",
       "norm_label": "injectfabbutton()"
     },
     {
@@ -2144,8 +2144,8 @@
       "source_location": "L672",
       "_origin": "ast",
       "id": "chrome_extension_src_content_injecttoolbarbutton",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 114,
+      "community_name": "loadDocumentComments",
       "norm_label": "injecttoolbarbutton()"
     },
     {
@@ -2155,8 +2155,8 @@
       "source_location": "L677",
       "_origin": "ast",
       "id": "chrome_extension_src_content_togglesidebar",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 114,
+      "community_name": "loadDocumentComments",
       "norm_label": "togglesidebar()"
     },
     {
@@ -2166,8 +2166,8 @@
       "source_location": "L685",
       "_origin": "ast",
       "id": "chrome_extension_src_content_getfilepathfromfilecontainer",
-      "community": 112,
-      "community_name": "renderDOMIndicatorsForFile",
+      "community": 116,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "getfilepathfromfilecontainer()"
     },
     {
@@ -2211,7 +2211,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_processprmarkdownfiles",
       "community": 106,
-      "community_name": "renderSidebarComments",
+      "community_name": "parseGitHubUrl",
       "norm_label": "processprmarkdownfiles()"
     },
     {
@@ -2222,7 +2222,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_rendercustommarkdownsourceview",
       "community": 106,
-      "community_name": "renderSidebarComments",
+      "community_name": "parseGitHubUrl",
       "norm_label": "rendercustommarkdownsourceview()"
     },
     {
@@ -2233,7 +2233,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_loadandrendercommentsforcontainer",
       "community": 106,
-      "community_name": "renderSidebarComments",
+      "community_name": "parseGitHubUrl",
       "norm_label": "loadandrendercommentsforcontainer()"
     },
     {
@@ -2243,8 +2243,8 @@
       "source_location": "L954",
       "_origin": "ast",
       "id": "chrome_extension_src_content_initrepoandmetadata",
-      "community": 113,
-      "community_name": "chrome-extension/src/githubAuth.ts",
+      "community": 106,
+      "community_name": "parseGitHubUrl",
       "norm_label": "initrepoandmetadata()"
     },
     {
@@ -2255,7 +2255,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_setactivefile",
       "community": 106,
-      "community_name": "renderSidebarComments",
+      "community_name": "parseGitHubUrl",
       "norm_label": "setactivefile()"
     },
     {
@@ -2265,8 +2265,8 @@
       "source_location": "L1093",
       "_origin": "ast",
       "id": "chrome_extension_src_content_finddiffguttercell",
-      "community": 103,
-      "community_name": "attachCommentCardEvents",
+      "community": 116,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "finddiffguttercell()"
     },
     {
@@ -2276,8 +2276,8 @@
       "source_location": "L1101",
       "_origin": "ast",
       "id": "chrome_extension_src_content_triggerandmovenativecomposer",
-      "community": 103,
-      "community_name": "attachCommentCardEvents",
+      "community": 116,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "triggerandmovenativecomposer()"
     },
     {
@@ -2287,8 +2287,8 @@
       "source_location": "L1281",
       "_origin": "ast",
       "id": "chrome_extension_src_content_showfallbackreplycomposer",
-      "community": 103,
-      "community_name": "attachCommentCardEvents",
+      "community": 116,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "showfallbackreplycomposer()"
     },
     {
@@ -2331,8 +2331,8 @@
       "source_location": "L1533",
       "_origin": "ast",
       "id": "chrome_extension_src_content_injectsidebar",
-      "community": 103,
-      "community_name": "attachCommentCardEvents",
+      "community": 116,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "injectsidebar()"
     },
     {
@@ -2342,8 +2342,8 @@
       "source_location": "L1673",
       "_origin": "ast",
       "id": "chrome_extension_src_content_opensidebar",
-      "community": 103,
-      "community_name": "attachCommentCardEvents",
+      "community": 116,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "opensidebar()"
     },
     {
@@ -2353,8 +2353,8 @@
       "source_location": "L1705",
       "_origin": "ast",
       "id": "chrome_extension_src_content_closesidebar",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 114,
+      "community_name": "loadDocumentComments",
       "norm_label": "closesidebar()"
     },
     {
@@ -2364,7 +2364,7 @@
       "source_location": "L1712",
       "_origin": "ast",
       "id": "chrome_extension_src_content_renderinstallationprompt",
-      "community": 106,
+      "community": 115,
       "community_name": "renderSidebarComments",
       "norm_label": "renderinstallationprompt()"
     },
@@ -2375,7 +2375,7 @@
       "source_location": "L1771",
       "_origin": "ast",
       "id": "chrome_extension_src_content_attachinstallationpromptevents",
-      "community": 106,
+      "community": 115,
       "community_name": "renderSidebarComments",
       "norm_label": "attachinstallationpromptevents()"
     },
@@ -2386,7 +2386,7 @@
       "source_location": "L1819",
       "_origin": "ast",
       "id": "chrome_extension_src_content_renderoauthprompt",
-      "community": 106,
+      "community": 115,
       "community_name": "renderSidebarComments",
       "norm_label": "renderoauthprompt()"
     },
@@ -2397,8 +2397,8 @@
       "source_location": "L1853",
       "_origin": "ast",
       "id": "chrome_extension_src_content_attachoauthevents",
-      "community": 106,
-      "community_name": "renderSidebarComments",
+      "community": 113,
+      "community_name": "chrome-extension/src/githubAuth.ts",
       "norm_label": "attachoauthevents()"
     },
     {
@@ -2408,7 +2408,7 @@
       "source_location": "L2017",
       "_origin": "ast",
       "id": "chrome_extension_src_content_rendersidebarcomments",
-      "community": 106,
+      "community": 115,
       "community_name": "renderSidebarComments",
       "norm_label": "rendersidebarcomments()"
     },
@@ -2419,8 +2419,8 @@
       "source_location": "L2127",
       "_origin": "ast",
       "id": "chrome_extension_src_content_rendercommentcard",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 115,
+      "community_name": "renderSidebarComments",
       "norm_label": "rendercommentcard()"
     },
     {
@@ -2441,8 +2441,8 @@
       "source_location": "L2296",
       "_origin": "ast",
       "id": "chrome_extension_src_content_hidecommenttooltip",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 112,
+      "community_name": "renderDOMIndicatorsForFile",
       "norm_label": "hidecommenttooltip()"
     },
     {
@@ -2452,8 +2452,8 @@
       "source_location": "L2303",
       "_origin": "ast",
       "id": "chrome_extension_src_content_showcommenttooltip",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 112,
+      "community_name": "renderDOMIndicatorsForFile",
       "norm_label": "showcommenttooltip()"
     },
     {
@@ -2485,8 +2485,8 @@
       "source_location": "L2738",
       "_origin": "ast",
       "id": "chrome_extension_src_content_opensidebarfornewinline",
-      "community": 103,
-      "community_name": "attachCommentCardEvents",
+      "community": 116,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "opensidebarfornewinline()"
     },
     {
@@ -2540,8 +2540,8 @@
       "source_location": "L2974",
       "_origin": "ast",
       "id": "chrome_extension_src_content_getnativecontentcontainer",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 112,
+      "community_name": "renderDOMIndicatorsForFile",
       "norm_label": "getnativecontentcontainer()"
     },
     {
@@ -2574,7 +2574,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_rendertabcontent",
       "community": 106,
-      "community_name": "renderSidebarComments",
+      "community_name": "parseGitHubUrl",
       "norm_label": "rendertabcontent()"
     },
     {
@@ -2585,7 +2585,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_loadandrenderfileintab",
       "community": 106,
-      "community_name": "renderSidebarComments",
+      "community_name": "parseGitHubUrl",
       "norm_label": "loadandrenderfileintab()"
     },
     {
@@ -2617,8 +2617,8 @@
       "source_location": "L3584",
       "_origin": "ast",
       "id": "chrome_extension_src_content_findheadingcontext",
-      "community": 112,
-      "community_name": "renderDOMIndicatorsForFile",
+      "community": 1,
+      "community_name": "content.ts",
       "norm_label": "findheadingcontext()"
     },
     {
@@ -2727,8 +2727,8 @@
       "source_location": "L3869",
       "_origin": "ast",
       "id": "chrome_extension_src_content_formatrelativetime",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 112,
+      "community_name": "renderDOMIndicatorsForFile",
       "norm_label": "formatrelativetime()"
     },
     {
@@ -2738,8 +2738,8 @@
       "source_location": "L3892",
       "_origin": "ast",
       "id": "chrome_extension_src_content_resolvedisplayname",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 115,
+      "community_name": "renderSidebarComments",
       "norm_label": "resolvedisplayname()"
     },
     {
@@ -2749,8 +2749,8 @@
       "source_location": "L3908",
       "_origin": "ast",
       "id": "chrome_extension_src_content_fetchdisplayname",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 115,
+      "community_name": "renderSidebarComments",
       "norm_label": "fetchdisplayname()"
     },
     {
@@ -2760,8 +2760,8 @@
       "source_location": "L3938",
       "_origin": "ast",
       "id": "chrome_extension_src_content_renderauthor",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 115,
+      "community_name": "renderSidebarComments",
       "norm_label": "renderauthor()"
     },
     {
@@ -2771,8 +2771,8 @@
       "source_location": "L3948",
       "_origin": "ast",
       "id": "chrome_extension_src_content_collectcommentauthors",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 115,
+      "community_name": "renderSidebarComments",
       "norm_label": "collectcommentauthors()"
     },
     {
@@ -2782,8 +2782,8 @@
       "source_location": "L3971",
       "_origin": "ast",
       "id": "chrome_extension_src_content_warmdisplaynames",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 115,
+      "community_name": "renderSidebarComments",
       "norm_label": "warmdisplaynames()"
     },
     {
@@ -2815,8 +2815,8 @@
       "source_location": "L4010",
       "_origin": "ast",
       "id": "chrome_extension_src_content_findparagraphfornode",
-      "community": 112,
-      "community_name": "renderDOMIndicatorsForFile",
+      "community": 1,
+      "community_name": "content.ts",
       "norm_label": "findparagraphfornode()"
     },
     {
@@ -2826,8 +2826,8 @@
       "source_location": "L4025",
       "_origin": "ast",
       "id": "chrome_extension_src_content_showselectionbutton",
-      "community": 112,
-      "community_name": "renderDOMIndicatorsForFile",
+      "community": 89,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "showselectionbutton()"
     },
     {
@@ -2837,8 +2837,8 @@
       "source_location": "L4125",
       "_origin": "ast",
       "id": "chrome_extension_src_content_hideselectionbutton",
-      "community": 112,
-      "community_name": "renderDOMIndicatorsForFile",
+      "community": 89,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "hideselectionbutton()"
     },
     {
@@ -2848,8 +2848,8 @@
       "source_location": "L4131",
       "_origin": "ast",
       "id": "chrome_extension_src_content_handletextselection",
-      "community": 112,
-      "community_name": "renderDOMIndicatorsForFile",
+      "community": 89,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "handletextselection()"
     },
     {
@@ -2859,8 +2859,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "chrome_extension_src_githubapi",
-      "community": 25,
-      "community_name": "GitHubApi",
+      "community": 1,
+      "community_name": "content.ts",
       "norm_label": "githubapi.ts"
     },
     {
@@ -2870,8 +2870,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "chrome_extension_src_githubapi_viewerinfo",
-      "community": 25,
-      "community_name": "GitHubApi",
+      "community": 1,
+      "community_name": "content.ts",
       "norm_label": "viewerinfo"
     },
     {
@@ -2881,8 +2881,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "chrome_extension_src_githubapi_repometadata",
-      "community": 25,
-      "community_name": "GitHubApi",
+      "community": 1,
+      "community_name": "content.ts",
       "norm_label": "repometadata"
     },
     {
@@ -3079,8 +3079,8 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "chrome_extension_src_githubauth_clearoauthtoken",
-      "community": 113,
-      "community_name": "chrome-extension/src/githubAuth.ts",
+      "community": 106,
+      "community_name": "parseGitHubUrl",
       "norm_label": "clearoauthtoken()"
     },
     {
@@ -3938,7 +3938,7 @@
       "_origin": "ast",
       "id": "ref_obsidian",
       "community": 89,
-      "community_name": "main.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "obsidian"
     },
     {
@@ -4257,7 +4257,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_livepreview",
       "community": 89,
-      "community_name": "main.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "livepreview.ts"
     },
     {
@@ -4268,7 +4268,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_livepreview_createlivepreviewextension",
       "community": 89,
-      "community_name": "main.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "createlivepreviewextension()"
     },
     {
@@ -4279,7 +4279,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main",
       "community": 89,
-      "community_name": "main.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "main.ts"
     },
     {
@@ -4576,7 +4576,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_readingview",
       "community": 89,
-      "community_name": "main.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "readingview.ts"
     },
     {
@@ -4587,7 +4587,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_readingview_fuzzymatch",
       "community": 89,
-      "community_name": "main.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "fuzzymatch()"
     },
     {
@@ -4598,7 +4598,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_readingview_highlighttextinelement",
       "community": 89,
-      "community_name": "main.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "highlighttextinelement()"
     },
     {
@@ -4609,7 +4609,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_readingview_registerreadingviewprocessor",
       "community": 89,
-      "community_name": "main.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "registerreadingviewprocessor()"
     },
     {
@@ -4620,7 +4620,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview",
       "community": 89,
-      "community_name": "main.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "sidebarview.ts"
     },
     {
@@ -4631,7 +4631,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_displaynamecache",
       "community": 89,
-      "community_name": "main.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "displaynamecache"
     },
     {
@@ -4642,7 +4642,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_pendingfetches",
       "community": 89,
-      "community_name": "main.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "pendingfetches"
     },
     {
@@ -4663,8 +4663,8 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_commentssidebarview_constructor",
-      "community": 3,
-      "community_name": "Obsidian Plugin Guide",
+      "community": 12,
+      "community_name": "CommentsSidebarView",
       "norm_label": ".constructor()"
     },
     {
@@ -6300,7 +6300,7 @@
       "_origin": "ast",
       "id": "shared_anchor",
       "community": 89,
-      "community_name": "main.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "anchor.ts"
     },
     {
@@ -6311,7 +6311,7 @@
       "_origin": "ast",
       "id": "shared_anchor_fnv1ahash",
       "community": 89,
-      "community_name": "main.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "fnv1ahash()"
     },
     {
@@ -6322,7 +6322,7 @@
       "_origin": "ast",
       "id": "shared_anchor_computeanchorid",
       "community": 89,
-      "community_name": "main.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "computeanchorid()"
     },
     {
@@ -6333,7 +6333,7 @@
       "_origin": "ast",
       "id": "shared_anchor_normalizeanchortext",
       "community": 89,
-      "community_name": "main.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "normalizeanchortext()"
     },
     {
@@ -6344,7 +6344,7 @@
       "_origin": "ast",
       "id": "shared_anchor_parsemarkdownanchors",
       "community": 89,
-      "community_name": "main.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "parsemarkdownanchors()"
     },
     {
@@ -6355,7 +6355,7 @@
       "_origin": "ast",
       "id": "shared_anchor_findblockbyindex",
       "community": 89,
-      "community_name": "main.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "findblockbyindex()"
     },
     {
@@ -6366,7 +6366,7 @@
       "_origin": "ast",
       "id": "shared_anchor_findblockbyhash",
       "community": 89,
-      "community_name": "main.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "findblockbyhash()"
     },
     {
@@ -6453,8 +6453,8 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "shared_author_githubprofileurl",
-      "community": 99,
-      "community_name": "markdownItPlugin.ts",
+      "community": 104,
+      "community_name": "src/author.ts",
       "norm_label": "githubprofileurl()"
     },
     {
@@ -6475,8 +6475,8 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "shared_author_extractmentionlogins",
-      "community": 104,
-      "community_name": "src/author.ts",
+      "community": 86,
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "extractmentionlogins()"
     },
     {
@@ -6695,7 +6695,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_html",
-      "community": 99,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "html.ts"
     },
@@ -6706,7 +6706,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "shared_html_escapehtml",
-      "community": 99,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "escapehtml()"
     },
@@ -6717,8 +6717,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_index",
-      "community": 30,
-      "community_name": "CommentsFile",
+      "community": 89,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "shared/index.ts"
     },
     {
@@ -7092,7 +7092,7 @@
       "_origin": "ast",
       "id": "shared_placement",
       "community": 89,
-      "community_name": "main.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "shared/placement.ts"
     },
     {
@@ -7103,7 +7103,7 @@
       "_origin": "ast",
       "id": "shared_placement_fuzzymatch",
       "community": 89,
-      "community_name": "main.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "fuzzymatch()"
     },
     {
@@ -7114,7 +7114,7 @@
       "_origin": "ast",
       "id": "shared_placement_placeinlinecomments",
       "community": 89,
-      "community_name": "main.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "placeinlinecomments()"
     },
     {
@@ -7125,7 +7125,7 @@
       "_origin": "ast",
       "id": "shared_placement_isorphanedplacement",
       "community": 89,
-      "community_name": "main.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "isorphanedplacement()"
     },
     {
@@ -7136,7 +7136,7 @@
       "_origin": "ast",
       "id": "shared_placement_unplacedororphan",
       "community": 89,
-      "community_name": "main.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "unplacedororphan()"
     },
     {
@@ -7388,8 +7388,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_types",
-      "community": 30,
-      "community_name": "CommentsFile",
+      "community": 89,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "shared/types.ts"
     },
     {
@@ -7399,8 +7399,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_types_reaction",
-      "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community": 89,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "reaction"
     },
     {
@@ -7410,8 +7410,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "shared_types_reply",
-      "community": 30,
-      "community_name": "CommentsFile",
+      "community": 89,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "reply"
     },
     {
@@ -7433,7 +7433,7 @@
       "_origin": "ast",
       "id": "shared_types_inlinecomment",
       "community": 89,
-      "community_name": "main.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "inlinecomment"
     },
     {
@@ -7466,7 +7466,7 @@
       "_origin": "ast",
       "id": "shared_types_anchorblock",
       "community": 89,
-      "community_name": "main.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "anchorblock"
     },
     {
@@ -7476,8 +7476,8 @@
       "source_location": "L60",
       "_origin": "ast",
       "id": "shared_types_placementresult",
-      "community": 30,
-      "community_name": "CommentsFile",
+      "community": 89,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "placementresult"
     },
     {
@@ -8720,7 +8720,7 @@
       "_origin": "ast",
       "id": "tests_anchor_test",
       "community": 89,
-      "community_name": "main.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "anchor.test.ts"
     },
     {
@@ -8742,7 +8742,7 @@
       "_origin": "ast",
       "id": "tests_placement_test",
       "community": 89,
-      "community_name": "main.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "placement.test.ts"
     },
     {
@@ -11239,7 +11239,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_codelensprovider",
       "community": 89,
-      "community_name": "main.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "codelensprovider.ts"
     },
     {
@@ -11250,7 +11250,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_codelensprovider_markdowncommentscodelensprovider",
       "community": 89,
-      "community_name": "main.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "markdowncommentscodelensprovider"
     },
     {
@@ -11261,7 +11261,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_codelensprovider_markdowncommentscodelensprovider_refresh",
       "community": 89,
-      "community_name": "main.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": ".refresh()"
     },
     {
@@ -11272,7 +11272,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_codelensprovider_markdowncommentscodelensprovider_providecodelenses",
       "community": 89,
-      "community_name": "main.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": ".providecodelenses()"
     },
     {
@@ -11304,8 +11304,8 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "vscode_extension_src_commentactions_commentactionmessage",
-      "community": 111,
-      "community_name": "extension.ts",
+      "community": 118,
+      "community_name": "previewCommand.ts",
       "norm_label": "commentactionmessage"
     },
     {
@@ -11799,7 +11799,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth_hastokensync",
-      "community": 99,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "hastokensync()"
     },
@@ -12085,8 +12085,8 @@
       "source_location": "L101",
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_authorsmatch",
-      "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community": 101,
+      "community_name": "commentStore.ts",
       "norm_label": "authorsmatch()"
     },
     {
@@ -12118,8 +12118,8 @@
       "source_location": "L146",
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_displaynamesmapforlogins",
-      "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community": 89,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "displaynamesmapforlogins()"
     },
     {
@@ -12140,8 +12140,8 @@
       "source_location": "L187",
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_schedulepreviewrefreshafterdisplaynames",
-      "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community": 89,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "schedulepreviewrefreshafterdisplaynames()"
     },
     {
@@ -12239,7 +12239,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin",
-      "community": 99,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "markdownitplugin.ts"
     },
@@ -12250,7 +12250,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_formattime",
-      "community": 99,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "formattime()"
     },
@@ -12261,7 +12261,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_formatcommenttime",
-      "community": 99,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "formatcommenttime()"
     },
@@ -12272,7 +12272,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_caneditcomment",
-      "community": 99,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "caneditcomment()"
     },
@@ -12283,7 +12283,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_rendereditbtn",
-      "community": 99,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "rendereditbtn()"
     },
@@ -12294,7 +12294,7 @@
       "source_location": "L88",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_actioniconbtn",
-      "community": 99,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "actioniconbtn()"
     },
@@ -12305,7 +12305,7 @@
       "source_location": "L104",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_renderauthorlink",
-      "community": 99,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "renderauthorlink()"
     },
@@ -12316,7 +12316,7 @@
       "source_location": "L116",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_rendercommentbody",
-      "community": 99,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "rendercommentbody()"
     },
@@ -12327,8 +12327,8 @@
       "source_location": "L127",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_collectmentioncandidates",
-      "community": 104,
-      "community_name": "src/author.ts",
+      "community": 86,
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "collectmentioncandidates()"
     },
     {
@@ -12338,8 +12338,8 @@
       "source_location": "L152",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_authorinitials",
-      "community": 99,
-      "community_name": "markdownItPlugin.ts",
+      "community": 86,
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "authorinitials()"
     },
     {
@@ -12349,7 +12349,7 @@
       "source_location": "L160",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_renderavatar",
-      "community": 99,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "renderavatar()"
     },
@@ -12360,7 +12360,7 @@
       "source_location": "L175",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_threadfooterbtn",
-      "community": 99,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "threadfooterbtn()"
     },
@@ -12371,7 +12371,7 @@
       "source_location": "L190",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_replycountlabel",
-      "community": 99,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "replycountlabel()"
     },
@@ -12382,7 +12382,7 @@
       "source_location": "L197",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_renderrepliesblock",
-      "community": 99,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "renderrepliesblock()"
     },
@@ -12393,7 +12393,7 @@
       "source_location": "L214",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_renderreactions",
-      "community": 99,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "renderreactions()"
     },
@@ -12404,7 +12404,7 @@
       "source_location": "L233",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_renderreply",
-      "community": 99,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "renderreply()"
     },
@@ -12415,7 +12415,7 @@
       "source_location": "L274",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_rendercard",
-      "community": 99,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "rendercard()"
     },
@@ -12426,8 +12426,8 @@
       "source_location": "L349",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_rendercontext",
-      "community": 30,
-      "community_name": "CommentsFile",
+      "community": 89,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "rendercontext"
     },
     {
@@ -12437,7 +12437,7 @@
       "source_location": "L356",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_renderquoteexcerpt",
-      "community": 99,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "renderquoteexcerpt()"
     },
@@ -12448,7 +12448,7 @@
       "source_location": "L363",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_rendersidebarthread",
-      "community": 99,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "rendersidebarthread()"
     },
@@ -12459,7 +12459,7 @@
       "source_location": "L371",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_renderresolvedsummary",
-      "community": 99,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "renderresolvedsummary()"
     },
@@ -12470,7 +12470,7 @@
       "source_location": "L378",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_renderresolvedthread",
-      "community": 99,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "renderresolvedthread()"
     },
@@ -12481,7 +12481,7 @@
       "source_location": "L390",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_panelempty",
-      "community": 99,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "panelempty()"
     },
@@ -12492,7 +12492,7 @@
       "source_location": "L394",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_buildsidebarhtml",
-      "community": 99,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "buildsidebarhtml()"
     },
@@ -12503,7 +12503,7 @@
       "source_location": "L526",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_getreactionemojisjson",
-      "community": 99,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "getreactionemojisjson()"
     },
@@ -12514,7 +12514,7 @@
       "source_location": "L534",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_getdefaultsidebarwidth",
-      "community": 99,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "getdefaultsidebarwidth()"
     },
@@ -12525,7 +12525,7 @@
       "source_location": "L541",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_renderdocumentlayout",
-      "community": 99,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "renderdocumentlayout()"
     },
@@ -12536,8 +12536,8 @@
       "source_location": "L599",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_getmduri",
-      "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community": 89,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "getmduri()"
     },
     {
@@ -12547,8 +12547,8 @@
       "source_location": "L626",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_loadcontext",
-      "community": 109,
-      "community_name": "repoManager.ts",
+      "community": 89,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "loadcontext()"
     },
     {
@@ -12558,8 +12558,8 @@
       "source_location": "L673",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_extendmarkdownit",
-      "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community": 89,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "extendmarkdownit()"
     },
     {
@@ -12702,7 +12702,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_orphan",
       "community": 89,
-      "community_name": "main.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "orphan.ts"
     },
     {
@@ -12713,7 +12713,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_orphan_scanorphansformarkdown",
       "community": 89,
-      "community_name": "main.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "scanorphansformarkdown()"
     },
     {
@@ -12723,8 +12723,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_previewcommand",
-      "community": 111,
-      "community_name": "extension.ts",
+      "community": 118,
+      "community_name": "previewCommand.ts",
       "norm_label": "previewcommand.ts"
     },
     {
@@ -12734,8 +12734,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "vscode_extension_src_previewcommand_parsepreviewcommandarg",
-      "community": 111,
-      "community_name": "extension.ts",
+      "community": 118,
+      "community_name": "previewCommand.ts",
       "norm_label": "parsepreviewcommandarg()"
     },
     {
@@ -12745,8 +12745,8 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "vscode_extension_src_previewcommand_normalizeobject",
-      "community": 111,
-      "community_name": "extension.ts",
+      "community": 118,
+      "community_name": "previewCommand.ts",
       "norm_label": "normalizeobject()"
     },
     {
@@ -12855,8 +12855,8 @@
       "source_location": "L119",
       "_origin": "ast",
       "id": "vscode_extension_src_repomanager_resolvestoragekeyforuri",
-      "community": 101,
-      "community_name": "commentStore.ts",
+      "community": 109,
+      "community_name": "repoManager.ts",
       "norm_label": "resolvestoragekeyforuri()"
     },
     {
@@ -15159,6 +15159,171 @@
       "norm_label": "common commands"
     },
     {
+      "label": "cross-browser-extension.md",
+      "file_type": "document",
+      "source_file": ".plans/cross-browser-extension.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "plans_cross_browser_extension",
+      "community": 99,
+      "community_name": "Cross-Browser Extension Expansion Plan & Store Publishing Roadmap",
+      "norm_label": "cross-browser-extension.md"
+    },
+    {
+      "label": "Cross-Browser Extension Expansion Plan & Store Publishing Roadmap",
+      "file_type": "document",
+      "source_file": ".plans/cross-browser-extension.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "plans_cross_browser_extension_cross_browser_extension_expansion_plan_store_publishing_roadmap",
+      "community": 99,
+      "community_name": "Cross-Browser Extension Expansion Plan & Store Publishing Roadmap",
+      "norm_label": "cross-browser extension expansion plan & store publishing roadmap"
+    },
+    {
+      "label": "Overview",
+      "file_type": "document",
+      "source_file": ".plans/cross-browser-extension.md",
+      "source_location": "L3",
+      "_origin": "ast",
+      "id": "plans_cross_browser_extension_overview",
+      "community": 99,
+      "community_name": "Cross-Browser Extension Expansion Plan & Store Publishing Roadmap",
+      "norm_label": "overview"
+    },
+    {
+      "label": "Today's Existing Incompatibilities & How This Plan Solves Them",
+      "file_type": "document",
+      "source_file": ".plans/cross-browser-extension.md",
+      "source_location": "L15",
+      "_origin": "ast",
+      "id": "plans_cross_browser_extension_today_s_existing_incompatibilities_how_this_plan_solves_them",
+      "community": 99,
+      "community_name": "Cross-Browser Extension Expansion Plan & Store Publishing Roadmap",
+      "norm_label": "today's existing incompatibilities & how this plan solves them"
+    },
+    {
+      "label": "Technical Architecture Plan",
+      "file_type": "document",
+      "source_file": ".plans/cross-browser-extension.md",
+      "source_location": "L28",
+      "_origin": "ast",
+      "id": "plans_cross_browser_extension_technical_architecture_plan",
+      "community": 99,
+      "community_name": "Cross-Browser Extension Expansion Plan & Store Publishing Roadmap",
+      "norm_label": "technical architecture plan"
+    },
+    {
+      "label": "1. Unified `src/browserApi.ts`",
+      "file_type": "document",
+      "source_file": ".plans/cross-browser-extension.md",
+      "source_location": "L50",
+      "_origin": "ast",
+      "id": "plans_cross_browser_extension_1_unified_src_browserapi_ts",
+      "community": 99,
+      "community_name": "Cross-Browser Extension Expansion Plan & Store Publishing Roadmap",
+      "norm_label": "1. unified `src/browserapi.ts`"
+    },
+    {
+      "label": "Store Publishing Roadmap",
+      "file_type": "document",
+      "source_file": ".plans/cross-browser-extension.md",
+      "source_location": "L98",
+      "_origin": "ast",
+      "id": "plans_cross_browser_extension_store_publishing_roadmap",
+      "community": 99,
+      "community_name": "Cross-Browser Extension Expansion Plan & Store Publishing Roadmap",
+      "norm_label": "store publishing roadmap"
+    },
+    {
+      "label": "1. Google Chrome Web Store (CWS)",
+      "file_type": "document",
+      "source_file": ".plans/cross-browser-extension.md",
+      "source_location": "L102",
+      "_origin": "ast",
+      "id": "plans_cross_browser_extension_1_google_chrome_web_store_cws",
+      "community": 99,
+      "community_name": "Cross-Browser Extension Expansion Plan & Store Publishing Roadmap",
+      "norm_label": "1. google chrome web store (cws)"
+    },
+    {
+      "label": "2. Mozilla Add-ons (AMO - Firefox)",
+      "file_type": "document",
+      "source_file": ".plans/cross-browser-extension.md",
+      "source_location": "L119",
+      "_origin": "ast",
+      "id": "plans_cross_browser_extension_2_mozilla_add_ons_amo_firefox",
+      "community": 99,
+      "community_name": "Cross-Browser Extension Expansion Plan & Store Publishing Roadmap",
+      "norm_label": "2. mozilla add-ons (amo - firefox)"
+    },
+    {
+      "label": "3. Microsoft Edge Add-ons",
+      "file_type": "document",
+      "source_file": ".plans/cross-browser-extension.md",
+      "source_location": "L133",
+      "_origin": "ast",
+      "id": "plans_cross_browser_extension_3_microsoft_edge_add_ons",
+      "community": 99,
+      "community_name": "Cross-Browser Extension Expansion Plan & Store Publishing Roadmap",
+      "norm_label": "3. microsoft edge add-ons"
+    },
+    {
+      "label": "4. Apple Mac App Store & iOS App Store (Safari)",
+      "file_type": "document",
+      "source_file": ".plans/cross-browser-extension.md",
+      "source_location": "L148",
+      "_origin": "ast",
+      "id": "plans_cross_browser_extension_4_apple_mac_app_store_ios_app_store_safari",
+      "community": 99,
+      "community_name": "Cross-Browser Extension Expansion Plan & Store Publishing Roadmap",
+      "norm_label": "4. apple mac app store & ios app store (safari)"
+    },
+    {
+      "label": "5. Opera Add-ons",
+      "file_type": "document",
+      "source_file": ".plans/cross-browser-extension.md",
+      "source_location": "L166",
+      "_origin": "ast",
+      "id": "plans_cross_browser_extension_5_opera_add_ons",
+      "community": 99,
+      "community_name": "Cross-Browser Extension Expansion Plan & Store Publishing Roadmap",
+      "norm_label": "5. opera add-ons"
+    },
+    {
+      "label": "Verification & Automation Plan",
+      "file_type": "document",
+      "source_file": ".plans/cross-browser-extension.md",
+      "source_location": "L176",
+      "_origin": "ast",
+      "id": "plans_cross_browser_extension_verification_automation_plan",
+      "community": 99,
+      "community_name": "Cross-Browser Extension Expansion Plan & Store Publishing Roadmap",
+      "norm_label": "verification & automation plan"
+    },
+    {
+      "label": "Automated Build & Packaging Pipeline",
+      "file_type": "document",
+      "source_file": ".plans/cross-browser-extension.md",
+      "source_location": "L178",
+      "_origin": "ast",
+      "id": "plans_cross_browser_extension_automated_build_packaging_pipeline",
+      "community": 99,
+      "community_name": "Cross-Browser Extension Expansion Plan & Store Publishing Roadmap",
+      "norm_label": "automated build & packaging pipeline"
+    },
+    {
+      "label": "Testing Verification Checklist",
+      "file_type": "document",
+      "source_file": ".plans/cross-browser-extension.md",
+      "source_location": "L194",
+      "_origin": "ast",
+      "id": "plans_cross_browser_extension_testing_verification_checklist",
+      "community": 99,
+      "community_name": "Cross-Browser Extension Expansion Plan & Store Publishing Roadmap",
+      "norm_label": "testing verification checklist"
+    },
+    {
       "label": "AUTHORS.md",
       "file_type": "document",
       "source_file": "AUTHORS.md",
@@ -16382,7 +16547,7 @@
       "contributor": null,
       "community": 89,
       "norm_label": "markdown comments key features",
-      "community_name": "main.ts",
+      "community_name": "markdownItPlugin.ts",
       "id": "readme_features"
     },
     {
@@ -47560,6 +47725,160 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": ".plans/cross-browser-extension.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "plans_cross_browser_extension",
+      "target": "plans_cross_browser_extension_cross_browser_extension_expansion_plan_store_publishing_roadmap",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".plans/cross-browser-extension.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "plans_cross_browser_extension_cross_browser_extension_expansion_plan_store_publishing_roadmap",
+      "target": "plans_cross_browser_extension_overview",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".plans/cross-browser-extension.md",
+      "source_location": "L98",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "plans_cross_browser_extension_cross_browser_extension_expansion_plan_store_publishing_roadmap",
+      "target": "plans_cross_browser_extension_store_publishing_roadmap",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".plans/cross-browser-extension.md",
+      "source_location": "L28",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "plans_cross_browser_extension_cross_browser_extension_expansion_plan_store_publishing_roadmap",
+      "target": "plans_cross_browser_extension_technical_architecture_plan",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".plans/cross-browser-extension.md",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "plans_cross_browser_extension_cross_browser_extension_expansion_plan_store_publishing_roadmap",
+      "target": "plans_cross_browser_extension_today_s_existing_incompatibilities_how_this_plan_solves_them",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".plans/cross-browser-extension.md",
+      "source_location": "L176",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "plans_cross_browser_extension_cross_browser_extension_expansion_plan_store_publishing_roadmap",
+      "target": "plans_cross_browser_extension_verification_automation_plan",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".plans/cross-browser-extension.md",
+      "source_location": "L50",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "plans_cross_browser_extension_technical_architecture_plan",
+      "target": "plans_cross_browser_extension_1_unified_src_browserapi_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".plans/cross-browser-extension.md",
+      "source_location": "L102",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "plans_cross_browser_extension_store_publishing_roadmap",
+      "target": "plans_cross_browser_extension_1_google_chrome_web_store_cws",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".plans/cross-browser-extension.md",
+      "source_location": "L119",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "plans_cross_browser_extension_store_publishing_roadmap",
+      "target": "plans_cross_browser_extension_2_mozilla_add_ons_amo_firefox",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".plans/cross-browser-extension.md",
+      "source_location": "L133",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "plans_cross_browser_extension_store_publishing_roadmap",
+      "target": "plans_cross_browser_extension_3_microsoft_edge_add_ons",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".plans/cross-browser-extension.md",
+      "source_location": "L148",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "plans_cross_browser_extension_store_publishing_roadmap",
+      "target": "plans_cross_browser_extension_4_apple_mac_app_store_ios_app_store_safari",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".plans/cross-browser-extension.md",
+      "source_location": "L166",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "plans_cross_browser_extension_store_publishing_roadmap",
+      "target": "plans_cross_browser_extension_5_opera_add_ons",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".plans/cross-browser-extension.md",
+      "source_location": "L178",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "plans_cross_browser_extension_verification_automation_plan",
+      "target": "plans_cross_browser_extension_automated_build_packaging_pipeline",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".plans/cross-browser-extension.md",
+      "source_location": "L194",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "plans_cross_browser_extension_verification_automation_plan",
+      "target": "plans_cross_browser_extension_testing_verification_checklist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "AUTHORS.md",
       "source_location": "L1",
       "weight": 1.0,
@@ -48684,5 +49003,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "f8cc98bf205de462b1ba63bd35845a156bb6ddc8"
+  "built_at_commit": "e23ed3d68f95db0a0b4bd856364dd6d839404802"
 }

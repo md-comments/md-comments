@@ -605,8 +605,8 @@
     "semantic_hash": ""
   },
   "website/index.html": {
-    "mtime": 1788024408.5085871,
-    "ast_hash": "9fd3f85b5d50fd43b1fd8b406a9eb701",
+    "mtime": 1788024775.8923357,
+    "ast_hash": "1896071add273d201e332ad4d219d3e2",
     "semantic_hash": ""
   },
   "website/privacy.html": {
@@ -892,6 +892,11 @@
   ".github/workflows/reset-demo-comments.yml": {
     "mtime": 1788020077.7361286,
     "ast_hash": "4ad582cec0315e2aa57184569348ce24",
+    "semantic_hash": ""
+  },
+  ".plans/cross-browser-extension.md": {
+    "mtime": 1788024775.8373022,
+    "ast_hash": "2cedf76ab169af3c3b25f5b1e03147cb",
     "semantic_hash": ""
   }
 }
