@@ -14,7 +14,7 @@
   const currentScript = document.currentScript;
   const scriptOptions = currentScript
     ? {
-        repo: currentScript.getAttribute('data-repo') || 'md-comments/demo-comments',
+        repo: currentScript.getAttribute('data-repo') || 'md-comments/html-demo-comments',
         file: currentScript.getAttribute('data-file') || window.location.pathname,
         branch: currentScript.getAttribute('data-branch') || 'main',
         theme: currentScript.getAttribute('data-theme') || 'auto',
@@ -24,7 +24,7 @@
 
   const options = Object.assign(
     {
-      repo: 'md-comments/demo-comments',
+      repo: 'md-comments/html-demo-comments',
       file: window.location.pathname.replace(/^\//, '') || 'index.html',
       branch: 'main',
       clientId: DEFAULT_CLIENT_ID,

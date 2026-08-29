@@ -1,112 +1,148 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>How Markdown Comments Works - Plain HTML Demo</title>
-  <meta name="description" content="Learn how the inline comments overlay integrates with any Plain HTML website or documentation.">
-  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
-  <link rel="stylesheet" href="demo.css">
-  
-  <!-- Drop-in Redistributable Markdown Comments Embed -->
-  <link rel="stylesheet" href="./embed/md-comments.css">
-  <script src="./embed/md-comments.js" data-repo="md-comments/demo-comments" data-file="demo-html/how-it-works.html" async></script>
-  <script src="demo.js" defer></script>
-</head>
-<body>
-  <!-- Global Announcement Banner (Wiped daily at midnight) -->
-  <div class="demo-site-banner" role="region" aria-label="Demo environment notice">
-    <div class="demo-banner-inner">
-      <span class="demo-banner-badge">Demo Notice</span>
-      <span class="demo-banner-text">
-        All comments are automatically wiped every day at <strong>midnight (00:00 UTC)</strong> to keep the demo clean and unmoderated.
-      </span>
-    </div>
-  </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How Markdown Comments Works - Plain HTML Demo</title>
+    <meta
+      name="description"
+      content="Learn how the inline comments overlay integrates with any Plain HTML website or documentation."
+    />
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+    <link rel="stylesheet" href="demo.css" />
 
-  <!-- Header Navigation -->
-  <header class="site-header">
-    <div class="header-container">
-      <a href="index.html" class="brand">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="16 18 22 12 16 6"></polyline>
-          <polyline points="8 6 2 12 8 18"></polyline>
-        </svg>
-        <span>Markdown Comments</span>
-        <span class="brand-badge">Plain HTML</span>
-      </a>
-
-      <div class="nav-actions">
-        <a href="../index.html" class="nav-link-return">&larr; Return to Main Site</a>
-        <button id="theme-toggle-btn" class="btn-theme-toggle" aria-label="Toggle theme">☀️ Light</button>
-        <a href="https://github.com/md-comments/md-comments" class="btn-secondary" target="_blank" rel="noopener" style="padding: 6px 12px; font-size: 13px;">GitHub</a>
+    <!-- Drop-in Redistributable Markdown Comments Embed -->
+    <link rel="stylesheet" href="./embed/md-comments.css" />
+    <script
+      src="./embed/md-comments.js"
+      data-repo="md-comments/html-demo-comments"
+      data-file="demo-html/how-it-works.html"
+      async
+    ></script>
+    <script src="demo.js" defer></script>
+  </head>
+  <body>
+    <!-- Global Announcement Banner (Wiped daily at midnight) -->
+    <div class="demo-site-banner" role="region" aria-label="Demo environment notice">
+      <div class="demo-banner-inner">
+        <span class="demo-banner-badge">Demo Notice</span>
+        <span class="demo-banner-text">
+          All comments are automatically wiped every day at <strong>midnight (00:00 UTC)</strong> to
+          keep the demo clean and unmoderated.
+        </span>
       </div>
     </div>
-  </header>
 
-  <div class="app-layout">
-    <!-- Sidebar Navigation -->
-    <aside class="sidebar">
-      <div>
-        <div class="sidebar-group-title">Overview</div>
-        <ul class="sidebar-nav">
-          <li><a href="index.html">🏠 Demo Overview</a></li>
-          <li><a href="sandbox.html">🧪 Interactive Sandbox</a></li>
-        </ul>
+    <!-- Header Navigation -->
+    <header class="site-header">
+      <div class="header-container">
+        <a href="index.html" class="brand">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+          </svg>
+          <span>Markdown Comments</span>
+          <span class="brand-badge">Plain HTML</span>
+        </a>
+
+        <div class="nav-actions">
+          <a href="../index.html" class="nav-link-return">&larr; Return to Main Site</a>
+          <button id="theme-toggle-btn" class="btn-theme-toggle" aria-label="Toggle theme">
+            ☀️ Light
+          </button>
+          <a
+            href="https://github.com/md-comments/md-comments"
+            class="btn-secondary"
+            target="_blank"
+            rel="noopener"
+            style="padding: 6px 12px; font-size: 13px"
+            >GitHub</a
+          >
+        </div>
       </div>
+    </header>
 
-      <div>
-        <div class="sidebar-group-title">Documentation</div>
-        <ul class="sidebar-nav">
-          <li><a href="how-it-works.html" class="active">📖 How It Works</a></li>
-          <li><a href="architecture.html">🏗️ Architecture & Storage</a></li>
+    <div class="app-layout">
+      <!-- Sidebar Navigation -->
+      <aside class="sidebar">
+        <div>
+          <div class="sidebar-group-title">Overview</div>
+          <ul class="sidebar-nav">
+            <li><a href="index.html">🏠 Demo Overview</a></li>
+            <li><a href="sandbox.html">🧪 Interactive Sandbox</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="sidebar-group-title">Documentation</div>
+          <ul class="sidebar-nav">
+            <li><a href="how-it-works.html" class="active">📖 How It Works</a></li>
+            <li><a href="architecture.html">🏗️ Architecture & Storage</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <!-- Main Content Area -->
+      <main class="content-wrapper">
+        <h1>How Markdown Comments Works</h1>
+        <p style="font-size: 16px; color: var(--color-text-muted)">
+          Learn how the inline comments overlay integrates with any static site, documentation
+          portal, or plain HTML page.
+        </p>
+
+        <blockquote>
+          <strong>AI-Orchestrated Docs. Human-Orchestrated Comments.</strong><br />
+          Docs live directly in your repository, and comments live as a native layer on top, never
+          locked in third-party SaaS silos. AI agents orchestrate the documentation as code evolves,
+          while humans orchestrate the reviews and discussions on rendered views.
+        </blockquote>
+
+        <p>
+          Markdown Comments enables frictionless, real-time collaboration for technical
+          documentation, specifications, and proposals directly on rendered views across browsers
+          and code editors.
+        </p>
+
+        <h2>1. Highlighting Rendered Prose</h2>
+        <p>
+          When you read a documentation page or preview, select any string of text. The Markdown
+          Comments engine tracks the rendered DOM text and computes a robust anchor cascade
+          (paragraph hash, fuzzy text match, heading offset).
+        </p>
+
+        <blockquote>
+          <strong>Try highlighting this sentence right now!</strong><br />
+          A floating tooltip button with a comment icon will appear. Clicking it opens the comment
+          creation dialog.
+        </blockquote>
+
+        <h2>2. Leaving a Comment</h2>
+        <p>When you leave a comment:</p>
+        <ul>
+          <li>
+            An anchor identifier is created pointing to the file path, line range, and exact text
+            excerpt.
+          </li>
+          <li>A margin indicator pin is placed alongside the paragraph or heading.</li>
+          <li>You can add replies, emojis, and mark threads as resolved.</li>
         </ul>
-      </div>
-    </aside>
 
-    <!-- Main Content Area -->
-    <main class="content-wrapper">
-      <h1>How Markdown Comments Works</h1>
-      <p style="font-size: 16px; color: var(--color-text-muted);">
-        Learn how the inline comments overlay integrates with any static site, documentation portal, or plain HTML page.
-      </p>
+        <h2>3. GitHub OAuth Authentication</h2>
+        <p>When submitting your first comment or syncing data:</p>
+        <ul>
+          <li>Click <strong>Sign In with GitHub</strong> in the top right drawer or auth modal.</li>
+          <li>A standard GitHub Device Flow code is provided.</li>
+          <li>Once authenticated, your comments are written directly to your GitHub repository.</li>
+        </ul>
 
-      <blockquote>
-        <strong>AI-Orchestrated Docs. Human-Orchestrated Comments.</strong><br>
-        Docs live directly in your repository, and comments live as a native layer on top, never locked in third-party SaaS silos. AI agents orchestrate the documentation as code evolves, while humans orchestrate the reviews and discussions on rendered views.
-      </blockquote>
-
-      <p>
-        Markdown Comments enables frictionless, real-time collaboration for technical documentation, specifications, and proposals directly on rendered views across browsers and code editors.
-      </p>
-
-      <h2>1. Highlighting Rendered Prose</h2>
-      <p>
-        When you read a documentation page or preview, select any string of text. The Markdown Comments engine tracks the rendered DOM text and computes a robust anchor cascade (paragraph hash, fuzzy text match, heading offset).
-      </p>
-
-      <blockquote>
-        <strong>Try highlighting this sentence right now!</strong><br>
-        A floating tooltip button with a comment icon will appear. Clicking it opens the comment creation dialog.
-      </blockquote>
-
-      <h2>2. Leaving a Comment</h2>
-      <p>When you leave a comment:</p>
-      <ul>
-        <li>An anchor identifier is created pointing to the file path, line range, and exact text excerpt.</li>
-        <li>A margin indicator pin is placed alongside the paragraph or heading.</li>
-        <li>You can add replies, emojis, and mark threads as resolved.</li>
-      </ul>
-
-      <h2>3. GitHub OAuth Authentication</h2>
-      <p>When submitting your first comment or syncing data:</p>
-      <ul>
-        <li>Click <strong>Sign In with GitHub</strong> in the top right drawer or auth modal.</li>
-        <li>A standard GitHub Device Flow code is provided.</li>
-        <li>Once authenticated, your comments are written directly to your GitHub repository.</li>
-      </ul>
-
-      <pre><code>{
+        <pre><code>{
   "anchor": {
     "file": "demo-html/how-it-works.html",
     "selectedText": "Try highlighting this sentence right now!"
@@ -119,7 +155,7 @@
     }
   ]
 }</code></pre>
-    </main>
-  </div>
-</body>
+      </main>
+    </div>
+  </body>
 </html>

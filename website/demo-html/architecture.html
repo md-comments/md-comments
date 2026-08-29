@@ -1,107 +1,148 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Architecture & Git Storage - Plain HTML Demo</title>
-  <meta name="description" content="Technical architecture and Git-native storage for Markdown Comments.">
-  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
-  <link rel="stylesheet" href="demo.css">
-  
-  <!-- Drop-in Redistributable Markdown Comments Embed -->
-  <link rel="stylesheet" href="./embed/md-comments.css">
-  <script src="./embed/md-comments.js" data-repo="md-comments/demo-comments" data-file="demo-html/architecture.html" async></script>
-  <script src="demo.js" defer></script>
-</head>
-<body>
-  <!-- Global Announcement Banner (Wiped daily at midnight) -->
-  <div class="demo-site-banner" role="region" aria-label="Demo environment notice">
-    <div class="demo-banner-inner">
-      <span class="demo-banner-badge">Demo Notice</span>
-      <span class="demo-banner-text">
-        All comments are automatically wiped every day at <strong>midnight (00:00 UTC)</strong> to keep the demo clean and unmoderated.
-      </span>
-    </div>
-  </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Architecture & Git Storage - Plain HTML Demo</title>
+    <meta
+      name="description"
+      content="Technical architecture and Git-native storage for Markdown Comments."
+    />
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+    <link rel="stylesheet" href="demo.css" />
 
-  <!-- Header Navigation -->
-  <header class="site-header">
-    <div class="header-container">
-      <a href="index.html" class="brand">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="16 18 22 12 16 6"></polyline>
-          <polyline points="8 6 2 12 8 18"></polyline>
-        </svg>
-        <span>Markdown Comments</span>
-        <span class="brand-badge">Plain HTML</span>
-      </a>
-
-      <div class="nav-actions">
-        <a href="../index.html" class="nav-link-return">&larr; Return to Main Site</a>
-        <button id="theme-toggle-btn" class="btn-theme-toggle" aria-label="Toggle theme">☀️ Light</button>
-        <a href="https://github.com/md-comments/md-comments" class="btn-secondary" target="_blank" rel="noopener" style="padding: 6px 12px; font-size: 13px;">GitHub</a>
+    <!-- Drop-in Redistributable Markdown Comments Embed -->
+    <link rel="stylesheet" href="./embed/md-comments.css" />
+    <script
+      src="./embed/md-comments.js"
+      data-repo="md-comments/html-demo-comments"
+      data-file="demo-html/architecture.html"
+      async
+    ></script>
+    <script src="demo.js" defer></script>
+  </head>
+  <body>
+    <!-- Global Announcement Banner (Wiped daily at midnight) -->
+    <div class="demo-site-banner" role="region" aria-label="Demo environment notice">
+      <div class="demo-banner-inner">
+        <span class="demo-banner-badge">Demo Notice</span>
+        <span class="demo-banner-text">
+          All comments are automatically wiped every day at <strong>midnight (00:00 UTC)</strong> to
+          keep the demo clean and unmoderated.
+        </span>
       </div>
     </div>
-  </header>
 
-  <div class="app-layout">
-    <!-- Sidebar Navigation -->
-    <aside class="sidebar">
-      <div>
-        <div class="sidebar-group-title">Overview</div>
-        <ul class="sidebar-nav">
-          <li><a href="index.html">🏠 Demo Overview</a></li>
-          <li><a href="sandbox.html">🧪 Interactive Sandbox</a></li>
-        </ul>
+    <!-- Header Navigation -->
+    <header class="site-header">
+      <div class="header-container">
+        <a href="index.html" class="brand">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+          </svg>
+          <span>Markdown Comments</span>
+          <span class="brand-badge">Plain HTML</span>
+        </a>
+
+        <div class="nav-actions">
+          <a href="../index.html" class="nav-link-return">&larr; Return to Main Site</a>
+          <button id="theme-toggle-btn" class="btn-theme-toggle" aria-label="Toggle theme">
+            ☀️ Light
+          </button>
+          <a
+            href="https://github.com/md-comments/md-comments"
+            class="btn-secondary"
+            target="_blank"
+            rel="noopener"
+            style="padding: 6px 12px; font-size: 13px"
+            >GitHub</a
+          >
+        </div>
       </div>
+    </header>
 
-      <div>
-        <div class="sidebar-group-title">Documentation</div>
-        <ul class="sidebar-nav">
-          <li><a href="how-it-works.html">📖 How It Works</a></li>
-          <li><a href="architecture.html" class="active">🏗️ Architecture & Storage</a></li>
+    <div class="app-layout">
+      <!-- Sidebar Navigation -->
+      <aside class="sidebar">
+        <div>
+          <div class="sidebar-group-title">Overview</div>
+          <ul class="sidebar-nav">
+            <li><a href="index.html">🏠 Demo Overview</a></li>
+            <li><a href="sandbox.html">🧪 Interactive Sandbox</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="sidebar-group-title">Documentation</div>
+          <ul class="sidebar-nav">
+            <li><a href="how-it-works.html">📖 How It Works</a></li>
+            <li><a href="architecture.html" class="active">🏗️ Architecture & Storage</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <!-- Main Content Area -->
+      <main class="content-wrapper">
+        <h1>Architecture & Storage</h1>
+        <p style="font-size: 16px; color: var(--color-text-muted)">
+          Understand how Markdown Comments achieves complete SaaS-independence through Git custom
+          references.
+        </p>
+
+        <h2>The Git-Native Storage Model</h2>
+        <p>
+          Traditional commenting tools either write HTML comments directly into markdown source
+          files (causing diff noise and token bloat for LLMs) or store review comments in
+          proprietary third-party databases.
+        </p>
+        <p>Markdown Comments stores discussion threads inside a dedicated custom Git reference:</p>
+
+        <pre><code>refs/md-comments/data</code></pre>
+
+        <p>
+          This isolates all comment data from your branch list (<code>refs/heads/</code>) and tags
+          (<code>refs/tags/</code>), ensuring that commits, PRs, and CI pipelines remain completely
+          clean.
+        </p>
+
+        <h2>Multi-Platform Synchronization</h2>
+        <p>
+          Because discussion data is stored in Git, comments sync transparently across all client
+          interfaces:
+        </p>
+
+        <ul>
+          <li>
+            <strong>Web Browsers</strong>: Via this Plain HTML embed or the Starlight Astro plugin.
+          </li>
+          <li>
+            <strong>VS Code / Cursor / Antigravity</strong>: Native extension with margin pins and
+            hover cards.
+          </li>
+          <li>
+            <strong>Obsidian</strong>: Community plugin with live side panel discussion feeds.
+          </li>
+          <li>
+            <strong>GitHub Chrome Extension</strong>: Review comments overlaid directly on rendered
+            GitHub markdown files.
+          </li>
         </ul>
-      </div>
-    </aside>
 
-    <!-- Main Content Area -->
-    <main class="content-wrapper">
-      <h1>Architecture & Storage</h1>
-      <p style="font-size: 16px; color: var(--color-text-muted);">
-        Understand how Markdown Comments achieves complete SaaS-independence through Git custom references.
-      </p>
-
-      <h2>The Git-Native Storage Model</h2>
-      <p>
-        Traditional commenting tools either write HTML comments directly into markdown source files (causing diff noise and token bloat for LLMs) or store review comments in proprietary third-party databases.
-      </p>
-      <p>
-        Markdown Comments stores discussion threads inside a dedicated custom Git reference:
-      </p>
-
-      <pre><code>refs/md-comments/data</code></pre>
-
-      <p>
-        This isolates all comment data from your branch list (<code>refs/heads/</code>) and tags (<code>refs/tags/</code>), ensuring that commits, PRs, and CI pipelines remain completely clean.
-      </p>
-
-      <h2>Multi-Platform Synchronization</h2>
-      <p>
-        Because discussion data is stored in Git, comments sync transparently across all client interfaces:
-      </p>
-
-      <ul>
-        <li><strong>Web Browsers</strong>: Via this Plain HTML embed or the Starlight Astro plugin.</li>
-        <li><strong>VS Code / Cursor / Antigravity</strong>: Native extension with margin pins and hover cards.</li>
-        <li><strong>Obsidian</strong>: Community plugin with live side panel discussion feeds.</li>
-        <li><strong>GitHub Chrome Extension</strong>: Review comments overlaid directly on rendered GitHub markdown files.</li>
-      </ul>
-
-      <h2>Security & Permissions</h2>
-      <p>
-        Markdown Comments relies on GitHub's repository access control. Only users with repository write permissions can push commits to <code>refs/md-comments/data</code>, preventing unauthorized modifications.
-      </p>
-    </main>
-  </div>
-</body>
+        <h2>Security & Permissions</h2>
+        <p>
+          Markdown Comments relies on GitHub's repository access control. Only users with repository
+          write permissions can push commits to <code>refs/md-comments/data</code>, preventing
+          unauthorized modifications.
+        </p>
+      </main>
+    </div>
+  </body>
 </html>

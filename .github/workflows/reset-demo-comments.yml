@@ -30,8 +30,8 @@ jobs:
           script: |
             const defaultRepos = [
               process.env.CURRENT_REPO,
-              'md-comments/demo-comments',
-              'md-comments/astro-demo-comments'
+              'md-comments/html-demo-comments',
+              'md-comments/astro-demo-comments',
             ];
 
             const inputRepos = process.env.INPUT_REPOS
