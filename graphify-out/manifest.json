@@ -860,28 +860,28 @@
     "semantic_hash": ""
   },
   "website/demo-html/embed/md-comments.js": {
-    "mtime": 1788019637.2508395,
-    "ast_hash": "d35100eb02bd96623197cdf99e58ae13",
+    "mtime": 1788020054.5839374,
+    "ast_hash": "20a24c0fb83aa093cbd3cf70d1d9359c",
     "semantic_hash": ""
   },
   "website/demo-html/architecture.html": {
-    "mtime": 1788019163.6687546,
-    "ast_hash": "54f9c87047f5632df7537a0ab8ee0368",
+    "mtime": 1788020081.6835923,
+    "ast_hash": "dbd979190a42a593785a1607920e8d46",
     "semantic_hash": ""
   },
   "website/demo-html/how-it-works.html": {
-    "mtime": 1788019159.9756334,
-    "ast_hash": "069df23986c4eb715407fbdb11b7fdd3",
+    "mtime": 1788020081.7727666,
+    "ast_hash": "605b14e861f9d357f0a8c7efeabe3476",
     "semantic_hash": ""
   },
   "website/demo-html/index.html": {
-    "mtime": 1788019147.6912792,
-    "ast_hash": "01fec0d0d8eea937d859d7e50e89b48f",
+    "mtime": 1788020081.7826111,
+    "ast_hash": "b4bd3dc2db62d6bb9a8f43be42d94fe1",
     "semantic_hash": ""
   },
   "website/demo-html/sandbox.html": {
-    "mtime": 1788019628.6178508,
-    "ast_hash": "e1b9d7b86443c848f06465fb3d1111fe",
+    "mtime": 1788020081.7872343,
+    "ast_hash": "23d21fc8749ffb4758127fce996f468b",
     "semantic_hash": ""
   },
   "scripts/serve-website.js": {
@@ -890,8 +890,8 @@
     "semantic_hash": ""
   },
   ".github/workflows/reset-demo-comments.yml": {
-    "mtime": 1788019929.326376,
-    "ast_hash": "be914f267416934ed0a4c6d1329fd493",
+    "mtime": 1788020077.7361286,
+    "ast_hash": "4ad582cec0315e2aa57184569348ce24",
     "semantic_hash": ""
   }
 }
