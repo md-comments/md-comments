@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown Comments - Plain HTML Live Demo</title>
+  <meta name="description" content="Live interactive demonstration of Markdown Comments on a plain static HTML website with zero frameworks or extensions.">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="stylesheet" href="demo.css">
+  
+  <!-- Drop-in Redistributable Markdown Comments Embed -->
+  <link rel="stylesheet" href="./embed/md-comments.css">
+  <script src="./embed/md-comments.js" data-repo="md-comments/demo-comments" data-file="demo-html/index.html" async></script>
+  <script src="demo.js" defer></script>
+</head>
+<body>
+  <!-- Global Announcement Banner (Wiped daily at midnight) -->
+  <div class="demo-site-banner" role="region" aria-label="Demo environment notice">
+    <div class="demo-banner-inner">
+      <span class="demo-banner-badge">Demo Notice</span>
+      <span class="demo-banner-text">
+        All comments are automatically wiped every day at <strong>midnight (00:00 UTC)</strong> to keep the demo clean and unmoderated.
+      </span>
+    </div>
+  </div>
+
+  <!-- Header Navigation -->
+  <header class="site-header">
+    <div class="header-container">
+      <a href="index.html" class="brand">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="16 18 22 12 16 6"></polyline>
+          <polyline points="8 6 2 12 8 18"></polyline>
+        </svg>
+        <span>Markdown Comments</span>
+        <span class="brand-badge">Plain HTML</span>
+      </a>
+
+      <div class="nav-actions">
+        <a href="../index.html" class="nav-link-return">&larr; Return to Main Site</a>
+        <button id="theme-toggle-btn" class="btn-theme-toggle" aria-label="Toggle theme">☀️ Light</button>
+        <a href="https://github.com/md-comments/md-comments" class="btn-secondary" target="_blank" rel="noopener" style="padding: 6px 12px; font-size: 13px;">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div>
+        <div class="sidebar-group-title">Overview</div>
+        <ul class="sidebar-nav">
+          <li><a href="index.html">🏠 Demo Overview</a></li>
+          <li><a href="sandbox.html">🧪 Interactive Sandbox</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="sidebar-group-title">Documentation</div>
+        <ul class="sidebar-nav">
+          <li><a href="how-it-works.html">📖 How It Works</a></li>
+          <li><a href="architecture.html">🏗️ Architecture & Storage</a></li>
+        </ul>
+      </div>
+
+      <div style="margin-top: auto; padding: 12px; background: var(--color-bg-subtle); border-radius: 8px; border: 1px solid var(--color-border);">
+        <p style="font-size: 12px; color: var(--color-text-muted); margin-bottom: 8px;">
+          🚀 <strong>Drop-in Embed</strong><br>
+          Included via simple <code>&lt;script&gt;</code> and <code>&lt;link&gt;</code> tags.
+        </p>
+        <a href="https://github.com/md-comments/md-comments#readme" target="_blank" style="font-size: 12px; color: var(--color-primary); font-weight: 600; text-decoration: none;">View Embed Docs &rarr;</a>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="content-wrapper">
+      <div class="hero-section">
+        <h1 class="hero-title">AI-Orchestrated Docs.<br>Human-Orchestrated Comments.</h1>
+        <p class="hero-subtitle">
+          Highlight any text on this rendered page to leave inline feedback, discuss architectural specs, and sync directly with git.
+        </p>
+        <div class="hero-actions">
+          <a href="sandbox.html" class="btn-primary">Try Interactive Sandbox &rarr;</a>
+          <a href="../index.html" class="btn-secondary">Back to Main Website</a>
+        </div>
+      </div>
+
+      <div class="demo-banner">
+        <h3>💡 Try It Now: Highlight Any Text on This Rendered Page</h3>
+        <p>
+          Documentation lives in your Git repository. AI agents keep documentation updated as code changes.
+          Select any sentence or paragraph on this rendered page to leave inline feedback, discuss technical decisions, and resolve threads!
+        </p>
+      </div>
+
+      <h2>Key Features in This Plain HTML Demo</h2>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <h4>Zero Framework Dependencies</h4>
+          <p>Works out of the box with standard HTML5. No bundlers, Node.js runtime, or complex build setups required.</p>
+        </div>
+
+        <div class="feature-card">
+          <h4>Rendered View Commenting</h4>
+          <p>Comment directly on rendered web prose with zero browser extensions required for visitors.</p>
+        </div>
+
+        <div class="feature-card">
+          <h4>AI-Friendly & Zero Inline Noise</h4>
+          <p>Markdown and HTML files stay pristine in git—zero inline HTML comment pollution, zero token bloat in LLM contexts.</p>
+        </div>
+
+        <div class="feature-card">
+          <h4>Git-Native Storage (refs/md-comments/data)</h4>
+          <p>Discussion threads save live to custom git refs with zero branch or PR clutter, avoiding third-party SaaS lock-in.</p>
+        </div>
+
+        <div class="feature-card">
+          <h4>GitHub OAuth Device Flow</h4>
+          <p>Authenticate safely using standard GitHub OAuth Device Flow with zero custom backend servers required.</p>
+        </div>
+
+        <div class="feature-card">
+          <h4>Universal Multi-Platform Sync</h4>
+          <p>Discussions left here sync seamlessly with VS Code, Cursor, Antigravity, Obsidian, and GitHub PR reviews.</p>
+        </div>
+      </div>
+
+      <h2>Quick Interactive Demonstration</h2>
+      <p>
+        Markdown Comments provides modern collaborative review for teams building with static sites, internal wikis, and API references.
+        Try highlighting the following test paragraph:
+      </p>
+
+      <blockquote>
+        "Decentralized collaboration guarantees data sovereignty. By storing conversations directly in Git refs, technical teams retain permanent ownership of all review history and design decisions."
+      </blockquote>
+
+      <p>
+        Click the comment bubble that appears above your selection or press <kbd style="background: var(--color-bg-card); padding: 2px 6px; border: 1px solid var(--color-border); border-radius: 4px; font-family: monospace; font-size: 12px;">Cmd+Shift+C</kbd> (or <kbd style="background: var(--color-bg-card); padding: 2px 6px; border: 1px solid var(--color-border); border-radius: 4px; font-family: monospace; font-size: 12px;">Ctrl+Shift+C</kbd>) to open the discussion drawer.
+      </p>
+    </main>
+  </div>
+</body>
+</html>

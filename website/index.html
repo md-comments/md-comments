@@ -1,135 +1,166 @@
 <!doctype html>
 <html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Markdown Comments | Inline Feedback for Markdown Docs</title>
+    <meta
+      name="description"
+      content="Collaborative inline comments for Markdown files powered by custom git refs backend. Support for GitHub, VS Code, Cursor / Antigravity, Plain HTML, Astro / Starlight, and Obsidian."
+    />
+    <link rel="icon" type="image/svg+xml" href="assets/icon.svg" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Markdown Comments | Inline Feedback for Markdown Docs</title>
-  <meta name="description"
-    content="Collaborative inline comments for Markdown files powered by custom git refs backend. Support for GitHub, VS Code, Cursor / Antigravity, Plain HTML, Astro / Starlight, and Obsidian." />
-  <link rel="icon" type="image/svg+xml" href="assets/icon.svg" />
-  <link rel="stylesheet" href="styles.css" />
-</head>
-
-<body>
-  <!-- Header -->
-  <header class="header">
-    <div class="container header-container">
-      <a href="#" class="logo-link">
-        <svg class="logo-icon" viewBox="0 0 512 512" fill="currentColor" width="32" height="32">
-          <path fill-rule="evenodd"
-            d="M 136 64 L 376 64 C 424 64 456 96 456 144 L 456 304 C 456 352 424 384 376 384 L 216 384 C 184 384 150 404 126 428 C 118 436 104 430 104 418 L 104 384 C 72 380 56 352 56 304 L 56 144 C 56 96 88 64 136 64 Z M 132 168 L 164 168 L 192 232 L 220 168 L 252 168 L 252 280 L 226 280 L 226 212 L 201 268 L 183 268 L 158 212 L 158 280 L 132 280 Z M 276 168 L 324 168 C 358 168 380 188 380 224 C 380 260 358 280 324 280 L 276 280 Z M 302 192 L 302 256 L 322 256 C 342 256 352 246 352 224 C 352 202 342 192 322 192 Z" />
-        </svg>
-        <span>Markdown Comments</span>
-      </a>
-      <nav class="nav">
-        <a href="#ai-humans" class="nav-link">AI + Humans</a>
-        <a href="#demos" class="nav-link">Demos</a>
-        <a href="#integrations" class="nav-link">Integrations</a>
-        <a href="privacy.html" class="nav-link">Privacy Policy</a>
-      </nav>
-      <div class="nav-actions">
-        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle light/dark theme">
-          <!-- Sun Icon (Dark Mode View) -->
-          <svg class="sun-icon" viewBox="0 0 24 24">
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <div class="container header-container">
+        <a href="#" class="logo-link">
+          <svg class="logo-icon" viewBox="0 0 512 512" fill="currentColor" width="32" height="32">
             <path
-              d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.01c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z" />
+              fill-rule="evenodd"
+              d="M 136 64 L 376 64 C 424 64 456 96 456 144 L 456 304 C 456 352 424 384 376 384 L 216 384 C 184 384 150 404 126 428 C 118 436 104 430 104 418 L 104 384 C 72 380 56 352 56 304 L 56 144 C 56 96 88 64 136 64 Z M 132 168 L 164 168 L 192 232 L 220 168 L 252 168 L 252 280 L 226 280 L 226 212 L 201 268 L 183 268 L 158 212 L 158 280 L 132 280 Z M 276 168 L 324 168 C 358 168 380 188 380 224 C 380 260 358 280 324 280 L 276 280 Z M 302 192 L 302 256 L 322 256 C 342 256 352 246 352 224 C 352 202 342 192 322 192 Z"
+            />
           </svg>
-          <!-- Moon Icon (Light Mode View) -->
-          <svg class="moon-icon" viewBox="0 0 24 24">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-          </svg>
-        </button>
-        <a href="https://github.com/md-comments/md-comments" class="btn btn-secondary btn-github" target="_blank"
-          rel="noopener">
-          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-            <path
-              d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.646.64.699 1.026 1.592 1.026 2.683 0 3.842-2.337 4.687-4.565 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.138 20.161 22 16.416 22 12c0-5.523-4.523-10-10-10z" />
-          </svg>
-          GitHub
+          <span>Markdown Comments</span>
         </a>
-      </div>
-    </div>
-  </header>
-
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="container hero-grid">
-      <div class="hero-content">
-        <h1 class="hero-title">
-          Stop Siloing Docs.<br /><span class="gradient-text">Bring Them Home.</span>
-        </h1>
-        <p class="hero-subtitle">
-          Documentation lives in your repository where AI agents can orchestrate and update it. Markdown Comments adds a
-          collaborative layer on top, also stored natively in Git, so humans can review, comment, and discuss rendered
-          docs without SaaS lock-in or PR overhead.
-        </p>
-        <div class="hero-buttons">
-          <a href="#demos" class="btn btn-primary">Explore Demos</a>
-          <a href="#ai-humans" class="btn btn-secondary"
-            title="AI Agents orchestrate docs, humans orchestrate comments">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px; vertical-align: middle;">
-              <polyline points="23 4 23 10 17 10"></polyline>
-              <polyline points="1 20 1 14 7 14"></polyline>
-              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+        <nav class="nav">
+          <a href="#ai-humans" class="nav-link">AI + Humans</a>
+          <a href="#demos" class="nav-link">Demos</a>
+          <a href="#integrations" class="nav-link">Integrations</a>
+          <a href="privacy.html" class="nav-link">Privacy Policy</a>
+        </nav>
+        <div class="nav-actions">
+          <button id="theme-toggle" class="theme-toggle" aria-label="Toggle light/dark theme">
+            <!-- Sun Icon (Dark Mode View) -->
+            <svg class="sun-icon" viewBox="0 0 24 24">
+              <path
+                d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.01c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"
+              />
             </svg>
-            AI + Humans
+            <!-- Moon Icon (Light Mode View) -->
+            <svg class="moon-icon" viewBox="0 0 24 24">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+          </button>
+          <a
+            href="https://github.com/md-comments/md-comments"
+            class="btn btn-secondary btn-github"
+            target="_blank"
+            rel="noopener"
+          >
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.646.64.699 1.026 1.592 1.026 2.683 0 3.842-2.337 4.687-4.565 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.138 20.161 22 16.416 22 12c0-5.523-4.523-10-10-10z"
+              />
+            </svg>
+            GitHub
           </a>
-          <a href="#integrations" class="btn btn-outline-accent">See Integrations</a>
         </div>
       </div>
+    </header>
 
-      <!-- Interactive Static Mockup of the Concept -->
-      <div class="mockup-window">
-        <div class="mockup-header">
-          <div class="mockup-controls">
-            <div class="mockup-dot red"></div>
-            <div class="mockup-dot yellow"></div>
-            <div class="mockup-dot green"></div>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <h1 class="hero-title">
+            Stop Siloing Docs.<br /><span class="gradient-text">Bring Them Home.</span>
+          </h1>
+          <p class="hero-subtitle">
+            Documentation lives in your repository where AI agents can orchestrate and update it.
+            Markdown Comments adds a collaborative layer on top, also stored natively in Git, so
+            humans can review, comment, and discuss rendered docs without SaaS lock-in or PR
+            overhead.
+          </p>
+          <div class="hero-buttons">
+            <a href="#demos" class="btn btn-primary">Explore Demos</a>
+            <a
+              href="#ai-humans"
+              class="btn btn-secondary"
+              title="AI Agents orchestrate docs, humans orchestrate comments"
+            >
+              <svg
+                width="17"
+                height="17"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                style="margin-right: 6px; vertical-align: middle"
+              >
+                <polyline points="23 4 23 10 17 10"></polyline>
+                <polyline points="1 20 1 14 7 14"></polyline>
+                <path
+                  d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"
+                ></path>
+              </svg>
+              AI + Humans
+            </a>
+            <a href="#integrations" class="btn btn-outline-accent">See Integrations</a>
           </div>
-          <span class="mockup-title">doc_collaboration.md</span>
         </div>
-        <div class="mockup-body">
-          <div class="vscode-editor">
-            <div class="vscode-tabs">
-              <div class="vscode-tab active">doc_collaboration.md</div>
+
+        <!-- Interactive Static Mockup of the Concept -->
+        <div class="mockup-window">
+          <div class="mockup-header">
+            <div class="mockup-controls">
+              <div class="mockup-dot red"></div>
+              <div class="mockup-dot yellow"></div>
+              <div class="mockup-dot green"></div>
             </div>
-            <div class="vscode-content" style="font-family: var(--font-sans); line-height: 1.6">
-              <h1 style="
+            <span class="mockup-title">doc_collaboration.md</span>
+          </div>
+          <div class="mockup-body">
+            <div class="vscode-editor">
+              <div class="vscode-tabs">
+                <div class="vscode-tab active">doc_collaboration.md</div>
+              </div>
+              <div class="vscode-content" style="font-family: var(--font-sans); line-height: 1.6">
+                <h1
+                  style="
                     font-size: 1.5rem;
                     margin-bottom: 16px;
                     border-bottom: 1px solid var(--border-color);
                     padding-bottom: 8px;
                     font-family: var(--font-display);
-                  ">
-                Project Architecture
-              </h1>
-              <p style="margin-bottom: 12px">This project implements collaborative tools.</p>
-              <p style="margin-bottom: 12px">
-                <span class="highlight-select">The frontend relies on responsive vanilla styles</span>
-                for modern performance.
-              </p>
-              <p style="margin-bottom: 12px">GitHub backend stores comments without cluttering your git tree.</p>
+                  "
+                >
+                  Project Architecture
+                </h1>
+                <p style="margin-bottom: 12px">This project implements collaborative tools.</p>
+                <p style="margin-bottom: 12px">
+                  <span class="highlight-select"
+                    >The frontend relies on responsive vanilla styles</span
+                  >
+                  for modern performance.
+                </p>
+                <p style="margin-bottom: 12px">
+                  GitHub backend stores comments without cluttering your git tree.
+                </p>
+              </div>
             </div>
-          </div>
-          <div class="vscode-sidebar">
-            <div class="vscode-sidebar-title">
-              <span>Comments</span>
-              <span>● ● ●</span>
-            </div>
-            <div class="vscode-comments">
-              <div class="comment-thread">
-                <div class="comment-header">
-                  <div class="avatar">D</div>
-                  <span class="author-name">dev_lead</span>
-                  <span class="comment-time">10m ago</span>
-                </div>
-                <div class="comment-body">Should we also add Tailwind CSS config options?</div>
-                <div class="comment-footer">
-                  <span class="comment-status open">Open</span>
-                  <div class="comment-reactions">
-                    <span class="reaction-btn">👍 2</span>
+            <div class="vscode-sidebar">
+              <div class="vscode-sidebar-title">
+                <span>Comments</span>
+                <span>● ● ●</span>
+              </div>
+              <div class="vscode-comments">
+                <div class="comment-thread">
+                  <div class="comment-header">
+                    <div class="avatar">D</div>
+                    <span class="author-name">dev_lead</span>
+                    <span class="comment-time">10m ago</span>
+                  </div>
+                  <div class="comment-body">Should we also add Tailwind CSS config options?</div>
+                  <div class="comment-footer">
+                    <span class="comment-status open">Open</span>
+                    <div class="comment-reactions">
+                      <span class="reaction-btn">👍 2</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -137,701 +168,928 @@
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Demos Showcase Section -->
-  <section id="demos" class="demos-section">
-    <div class="container">
-      <div class="section-header-center">
-        <h2 class="section-title">Experience Markdown Comments Across Frameworks</h2>
-      </div>
-
-      <div class="demos-grid">
-        <!-- Plain HTML / Vanilla JS Card (Active) -->
-        <div class="demo-card active-demo">
-          <div class="demo-card-header">
-            <div class="demo-icon-wrapper html-icon">
-              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="16 18 22 12 16 6"></polyline>
-                <polyline points="8 6 2 12 8 18"></polyline>
-              </svg>
-            </div>
-            <span class="demo-status-badge badge-live">Live Demo</span>
-          </div>
-          <h3 class="demo-title">Plain HTML / Embed</h3>
-          <p class="demo-desc">
-            Embeddable drop-in JS snippet that enables inline comments on any static web page or custom Markdown
-            renderer.
-          </p>
-          <div class="demo-card-actions">
-            <a href="#integrations" class="btn btn-sm btn-primary"
-              onclick="const b = document.querySelector('[data-tab=tab-html]'); if(b) b.click();">
-              View Embed Option &rarr;
-            </a>
-          </div>
+    <!-- Demos Showcase Section -->
+    <section id="demos" class="demos-section">
+      <div class="container">
+        <div class="section-header-center">
+          <h2 class="section-title">Experience Markdown Comments Across Frameworks</h2>
         </div>
 
-        <!-- Astro / Starlight Card (Active) -->
-        <div class="demo-card active-demo">
-          <div class="demo-card-header">
-            <div class="demo-icon-wrapper astro-icon">
-              <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
-                <path
-                  d="M8.358 20.162c-1.186-1.07-1.532-3.316-1.038-4.944.856 1.026 2.043 1.352 3.272 1.535 1.897.283 3.76.177 5.522-.678.202-.098.388-.229.608-.36.166.473.209.95.151 1.437-.14 1.185-.738 2.1-1.688 2.794-.38.277-.782.525-1.175.787-1.205.804-1.531 1.747-1.078 3.119l.044.148a3.158 3.158 0 0 1-1.407-1.188 3.31 3.31 0 0 1-.544-1.815c-.004-.32-.004-.642-.048-.958-.106-.769-.472-1.113-1.161-1.133-.707-.02-1.267.411-1.415 1.09-.012.053-.028.104-.045.165h.002zm-5.961-4.445s3.24-1.575 6.49-1.575l2.451-7.565c.092-.366.36-.614.662-.614.302 0 .57.248.662.614l2.45 7.565c3.85 0 6.491 1.575 6.491 1.575L16.088.727C15.93.285 15.663 0 15.303 0H8.697c-.36 0-.615.285-.784.727l-5.516 14.99z" />
-              </svg>
-            </div>
-            <span class="demo-status-badge badge-live">Live Demo</span>
-          </div>
-          <h3 class="demo-title">Astro & Starlight</h3>
-          <p class="demo-desc">
-            Native Starlight integration with interactive margin pins, floating bubble selection, and GitHub Device
-            Flow.
-          </p>
-          <div class="demo-card-actions">
-            <a href="demo-astro/" class="btn btn-sm btn-primary">
-              🚀 Launch Astro Demo
-            </a>
-          </div>
-        </div>
-
-        <!-- Docusaurus Card (Disabled) -->
-        <div class="demo-card disabled-demo">
-          <div class="demo-card-header">
-            <div class="demo-icon-wrapper docu-icon">
-              <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
-                <path
-                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9v-2h2v2zm0-4H9V7h2v5zm4 4h-2V7h2v9z" />
-              </svg>
-            </div>
-            <span class="demo-status-badge badge-soon">Coming Soon</span>
-          </div>
-          <h3 class="demo-title">Docusaurus</h3>
-          <p class="demo-desc">
-            React plugin bringing effortless inline document comments and team review loops to Docusaurus sites.
-          </p>
-          <div class="demo-card-actions">
-            <button class="btn btn-sm btn-disabled" disabled>Coming Soon</button>
-          </div>
-        </div>
-
-        <!-- VitePress Card (Disabled) -->
-        <div class="demo-card disabled-demo">
-          <div class="demo-card-header">
-            <div class="demo-icon-wrapper vite-icon">
-              <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
-                <path d="M21.5 3.5L12 21.5 2.5 3.5 12 7l9.5-3.5zM12 7v14.5L19.5 5.5 12 7z" />
-              </svg>
-            </div>
-            <span class="demo-status-badge badge-soon">Coming Soon</span>
-          </div>
-          <h3 class="demo-title">VitePress</h3>
-          <p class="demo-desc">
-            Vue & Vite-powered documentation theme integration designed for ultra-fast doc workflows.
-          </p>
-          <div class="demo-card-actions">
-            <button class="btn btn-sm btn-disabled" disabled>Coming Soon</button>
-          </div>
-        </div>
-
-        <!-- Next.js Card (Disabled) -->
-        <div class="demo-card disabled-demo">
-          <div class="demo-card-header">
-            <div class="demo-icon-wrapper next-icon">
-              <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
-                <path
-                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.8 15.3l-5.6-7.3v7.3H9.4V8.7h1.8l5.6 7.3V8.7h1.8v8.6h-1.8z" />
-              </svg>
-            </div>
-            <span class="demo-status-badge badge-soon">Coming Soon</span>
-          </div>
-          <h3 class="demo-title">Next.js</h3>
-          <p class="demo-desc">
-            React Server Component (RSC) compatible documentation component with Fumadocs and Nextra support.
-          </p>
-          <div class="demo-card-actions">
-            <button class="btn btn-sm btn-disabled" disabled>Coming Soon</button>
-          </div>
-        </div>
-
-        <!-- Hugo Card (Disabled) -->
-        <div class="demo-card disabled-demo">
-          <div class="demo-card-header">
-            <div class="demo-icon-wrapper hugo-icon">
-              <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
-                <path d="M12 2L2 7v10l10 5 10-5V7L12 2zm-1 14H8V8h3v3h2V8h3v8h-3v-3h-2v3z" />
-              </svg>
-            </div>
-            <span class="demo-status-badge badge-soon">Coming Soon</span>
-          </div>
-          <h3 class="demo-title">Hugo</h3>
-          <p class="demo-desc">
-            Lightweight shortcode integration for blazing-fast Go-based static documentation sites.
-          </p>
-          <div class="demo-card-actions">
-            <button class="btn btn-sm btn-disabled" disabled>Coming Soon</button>
-          </div>
-        </div>
-
-        <!-- MkDocs Card (Disabled) -->
-        <div class="demo-card disabled-demo">
-          <div class="demo-card-header">
-            <div class="demo-icon-wrapper mkdocs-icon">
-              <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
-                <path
-                  d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z" />
-              </svg>
-            </div>
-            <span class="demo-status-badge badge-soon">Coming Soon</span>
-          </div>
-          <h3 class="demo-title">MkDocs</h3>
-          <p class="demo-desc">
-            Python & Material for MkDocs extension providing inline feedback and review directly on project docs.
-          </p>
-          <div class="demo-card-actions">
-            <button class="btn btn-sm btn-disabled" disabled>Coming Soon</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Marketing Section: AI + Humans Documentation -->
-  <section id="ai-humans" class="ai-docs-section">
-    <div class="container">
-      <div class="section-header-center">
-        <h2 class="section-title">
-          AI-Orchestrated Docs.<br /><span class="gradient-text">Human-Orchestrated Comments.</span>
-        </h2>
-        <p class="section-subtitle">
-          Docs live directly in your repository, and comments live as a native layer on top, never locked in third-party
-          SaaS silos. AI agents orchestrate the documentation as code evolves, while humans orchestrate the reviews and
-          discussions on rendered views.
-        </p>
-      </div>
-
-      <div class="ai-docs-grid">
-        <!-- Card 1 -->
-        <div class="ai-docs-card">
-          <div class="ai-card-badge red-accent">The Problem</div>
-          <div class="ai-card-icon red-icon">
-            <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path
-                d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
-            </svg>
-          </div>
-          <h3>SaaS Tools Trap Knowledge in Silos</h3>
-          <p>
-            External tools like <strong>Notion</strong> or <strong>Confluence</strong> isolate comments from
-            your codebase. Human feedback gets trapped in closed SaaS silos instead of living with your docs source.
-          </p>
-        </div>
-
-        <!-- Card 2 -->
-        <div class="ai-docs-card highlight-card">
-          <div class="ai-card-badge green-accent">AI Orchestrated</div>
-          <div class="ai-card-icon green-icon">
-            <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path
-                d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-            </svg>
-          </div>
-          <h3>AI Agents Orchestrate Your Docs</h3>
-          <p>
-            Markdown files in your repository serve as <strong>native, indexable context for AI agents</strong>. As code
-            and architecture change, AI assistants (Cursor, Copilot, Claude) can inspect, query, generate, and
-            continuously update the raw documentation in Git.
-          </p>
-        </div>
-
-        <!-- Card 3 -->
-        <div class="ai-docs-card">
-          <div class="ai-card-badge purple-accent">Human Orchestrated</div>
-          <div class="ai-card-icon purple-icon">
-            <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path
-                d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
-            </svg>
-          </div>
-          <h3>Humans Orchestrate the Comments</h3>
-          <p>
-            Humans review <strong>rendered visual variants</strong> with rich inline feedback and discussion threads.
-            Comments are saved directly to Git via custom refs as a lightweight layer on top, giving teams instant
-            review
-            loops without pull requests or commit noise.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Technical Architecture Callout Section -->
-  <section class="tech-overview-section">
-    <div class="container">
-      <div class="section-header-center">
-        <h2 class="section-title">
-          Clean Source Branches.<br /><span class="gradient-text">Zero-Overhead Custom Refs.</span>
-        </h2>
-      </div>
-
-      <div class="tech-grid">
-        <div class="tech-feature-card">
-          <div class="tech-feature-icon">
-            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path d="M6 3v12M18 9a3 3 0 100-6 3 3 0 000 6zM6 15a3 3 0 100-6 3 3 0 000 6zm12 0a3 3 0 100-6 3 3 0 000 6zM6 18a3 3 0 100-6 3 3 0 000 6z" />
-            </svg>
-          </div>
-          <h3>Isolated Ref Namespace</h3>
-          <p>
-            Standard Git branches live under <code>refs/heads/</code> and tags under <code>refs/tags/</code>. By isolating comments in <code>refs/md-comments/</code>, discussion data is stored in Git without polluting your branch list, commit logs, or PR diffs.
-          </p>
-        </div>
-
-        <div class="tech-feature-card">
-          <div class="tech-feature-icon">
-            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-            </svg>
-          </div>
-          <h3>Zero Commits & Zero PR Overhead</h3>
-          <p>
-            Standard Git porcelain commands (<code>checkout</code>, <code>diff</code>, <code>status</code>) ignore custom refs. Teams can post, reply, and resolve discussions instantly via API without triggering CI/CD pipelines or merge conflicts.
-          </p>
-        </div>
-
-        <div class="tech-feature-card">
-          <div class="tech-feature-icon">
-            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-            </svg>
-          </div>
-          <h3>Cryptographic Integrity & Rollbacks</h3>
-          <p>
-            Comments are anchored with commit SHAs and FNV-1a content hashing. When checking out historical commits or rolling back files, comments stay preserved across Git history while inline annotations re-anchor accurately.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Integrations Section -->
-  <section id="integrations" class="integrations">
-    <div class="container">
-      <h2 class="section-title">Integrations for Your Workflow</h2>
-
-      <!-- Icon-based tab switcher -->
-      <div class="tabs-container">
-        <button class="tab-btn active" data-tab="tab-github" title="GitHub Chrome Extension">
-          <svg class="tab-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-            <path
-              d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.646.64.699 1.026 1.592 1.026 2.683 0 3.842-2.337 4.687-4.565 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.138 20.161 22 16.416 22 12c0-5.523-4.523-10-10-10z" />
-          </svg>
-          <span>GitHub</span>
-        </button>
-        <button class="tab-btn" data-tab="tab-vscode" title="VS Code (MS Marketplace)">
-          <svg class="tab-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-            <path
-              d="M23.15 2.587L18.21.21a1.494 1.494 0 0 0-1.705.29l-9.46 8.63-4.12-3.128a.999.999 0 0 0-1.276.057L.327 7.261A1 1 0 0 0 .326 8.74L3.899 12 .326 15.26a1 1 0 0 0 .001 1.479L1.65 17.94a.999.999 0 0 0 1.276.057l4.12-3.128 9.46 8.63a1.492 1.492 0 0 0 1.704.29l4.942-2.377A1.5 1.5 0 0 0 24 20.06V3.939a1.5 1.5 0 0 0-.85-1.352zm-5.146 14.861L10.826 12l7.178-5.448v10.896z" />
-          </svg>
-          <span>VS Code</span>
-        </button>
-        <button class="tab-btn" data-tab="tab-cursor" title="Cursor / Antigravity (Open VSX)">
-          <svg class="tab-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-            <path d="M12 2L2 7l10 5 10-5-10-5z" />
-            <path d="M2 17l10 5 10-5" />
-            <path d="M2 12l10 5 10-5" />
-            <path d="M12 22V12" />
-          </svg>
-          <span>Cursor / Antigravity</span>
-        </button>
-        <button class="tab-btn" data-tab="tab-html" title="Plain HTML / Generic JS Embed">
-          <svg class="tab-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
-            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="16 18 22 12 16 6"></polyline>
-            <polyline points="8 6 2 12 8 18"></polyline>
-          </svg>
-          <span>Plain HTML / JS</span>
-        </button>
-        <button class="tab-btn" data-tab="tab-starlight" title="Astro / Starlight Plugin">
-          <svg class="tab-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-            <path
-              d="M8.358 20.162c-1.186-1.07-1.532-3.316-1.038-4.944.856 1.026 2.043 1.352 3.272 1.535 1.897.283 3.76.177 5.522-.678.202-.098.388-.229.608-.36.166.473.209.95.151 1.437-.14 1.185-.738 2.1-1.688 2.794-.38.277-.782.525-1.175.787-1.205.804-1.531 1.747-1.078 3.119l.044.148a3.158 3.158 0 0 1-1.407-1.188 3.31 3.31 0 0 1-.544-1.815c-.004-.32-.004-.642-.048-.958-.106-.769-.472-1.113-1.161-1.133-.707-.02-1.267.411-1.415 1.09-.012.053-.028.104-.045.165h.002zm-5.961-4.445s3.24-1.575 6.49-1.575l2.451-7.565c.092-.366.36-.614.662-.614.302 0 .57.248.662.614l2.45 7.565c3.85 0 6.491 1.575 6.491 1.575L16.088.727C15.93.285 15.663 0 15.303 0H8.697c-.36 0-.615.285-.784.727l-5.516 14.99z" />
-          </svg>
-          <span>Astro / Starlight</span>
-        </button>
-        <button class="tab-btn" data-tab="tab-obsidian" title="Obsidian Plugin">
-          <svg class="tab-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-            <path
-              d="M18.7 8.3L13.7 2.3c-.4-.5-1-.8-1.7-.8s-1.3.3-1.7.8L5.3 8.3c-.4.5-.6 1.1-.6 1.7v5.3c0 .8.4 1.5 1.1 1.9l5.5 3.3c.4.2.8.4 1.2.4s.8-.1 1.2-.4l5.5-3.3c.7-.4 1.1-1.1 1.1-1.9v-5.3c0-.6-.2-1.2-.6-1.7zm-6.7 11.2l-4.5-2.7V10.6l4.5 4.5v4.4zm1-4.4l4.5-4.5v6.2l-4.5 2.7v-4.4zM12 4.1l4.2 5.1-4.2 4.2-4.2-4.2L12 4.1z" />
-          </svg>
-          <span>Obsidian</span>
-        </button>
-      </div>
-
-      <!-- 1. GitHub Tab Content -->
-      <div id="tab-github" class="tab-content active">
-        <div class="integration-layout">
-          <div class="integration-info">
-            <h3>GitHub Integration (Chrome Extension & App)</h3>
-            <p>
-              Collaborate natively on GitHub markdown files. Adds a dedicated comments panel directly into Markdown
-              previews, powered by custom Git refs with zero PR friction.
-            </p>
-            <ul class="integration-features">
-              <li>
-                <svg fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd"></path>
+        <div class="demos-grid">
+          <!-- Plain HTML / Vanilla JS Card (Active) -->
+          <div class="demo-card active-demo">
+            <div class="demo-card-header">
+              <div class="demo-icon-wrapper html-icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="28"
+                  height="28"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polyline points="16 18 22 12 16 6"></polyline>
+                  <polyline points="8 6 2 12 8 18"></polyline>
                 </svg>
-                <span>Adds a dedicated comments panel to Markdown file previews.</span>
-              </li>
-              <li>
-                <svg fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd"></path>
-                </svg>
-                <span>Inline paragraph hover pins with highlighted commented text.</span>
-              </li>
-              <li>
-                <svg fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd"></path>
-                </svg>
-                <span>Auto-saves live via custom git refs with zero commits or branch overhead.</span>
-              </li>
-            </ul>
-            <div class="integration-buttons">
-              <a href="https://chromewebstore.google.com/detail/markdown-comments/mjlhdjonjfcedkbpajkfeidfebefhkpp"
-                class="btn btn-primary btn-chrome" target="_blank" rel="noopener">
-                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                  <path
-                    d="M20.5 11H19V7c0-1.1-.9-2-2-2h-4V3.5c0-1.38-1.12-2.5-2.5-2.5S8 2.12 8 3.5V5H4c-1.1 0-1.99.9-1.99 2v3.8H3.5c1.49 0 2.7 1.21 2.7 2.7s-1.21 2.7-2.7 2.7H2V20c0 1.1.9 2 2 2h3.8v-1.5c0-1.49 1.21-2.7 2.7-2.7s2.7 1.21 2.7 2.7V22H17c1.1 0 2-.9 2-2v-4h1.5c1.38 0 2.5-1.12 2.5-2.5S21.88 11 20.5 11z" />
-                </svg>
-                Install Chrome Extension
-              </a>
-              <a href="https://github.com/md-comments/md-comments#github-chrome-extension" class="btn btn-secondary"
-                target="_blank" rel="noopener">Setup Instructions</a>
-              <a href="https://github.com/apps/markdown-comments" class="btn btn-secondary" target="_blank"
-                rel="noopener">
-                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"
-                  style="margin-right: 6px; vertical-align: middle;">
-                  <path
-                    d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.646.64.699 1.026 1.592 1.026 2.683 0 3.842-2.337 4.687-4.565 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.138 20.161 22 16.416 22 12c0-5.523-4.523-10-10-10z" />
-                </svg>
-                Install GitHub App
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 2. VS Code Tab Content -->
-      <div id="tab-vscode" class="tab-content">
-        <div class="integration-layout">
-          <div class="integration-info">
-            <h3>VS Code (Visual Studio Marketplace)</h3>
-            <p>
-              A fully featured workspace extension for Visual Studio Code. Access comments in a native side panel,
-              highlight selections to anchor thoughts, and edit files side-by-side.
-            </p>
-            <ul class="integration-features">
-              <li>
-                <svg fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd"></path>
-                </svg>
-                <span>Interactive side panel mapping comment threads to lines.</span>
-              </li>
-              <li>
-                <svg fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd"></path>
-                </svg>
-                <span>Command Palette action to scan for orphaned comments.</span>
-              </li>
-              <li>
-                <svg fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd"></path>
-                </svg>
-                <span>Robust configuration for reactions and pane widths.</span>
-              </li>
-            </ul>
-            <div class="integration-buttons">
-              <a href="https://marketplace.visualstudio.com/items?itemName=md-comments.md-preview-comments"
-                class="btn btn-primary btn-vscode" target="_blank" rel="noopener">
-                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                  <path
-                    d="M23.15 2.587L18.21.21a1.494 1.494 0 0 0-1.705.29l-9.46 8.63-4.12-3.128a.999.999 0 0 0-1.276.057L.327 7.261A1 1 0 0 0 .326 8.74L3.899 12 .326 15.26a1 1 0 0 0 .001 1.479L1.65 17.94a.999.999 0 0 0 1.276.057l4.12-3.128 9.46 8.63a1.492 1.492 0 0 0 1.704.29l4.942-2.377A1.5 1.5 0 0 0 24 20.06V3.939a1.5 1.5 0 0 0-.85-1.352zm-5.146 14.861L10.826 12l7.178-5.448v10.896z" />
-                </svg>
-                Install from VS Marketplace
-              </a>
-              <a href="https://github.com/md-comments/md-comments#install" class="btn btn-secondary" target="_blank"
-                rel="noopener">Setup Instructions</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 3. Cursor / Antigravity Tab Content -->
-      <div id="tab-cursor" class="tab-content">
-        <div class="integration-layout">
-          <div class="integration-info">
-            <h3>Cursor & Antigravity (Open VSX)</h3>
-            <p>
-              Available on the Open VSX Registry for seamless integration with Cursor, Google Antigravity,
-              VSCodium, and other Open VSX-compatible editors.
-            </p>
-            <ul class="integration-features">
-              <li>
-                <svg fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd"></path>
-                </svg>
-                <span>Full compatibility with Cursor AI workflows & Antigravity IDE.</span>
-              </li>
-              <li>
-                <svg fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd"></path>
-                </svg>
-                <span>Real-time line comments and side-panel thread navigation.</span>
-              </li>
-              <li>
-                <svg fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd"></path>
-                </svg>
-                <span>Direct sync with Git custom refs and web documentation.</span>
-              </li>
-            </ul>
-            <div class="integration-buttons">
-              <a href="https://open-vsx.org/extension/md-comments/md-preview-comments"
-                class="btn btn-primary btn-openvsx" target="_blank" rel="noopener">
-                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                  stroke-linejoin="round" viewBox="0 0 24 24">
-                  <path d="M12 2L2 7l10 5 10-5-10-5z" />
-                  <path d="M2 17l10 5 10-5" />
-                  <path d="M2 12l10 5 10-5" />
-                  <path d="M12 22V12" />
-                </svg>
-                Install from Open VSX
-              </a>
-              <a href="https://github.com/md-comments/md-comments#install" class="btn btn-secondary" target="_blank"
-                rel="noopener">Setup Instructions</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 4. Plain HTML Tab Content -->
-      <div id="tab-html" class="tab-content">
-        <div class="integration-layout">
-          <div class="integration-info">
-            <h3>Plain HTML & Generic JS Embed</h3>
-            <p>
-              Add collaborative inline comments to any website or static HTML page with a single script tag. Zero
-              dependencies or complex build setup required.
-            </p>
-
-            <div class="code-snippet-box">
-              <div class="code-snippet-header">
-                <span>HTML Embed Snippet</span>
-                <button class="copy-btn" id="copy-embed-btn"
-                  onclick="navigator.clipboard.writeText(document.getElementById('embed-code-text').innerText); this.innerText='Copied!'; setTimeout(()=>this.innerText='Copy', 2000);">Copy</button>
               </div>
-              <pre class="code-snippet-pre"><code id="embed-code-text">&lt;!-- Drop Markdown Comments into any HTML document --&gt;
+              <span class="demo-status-badge badge-live">Live Demo</span>
+            </div>
+            <h3 class="demo-title">Plain HTML / Embed</h3>
+            <p class="demo-desc">
+              Embeddable drop-in JS snippet that enables inline comments on any static web page or
+              custom Markdown renderer.
+            </p>
+            <div class="demo-card-actions">
+              <a href="demo-html/" class="btn btn-sm btn-primary"> 🚀 Launch HTML Demo </a>
+            </div>
+          </div>
+
+          <!-- Astro / Starlight Card (Active) -->
+          <div class="demo-card active-demo">
+            <div class="demo-card-header">
+              <div class="demo-icon-wrapper astro-icon">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                  <path
+                    d="M8.358 20.162c-1.186-1.07-1.532-3.316-1.038-4.944.856 1.026 2.043 1.352 3.272 1.535 1.897.283 3.76.177 5.522-.678.202-.098.388-.229.608-.36.166.473.209.95.151 1.437-.14 1.185-.738 2.1-1.688 2.794-.38.277-.782.525-1.175.787-1.205.804-1.531 1.747-1.078 3.119l.044.148a3.158 3.158 0 0 1-1.407-1.188 3.31 3.31 0 0 1-.544-1.815c-.004-.32-.004-.642-.048-.958-.106-.769-.472-1.113-1.161-1.133-.707-.02-1.267.411-1.415 1.09-.012.053-.028.104-.045.165h.002zm-5.961-4.445s3.24-1.575 6.49-1.575l2.451-7.565c.092-.366.36-.614.662-.614.302 0 .57.248.662.614l2.45 7.565c3.85 0 6.491 1.575 6.491 1.575L16.088.727C15.93.285 15.663 0 15.303 0H8.697c-.36 0-.615.285-.784.727l-5.516 14.99z"
+                  />
+                </svg>
+              </div>
+              <span class="demo-status-badge badge-live">Live Demo</span>
+            </div>
+            <h3 class="demo-title">Astro & Starlight</h3>
+            <p class="demo-desc">
+              Native Starlight integration with interactive margin pins, floating bubble selection,
+              and GitHub Device Flow.
+            </p>
+            <div class="demo-card-actions">
+              <a href="demo-astro/" class="btn btn-sm btn-primary"> 🚀 Launch Astro Demo </a>
+            </div>
+          </div>
+
+          <!-- Docusaurus Card (Disabled) -->
+          <div class="demo-card disabled-demo">
+            <div class="demo-card-header">
+              <div class="demo-icon-wrapper docu-icon">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                  <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9v-2h2v2zm0-4H9V7h2v5zm4 4h-2V7h2v9z"
+                  />
+                </svg>
+              </div>
+              <span class="demo-status-badge badge-soon">Coming Soon</span>
+            </div>
+            <h3 class="demo-title">Docusaurus</h3>
+            <p class="demo-desc">
+              React plugin bringing effortless inline document comments and team review loops to
+              Docusaurus sites.
+            </p>
+            <div class="demo-card-actions">
+              <button class="btn btn-sm btn-disabled" disabled>Coming Soon</button>
+            </div>
+          </div>
+
+          <!-- VitePress Card (Disabled) -->
+          <div class="demo-card disabled-demo">
+            <div class="demo-card-header">
+              <div class="demo-icon-wrapper vite-icon">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                  <path d="M21.5 3.5L12 21.5 2.5 3.5 12 7l9.5-3.5zM12 7v14.5L19.5 5.5 12 7z" />
+                </svg>
+              </div>
+              <span class="demo-status-badge badge-soon">Coming Soon</span>
+            </div>
+            <h3 class="demo-title">VitePress</h3>
+            <p class="demo-desc">
+              Vue & Vite-powered documentation theme integration designed for ultra-fast doc
+              workflows.
+            </p>
+            <div class="demo-card-actions">
+              <button class="btn btn-sm btn-disabled" disabled>Coming Soon</button>
+            </div>
+          </div>
+
+          <!-- Next.js Card (Disabled) -->
+          <div class="demo-card disabled-demo">
+            <div class="demo-card-header">
+              <div class="demo-icon-wrapper next-icon">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                  <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.8 15.3l-5.6-7.3v7.3H9.4V8.7h1.8l5.6 7.3V8.7h1.8v8.6h-1.8z"
+                  />
+                </svg>
+              </div>
+              <span class="demo-status-badge badge-soon">Coming Soon</span>
+            </div>
+            <h3 class="demo-title">Next.js</h3>
+            <p class="demo-desc">
+              React Server Component (RSC) compatible documentation component with Fumadocs and
+              Nextra support.
+            </p>
+            <div class="demo-card-actions">
+              <button class="btn btn-sm btn-disabled" disabled>Coming Soon</button>
+            </div>
+          </div>
+
+          <!-- Hugo Card (Disabled) -->
+          <div class="demo-card disabled-demo">
+            <div class="demo-card-header">
+              <div class="demo-icon-wrapper hugo-icon">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                  <path d="M12 2L2 7v10l10 5 10-5V7L12 2zm-1 14H8V8h3v3h2V8h3v8h-3v-3h-2v3z" />
+                </svg>
+              </div>
+              <span class="demo-status-badge badge-soon">Coming Soon</span>
+            </div>
+            <h3 class="demo-title">Hugo</h3>
+            <p class="demo-desc">
+              Lightweight shortcode integration for blazing-fast Go-based static documentation
+              sites.
+            </p>
+            <div class="demo-card-actions">
+              <button class="btn btn-sm btn-disabled" disabled>Coming Soon</button>
+            </div>
+          </div>
+
+          <!-- MkDocs Card (Disabled) -->
+          <div class="demo-card disabled-demo">
+            <div class="demo-card-header">
+              <div class="demo-icon-wrapper mkdocs-icon">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                  <path
+                    d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"
+                  />
+                </svg>
+              </div>
+              <span class="demo-status-badge badge-soon">Coming Soon</span>
+            </div>
+            <h3 class="demo-title">MkDocs</h3>
+            <p class="demo-desc">
+              Python & Material for MkDocs extension providing inline feedback and review directly
+              on project docs.
+            </p>
+            <div class="demo-card-actions">
+              <button class="btn btn-sm btn-disabled" disabled>Coming Soon</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Marketing Section: AI + Humans Documentation -->
+    <section id="ai-humans" class="ai-docs-section">
+      <div class="container">
+        <div class="section-header-center">
+          <h2 class="section-title">
+            AI-Orchestrated Docs.<br /><span class="gradient-text"
+              >Human-Orchestrated Comments.</span
+            >
+          </h2>
+          <p class="section-subtitle">
+            Docs live directly in your repository, and comments live as a native layer on top, never
+            locked in third-party SaaS silos. AI agents orchestrate the documentation as code
+            evolves, while humans orchestrate the reviews and discussions on rendered views.
+          </p>
+        </div>
+
+        <div class="ai-docs-grid">
+          <!-- Card 1 -->
+          <div class="ai-docs-card">
+            <div class="ai-card-badge red-accent">The Problem</div>
+            <div class="ai-card-icon red-icon">
+              <svg
+                width="28"
+                height="28"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"
+                />
+              </svg>
+            </div>
+            <h3>SaaS Tools Trap Knowledge in Silos</h3>
+            <p>
+              External tools like <strong>Notion</strong> or <strong>Confluence</strong> isolate
+              comments from your codebase. Human feedback gets trapped in closed SaaS silos instead
+              of living with your docs source.
+            </p>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="ai-docs-card highlight-card">
+            <div class="ai-card-badge green-accent">AI Orchestrated</div>
+            <div class="ai-card-icon green-icon">
+              <svg
+                width="28"
+                height="28"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                />
+              </svg>
+            </div>
+            <h3>AI Agents Orchestrate Your Docs</h3>
+            <p>
+              Markdown files in your repository serve as
+              <strong>native, indexable context for AI agents</strong>. As code and architecture
+              change, AI assistants (Cursor, Copilot, Claude) can inspect, query, generate, and
+              continuously update the raw documentation in Git.
+            </p>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="ai-docs-card">
+            <div class="ai-card-badge purple-accent">Human Orchestrated</div>
+            <div class="ai-card-icon purple-icon">
+              <svg
+                width="28"
+                height="28"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"
+                />
+              </svg>
+            </div>
+            <h3>Humans Orchestrate the Comments</h3>
+            <p>
+              Humans review <strong>rendered visual variants</strong> with rich inline feedback and
+              discussion threads. Comments are saved directly to Git via custom refs as a
+              lightweight layer on top, giving teams instant review loops without pull requests or
+              commit noise.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Technical Architecture Callout Section -->
+    <section class="tech-overview-section">
+      <div class="container">
+        <div class="section-header-center">
+          <h2 class="section-title">
+            Clean Source Branches.<br /><span class="gradient-text"
+              >Zero-Overhead Custom Refs.</span
+            >
+          </h2>
+        </div>
+
+        <div class="tech-grid">
+          <div class="tech-feature-card">
+            <div class="tech-feature-icon">
+              <svg
+                width="24"
+                height="24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M6 3v12M18 9a3 3 0 100-6 3 3 0 000 6zM6 15a3 3 0 100-6 3 3 0 000 6zm12 0a3 3 0 100-6 3 3 0 000 6zM6 18a3 3 0 100-6 3 3 0 000 6z"
+                />
+              </svg>
+            </div>
+            <h3>Isolated Ref Namespace</h3>
+            <p>
+              Standard Git branches live under <code>refs/heads/</code> and tags under
+              <code>refs/tags/</code>. By isolating comments in <code>refs/md-comments/</code>,
+              discussion data is stored in Git without polluting your branch list, commit logs, or
+              PR diffs.
+            </p>
+          </div>
+
+          <div class="tech-feature-card">
+            <div class="tech-feature-icon">
+              <svg
+                width="24"
+                height="24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                />
+              </svg>
+            </div>
+            <h3>Zero Commits & Zero PR Overhead</h3>
+            <p>
+              Standard Git porcelain commands (<code>checkout</code>, <code>diff</code>,
+              <code>status</code>) ignore custom refs. Teams can post, reply, and resolve
+              discussions instantly via API without triggering CI/CD pipelines or merge conflicts.
+            </p>
+          </div>
+
+          <div class="tech-feature-card">
+            <div class="tech-feature-icon">
+              <svg
+                width="24"
+                height="24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                />
+              </svg>
+            </div>
+            <h3>Cryptographic Integrity & Rollbacks</h3>
+            <p>
+              Comments are anchored with commit SHAs and FNV-1a content hashing. When checking out
+              historical commits or rolling back files, comments stay preserved across Git history
+              while inline annotations re-anchor accurately.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Integrations Section -->
+    <section id="integrations" class="integrations">
+      <div class="container">
+        <h2 class="section-title">Integrations for Your Workflow</h2>
+
+        <!-- Icon-based tab switcher -->
+        <div class="tabs-container">
+          <button class="tab-btn active" data-tab="tab-github" title="GitHub Chrome Extension">
+            <svg class="tab-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path
+                d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.646.64.699 1.026 1.592 1.026 2.683 0 3.842-2.337 4.687-4.565 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.138 20.161 22 16.416 22 12c0-5.523-4.523-10-10-10z"
+              />
+            </svg>
+            <span>GitHub</span>
+          </button>
+          <button class="tab-btn" data-tab="tab-vscode" title="VS Code (MS Marketplace)">
+            <svg class="tab-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path
+                d="M23.15 2.587L18.21.21a1.494 1.494 0 0 0-1.705.29l-9.46 8.63-4.12-3.128a.999.999 0 0 0-1.276.057L.327 7.261A1 1 0 0 0 .326 8.74L3.899 12 .326 15.26a1 1 0 0 0 .001 1.479L1.65 17.94a.999.999 0 0 0 1.276.057l4.12-3.128 9.46 8.63a1.492 1.492 0 0 0 1.704.29l4.942-2.377A1.5 1.5 0 0 0 24 20.06V3.939a1.5 1.5 0 0 0-.85-1.352zm-5.146 14.861L10.826 12l7.178-5.448v10.896z"
+              />
+            </svg>
+            <span>VS Code</span>
+          </button>
+          <button class="tab-btn" data-tab="tab-cursor" title="Cursor / Antigravity (Open VSX)">
+            <svg
+              class="tab-icon"
+              width="20"
+              height="20"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              viewBox="0 0 24 24"
+            >
+              <path d="M12 2L2 7l10 5 10-5-10-5z" />
+              <path d="M2 17l10 5 10-5" />
+              <path d="M2 12l10 5 10-5" />
+              <path d="M12 22V12" />
+            </svg>
+            <span>Cursor / Antigravity</span>
+          </button>
+          <button class="tab-btn" data-tab="tab-html" title="Plain HTML / Generic JS Embed">
+            <svg
+              class="tab-icon"
+              viewBox="0 0 24 24"
+              width="20"
+              height="20"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+            <span>Plain HTML / JS</span>
+          </button>
+          <button class="tab-btn" data-tab="tab-starlight" title="Astro / Starlight Plugin">
+            <svg class="tab-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path
+                d="M8.358 20.162c-1.186-1.07-1.532-3.316-1.038-4.944.856 1.026 2.043 1.352 3.272 1.535 1.897.283 3.76.177 5.522-.678.202-.098.388-.229.608-.36.166.473.209.95.151 1.437-.14 1.185-.738 2.1-1.688 2.794-.38.277-.782.525-1.175.787-1.205.804-1.531 1.747-1.078 3.119l.044.148a3.158 3.158 0 0 1-1.407-1.188 3.31 3.31 0 0 1-.544-1.815c-.004-.32-.004-.642-.048-.958-.106-.769-.472-1.113-1.161-1.133-.707-.02-1.267.411-1.415 1.09-.012.053-.028.104-.045.165h.002zm-5.961-4.445s3.24-1.575 6.49-1.575l2.451-7.565c.092-.366.36-.614.662-.614.302 0 .57.248.662.614l2.45 7.565c3.85 0 6.491 1.575 6.491 1.575L16.088.727C15.93.285 15.663 0 15.303 0H8.697c-.36 0-.615.285-.784.727l-5.516 14.99z"
+              />
+            </svg>
+            <span>Astro / Starlight</span>
+          </button>
+          <button class="tab-btn" data-tab="tab-obsidian" title="Obsidian Plugin">
+            <svg class="tab-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path
+                d="M18.7 8.3L13.7 2.3c-.4-.5-1-.8-1.7-.8s-1.3.3-1.7.8L5.3 8.3c-.4.5-.6 1.1-.6 1.7v5.3c0 .8.4 1.5 1.1 1.9l5.5 3.3c.4.2.8.4 1.2.4s.8-.1 1.2-.4l5.5-3.3c.7-.4 1.1-1.1 1.1-1.9v-5.3c0-.6-.2-1.2-.6-1.7zm-6.7 11.2l-4.5-2.7V10.6l4.5 4.5v4.4zm1-4.4l4.5-4.5v6.2l-4.5 2.7v-4.4zM12 4.1l4.2 5.1-4.2 4.2-4.2-4.2L12 4.1z"
+              />
+            </svg>
+            <span>Obsidian</span>
+          </button>
+        </div>
+
+        <!-- 1. GitHub Tab Content -->
+        <div id="tab-github" class="tab-content active">
+          <div class="integration-layout">
+            <div class="integration-info">
+              <h3>GitHub Integration (Chrome Extension & App)</h3>
+              <p>
+                Collaborate natively on GitHub markdown files. Adds a dedicated comments panel
+                directly into Markdown previews, powered by custom Git refs with zero PR friction.
+              </p>
+              <ul class="integration-features">
+                <li>
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span>Adds a dedicated comments panel to Markdown file previews.</span>
+                </li>
+                <li>
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span>Inline paragraph hover pins with highlighted commented text.</span>
+                </li>
+                <li>
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span
+                    >Auto-saves live via custom git refs with zero commits or branch overhead.</span
+                  >
+                </li>
+              </ul>
+              <div class="integration-buttons">
+                <a
+                  href="https://chromewebstore.google.com/detail/markdown-comments/mjlhdjonjfcedkbpajkfeidfebefhkpp"
+                  class="btn btn-primary btn-chrome"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                      d="M20.5 11H19V7c0-1.1-.9-2-2-2h-4V3.5c0-1.38-1.12-2.5-2.5-2.5S8 2.12 8 3.5V5H4c-1.1 0-1.99.9-1.99 2v3.8H3.5c1.49 0 2.7 1.21 2.7 2.7s-1.21 2.7-2.7 2.7H2V20c0 1.1.9 2 2 2h3.8v-1.5c0-1.49 1.21-2.7 2.7-2.7s2.7 1.21 2.7 2.7V22H17c1.1 0 2-.9 2-2v-4h1.5c1.38 0 2.5-1.12 2.5-2.5S21.88 11 20.5 11z"
+                    />
+                  </svg>
+                  Install Chrome Extension
+                </a>
+                <a
+                  href="https://github.com/md-comments/md-comments#github-chrome-extension"
+                  class="btn btn-secondary"
+                  target="_blank"
+                  rel="noopener"
+                  >Setup Instructions</a
+                >
+                <a
+                  href="https://github.com/apps/markdown-comments"
+                  class="btn btn-secondary"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  <svg
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    style="margin-right: 6px; vertical-align: middle"
+                  >
+                    <path
+                      d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.646.64.699 1.026 1.592 1.026 2.683 0 3.842-2.337 4.687-4.565 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.138 20.161 22 16.416 22 12c0-5.523-4.523-10-10-10z"
+                    />
+                  </svg>
+                  Install GitHub App
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. VS Code Tab Content -->
+        <div id="tab-vscode" class="tab-content">
+          <div class="integration-layout">
+            <div class="integration-info">
+              <h3>VS Code (Visual Studio Marketplace)</h3>
+              <p>
+                A fully featured workspace extension for Visual Studio Code. Access comments in a
+                native side panel, highlight selections to anchor thoughts, and edit files
+                side-by-side.
+              </p>
+              <ul class="integration-features">
+                <li>
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span>Interactive side panel mapping comment threads to lines.</span>
+                </li>
+                <li>
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span>Command Palette action to scan for orphaned comments.</span>
+                </li>
+                <li>
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span>Robust configuration for reactions and pane widths.</span>
+                </li>
+              </ul>
+              <div class="integration-buttons">
+                <a
+                  href="https://marketplace.visualstudio.com/items?itemName=md-comments.md-preview-comments"
+                  class="btn btn-primary btn-vscode"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                      d="M23.15 2.587L18.21.21a1.494 1.494 0 0 0-1.705.29l-9.46 8.63-4.12-3.128a.999.999 0 0 0-1.276.057L.327 7.261A1 1 0 0 0 .326 8.74L3.899 12 .326 15.26a1 1 0 0 0 .001 1.479L1.65 17.94a.999.999 0 0 0 1.276.057l4.12-3.128 9.46 8.63a1.492 1.492 0 0 0 1.704.29l4.942-2.377A1.5 1.5 0 0 0 24 20.06V3.939a1.5 1.5 0 0 0-.85-1.352zm-5.146 14.861L10.826 12l7.178-5.448v10.896z"
+                    />
+                  </svg>
+                  Install from VS Marketplace
+                </a>
+                <a
+                  href="https://github.com/md-comments/md-comments#install"
+                  class="btn btn-secondary"
+                  target="_blank"
+                  rel="noopener"
+                  >Setup Instructions</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Cursor / Antigravity Tab Content -->
+        <div id="tab-cursor" class="tab-content">
+          <div class="integration-layout">
+            <div class="integration-info">
+              <h3>Cursor & Antigravity (Open VSX)</h3>
+              <p>
+                Available on the Open VSX Registry for seamless integration with Cursor, Google
+                Antigravity, VSCodium, and other Open VSX-compatible editors.
+              </p>
+              <ul class="integration-features">
+                <li>
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span>Full compatibility with Cursor AI workflows & Antigravity IDE.</span>
+                </li>
+                <li>
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span>Real-time line comments and side-panel thread navigation.</span>
+                </li>
+                <li>
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span>Direct sync with Git custom refs and web documentation.</span>
+                </li>
+              </ul>
+              <div class="integration-buttons">
+                <a
+                  href="https://open-vsx.org/extension/md-comments/md-preview-comments"
+                  class="btn btn-primary btn-openvsx"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                    <path d="M2 17l10 5 10-5" />
+                    <path d="M2 12l10 5 10-5" />
+                    <path d="M12 22V12" />
+                  </svg>
+                  Install from Open VSX
+                </a>
+                <a
+                  href="https://github.com/md-comments/md-comments#install"
+                  class="btn btn-secondary"
+                  target="_blank"
+                  rel="noopener"
+                  >Setup Instructions</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Plain HTML Tab Content -->
+        <div id="tab-html" class="tab-content">
+          <div class="integration-layout">
+            <div class="integration-info">
+              <h3>Plain HTML & Generic JS Embed</h3>
+              <p>
+                Add collaborative inline comments to any website or static HTML page with a single
+                script tag. Zero dependencies or complex build setup required.
+              </p>
+
+              <div class="code-snippet-box">
+                <div class="code-snippet-header">
+                  <span>HTML Embed Snippet</span>
+                  <button
+                    class="copy-btn"
+                    id="copy-embed-btn"
+                    onclick="
+                      navigator.clipboard.writeText(
+                        document.getElementById('embed-code-text').innerText
+                      );
+                      this.innerText = 'Copied!';
+                      setTimeout(() => (this.innerText = 'Copy'), 2000);
+                    "
+                  >
+                    Copy
+                  </button>
+                </div>
+                <pre
+                  class="code-snippet-pre"
+                ><code id="embed-code-text">&lt;!-- Drop Markdown Comments into any HTML document --&gt;
 &lt;script
   src="https://unpkg.com/@md-comments/embed/dist/md-comments.min.js"
   data-repo="owner/repo"
   data-file="docs/architecture.md"
   async&gt;
 &lt;/script&gt;</code></pre>
-            </div>
+              </div>
 
-            <ul class="integration-features" style="margin-top: 24px;">
-              <li>
-                <svg fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd"></path>
-                </svg>
-                <span>Works with any static site, Hugo, Jekyll, custom Markdown or plain HTML.</span>
-              </li>
-              <li>
-                <svg fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd"></path>
-                </svg>
-                <span>Automatic selection popup, margin pins, and GitHub OAuth Device Flow.</span>
-              </li>
-              <li>
-                <svg fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd"></path>
-                </svg>
-                <span>Full two-way sync with GitHub Extension, VS Code, Cursor, and Obsidian.</span>
-              </li>
-            </ul>
-            <div class="integration-buttons">
-              <a href="demo-astro/" class="btn btn-primary">
-                🚀 Test in Astro Live Demo
-              </a>
-              <a href="https://github.com/md-comments/md-comments#readme" class="btn btn-secondary" target="_blank"
-                rel="noopener">Embed Documentation</a>
+              <ul class="integration-features" style="margin-top: 24px">
+                <li>
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span
+                    >Works with any static site, Hugo, Jekyll, custom Markdown or plain HTML.</span
+                  >
+                </li>
+                <li>
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span>Automatic selection popup, margin pins, and GitHub OAuth Device Flow.</span>
+                </li>
+                <li>
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span
+                    >Full two-way sync with GitHub Extension, VS Code, Cursor, and Obsidian.</span
+                  >
+                </li>
+              </ul>
+              <div class="integration-buttons">
+                <a href="demo-html/" class="btn btn-primary"> 🚀 Launch Plain HTML Demo </a>
+                <a
+                  href="https://github.com/md-comments/md-comments#readme"
+                  class="btn btn-secondary"
+                  target="_blank"
+                  rel="noopener"
+                  >Embed Documentation</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Astro / Starlight Tab Content -->
+        <div id="tab-starlight" class="tab-content">
+          <div class="integration-layout">
+            <div class="integration-info">
+              <h3>Astro & Starlight Plugin</h3>
+              <p>
+                Embed Markdown Comments directly into your documentation websites. Zero browser
+                extensions required for readers and reviewers; seamless GitHub OAuth Device Flow.
+              </p>
+              <ul class="integration-features">
+                <li>
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span
+                    >Highlight prose to comment with floating selection bubble and margin
+                    pins.</span
+                  >
+                </li>
+                <li>
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span>Built-in GitHub OAuth Device Flow with zero server infrastructure.</span>
+                </li>
+                <li>
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span
+                    >Shared Git ref sync compatible with GitHub, VS Code, Cursor, Antigravity &
+                    Obsidian.</span
+                  >
+                </li>
+              </ul>
+              <div class="integration-buttons">
+                <a href="demo-astro/" class="btn btn-primary"> 🚀 Try Live Astro Demo </a>
+                <a
+                  href="https://www.npmjs.com/package/@md-comments/starlight"
+                  class="btn btn-secondary"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  View on npm (@md-comments/starlight)
+                </a>
+                <a
+                  href="https://github.com/md-comments/md-comments/blob/main/docs/starlight-plugin.md"
+                  class="btn btn-secondary"
+                  target="_blank"
+                  rel="noopener"
+                  >Plugin Guide</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. Obsidian Tab Content -->
+        <div id="tab-obsidian" class="tab-content">
+          <div class="integration-layout">
+            <div class="integration-info">
+              <h3>Obsidian Plugin</h3>
+              <p>
+                Bring native collaboration to your personal knowledge base. Right-click any block in
+                Live Preview or Reading Mode to start inline comment discussions powered by GitHub.
+              </p>
+              <ul class="integration-features">
+                <li>
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span>Integrates seamlessly with Obsidian's right sidebar ribbon.</span>
+                </li>
+                <li>
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span>Supports Obsidian Sync, Dropbox, and Git vault backup.</span>
+                </li>
+                <li>
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span>Custom Author fallback using Git username configs.</span>
+                </li>
+              </ul>
+              <div class="integration-buttons">
+                <a
+                  href="https://github.com/md-comments/md-comments#obsidian"
+                  class="btn btn-secondary"
+                  target="_blank"
+                  rel="noopener"
+                  >Setup Instructions</a
+                >
+              </div>
             </div>
           </div>
         </div>
       </div>
+    </section>
 
-      <!-- 5. Astro / Starlight Tab Content -->
-      <div id="tab-starlight" class="tab-content">
-        <div class="integration-layout">
-          <div class="integration-info">
-            <h3>Astro & Starlight Plugin</h3>
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <h4>Markdown Comments</h4>
             <p>
-              Embed Markdown Comments directly into your documentation websites. Zero browser
-              extensions required for readers and reviewers; seamless GitHub OAuth Device Flow.
+              Collaborative inline comments for Markdown documents, powered by GitHub as the
+              backend.
             </p>
-            <ul class="integration-features">
+          </div>
+          <div class="footer-links-col">
+            <h5>Product</h5>
+            <ul>
+              <li><a href="#ai-humans">AI + Humans</a></li>
+              <li><a href="#demos">Demos</a></li>
+              <li><a href="#integrations">Integrations</a></li>
+            </ul>
+          </div>
+          <div class="footer-links-col">
+            <h5>Privacy & Legal</h5>
+            <ul>
+              <li><a href="privacy.html">Privacy Policy</a></li>
               <li>
-                <svg fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd"></path>
-                </svg>
-                <span>Highlight prose to comment with floating selection bubble and margin pins.</span>
-              </li>
-              <li>
-                <svg fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd"></path>
-                </svg>
-                <span>Built-in GitHub OAuth Device Flow with zero server infrastructure.</span>
-              </li>
-              <li>
-                <svg fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd"></path>
-                </svg>
-                <span>Shared Git ref sync compatible with GitHub, VS Code, Cursor, Antigravity & Obsidian.</span>
+                <a
+                  href="https://github.com/md-comments/md-comments/blob/main/LICENSE"
+                  target="_blank"
+                  rel="noopener"
+                  >License (MIT)</a
+                >
               </li>
             </ul>
-            <div class="integration-buttons">
-              <a href="demo-astro/" class="btn btn-primary">
-                🚀 Try Live Astro Demo
-              </a>
-              <a href="https://www.npmjs.com/package/@md-comments/starlight" class="btn btn-secondary" target="_blank"
-                rel="noopener">
-                View on npm (@md-comments/starlight)
-              </a>
-              <a href="https://github.com/md-comments/md-comments/blob/main/docs/starlight-plugin.md"
-                class="btn btn-secondary" target="_blank" rel="noopener">Plugin Guide</a>
-            </div>
           </div>
         </div>
-      </div>
-
-      <!-- 6. Obsidian Tab Content -->
-      <div id="tab-obsidian" class="tab-content">
-        <div class="integration-layout">
-          <div class="integration-info">
-            <h3>Obsidian Plugin</h3>
-            <p>
-              Bring native collaboration to your personal knowledge base. Right-click any block in
-              Live Preview or Reading Mode to start inline comment discussions powered by GitHub.
-            </p>
-            <ul class="integration-features">
-              <li>
-                <svg fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd"></path>
-                </svg>
-                <span>Integrates seamlessly with Obsidian's right sidebar ribbon.</span>
-              </li>
-              <li>
-                <svg fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd"></path>
-                </svg>
-                <span>Supports Obsidian Sync, Dropbox, and Git vault backup.</span>
-              </li>
-              <li>
-                <svg fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd"></path>
-                </svg>
-                <span>Custom Author fallback using Git username configs.</span>
-              </li>
-            </ul>
-            <div class="integration-buttons">
-              <a href="https://github.com/md-comments/md-comments#obsidian" class="btn btn-secondary"
-                target="_blank" rel="noopener">Setup Instructions</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <h4>Markdown Comments</h4>
+        <div class="footer-bottom">
+          <p>&copy; 2026 Markdown Comments. All rights reserved.</p>
           <p>
-            Collaborative inline comments for Markdown documents, powered by GitHub as the backend.
+            Support:
+            <a href="mailto:info@md-comments.com" style="text-decoration: underline"
+              >info@md-comments.com</a
+            >
           </p>
         </div>
-        <div class="footer-links-col">
-          <h5>Product</h5>
-          <ul>
-            <li><a href="#ai-humans">AI + Humans</a></li>
-            <li><a href="#demos">Demos</a></li>
-            <li><a href="#integrations">Integrations</a></li>
-          </ul>
-        </div>
-        <div class="footer-links-col">
-          <h5>Privacy & Legal</h5>
-          <ul>
-            <li><a href="privacy.html">Privacy Policy</a></li>
-            <li>
-              <a href="https://github.com/md-comments/md-comments/blob/main/LICENSE" target="_blank"
-                rel="noopener">License (MIT)</a>
-            </li>
-          </ul>
-        </div>
       </div>
-      <div class="footer-bottom">
-        <p>&copy; 2026 Markdown Comments. All rights reserved.</p>
-        <p>
-          Support:
-          <a href="mailto:info@md-comments.com" style="text-decoration: underline">info@md-comments.com</a>
-        </p>
-      </div>
-    </div>
-  </footer>
+    </footer>
 
-  <script src="main.js"></script>
-</body>
-
+    <script src="main.js"></script>
+  </body>
 </html>

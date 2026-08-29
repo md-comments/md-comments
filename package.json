@@ -10,6 +10,8 @@
     "watch:chrome": "pnpm copy-icons && pnpm --filter chrome-md-comments run dev",
     "watch:starlight": "pnpm --filter @md-comments/starlight run dev",
     "watch:demo-astro": "pnpm --filter md-comments-demo-astro run dev",
+    "dev:website": "node scripts/serve-website.js",
+    "serve:website": "node scripts/serve-website.js",
     "build:shared": "pnpm --filter @md-comments/shared run build",
     "build:vscode": "pnpm copy-icons && pnpm --filter md-preview-comments run compile",
     "build:obsidian": "pnpm --filter obsidian-md-comments run build",

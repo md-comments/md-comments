@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Discussion Sandbox - Plain HTML Demo</title>
+  <meta name="description" content="Test highlighting, threaded discussions, and margin pins in this plain HTML sandbox environment.">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="stylesheet" href="demo.css">
+  
+  <!-- Drop-in Redistributable Markdown Comments Embed -->
+  <link rel="stylesheet" href="./embed/md-comments.css">
+  <script src="./embed/md-comments.js" data-repo="md-comments/demo-comments" data-file="demo-html/sandbox.html" async></script>
+  <script src="demo.js" defer></script>
+</head>
+<body>
+  <!-- Global Announcement Banner (Wiped daily at midnight) -->
+  <div class="demo-site-banner" role="region" aria-label="Demo environment notice">
+    <div class="demo-banner-inner">
+      <span class="demo-banner-badge">Demo Notice</span>
+      <span class="demo-banner-text">
+        All comments are automatically wiped every day at <strong>midnight (00:00 UTC)</strong> to keep the demo clean and unmoderated.
+      </span>
+    </div>
+  </div>
+
+  <!-- Header Navigation -->
+  <header class="site-header">
+    <div class="header-container">
+      <a href="index.html" class="brand">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="16 18 22 12 16 6"></polyline>
+          <polyline points="8 6 2 12 8 18"></polyline>
+        </svg>
+        <span>Markdown Comments</span>
+        <span class="brand-badge">Plain HTML</span>
+      </a>
+
+      <div class="nav-actions">
+        <a href="../index.html" class="nav-link-return">&larr; Return to Main Site</a>
+        <button id="theme-toggle-btn" class="btn-theme-toggle" aria-label="Toggle theme">☀️ Light</button>
+        <a href="https://github.com/md-comments/md-comments" class="btn-secondary" target="_blank" rel="noopener" style="padding: 6px 12px; font-size: 13px;">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div>
+        <div class="sidebar-group-title">Overview</div>
+        <ul class="sidebar-nav">
+          <li><a href="index.html">🏠 Demo Overview</a></li>
+          <li><a href="sandbox.html" class="active">🧪 Interactive Sandbox</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="sidebar-group-title">Documentation</div>
+        <ul class="sidebar-nav">
+          <li><a href="how-it-works.html">📖 How It Works</a></li>
+          <li><a href="architecture.html">🏗️ Architecture & Storage</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="content-wrapper">
+      <div class="demo-banner">
+        <h3>💡 Interactive Sandbox</h3>
+        <p>
+          Notice the underlined text on the page! Click any underlined sentence or highlight any phrase to start and view discussions.
+        </p>
+      </div>
+
+      <h1>Interactive Discussion Sandbox</h1>
+      <p style="font-size: 16px; color: var(--color-text-muted);">
+        Welcome to the live interactive sandbox! Use the sample technical spec below to test commenting on rendered views.
+      </p>
+
+      <h2>Sample Technical Specification</h2>
+
+      <h3>Authentication Protocol</h3>
+      <p data-md-anchor-id="sec-auth-ttl">
+        All client applications communicate with the backend via mutual TLS and JWT bearer tokens. Tokens expire after 60 minutes and must be refreshed using the <code>/auth/refresh</code> endpoint.
+      </p>
+
+      <blockquote>
+        <strong>Discussion prompt</strong>: Should token lifetime be reduced from 60 minutes to 15 minutes for enhanced security?<br>
+        Highlight the sentence above and leave your feedback!
+      </blockquote>
+
+      <h3>Data Storage Architecture</h3>
+      <p>Database replicas are distributed across three availability zones:</p>
+
+      <ul>
+        <li><code>us-east-1a</code>: Primary read/write node</li>
+        <li><code>us-east-1b</code>: Synchronous standby node</li>
+        <li><code>us-east-1c</code>: Read-only reporting replica</li>
+      </ul>
+
+      <pre data-md-anchor-id="sec-failover"><code>export interface ClusterConfig {
+  primaryRegion: string;
+  replicas: number;
+  autoFailover: boolean;
+}</code></pre>
+
+      <h3>Deployment Guidelines</h3>
+      <p data-md-anchor-id="sec-deployment">
+        All production deployments must follow blue/green rollout procedures. Canary traffic is routed to the new deployment group at 5% intervals before 100% promotion.
+      </p>
+
+      <p>
+        Highlight any line or word in this guide to experience Markdown Comments live!
+      </p>
+    </main>
+  </div>
+</body>
+</html>
