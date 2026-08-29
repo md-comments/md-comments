@@ -113,9 +113,8 @@
   "111": "extension.ts",
   "112": "renderDOMIndicatorsForFile",
   "113": "chrome-extension/src/githubAuth.ts",
-  "114": "loadDocumentComments",
-  "115": "renderSidebarComments",
-  "116": "openSidebarForNewInline",
+  "114": "renderSidebarComments",
+  "115": "injectGlobalStyles",
   "117": "demo.js",
   "118": "previewCommand.ts"
 }

@@ -459,35 +459,6 @@ html.md-comments-panel-open .md-comments-fab-toggle {
   font-size: 16px;
 }
 
-.md-comments-auth-tabs {
-  display: flex;
-  gap: 8px;
-  border-bottom: 1px solid var(--md-comments-border);
-  margin-bottom: 14px;
-}
-
-.md-comments-auth-tab {
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid transparent;
-  padding: 6px 10px;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--md-comments-text-muted);
-  cursor: pointer;
-  margin-bottom: -1px;
-}
-
-.md-comments-auth-tab:hover {
-  color: var(--md-comments-text);
-}
-
-.md-comments-auth-tab.md-comments-tab-active {
-  color: var(--md-comments-primary);
-  border-bottom-color: var(--md-comments-primary);
-  font-weight: 600;
-}
-
 .md-comments-auth-panel {
   display: block;
 }

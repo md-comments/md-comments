@@ -177,7 +177,7 @@ describe('GitHub Device Flow Authentication', () => {
     vi.restoreAllMocks();
   });
 
-  it('requests device code from GitHub endpoint', async () => {
+  it('requests device code from GitHub endpoint or CORS proxy', async () => {
     const mockResponse = {
       device_code: 'dev_12345',
       user_code: 'ABCD-1234',
@@ -186,14 +186,31 @@ describe('GitHub Device Flow Authentication', () => {
       interval: 5,
     };
 
-    global.fetch = vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => mockResponse,
-    } as any);
+    global.fetch = vi.fn().mockImplementation(async (url: string) => {
+      if (url.includes('proxy.cors.sh') || url.includes('device/code')) {
+        return {
+          ok: true,
+          json: async () => mockResponse,
+        } as any;
+      }
+      return { ok: false, status: 404 } as any;
+    });
 
-    const { data } = await requestDeviceCode('test_client_id');
+    const { data, pollUrl } = await requestDeviceCode('test_client_id');
     expect(data.user_code).toBe('ABCD-1234');
     expect(data.verification_uri).toBe('https://github.com/login/device');
+    expect(pollUrl).toContain('access_token');
+  });
+
+  it('throws a clean error without mentioning PAT when network fails', async () => {
+    global.fetch = vi.fn().mockRejectedValue(new TypeError('Failed to fetch'));
+
+    await expect(requestDeviceCode('test_client_id')).rejects.toThrowError(
+      /Unable to connect to GitHub authorization service/
+    );
+    await expect(requestDeviceCode('test_client_id')).rejects.not.toThrowError(
+      /Personal Access Token|PAT/
+    );
   });
 
   it('fetches authenticated viewer info', async () => {

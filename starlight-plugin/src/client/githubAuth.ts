@@ -131,7 +131,39 @@ export async function requestDeviceCode(
     }
   }
 
-  // 3. Fallback: Direct GitHub Device Code request
+  // 3. Fallback: Hosted CORS proxy for static / published sites
+  const proxyCandidates = [
+    {
+      codeUrl: 'https://proxy.cors.sh/https://github.com/login/device/code',
+      pollUrl: 'https://proxy.cors.sh/https://github.com/login/oauth/access_token',
+    },
+  ];
+
+  for (const proxy of proxyCandidates) {
+    try {
+      const res = await fetch(proxy.codeUrl, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          client_id: clientId,
+          scope: 'public_repo repo',
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.device_code) {
+          return { data, pollUrl: proxy.pollUrl };
+        }
+      }
+    } catch {
+      // Continue to next candidate
+    }
+  }
+
+  // 4. Fallback: Direct GitHub Device Code request
   try {
     const res = await fetch('https://github.com/login/device/code', {
       method: 'POST',
@@ -154,7 +186,7 @@ export async function requestDeviceCode(
   } catch (err: any) {
     if (err?.name === 'TypeError' || err?.message?.includes('fetch')) {
       throw new Error(
-        'GitHub Device OAuth was blocked by browser CORS. Restart your local dev server (pnpm watch:demo-astro), configure an authProxyUrl, or use a Personal Access Token.'
+        'Unable to connect to GitHub authorization service. Please check your network connection and try again.'
       );
     }
     throw err;

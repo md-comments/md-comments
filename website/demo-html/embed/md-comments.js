@@ -218,6 +218,10 @@
           codeUrl: 'http://127.0.0.1:3000/api/md-comments/auth/device-code',
           pollUrl: 'http://127.0.0.1:3000/api/md-comments/auth/access-token',
         },
+        {
+          codeUrl: 'https://proxy.cors.sh/https://github.com/login/device/code',
+          pollUrl: 'https://proxy.cors.sh/https://github.com/login/oauth/access_token',
+        },
       ].filter(Boolean);
 
       for (const ep of candidates) {
@@ -247,21 +251,35 @@
       }
 
       if (!deviceData) {
-        codeEl.textContent = 'DEV-PROXY';
+        codeEl.textContent = 'ERROR';
         statusText.innerHTML =
-          'OAuth Proxy not detected on dev server.<br>Please run: <code style="color:var(--md-comments-primary); font-size:11px;">pnpm dev:website</code> or <code style="color:var(--md-comments-primary); font-size:11px;">pnpm watch:demo-astro</code>';
+          'Unable to initiate GitHub OAuth Device Flow.<br>Please check your connection and try again.';
         if (spinner) spinner.style.display = 'none';
         return;
       }
 
       codeEl.textContent = deviceData.user_code;
       verifyBtn.disabled = false;
-      statusText.textContent = 'Waiting for authorization on GitHub...';
+      verifyBtn.textContent = `Open GitHub (${deviceData.user_code})`;
+      statusText.textContent = 'Code copied! Waiting for authorization on GitHub...';
 
       const verifyUrl =
         deviceData.verification_uri_complete ||
-        deviceData.verification_uri ||
-        'https://github.com/login/device';
+        (deviceData.verification_uri
+          ? `${deviceData.verification_uri}?user_code=${encodeURIComponent(deviceData.user_code)}`
+          : 'https://github.com/login/device');
+
+      // Auto copy code to clipboard
+      if (navigator.clipboard && deviceData.user_code) {
+        navigator.clipboard.writeText(deviceData.user_code).catch(() => {});
+      }
+
+      // Auto open GitHub authorization window
+      try {
+        window.open(verifyUrl, '_blank');
+      } catch {
+        /* popup blocked */
+      }
 
       verifyBtn.onclick = () => {
         // Copy user code to clipboard for user convenience

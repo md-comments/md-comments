@@ -1,16 +1,16 @@
 # Graph Report - md-comments  (2026-08-29)
 
 ## Corpus Check
-- 148 files · ~133,682 words
+- 148 files · ~133,590 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1517 nodes · 2799 edges · 119 communities (92 shown, 27 thin omitted)
+- 1517 nodes · 2795 edges · 118 communities (91 shown, 27 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 65 edges (avg confidence: 0.74)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `e23ed3d6`
+- Built from commit: `edbf19ec`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -124,9 +124,8 @@
 - extension.ts
 - renderDOMIndicatorsForFile
 - chrome-extension/src/githubAuth.ts
-- loadDocumentComments
 - renderSidebarComments
-- openSidebarForNewInline
+- injectGlobalStyles
 - previewCommand.ts
 
 ## God Nodes (most connected - your core abstractions)
@@ -156,15 +155,15 @@
 ## Import Cycles
 - None detected.
 
-## Communities (119 total, 27 thin omitted)
+## Communities (118 total, 27 thin omitted)
 
 ### Community 0 - "devDependencies"
 Cohesion: 0.15
 Nodes (13): @types/markdown-it, @types/vscode, devDependencies, @types/js-yaml, @types/markdown-it, @types/node, @types/vscode, typescript (+5 more)
 
 ### Community 1 - "content.ts"
-Cohesion: 0.09
-Nodes (25): activeIndicators, appInstallationStatus, cachedSelectedClasses, displayNameCache, draftsStore, findHeadingContext(), findParagraphForNode(), gitRefBackend (+17 more)
+Cohesion: 0.08
+Nodes (33): activeIndicators, appInstallationStatus, cachedSelectedClasses, cleanupInjections(), collectCommentAuthors(), displayNameCache, draftsStore, fetchDisplayName() (+25 more)
 
 ### Community 2 - "validate.py"
 Cohesion: 0.07
@@ -451,8 +450,8 @@ Cohesion: 0.33
 Nodes (5): Context Pack, Guardrails, Output Focus, Patterns, Workflow
 
 ### Community 103 - "attachCommentCardEvents"
-Cohesion: 0.30
-Nodes (12): attachCommentCardEvents(), commitCommentFileChanges(), deleteComment(), deleteReply(), editComment(), editReply(), getDisplayAuthor(), saveNewInlineComment() (+4 more)
+Cohesion: 0.19
+Nodes (21): attachCommentCardEvents(), commitCommentFileChanges(), deleteComment(), deleteReply(), editComment(), editReply(), findDiffGutterCell(), getDisplayAuthor() (+13 more)
 
 ### Community 104 - "src/author.ts"
 Cohesion: 0.28
@@ -479,24 +478,20 @@ Cohesion: 0.20
 Nodes (19): warmAuthorCache(), CommentPreviewPanel, activate(), handlePreviewAction(), handleUri(), mdUriFromMessage(), refreshPreview(), updateStatusBar() (+11 more)
 
 ### Community 112 - "renderDOMIndicatorsForFile"
-Cohesion: 0.24
-Nodes (11): applyPendingHighlight(), cleanupInjections(), clearPendingHighlights(), findDomParagraphs(), formatRelativeTime(), getNativeContentContainer(), hideCommentTooltip(), highlightTextInElement() (+3 more)
+Cohesion: 0.47
+Nodes (6): applyPendingHighlight(), clearPendingHighlights(), findDomParagraphs(), highlightTextInElement(), renderDOMIndicatorsForFile(), scrollToCommentText()
 
 ### Community 113 - "chrome-extension/src/githubAuth.ts"
 Cohesion: 0.36
 Nodes (7): attachOAuthEvents(), DeviceCodeResponse, getStoredToken(), pollForAccessToken(), requestDeviceCode(), saveOAuthToken(), startOAuthDeviceFlow()
 
-### Community 114 - "loadDocumentComments"
-Cohesion: 0.25
-Nodes (11): checkPageChange(), closeSidebar(), getAuthToken(), handleDevicePageAutofill(), handlePageLoad(), injectFABButton(), injectToolbarButton(), isSidebarOpen() (+3 more)
+### Community 114 - "renderSidebarComments"
+Cohesion: 0.19
+Nodes (16): attachInstallationPromptEvents(), checkPageChange(), closeSidebar(), getAuthToken(), handleDevicePageAutofill(), handlePageLoad(), injectFABButton(), injectToolbarButton() (+8 more)
 
-### Community 115 - "renderSidebarComments"
-Cohesion: 0.22
-Nodes (10): attachInstallationPromptEvents(), collectCommentAuthors(), fetchDisplayName(), renderAuthor(), renderCommentCard(), renderInstallationPrompt(), renderOAuthPrompt(), renderSidebarComments() (+2 more)
-
-### Community 116 - "openSidebarForNewInline"
-Cohesion: 0.31
-Nodes (10): findDiffGutterCell(), getDraftKey(), getFilePathFromFileContainer(), injectSidebar(), openSidebar(), openSidebarForNewInline(), renameReplyButtonsToOK(), saveDraft() (+2 more)
+### Community 115 - "injectGlobalStyles"
+Cohesion: 0.67
+Nodes (3): injectGlobalStyles(), isGitHubDarkTheme(), syncTheme()
 
 ### Community 118 - "previewCommand.ts"
 Cohesion: 0.67
@@ -519,7 +514,7 @@ _Questions this graph is uniquely positioned to answer:_
 - **What connects `root`, `parser`, `browser` to the rest of the system?**
   _580 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `content.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.08866995073891626 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07957957957957958 - nodes in this community are weakly interconnected._
 - **Should `validate.py` be split into smaller, more focused modules?**
   _Cohesion score 0.06848357791754019 - nodes in this community are weakly interconnected._
 - **Should `Obsidian Plugin Guide` be split into smaller, more focused modules?**
