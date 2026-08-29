@@ -77,36 +77,44 @@
       <article class="privacy-content">
         <div class="privacy-header-section">
           <h1>Privacy Policy</h1>
-          <div class="privacy-last-updated">Last Updated: July 30, 2026</div>
+          <div class="privacy-last-updated">Last Updated: August 29, 2026</div>
         </div>
 
         <div class="privacy-body-section">
           <p>
             Your privacy is extremely important to us. This Privacy Policy describes how the
             <strong>Markdown Comments</strong> suite of tools—including the
-            <strong>VS Code Extension</strong>, <strong>Obsidian Plugin</strong>, and
-            <strong>Chrome Extension</strong> (collectively, the "Software")—collects, stores, uses,
-            and shares information.
+            <strong>VS Code Extension</strong>, <strong>Obsidian Plugin</strong>,
+            <strong>Chrome Extension</strong>, and
+            <strong>Embeddable Web Component</strong> (collectively, the "Software")—handles data
+            and information.
           </p>
 
           <h2>1. Executive Summary</h2>
           <ul>
             <li>
-              <strong>Local-First Operation:</strong> The Software runs entirely client-side and
-              locally on your machine or browser.
+              <strong>Local-First &amp; Serverless:</strong> The Software runs entirely client-side
+              on your local machine, editor, or browser.
             </li>
             <li>
-              <strong>No Third-Party Servers:</strong> We do not host any remote servers, databases,
-              or tracking systems.
+              <strong>Not a PII Processor or Keeper:</strong> Because data is stored directly in
+              your own designated GitHub repository and we operate no backend servers or databases,
+              Markdown Comments is neither a data processor nor a keeper/custodian of any direct or
+              linkable Personally Identifiable Information (PII).
             </li>
             <li>
-              <strong>No Analytics or Telemetry:</strong> There are no analytics, tracking pixels,
-              or telemetry scripts included in any version of the Software.
+              <strong>Public Demo Sites (24-Hour Maximum Retention):</strong> For public interactive
+              demo sites and sandboxes, any comments and associated public identifiers are retained
+              for a maximum of 24 hours, as demo data is automatically wiped every 24 hours.
+            </li>
+            <li>
+              <strong>No Third-Party Servers or Telemetry:</strong> We do not host any remote
+              servers, databases, tracking pixels, analytics, or telemetry scripts.
             </li>
             <li>
               <strong>Direct GitHub Communication:</strong> Network requests are limited to direct,
-              secure communication with GitHub APIs (<code>https://api.github.com</code> and
-              <code>https://raw.githubusercontent.com</code>) to resolve author names, fetch
+              secure communication with official GitHub APIs (<code>https://api.github.com</code>
+              and <code>https://raw.githubusercontent.com</code>) to resolve author names, fetch
               avatars, or manage comment commits.
             </li>
             <li>
@@ -116,14 +124,44 @@
             </li>
           </ul>
 
-          <h2>2. Information Collection and Handling</h2>
+          <h2>2. Information Collection, Storage &amp; PII Handling</h2>
 
-          <h3>VS Code Extension & Obsidian Plugin</h3>
+          <h3>User Repositories &amp; Tool Usage (No PII Processing or Keeping)</h3>
+          <p>When using the Software with your own GitHub repositories:</p>
           <ul>
             <li>
-              <strong>Comment Data:</strong> All comments, replies, and reactions are stored directly
-              on GitHub as the primary backend (via GitHub API using dedicated orphan git references
+              <strong>Zero Central Storage:</strong> All comments, replies, reactions, and metadata
+              are written directly to your chosen GitHub repository (using dedicated git refs
               <code>refs/md-comments/data</code>).
+            </li>
+            <li>
+              <strong>PII Ownership &amp; Custody:</strong> Any direct PII (e.g., real names) or
+              linkable PII (e.g., GitHub usernames, user IDs, avatar URLs) reside exclusively within
+              your GitHub repository and your local client. Markdown Comments does not collect,
+              retain, process, or act as a keeper or processor of this PII.
+            </li>
+          </ul>
+
+          <h3>Public Demo Environments (24-Hour Ephemeral Retention)</h3>
+          <p>When interacting with our public demo sites and sandboxes:</p>
+          <ul>
+            <li>
+              <strong>Temporary 24-Hour Hosting:</strong> Any comments, public GitHub usernames, or
+              avatars submitted on public demo instances are hosted for a
+              <strong>maximum of 24 hours</strong>.
+            </li>
+            <li>
+              <strong>Automated Daily Reset:</strong> All demo repository comments and data are
+              automatically and completely wiped every 24 hours (daily reset at 00:00 UTC) to ensure
+              clean environments and prevent permanent data retention.
+            </li>
+          </ul>
+
+          <h3>VS Code Extension &amp; Obsidian Plugin</h3>
+          <ul>
+            <li>
+              <strong>Comment Data:</strong> Stored directly in your target GitHub repository via
+              the GitHub API.
             </li>
             <li>
               <strong>Local Settings:</strong> Settings such as preferred sidebar width, emoji
@@ -133,10 +171,9 @@
             </li>
             <li>
               <strong>GitHub Profile Lookup:</strong> To display GitHub profile pictures (avatars)
-              and usernames in the comment sidebar, the VS Code extension and Obsidian plugin query
-              public GitHub endpoints (<code>https://api.github.com/users/*</code>). These requests
-              do not transmit personal data and are used solely to fetch public avatar URLs and
-              display names.
+              and usernames in the comment sidebar, the extensions query public GitHub endpoints
+              (<code>https://api.github.com/users/*</code>) directly from your machine. These
+              requests are used solely to fetch public avatar URLs and display names.
             </li>
           </ul>
 
@@ -151,7 +188,7 @@
               to any third party.
             </li>
             <li>
-              <strong>GitHub Repository & Comment Data:</strong> The Chrome extension reads
+              <strong>GitHub Repository &amp; Comment Data:</strong> The Chrome extension reads
               repository structure, pull requests, files in pull requests, and commit data from
               GitHub repositories you visit. It reads and writes comments using the GitHub API on
               your behalf.
@@ -178,14 +215,16 @@
           <h3>VS Code Extension</h3>
           <ul>
             <li>
-              File System Access: Required for reading workspace configuration and file paths to associate comments with Markdown documents.
+              File System Access: Required for reading workspace configuration and file paths to
+              associate comments with Markdown documents.
             </li>
           </ul>
 
           <h3>Obsidian Plugin</h3>
           <ul>
             <li>
-              Vault Access: Required for reading vault structure and note files to associate comments with Markdown documents.
+              Vault Access: Required for reading vault structure and note files to associate
+              comments with Markdown documents.
             </li>
           </ul>
 
@@ -257,7 +296,8 @@
           <div class="footer-brand">
             <h4>Markdown Comments</h4>
             <p>
-              Collaborative inline comments for Markdown documents, powered by GitHub as the backend.
+              Collaborative inline comments for Markdown documents, powered by GitHub as the
+              backend.
             </p>
           </div>
           <div class="footer-links-col">

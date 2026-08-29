@@ -1,28 +1,43 @@
 # Privacy Policy
 
-**Last Updated:** July 30, 2026
+**Last Updated:** August 29, 2026
 
-Your privacy is extremely important to us. This Privacy Policy describes how the **Markdown Comments** suite of tools—including the **VS Code Extension**, **Obsidian Plugin**, and **Chrome Extension** (collectively, the "Software")—collects, stores, uses, and shares information.
+Your privacy is extremely important to us. This Privacy Policy describes how the **Markdown Comments** suite of tools—including the **VS Code Extension**, **Obsidian Plugin**, **Chrome Extension**, and **Embeddable Web Component** (collectively, the "Software")—handles data and information.
 
 ---
 
 ## 1. Executive Summary
 
-- **Local-First Operation:** The Software runs entirely client-side and locally on your machine or browser.
-- **No Third-Party Servers:** We do not host any remote servers, databases, or tracking systems.
-- **No Analytics or Telemetry:** There are no analytics, tracking pixels, or telemetry scripts included in any version of the Software.
-- **Direct GitHub Communication:** Network requests are limited to direct, secure communication with GitHub APIs (`https://api.github.com` and `https://raw.githubusercontent.com`) to resolve author names, fetch avatars, or manage comment commits.
-- **Local Storage:** All settings, configurations, cached profiles, and authentication credentials are stored locally in your editor's or browser's native storage.
+- **Local-First & Serverless:** The Software runs entirely client-side on your local machine, editor, or browser.
+- **Not a PII Processor or Keeper:** Because data is stored directly in your own designated GitHub repository and we operate no backend servers or databases, Markdown Comments is neither a data processor nor a keeper/custodian of any direct or linkable Personally Identifiable Information (PII).
+- **Public Demo Sites (24-Hour Maximum Retention):** For public interactive demo sites and sandboxes, any comments and associated public identifiers are retained for a maximum of 24 hours, as demo data is automatically wiped every 24 hours.
+- **No Third-Party Servers or Telemetry:** We do not host central databases, tracking pixels, analytics, or telemetry scripts.
+- **Direct GitHub Communication:** Network requests occur directly between your client and official GitHub endpoints (`https://api.github.com` and `https://raw.githubusercontent.com`).
+- **Local Storage:** All settings, configurations, cached profiles, and authentication credentials are saved strictly on your local device.
 
 ---
 
-## 2. Information Collection and Handling
+## 2. Information Collection, Storage & PII Handling
+
+### User Repositories & Tool Usage (No PII Processing or Keeping)
+
+When using the Software with your own GitHub repositories:
+
+- **Zero Central Storage:** All comments, replies, reactions, and metadata are written directly to your chosen GitHub repository (using dedicated git refs `refs/md-comments/data`).
+- **PII Ownership & Custody:** Any direct PII (e.g., real names) or linkable PII (e.g., GitHub usernames, user IDs, avatar URLs) reside exclusively within your GitHub repository and your local client. Markdown Comments does not collect, retain, process, or act as a keeper or processor of this PII.
+
+### Public Demo Environments (24-Hour Ephemeral Retention)
+
+When interacting with our public demo sites and sandboxes:
+
+- **Temporary 24-Hour Hosting:** Any comments, public GitHub usernames, or avatars submitted on public demo instances are hosted for a **maximum of 24 hours**.
+- **Automated Daily Reset:** All demo repository comments and data are automatically and completely wiped every 24 hours (daily reset at 00:00 UTC) to ensure clean environments and prevent permanent data retention.
 
 ### VS Code Extension & Obsidian Plugin
 
-- **Comment Data:** All comments, replies, and reactions are stored directly on GitHub as the primary backend (via GitHub API using dedicated orphan git references `refs/md-comments/data`).
+- **Comment Data:** Stored directly in your target GitHub repository via the GitHub API.
 - **Local Settings:** Settings such as preferred sidebar width, emoji lists, or your custom author name are stored locally using the host application's configuration mechanism (VS Code native workspace settings or Obsidian plugin data folder).
-- **GitHub Profile Lookup:** To display GitHub profile pictures (avatars) and usernames in the comment sidebar, the VS Code extension and Obsidian plugin query public GitHub endpoints (`https://api.github.com/users/*`). These requests do not transmit personal data and are used solely to fetch public avatar URLs and display names.
+- **GitHub Profile Lookup:** To display GitHub profile pictures (avatars) and usernames in the comment sidebar, the extensions query public GitHub endpoints (`https://api.github.com/users/*`) directly from your machine. These requests are used solely to fetch public avatar URLs and display names.
 
 ### Chrome Extension (GitHub Integration)
 
