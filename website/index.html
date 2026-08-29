@@ -69,10 +69,9 @@
             Stop Siloing Docs.<br /><span class="gradient-text">Bring Them Home.</span>
           </h1>
           <p class="hero-subtitle">
-            Documentation lives in your repository where AI agents can orchestrate and update it.
-            Markdown Comments adds a collaborative layer on top, also stored natively in Git, so
-            humans can review, comment, and discuss rendered docs without SaaS lock-in or PR
-            overhead.
+            Docs and comments live in your Git repository. With one shared backend, developers in
+            agentic IDEs like Cursor and VS Code collaborate seamlessly with business reviewers on
+            rendered web docs, without SaaS lock in or PR overhead.
           </p>
           <div class="hero-buttons">
             <a href="#demos" class="btn btn-primary">Explore Demos</a>
@@ -344,14 +343,14 @@
       <div class="container">
         <div class="section-header-center">
           <h2 class="section-title">
-            AI-Orchestrated Docs.<br /><span class="gradient-text"
-              >Human-Orchestrated Comments.</span
+            AI Orchestrated Docs.<br /><span class="gradient-text"
+              >Human Orchestrated Comments.</span
             >
           </h2>
           <p class="section-subtitle">
-            Docs live directly in your repository, and comments live as a native layer on top, never
-            locked in third-party SaaS silos. AI agents orchestrate the documentation as code
-            evolves, while humans orchestrate the reviews and discussions on rendered views.
+            AI agents maintain markdown in Git, while humans review and discuss rendered pages. With
+            one shared Git backend, engineering and business teams stay synchronized across IDEs and
+            browsers without third party silos.
           </p>
         </div>
 
@@ -373,11 +372,10 @@
                 />
               </svg>
             </div>
-            <h3>SaaS Tools Trap Knowledge in Silos</h3>
+            <h3>SaaS Tools Trap Knowledge</h3>
             <p>
-              External tools like <strong>Notion</strong> or <strong>Confluence</strong> isolate
-              comments from your codebase. Human feedback gets trapped in closed SaaS silos instead
-              of living with your docs source.
+              Tools like <strong>Notion</strong> or <strong>Confluence</strong> trap feedback in
+              proprietary silos, separating doc reviews from your codebase.
             </p>
           </div>
 
@@ -398,12 +396,10 @@
                 />
               </svg>
             </div>
-            <h3>AI Agents Orchestrate Your Docs</h3>
+            <h3>AI Agents Maintain Docs</h3>
             <p>
-              Markdown files in your repository serve as
-              <strong>native, indexable context for AI agents</strong>. As code and architecture
-              change, AI assistants (Cursor, Copilot, Claude) can inspect, query, generate, and
-              continuously update the raw documentation in Git.
+              Markdown files serve as <strong>indexable context</strong> for AI agents like Cursor,
+              Claude, and Copilot to inspect, generate, and update docs in Git.
             </p>
           </div>
 
@@ -424,13 +420,56 @@
                 />
               </svg>
             </div>
-            <h3>Humans Orchestrate the Comments</h3>
+            <h3>Humans Review Rendered Pages</h3>
             <p>
-              Humans review <strong>rendered visual variants</strong> with rich inline feedback and
-              discussion threads. Comments are saved directly to Git via custom refs as a
-              lightweight layer on top, giving teams instant review loops without pull requests or
-              commit noise.
+              Stakeholders review <strong>rendered web views</strong> with inline comment threads,
+              stored natively in Git custom refs without PR noise.
             </p>
+          </div>
+        </div>
+
+        <!-- Unified Collaboration Banner -->
+        <div class="both-worlds-banner">
+          <div class="both-worlds-content">
+            <h3>
+              Unified Git Backend.<br /><span class="gradient-text">Complete Team Alignment.</span>
+            </h3>
+            <p>
+              Comments posted on rendered web docs write directly to Git custom refs. Developers and
+              AI agents in Cursor, Antigravity, or VS Code see the feedback instantly anchored to
+              markdown source lines and resolve it in place.
+            </p>
+          </div>
+          <div class="both-worlds-visual">
+            <div class="dual-pill-box">
+              <div class="dual-pill ai-pill">
+                <strong>Developers & Agentic IDEs</strong>
+                <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px">
+                  Cursor, Antigravity, VS Code
+                </div>
+              </div>
+              <div class="dual-connector">⇅</div>
+              <div
+                class="dual-pill"
+                style="
+                  background: var(--bg-tertiary);
+                  border: 1px solid var(--border-color);
+                  color: var(--accent-light);
+                "
+              >
+                <strong>Shared Git Backend</strong>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px">
+                  <code>refs/md-comments/*</code>
+                </div>
+              </div>
+              <div class="dual-connector">⇅</div>
+              <div class="dual-pill human-pill">
+                <strong>Business Users & Reviewers</strong>
+                <div style="font-size: 0.8rem; color: rgba(255, 255, 255, 0.9); margin-top: 2px">
+                  Rendered Web Docs, Astro, HTML
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -442,7 +481,7 @@
         <div class="section-header-center">
           <h2 class="section-title">
             Clean Source Branches.<br /><span class="gradient-text"
-              >Zero-Overhead Custom Refs.</span
+              >Zero Overhead Custom Refs.</span
             >
           </h2>
         </div>
@@ -463,12 +502,10 @@
                 />
               </svg>
             </div>
-            <h3>Isolated Ref Namespace</h3>
+            <h3>Isolated Namespace, Zero PR Overhead</h3>
             <p>
-              Standard Git branches live under <code>refs/heads/</code> and tags under
-              <code>refs/tags/</code>. By isolating comments in <code>refs/md-comments/</code>,
-              discussion data is stored in Git without polluting your branch list, commit logs, or
-              PR diffs.
+              Comments live in <code>refs/md-comments/</code>, keeping branches, commit logs, and CI
+              pipelines clean without pull request friction.
             </p>
           </div>
 
@@ -483,15 +520,14 @@
                 viewBox="0 0 24 24"
               >
                 <path
-                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                  d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                 />
               </svg>
             </div>
-            <h3>Zero Commits & Zero PR Overhead</h3>
+            <h3>Universal Client Interoperability</h3>
             <p>
-              Standard Git porcelain commands (<code>checkout</code>, <code>diff</code>,
-              <code>status</code>) ignore custom refs. Teams can post, reply, and resolve
-              discussions instantly via API without triggering CI/CD pipelines or merge conflicts.
+              Web embeds, browser extensions, VS Code, Cursor, Antigravity, and Obsidian share the
+              exact same data schema, with instant cross client sync.
             </p>
           </div>
 
@@ -510,11 +546,10 @@
                 />
               </svg>
             </div>
-            <h3>Cryptographic Integrity & Rollbacks</h3>
+            <h3>Cryptographic Integrity</h3>
             <p>
-              Comments are anchored with commit SHAs and FNV-1a content hashing. When checking out
-              historical commits or rolling back files, comments stay preserved across Git history
-              while inline annotations re-anchor accurately.
+              Anchored with commit SHAs and content hashing, comments preserve history across Git
+              checkouts and attach accurately across file edits.
             </p>
           </div>
         </div>
@@ -524,7 +559,13 @@
     <!-- Integrations Section -->
     <section id="integrations" class="integrations">
       <div class="container">
-        <h2 class="section-title">Integrations for Your Workflow</h2>
+        <div class="section-header-center" style="margin-bottom: 36px">
+          <h2 class="section-title">Integrations for Your Workflow</h2>
+          <p class="section-subtitle" style="max-width: 720px; margin: 10px auto 0">
+            Every integration connects to the same Git backend. Comments left on web docs appear
+            instantly in Cursor, Antigravity, and VS Code, and vice versa.
+          </p>
+        </div>
 
         <!-- Icon-based tab switcher -->
         <div class="tabs-container">
