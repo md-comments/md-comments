@@ -200,33 +200,6 @@ body {
   gap: 16px;
 }
 
-/* Tabs inside Drawer */
-.md-comments-tabs {
-  display: flex;
-  border-bottom: 1px solid var(--md-comments-border);
-  margin-bottom: 8px;
-}
-
-.md-comments-tab-btn {
-  flex: 1;
-  padding: 8px 12px;
-  background: none;
-  border: none;
-  border-bottom: 2px solid transparent;
-  color: var(--md-comments-text-muted);
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition:
-    color 0.15s,
-    border-color 0.15s;
-}
-
-.md-comments-tab-btn.active {
-  color: var(--md-comments-primary);
-  border-bottom-color: var(--md-comments-primary);
-}
-
 /* Thread Card */
 .md-comments-thread-card {
   background: var(--md-comments-bg-subtle);

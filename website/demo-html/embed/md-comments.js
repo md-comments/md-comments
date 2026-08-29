@@ -489,7 +489,6 @@
     constructor() {
       this.comments = [];
       this.currentUser = null;
-      this.activeTab = 'active'; // 'active' | 'resolved'
       this.activeThreadId = null;
       this.pendingSelection = null;
       this.isDrawerOpen = false;
@@ -834,7 +833,7 @@
             <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
               <path d="M1 2.75C1 1.784 1.784 1 2.75 1h10.5c.966 0 1.75.784 1.75 1.75v7.5A1.75 1.75 0 0 1 13.25 12H9.06l-2.573 2.573A1.458 1.458 0 0 1 4 13.543V12H2.75A1.75 1.75 0 0 1 1 10.25v-7.5Z"/>
             </svg>
-            <span>Comments (Git Ref)</span>
+            <span>Comments</span>
           </div>
           <div class="md-comments-header-actions">
             <div class="md-comments-user-badge"></div>
@@ -842,37 +841,11 @@
           </div>
         </div>
 
-        <div class="md-comments-tabs">
-          <button class="md-comments-tab active" data-tab="active">
-            Active (<span class="tab-count-active">0</span>)
-          </button>
-          <button class="md-comments-tab" data-tab="resolved">
-            Resolved (<span class="tab-count-resolved">0</span>)
-          </button>
-        </div>
-
-        <div class="md-comments-sync-banner" style="display: none; padding: 6px 12px; font-size: 11px; background: rgba(59, 130, 246, 0.1); color: var(--md-comments-primary); border-bottom: 1px solid var(--md-comments-border); display: flex; align-items: center; justify-content: space-between;">
-          <span class="sync-status-text">Git Ref: refs/md-comments/data</span>
-          <span class="sync-spinner" style="display: none;">Syncing...</span>
-        </div>
-
         <div class="md-comments-drawer-content"></div>
       `;
       document.body.appendChild(this.drawerEl);
 
       this.drawerEl.querySelector('.md-comments-drawer-close').onclick = () => this.closeDrawer();
-
-      // Tab switcher
-      this.drawerEl.querySelectorAll('.md-comments-tab').forEach((tabBtn) => {
-        tabBtn.onclick = () => {
-          this.drawerEl
-            .querySelectorAll('.md-comments-tab')
-            .forEach((t) => t.classList.remove('active'));
-          tabBtn.classList.add('active');
-          this.activeTab = tabBtn.getAttribute('data-tab');
-          this.renderDrawer();
-        };
-      });
     }
 
     scanDocumentAnchors() {
@@ -1068,7 +1041,6 @@
 
     updateFABCount() {
       const openCount = this.comments.filter((c) => c.status === 'open').length;
-      const resolvedCount = this.comments.filter((c) => c.status === 'resolved').length;
 
       const badge = this.fabEl.querySelector('.badge-count');
       if (openCount > 0) {
@@ -1077,11 +1049,6 @@
       } else {
         badge.style.display = 'none';
       }
-
-      const activeTabCount = this.drawerEl.querySelector('.tab-count-active');
-      const resolvedTabCount = this.drawerEl.querySelector('.tab-count-resolved');
-      if (activeTabCount) activeTabCount.textContent = openCount;
-      if (resolvedTabCount) resolvedTabCount.textContent = resolvedCount;
     }
 
     toggleDrawer() {
@@ -1145,37 +1112,18 @@
         }
       }
 
-      const syncBanner = this.drawerEl.querySelector('.md-comments-sync-banner');
-      if (syncBanner) {
-        syncBanner.style.display = 'flex';
-        const syncText = syncBanner.querySelector('.sync-status-text');
-        const syncSpinner = syncBanner.querySelector('.sync-spinner');
-        if (this.isSaving) {
-          syncText.textContent = 'Committing to Git...';
-          syncSpinner.style.display = 'inline-block';
-        } else if (this.isLoading) {
-          syncText.textContent = 'Loading from Git ref...';
-          syncSpinner.style.display = 'inline-block';
-        } else {
-          syncText.textContent = `${this.repoOwner}/${this.repoName} (refs/md-comments/data)`;
-          syncSpinner.style.display = 'none';
-        }
-      }
-
       const content = this.drawerEl.querySelector('.md-comments-drawer-content');
       if (this.isLoading) {
         content.innerHTML = `
           <div style="text-align: center; padding: 40px 10px; color: var(--md-comments-text-muted);">
             <div class="md-comments-spinner" style="display: inline-block; width: 24px; height: 24px; margin-bottom: 12px;"></div>
-            <p style="font-size: 13px;">Fetching comments from GitHub orphan ref...</p>
+            <p style="font-size: 13px;">Loading comments...</p>
           </div>
         `;
         return;
       }
 
-      const filtered = this.comments.filter((c) =>
-        this.activeTab === 'resolved' ? c.status === 'resolved' : c.status !== 'resolved'
-      );
+      const filtered = this.comments.filter((c) => c.status !== 'resolved');
 
       if (filtered.length === 0) {
         content.innerHTML = `
@@ -1183,8 +1131,8 @@
             <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 12px; opacity: 0.6;">
               <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
             </svg>
-            <p style="font-size: 14px; font-weight: 500; margin-bottom: 6px;">No ${this.activeTab} discussions</p>
-            <p style="font-size: 12px;">Highlight any text on the page to start a new discussion committed directly to Git!</p>
+            <p style="font-size: 14px; font-weight: 500; margin-bottom: 6px;">No comments yet</p>
+            <p style="font-size: 12px;">Highlight any text on the page to leave a comment.</p>
           </div>
         `;
         return;

@@ -1,16 +1,16 @@
 # Graph Report - md-comments  (2026-08-29)
 
 ## Corpus Check
-- 148 files · ~134,783 words
+- 148 files · ~134,605 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1522 nodes · 2811 edges · 114 communities (87 shown, 27 thin omitted)
+- 1522 nodes · 2810 edges · 112 communities (86 shown, 26 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 65 edges (avg confidence: 0.74)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `12ab91b4`
+- Built from commit: `51ce4806`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -27,7 +27,6 @@
 - pre-commit-checks/SKILL.md
 - chrome-extension/manifest.json
 - chrome-extension/package.json
-- CommentsSidebarView
 - compilerOptions
 - previewActions.js
 - inlineAnchors.js
@@ -100,7 +99,6 @@
 - markdownItPlugin.ts
 - scripts
 - repository
-- CommentStore
 - @typescript-eslint/parser
 - activationEvents
 - Sample Technical Specification
@@ -151,7 +149,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (114 total, 27 thin omitted)
+## Communities (112 total, 26 thin omitted)
 
 ### Community 0 - "devDependencies"
 Cohesion: 0.15
@@ -159,15 +157,15 @@ Nodes (13): @types/markdown-it, @types/vscode, devDependencies, @types/js-yaml, 
 
 ### Community 1 - "content.ts"
 Cohesion: 0.09
-Nodes (29): activeIndicators, appInstallationStatus, cachedSelectedClasses, cleanupInjections(), collectCommentAuthors(), displayNameCache, draftsStore, fetchDisplayName() (+21 more)
+Nodes (27): activeIndicators, appInstallationStatus, cachedSelectedClasses, collectCommentAuthors(), displayNameCache, draftsStore, fetchDisplayName(), formatRelativeTime() (+19 more)
 
 ### Community 2 - "validate.py"
 Cohesion: 0.07
 Nodes (45): benchmark_pair(), count_tokens(), main(), print_table(), main(), print_usage(), backup_dir_for(), build_compress_prompt() (+37 more)
 
 ### Community 3 - "Obsidian Plugin Guide"
-Cohesion: 0.13
-Nodes (14): App Icon PNG, App Icon SVG, Comments Example Note, Obsidian Plugin Guide, CommentComposerModal, DEFAULT_SETTINGS, MarkdownCommentsPlugin, MarkdownCommentsSettings (+6 more)
+Cohesion: 0.08
+Nodes (15): App Icon PNG, App Icon SVG, Comments Example Note, Obsidian Plugin Guide, CommentComposerModal, DEFAULT_SETTINGS, MarkdownCommentsPlugin, MarkdownCommentsSettings (+7 more)
 
 ### Community 4 - "CommentsOverlay"
 Cohesion: 0.08
@@ -262,8 +260,8 @@ Cohesion: 0.50
 Nodes (7): bindTextarea(), getMentionQuery(), loadDisplayNames(), loadMentionUsers(), removeMentionMenu(), scan(), showMentionMenu()
 
 ### Community 30 - "CommentsFile"
-Cohesion: 0.07
-Nodes (44): createLivePreviewExtension(), fuzzyMatch(), highlightTextInElement(), registerReadingViewProcessor(), displayNameCache, pendingFetches, EMPTY, normalizeCommentsFile() (+36 more)
+Cohesion: 0.06
+Nodes (47): createLivePreviewExtension(), fuzzyMatch(), highlightTextInElement(), registerReadingViewProcessor(), displayNameCache, pendingFetches, CommentStore, EMPTY (+39 more)
 
 ### Community 31 - "compilerOptions"
 Cohesion: 0.13
@@ -405,10 +403,6 @@ Nodes (5): scripts, compile, package, typecheck, watch
 Cohesion: 0.50
 Nodes (4): repository, directory, type, url
 
-### Community 89 - "CommentStore"
-Cohesion: 0.33
-Nodes (3): CommentStore, newId(), CommentRootType
-
 ### Community 91 - "activationEvents"
 Cohesion: 0.67
 Nodes (3): onLanguage:markdown, onStartupFinished, activationEvents
@@ -470,8 +464,8 @@ Cohesion: 0.27
 Nodes (9): getBranchFromDom(), initRepoAndMetadata(), clearOAuthToken(), DeviceCodeResponse, getStoredToken(), pollForAccessToken(), requestDeviceCode(), saveOAuthToken() (+1 more)
 
 ### Community 114 - "renderDOMIndicatorsForFile"
-Cohesion: 0.24
-Nodes (12): checkPageChange(), hideCommentTooltip(), highlightTextInElement(), injectFABButton(), injectToolbarButton(), isSidebarOpen(), loadDocumentComments(), mergeLocalComments() (+4 more)
+Cohesion: 0.21
+Nodes (14): checkPageChange(), cleanupInjections(), getNativeContentContainer(), hideCommentTooltip(), highlightTextInElement(), injectFABButton(), injectToolbarButton(), isSidebarOpen() (+6 more)
 
 ### Community 115 - "handlePageLoad"
 Cohesion: 0.28
@@ -480,7 +474,7 @@ Nodes (9): closeSidebar(), getAuthToken(), getDraftKey(), handleDevicePageAutofi
 ## Knowledge Gaps
 - **580 isolated node(s):** `root`, `parser`, `browser`, `node`, `es2022` (+575 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **27 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **26 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
@@ -489,13 +483,13 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.026) - this node is a cross-community bridge._
 - **Why does `vscode` connect `commentStore.ts` to `keywords`, `markdownItPlugin.ts`, `CommentsFile`?**
   _High betweenness centrality (0.025) - this node is a cross-community bridge._
-- **Why does `CommentsFile` connect `CommentsFile` to `CommentStore`, `content.ts`, `markdownItPlugin.ts`, `commentStore.ts`?**
+- **Why does `CommentsFile` connect `CommentsFile` to `content.ts`, `markdownItPlugin.ts`, `commentStore.ts`?**
   _High betweenness centrality (0.020) - this node is a cross-community bridge._
 - **What connects `root`, `parser`, `browser` to the rest of the system?**
   _580 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `content.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.08712121212121213 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.09032258064516129 - nodes in this community are weakly interconnected._
 - **Should `validate.py` be split into smaller, more focused modules?**
   _Cohesion score 0.06848357791754019 - nodes in this community are weakly interconnected._
 - **Should `Obsidian Plugin Guide` be split into smaller, more focused modules?**
-  _Cohesion score 0.12834224598930483 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.0780399274047187 - nodes in this community are weakly interconnected._
