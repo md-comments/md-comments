@@ -18,11 +18,11 @@
   "author": "mstrelex",
   "license": "MIT",
   "dependencies": {
-    "js-yaml": "^4.3.1"
+    "js-yaml": "^5.3.0"
   },
   "devDependencies": {
     "@codemirror/language": "^6.10.1",
-    "@codemirror/state": "^6.4.1",
+    "@codemirror/state": "^6.7.1",
     "@codemirror/view": "^6.26.3",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^20.11.24",

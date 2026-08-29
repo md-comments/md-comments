@@ -6,9 +6,9 @@ import { collectGitHubLogins, warmGitHubDisplayNames } from './githubDisplayName
 import { extendMarkdownIt } from './markdownItPlugin';
 import { readComments } from './commentStore';
 
-let engine: MarkdownIt | null = null;
+let engine: InstanceType<typeof MarkdownIt> | null = null;
 
-export function getMarkdownEngine(): MarkdownIt {
+export function getMarkdownEngine(): InstanceType<typeof MarkdownIt> {
   if (!engine) {
     engine = new MarkdownIt({ html: true, linkify: true, typographer: true });
     extendMarkdownIt(engine);
