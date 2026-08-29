@@ -8540,7 +8540,7 @@
       "label": "makeElement()",
       "file_type": "code",
       "source_file": "tests/starlight-plugin.test.ts",
-      "source_location": "L213",
+      "source_location": "L221",
       "_origin": "ast",
       "id": "tests_starlight_plugin_test_makeelement",
       "community": 4,
@@ -34130,7 +34130,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/starlight-plugin.test.ts",
-      "source_location": "L213",
+      "source_location": "L221",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tests_starlight_plugin_test",
@@ -46567,5 +46567,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "91e00b8fb1fa8264d8aac948e61e3082eb9205f0"
+  "built_at_commit": "c08fe31bafac75c1a5f97bd4f22ca173e1b4c8d9"
 }

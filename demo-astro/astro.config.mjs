@@ -5,6 +5,16 @@ import { starlightMdComments } from '@md-comments/starlight';
 // https://astro.build/config
 export default defineConfig({
   base: '/demo-astro',
+  vite: {
+    optimizeDeps: {
+      esbuildOptions: {
+        target: 'es2022',
+      },
+    },
+    build: {
+      target: 'es2022',
+    },
+  },
   integrations: [
     starlight({
       title: 'Markdown Comments Demo',

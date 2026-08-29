@@ -47,6 +47,13 @@ export function starlightMdComments(options: MdCommentsPluginOptions = {}): Star
               tag: 'script',
               content: `window.__MD_COMMENTS_OPTIONS__ = ${JSON.stringify(options)};`,
             },
+            {
+              tag: 'script',
+              attrs: {
+                type: 'module',
+              },
+              content: `import '@md-comments/starlight/client/bootstrap';`,
+            },
           ],
           customCss: ['@md-comments/starlight/styles.css'],
         });
@@ -60,6 +67,14 @@ export function starlightMdComments(options: MdCommentsPluginOptions = {}): Star
                 updateAstroConfig({
                   vite: {
                     plugins: [createAuthProxyVitePlugin()],
+                    optimizeDeps: {
+                      esbuildOptions: {
+                        target: 'es2022',
+                      },
+                    },
+                    build: {
+                      target: 'es2022',
+                    },
                   },
                 });
               }

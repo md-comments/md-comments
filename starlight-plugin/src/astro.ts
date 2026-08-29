@@ -35,6 +35,14 @@ export function astroMdComments(options: MdCommentsPluginOptions = {}): AstroInt
           updateConfig({
             vite: {
               plugins: [createAuthProxyVitePlugin()],
+              optimizeDeps: {
+                esbuildOptions: {
+                  target: 'es2022',
+                },
+              },
+              build: {
+                target: 'es2022',
+              },
             },
           });
         }

@@ -72,9 +72,12 @@ describe('starlightMdComments plugin', () => {
     });
 
     expect(updatedConfig).toBeDefined();
-    expect(updatedConfig.head).toHaveLength(1);
+    expect(updatedConfig.head).toHaveLength(2);
     expect(updatedConfig.head[0].tag).toBe('script');
     expect(updatedConfig.head[0].content).toContain('"repo":"owner/repo"');
+    expect(updatedConfig.head[1].tag).toBe('script');
+    expect(updatedConfig.head[1].attrs.type).toBe('module');
+    expect(updatedConfig.head[1].content).toContain('@md-comments/starlight/client/bootstrap');
     expect(updatedConfig.customCss).toContain('@md-comments/starlight/styles.css');
 
     expect(addedIntegration).toBeDefined();
@@ -82,13 +85,18 @@ describe('starlightMdComments plugin', () => {
 
     let injectedType = '';
     let injectedScript = '';
+    let updatedAstroViteConfig: any = null;
     addedIntegration.hooks['astro:config:setup']({
+      updateConfig: (cfg: any) => {
+        updatedAstroViteConfig = cfg;
+      },
       injectScript: (type: string, script: string) => {
         injectedType = type;
         injectedScript = script;
       },
     });
 
+    expect(updatedAstroViteConfig.vite.build.target).toBe('es2022');
     expect(injectedType).toBe('page');
     expect(injectedScript).toContain('@md-comments/starlight/client/bootstrap');
   });

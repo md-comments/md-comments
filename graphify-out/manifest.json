@@ -720,8 +720,8 @@
     "semantic_hash": ""
   },
   "starlight-plugin/src/astro.ts": {
-    "mtime": 1787881134.4725387,
-    "ast_hash": "76d87b661f10defdfb31359a8b67735e",
+    "mtime": 1788008902.882724,
+    "ast_hash": "b017f1895524bb04dea33e0a2d646ce7",
     "semantic_hash": ""
   },
   "starlight-plugin/src/client/components/AuthModal.ts": {
@@ -765,8 +765,8 @@
     "semantic_hash": ""
   },
   "starlight-plugin/src/starlight.ts": {
-    "mtime": 1787881129.764224,
-    "ast_hash": "7fe7f6caffb7d6850743b26e6fcfe5b3",
+    "mtime": 1788008945.050901,
+    "ast_hash": "73b59849042b48e5ef7febfe47dc6d72",
     "semantic_hash": ""
   },
   "starlight-plugin/src/types.ts": {
@@ -780,8 +780,8 @@
     "semantic_hash": ""
   },
   "tests/starlight-plugin.test.ts": {
-    "mtime": 1787882051.6774693,
-    "ast_hash": "ef9a58776cb7d992441e01b59823749e",
+    "mtime": 1788008982.7981026,
+    "ast_hash": "42c38ac3cef99e56d9f0fe6e9446c009",
     "semantic_hash": ""
   },
   "docs/starlight-plugin.md": {
@@ -795,8 +795,8 @@
     "semantic_hash": ""
   },
   "demo-astro/astro.config.mjs": {
-    "mtime": 1787881530.325249,
-    "ast_hash": "43e8603534f2c6b2c09138c65fc4ec8b",
+    "mtime": 1788008948.4129457,
+    "ast_hash": "b4a9d6e5d64511030c923c238d33757c",
     "semantic_hash": ""
   },
   "demo-astro/package.json": {
