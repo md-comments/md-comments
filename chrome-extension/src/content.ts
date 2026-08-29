@@ -1675,6 +1675,9 @@ function openSidebar(tab: 'inline' | 'page' = 'inline', highlightCommentId?: str
   injectSidebar();
   if (!activeSidebarHost) return;
 
+  const fab = document.getElementById('md-comments-fab-toggle');
+  if (fab) fab.style.display = 'none';
+
   document.body.classList.add('md-comments-push-active');
   activeSidebarHost.style.transform = 'translateX(0px)';
 
@@ -1705,6 +1708,8 @@ function openSidebar(tab: 'inline' | 'page' = 'inline', highlightCommentId?: str
 function closeSidebar() {
   chrome.storage.local.set({ sidebarOpenState: false }).catch(() => {});
   if (!activeSidebarHost) return;
+  const fab = document.getElementById('md-comments-fab-toggle');
+  if (fab) fab.style.display = 'flex';
   activeSidebarHost.style.transform = 'translateX(100%)';
   document.body.classList.remove('md-comments-push-active');
 }
@@ -1931,7 +1936,6 @@ function attachOAuthEvents(container: HTMLElement) {
                 });
               }
             }
-            window.open(prefilledUrl, '_blank');
 
             // Start polling directly in active content script context using recursive setTimeout
             let currentInterval = Math.max(interval || 5, 5) * 1000;

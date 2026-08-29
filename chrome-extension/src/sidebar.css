@@ -909,6 +909,12 @@ body.md-comments-push-active {
   width: calc(100% - 380px) !important;
 }
 
+body.md-comments-push-active #md-comments-fab-toggle {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: scale(0.8) !important;
+}
+
 body.md-comments-push-active .repository-content,
 body.md-comments-push-active .application-main {
   max-width: 100% !important;

@@ -2,6 +2,7 @@
  * Markdown Comments - Standalone Redistributable Embed Runtime
  * Enables zero-dependency inline collaborative commenting on any static HTML page.
  * Real Git Backend: Commits comments directly to GitHub orphan ref refs/md-comments/data.
+ * Feature & Visual parity with the GitHub Chrome Extension standard (100% match).
  */
 
 (function () {
@@ -10,6 +11,16 @@
   const DEFAULT_CLIENT_ID = 'Iv23li9t461keXDcVS0T';
   const TOKEN_KEY = 'md_comments_oauth_token';
   const ORPHAN_REF_NAME = 'refs/md-comments/data';
+
+  // SVG Icons matching GitHub Extension exactly
+  const ICON_EDIT = `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 18.5h2.5L17 9l-2.5-2.5L5 16v2.5zM15.5 5.5L18.5 8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  const ICON_DELETE = `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 7h14M9 7V5h6v2M8 7l1 12h6l1-12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  const ICON_RESOLVE = `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 12.5l3.5 3.5L18 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  const ICON_REOPEN = `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.5-5.5M20 12a8 8 0 0 1-13.5 5.5M16 6.5V10h-3.5M8 17.5V14H11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  const ICON_REACT = `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.5"/><path d="M9.25 10.25h.01M14.75 10.25h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9.25 14.25c.85 1.15 2 1.75 2.75 1.75s1.9-.6 2.75-1.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`;
+
+  const displayNameCache = new Map();
+  const pendingFetches = new Set();
 
   // Extract config from script attributes or global options
   const currentScript = document.currentScript;
@@ -34,6 +45,73 @@
     window.__MD_COMMENTS_OPTIONS__ || {},
     scriptOptions
   );
+
+  // ==========================================
+  // Formatting & Display Helpers
+  // ==========================================
+  function escapeHtml(str) {
+    return (str || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  function formatRelativeTime(dateStr) {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    const diff = Date.now() - date.getTime();
+    const seconds = Math.floor(diff / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    if (days > 7) return date.toLocaleDateString();
+    if (days > 0) return `${days}d ago`;
+    if (hours > 0) return `${hours}h ago`;
+    if (minutes > 0) return `${minutes}m ago`;
+    return 'just now';
+  }
+
+  function isGitHubLogin(name) {
+    return /^[a-z0-9](?:[a-z0-9]|-(?=[a-z0-9])){0,38}$/i.test((name || '').trim());
+  }
+
+  function resolveDisplayName(author, onResolved) {
+    const login = (author || '').trim();
+    if (!login) return 'Anonymous';
+    if (isGitHubLogin(login)) {
+      const key = login.toLowerCase();
+      if (displayNameCache.has(key)) {
+        return displayNameCache.get(key) || login;
+      }
+      if (!pendingFetches.has(key)) {
+        pendingFetches.add(key);
+        fetch(`https://api.github.com/users/${encodeURIComponent(login)}`)
+          .then((res) => (res.ok ? res.json() : null))
+          .then((data) => {
+            if (data && typeof data.name === 'string' && data.name.trim()) {
+              displayNameCache.set(key, data.name.trim());
+              if (onResolved) onResolved();
+            }
+          })
+          .catch(() => {})
+          .finally(() => pendingFetches.delete(key));
+      }
+    }
+    return login;
+  }
+
+  function renderAuthor(author, onResolved) {
+    const login = (author || '').trim();
+    const displayName = resolveDisplayName(login, onResolved);
+    if (isGitHubLogin(login)) {
+      const title = displayName !== login ? ` title="@${escapeHtml(login)}"` : '';
+      return `<a href="https://github.com/${encodeURIComponent(login)}" class="md-comments-username" target="_blank" rel="noopener noreferrer"${title}>${escapeHtml(displayName)}</a>`;
+    }
+    return `<span class="md-comments-username">${escapeHtml(displayName)}</span>`;
+  }
 
   // ==========================================
   // Unicode Base64 & YAML Serialization Helpers
@@ -249,17 +327,17 @@
         return {
           login: data.login,
           name: data.name || data.login,
-          avatar_url: data.avatar_url,
+          avatar_url: data.avatar_url || `https://github.com/${data.login}.png`,
         };
       }
     } catch (e) {
-      console.warn('Failed to fetch GitHub viewer profile', e);
+      console.warn('[md-comments] Failed to fetch GitHub user viewer:', e);
     }
     return null;
   }
 
   // ==========================================
-  // Auth Modal (Real GitHub OAuth Device Flow)
+  // Auth Modal (No auto popup, user-driven)
   // ==========================================
   class AuthModal {
     constructor(app) {
@@ -269,33 +347,28 @@
     }
 
     show(onSuccess) {
-      if (this.modalEl) return;
+      if (this.modalEl) this.modalEl.remove();
 
       this.modalEl = document.createElement('div');
       this.modalEl.className = 'md-comments-auth-modal';
       this.modalEl.innerHTML = `
-        <div class="md-comments-modal-backdrop"></div>
-        <div class="md-comments-modal-card">
-          <div class="md-comments-modal-header">
-            <h3>Sign in with GitHub</h3>
-            <button class="md-comments-modal-close" aria-label="Close">&times;</button>
+        <div class="md-comments-auth-card">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="margin: 0; font-size: 16px; font-weight: 600;">Sign in with GitHub</h3>
+            <button class="md-comments-drawer-close modal-close-btn">&times;</button>
           </div>
-
-          <div class="md-comments-panel-oauth">
-            <p class="md-comments-modal-desc">
-              Authorize Markdown Comments to commit discussions directly to Git:
-            </p>
-            <div class="md-comments-code-box">
-              <span class="md-comments-code-label">One-Time Device Code:</span>
-              <div class="md-comments-user-code">Loading...</div>
-            </div>
-            <button class="md-comments-btn-primary md-comments-btn-verify" style="width: 100%; padding: 10px; font-size: 14px;" disabled>
-              Open GitHub & Authorize
+          <p style="margin: 0; font-size: 13px; color: var(--text-secondary); line-height: 1.4;">
+            Authenticate with GitHub to leave comments directly on repository <strong>${escapeHtml(options.repo)}</strong>.
+          </p>
+          <div class="md-comments-user-code" style="display: none;">------</div>
+          <div style="display: flex; gap: 8px;">
+            <button class="md-comments-btn-primary md-comments-btn-verify" style="flex: 1; justify-content: center; padding: 8px 14px; font-size: 13px;" disabled>
+              Open GitHub Activation
             </button>
-            <div class="md-comments-auth-status">
-              <span class="md-comments-spinner"></span>
-              <span class="md-comments-status-text">Requesting authorization code from GitHub...</span>
-            </div>
+          </div>
+          <div class="md-comments-auth-status" style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-secondary);">
+            <div class="md-comments-spinner" style="width: 14px; height: 14px;"></div>
+            <span class="md-comments-status-text">Requesting device authorization code...</span>
           </div>
         </div>
       `;
@@ -310,50 +383,35 @@
         }
       };
 
-      this.modalEl.querySelector('.md-comments-modal-close').onclick = close;
-      this.modalEl.querySelector('.md-comments-modal-backdrop').onclick = close;
+      this.modalEl.querySelector('.modal-close-btn').onclick = close;
+      this.modalEl.onclick = (e) => {
+        if (e.target === this.modalEl) close();
+      };
 
-      this.startRealDeviceFlow(onSuccess, close);
+      this.startDeviceFlow(onSuccess, close);
     }
 
-    async startRealDeviceFlow(onSuccess, close) {
+    async startDeviceFlow(onSuccess, close) {
       const codeEl = this.modalEl.querySelector('.md-comments-user-code');
       const verifyBtn = this.modalEl.querySelector('.md-comments-btn-verify');
       const statusText = this.modalEl.querySelector('.md-comments-status-text');
       const spinner = this.modalEl.querySelector('.md-comments-spinner');
 
       const clientId = options.clientId || DEFAULT_CLIENT_ID;
-      let deviceData = null;
-      let pollUrl = null;
 
       const candidates = [
-        options.authProxyUrl
-          ? {
-              codeUrl: `${options.authProxyUrl}/device-code`,
-              pollUrl: `${options.authProxyUrl}/access-token`,
-            }
-          : null,
         {
-          codeUrl: '/api/md-comments/auth/device-code',
-          pollUrl: '/api/md-comments/auth/access-token',
+          codeUrl: 'https://md-comments-oauth.vercel.app/api/device/code',
+          pollUrl: 'https://md-comments-oauth.vercel.app/api/device/token',
         },
         {
-          codeUrl: `${window.location.origin}/api/md-comments/auth/device-code`,
-          pollUrl: `${window.location.origin}/api/md-comments/auth/access-token`,
+          codeUrl: 'https://github.com/login/device/code',
+          pollUrl: 'https://github.com/login/oauth/access_token',
         },
-        {
-          codeUrl: 'http://localhost:4321/api/md-comments/auth/device-code',
-          pollUrl: 'http://localhost:4321/api/md-comments/auth/access-token',
-        },
-        {
-          codeUrl: 'http://127.0.0.1:4321/api/md-comments/auth/device-code',
-          pollUrl: 'http://127.0.0.1:4321/api/md-comments/auth/access-token',
-        },
-        {
-          codeUrl: 'https://proxy.cors.sh/https://github.com/login/device/code',
-          pollUrl: 'https://proxy.cors.sh/https://github.com/login/oauth/access_token',
-        },
-      ].filter(Boolean);
+      ];
+
+      let deviceData = null;
+      let pollUrl = '';
 
       for (const ep of candidates) {
         try {
@@ -365,50 +423,44 @@
             },
             body: JSON.stringify({
               client_id: clientId,
-              scope: 'public_repo repo',
+              scope: 'repo read:user',
             }),
           });
           if (res.ok) {
             const data = await res.json();
-            if (data && data.user_code && data.device_code) {
+            if (data.device_code && data.user_code) {
               deviceData = data;
               pollUrl = ep.pollUrl;
               break;
             }
           }
-        } catch (e) {
-          /* try next candidate */
+        } catch {
+          // Fall through
         }
       }
 
       if (!deviceData) {
-        codeEl.textContent = 'ERROR';
-        statusText.innerHTML =
-          'Unable to initiate GitHub OAuth Device Flow.<br>Please check your internet connection.';
+        statusText.textContent = 'Failed to obtain device code. Check network or Client ID.';
         if (spinner) spinner.style.display = 'none';
         return;
       }
 
+      codeEl.style.display = 'block';
       codeEl.textContent = deviceData.user_code;
       verifyBtn.disabled = false;
-      verifyBtn.textContent = `Open GitHub (${deviceData.user_code})`;
-      statusText.textContent = 'Code copied! Waiting for authorization on GitHub...';
+
+      // Auto-copy to clipboard
+      if (navigator.clipboard && deviceData.user_code) {
+        navigator.clipboard.writeText(deviceData.user_code).catch(() => {});
+      }
+
+      statusText.textContent = 'Code copied! Click "Open GitHub Activation" to authorize:';
 
       const verifyUrl =
         deviceData.verification_uri_complete ||
         (deviceData.verification_uri
           ? `${deviceData.verification_uri}?user_code=${encodeURIComponent(deviceData.user_code)}`
           : 'https://github.com/login/device');
-
-      if (navigator.clipboard && deviceData.user_code) {
-        navigator.clipboard.writeText(deviceData.user_code).catch(() => {});
-      }
-
-      try {
-        window.open(verifyUrl, '_blank');
-      } catch {
-        /* popup blocked */
-      }
 
       verifyBtn.onclick = () => {
         if (navigator.clipboard && deviceData.user_code) {
@@ -469,8 +521,8 @@
               return;
             }
           }
-        } catch (e) {
-          /* transient network issue during poll */
+        } catch {
+          // Transient network error
         }
 
         if (this.isPolling) {
@@ -483,17 +535,20 @@
   }
 
   // ==========================================
-  // Main Comments Application (Real Git Backend)
+  // Main Comments Application
   // ==========================================
   class CommentsApp {
     constructor() {
-      this.comments = [];
+      this.comments = { inline_comments: [], page_comments: [] };
       this.currentUser = null;
-      this.activeThreadId = null;
+      this.activeTab = 'inline'; // 'inline' | 'page'
       this.pendingSelection = null;
       this.isDrawerOpen = false;
       this.isSaving = false;
       this.isLoading = true;
+      this.editingCommentId = null;
+      this.editingReplyId = null;
+      this.activeTooltipEl = null;
 
       const [owner, repo] = (options.repo || '').split('/');
       this.repoOwner = owner;
@@ -520,12 +575,9 @@
       return fetch(url, { ...fetchOpts, headers });
     }
 
-    /**
-     * Reads comments from GitHub orphan ref refs/md-comments/data
-     */
     async loadCommentsFromGit() {
       if (!this.repoOwner || !this.repoName) {
-        this.comments = [];
+        this.comments = { inline_comments: [], page_comments: [] };
         this.isLoading = false;
         return;
       }
@@ -542,82 +594,47 @@
           if (data && data.content) {
             const rawYaml = decodeBase64Utf8(data.content);
             const parsed = parseYamlComments(rawYaml);
-            const inlines = parsed.inline_comments || [];
-
-            this.comments = inlines.map((c) => ({
-              id: c.id,
-              anchorId: c.anchor_hash || '',
-              selectedText: c.anchor_text || '',
-              textPrefix: c.heading_context || '',
-              status: c.resolved ? 'resolved' : 'open',
-              createdAt: c.created_at || new Date().toISOString(),
-              author: {
-                login: c.author_login || c.author || 'Anonymous',
-                name: c.author || c.author_login || 'Anonymous',
-                avatar_url:
-                  c.author_avatar || `https://github.com/${c.author_login || 'ghost'}.png`,
-              },
-              body: c.body || '',
-              replies: (c.replies || []).map((r) => ({
-                id: r.id,
-                createdAt: r.created_at || new Date().toISOString(),
-                author: {
-                  login: r.author_login || r.author || 'Anonymous',
-                  name: r.author || r.author_login || 'Anonymous',
-                  avatar_url:
-                    r.author_avatar || `https://github.com/${r.author_login || 'ghost'}.png`,
-                },
-                body: r.body || '',
-              })),
-            }));
-          }
-        } else if (res.status === 404) {
-          // Check unhashed legacy path
-          const cleanFile = (options.file || 'index.html')
-            .replace(/^\//, '')
-            .replace(/\.html?$/i, '');
-          const legacyPath = `${cleanFile}.comments.yml`;
-          const legacyUrl = `https://api.github.com/repos/${this.repoOwner}/${this.repoName}/contents/${legacyPath}?ref=${encodeURIComponent(ORPHAN_REF_NAME)}&t=${Date.now()}`;
-          const legRes = await this.fetchGitHubApi(legacyUrl);
-          if (legRes.ok) {
-            const legData = await legRes.json();
-            if (legData && legData.content) {
-              const rawYaml = decodeBase64Utf8(legData.content);
-              const parsed = parseYamlComments(rawYaml);
-              this.comments = (parsed.inline_comments || []).map((c) => ({
+            this.comments = {
+              inline_comments: (parsed.inline_comments || []).map((c) => ({
                 id: c.id,
-                anchorId: c.anchor_hash || '',
-                selectedText: c.anchor_text || '',
-                textPrefix: c.heading_context || '',
-                status: c.resolved ? 'resolved' : 'open',
-                createdAt: c.created_at || new Date().toISOString(),
-                author: {
-                  login: c.author_login || c.author || 'Anonymous',
-                  name: c.author || c.author_login || 'Anonymous',
-                  avatar_url:
-                    c.author_avatar || `https://github.com/${c.author_login || 'ghost'}.png`,
-                },
+                anchor_hash: c.anchor_hash || '',
+                anchor_text: c.anchor_text || '',
+                paragraph_index: c.paragraph_index || 0,
+                heading_context: c.heading_context || '',
                 body: c.body || '',
+                created_at: c.created_at || new Date().toISOString(),
+                author: c.author || 'Anonymous',
+                resolved: !!c.resolved,
+                orphaned: !!c.orphaned,
+                reactions: c.reactions || [],
                 replies: (c.replies || []).map((r) => ({
                   id: r.id,
-                  createdAt: r.created_at || new Date().toISOString(),
-                  author: {
-                    login: r.author_login || r.author || 'Anonymous',
-                    name: r.author || r.author_login || 'Anonymous',
-                    avatar_url:
-                      r.author_avatar || `https://github.com/${r.author_login || 'ghost'}.png`,
-                  },
                   body: r.body || '',
+                  created_at: r.created_at || new Date().toISOString(),
+                  author: r.author || 'Anonymous',
+                  reactions: r.reactions || [],
                 })),
-              }));
-            }
-          } else {
-            this.comments = [];
+              })),
+              page_comments: (parsed.page_comments || []).map((c) => ({
+                id: c.id,
+                body: c.body || '',
+                created_at: c.created_at || new Date().toISOString(),
+                author: c.author || 'Anonymous',
+                resolved: !!c.resolved,
+                reactions: c.reactions || [],
+                replies: (c.replies || []).map((r) => ({
+                  id: r.id,
+                  body: r.body || '',
+                  created_at: r.created_at || new Date().toISOString(),
+                  author: r.author || 'Anonymous',
+                  reactions: r.reactions || [],
+                })),
+              })),
+            };
           }
         }
       } catch (err) {
-        console.warn('[md-comments] Error fetching comments from GitHub Git ref:', err);
-        this.comments = [];
+        console.warn('[md-comments] Error fetching comments from Git ref:', err);
       } finally {
         this.isLoading = false;
         this.renderDrawer();
@@ -626,10 +643,7 @@
       }
     }
 
-    /**
-     * Commits comments directly to GitHub orphan ref refs/md-comments/data
-     */
-    async commitCommentsToGit() {
+    async commitCommentsToGit(action = 'update comments') {
       const token = this.getAuthToken();
       if (!token) {
         return new Promise((resolve) => {
@@ -637,7 +651,7 @@
           modal.show(async (viewer) => {
             this.currentUser = viewer;
             this.renderDrawer();
-            const res = await this.commitCommentsToGit();
+            const res = await this.commitCommentsToGit(action);
             resolve(res);
           });
         });
@@ -652,36 +666,7 @@
       this.renderDrawer();
 
       try {
-        // Convert to standard CommentsFile format
-        const commentsFile = {
-          inline_comments: this.comments.map((c) => ({
-            id: c.id,
-            anchor_hash: c.anchorId || '',
-            anchor_text: c.selectedText || '',
-            paragraph_index: 0,
-            heading_context: c.textPrefix || '',
-            body: c.body || '',
-            created_at: c.createdAt || new Date().toISOString(),
-            author: c.author.name || c.author.login || 'GitHub User',
-            author_avatar: c.author.avatar_url || '',
-            author_login: c.author.login || '',
-            orphaned: false,
-            resolved: c.status === 'resolved',
-            reactions: [],
-            replies: (c.replies || []).map((r) => ({
-              id: r.id,
-              body: r.body || '',
-              created_at: r.createdAt || new Date().toISOString(),
-              author: r.author.name || r.author.login || 'GitHub User',
-              author_avatar: r.author.avatar_url || '',
-              author_login: r.author.login || '',
-              reactions: [],
-            })),
-          })),
-          page_comments: [],
-        };
-
-        const yamlString = stringifyYaml(commentsFile);
+        const yamlString = stringifyYaml(this.comments);
 
         // 1. Get current commit of orphan ref
         const refUrl = `https://api.github.com/repos/${this.repoOwner}/${this.repoName}/git/refs/md-comments/data`;
@@ -707,16 +692,14 @@
 
         if (!treeRes.ok) {
           const errText = await treeRes.text().catch(() => '');
-          throw new Error(
-            `Git Tree creation failed (${treeRes.status}). Verify user permissions on repository ${options.repo}. ${errText}`
-          );
+          throw new Error(`Git Tree creation failed: ${errText}`);
         }
         const treeData = await treeRes.json();
 
         // 3. Create Commit
         const commitUrl = `https://api.github.com/repos/${this.repoOwner}/${this.repoName}/git/commits`;
         const commitBody = {
-          message: `Update comments for ${options.file}`,
+          message: `${action.charAt(0).toUpperCase() + action.slice(1)} via Markdown Comments Embed`,
           tree: treeData.sha,
         };
         if (currentCommitSha) {
@@ -729,7 +712,7 @@
 
         if (!commitRes.ok) {
           const errText = await commitRes.text().catch(() => '');
-          throw new Error(`Git Commit creation failed (${commitRes.status}): ${errText}`);
+          throw new Error(`Git Commit creation failed: ${errText}`);
         }
         const createdCommit = await commitRes.json();
 
@@ -739,26 +722,20 @@
             method: 'PATCH',
             body: JSON.stringify({ sha: createdCommit.sha, force: false }),
           });
-          if (!patchRefRes.ok) {
-            throw new Error(`Ref update failed: HTTP ${patchRefRes.status}`);
-          }
+          if (!patchRefRes.ok) throw new Error(`Ref update failed: HTTP ${patchRefRes.status}`);
         } else {
           const createRefUrl = `https://api.github.com/repos/${this.repoOwner}/${this.repoName}/git/refs`;
           const createRefRes = await this.fetchGitHubApi(createRefUrl, {
             method: 'POST',
             body: JSON.stringify({ ref: ORPHAN_REF_NAME, sha: createdCommit.sha }),
           });
-          if (!createRefRes.ok) {
-            throw new Error(`Ref creation failed: HTTP ${createRefRes.status}`);
-          }
+          if (!createRefRes.ok) throw new Error(`Ref creation failed: HTTP ${createRefRes.status}`);
         }
 
         return true;
       } catch (err) {
         console.error('[md-comments] Git Commit Error:', err);
-        alert(
-          `Failed to commit comments to Git: ${err.message || err}\n\nMake sure your GitHub account has write access to ${options.repo}.`
-        );
+        alert(`Failed to commit comments to Git: ${err.message || err}`);
         return false;
       } finally {
         this.isSaving = false;
@@ -773,13 +750,11 @@
       this.scanDocumentAnchors();
       this.bindSelectionListener();
 
-      // Check stored token
       const storedToken = this.getAuthToken();
       if (storedToken) {
         this.currentUser = await fetchGitHubViewer(storedToken);
       }
 
-      // Global shortcut Cmd/Ctrl + Shift + C
       document.addEventListener('keydown', (e) => {
         if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key.toLowerCase() === 'c') {
           e.preventDefault();
@@ -787,7 +762,6 @@
         }
       });
 
-      // Load real comments from Git ref
       await this.loadCommentsFromGit();
     }
 
@@ -797,8 +771,8 @@
       this.bubbleEl.className = 'md-comments-selection-bubble';
       this.bubbleEl.style.display = 'none';
       this.bubbleEl.innerHTML = `
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M1 2.75C1 1.784 1.784 1 2.75 1h10.5c.966 0 1.75.784 1.75 1.75v7.5A1.75 1.75 0 0 1 13.25 12H9.06l-2.573 2.573A1.458 1.458 0 0 1 4 13.543V12H2.75A1.75 1.75 0 0 1 1 10.25v-7.5Z"/>
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M8 0a8 8 0 110 16A8 8 0 018 0zM7 5v2H5v2h2v2h2V9h2V7H9V5H7z"/>
         </svg>
         <span>Comment</span>
       `;
@@ -824,16 +798,16 @@
       this.fabEl.onclick = () => this.toggleDrawer();
       document.body.appendChild(this.fabEl);
 
-      // 3. Comments Drawer Container
+      // 3. Comments Drawer Container (Exact GitHub Chrome extension layout)
       this.drawerEl = document.createElement('div');
       this.drawerEl.className = 'md-comments-drawer';
       this.drawerEl.innerHTML = `
         <div class="md-comments-drawer-header">
-          <div class="md-comments-header-title">
+          <div class="md-comments-drawer-title">
             <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
               <path d="M1 2.75C1 1.784 1.784 1 2.75 1h10.5c.966 0 1.75.784 1.75 1.75v7.5A1.75 1.75 0 0 1 13.25 12H9.06l-2.573 2.573A1.458 1.458 0 0 1 4 13.543V12H2.75A1.75 1.75 0 0 1 1 10.25v-7.5Z"/>
             </svg>
-            <span>Comments</span>
+            <span>Markdown Comments</span>
           </div>
           <div class="md-comments-header-actions">
             <div class="md-comments-user-badge"></div>
@@ -841,11 +815,64 @@
           </div>
         </div>
 
-        <div class="md-comments-drawer-content"></div>
+        <div class="md-comments-tab-header">
+          <button class="md-comments-tab-btn active" data-tab="inline">
+            <span>Inline</span>
+            <span class="md-comments-tab-count inline-tab-count">0</span>
+          </button>
+          <button class="md-comments-tab-btn" data-tab="page">
+            <span>Document</span>
+            <span class="md-comments-tab-count page-tab-count">0</span>
+          </button>
+        </div>
+
+        <div class="md-comments-tab-panel active" id="panel-inline">
+          <div class="new-inline-composer-wrapper" style="display: none;">
+            <div style="font-size: 11px; margin-bottom: 6px; color: var(--text-secondary);">New comment on: <em class="anchor-text-preview" style="font-style: italic;"></em></div>
+            <div class="new-inline-composer-container"></div>
+          </div>
+          <div class="md-comments-threads-list" id="inline-threads-list"></div>
+        </div>
+
+        <div class="md-comments-tab-panel" id="panel-page">
+          <div class="md-comments-threads-list" id="page-threads-list"></div>
+          <div class="page-composer">
+            <textarea placeholder="${this.currentUser ? 'Write a page comment...' : 'Sign in to write a page comment...'}" class="page-textarea"></textarea>
+            <div style="display: flex; justify-content: flex-end;">
+              <button class="md-comments-btn-primary submit-page-btn">Send</button>
+            </div>
+          </div>
+        </div>
       `;
       document.body.appendChild(this.drawerEl);
 
       this.drawerEl.querySelector('.md-comments-drawer-close').onclick = () => this.closeDrawer();
+
+      // Tab switching
+      this.drawerEl.querySelectorAll('.md-comments-tab-btn').forEach((btn) => {
+        btn.onclick = () => {
+          this.activeTab = btn.getAttribute('data-tab');
+          this.drawerEl
+            .querySelectorAll('.md-comments-tab-btn')
+            .forEach((b) => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          const panelInline = this.drawerEl.querySelector('#panel-inline');
+          const panelPage = this.drawerEl.querySelector('#panel-page');
+          if (panelInline) panelInline.classList.toggle('active', this.activeTab === 'inline');
+          if (panelPage) panelPage.classList.toggle('active', this.activeTab === 'page');
+
+          this.renderDrawer();
+        };
+      });
+
+      // Page Composer submit button
+      this.drawerEl.querySelector('.submit-page-btn').onclick = async () => {
+        const textarea = this.drawerEl.querySelector('.page-textarea');
+        const body = textarea?.value.trim();
+        if (!body) return;
+        await this.submitPageComment(body, textarea);
+      };
     }
 
     scanDocumentAnchors() {
@@ -863,6 +890,21 @@
           node.setAttribute('data-md-anchor-id', `anchor-${idx}-${textExcerpt || 'node'}`);
         }
       });
+    }
+
+    findHeadingContext(el) {
+      let curr = el;
+      while (curr && curr !== document.body) {
+        let prev = curr.previousElementSibling;
+        while (prev) {
+          if (/^H[1-6]$/i.test(prev.tagName)) {
+            return prev.textContent.trim();
+          }
+          prev = prev.previousElementSibling;
+        }
+        curr = curr.parentElement;
+      }
+      return 'Top level';
     }
 
     bindSelectionListener() {
@@ -887,7 +929,7 @@
 
         if (
           blockEl.closest(
-            '.md-comments-drawer, .md-comments-selection-bubble, .md-comments-auth-modal'
+            '.md-comments-drawer, .md-comments-selection-bubble, .md-comments-auth-modal, .md-comments-tooltip'
           )
         ) {
           this.bubbleEl.style.display = 'none';
@@ -896,17 +938,17 @@
 
         const anchorParent = blockEl.closest('[data-md-anchor-id]');
         const anchorId = anchorParent ? anchorParent.getAttribute('data-md-anchor-id') : 'general';
-        const textPrefix = anchorParent ? anchorParent.textContent.trim().slice(0, 40) : '';
+        const heading = anchorParent ? this.findHeadingContext(anchorParent) : 'Top level';
 
         this.pendingSelection = {
           text: text,
           anchorId: anchorId,
-          textPrefix: textPrefix,
+          headingContext: heading,
           range: range.cloneRange(),
         };
 
         const rect = range.getBoundingClientRect();
-        this.bubbleEl.style.top = `${window.scrollY + rect.top - 38}px`;
+        this.bubbleEl.style.top = `${window.scrollY + rect.top - 36}px`;
         this.bubbleEl.style.left = `${window.scrollX + rect.left + rect.width / 2 - 40}px`;
         this.bubbleEl.style.display = 'inline-flex';
       };
@@ -918,31 +960,49 @@
     openComposerForSelection() {
       if (!this.pendingSelection) return;
       this.bubbleEl.style.display = 'none';
+      this.activeTab = 'inline';
+      this.drawerEl
+        .querySelectorAll('.md-comments-tab-btn')
+        .forEach((b) => b.classList.toggle('active', b.getAttribute('data-tab') === 'inline'));
+      const panelInline = this.drawerEl.querySelector('#panel-inline');
+      const panelPage = this.drawerEl.querySelector('#panel-page');
+      if (panelInline) panelInline.classList.add('active');
+      if (panelPage) panelPage.classList.remove('active');
+
       this.openDrawer();
 
-      const content = this.drawerEl.querySelector('.md-comments-drawer-content');
-      const composer = document.createElement('div');
-      composer.className = 'md-comments-thread-card new-composer';
-      composer.innerHTML = `
-        <div class="md-comments-thread-anchor">"${this.escapeHTML(this.pendingSelection.text)}"</div>
-        <textarea placeholder="${this.currentUser ? 'Write a comment (commits to Git ref)...' : 'Sign in with GitHub to commit comment...'}" style="width: 100%; min-height: 70px; padding: 8px; font-size: 13px; border-radius: 6px; border: 1px solid var(--md-comments-border); background: var(--md-comments-bg); color: var(--md-comments-text); box-sizing: border-box; resize: vertical;"></textarea>
+      const composerWrapper = this.drawerEl.querySelector('.new-inline-composer-wrapper');
+      const container = this.drawerEl.querySelector('.new-inline-composer-container');
+      const preview = this.drawerEl.querySelector('.anchor-text-preview');
+      if (!composerWrapper || !container) return;
+
+      composerWrapper.style.display = 'block';
+      if (preview) {
+        preview.textContent =
+          this.pendingSelection.text.length > 60
+            ? this.pendingSelection.text.slice(0, 60) + '...'
+            : this.pendingSelection.text;
+      }
+
+      container.innerHTML = `
+        <textarea placeholder="${this.currentUser ? 'Write a comment (commits to Git)...' : 'Sign in with GitHub to commit comment...'}" class="new-inline-textarea"></textarea>
         <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px;">
-          <button class="md-comments-btn-sm cancel-new-btn">Cancel</button>
-          <button class="md-comments-btn-primary submit-new-btn" style="font-size: 12px; padding: 6px 12px;">Commit Comment</button>
+          <button class="md-comments-btn-secondary cancel-new-btn">Cancel</button>
+          <button class="md-comments-btn-primary submit-new-btn">Comment</button>
         </div>
       `;
 
-      content.prepend(composer);
-      const textarea = composer.querySelector('textarea');
-      textarea.focus();
+      const textarea = container.querySelector('textarea');
+      textarea?.focus();
 
-      composer.querySelector('.cancel-new-btn').onclick = () => {
-        composer.remove();
+      container.querySelector('.cancel-new-btn').onclick = () => {
+        composerWrapper.style.display = 'none';
+        container.innerHTML = '';
         this.pendingSelection = null;
       };
 
-      composer.querySelector('.submit-new-btn').onclick = async () => {
-        const body = textarea.value.trim();
+      container.querySelector('.submit-new-btn').onclick = async () => {
+        const body = textarea?.value.trim();
         if (!body) return;
 
         if (!this.currentUser) {
@@ -950,38 +1010,120 @@
           modal.show(async (viewer) => {
             this.currentUser = viewer;
             this.renderDrawer();
-            await this.submitComment(body, composer);
+            await this.submitInlineComment(body, composerWrapper, container);
           });
           return;
         }
 
-        await this.submitComment(body, composer);
+        await this.submitInlineComment(body, composerWrapper, container);
       };
     }
 
-    async submitComment(body, composerEl) {
+    async submitInlineComment(body, composerWrapper, container) {
       if (!this.currentUser) return;
-      const newThread = {
-        id: `thread-${Date.now()}`,
-        anchorId: this.pendingSelection ? this.pendingSelection.anchorId : 'general',
-        selectedText: this.pendingSelection ? this.pendingSelection.text : '',
-        textPrefix: this.pendingSelection ? this.pendingSelection.textPrefix : '',
-        status: 'open',
-        createdAt: new Date().toISOString(),
-        author: this.currentUser,
+      const newComment = {
+        id: `c_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+        anchor_hash: this.pendingSelection ? this.pendingSelection.anchorId : 'general',
+        anchor_text: this.pendingSelection ? this.pendingSelection.text : '',
+        paragraph_index: 0,
+        heading_context: this.pendingSelection ? this.pendingSelection.headingContext : 'Top level',
         body: body,
+        created_at: new Date().toISOString(),
+        author: this.currentUser.login,
+        orphaned: false,
+        resolved: false,
+        reactions: [],
         replies: [],
       };
 
-      this.comments.unshift(newThread);
+      this.comments.inline_comments.unshift(newComment);
       this.pendingSelection = null;
-      if (composerEl) composerEl.remove();
+      if (composerWrapper) composerWrapper.style.display = 'none';
+      if (container) container.innerHTML = '';
 
       this.renderDrawer();
       this.renderHighlights();
       this.updateFABCount();
 
-      await this.commitCommentsToGit();
+      await this.commitCommentsToGit('add inline comment');
+    }
+
+    async submitPageComment(body, textareaEl) {
+      if (!this.currentUser) {
+        const modal = new AuthModal(this);
+        modal.show(async (viewer) => {
+          this.currentUser = viewer;
+          this.renderDrawer();
+          await this.submitPageComment(body, textareaEl);
+        });
+        return;
+      }
+
+      const newPageComment = {
+        id: `pc_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+        body: body,
+        created_at: new Date().toISOString(),
+        author: this.currentUser.login,
+        resolved: false,
+        reactions: [],
+        replies: [],
+      };
+
+      this.comments.page_comments.unshift(newPageComment);
+      if (textareaEl) textareaEl.value = '';
+
+      this.renderDrawer();
+      this.updateFABCount();
+
+      await this.commitCommentsToGit('add page comment');
+    }
+
+    showCommentTooltip(targetEl, commentId) {
+      this.hideCommentTooltip();
+      const comment = (this.comments.inline_comments || []).find((c) => c.id === commentId);
+      if (!comment) return;
+
+      const tooltip = document.createElement('div');
+      tooltip.className = 'md-comments-tooltip';
+      const displayName = resolveDisplayName(comment.author);
+
+      tooltip.innerHTML = `
+        <div class="tooltip-header">
+          <img class="tooltip-avatar" src="https://github.com/${encodeURIComponent(comment.author)}.png?size=32" alt="${escapeHtml(comment.author)}" />
+          <div>
+            <div class="tooltip-author">${escapeHtml(displayName)}</div>
+            <div class="tooltip-time">${formatRelativeTime(comment.created_at)}</div>
+          </div>
+        </div>
+        <div class="tooltip-body">${escapeHtml(comment.body.length > 120 ? comment.body.slice(0, 120) + '...' : comment.body)}</div>
+      `;
+
+      document.body.appendChild(tooltip);
+      this.activeTooltipEl = tooltip;
+
+      const rect = targetEl.getBoundingClientRect();
+      const tooltipRect = tooltip.getBoundingClientRect();
+
+      let top = window.scrollY + rect.top - tooltipRect.height - 8;
+      let arrowClass = 'arrow-bottom';
+      if (rect.top - tooltipRect.height - 8 < 10) {
+        top = window.scrollY + rect.bottom + 8;
+        arrowClass = 'arrow-top';
+      }
+
+      const left = window.scrollX + rect.left + rect.width / 2;
+      tooltip.classList.add(arrowClass);
+      tooltip.style.top = `${top}px`;
+      tooltip.style.left = `${left - tooltipRect.width / 2}px`;
+
+      requestAnimationFrame(() => tooltip.classList.add('visible'));
+    }
+
+    hideCommentTooltip() {
+      if (this.activeTooltipEl) {
+        this.activeTooltipEl.remove();
+        this.activeTooltipEl = null;
+      }
     }
 
     renderHighlights() {
@@ -994,15 +1136,17 @@
         }
       });
 
-      const openThreads = this.comments.filter((c) => c.status === 'open' && c.selectedText);
+      const openThreads = (this.comments.inline_comments || []).filter(
+        (c) => !c.resolved && c.anchor_text
+      );
       const container = document.querySelector(options.selector) || document.body;
 
       openThreads.forEach((th) => {
-        const query = (th.selectedText || '').trim();
+        const query = (th.anchor_text || '').trim();
         if (!query) return;
 
-        let targetEl = th.anchorId
-          ? document.querySelector(`[data-md-anchor-id="${th.anchorId}"]`)
+        let targetEl = th.anchor_hash
+          ? document.querySelector(`[data-md-anchor-id="${th.anchor_hash}"]`)
           : null;
         if (!targetEl) targetEl = container;
 
@@ -1020,17 +1164,34 @@
               const anchorSpan = document.createElement('span');
               anchorSpan.className = 'md-comments-text-anchor';
               anchorSpan.setAttribute('data-thread-id', th.id);
-              anchorSpan.title = 'Click to view comment thread';
+              anchorSpan.title = 'Click to view comment';
 
               range.surroundContents(anchorSpan);
 
+              anchorSpan.addEventListener('mouseenter', () => {
+                this.showCommentTooltip(anchorSpan, th.id);
+              });
+              anchorSpan.addEventListener('mouseleave', () => {
+                this.hideCommentTooltip();
+              });
+
               anchorSpan.addEventListener('click', (e) => {
                 e.stopPropagation();
-                this.activeThreadId = th.id;
+                this.activeTab = 'inline';
+                this.drawerEl
+                  .querySelectorAll('.md-comments-tab-btn')
+                  .forEach((b) =>
+                    b.classList.toggle('active', b.getAttribute('data-tab') === 'inline')
+                  );
+                const panelInline = this.drawerEl.querySelector('#panel-inline');
+                const panelPage = this.drawerEl.querySelector('#panel-page');
+                if (panelInline) panelInline.classList.add('active');
+                if (panelPage) panelPage.classList.remove('active');
+
                 this.openDrawer();
-                this.highlightThread(th.id);
+                this.highlightCard(th.id);
               });
-            } catch (e) {
+            } catch {
               targetEl.classList.add('md-comments-text-anchor');
             }
             break;
@@ -1039,16 +1200,34 @@
       });
     }
 
+    scrollToCommentAnchor(commentId) {
+      const anchorEl = document.querySelector(
+        `.md-comments-text-anchor[data-thread-id="${commentId}"]`
+      );
+      if (anchorEl) {
+        anchorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        anchorEl.classList.add('md-comments-highlight-flash');
+        setTimeout(() => anchorEl.classList.remove('md-comments-highlight-flash'), 2100);
+      }
+    }
+
     updateFABCount() {
-      const openCount = this.comments.filter((c) => c.status === 'open').length;
+      const inlineOpen = (this.comments.inline_comments || []).filter((c) => !c.resolved).length;
+      const pageOpen = (this.comments.page_comments || []).filter((c) => !c.resolved).length;
+      const totalOpen = inlineOpen + pageOpen;
 
       const badge = this.fabEl.querySelector('.badge-count');
-      if (openCount > 0) {
-        badge.textContent = openCount;
+      if (totalOpen > 0) {
+        badge.textContent = totalOpen;
         badge.style.display = 'flex';
       } else {
         badge.style.display = 'none';
       }
+
+      const inlineCountEl = this.drawerEl.querySelector('.inline-tab-count');
+      const pageCountEl = this.drawerEl.querySelector('.page-tab-count');
+      if (inlineCountEl) inlineCountEl.textContent = inlineOpen;
+      if (pageCountEl) pageCountEl.textContent = pageOpen;
     }
 
     toggleDrawer() {
@@ -1063,6 +1242,7 @@
       this.isDrawerOpen = true;
       this.drawerEl.classList.add('md-comments-drawer-open');
       document.documentElement.classList.add('md-comments-panel-open');
+      if (this.fabEl) this.fabEl.style.display = 'none';
       this.renderDrawer();
     }
 
@@ -1070,11 +1250,13 @@
       this.isDrawerOpen = false;
       this.drawerEl.classList.remove('md-comments-drawer-open');
       document.documentElement.classList.remove('md-comments-panel-open');
+      if (this.fabEl) this.fabEl.style.display = 'flex';
+      this.hideCommentTooltip();
     }
 
-    highlightThread(threadId) {
+    highlightCard(threadId) {
       setTimeout(() => {
-        const card = this.drawerEl.querySelector(`[data-thread-id="${threadId}"]`);
+        const card = this.drawerEl.querySelector(`[data-id="${threadId}"]`);
         if (card) {
           card.scrollIntoView({ behavior: 'smooth', block: 'center' });
           card.classList.add('highlighted');
@@ -1083,13 +1265,191 @@
       }, 100);
     }
 
+    renderCommentCard(comment, type) {
+      const isInline = type === 'inline';
+      const isAuthor =
+        comment.author &&
+        this.currentUser &&
+        comment.author.trim().toLowerCase() === this.currentUser.login.trim().toLowerCase();
+
+      let headerContextHtml = '';
+      if (isInline) {
+        headerContextHtml = `
+          <div class="md-comments-context-row">
+            <span class="md-comments-context-heading">${escapeHtml(comment.heading_context || 'Top level')}</span>
+            ${comment.orphaned ? `<span class="md-comments-badge orphan">Orphaned</span>` : ''}
+            ${comment.resolved ? `<span class="md-comments-badge resolved">Resolved</span>` : ''}
+          </div>
+          ${
+            comment.anchor_text
+              ? `<div class="md-comments-anchor-quote" title="${escapeHtml(comment.anchor_text)}">"${escapeHtml(comment.anchor_text)}"</div>`
+              : ''
+          }
+        `;
+      } else {
+        headerContextHtml = `
+          <div class="md-comments-context-row">
+            ${comment.resolved ? `<span class="md-comments-badge resolved">Resolved</span>` : ''}
+          </div>
+        `;
+      }
+
+      const isEditing = this.editingCommentId === comment.id;
+
+      const repliesHtml = (comment.replies || [])
+        .map((r) => {
+          const isReplyAuthor =
+            r.author &&
+            this.currentUser &&
+            r.author.trim().toLowerCase() === this.currentUser.login.trim().toLowerCase();
+          const isEditingReply = this.editingReplyId === r.id;
+
+          return `
+            <div class="reply-item" data-reply-id="${r.id}">
+              <img class="md-comments-avatar" src="https://github.com/${encodeURIComponent(r.author)}.png?size=32" alt="${escapeHtml(r.author)}" />
+              <div class="reply-content">
+                <div class="reply-header">
+                  <div>
+                    ${renderAuthor(r.author, () => this.renderDrawer())}
+                    <span class="md-comments-time">${formatRelativeTime(r.created_at)}</span>
+                  </div>
+                  ${
+                    this.currentUser && isReplyAuthor
+                      ? `
+                    <div style="display: flex; gap: 2px;">
+                      <button class="icon-action-btn edit-reply-btn" data-comment-id="${comment.id}" data-reply-id="${r.id}" title="Edit Reply">${ICON_EDIT}</button>
+                      <button class="icon-action-btn delete-reply-btn" data-comment-id="${comment.id}" data-reply-id="${r.id}" title="Delete Reply">${ICON_DELETE}</button>
+                    </div>
+                  `
+                      : ''
+                  }
+                </div>
+                ${
+                  isEditingReply
+                    ? `
+                  <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 4px;">
+                    <textarea class="edit-reply-textarea" style="width: 100%; box-sizing: border-box; min-height: 50px; padding: 6px; font-size: 12px; border-radius: 4px; border: 1px solid var(--sidebar-border); background: var(--composer-bg); color: var(--text-primary);">${escapeHtml(r.body)}</textarea>
+                    <div style="display: flex; justify-content: flex-end; gap: 6px;">
+                      <button class="md-comments-btn-secondary cancel-edit-reply-btn" data-reply-id="${r.id}">Cancel</button>
+                      <button class="md-comments-btn-primary save-edit-reply-btn" data-comment-id="${comment.id}" data-reply-id="${r.id}">Save</button>
+                    </div>
+                  </div>
+                `
+                    : `<div class="reply-body">${escapeHtml(r.body)}</div>`
+                }
+              </div>
+            </div>
+          `;
+        })
+        .join('');
+
+      return `
+        <div class="md-comments-card" data-id="${comment.id}" data-type="${type}">
+          ${headerContextHtml}
+          <div class="md-comments-card-header">
+            <div class="md-comments-author-section">
+              <img class="md-comments-avatar" src="https://github.com/${encodeURIComponent(comment.author)}.png?size=40" alt="${escapeHtml(comment.author)}" />
+              <div class="md-comments-author-meta">
+                ${renderAuthor(comment.author, () => this.renderDrawer())}
+                <span class="md-comments-time">${formatRelativeTime(comment.created_at)}</span>
+              </div>
+            </div>
+            <div class="md-comments-card-actions">
+              ${
+                this.currentUser
+                  ? `
+                <div class="emoji-picker-container">
+                  <button class="icon-action-btn emoji-picker-btn" title="Add Reaction">${ICON_REACT}</button>
+                  <div class="emoji-popover" style="display: none;">
+                    ${['👍', '👀', '❤️', '🎉', '❓']
+                      .map(
+                        (e) =>
+                          `<button class="emoji-opt-btn" data-id="${comment.id}" data-type="${type}" data-emoji="${e}">${e}</button>`
+                      )
+                      .join('')}
+                  </div>
+                </div>
+                ${
+                  isAuthor
+                    ? `
+                  <button class="icon-action-btn edit-comment-btn" data-id="${comment.id}" title="Edit Comment">${ICON_EDIT}</button>
+                  <button class="icon-action-btn delete-comment-btn" data-id="${comment.id}" data-type="${type}" title="Delete Comment">${ICON_DELETE}</button>
+                `
+                    : ''
+                }
+                <button class="icon-action-btn resolve-btn" data-id="${comment.id}" data-type="${type}" data-resolved="${comment.resolved}" title="${comment.resolved ? 'Reopen Thread' : 'Resolve Thread'}">
+                  ${comment.resolved ? ICON_REOPEN : ICON_RESOLVE}
+                </button>
+              `
+                  : ''
+              }
+            </div>
+          </div>
+
+          ${
+            isEditing
+              ? `
+            <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 6px;">
+              <textarea class="edit-comment-textarea" style="width: 100%; box-sizing: border-box; min-height: 60px; padding: 8px; font-size: 13px; border-radius: 4px; border: 1px solid var(--sidebar-border); background: var(--composer-bg); color: var(--text-primary); font-family: var(--font-family);">${escapeHtml(comment.body)}</textarea>
+              <div style="display: flex; justify-content: flex-end; gap: 6px;">
+                <button class="md-comments-btn-secondary cancel-edit-btn" data-id="${comment.id}">Cancel</button>
+                <button class="md-comments-btn-primary save-edit-btn" data-id="${comment.id}" data-type="${type}">Save</button>
+              </div>
+            </div>
+          `
+              : `<div class="md-comments-card-body">${escapeHtml(comment.body)}</div>`
+          }
+
+          ${
+            comment.reactions && comment.reactions.length > 0
+              ? `
+            <div class="reactions-row">
+              ${comment.reactions
+                .map((r) => {
+                  const hasReacted =
+                    this.currentUser && (r.users || []).includes(this.currentUser.login);
+                  return `
+                  <button class="reaction-chip ${hasReacted ? 'active' : ''}" data-id="${comment.id}" data-type="${type}" data-emoji="${escapeHtml(r.emoji)}">
+                    ${escapeHtml(r.emoji)} <span>${(r.users || []).length}</span>
+                  </button>
+                `;
+                })
+                .join('')}
+            </div>
+          `
+              : ''
+          }
+
+          ${(comment.replies || []).length > 0 ? `<div class="replies-section">${repliesHtml}</div>` : ''}
+
+          ${
+            this.currentUser && !comment.resolved
+              ? `
+            <div class="reply-composer">
+              <input type="text" placeholder="Reply..." class="reply-input" data-id="${comment.id}">
+              <div class="reply-expanded" style="display: none; flex-direction: column; gap: 6px;">
+                <textarea placeholder="Write a reply..." style="width: 100%; box-sizing: border-box; min-height: 50px; padding: 6px; font-size: 12px; border-radius: 4px; border: 1px solid var(--sidebar-border); background: var(--composer-bg); color: var(--text-primary);"></textarea>
+                <div style="display: flex; justify-content: flex-end; gap: 6px;">
+                  <button class="md-comments-btn-secondary cancel-reply-btn" data-id="${comment.id}">Cancel</button>
+                  <button class="md-comments-btn-primary send-reply-btn" data-id="${comment.id}" data-type="${type}">Reply</button>
+                </div>
+              </div>
+            </div>
+          `
+              : ''
+          }
+        </div>
+      `;
+    }
+
     renderDrawer() {
+      // 1. User Badge
       const userBadge = this.drawerEl.querySelector('.md-comments-user-badge');
       if (userBadge) {
         if (this.currentUser) {
           userBadge.innerHTML = `
-            <div class="md-comments-user-info">
-              <img class="md-comments-avatar" src="${this.currentUser.avatar_url}" alt="${this.currentUser.login}" />
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <img class="md-comments-avatar" style="width: 22px; height: 22px; border-radius: 50%;" src="${this.currentUser.avatar_url}" alt="${this.currentUser.login}" />
               <button class="md-comments-btn-link md-comments-logout-btn" title="Sign out (${this.currentUser.login})">Sign Out</button>
             </div>
           `;
@@ -1112,197 +1472,336 @@
         }
       }
 
-      const content = this.drawerEl.querySelector('.md-comments-drawer-content');
-      if (this.isLoading) {
-        content.innerHTML = `
-          <div style="text-align: center; padding: 40px 10px; color: var(--md-comments-text-muted);">
-            <div class="md-comments-spinner" style="display: inline-block; width: 24px; height: 24px; margin-bottom: 12px;"></div>
-            <p style="font-size: 13px;">Loading comments...</p>
-          </div>
-        `;
-        return;
+      this.updateFABCount();
+
+      // 2. Render Inline list
+      const inlineListEl = this.drawerEl.querySelector('#inline-threads-list');
+      if (inlineListEl) {
+        const inlines = this.comments.inline_comments || [];
+        if (inlines.length === 0) {
+          inlineListEl.innerHTML = `
+            <div style="text-align: center; padding: 36px 12px; color: var(--text-secondary);">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 10px; opacity: 0.5;">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
+              <p style="font-size: 13px; font-weight: 500; margin: 0 0 4px;">No inline comments yet</p>
+              <p style="font-size: 11px; margin: 0;">Highlight any text on the page to leave an inline comment.</p>
+            </div>
+          `;
+        } else {
+          inlineListEl.innerHTML = inlines.map((c) => this.renderCommentCard(c, 'inline')).join('');
+        }
+        this.bindCardEvents(inlineListEl);
       }
 
-      const filtered = this.comments.filter((c) => c.status !== 'resolved');
-
-      if (filtered.length === 0) {
-        content.innerHTML = `
-          <div style="text-align: center; padding: 40px 10px; color: var(--md-comments-text-muted);">
-            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 12px; opacity: 0.6;">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-            </svg>
-            <p style="font-size: 14px; font-weight: 500; margin-bottom: 6px;">No comments yet</p>
-            <p style="font-size: 12px;">Highlight any text on the page to leave a comment.</p>
-          </div>
-        `;
-        return;
+      // 3. Render Page list
+      const pageListEl = this.drawerEl.querySelector('#page-threads-list');
+      if (pageListEl) {
+        const pages = this.comments.page_comments || [];
+        if (pages.length === 0) {
+          pageListEl.innerHTML = `
+            <div style="text-align: center; padding: 36px 12px; color: var(--text-secondary);">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 10px; opacity: 0.5;">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
+              <p style="font-size: 13px; font-weight: 500; margin: 0 0 4px;">No document discussion yet</p>
+              <p style="font-size: 11px; margin: 0;">Use the composer below to start a discussion.</p>
+            </div>
+          `;
+        } else {
+          pageListEl.innerHTML = pages.map((c) => this.renderCommentCard(c, 'page')).join('');
+        }
+        this.bindCardEvents(pageListEl);
       }
+    }
 
-      content.innerHTML = filtered
-        .map((th) => {
-          const timeAgo = this.formatTimeAgo(th.createdAt);
-          return `
-          <div class="md-comments-thread-card" data-thread-id="${th.id}">
-            ${th.selectedText ? `<div class="md-comments-thread-anchor">"${this.escapeHTML(th.selectedText)}"</div>` : ''}
-            <div class="md-comments-thread-header">
-              <div class="md-comments-user-info">
-                <img class="md-comments-avatar" src="${th.author.avatar_url}" alt="${th.author.login}" />
-                <div>
-                  <div class="md-comments-username">${this.escapeHTML(th.author.name || th.author.login)}</div>
-                  <div class="md-comments-time">${timeAgo}</div>
-                </div>
-              </div>
-            </div>
-            <div class="md-comments-body">${this.escapeHTML(th.body)}</div>
-
-            ${
-              th.replies && th.replies.length > 0
-                ? `
-              <div class="md-comments-replies">
-                ${th.replies
-                  .map(
-                    (rep) => `
-                  <div class="md-comments-reply-item">
-                    <div class="md-comments-user-info">
-                      <img class="md-comments-avatar" style="width: 20px; height: 20px;" src="${rep.author.avatar_url}" alt="${rep.author.login}" />
-                      <span class="md-comments-username" style="font-size: 12px;">${this.escapeHTML(rep.author.name || rep.author.login)}</span>
-                      <span class="md-comments-time">${this.formatTimeAgo(rep.createdAt)}</span>
-                    </div>
-                    <div class="md-comments-body" style="font-size: 12px;">${this.escapeHTML(rep.body)}</div>
-                  </div>
-                `
-                  )
-                  .join('')}
-              </div>
-            `
-                : ''
-            }
-
-            <div class="md-comments-thread-actions">
-              <button class="md-comments-btn-sm reply-toggle-btn" data-id="${th.id}">Reply</button>
-              <button class="md-comments-btn-sm resolve-btn" data-id="${th.id}">
-                ${th.status === 'resolved' ? 'Reopen' : '✓ Resolve'}
-              </button>
-              <button class="md-comments-btn-sm delete-btn" data-id="${th.id}">Delete</button>
-            </div>
-
-            <div class="reply-composer-container" id="reply-box-${th.id}" style="display: none; margin-top: 8px;">
-              <textarea placeholder="${this.currentUser ? 'Write a reply (commits to Git)...' : 'Sign in with GitHub to reply...'}" style="width: 100%; min-height: 50px; padding: 6px; font-size: 12px; border-radius: 4px; border: 1px solid var(--md-comments-border); background: var(--md-comments-bg); color: var(--md-comments-text); box-sizing: border-box;"></textarea>
-              <div style="display: flex; justify-content: flex-end; gap: 6px; margin-top: 6px;">
-                <button class="md-comments-btn-sm cancel-reply-btn" data-id="${th.id}">Cancel</button>
-                <button class="md-comments-btn-primary send-reply-btn" data-id="${th.id}" style="font-size: 11px; padding: 4px 10px;">Post Reply</button>
-              </div>
-            </div>
-          </div>
-        `;
-        })
-        .join('');
-
-      // Bind action listeners
-      content.querySelectorAll('.resolve-btn').forEach((btn) => {
-        btn.addEventListener('click', async () => {
-          const id = btn.getAttribute('data-id');
-          const thread = this.comments.find((t) => t.id === id);
-          if (thread) {
-            thread.status = thread.status === 'resolved' ? 'open' : 'resolved';
-            this.renderDrawer();
-            this.renderHighlights();
-            this.updateFABCount();
-            await this.commitCommentsToGit();
-          }
-        });
+    bindCardEvents(container) {
+      // Card click anchor jump
+      container.querySelectorAll('.md-comments-card').forEach((card) => {
+        const id = card.getAttribute('data-id');
+        const type = card.getAttribute('data-type');
+        if (type === 'inline') {
+          card.onclick = (e) => {
+            if (e.target.closest('button, textarea, input, a')) return;
+            this.scrollToCommentAnchor(id);
+          };
+        }
       });
 
-      content.querySelectorAll('.delete-btn').forEach((btn) => {
-        btn.addEventListener('click', async () => {
-          const id = btn.getAttribute('data-id');
-          if (confirm('Delete this comment thread permanently from Git?')) {
-            this.comments = this.comments.filter((t) => t.id !== id);
-            this.renderDrawer();
-            this.renderHighlights();
-            this.updateFABCount();
-            await this.commitCommentsToGit();
+      // Emoji picker popover toggle
+      container.querySelectorAll('.emoji-picker-btn').forEach((btn) => {
+        btn.onclick = (e) => {
+          e.stopPropagation();
+          const popover = btn.nextElementSibling;
+          if (popover) {
+            popover.style.display = popover.style.display === 'none' ? 'flex' : 'none';
           }
-        });
+        };
       });
 
-      content.querySelectorAll('.reply-toggle-btn').forEach((btn) => {
-        btn.addEventListener('click', () => {
+      // Close emoji popovers on click outside
+      document.addEventListener(
+        'click',
+        () => {
+          container.querySelectorAll('.emoji-popover').forEach((p) => (p.style.display = 'none'));
+        },
+        { once: true }
+      );
+
+      // Emoji option click
+      container.querySelectorAll('.emoji-opt-btn, .reaction-chip').forEach((btn) => {
+        btn.onclick = async (e) => {
+          e.stopPropagation();
           const id = btn.getAttribute('data-id');
-          const box = document.getElementById(`reply-box-${id}`);
-          if (box) {
-            box.style.display = box.style.display === 'none' ? 'block' : 'none';
-            if (box.style.display === 'block') {
-              box.querySelector('textarea').focus();
-            }
-          }
-        });
+          const type = btn.getAttribute('data-type');
+          const emoji = btn.getAttribute('data-emoji');
+          await this.toggleReaction(id, type, emoji);
+        };
       });
 
-      content.querySelectorAll('.cancel-reply-btn').forEach((btn) => {
-        btn.addEventListener('click', () => {
+      // Resolve toggle
+      container.querySelectorAll('.resolve-btn').forEach((btn) => {
+        btn.onclick = async (e) => {
+          e.stopPropagation();
           const id = btn.getAttribute('data-id');
-          const box = document.getElementById(`reply-box-${id}`);
-          if (box) box.style.display = 'none';
-        });
+          const type = btn.getAttribute('data-type');
+          const resolved = btn.getAttribute('data-resolved') === 'true';
+          await this.toggleResolve(id, type, !resolved);
+        };
       });
 
-      content.querySelectorAll('.send-reply-btn').forEach((btn) => {
-        btn.addEventListener('click', async () => {
+      // Delete comment
+      container.querySelectorAll('.delete-comment-btn').forEach((btn) => {
+        btn.onclick = async (e) => {
+          e.stopPropagation();
           const id = btn.getAttribute('data-id');
-          const box = document.getElementById(`reply-box-${id}`);
-          const text = box.querySelector('textarea').value.trim();
-          if (!text) return;
-
-          if (!this.currentUser) {
-            const modal = new AuthModal(this);
-            modal.show(async (viewer) => {
-              this.currentUser = viewer;
-              this.renderDrawer();
-              await this.postReply(id, text);
-            });
-            return;
+          const type = btn.getAttribute('data-type');
+          if (confirm('Delete this comment permanently from Git?')) {
+            await this.deleteComment(id, type);
           }
+        };
+      });
 
-          await this.postReply(id, text);
-        });
+      // Edit comment mode
+      container.querySelectorAll('.edit-comment-btn').forEach((btn) => {
+        btn.onclick = (e) => {
+          e.stopPropagation();
+          this.editingCommentId = btn.getAttribute('data-id');
+          this.renderDrawer();
+        };
+      });
+
+      container.querySelectorAll('.cancel-edit-btn').forEach((btn) => {
+        btn.onclick = (e) => {
+          e.stopPropagation();
+          this.editingCommentId = null;
+          this.renderDrawer();
+        };
+      });
+
+      container.querySelectorAll('.save-edit-btn').forEach((btn) => {
+        btn.onclick = async (e) => {
+          e.stopPropagation();
+          const id = btn.getAttribute('data-id');
+          const type = btn.getAttribute('data-type');
+          const card = btn.closest('.md-comments-card');
+          const textarea = card.querySelector('.edit-comment-textarea');
+          if (textarea && textarea.value.trim()) {
+            await this.saveEditComment(id, type, textarea.value.trim());
+          }
+        };
+      });
+
+      // Edit reply mode
+      container.querySelectorAll('.edit-reply-btn').forEach((btn) => {
+        btn.onclick = (e) => {
+          e.stopPropagation();
+          this.editingReplyId = btn.getAttribute('data-reply-id');
+          this.renderDrawer();
+        };
+      });
+
+      container.querySelectorAll('.cancel-edit-reply-btn').forEach((btn) => {
+        btn.onclick = (e) => {
+          e.stopPropagation();
+          this.editingReplyId = null;
+          this.renderDrawer();
+        };
+      });
+
+      container.querySelectorAll('.save-edit-reply-btn').forEach((btn) => {
+        btn.onclick = async (e) => {
+          e.stopPropagation();
+          const commentId = btn.getAttribute('data-comment-id');
+          const replyId = btn.getAttribute('data-reply-id');
+          const replyEl = btn.closest('.reply-item');
+          const textarea = replyEl.querySelector('.edit-reply-textarea');
+          if (textarea && textarea.value.trim()) {
+            await this.saveEditReply(commentId, replyId, textarea.value.trim());
+          }
+        };
+      });
+
+      // Delete reply
+      container.querySelectorAll('.delete-reply-btn').forEach((btn) => {
+        btn.onclick = async (e) => {
+          e.stopPropagation();
+          const commentId = btn.getAttribute('data-comment-id');
+          const replyId = btn.getAttribute('data-reply-id');
+          if (confirm('Delete this reply?')) {
+            await this.deleteReply(commentId, replyId);
+          }
+        };
+      });
+
+      // Reply input expanding
+      container.querySelectorAll('.reply-input').forEach((input) => {
+        input.onfocus = () => {
+          const expanded = input.nextElementSibling;
+          if (expanded) {
+            input.style.display = 'none';
+            expanded.style.display = 'flex';
+            const ta = expanded.querySelector('textarea');
+            if (ta) ta.focus();
+          }
+        };
+      });
+
+      container.querySelectorAll('.cancel-reply-btn').forEach((btn) => {
+        btn.onclick = () => {
+          const expanded = btn.closest('.reply-expanded');
+          const input = expanded.previousElementSibling;
+          if (expanded && input) {
+            expanded.style.display = 'none';
+            input.style.display = 'block';
+          }
+        };
+      });
+
+      container.querySelectorAll('.send-reply-btn').forEach((btn) => {
+        btn.onclick = async () => {
+          const id = btn.getAttribute('data-id');
+          const type = btn.getAttribute('data-type');
+          const expanded = btn.closest('.reply-expanded');
+          const textarea = expanded.querySelector('textarea');
+          if (textarea && textarea.value.trim()) {
+            await this.submitReply(id, type, textarea.value.trim());
+          }
+        };
       });
     }
 
-    async postReply(threadId, text) {
-      const thread = this.comments.find((t) => t.id === threadId);
-      if (thread) {
-        if (!thread.replies) thread.replies = [];
-        thread.replies.push({
-          id: `reply-${Date.now()}`,
-          createdAt: new Date().toISOString(),
-          author: this.currentUser,
-          body: text,
+    async toggleReaction(commentId, type, emoji) {
+      if (!this.currentUser) return;
+      const list = type === 'inline' ? this.comments.inline_comments : this.comments.page_comments;
+      const comment = list.find((c) => c.id === commentId);
+      if (!comment) return;
+
+      if (!comment.reactions) comment.reactions = [];
+      const user = this.currentUser.login;
+      const existing = comment.reactions.find((r) => r.emoji === emoji);
+
+      if (existing) {
+        if (existing.users.includes(user)) {
+          existing.users = existing.users.filter((u) => u !== user);
+        } else {
+          existing.users.push(user);
+        }
+        comment.reactions = comment.reactions.filter((r) => r.users.length > 0);
+      } else {
+        comment.reactions.push({ emoji, users: [user] });
+      }
+
+      this.renderDrawer();
+      await this.commitCommentsToGit('toggle reaction');
+    }
+
+    async toggleResolve(commentId, type, resolved) {
+      const list = type === 'inline' ? this.comments.inline_comments : this.comments.page_comments;
+      const comment = list.find((c) => c.id === commentId);
+      if (comment) {
+        comment.resolved = resolved;
+        comment.resolved_at = resolved ? new Date().toISOString() : undefined;
+        this.renderDrawer();
+        this.renderHighlights();
+        this.updateFABCount();
+        await this.commitCommentsToGit(resolved ? 'resolve thread' : 'reopen thread');
+      }
+    }
+
+    async deleteComment(commentId, type) {
+      if (type === 'inline') {
+        this.comments.inline_comments = this.comments.inline_comments.filter(
+          (c) => c.id !== commentId
+        );
+      } else {
+        this.comments.page_comments = this.comments.page_comments.filter((c) => c.id !== commentId);
+      }
+      this.renderDrawer();
+      this.renderHighlights();
+      this.updateFABCount();
+      await this.commitCommentsToGit('delete comment');
+    }
+
+    async saveEditComment(commentId, type, newBody) {
+      const list = type === 'inline' ? this.comments.inline_comments : this.comments.page_comments;
+      const comment = list.find((c) => c.id === commentId);
+      if (comment) {
+        comment.body = newBody;
+        comment.updated_at = new Date().toISOString();
+        this.editingCommentId = null;
+        this.renderDrawer();
+        await this.commitCommentsToGit('edit comment');
+      }
+    }
+
+    async submitReply(commentId, type, replyBody) {
+      if (!this.currentUser) return;
+      const list = type === 'inline' ? this.comments.inline_comments : this.comments.page_comments;
+      const comment = list.find((c) => c.id === commentId);
+      if (comment) {
+        if (!comment.replies) comment.replies = [];
+        comment.replies.push({
+          id: `r_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+          body: replyBody,
+          created_at: new Date().toISOString(),
+          author: this.currentUser.login,
+          reactions: [],
         });
         this.renderDrawer();
-        this.updateFABCount();
-        await this.commitCommentsToGit();
+        await this.commitCommentsToGit('add reply');
       }
     }
 
-    formatTimeAgo(isoString) {
-      const diffSec = Math.floor((Date.now() - new Date(isoString).getTime()) / 1000);
-      if (diffSec < 60) return 'just now';
-      const diffMin = Math.floor(diffSec / 60);
-      if (diffMin < 60) return `${diffMin}m ago`;
-      const diffHour = Math.floor(diffMin / 60);
-      if (diffHour < 24) return `${diffHour}h ago`;
-      const diffDay = Math.floor(diffHour / 24);
-      return `${diffDay}d ago`;
+    async saveEditReply(commentId, replyId, newBody) {
+      const allComments = [
+        ...(this.comments.inline_comments || []),
+        ...(this.comments.page_comments || []),
+      ];
+      const comment = allComments.find((c) => c.id === commentId);
+      if (comment && comment.replies) {
+        const reply = comment.replies.find((r) => r.id === replyId);
+        if (reply) {
+          reply.body = newBody;
+          reply.updated_at = new Date().toISOString();
+          this.editingReplyId = null;
+          this.renderDrawer();
+          await this.commitCommentsToGit('edit reply');
+        }
+      }
     }
 
-    escapeHTML(str) {
-      return (str || '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
+    async deleteReply(commentId, replyId) {
+      const allComments = [
+        ...(this.comments.inline_comments || []),
+        ...(this.comments.page_comments || []),
+      ];
+      const comment = allComments.find((c) => c.id === commentId);
+      if (comment && comment.replies) {
+        comment.replies = comment.replies.filter((r) => r.id !== replyId);
+        this.renderDrawer();
+        await this.commitCommentsToGit('delete reply');
+      }
     }
   }
 

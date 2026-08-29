@@ -83,15 +83,9 @@ export class AuthModal {
             ? `${data.verification_uri}&user_code=${encodeURIComponent(data.user_code)}`
             : `${data.verification_uri}?user_code=${encodeURIComponent(data.user_code)}`);
 
-        // Auto open GitHub device authorization page with prefilled user_code
-        try {
-          window.open(verificationUrl, '_blank');
-        } catch {
-          /* browser blocked auto popup */
-        }
-
         if (statusText)
-          statusText.textContent = 'Code copied to clipboard! Waiting for GitHub approval...';
+          statusText.textContent =
+            'Code copied to clipboard! Click below to open GitHub and verify:';
         if (verifyBtn) {
           verifyBtn.disabled = false;
           verifyBtn.textContent = `Open GitHub (${data.user_code})`;
