@@ -74,6 +74,7 @@ export class CommentsOverlay {
 
     this.selectionBubbleEl.addEventListener('click', (e) => {
       e.stopPropagation();
+      this.applyPendingSelectionHighlight();
       this.openNewCommentDrawer();
     });
 
@@ -241,6 +242,7 @@ export class CommentsOverlay {
     } catch {
       this.comments = { inline_comments: [], page_comments: [] };
     }
+    this.renderInlineHighlights();
     this.updateFABCount();
   }
 
@@ -257,8 +259,26 @@ export class CommentsOverlay {
 
   private getDocumentFilePath(): string {
     const basePath = this.options.docBasePath || 'src/content/docs';
-    let path = window.location.pathname.replace(/^\/|\/$/g, '');
+    let path = window.location.pathname;
+
+    // Strip site base if present
+    const base = this.options.base || '';
+    if (base && path.startsWith(base)) {
+      path = path.slice(base.length);
+    }
+
+    path = path.replace(/^\/|\/$/g, '');
+
+    // Strip leading path segment if basePath already contains it
+    const basePathFirstSegment = basePath.split('/')[0];
+    if (basePathFirstSegment && path.startsWith(basePathFirstSegment + '/')) {
+      path = path.slice(basePathFirstSegment.length + 1);
+    } else if (path === basePathFirstSegment) {
+      path = '';
+    }
+
     if (!path) path = 'index';
+    if (path.endsWith('/')) path += 'index';
     return `${basePath}/${path}.md`;
   }
 
@@ -289,6 +309,8 @@ export class CommentsOverlay {
     if (typeof document !== 'undefined' && document.documentElement) {
       document.documentElement.classList?.remove?.('md-comments-panel-open');
     }
+    this.clearPendingSelectionHighlight();
+    this.clearActiveHighlight();
     this.drawerEl.classList.remove('md-comments-drawer-open');
     this.activeThreadId = null;
     this.pendingSelection = null;
@@ -300,9 +322,11 @@ export class CommentsOverlay {
   }
 
   public openThreadDrawer(threadId: string): void {
+    this.clearPendingSelectionHighlight();
     this.pendingSelection = null;
     this.activeThreadId = threadId;
     this.openDrawer();
+    this.activateCommentHighlight(threadId);
   }
 
   private renderDrawerContent(): void {
@@ -331,6 +355,7 @@ export class CommentsOverlay {
       const textarea = contentEl.querySelector<HTMLTextAreaElement>('.md-comments-input');
 
       cancelBtn?.addEventListener('click', () => {
+        this.clearPendingSelectionHighlight();
         this.pendingSelection = null;
         this.renderDrawerContent();
       });
@@ -347,6 +372,7 @@ export class CommentsOverlay {
     const activeComment = inlineComments.find((c) => c.id === this.activeThreadId);
 
     if (activeComment) {
+      this.activateCommentHighlight(activeComment.id);
       contentEl.innerHTML = `
         <div class="md-comments-thread-view">
           <div class="md-comments-thread-toolbar">
@@ -393,6 +419,7 @@ export class CommentsOverlay {
 
       const backBtn = contentEl.querySelector('.md-comments-back-btn');
       backBtn?.addEventListener('click', () => {
+        this.clearActiveHighlight();
         this.activeThreadId = null;
         this.renderDrawerContent();
       });
@@ -457,26 +484,397 @@ export class CommentsOverlay {
 
     const itemEls = contentEl.querySelectorAll('.md-comments-list-item');
     itemEls.forEach((el) => {
-      el.addEventListener('click', () => {
-        const threadId = el.getAttribute('data-thread-id');
-        if (!threadId) return;
+      const threadId = el.getAttribute('data-thread-id');
+      if (!threadId) return;
 
+      el.addEventListener('mouseenter', () => {
+        this.activateCommentHighlight(threadId);
+      });
+      el.addEventListener('mouseleave', () => {
+        this.clearActiveHighlight();
+      });
+
+      el.addEventListener('click', () => {
         const comment = allComments.find((c) => c.id === threadId);
         if (comment) {
-          const match = resolveElementForAnchor(
-            this.scanned,
-            comment.anchor_hash,
-            comment.anchor_text?.slice(0, 40) || '',
-            comment.paragraph_index || 0
+          const span = this.container?.querySelector(
+            `.md-comments-text-anchor[data-md-comment-id="${threadId}"]`
           );
-          if (match?.element) {
-            match.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          if (span) {
+            span.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          } else {
+            const match = resolveElementForAnchor(
+              this.scanned,
+              comment.anchor_hash,
+              comment.anchor_text?.slice(0, 40) || '',
+              comment.paragraph_index || 0
+            );
+            if (match?.element) {
+              match.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
           }
         }
 
         this.openThreadDrawer(threadId);
       });
     });
+  }
+
+  // ==========================================================================
+  // Inline Document Highlighting & Text Anchors
+  // ==========================================================================
+
+  public renderInlineHighlights(): void {
+    this.clearInlineHighlights();
+
+    if (!this.container) return;
+    if (!this.scanned || this.scanned.length === 0) {
+      this.scanned = scanArticleAnchors(this.container);
+    }
+
+    const inlineComments = this.comments.inline_comments || [];
+    for (const comment of inlineComments) {
+      if (comment.resolved) continue;
+
+      const target = resolveElementForAnchor(
+        this.scanned,
+        comment.anchor_hash,
+        comment.anchor_text?.slice(0, 40) || '',
+        comment.paragraph_index || 0
+      );
+
+      if (!target?.element) continue;
+
+      const element = target.element;
+      const anchorText = comment.anchor_text?.trim();
+
+      if (anchorText && !this.isFullParagraphText(element, anchorText)) {
+        const wrapped = this.wrapAnchorTextInElement(element, anchorText, comment.id);
+        if (wrapped) continue;
+      }
+
+      this.markFullParagraph(element, comment.id);
+    }
+  }
+
+  private clearInlineHighlights(): void {
+    if (!this.container) return;
+
+    // 1. Unwrap span.md-comments-text-anchor
+    const anchors = this.container.querySelectorAll<HTMLElement>(
+      '.md-comments-text-anchor:not(.pending)'
+    );
+    anchors.forEach((span) => {
+      const parent = span.parentNode;
+      if (!parent) return;
+      while (span.firstChild) {
+        parent.insertBefore(span.firstChild, span);
+      }
+      parent.removeChild(span);
+    });
+
+    // 2. Clear marked paragraphs
+    const paragraphs = this.container.querySelectorAll<HTMLElement>(
+      '.md-comments-paragraph-marked'
+    );
+    paragraphs.forEach((p) => {
+      p.classList.remove('md-comments-paragraph-marked', 'md-comments-text-active');
+      p.removeAttribute('data-md-comment-id');
+      p.removeAttribute('title');
+    });
+
+    try {
+      this.container.normalize();
+    } catch {
+      // Container normalize
+    }
+  }
+
+  private isFullParagraphText(container: HTMLElement, anchorText: string): boolean {
+    const normContainer = (container.innerText || container.textContent || '')
+      .replace(/\s+/g, ' ')
+      .trim();
+    const normAnchor = anchorText.replace(/\s+/g, ' ').trim();
+    return normContainer === normAnchor;
+  }
+
+  private markFullParagraph(container: HTMLElement, commentId: string): void {
+    const existing = (container.getAttribute('data-md-comment-id') || '')
+      .split(/\s+/)
+      .filter(Boolean);
+    if (!existing.includes(commentId)) {
+      existing.push(commentId);
+      container.setAttribute('data-md-comment-id', existing.join(' '));
+    }
+    container.classList.add('md-comments-paragraph-marked');
+    container.title = 'Click to view comment';
+
+    if (container.getAttribute('data-md-events-bound') !== 'true') {
+      container.setAttribute('data-md-events-bound', 'true');
+      container.addEventListener('mouseenter', () => {
+        const ids = (container.getAttribute('data-md-comment-id') || '')
+          .split(/\s+/)
+          .filter(Boolean);
+        if (ids[0]) this.activateCommentHighlight(ids[0]);
+      });
+      container.addEventListener('mouseleave', () => {
+        this.clearActiveHighlight();
+      });
+      container.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        if (target.tagName === 'A' || target.tagName === 'BUTTON') return;
+        const ids = (container.getAttribute('data-md-comment-id') || '')
+          .split(/\s+/)
+          .filter(Boolean);
+        if (ids[0]) {
+          e.stopPropagation();
+          this.openThreadDrawer(ids[0]);
+        }
+      });
+    }
+  }
+
+  private wrapAnchorTextInElement(
+    container: HTMLElement,
+    anchorText: string,
+    commentId: string
+  ): boolean {
+    if (container.querySelector(`.md-comments-text-anchor[data-md-comment-id="${commentId}"]`)) {
+      return true;
+    }
+
+    const raw = container.textContent || '';
+    const match = this.findNeedleRange(raw, anchorText);
+    if (!match) return false;
+
+    const range = this.createDomRange(container, match.start, match.length);
+    if (!range) return false;
+
+    const span = document.createElement('span');
+    span.className = 'md-comments-text-anchor';
+    span.setAttribute('data-md-comment-id', commentId);
+    span.title = 'Click to view comment';
+
+    try {
+      const contents = range.extractContents();
+      span.appendChild(contents);
+      range.insertNode(span);
+    } catch {
+      return false;
+    }
+
+    span.addEventListener('mouseenter', () => {
+      this.activateCommentHighlight(commentId);
+    });
+    span.addEventListener('mouseleave', () => {
+      this.clearActiveHighlight();
+    });
+    span.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.openThreadDrawer(commentId);
+    });
+
+    return true;
+  }
+
+  private findNeedleRange(raw: string, needle: string): { start: number; length: number } | null {
+    if (!needle) return null;
+    const normalize = (t: string) => (t || '').replace(/\s+/g, ' ').trim();
+    const n = normalize(needle);
+    if (!n) return null;
+
+    // 1. Exact indexOf
+    const exactIdx = raw.indexOf(needle);
+    if (exactIdx >= 0) {
+      return { start: exactIdx, length: needle.length };
+    }
+
+    // 2. Flexible whitespace regex
+    // eslint-disable-next-line security/detect-non-literal-regexp
+    const flexible = needle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+');
+    try {
+      // eslint-disable-next-line security/detect-non-literal-regexp
+      const re = new RegExp(flexible);
+      const m = raw.match(re);
+      if (m && m.index !== undefined) {
+        return { start: m.index, length: m[0].length };
+      }
+    } catch {
+      // Fallback
+    }
+
+    // 3. Normalized string search
+    const normRaw = normalize(raw);
+    const normIdx = normRaw.indexOf(n);
+    if (normIdx >= 0) {
+      const start = this.mapNormIndexToRaw(raw, normIdx);
+      const endNorm = normIdx + n.length;
+      let normCount = 0;
+      let rawEnd = 0;
+      let lastWasSpace = false;
+      while (rawEnd < raw.length && normCount < endNorm) {
+        const ch = raw[rawEnd];
+        if (/\s/.test(ch)) {
+          if (!lastWasSpace) {
+            normCount++;
+            lastWasSpace = true;
+          }
+        } else {
+          normCount++;
+          lastWasSpace = false;
+        }
+        rawEnd++;
+      }
+      return { start, length: Math.max(1, rawEnd - start) };
+    }
+
+    return null;
+  }
+
+  private mapNormIndexToRaw(raw: string, normIndex: number): number {
+    let normCount = 0;
+    let rawIndex = 0;
+    let lastWasSpace = false;
+    while (rawIndex < raw.length && normCount < normIndex) {
+      const ch = raw[rawIndex];
+      if (/\s/.test(ch)) {
+        if (!lastWasSpace) {
+          normCount++;
+          lastWasSpace = true;
+        }
+      } else {
+        normCount++;
+        lastWasSpace = false;
+      }
+      rawIndex++;
+    }
+    while (rawIndex < raw.length && /\s/.test(raw[rawIndex])) {
+      rawIndex++;
+    }
+    return rawIndex;
+  }
+
+  private createDomRange(container: HTMLElement, start: number, length: number): Range | null {
+    if (typeof document === 'undefined' || !document.createRange) return null;
+    const range = document.createRange();
+    let offset = 0;
+    let startNode: Node | null = null;
+    let startOff = 0;
+    let endNode: Node | null = null;
+    let endOff = 0;
+
+    const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, {
+      acceptNode: (node: Node) => {
+        const parent = node.parentElement;
+        if (!parent) return NodeFilter.FILTER_REJECT;
+        if (
+          parent.closest(
+            '.md-comments-drawer, .md-comments-selection-bubble, .md-comments-fab-toggle, .md-comments-auth-modal'
+          ) ||
+          parent.classList.contains('md-comments-text-anchor')
+        ) {
+          return NodeFilter.FILTER_REJECT;
+        }
+        return NodeFilter.FILTER_ACCEPT;
+      },
+    });
+
+    let node: Node | null;
+    while ((node = walker.nextNode())) {
+      const text = node.textContent || '';
+      const len = text.length;
+      if (startNode === null && offset + len > start) {
+        startNode = node;
+        startOff = start - offset;
+      }
+      if (startNode !== null && offset + len >= start + length) {
+        endNode = node;
+        endOff = start + length - offset;
+        break;
+      }
+      offset += len;
+    }
+
+    if (!startNode || !endNode) {
+      return null;
+    }
+
+    range.setStart(startNode, startOff);
+    range.setEnd(endNode, endOff);
+    return range;
+  }
+
+  public activateCommentHighlight(commentId: string): void {
+    this.clearActiveHighlight();
+    if (!this.container) return;
+
+    const textAnchors = this.container.querySelectorAll<HTMLElement>(
+      `.md-comments-text-anchor[data-md-comment-id="${commentId}"]`
+    );
+    textAnchors.forEach((el) => el.classList.add('md-comments-text-active'));
+
+    const markedParagraphs = this.container.querySelectorAll<HTMLElement>(
+      `.md-comments-paragraph-marked[data-md-comment-id~="${commentId}"]`
+    );
+    markedParagraphs.forEach((el) => el.classList.add('md-comments-text-active'));
+
+    if (this.drawerEl) {
+      const card = this.drawerEl.querySelector<HTMLElement>(
+        `.md-comments-list-item[data-thread-id="${commentId}"]`
+      );
+      card?.classList.add('md-comments-card-active');
+    }
+  }
+
+  public clearActiveHighlight(): void {
+    if (this.container) {
+      const activeText = this.container.querySelectorAll('.md-comments-text-active');
+      activeText.forEach((el) => el.classList.remove('md-comments-text-active'));
+    }
+    if (this.drawerEl) {
+      const activeCards = this.drawerEl.querySelectorAll('.md-comments-card-active');
+      activeCards.forEach((el) => el.classList.remove('md-comments-card-active'));
+    }
+  }
+
+  private applyPendingSelectionHighlight(): void {
+    this.clearPendingSelectionHighlight();
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0 || selection.isCollapsed) return;
+
+    const range = selection.getRangeAt(0);
+    const span = document.createElement('span');
+    span.className = 'md-comments-text-anchor pending';
+    span.title = 'New comment';
+
+    try {
+      const contents = range.extractContents();
+      span.appendChild(contents);
+      range.insertNode(span);
+      selection.removeAllRanges();
+    } catch {
+      // Ignore
+    }
+  }
+
+  private clearPendingSelectionHighlight(): void {
+    if (!this.container) return;
+    const pendingSpans = this.container.querySelectorAll<HTMLElement>(
+      '.md-comments-text-anchor.pending'
+    );
+    pendingSpans.forEach((span) => {
+      const parent = span.parentNode;
+      if (!parent) return;
+      while (span.firstChild) {
+        parent.insertBefore(span.firstChild, span);
+      }
+      parent.removeChild(span);
+    });
+    try {
+      this.container.normalize();
+    } catch {
+      // Ignore
+    }
   }
 
   private async submitComment(text: string): Promise<void> {
@@ -512,6 +910,7 @@ export class CommentsOverlay {
       replies: [],
     };
 
+    this.clearPendingSelectionHighlight();
     const filePath = this.getDocumentFilePath();
     this.comments.inline_comments.push(newComment);
 
@@ -525,8 +924,10 @@ export class CommentsOverlay {
     );
 
     this.pendingSelection = null;
+    this.renderInlineHighlights();
     this.activeThreadId = newComment.id;
     this.renderDrawerContent();
+    this.activateCommentHighlight(newComment.id);
     this.updateFABCount();
   }
 

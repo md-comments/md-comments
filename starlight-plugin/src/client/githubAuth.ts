@@ -111,13 +111,18 @@ export async function requestDeviceCode(
           }),
         });
         if (devRes.ok) {
-          const data = await devRes.json();
-          if (data.device_code) {
-            const pollUrl = endpoint.replace('device-code', 'access-token');
-            return {
-              data,
-              pollUrl,
-            };
+          const text = await devRes.text();
+          try {
+            const data = JSON.parse(text);
+            if (data && data.device_code) {
+              const pollUrl = endpoint.replace('device-code', 'access-token');
+              return {
+                data,
+                pollUrl,
+              };
+            }
+          } catch {
+            // Not JSON, continue to next candidate
           }
         }
       } catch {
@@ -149,7 +154,7 @@ export async function requestDeviceCode(
   } catch (err: any) {
     if (err?.name === 'TypeError' || err?.message?.includes('fetch')) {
       throw new Error(
-        'GitHub Device OAuth was blocked by browser CORS. Please configure an authProxyUrl in plugin options or run in local dev mode.'
+        'GitHub Device OAuth was blocked by browser CORS. Restart your local dev server (pnpm watch:demo-astro), configure an authProxyUrl, or use a Personal Access Token.'
       );
     }
     throw err;

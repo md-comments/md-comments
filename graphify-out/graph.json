@@ -2419,7 +2419,7 @@
       "source_location": "L2127",
       "_origin": "ast",
       "id": "chrome_extension_src_content_rendercommentcard",
-      "community": 111,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "rendercommentcard()"
     },
@@ -2738,7 +2738,7 @@
       "source_location": "L3892",
       "_origin": "ast",
       "id": "chrome_extension_src_content_resolvedisplayname",
-      "community": 111,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "resolvedisplayname()"
     },
@@ -2760,7 +2760,7 @@
       "source_location": "L3938",
       "_origin": "ast",
       "id": "chrome_extension_src_content_renderauthor",
-      "community": 111,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "renderauthor()"
     },
@@ -2826,8 +2826,8 @@
       "source_location": "L4025",
       "_origin": "ast",
       "id": "chrome_extension_src_content_showselectionbutton",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "showselectionbutton()"
     },
     {
@@ -2837,8 +2837,8 @@
       "source_location": "L4125",
       "_origin": "ast",
       "id": "chrome_extension_src_content_hideselectionbutton",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "hideselectionbutton()"
     },
     {
@@ -2848,8 +2848,8 @@
       "source_location": "L4131",
       "_origin": "ast",
       "id": "chrome_extension_src_content_handletextselection",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "handletextselection()"
     },
     {
@@ -3937,8 +3937,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "ref_obsidian",
-      "community": 86,
-      "community_name": "shared/types.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "obsidian"
     },
     {
@@ -4256,8 +4256,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "obsidian_plugin_src_livepreview",
-      "community": 86,
-      "community_name": "shared/types.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "livepreview.ts"
     },
     {
@@ -4267,8 +4267,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "obsidian_plugin_src_livepreview_createlivepreviewextension",
-      "community": 86,
-      "community_name": "shared/types.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "createlivepreviewextension()"
     },
     {
@@ -4278,8 +4278,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "obsidian_plugin_src_main",
-      "community": 86,
-      "community_name": "shared/types.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "main.ts"
     },
     {
@@ -4290,7 +4290,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentssettings",
       "community": 86,
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": "markdowncommentssettings"
     },
     {
@@ -4301,7 +4301,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_default_settings",
       "community": 86,
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": "default_settings"
     },
     {
@@ -4312,7 +4312,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin",
       "community": 86,
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": "markdowncommentsplugin"
     },
     {
@@ -4323,7 +4323,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_onload",
       "community": 86,
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".onload()"
     },
     {
@@ -4334,7 +4334,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_triggerrefreshes",
       "community": 86,
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".triggerrefreshes()"
     },
     {
@@ -4345,7 +4345,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_getanchorblocks",
       "community": 86,
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".getanchorblocks()"
     },
     {
@@ -4356,7 +4356,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_opencomposerforparagraph",
       "community": 86,
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".opencomposerforparagraph()"
     },
     {
@@ -4367,7 +4367,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_opencomposerforselection",
       "community": 86,
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".opencomposerforselection()"
     },
     {
@@ -4378,7 +4378,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_opencomposerforcursorline",
       "community": 86,
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".opencomposerforcursorline()"
     },
     {
@@ -4389,7 +4389,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_opensidebarandfocus",
       "community": 86,
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".opensidebarandfocus()"
     },
     {
@@ -4400,7 +4400,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_activatesidebarview",
       "community": 86,
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".activatesidebarview()"
     },
     {
@@ -4411,7 +4411,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_initsidebarview",
       "community": 86,
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".initsidebarview()"
     },
     {
@@ -4422,7 +4422,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_resolvedefaultauthor",
       "community": 86,
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".resolvedefaultauthor()"
     },
     {
@@ -4433,7 +4433,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_loadsettings",
       "community": 86,
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".loadsettings()"
     },
     {
@@ -4444,7 +4444,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentsplugin_savesettings",
       "community": 86,
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".savesettings()"
     },
     {
@@ -4455,7 +4455,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_commentcomposermodal",
       "community": 86,
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": "commentcomposermodal"
     },
     {
@@ -4466,7 +4466,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_commentcomposermodal_constructor",
       "community": 86,
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".constructor()"
     },
     {
@@ -4477,7 +4477,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_commentcomposermodal_onopen",
       "community": 86,
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".onopen()"
     },
     {
@@ -4488,7 +4488,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_commentcomposermodal_onclose",
       "community": 86,
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".onclose()"
     },
     {
@@ -4499,7 +4499,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_successmodal",
       "community": 86,
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": "successmodal"
     },
     {
@@ -4510,7 +4510,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_successmodal_constructor",
       "community": 86,
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".constructor()"
     },
     {
@@ -4521,7 +4521,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_successmodal_onopen",
       "community": 86,
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".onopen()"
     },
     {
@@ -4532,7 +4532,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_successmodal_onclose",
       "community": 86,
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".onclose()"
     },
     {
@@ -4543,7 +4543,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentssettingtab",
       "community": 86,
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": "markdowncommentssettingtab"
     },
     {
@@ -4554,7 +4554,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentssettingtab_constructor",
       "community": 86,
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".constructor()"
     },
     {
@@ -4565,7 +4565,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_main_markdowncommentssettingtab_display",
       "community": 86,
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "norm_label": ".display()"
     },
     {
@@ -4575,8 +4575,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "obsidian_plugin_src_readingview",
-      "community": 86,
-      "community_name": "shared/types.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "readingview.ts"
     },
     {
@@ -4586,8 +4586,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "obsidian_plugin_src_readingview_fuzzymatch",
-      "community": 86,
-      "community_name": "shared/types.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "fuzzymatch()"
     },
     {
@@ -4597,8 +4597,8 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "obsidian_plugin_src_readingview_highlighttextinelement",
-      "community": 86,
-      "community_name": "shared/types.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "highlighttextinelement()"
     },
     {
@@ -4608,8 +4608,8 @@
       "source_location": "L114",
       "_origin": "ast",
       "id": "obsidian_plugin_src_readingview_registerreadingviewprocessor",
-      "community": 86,
-      "community_name": "shared/types.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "registerreadingviewprocessor()"
     },
     {
@@ -4619,8 +4619,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview",
-      "community": 86,
-      "community_name": "shared/types.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "sidebarview.ts"
     },
     {
@@ -4630,8 +4630,8 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_displaynamecache",
-      "community": 86,
-      "community_name": "shared/types.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "displaynamecache"
     },
     {
@@ -4641,8 +4641,8 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_pendingfetches",
-      "community": 86,
-      "community_name": "shared/types.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "pendingfetches"
     },
     {
@@ -4653,7 +4653,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_commentssidebarview",
       "community": 3,
-      "community_name": "src/author.ts",
+      "community_name": "CommentsSidebarView",
       "norm_label": "commentssidebarview"
     },
     {
@@ -4663,8 +4663,8 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_commentssidebarview_constructor",
-      "community": 86,
-      "community_name": "shared/types.ts",
+      "community": 3,
+      "community_name": "CommentsSidebarView",
       "norm_label": ".constructor()"
     },
     {
@@ -4675,7 +4675,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_commentssidebarview_getviewtype",
       "community": 3,
-      "community_name": "src/author.ts",
+      "community_name": "CommentsSidebarView",
       "norm_label": ".getviewtype()"
     },
     {
@@ -4686,7 +4686,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_commentssidebarview_getdisplaytext",
       "community": 3,
-      "community_name": "src/author.ts",
+      "community_name": "CommentsSidebarView",
       "norm_label": ".getdisplaytext()"
     },
     {
@@ -4697,7 +4697,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_commentssidebarview_geticon",
       "community": 3,
-      "community_name": "src/author.ts",
+      "community_name": "CommentsSidebarView",
       "norm_label": ".geticon()"
     },
     {
@@ -4708,7 +4708,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_commentssidebarview_onopen",
       "community": 3,
-      "community_name": "src/author.ts",
+      "community_name": "CommentsSidebarView",
       "norm_label": ".onopen()"
     },
     {
@@ -4719,7 +4719,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_commentssidebarview_onclose",
       "community": 3,
-      "community_name": "src/author.ts",
+      "community_name": "CommentsSidebarView",
       "norm_label": ".onclose()"
     },
     {
@@ -4730,7 +4730,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_commentssidebarview_refresh",
       "community": 3,
-      "community_name": "src/author.ts",
+      "community_name": "CommentsSidebarView",
       "norm_label": ".refresh()"
     },
     {
@@ -4741,7 +4741,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_commentssidebarview_renderemptystate",
       "community": 3,
-      "community_name": "src/author.ts",
+      "community_name": "CommentsSidebarView",
       "norm_label": ".renderemptystate()"
     },
     {
@@ -4752,7 +4752,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_commentssidebarview_formattime",
       "community": 3,
-      "community_name": "src/author.ts",
+      "community_name": "CommentsSidebarView",
       "norm_label": ".formattime()"
     },
     {
@@ -4763,7 +4763,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_commentssidebarview_renderavatar",
       "community": 3,
-      "community_name": "src/author.ts",
+      "community_name": "CommentsSidebarView",
       "norm_label": ".renderavatar()"
     },
     {
@@ -4774,7 +4774,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_commentssidebarview_resolvedisplayname",
       "community": 3,
-      "community_name": "src/author.ts",
+      "community_name": "CommentsSidebarView",
       "norm_label": ".resolvedisplayname()"
     },
     {
@@ -4785,7 +4785,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_commentssidebarview_fetchdisplayname",
       "community": 3,
-      "community_name": "src/author.ts",
+      "community_name": "CommentsSidebarView",
       "norm_label": ".fetchdisplayname()"
     },
     {
@@ -4796,7 +4796,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_commentssidebarview_rendermentions",
       "community": 3,
-      "community_name": "src/author.ts",
+      "community_name": "CommentsSidebarView",
       "norm_label": ".rendermentions()"
     },
     {
@@ -4807,7 +4807,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_commentssidebarview_renderreactions",
       "community": 3,
-      "community_name": "src/author.ts",
+      "community_name": "CommentsSidebarView",
       "norm_label": ".renderreactions()"
     },
     {
@@ -4818,7 +4818,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_commentssidebarview_renderthread",
       "community": 3,
-      "community_name": "src/author.ts",
+      "community_name": "CommentsSidebarView",
       "norm_label": ".renderthread()"
     },
     {
@@ -4829,7 +4829,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_commentssidebarview_renderreply",
       "community": 3,
-      "community_name": "src/author.ts",
+      "community_name": "CommentsSidebarView",
       "norm_label": ".renderreply()"
     },
     {
@@ -4840,7 +4840,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_commentssidebarview_renderresolvedcollapse",
       "community": 3,
-      "community_name": "src/author.ts",
+      "community_name": "CommentsSidebarView",
       "norm_label": ".renderresolvedcollapse()"
     },
     {
@@ -4851,7 +4851,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_commentssidebarview_renderactions",
       "community": 3,
-      "community_name": "src/author.ts",
+      "community_name": "CommentsSidebarView",
       "norm_label": ".renderactions()"
     },
     {
@@ -4862,7 +4862,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_commentssidebarview_rendercomposerhtml",
       "community": 3,
-      "community_name": "src/author.ts",
+      "community_name": "CommentsSidebarView",
       "norm_label": ".rendercomposerhtml()"
     },
     {
@@ -4873,7 +4873,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_commentssidebarview_restorecomposers",
       "community": 3,
-      "community_name": "src/author.ts",
+      "community_name": "CommentsSidebarView",
       "norm_label": ".restorecomposers()"
     },
     {
@@ -4884,7 +4884,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_commentssidebarview_handleclicks",
       "community": 3,
-      "community_name": "src/author.ts",
+      "community_name": "CommentsSidebarView",
       "norm_label": ".handleclicks()"
     },
     {
@@ -4895,7 +4895,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_commentssidebarview_showemojipickerpopup",
       "community": 3,
-      "community_name": "src/author.ts",
+      "community_name": "CommentsSidebarView",
       "norm_label": ".showemojipickerpopup()"
     },
     {
@@ -4906,7 +4906,7 @@
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_commentssidebarview_highlightandscrollto",
       "community": 3,
-      "community_name": "src/author.ts",
+      "community_name": "CommentsSidebarView",
       "norm_label": ".highlightandscrollto()"
     },
     {
@@ -4938,8 +4938,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_newid",
-      "community": 12,
-      "community_name": "CommentsFile",
+      "community": 101,
+      "community_name": "CommentStore",
       "norm_label": "newid()"
     },
     {
@@ -4993,8 +4993,8 @@
       "source_location": "L76",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore",
-      "community": 12,
-      "community_name": "CommentsFile",
+      "community": 101,
+      "community_name": "CommentStore",
       "norm_label": "commentstore"
     },
     {
@@ -5004,8 +5004,8 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_constructor",
-      "community": 12,
-      "community_name": "CommentsFile",
+      "community": 101,
+      "community_name": "CommentStore",
       "norm_label": ".constructor()"
     },
     {
@@ -5015,8 +5015,8 @@
       "source_location": "L82",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_getcommentspath",
-      "community": 12,
-      "community_name": "CommentsFile",
+      "community": 101,
+      "community_name": "CommentStore",
       "norm_label": ".getcommentspath()"
     },
     {
@@ -5026,8 +5026,8 @@
       "source_location": "L86",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_readcomments",
-      "community": 12,
-      "community_name": "CommentsFile",
+      "community": 101,
+      "community_name": "CommentStore",
       "norm_label": ".readcomments()"
     },
     {
@@ -5037,8 +5037,8 @@
       "source_location": "L120",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_writecomments",
-      "community": 12,
-      "community_name": "CommentsFile",
+      "community": 101,
+      "community_name": "CommentStore",
       "norm_label": ".writecomments()"
     },
     {
@@ -5048,8 +5048,8 @@
       "source_location": "L132",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_addinlinecomment",
-      "community": 12,
-      "community_name": "CommentsFile",
+      "community": 101,
+      "community_name": "CommentStore",
       "norm_label": ".addinlinecomment()"
     },
     {
@@ -5059,8 +5059,8 @@
       "source_location": "L162",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_addpagecomment",
-      "community": 12,
-      "community_name": "CommentsFile",
+      "community": 101,
+      "community_name": "CommentStore",
       "norm_label": ".addpagecomment()"
     },
     {
@@ -5070,8 +5070,8 @@
       "source_location": "L178",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_addreply",
-      "community": 12,
-      "community_name": "CommentsFile",
+      "community": 101,
+      "community_name": "CommentStore",
       "norm_label": ".addreply()"
     },
     {
@@ -5081,8 +5081,8 @@
       "source_location": "L202",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_deletecomment",
-      "community": 12,
-      "community_name": "CommentsFile",
+      "community": 101,
+      "community_name": "CommentStore",
       "norm_label": ".deletecomment()"
     },
     {
@@ -5092,8 +5092,8 @@
       "source_location": "L241",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_editcomment",
-      "community": 12,
-      "community_name": "CommentsFile",
+      "community": 101,
+      "community_name": "CommentStore",
       "norm_label": ".editcomment()"
     },
     {
@@ -5103,8 +5103,8 @@
       "source_location": "L289",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_resolvecomment",
-      "community": 12,
-      "community_name": "CommentsFile",
+      "community": 101,
+      "community_name": "CommentStore",
       "norm_label": ".resolvecomment()"
     },
     {
@@ -5114,8 +5114,8 @@
       "source_location": "L303",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_unresolvecomment",
-      "community": 12,
-      "community_name": "CommentsFile",
+      "community": 101,
+      "community_name": "CommentStore",
       "norm_label": ".unresolvecomment()"
     },
     {
@@ -5125,8 +5125,8 @@
       "source_location": "L317",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_togglereaction",
-      "community": 12,
-      "community_name": "CommentsFile",
+      "community": 101,
+      "community_name": "CommentStore",
       "norm_label": ".togglereaction()"
     },
     {
@@ -5136,8 +5136,8 @@
       "source_location": "L365",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_reanchorcomment",
-      "community": 12,
-      "community_name": "CommentsFile",
+      "community": 101,
+      "community_name": "CommentStore",
       "norm_label": ".reanchorcomment()"
     },
     {
@@ -5147,8 +5147,8 @@
       "source_location": "L389",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_updateorphanflags",
-      "community": 12,
-      "community_name": "CommentsFile",
+      "community": 101,
+      "community_name": "CommentStore",
       "norm_label": ".updateorphanflags()"
     },
     {
@@ -5818,8 +5818,8 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "package_devdependencies_types_js_yaml",
-      "community": 78,
-      "community_name": "devDependencies",
+      "community": 106,
+      "community_name": "@types/js-yaml",
       "norm_label": "@types/js-yaml"
     },
     {
@@ -5829,8 +5829,8 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "package_json_types_js_yaml",
-      "community": 78,
-      "community_name": "devDependencies",
+      "community": 106,
+      "community_name": "@types/js-yaml",
       "norm_label": "@types/js-yaml"
     },
     {
@@ -5884,8 +5884,8 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "package_devdependencies_typescript",
-      "community": 89,
-      "community_name": "typescript",
+      "community": 78,
+      "community_name": "devDependencies",
       "norm_label": "typescript"
     },
     {
@@ -5895,8 +5895,8 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "package_json_typescript",
-      "community": 89,
-      "community_name": "typescript",
+      "community": 78,
+      "community_name": "devDependencies",
       "norm_label": "typescript"
     },
     {
@@ -6189,8 +6189,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_anchor",
-      "community": 86,
-      "community_name": "shared/types.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "anchor.ts"
     },
     {
@@ -6200,8 +6200,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "shared_anchor_fnv1ahash",
-      "community": 86,
-      "community_name": "shared/types.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "fnv1ahash()"
     },
     {
@@ -6211,8 +6211,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "shared_anchor_computeanchorid",
-      "community": 86,
-      "community_name": "shared/types.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "computeanchorid()"
     },
     {
@@ -6222,8 +6222,8 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "shared_anchor_normalizeanchortext",
-      "community": 86,
-      "community_name": "shared/types.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "normalizeanchortext()"
     },
     {
@@ -6233,8 +6233,8 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "shared_anchor_parsemarkdownanchors",
-      "community": 86,
-      "community_name": "shared/types.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "parsemarkdownanchors()"
     },
     {
@@ -6244,8 +6244,8 @@
       "source_location": "L126",
       "_origin": "ast",
       "id": "shared_anchor_findblockbyindex",
-      "community": 86,
-      "community_name": "shared/types.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "findblockbyindex()"
     },
     {
@@ -6255,8 +6255,8 @@
       "source_location": "L130",
       "_origin": "ast",
       "id": "shared_anchor_findblockbyhash",
-      "community": 86,
-      "community_name": "shared/types.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "findblockbyhash()"
     },
     {
@@ -6266,7 +6266,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_author",
-      "community": 3,
+      "community": 103,
       "community_name": "src/author.ts",
       "norm_label": "shared/author.ts"
     },
@@ -6277,7 +6277,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "shared_author_clearauthorcache",
-      "community": 3,
+      "community": 103,
       "community_name": "src/author.ts",
       "norm_label": "clearauthorcache()"
     },
@@ -6288,8 +6288,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "shared_author_getcachedauthor",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 103,
+      "community_name": "src/author.ts",
       "norm_label": "getcachedauthor()"
     },
     {
@@ -6299,7 +6299,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "shared_author_setcachedauthor",
-      "community": 3,
+      "community": 103,
       "community_name": "src/author.ts",
       "norm_label": "setcachedauthor()"
     },
@@ -6310,7 +6310,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "shared_author_iscachevalid",
-      "community": 3,
+      "community": 103,
       "community_name": "src/author.ts",
       "norm_label": "iscachevalid()"
     },
@@ -6321,7 +6321,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "shared_author_fallbackauthor",
-      "community": 3,
+      "community": 103,
       "community_name": "src/author.ts",
       "norm_label": "fallbackauthor()"
     },
@@ -6333,7 +6333,7 @@
       "_origin": "ast",
       "id": "shared_author_isgithublogin",
       "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "isgithublogin()"
     },
     {
@@ -6343,7 +6343,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "shared_author_githubprofileurl",
-      "community": 111,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "githubprofileurl()"
     },
@@ -6354,7 +6354,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "shared_author_githubavatarurl",
-      "community": 3,
+      "community": 103,
       "community_name": "src/author.ts",
       "norm_label": "githubavatarurl()"
     },
@@ -6365,8 +6365,8 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "shared_author_extractmentionlogins",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 103,
+      "community_name": "src/author.ts",
       "norm_label": "extractmentionlogins()"
     },
     {
@@ -6585,8 +6585,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_html",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "html.ts"
     },
     {
@@ -6596,7 +6596,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "shared_html_escapehtml",
-      "community": 111,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "escapehtml()"
     },
@@ -6607,8 +6607,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_index",
-      "community": 86,
-      "community_name": "shared/types.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "shared/index.ts"
     },
     {
@@ -6981,8 +6981,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_placement",
-      "community": 86,
-      "community_name": "shared/types.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "shared/placement.ts"
     },
     {
@@ -6992,8 +6992,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "shared_placement_fuzzymatch",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "fuzzymatch()"
     },
     {
@@ -7003,8 +7003,8 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "shared_placement_placeinlinecomments",
-      "community": 86,
-      "community_name": "shared/types.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "placeinlinecomments()"
     },
     {
@@ -7014,8 +7014,8 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "shared_placement_isorphanedplacement",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "isorphanedplacement()"
     },
     {
@@ -7025,8 +7025,8 @@
       "source_location": "L85",
       "_origin": "ast",
       "id": "shared_placement_unplacedororphan",
-      "community": 86,
-      "community_name": "shared/types.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "unplacedororphan()"
     },
     {
@@ -7036,8 +7036,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_repodetector",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 104,
+      "community_name": "repoManager.ts",
       "norm_label": "repodetector.ts"
     },
     {
@@ -7047,8 +7047,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_repodetector_githubrepoinfo",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 104,
+      "community_name": "repoManager.ts",
       "norm_label": "githubrepoinfo"
     },
     {
@@ -7058,8 +7058,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "shared_repodetector_parsegithubremote",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 104,
+      "community_name": "repoManager.ts",
       "norm_label": "parsegithubremote()"
     },
     {
@@ -7069,8 +7069,8 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "shared_repodetector_parsegithubpageurl",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 104,
+      "community_name": "repoManager.ts",
       "norm_label": "parsegithubpageurl()"
     },
     {
@@ -7278,8 +7278,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_types",
-      "community": 86,
-      "community_name": "shared/types.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "shared/types.ts"
     },
     {
@@ -7289,8 +7289,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_types_reaction",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "reaction"
     },
     {
@@ -7311,8 +7311,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "shared_types_pagecomment",
-      "community": 3,
-      "community_name": "src/author.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "pagecomment"
     },
     {
@@ -7322,8 +7322,8 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "shared_types_inlinecomment",
-      "community": 86,
-      "community_name": "shared/types.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "inlinecomment"
     },
     {
@@ -7344,8 +7344,8 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "shared_types_commentroottype",
-      "community": 12,
-      "community_name": "CommentsFile",
+      "community": 101,
+      "community_name": "CommentStore",
       "norm_label": "commentroottype"
     },
     {
@@ -7355,8 +7355,8 @@
       "source_location": "L52",
       "_origin": "ast",
       "id": "shared_types_anchorblock",
-      "community": 86,
-      "community_name": "shared/types.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "anchorblock"
     },
     {
@@ -7366,8 +7366,8 @@
       "source_location": "L60",
       "_origin": "ast",
       "id": "shared_types_placementresult",
-      "community": 86,
-      "community_name": "shared/types.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "placementresult"
     },
     {
@@ -7759,7 +7759,7 @@
       "label": "AuthModal",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/AuthModal.ts",
-      "source_location": "L4",
+      "source_location": "L10",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_authmodal_authmodal",
       "community": 4,
@@ -7770,7 +7770,7 @@
       "label": ".constructor()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/AuthModal.ts",
-      "source_location": "L10",
+      "source_location": "L16",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_authmodal_authmodal_constructor",
       "community": 4,
@@ -7781,7 +7781,7 @@
       "label": ".show()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/AuthModal.ts",
-      "source_location": "L19",
+      "source_location": "L25",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_authmodal_authmodal_show",
       "community": 4,
@@ -7792,7 +7792,7 @@
       "label": ".close()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/AuthModal.ts",
-      "source_location": "L140",
+      "source_location": "L247",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_authmodal_authmodal_close",
       "community": 4,
@@ -7858,7 +7858,7 @@
       "label": ".updateAuthUserUI()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L135",
+      "source_location": "L136",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_updateauthuserui",
       "community": 4,
@@ -7869,7 +7869,7 @@
       "label": ".bindSelectionEvents()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L166",
+      "source_location": "L167",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_bindselectionevents",
       "community": 4,
@@ -7880,7 +7880,7 @@
       "label": ".showSelectionBubble()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L216",
+      "source_location": "L217",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_showselectionbubble",
       "community": 4,
@@ -7891,7 +7891,7 @@
       "label": ".hideSelectionBubble()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L223",
+      "source_location": "L224",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_hideselectionbubble",
       "community": 4,
@@ -7902,7 +7902,7 @@
       "label": ".loadComments()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L229",
+      "source_location": "L230",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_loadcomments",
       "community": 4,
@@ -7913,7 +7913,7 @@
       "label": ".updateFABCount()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L247",
+      "source_location": "L249",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_updatefabcount",
       "community": 4,
@@ -7924,7 +7924,7 @@
       "label": ".getDocumentFilePath()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L258",
+      "source_location": "L260",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_getdocumentfilepath",
       "community": 4,
@@ -7935,7 +7935,7 @@
       "label": ".toggleDrawer()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L265",
+      "source_location": "L285",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_toggledrawer",
       "community": 4,
@@ -7946,7 +7946,7 @@
       "label": ".openDrawer()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L273",
+      "source_location": "L293",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_opendrawer",
       "community": 4,
@@ -7957,7 +7957,7 @@
       "label": ".closeDrawer()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L287",
+      "source_location": "L307",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_closedrawer",
       "community": 4,
@@ -7968,7 +7968,7 @@
       "label": ".openNewCommentDrawer()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L297",
+      "source_location": "L319",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_opennewcommentdrawer",
       "community": 4,
@@ -7979,7 +7979,7 @@
       "label": ".openThreadDrawer()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L302",
+      "source_location": "L324",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_openthreaddrawer",
       "community": 4,
@@ -7990,7 +7990,7 @@
       "label": ".renderDrawerContent()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L308",
+      "source_location": "L332",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_renderdrawercontent",
       "community": 4,
@@ -7998,10 +7998,142 @@
       "norm_label": ".renderdrawercontent()"
     },
     {
+      "label": ".renderInlineHighlights()",
+      "file_type": "code",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L527",
+      "_origin": "ast",
+      "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_renderinlinehighlights",
+      "community": 4,
+      "community_name": "CommentsOverlay",
+      "norm_label": ".renderinlinehighlights()"
+    },
+    {
+      "label": ".clearInlineHighlights()",
+      "file_type": "code",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L560",
+      "_origin": "ast",
+      "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_clearinlinehighlights",
+      "community": 4,
+      "community_name": "CommentsOverlay",
+      "norm_label": ".clearinlinehighlights()"
+    },
+    {
+      "label": ".isFullParagraphText()",
+      "file_type": "code",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L593",
+      "_origin": "ast",
+      "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_isfullparagraphtext",
+      "community": 4,
+      "community_name": "CommentsOverlay",
+      "norm_label": ".isfullparagraphtext()"
+    },
+    {
+      "label": ".markFullParagraph()",
+      "file_type": "code",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L601",
+      "_origin": "ast",
+      "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_markfullparagraph",
+      "community": 4,
+      "community_name": "CommentsOverlay",
+      "norm_label": ".markfullparagraph()"
+    },
+    {
+      "label": ".wrapAnchorTextInElement()",
+      "file_type": "code",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L637",
+      "_origin": "ast",
+      "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_wrapanchortextinelement",
+      "community": 4,
+      "community_name": "CommentsOverlay",
+      "norm_label": ".wrapanchortextinelement()"
+    },
+    {
+      "label": ".findNeedleRange()",
+      "file_type": "code",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L680",
+      "_origin": "ast",
+      "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_findneedlerange",
+      "community": 4,
+      "community_name": "CommentsOverlay",
+      "norm_label": ".findneedlerange()"
+    },
+    {
+      "label": ".mapNormIndexToRaw()",
+      "file_type": "code",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L734",
+      "_origin": "ast",
+      "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_mapnormindextoraw",
+      "community": 4,
+      "community_name": "CommentsOverlay",
+      "norm_label": ".mapnormindextoraw()"
+    },
+    {
+      "label": ".createDomRange()",
+      "file_type": "code",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L757",
+      "_origin": "ast",
+      "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_createdomrange",
+      "community": 4,
+      "community_name": "CommentsOverlay",
+      "norm_label": ".createdomrange()"
+    },
+    {
+      "label": ".activateCommentHighlight()",
+      "file_type": "code",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L807",
+      "_origin": "ast",
+      "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_activatecommenthighlight",
+      "community": 4,
+      "community_name": "CommentsOverlay",
+      "norm_label": ".activatecommenthighlight()"
+    },
+    {
+      "label": ".clearActiveHighlight()",
+      "file_type": "code",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L829",
+      "_origin": "ast",
+      "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_clearactivehighlight",
+      "community": 4,
+      "community_name": "CommentsOverlay",
+      "norm_label": ".clearactivehighlight()"
+    },
+    {
+      "label": ".applyPendingSelectionHighlight()",
+      "file_type": "code",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L840",
+      "_origin": "ast",
+      "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_applypendingselectionhighlight",
+      "community": 4,
+      "community_name": "CommentsOverlay",
+      "norm_label": ".applypendingselectionhighlight()"
+    },
+    {
+      "label": ".clearPendingSelectionHighlight()",
+      "file_type": "code",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L860",
+      "_origin": "ast",
+      "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_clearpendingselectionhighlight",
+      "community": 4,
+      "community_name": "CommentsOverlay",
+      "norm_label": ".clearpendingselectionhighlight()"
+    },
+    {
       "label": ".submitComment()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L482",
+      "source_location": "L880",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_submitcomment",
       "community": 4,
@@ -8012,7 +8144,7 @@
       "label": ".submitReply()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L533",
+      "source_location": "L934",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_submitreply",
       "community": 4,
@@ -8144,7 +8276,7 @@
       "label": "pollForAccessToken()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/githubAuth.ts",
-      "source_location": "L163",
+      "source_location": "L168",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_githubauth_pollforaccesstoken",
       "community": 4,
@@ -8155,7 +8287,7 @@
       "label": "getViewer()",
       "file_type": "code",
       "source_file": "starlight-plugin/src/client/githubAuth.ts",
-      "source_location": "L245",
+      "source_location": "L250",
       "_origin": "ast",
       "id": "starlight_plugin_src_client_githubauth_getviewer",
       "community": 4,
@@ -8477,8 +8609,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_anchor_test",
-      "community": 86,
-      "community_name": "shared/types.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "anchor.test.ts"
     },
     {
@@ -8499,8 +8631,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_placement_test",
-      "community": 86,
-      "community_name": "shared/types.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "placement.test.ts"
     },
     {
@@ -8510,8 +8642,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_repodetector_test",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 104,
+      "community_name": "repoManager.ts",
       "norm_label": "repodetector.test.ts"
     },
     {
@@ -10127,8 +10259,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "ref_vscode",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "vscode"
     },
     {
@@ -10897,7 +11029,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_author",
-      "community": 3,
+      "community": 103,
       "community_name": "src/author.ts",
       "norm_label": "src/author.ts"
     },
@@ -10908,7 +11040,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "vscode_extension_src_author_execfileasync",
-      "community": 3,
+      "community": 103,
       "community_name": "src/author.ts",
       "norm_label": "execfileasync"
     },
@@ -10920,7 +11052,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_author_warmauthorcache",
       "community": 30,
-      "community_name": "commentStore.ts",
+      "community_name": "extension.ts",
       "norm_label": "warmauthorcache()"
     },
     {
@@ -10930,8 +11062,8 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "vscode_extension_src_author_getauthor",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 103,
+      "community_name": "src/author.ts",
       "norm_label": "getauthor()"
     },
     {
@@ -10941,7 +11073,7 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "vscode_extension_src_author_resolvegithubusername",
-      "community": 3,
+      "community": 103,
       "community_name": "src/author.ts",
       "norm_label": "resolvegithubusername()"
     },
@@ -10952,7 +11084,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "vscode_extension_src_author_getusernamefromgithubsession",
-      "community": 3,
+      "community": 103,
       "community_name": "src/author.ts",
       "norm_label": "getusernamefromgithubsession()"
     },
@@ -10963,7 +11095,7 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "vscode_extension_src_author_getusernamefromoauthtoken",
-      "community": 3,
+      "community": 103,
       "community_name": "src/author.ts",
       "norm_label": "getusernamefromoauthtoken()"
     },
@@ -10974,7 +11106,7 @@
       "source_location": "L106",
       "_origin": "ast",
       "id": "vscode_extension_src_author_getusernamefromghcli",
-      "community": 3,
+      "community": 103,
       "community_name": "src/author.ts",
       "norm_label": "getusernamefromghcli()"
     },
@@ -10985,7 +11117,7 @@
       "source_location": "L118",
       "_origin": "ast",
       "id": "vscode_extension_src_author_getusernamefromgitconfig",
-      "community": 3,
+      "community": 103,
       "community_name": "src/author.ts",
       "norm_label": "getusernamefromgitconfig()"
     },
@@ -10996,8 +11128,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_codelensprovider",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "codelensprovider.ts"
     },
     {
@@ -11007,8 +11139,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "vscode_extension_src_codelensprovider_markdowncommentscodelensprovider",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "markdowncommentscodelensprovider"
     },
     {
@@ -11018,8 +11150,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "vscode_extension_src_codelensprovider_markdowncommentscodelensprovider_refresh",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": ".refresh()"
     },
     {
@@ -11029,8 +11161,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "vscode_extension_src_codelensprovider_markdowncommentscodelensprovider_providecodelenses",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": ".providecodelenses()"
     },
     {
@@ -11040,7 +11172,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_commentactions",
-      "community": 30,
+      "community": 99,
       "community_name": "commentStore.ts",
       "norm_label": "commentactions.ts"
     },
@@ -11051,7 +11183,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "vscode_extension_src_commentactions_resolvetext",
-      "community": 30,
+      "community": 99,
       "community_name": "commentStore.ts",
       "norm_label": "resolvetext()"
     },
@@ -11063,7 +11195,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_commentactions_commentactionmessage",
       "community": 30,
-      "community_name": "commentStore.ts",
+      "community_name": "extension.ts",
       "norm_label": "commentactionmessage"
     },
     {
@@ -11073,7 +11205,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "vscode_extension_src_commentactions_savedtoast",
-      "community": 30,
+      "community": 99,
       "community_name": "commentStore.ts",
       "norm_label": "savedtoast()"
     },
@@ -11084,7 +11216,7 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "vscode_extension_src_commentactions_executecommentaction",
-      "community": 30,
+      "community": 99,
       "community_name": "commentStore.ts",
       "norm_label": "executecommentaction()"
     },
@@ -11095,8 +11227,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 111,
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "commentpreviewpanel.ts"
     },
     {
@@ -11107,7 +11239,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel",
       "community": 30,
-      "community_name": "commentStore.ts",
+      "community_name": "extension.ts",
       "norm_label": "commentpreviewpanel"
     },
     {
@@ -11118,7 +11250,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_show",
       "community": 30,
-      "community_name": "commentStore.ts",
+      "community_name": "extension.ts",
       "norm_label": ".show()"
     },
     {
@@ -11129,7 +11261,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_refreshforuri",
       "community": 30,
-      "community_name": "commentStore.ts",
+      "community_name": "extension.ts",
       "norm_label": ".refreshforuri()"
     },
     {
@@ -11140,7 +11272,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_isopenforuri",
       "community": 30,
-      "community_name": "commentStore.ts",
+      "community_name": "extension.ts",
       "norm_label": ".isopenforuri()"
     },
     {
@@ -11151,7 +11283,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_closeforuri",
       "community": 30,
-      "community_name": "commentStore.ts",
+      "community_name": "extension.ts",
       "norm_label": ".closeforuri()"
     },
     {
@@ -11162,7 +11294,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_closeall",
       "community": 30,
-      "community_name": "commentStore.ts",
+      "community_name": "extension.ts",
       "norm_label": ".closeall()"
     },
     {
@@ -11173,7 +11305,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_constructor",
       "community": 30,
-      "community_name": "commentStore.ts",
+      "community_name": "extension.ts",
       "norm_label": ".constructor()"
     },
     {
@@ -11184,7 +11316,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_refresh",
       "community": 30,
-      "community_name": "commentStore.ts",
+      "community_name": "extension.ts",
       "norm_label": ".refresh()"
     },
     {
@@ -11194,7 +11326,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore",
-      "community": 30,
+      "community": 99,
       "community_name": "commentStore.ts",
       "norm_label": "commentstore.ts"
     },
@@ -11205,7 +11337,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_gitrefbackend",
-      "community": 30,
+      "community": 99,
       "community_name": "commentStore.ts",
       "norm_label": "gitrefbackend"
     },
@@ -11216,7 +11348,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_empty",
-      "community": 30,
+      "community": 99,
       "community_name": "commentStore.ts",
       "norm_label": "empty"
     },
@@ -11227,7 +11359,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_commentsuriformarkdown",
-      "community": 30,
+      "community": 99,
       "community_name": "commentStore.ts",
       "norm_label": "commentsuriformarkdown()"
     },
@@ -11238,7 +11370,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_commentsfspathformarkdown",
-      "community": 30,
+      "community": 99,
       "community_name": "commentStore.ts",
       "norm_label": "commentsfspathformarkdown()"
     },
@@ -11249,7 +11381,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_readcomments",
-      "community": 30,
+      "community": 99,
       "community_name": "commentStore.ts",
       "norm_label": "readcomments()"
     },
@@ -11260,7 +11392,7 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_writecomments",
-      "community": 30,
+      "community": 99,
       "community_name": "commentStore.ts",
       "norm_label": "writecomments()"
     },
@@ -11271,7 +11403,7 @@
       "source_location": "L79",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_newid",
-      "community": 30,
+      "community": 99,
       "community_name": "commentStore.ts",
       "norm_label": "newid()"
     },
@@ -11282,7 +11414,7 @@
       "source_location": "L83",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_normalizereply",
-      "community": 30,
+      "community": 99,
       "community_name": "commentStore.ts",
       "norm_label": "normalizereply()"
     },
@@ -11293,7 +11425,7 @@
       "source_location": "L94",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_normalizepagecomment",
-      "community": 30,
+      "community": 99,
       "community_name": "commentStore.ts",
       "norm_label": "normalizepagecomment()"
     },
@@ -11304,7 +11436,7 @@
       "source_location": "L108",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_normalizeinlinecomment",
-      "community": 30,
+      "community": 99,
       "community_name": "commentStore.ts",
       "norm_label": "normalizeinlinecomment()"
     },
@@ -11315,7 +11447,7 @@
       "source_location": "L128",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_normalizecommentsfile",
-      "community": 30,
+      "community": 99,
       "community_name": "commentStore.ts",
       "norm_label": "normalizecommentsfile()"
     },
@@ -11326,7 +11458,7 @@
       "source_location": "L139",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_addinlinecomment",
-      "community": 30,
+      "community": 99,
       "community_name": "commentStore.ts",
       "norm_label": "addinlinecomment()"
     },
@@ -11337,7 +11469,7 @@
       "source_location": "L169",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_addpagecomment",
-      "community": 30,
+      "community": 99,
       "community_name": "commentStore.ts",
       "norm_label": "addpagecomment()"
     },
@@ -11348,7 +11480,7 @@
       "source_location": "L188",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_addreply",
-      "community": 30,
+      "community": 99,
       "community_name": "commentStore.ts",
       "norm_label": "addreply()"
     },
@@ -11359,7 +11491,7 @@
       "source_location": "L212",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_deletecomment",
-      "community": 30,
+      "community": 99,
       "community_name": "commentStore.ts",
       "norm_label": "deletecomment()"
     },
@@ -11370,7 +11502,7 @@
       "source_location": "L250",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_editcomment",
-      "community": 30,
+      "community": 99,
       "community_name": "commentStore.ts",
       "norm_label": "editcomment()"
     },
@@ -11381,7 +11513,7 @@
       "source_location": "L297",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_resolvecomment",
-      "community": 30,
+      "community": 99,
       "community_name": "commentStore.ts",
       "norm_label": "resolvecomment()"
     },
@@ -11392,7 +11524,7 @@
       "source_location": "L315",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_unresolvecomment",
-      "community": 30,
+      "community": 99,
       "community_name": "commentStore.ts",
       "norm_label": "unresolvecomment()"
     },
@@ -11403,7 +11535,7 @@
       "source_location": "L333",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_applyreactiontoggle",
-      "community": 30,
+      "community": 99,
       "community_name": "commentStore.ts",
       "norm_label": "applyreactiontoggle()"
     },
@@ -11414,7 +11546,7 @@
       "source_location": "L349",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_togglereaction",
-      "community": 30,
+      "community": 99,
       "community_name": "commentStore.ts",
       "norm_label": "togglereaction()"
     },
@@ -11425,7 +11557,7 @@
       "source_location": "L376",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_reanchorcomment",
-      "community": 30,
+      "community": 99,
       "community_name": "commentStore.ts",
       "norm_label": "reanchorcomment()"
     },
@@ -11436,7 +11568,7 @@
       "source_location": "L400",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_updateorphanflags",
-      "community": 30,
+      "community": 99,
       "community_name": "commentStore.ts",
       "norm_label": "updateorphanflags()"
     },
@@ -11448,7 +11580,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_extension",
       "community": 30,
-      "community_name": "commentStore.ts",
+      "community_name": "extension.ts",
       "norm_label": "extension.ts"
     },
     {
@@ -11459,7 +11591,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_extension_mdurifrommessage",
       "community": 30,
-      "community_name": "commentStore.ts",
+      "community_name": "extension.ts",
       "norm_label": "mdurifrommessage()"
     },
     {
@@ -11470,7 +11602,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_extension_updatestatusbar",
       "community": 30,
-      "community_name": "commentStore.ts",
+      "community_name": "extension.ts",
       "norm_label": "updatestatusbar()"
     },
     {
@@ -11481,7 +11613,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_extension_refreshpreview",
       "community": 30,
-      "community_name": "commentStore.ts",
+      "community_name": "extension.ts",
       "norm_label": "refreshpreview()"
     },
     {
@@ -11492,7 +11624,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_extension_handlepreviewaction",
       "community": 30,
-      "community_name": "commentStore.ts",
+      "community_name": "extension.ts",
       "norm_label": "handlepreviewaction()"
     },
     {
@@ -11503,7 +11635,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_extension_handleuri",
       "community": 30,
-      "community_name": "commentStore.ts",
+      "community_name": "extension.ts",
       "norm_label": "handleuri()"
     },
     {
@@ -11514,7 +11646,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_extension_activate",
       "community": 30,
-      "community_name": "commentStore.ts",
+      "community_name": "extension.ts",
       "norm_label": "activate()"
     },
     {
@@ -11525,7 +11657,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_extension_deactivate",
       "community": 30,
-      "community_name": "commentStore.ts",
+      "community_name": "extension.ts",
       "norm_label": "deactivate()"
     },
     {
@@ -11536,7 +11668,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth",
       "community": 30,
-      "community_name": "commentStore.ts",
+      "community_name": "extension.ts",
       "norm_label": "vscode-extension/src/githubauth.ts"
     },
     {
@@ -11547,7 +11679,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth_initializeauth",
       "community": 30,
-      "community_name": "commentStore.ts",
+      "community_name": "extension.ts",
       "norm_label": "initializeauth()"
     },
     {
@@ -11557,7 +11689,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth_hastokensync",
-      "community": 111,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "hastokensync()"
     },
@@ -11569,7 +11701,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth_getoauthtoken",
       "community": 30,
-      "community_name": "commentStore.ts",
+      "community_name": "extension.ts",
       "norm_label": "getoauthtoken()"
     },
     {
@@ -11580,7 +11712,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth_devicecoderesponse",
       "community": 30,
-      "community_name": "commentStore.ts",
+      "community_name": "extension.ts",
       "norm_label": "devicecoderesponse"
     },
     {
@@ -11591,7 +11723,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth_requestdevicecode",
       "community": 30,
-      "community_name": "commentStore.ts",
+      "community_name": "extension.ts",
       "norm_label": "requestdevicecode()"
     },
     {
@@ -11602,7 +11734,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth_pollforaccesstoken",
       "community": 30,
-      "community_name": "commentStore.ts",
+      "community_name": "extension.ts",
       "norm_label": "pollforaccesstoken()"
     },
     {
@@ -11613,7 +11745,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth_signin",
       "community": 30,
-      "community_name": "commentStore.ts",
+      "community_name": "extension.ts",
       "norm_label": "signin()"
     },
     {
@@ -11624,7 +11756,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth_signout",
       "community": 30,
-      "community_name": "commentStore.ts",
+      "community_name": "extension.ts",
       "norm_label": "signout()"
     },
     {
@@ -11635,7 +11767,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubavatars",
       "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "githubavatars.ts"
     },
     {
@@ -11646,7 +11778,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubavatars_avatarcacheentry",
       "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "avatarcacheentry"
     },
     {
@@ -11657,7 +11789,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubavatars_avatarcache",
       "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "avatarcache"
     },
     {
@@ -11668,7 +11800,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubavatars_cachekey",
       "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "cachekey()"
     },
     {
@@ -11679,7 +11811,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubavatars_cacheentryvalid",
       "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "cacheentryvalid()"
     },
     {
@@ -11690,7 +11822,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubavatars_avatarfetchurl",
       "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "avatarfetchurl()"
     },
     {
@@ -11701,7 +11833,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubavatars_collectavatarlogins",
       "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "collectavatarlogins()"
     },
     {
@@ -11712,7 +11844,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubavatars_getavatardataurl",
       "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "getavatardataurl()"
     },
     {
@@ -11723,7 +11855,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubavatars_warmgithubavatars",
       "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "warmgithubavatars()"
     },
     {
@@ -11734,7 +11866,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubavatars_fetchavatardataurl",
       "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "fetchavatardataurl()"
     },
     {
@@ -11745,7 +11877,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames",
       "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "githubdisplaynames.ts"
     },
     {
@@ -11756,7 +11888,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_execfileasync",
       "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "execfileasync"
     },
     {
@@ -11767,7 +11899,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_cacheentry",
       "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "cacheentry"
     },
     {
@@ -11778,7 +11910,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_displaynamecache",
       "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "displaynamecache"
     },
     {
@@ -11789,7 +11921,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_cleargithubdisplaynamecache",
       "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "cleargithubdisplaynamecache()"
     },
     {
@@ -11800,7 +11932,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_cacheentryvalid",
       "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "cacheentryvalid()"
     },
     {
@@ -11811,7 +11943,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_collectgithublogins",
       "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "collectgithublogins()"
     },
     {
@@ -11822,7 +11954,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_getgithubdisplayname",
       "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "getgithubdisplayname()"
     },
     {
@@ -11833,7 +11965,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_authormatchkeys",
       "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "authormatchkeys()"
     },
     {
@@ -11844,7 +11976,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_authorsmatch",
       "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "authorsmatch()"
     },
     {
@@ -11855,7 +11987,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_resolveauthorlogin",
       "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "resolveauthorlogin()"
     },
     {
@@ -11866,7 +11998,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_authordisplaylabel",
       "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "authordisplaylabel()"
     },
     {
@@ -11877,7 +12009,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_displaynamesmapforlogins",
       "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "displaynamesmapforlogins()"
     },
     {
@@ -11888,7 +12020,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_warmgithubdisplaynames",
       "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "warmgithubdisplaynames()"
     },
     {
@@ -11899,7 +12031,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_schedulepreviewrefreshafterdisplaynames",
       "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "schedulepreviewrefreshafterdisplaynames()"
     },
     {
@@ -11910,7 +12042,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_fetchdisplayname",
       "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "fetchdisplayname()"
     },
     {
@@ -11921,7 +12053,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_fetchnameviaghcli",
       "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "fetchnameviaghcli()"
     },
     {
@@ -11932,7 +12064,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_fetchnameviagithubapi",
       "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "fetchnameviagithubapi()"
     },
     {
@@ -11943,7 +12075,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_logger",
       "community": 30,
-      "community_name": "commentStore.ts",
+      "community_name": "extension.ts",
       "norm_label": "logger.ts"
     },
     {
@@ -11954,7 +12086,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_logger_initializelogger",
       "community": 30,
-      "community_name": "commentStore.ts",
+      "community_name": "extension.ts",
       "norm_label": "initializelogger()"
     },
     {
@@ -11965,7 +12097,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_logger_logdebug",
       "community": 30,
-      "community_name": "commentStore.ts",
+      "community_name": "extension.ts",
       "norm_label": "logdebug()"
     },
     {
@@ -11976,7 +12108,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_logger_loginfo",
       "community": 30,
-      "community_name": "commentStore.ts",
+      "community_name": "extension.ts",
       "norm_label": "loginfo()"
     },
     {
@@ -11987,7 +12119,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_logger_logerror",
       "community": 30,
-      "community_name": "commentStore.ts",
+      "community_name": "extension.ts",
       "norm_label": "logerror()"
     },
     {
@@ -11997,7 +12129,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin",
-      "community": 111,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "markdownitplugin.ts"
     },
@@ -12008,7 +12140,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_formattime",
-      "community": 111,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "formattime()"
     },
@@ -12019,7 +12151,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_formatcommenttime",
-      "community": 111,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "formatcommenttime()"
     },
@@ -12030,7 +12162,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_caneditcomment",
-      "community": 111,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "caneditcomment()"
     },
@@ -12041,7 +12173,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_rendereditbtn",
-      "community": 111,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "rendereditbtn()"
     },
@@ -12052,7 +12184,7 @@
       "source_location": "L88",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_actioniconbtn",
-      "community": 111,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "actioniconbtn()"
     },
@@ -12063,7 +12195,7 @@
       "source_location": "L104",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_renderauthorlink",
-      "community": 111,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "renderauthorlink()"
     },
@@ -12074,7 +12206,7 @@
       "source_location": "L116",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_rendercommentbody",
-      "community": 111,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "rendercommentbody()"
     },
@@ -12085,8 +12217,8 @@
       "source_location": "L127",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_collectmentioncandidates",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 103,
+      "community_name": "src/author.ts",
       "norm_label": "collectmentioncandidates()"
     },
     {
@@ -12096,7 +12228,7 @@
       "source_location": "L152",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_authorinitials",
-      "community": 111,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "authorinitials()"
     },
@@ -12107,7 +12239,7 @@
       "source_location": "L160",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_renderavatar",
-      "community": 111,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "renderavatar()"
     },
@@ -12118,7 +12250,7 @@
       "source_location": "L175",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_threadfooterbtn",
-      "community": 111,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "threadfooterbtn()"
     },
@@ -12129,7 +12261,7 @@
       "source_location": "L190",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_replycountlabel",
-      "community": 111,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "replycountlabel()"
     },
@@ -12140,7 +12272,7 @@
       "source_location": "L197",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_renderrepliesblock",
-      "community": 111,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "renderrepliesblock()"
     },
@@ -12151,7 +12283,7 @@
       "source_location": "L214",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_renderreactions",
-      "community": 111,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "renderreactions()"
     },
@@ -12162,7 +12294,7 @@
       "source_location": "L233",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_renderreply",
-      "community": 111,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "renderreply()"
     },
@@ -12173,7 +12305,7 @@
       "source_location": "L274",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_rendercard",
-      "community": 111,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "rendercard()"
     },
@@ -12184,8 +12316,8 @@
       "source_location": "L349",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_rendercontext",
-      "community": 86,
-      "community_name": "shared/types.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "rendercontext"
     },
     {
@@ -12195,7 +12327,7 @@
       "source_location": "L356",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_renderquoteexcerpt",
-      "community": 111,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "renderquoteexcerpt()"
     },
@@ -12206,7 +12338,7 @@
       "source_location": "L363",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_rendersidebarthread",
-      "community": 111,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "rendersidebarthread()"
     },
@@ -12217,7 +12349,7 @@
       "source_location": "L371",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_renderresolvedsummary",
-      "community": 111,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "renderresolvedsummary()"
     },
@@ -12228,7 +12360,7 @@
       "source_location": "L378",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_renderresolvedthread",
-      "community": 111,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "renderresolvedthread()"
     },
@@ -12239,7 +12371,7 @@
       "source_location": "L390",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_panelempty",
-      "community": 111,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "panelempty()"
     },
@@ -12250,7 +12382,7 @@
       "source_location": "L394",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_buildsidebarhtml",
-      "community": 111,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "buildsidebarhtml()"
     },
@@ -12261,7 +12393,7 @@
       "source_location": "L526",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_getreactionemojisjson",
-      "community": 111,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "getreactionemojisjson()"
     },
@@ -12272,7 +12404,7 @@
       "source_location": "L534",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_getdefaultsidebarwidth",
-      "community": 111,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "getdefaultsidebarwidth()"
     },
@@ -12283,7 +12415,7 @@
       "source_location": "L541",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_renderdocumentlayout",
-      "community": 111,
+      "community": 89,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "renderdocumentlayout()"
     },
@@ -12295,7 +12427,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_getmduri",
       "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "getmduri()"
     },
     {
@@ -12305,8 +12437,8 @@
       "source_location": "L626",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_loadcontext",
-      "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community": 104,
+      "community_name": "repoManager.ts",
       "norm_label": "loadcontext()"
     },
     {
@@ -12317,7 +12449,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_extendmarkdownit",
       "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "extendmarkdownit()"
     },
     {
@@ -12328,7 +12460,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_markdownrender",
       "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "markdownrender.ts"
     },
     {
@@ -12339,7 +12471,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_markdownrender_getmarkdownengine",
       "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "getmarkdownengine()"
     },
     {
@@ -12350,7 +12482,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_markdownrender_rendermarkdownwithcomments",
       "community": 111,
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "githubDisplayNames.ts",
       "norm_label": "rendermarkdownwithcomments()"
     },
     {
@@ -12448,7 +12580,7 @@
       "source_location": "L113",
       "_origin": "ast",
       "id": "vscode_extension_src_optimisticstore_globaloptimisticstore",
-      "community": 30,
+      "community": 99,
       "community_name": "commentStore.ts",
       "norm_label": "globaloptimisticstore"
     },
@@ -12459,8 +12591,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_orphan",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "orphan.ts"
     },
     {
@@ -12470,8 +12602,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "vscode_extension_src_orphan_scanorphansformarkdown",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 12,
+      "community_name": "CommentsFile",
       "norm_label": "scanorphansformarkdown()"
     },
     {
@@ -12482,7 +12614,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_previewcommand",
       "community": 30,
-      "community_name": "commentStore.ts",
+      "community_name": "extension.ts",
       "norm_label": "previewcommand.ts"
     },
     {
@@ -12493,7 +12625,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_previewcommand_parsepreviewcommandarg",
       "community": 30,
-      "community_name": "commentStore.ts",
+      "community_name": "extension.ts",
       "norm_label": "parsepreviewcommandarg()"
     },
     {
@@ -12504,7 +12636,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_previewcommand_normalizeobject",
       "community": 30,
-      "community_name": "commentStore.ts",
+      "community_name": "extension.ts",
       "norm_label": "normalizeobject()"
     },
     {
@@ -12514,8 +12646,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_repomanager",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 104,
+      "community_name": "repoManager.ts",
       "norm_label": "repomanager.ts"
     },
     {
@@ -12525,8 +12657,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "vscode_extension_src_repomanager_execfileasync",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 104,
+      "community_name": "repoManager.ts",
       "norm_label": "execfileasync"
     },
     {
@@ -12536,8 +12668,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "vscode_extension_src_repomanager_remoteurlcache",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 104,
+      "community_name": "repoManager.ts",
       "norm_label": "remoteurlcache"
     },
     {
@@ -12547,8 +12679,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "vscode_extension_src_repomanager_getgitremoteurlsync",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 104,
+      "community_name": "repoManager.ts",
       "norm_label": "getgitremoteurlsync()"
     },
     {
@@ -12558,8 +12690,8 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "vscode_extension_src_repomanager_getgitremoteurl",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 104,
+      "community_name": "repoManager.ts",
       "norm_label": "getgitremoteurl()"
     },
     {
@@ -12569,8 +12701,8 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "vscode_extension_src_repomanager_commithashcache",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 104,
+      "community_name": "repoManager.ts",
       "norm_label": "commithashcache"
     },
     {
@@ -12580,8 +12712,8 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "vscode_extension_src_repomanager_getgitcommithashsync",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 104,
+      "community_name": "repoManager.ts",
       "norm_label": "getgitcommithashsync()"
     },
     {
@@ -12591,8 +12723,8 @@
       "source_location": "L70",
       "_origin": "ast",
       "id": "vscode_extension_src_repomanager_getgitcommithash",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 104,
+      "community_name": "repoManager.ts",
       "norm_label": "getgitcommithash()"
     },
     {
@@ -12602,8 +12734,8 @@
       "source_location": "L80",
       "_origin": "ast",
       "id": "vscode_extension_src_repomanager_resolvestoragekeyforurisync",
-      "community": 30,
-      "community_name": "commentStore.ts",
+      "community": 104,
+      "community_name": "repoManager.ts",
       "norm_label": "resolvestoragekeyforurisync()"
     },
     {
@@ -12613,7 +12745,7 @@
       "source_location": "L119",
       "_origin": "ast",
       "id": "vscode_extension_src_repomanager_resolvestoragekeyforuri",
-      "community": 30,
+      "community": 99,
       "community_name": "commentStore.ts",
       "norm_label": "resolvestoragekeyforuri()"
     },
@@ -15719,7 +15851,7 @@
       "contributor": null,
       "community": 86,
       "norm_label": "markdown comments overview",
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "id": "readme_main"
     },
     {
@@ -15731,9 +15863,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 86,
+      "community": 12,
       "norm_label": "markdown comments key features",
-      "community_name": "shared/types.ts",
+      "community_name": "CommentsFile",
       "id": "readme_features"
     },
     {
@@ -15747,7 +15879,7 @@
       "contributor": null,
       "community": 86,
       "norm_label": "monorepo package structure",
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "id": "readme_monorepo"
     },
     {
@@ -15789,7 +15921,7 @@
       "contributor": null,
       "community": 86,
       "norm_label": "comments example note",
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "id": "docs_example_file"
     },
     {
@@ -15803,7 +15935,7 @@
       "contributor": null,
       "community": 86,
       "norm_label": "obsidian plugin guide",
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "id": "obsidian_plugin_readme_file"
     },
     {
@@ -15817,7 +15949,7 @@
       "contributor": null,
       "community": 86,
       "norm_label": "pnpm monorepo configuration",
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "id": "pnpm_workspace_file"
     },
     {
@@ -15831,7 +15963,7 @@
       "contributor": null,
       "community": 86,
       "norm_label": "app icon png",
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "id": "assets_icon_png_node"
     },
     {
@@ -15845,7 +15977,7 @@
       "contributor": null,
       "community": 86,
       "norm_label": "app icon svg",
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "id": "assets_icon_svg_node"
     },
     {
@@ -15929,7 +16061,7 @@
       "contributor": null,
       "community": 86,
       "norm_label": "vs code extension icon png",
-      "community_name": "shared/types.ts",
+      "community_name": "Obsidian Plugin Guide",
       "id": "vscode_extension_icon_png_node"
     }
   ],
@@ -32386,7 +32518,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/AuthModal.ts",
-      "source_location": "L4",
+      "source_location": "L10",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_authmodal",
@@ -32414,6 +32546,18 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_authmodal",
+      "target": "starlight_plugin_src_client_githubauth_getviewer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/AuthModal.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_authmodal",
       "target": "starlight_plugin_src_client_githubauth_pollforaccesstoken",
       "confidence_score": 1.0
     },
@@ -32430,11 +32574,23 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/AuthModal.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_authmodal",
+      "target": "starlight_plugin_src_client_githubauth_saveoauthtoken",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/AuthModal.ts",
-      "source_location": "L2",
+      "source_location": "L8",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_authmodal",
@@ -32446,7 +32602,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/AuthModal.ts",
-      "source_location": "L2",
+      "source_location": "L8",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_authmodal",
@@ -32481,7 +32637,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/AuthModal.ts",
-      "source_location": "L140",
+      "source_location": "L247",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_authmodal_authmodal",
@@ -32492,7 +32648,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/AuthModal.ts",
-      "source_location": "L10",
+      "source_location": "L16",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_authmodal_authmodal",
@@ -32503,7 +32659,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/AuthModal.ts",
-      "source_location": "L19",
+      "source_location": "L25",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_authmodal_authmodal",
@@ -32527,7 +32683,7 @@
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/AuthModal.ts",
-      "source_location": "L10",
+      "source_location": "L16",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_authmodal_authmodal_constructor",
@@ -32539,7 +32695,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/AuthModal.ts",
-      "source_location": "L61",
+      "source_location": "L152",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_authmodal_authmodal_show",
@@ -32552,7 +32708,19 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "starlight-plugin/src/client/components/AuthModal.ts",
-      "source_location": "L106",
+      "source_location": "L147",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_authmodal_authmodal_show",
+      "target": "starlight_plugin_src_client_githubauth_getviewer"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "starlight-plugin/src/client/components/AuthModal.ts",
+      "source_location": "L210",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_authmodal_authmodal_show",
@@ -32564,7 +32732,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "starlight-plugin/src/client/components/AuthModal.ts",
-      "source_location": "L70",
+      "source_location": "L174",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_authmodal_authmodal_show",
@@ -32575,8 +32743,20 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
+      "source_file": "starlight-plugin/src/client/components/AuthModal.ts",
+      "source_location": "L151",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_authmodal_authmodal_show",
+      "target": "starlight_plugin_src_client_githubauth_saveoauthtoken"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L486",
+      "source_location": "L884",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_submitcomment",
@@ -32588,7 +32768,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L537",
+      "source_location": "L938",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_submitreply",
@@ -32600,7 +32780,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L157",
+      "source_location": "L158",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_updateauthuserui",
@@ -32786,7 +32966,29 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L166",
+      "source_location": "L807",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_activatecommenthighlight",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L840",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_applypendingselectionhighlight",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L167",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
@@ -32797,7 +32999,40 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L287",
+      "source_location": "L829",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_clearactivehighlight",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L560",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_clearinlinehighlights",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L860",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_clearpendingselectionhighlight",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L307",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
@@ -32819,7 +33054,29 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L258",
+      "source_location": "L757",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_createdomrange",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L680",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_findneedlerange",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L260",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
@@ -32830,7 +33087,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L223",
+      "source_location": "L224",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
@@ -32863,7 +33120,18 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L229",
+      "source_location": "L593",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_isfullparagraphtext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L230",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
@@ -32874,7 +33142,29 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L273",
+      "source_location": "L734",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_mapnormindextoraw",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L601",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_markfullparagraph",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L293",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
@@ -32885,7 +33175,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L297",
+      "source_location": "L319",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
@@ -32896,7 +33186,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L302",
+      "source_location": "L324",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
@@ -32907,7 +33197,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L308",
+      "source_location": "L332",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
@@ -32918,7 +33208,18 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L216",
+      "source_location": "L527",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_renderinlinehighlights",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L217",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
@@ -32929,7 +33230,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L482",
+      "source_location": "L880",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
@@ -32940,7 +33241,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L533",
+      "source_location": "L934",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
@@ -32951,7 +33252,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L265",
+      "source_location": "L285",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
@@ -32962,7 +33263,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L135",
+      "source_location": "L136",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
@@ -32973,11 +33274,22 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L247",
+      "source_location": "L249",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
       "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_updatefabcount",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L637",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_wrapanchortextinelement",
       "confidence_score": 1.0
     },
     {
@@ -33141,7 +33453,19 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L130",
+      "source_location": "L77",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_initdom",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_applypendingselectionhighlight",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L131",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_initdom",
@@ -33153,7 +33477,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L77",
+      "source_location": "L78",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_initdom",
@@ -33165,7 +33489,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L95",
+      "source_location": "L96",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_initdom",
@@ -33177,7 +33501,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L132",
+      "source_location": "L133",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_initdom",
@@ -33189,7 +33513,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L488",
+      "source_location": "L886",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_submitcomment",
@@ -33201,7 +33525,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L539",
+      "source_location": "L940",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_submitreply",
@@ -33213,7 +33537,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L149",
+      "source_location": "L150",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_updateauthuserui",
@@ -33226,7 +33550,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L146",
+      "source_location": "L147",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_updateauthuserui",
@@ -33238,7 +33562,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L158",
+      "source_location": "L159",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_updateauthuserui",
@@ -33249,7 +33573,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L170",
+      "source_location": "L171",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_bindselectionevents",
@@ -33261,7 +33585,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L209",
+      "source_location": "L210",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_bindselectionevents",
@@ -33273,7 +33597,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L234",
+      "source_location": "L235",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_loadcomments",
@@ -33285,7 +33609,19 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L244",
+      "source_location": "L245",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_loadcomments",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_renderinlinehighlights",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L246",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_loadcomments",
@@ -33297,7 +33633,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L530",
+      "source_location": "L931",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_submitcomment",
@@ -33309,7 +33645,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L574",
+      "source_location": "L975",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_submitreply",
@@ -33321,7 +33657,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L515",
+      "source_location": "L914",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_submitcomment",
@@ -33333,7 +33669,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L563",
+      "source_location": "L964",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_submitreply",
@@ -33345,7 +33681,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L267",
+      "source_location": "L287",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_toggledrawer",
@@ -33357,7 +33693,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L269",
+      "source_location": "L289",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_toggledrawer",
@@ -33369,7 +33705,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L284",
+      "source_location": "L304",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_opendrawer",
@@ -33381,7 +33717,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L299",
+      "source_location": "L321",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_opennewcommentdrawer",
@@ -33393,7 +33729,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L305",
+      "source_location": "L328",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_openthreaddrawer",
@@ -33405,7 +33741,67 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L477",
+      "source_location": "L313",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_closedrawer",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_clearactivehighlight",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L312",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_closedrawer",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_clearpendingselectionhighlight",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L631",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_markfullparagraph",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_openthreaddrawer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L329",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_openthreaddrawer",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_activatecommenthighlight",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L325",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_openthreaddrawer",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_clearpendingselectionhighlight",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L518",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_renderdrawercontent",
@@ -33417,7 +33813,55 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L341",
+      "source_location": "L674",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_wrapanchortextinelement",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_openthreaddrawer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L375",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_renderdrawercontent",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_activatecommenthighlight",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L422",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_renderdrawercontent",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_clearactivehighlight",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L358",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_renderdrawercontent",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_clearpendingselectionhighlight",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L366",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_renderdrawercontent",
@@ -33429,7 +33873,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L405",
+      "source_location": "L432",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_renderdrawercontent",
@@ -33442,7 +33886,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L466",
+      "source_location": "L506",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_renderdrawercontent",
@@ -33452,9 +33896,225 @@
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L528",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_renderinlinehighlights",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_clearinlinehighlights",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L551",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_renderinlinehighlights",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_isfullparagraphtext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L556",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_renderinlinehighlights",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_markfullparagraph",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L552",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_renderinlinehighlights",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_wrapanchortextinelement",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L483",
+      "source_location": "L532",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_renderinlinehighlights",
+      "target": "starlight_plugin_src_client_domanchors_scanarticleanchors"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L539",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_renderinlinehighlights",
+      "target": "starlight_plugin_src_client_placement_resolveelementforanchor"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L927",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_submitcomment",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_renderinlinehighlights",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L618",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_markfullparagraph",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_activatecommenthighlight",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L621",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_markfullparagraph",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_clearactivehighlight",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L667",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_wrapanchortextinelement",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_activatecommenthighlight",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L670",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_wrapanchortextinelement",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_clearactivehighlight",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L650",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_wrapanchortextinelement",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_createdomrange",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L647",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_wrapanchortextinelement",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_findneedlerange",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L710",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_findneedlerange",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_mapnormindextoraw",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L808",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_activatecommenthighlight",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_clearactivehighlight",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L930",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_submitcomment",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_activatecommenthighlight",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L841",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_applypendingselectionhighlight",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_clearpendingselectionhighlight",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L913",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_submitcomment",
+      "target": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_clearpendingselectionhighlight",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
+      "source_location": "L881",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_submitcomment",
@@ -33466,7 +34126,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L487",
+      "source_location": "L885",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_submitcomment",
@@ -33478,7 +34138,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L534",
+      "source_location": "L935",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_submitreply",
@@ -33490,7 +34150,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "starlight-plugin/src/client/components/CommentsOverlay.ts",
-      "source_location": "L538",
+      "source_location": "L939",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_components_commentsoverlay_commentsoverlay_submitreply",
@@ -33626,7 +34286,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/githubAuth.ts",
-      "source_location": "L245",
+      "source_location": "L250",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_githubauth",
@@ -33648,7 +34308,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/githubAuth.ts",
-      "source_location": "L163",
+      "source_location": "L168",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_githubauth",
@@ -33706,7 +34366,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "starlight-plugin/src/client/githubAuth.ts",
-      "source_location": "L209",
+      "source_location": "L214",
       "weight": 1.0,
       "_origin": "ast",
       "source": "starlight_plugin_src_client_githubauth_pollforaccesstoken",
@@ -34130,7 +34790,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/starlight-plugin.test.ts",
-      "source_location": "L221",
+      "source_location": "L336",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tests_starlight_plugin_test",
@@ -46567,5 +47227,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "c08fe31bafac75c1a5f97bd4f22ca173e1b4c8d9"
+  "built_at_commit": "88a4bffef648a2fffa9d3a29357d4df121d1d1cf"
 }

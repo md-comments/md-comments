@@ -17,6 +17,11 @@ export interface MdCommentsPluginOptions {
   docBasePath?: string;
 
   /**
+   * Site base path (e.g. '/demo-astro' or '/').
+   */
+  base?: string;
+
+  /**
    * GitHub OAuth App Client ID for Device Flow authentication.
    * Defaults to the official Markdown Comments client ID.
    */

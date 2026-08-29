@@ -459,6 +459,35 @@ html.md-comments-panel-open .md-comments-fab-toggle {
   font-size: 16px;
 }
 
+.md-comments-auth-tabs {
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid var(--md-comments-border);
+  margin-bottom: 14px;
+}
+
+.md-comments-auth-tab {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--md-comments-text-muted);
+  cursor: pointer;
+  margin-bottom: -1px;
+}
+
+.md-comments-auth-tab:hover {
+  color: var(--md-comments-text);
+}
+
+.md-comments-auth-tab.md-comments-tab-active {
+  color: var(--md-comments-primary);
+  border-bottom-color: var(--md-comments-primary);
+  font-weight: 600;
+}
+
 .md-comments-auth-panel {
   display: block;
 }
@@ -504,4 +533,88 @@ html.md-comments-panel-open .md-comments-fab-toggle {
   to {
     transform: rotate(360deg);
   }
+}
+
+/* ==========================================================================
+   Inline Comment Highlights & Text Anchors
+   ========================================================================== */
+
+.md-comments-text-anchor {
+  background-color: rgba(234, 179, 8, 0.25);
+  border-bottom: 2px solid #eab308;
+  border-radius: 2px;
+  cursor: pointer;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.md-comments-text-anchor:hover,
+.md-comments-text-anchor.md-comments-text-active {
+  background-color: rgba(59, 130, 246, 0.35);
+  border-bottom-color: var(--md-comments-primary, #3b82f6);
+}
+
+.md-comments-text-anchor.pending {
+  background-color: rgba(250, 204, 21, 0.45);
+  border-bottom: 2px dashed #eab308;
+  animation: md-comments-pulse 1.5s infinite alternate;
+}
+
+@keyframes md-comments-pulse {
+  from {
+    background-color: rgba(250, 204, 21, 0.25);
+  }
+  to {
+    background-color: rgba(250, 204, 21, 0.55);
+  }
+}
+
+.md-comments-paragraph-marked {
+  border-left: 3px solid #eab308;
+  padding-left: 10px;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.md-comments-paragraph-marked:hover,
+.md-comments-paragraph-marked.md-comments-text-active {
+  background-color: rgba(59, 130, 246, 0.08);
+  border-left-color: var(--md-comments-primary, #3b82f6);
+}
+
+.md-comments-card-active {
+  border-color: var(--md-comments-primary, #3b82f6) !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25) !important;
+}
+
+[data-theme='dark'] .md-comments-text-anchor,
+.dark .md-comments-text-anchor {
+  background-color: rgba(234, 179, 8, 0.3);
+  border-bottom-color: #facc15;
+}
+
+[data-theme='dark'] .md-comments-text-anchor:hover,
+[data-theme='dark'] .md-comments-text-anchor.md-comments-text-active,
+.dark .md-comments-text-anchor:hover,
+.dark .md-comments-text-anchor.md-comments-text-active {
+  background-color: rgba(96, 165, 250, 0.4);
+  border-bottom-color: #60a5fa;
+}
+
+[data-theme='dark'] .md-comments-paragraph-marked,
+.dark .md-comments-paragraph-marked {
+  border-left-color: #facc15;
+}
+
+[data-theme='dark'] .md-comments-paragraph-marked:hover,
+[data-theme='dark'] .md-comments-paragraph-marked.md-comments-text-active,
+.dark .md-comments-paragraph-marked:hover,
+.dark .md-comments-paragraph-marked.md-comments-text-active {
+  background-color: rgba(96, 165, 250, 0.12);
+  border-left-color: #60a5fa;
 }

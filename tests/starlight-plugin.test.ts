@@ -330,4 +330,93 @@ describe('CommentsOverlay FAB and Drawer', () => {
     overlay.toggleDrawer();
     expect(drawer?.classList.contains('md-comments-drawer-open')).toBe(false);
   });
+
+  it('renders inline comment highlights on matching document elements', async () => {
+    const classListMap = new Map<any, Set<string>>();
+    function makeElement(tag: string, text: string = '') {
+      const children: any[] = [];
+      const el: any = {
+        tagName: tag.toUpperCase(),
+        innerText: text,
+        textContent: text,
+        className: '',
+        classList: {
+          add: (cls: string) => {
+            const set = classListMap.get(el) || new Set();
+            set.add(cls);
+            classListMap.set(el, set);
+            el.className = Array.from(set).join(' ');
+          },
+          remove: (cls: string) => {
+            const set = classListMap.get(el) || new Set();
+            set.delete(cls);
+            classListMap.set(el, set);
+            el.className = Array.from(set).join(' ');
+          },
+          contains: (cls: string) => {
+            const set = classListMap.get(el) || new Set();
+            return set.has(cls);
+          },
+        },
+        getAttribute: (k: string) => el[k] || null,
+        setAttribute: (k: string, v: string) => {
+          el[k] = v;
+        },
+        removeAttribute: (k: string) => {
+          delete el[k];
+        },
+        querySelectorAll: (sel: string) => {
+          if (sel.includes('.md-comments-paragraph-marked')) {
+            return children.filter((c) => c.classList.contains('md-comments-paragraph-marked'));
+          }
+          if (sel.includes('.md-comments-text-anchor')) {
+            return children.filter((c) => c.classList.contains('md-comments-text-anchor'));
+          }
+          const tags = sel.split(',').map((s) => s.trim().toUpperCase());
+          return children.filter((c) => tags.includes(c.tagName));
+        },
+        querySelector: () => null,
+        appendChild: (child: any) => {
+          children.push(child);
+          return child;
+        },
+        closest: () => null,
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        children,
+      };
+      return el;
+    }
+
+    const container = makeElement('main');
+    const p1 = makeElement('p', 'This is the first document paragraph with key insights.');
+    container.appendChild(p1);
+
+    const { CommentsOverlay } =
+      await import('../starlight-plugin/src/client/components/CommentsOverlay');
+    const overlay = new CommentsOverlay(container as unknown as HTMLElement, {
+      repo: 'test/repo',
+    });
+
+    (overlay as any).comments = {
+      inline_comments: [
+        {
+          id: 'c_test_1',
+          anchor_hash: 'a_hash',
+          anchor_text: 'key insights',
+          paragraph_index: 0,
+          body: 'Great insight here!',
+          created_at: new Date().toISOString(),
+          author: 'Alice',
+          resolved: false,
+        },
+      ],
+      page_comments: [],
+    };
+
+    overlay.renderInlineHighlights();
+    expect(
+      p1.classList.contains('md-comments-paragraph-marked') || p1['data-md-comment-id']
+    ).toBeTruthy();
+  });
 });

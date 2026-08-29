@@ -725,13 +725,13 @@
     "semantic_hash": ""
   },
   "starlight-plugin/src/client/components/AuthModal.ts": {
-    "mtime": 1787882461.2774324,
-    "ast_hash": "11256a81379e791b490caefdacacfd2c",
+    "mtime": 1788009769.488364,
+    "ast_hash": "7efc9e82bbaf814d8f8a016a98144be9",
     "semantic_hash": ""
   },
   "starlight-plugin/src/client/components/CommentsOverlay.ts": {
-    "mtime": 1787882461.2871206,
-    "ast_hash": "30aa14a53651b930b08aa2f47455fea0",
+    "mtime": 1788009769.5081742,
+    "ast_hash": "ea49b670b0f96fd6545f34c297fea9ff",
     "semantic_hash": ""
   },
   "starlight-plugin/src/client/domAnchors.ts": {
@@ -740,8 +740,8 @@
     "semantic_hash": ""
   },
   "starlight-plugin/src/client/githubAuth.ts": {
-    "mtime": 1787882461.2953339,
-    "ast_hash": "f4fb40467e99e61b76cf246717176815",
+    "mtime": 1788009128.3465188,
+    "ast_hash": "6b51eb693fe7d09847114a7c24465ef6",
     "semantic_hash": ""
   },
   "starlight-plugin/src/client/placement.ts": {
@@ -765,13 +765,13 @@
     "semantic_hash": ""
   },
   "starlight-plugin/src/starlight.ts": {
-    "mtime": 1788008945.050901,
-    "ast_hash": "73b59849042b48e5ef7febfe47dc6d72",
+    "mtime": 1788009388.9224124,
+    "ast_hash": "d0ab2af344e1925a8bc5ed504d633a48",
     "semantic_hash": ""
   },
   "starlight-plugin/src/types.ts": {
-    "mtime": 1787880560.7626593,
-    "ast_hash": "fea488a01c635a2ee903ae41b0b483d2",
+    "mtime": 1788009385.2462356,
+    "ast_hash": "1d531f9f6875256e1e5fcfe563c50c8d",
     "semantic_hash": ""
   },
   "starlight-plugin/tsconfig.json": {
@@ -780,8 +780,8 @@
     "semantic_hash": ""
   },
   "tests/starlight-plugin.test.ts": {
-    "mtime": 1788008982.7981026,
-    "ast_hash": "42c38ac3cef99e56d9f0fe6e9446c009",
+    "mtime": 1788009769.5658057,
+    "ast_hash": "8636d549f21949b3ac78b4179a5f3e79",
     "semantic_hash": ""
   },
   "docs/starlight-plugin.md": {

@@ -39,13 +39,18 @@ export function starlightMdComments(options: MdCommentsPluginOptions = {}): Star
   return {
     name: '@md-comments/starlight',
     hooks: {
-      'config:setup'({ updateConfig, addIntegration }) {
+      'config:setup'({ config, updateConfig, addIntegration }: any) {
+        const mergedOptions: MdCommentsPluginOptions = {
+          base: config?.base,
+          ...options,
+        };
+
         // 1. Inject options into head and styles into Starlight customCss
         updateConfig({
           head: [
             {
               tag: 'script',
-              content: `window.__MD_COMMENTS_OPTIONS__ = ${JSON.stringify(options)};`,
+              content: `window.__MD_COMMENTS_OPTIONS__ = ${JSON.stringify(mergedOptions)};`,
             },
             {
               tag: 'script',
