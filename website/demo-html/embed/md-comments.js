@@ -113,6 +113,19 @@
     return `<span class="md-comments-username">${escapeHtml(displayName)}</span>`;
   }
 
+  function renderAvatar(authorOrUrl, size = 32, alt = '') {
+    const val = (authorOrUrl || '').trim();
+    const isUrl = val.startsWith('http://') || val.startsWith('https://');
+    const src = isUrl
+      ? val
+      : isGitHubLogin(val)
+        ? `https://avatars.githubusercontent.com/${encodeURIComponent(val)}?s=${size}`
+        : `https://github.com/${encodeURIComponent(val || 'Anonymous')}.png?size=${size}`;
+    const initial = (val || 'A').replace(/^https?:\/\/.*\/|\.png.*$/i, '')[0]?.toUpperCase() || 'A';
+
+    return `<span class="md-comments-avatar-wrap" style="width: ${size}px; height: ${size}px; position: relative; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; border-radius: 50%; overflow: hidden; background: var(--accent-color, #6366f1);"><span class="md-comments-avatar-fallback" style="font-size: ${Math.max(10, Math.floor(size * 0.4))}px; font-weight: 700; color: #ffffff; text-transform: uppercase; line-height: 1;">${escapeHtml(initial)}</span><img class="md-comments-avatar" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 50%; margin: 0; padding: 0;" src="${src}" alt="${escapeHtml(alt || val)}" onerror="this.style.display='none'" /></span>`;
+  }
+
   // ==========================================
   // Unicode Base64 & YAML Serialization Helpers
   // ==========================================
@@ -352,23 +365,32 @@
       this.modalEl = document.createElement('div');
       this.modalEl.className = 'md-comments-auth-modal';
       this.modalEl.innerHTML = `
-        <div class="md-comments-auth-card">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h3 style="margin: 0; font-size: 16px; font-weight: 600;">Sign in with GitHub</h3>
-            <button class="md-comments-drawer-close modal-close-btn">&times;</button>
+        <div class="md-comments-modal-backdrop"></div>
+        <div class="md-comments-modal-card">
+          <div class="md-comments-modal-header">
+            <div class="md-comments-modal-title">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+                <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+              </svg>
+              <span>Sign in with GitHub</span>
+            </div>
+            <button class="md-comments-modal-close modal-close-btn" aria-label="Close">&times;</button>
           </div>
-          <p style="margin: 0; font-size: 13px; color: var(--text-secondary); line-height: 1.4;">
-            Authenticate with GitHub to leave comments directly on repository <strong>${escapeHtml(options.repo)}</strong>.
-          </p>
-          <div class="md-comments-user-code" style="display: none;">------</div>
-          <div style="display: flex; gap: 8px;">
-            <button class="md-comments-btn-primary md-comments-btn-verify" style="flex: 1; justify-content: center; padding: 8px 14px; font-size: 13px;" disabled>
+          <div class="md-comments-auth-panel">
+            <p class="md-comments-modal-desc">
+              Authenticate using GitHub Device Flow to leave comments directly on repository <strong>${escapeHtml(options.repo)}</strong>:
+            </p>
+            <div class="md-comments-code-container">
+              <span class="md-comments-code-label">One-Time Activation Code</span>
+              <div class="md-comments-user-code" style="display: none;">------</div>
+            </div>
+            <button class="md-comments-btn-primary md-comments-btn-verify" style="width: 100%; justify-content: center; padding: 10px 16px; font-size: 13px; font-weight: 600;" disabled>
               Open GitHub Activation
             </button>
-          </div>
-          <div class="md-comments-auth-status" style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-secondary);">
-            <div class="md-comments-spinner" style="width: 14px; height: 14px;"></div>
-            <span class="md-comments-status-text">Requesting device authorization code...</span>
+            <div class="md-comments-auth-status">
+              <div class="md-comments-spinner"></div>
+              <span class="md-comments-status-text">Requesting device authorization code...</span>
+            </div>
           </div>
         </div>
       `;
@@ -399,16 +421,52 @@
 
       const clientId = options.clientId || DEFAULT_CLIENT_ID;
 
-      const candidates = [
+      const candidates = [];
+      if (options.authProxyUrl) {
+        const base = options.authProxyUrl.replace(/\/+$/, '');
+        candidates.push({
+          codeUrl: `${base}/device-code`,
+          pollUrl: `${base}/access-token`,
+        });
+      }
+
+      // Local dev proxy endpoints (provided when running via `pnpm dev:website` / `scripts/serve-website.js`)
+      if (typeof window !== 'undefined') {
+        const origin = window.location.origin;
+        const pathParts = window.location.pathname.split('/').filter(Boolean);
+        const basePath = pathParts.length > 0 ? `/${pathParts[0]}` : '';
+
+        candidates.push(
+          {
+            codeUrl: '/api/md-comments/auth/device-code',
+            pollUrl: '/api/md-comments/auth/access-token',
+          },
+          {
+            codeUrl: `${basePath}/api/md-comments/auth/device-code`,
+            pollUrl: `${basePath}/api/md-comments/auth/access-token`,
+          },
+          {
+            codeUrl: `${origin}/api/md-comments/auth/device-code`,
+            pollUrl: `${origin}/api/md-comments/auth/access-token`,
+          },
+          {
+            codeUrl: `${origin}${basePath}/api/md-comments/auth/device-code`,
+            pollUrl: `${origin}${basePath}/api/md-comments/auth/access-token`,
+          }
+        );
+      }
+
+      // Hosted Vercel / CORS proxy endpoints
+      candidates.push(
         {
           codeUrl: 'https://md-comments-oauth.vercel.app/api/device/code',
           pollUrl: 'https://md-comments-oauth.vercel.app/api/device/token',
         },
         {
-          codeUrl: 'https://github.com/login/device/code',
-          pollUrl: 'https://github.com/login/oauth/access_token',
-        },
-      ];
+          codeUrl: 'https://proxy.cors.sh/https://github.com/login/device/code',
+          pollUrl: 'https://proxy.cors.sh/https://github.com/login/oauth/access_token',
+        }
+      );
 
       let deviceData = null;
       let pollUrl = '';
@@ -440,7 +498,8 @@
       }
 
       if (!deviceData) {
-        statusText.textContent = 'Failed to obtain device code. Check network or Client ID.';
+        statusText.textContent =
+          'Failed to obtain device code. CORS/Proxy required for in-browser GitHub OAuth.';
         if (spinner) spinner.style.display = 'none';
         return;
       }
@@ -753,6 +812,7 @@
       const storedToken = this.getAuthToken();
       if (storedToken) {
         this.currentUser = await fetchGitHubViewer(storedToken);
+        this.renderDrawer();
       }
 
       document.addEventListener('keydown', (e) => {
@@ -1089,7 +1149,7 @@
 
       tooltip.innerHTML = `
         <div class="tooltip-header">
-          <img class="tooltip-avatar" src="https://github.com/${encodeURIComponent(comment.author)}.png?size=32" alt="${escapeHtml(comment.author)}" />
+          ${renderAvatar(comment.author, 32, comment.author)}
           <div>
             <div class="tooltip-author">${escapeHtml(displayName)}</div>
             <div class="tooltip-time">${formatRelativeTime(comment.created_at)}</div>
@@ -1268,9 +1328,16 @@
     renderCommentCard(comment, type) {
       const isInline = type === 'inline';
       const isAuthor =
-        comment.author &&
         this.currentUser &&
-        comment.author.trim().toLowerCase() === this.currentUser.login.trim().toLowerCase();
+        (!comment.author ||
+          comment.author === 'Anonymous' ||
+          comment.author.trim().toLowerCase() === this.currentUser.login.trim().toLowerCase() ||
+          (this.currentUser.name &&
+            comment.author.trim().toLowerCase() === this.currentUser.name.trim().toLowerCase()) ||
+          (displayNameCache.get(comment.author.trim().toLowerCase()) &&
+            this.currentUser.name &&
+            displayNameCache.get(comment.author.trim().toLowerCase()).toLowerCase() ===
+              this.currentUser.name.trim().toLowerCase()));
 
       let headerContextHtml = '';
       if (isInline) {
@@ -1299,14 +1366,17 @@
       const repliesHtml = (comment.replies || [])
         .map((r) => {
           const isReplyAuthor =
-            r.author &&
             this.currentUser &&
-            r.author.trim().toLowerCase() === this.currentUser.login.trim().toLowerCase();
+            (!r.author ||
+              r.author === 'Anonymous' ||
+              r.author.trim().toLowerCase() === this.currentUser.login.trim().toLowerCase() ||
+              (this.currentUser.name &&
+                r.author.trim().toLowerCase() === this.currentUser.name.trim().toLowerCase()));
           const isEditingReply = this.editingReplyId === r.id;
 
           return `
             <div class="reply-item" data-reply-id="${r.id}">
-              <img class="md-comments-avatar" src="https://github.com/${encodeURIComponent(r.author)}.png?size=32" alt="${escapeHtml(r.author)}" />
+              ${renderAvatar(r.author, 32, r.author)}
               <div class="reply-content">
                 <div class="reply-header">
                   <div>
@@ -1348,7 +1418,7 @@
           ${headerContextHtml}
           <div class="md-comments-card-header">
             <div class="md-comments-author-section">
-              <img class="md-comments-avatar" src="https://github.com/${encodeURIComponent(comment.author)}.png?size=40" alt="${escapeHtml(comment.author)}" />
+              ${renderAvatar(comment.author, 40, comment.author)}
               <div class="md-comments-author-meta">
                 ${renderAuthor(comment.author, () => this.renderDrawer())}
                 <span class="md-comments-time">${formatRelativeTime(comment.created_at)}</span>
@@ -1449,7 +1519,7 @@
         if (this.currentUser) {
           userBadge.innerHTML = `
             <div style="display: flex; align-items: center; gap: 6px;">
-              <img class="md-comments-avatar" style="width: 22px; height: 22px; border-radius: 50%;" src="${this.currentUser.avatar_url}" alt="${this.currentUser.login}" />
+              ${renderAvatar(this.currentUser.avatar_url || this.currentUser.login, 22, this.currentUser.login)}
               <button class="md-comments-btn-link md-comments-logout-btn" title="Sign out (${this.currentUser.login})">Sign Out</button>
             </div>
           `;

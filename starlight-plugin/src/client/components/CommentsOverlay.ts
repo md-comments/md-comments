@@ -89,6 +89,19 @@ function renderAuthor(author: string, onResolved?: () => void): string {
   return `<span class="md-comments-username">${escapeHtml(displayName)}</span>`;
 }
 
+function renderAvatar(authorOrUrl: string, size = 32, alt = ''): string {
+  const val = (authorOrUrl || '').trim();
+  const isUrl = val.startsWith('http://') || val.startsWith('https://');
+  const src = isUrl
+    ? val
+    : isGitHubLogin(val)
+      ? `https://avatars.githubusercontent.com/${encodeURIComponent(val)}?s=${size}`
+      : `https://github.com/${encodeURIComponent(val || 'Anonymous')}.png?size=${size}`;
+  const initial = (val || 'A').replace(/^https?:\/\/.*\/|\.png.*$/i, '')[0]?.toUpperCase() || 'A';
+
+  return `<span class="md-comments-avatar-wrap" style="width: ${size}px; height: ${size}px; position: relative; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; border-radius: 50%; overflow: hidden; background: var(--accent-color, #6366f1);"><span class="md-comments-avatar-fallback" style="font-size: ${Math.max(10, Math.floor(size * 0.4))}px; font-weight: 700; color: #ffffff; text-transform: uppercase; line-height: 1;">${escapeHtml(initial)}</span><img class="md-comments-avatar" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 50%; margin: 0; padding: 0;" src="${src}" alt="${escapeHtml(alt || val)}" onerror="this.style.display='none'" /></span>`;
+}
+
 export class CommentsOverlay {
   private container: HTMLElement;
   private options: MdCommentsPluginOptions;
@@ -132,6 +145,7 @@ export class CommentsOverlay {
     const token = getStoredToken();
     if (token) {
       this.currentViewer = await getViewer(token);
+      this.updateAuthUserUI();
     }
 
     await this.loadComments();
@@ -278,7 +292,7 @@ export class CommentsOverlay {
     if (this.currentViewer) {
       authContainer.innerHTML = `
         <div style="display: flex; align-items: center; gap: 6px;">
-          <img class="md-comments-avatar" style="width: 22px; height: 22px; border-radius: 50%;" src="${this.currentViewer.avatar_url}" alt="${this.currentViewer.login}" />
+          ${renderAvatar(this.currentViewer.avatar_url || this.currentViewer.login, 22, this.currentViewer.login)}
           <button class="md-comments-btn-link md-comments-logout-btn" title="Sign out (${this.currentViewer.login})">Sign Out</button>
         </div>
       `;
@@ -558,9 +572,16 @@ export class CommentsOverlay {
     const isInline = type === 'inline';
     const inlineC = comment as InlineComment;
     const isAuthor =
-      comment.author &&
       this.currentViewer &&
-      comment.author.trim().toLowerCase() === this.currentViewer.login.trim().toLowerCase();
+      (!comment.author ||
+        comment.author === 'Anonymous' ||
+        comment.author.trim().toLowerCase() === this.currentViewer.login.trim().toLowerCase() ||
+        (this.currentViewer.name &&
+          comment.author.trim().toLowerCase() === this.currentViewer.name.trim().toLowerCase()) ||
+        (displayNameCache.get(comment.author.trim().toLowerCase()) &&
+          this.currentViewer.name &&
+          displayNameCache.get(comment.author.trim().toLowerCase())?.toLowerCase() ===
+            this.currentViewer.name.trim().toLowerCase()));
 
     let headerContextHtml = '';
     if (isInline) {
@@ -589,14 +610,17 @@ export class CommentsOverlay {
     const repliesHtml = (comment.replies || [])
       .map((r) => {
         const isReplyAuthor =
-          r.author &&
           this.currentViewer &&
-          r.author.trim().toLowerCase() === this.currentViewer.login.trim().toLowerCase();
+          (!r.author ||
+            r.author === 'Anonymous' ||
+            r.author.trim().toLowerCase() === this.currentViewer.login.trim().toLowerCase() ||
+            (this.currentViewer.name &&
+              r.author.trim().toLowerCase() === this.currentViewer.name.trim().toLowerCase()));
         const isEditingReply = this.editingReplyId === r.id;
 
         return `
           <div class="reply-item" data-reply-id="${r.id}">
-            <img class="md-comments-avatar" src="https://github.com/${encodeURIComponent(r.author)}.png?size=32" alt="${escapeHtml(r.author)}" />
+            ${renderAvatar(r.author, 32, r.author)}
             <div class="reply-content">
               <div class="reply-header">
                 <div>
@@ -638,7 +662,7 @@ export class CommentsOverlay {
         ${headerContextHtml}
         <div class="md-comments-card-header">
           <div class="md-comments-author-section">
-            <img class="md-comments-avatar" src="https://github.com/${encodeURIComponent(comment.author)}.png?size=40" alt="${escapeHtml(comment.author)}" />
+            ${renderAvatar(comment.author, 40, comment.author)}
             <div class="md-comments-author-meta">
               ${renderAuthor(comment.author, () => this.renderDrawerContent())}
               <span class="md-comments-time">${formatRelativeTime(comment.created_at)}</span>
@@ -970,7 +994,7 @@ export class CommentsOverlay {
 
     tooltip.innerHTML = `
       <div class="tooltip-header">
-        <img class="tooltip-avatar" src="https://github.com/${encodeURIComponent(comment.author)}.png?size=32" alt="${escapeHtml(comment.author)}" />
+        ${renderAvatar(comment.author, 32, comment.author)}
         <div>
           <div class="tooltip-author">${escapeHtml(displayName)}</div>
           <div class="tooltip-time">${formatRelativeTime(comment.created_at)}</div>
