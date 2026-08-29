@@ -1935,8 +1935,8 @@
       "source_location": "L70",
       "_origin": "ast",
       "id": "chrome_extension_src_content_getdraftkey",
-      "community": 103,
-      "community_name": "attachCommentCardEvents",
+      "community": 115,
+      "community_name": "handlePageLoad",
       "norm_label": "getdraftkey()"
     },
     {
@@ -1946,8 +1946,8 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "chrome_extension_src_content_savedraft",
-      "community": 103,
-      "community_name": "attachCommentCardEvents",
+      "community": 112,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "savedraft()"
     },
     {
@@ -1969,7 +1969,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_parsegithuburl",
       "community": 106,
-      "community_name": "parseGitHubUrl",
+      "community_name": "renderSidebarComments",
       "norm_label": "parsegithuburl()"
     },
     {
@@ -1979,8 +1979,8 @@
       "source_location": "L121",
       "_origin": "ast",
       "id": "chrome_extension_src_content_getbranchfromdom",
-      "community": 106,
-      "community_name": "parseGitHubUrl",
+      "community": 113,
+      "community_name": "chrome-extension/src/githubAuth.ts",
       "norm_label": "getbranchfromdom()"
     },
     {
@@ -1991,7 +1991,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_getprheadbranchfromdom",
       "community": 106,
-      "community_name": "parseGitHubUrl",
+      "community_name": "renderSidebarComments",
       "norm_label": "getprheadbranchfromdom()"
     },
     {
@@ -2001,8 +2001,8 @@
       "source_location": "L194",
       "_origin": "ast",
       "id": "chrome_extension_src_content_getauthtoken",
-      "community": 114,
-      "community_name": "renderSidebarComments",
+      "community": 115,
+      "community_name": "handlePageLoad",
       "norm_label": "getauthtoken()"
     },
     {
@@ -2024,7 +2024,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_fetchfilecontent",
       "community": 106,
-      "community_name": "parseGitHubUrl",
+      "community_name": "renderSidebarComments",
       "norm_label": "fetchfilecontent()"
     },
     {
@@ -2035,7 +2035,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_fetchcommentsfile",
       "community": 106,
-      "community_name": "parseGitHubUrl",
+      "community_name": "renderSidebarComments",
       "norm_label": "fetchcommentsfile()"
     },
     {
@@ -2056,8 +2056,8 @@
       "source_location": "L327",
       "_origin": "ast",
       "id": "chrome_extension_src_content_renamereplybuttonstook",
-      "community": 103,
-      "community_name": "attachCommentCardEvents",
+      "community": 112,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "renamereplybuttonstook()"
     },
     {
@@ -2068,7 +2068,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_issidebaropen",
       "community": 114,
-      "community_name": "renderSidebarComments",
+      "community_name": "renderDOMIndicatorsForFile",
       "norm_label": "issidebaropen()"
     },
     {
@@ -2079,7 +2079,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_checkpagechange",
       "community": 114,
-      "community_name": "renderSidebarComments",
+      "community_name": "renderDOMIndicatorsForFile",
       "norm_label": "checkpagechange()"
     },
     {
@@ -2089,8 +2089,8 @@
       "source_location": "L392",
       "_origin": "ast",
       "id": "chrome_extension_src_content_handledevicepageautofill",
-      "community": 114,
-      "community_name": "renderSidebarComments",
+      "community": 115,
+      "community_name": "handlePageLoad",
       "norm_label": "handledevicepageautofill()"
     },
     {
@@ -2100,8 +2100,8 @@
       "source_location": "L440",
       "_origin": "ast",
       "id": "chrome_extension_src_content_handlepageload",
-      "community": 114,
-      "community_name": "renderSidebarComments",
+      "community": 115,
+      "community_name": "handlePageLoad",
       "norm_label": "handlepageload()"
     },
     {
@@ -2112,7 +2112,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_loaddocumentcomments",
       "community": 114,
-      "community_name": "renderSidebarComments",
+      "community_name": "renderDOMIndicatorsForFile",
       "norm_label": "loaddocumentcomments()"
     },
     {
@@ -2123,7 +2123,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_mergelocalcomments",
       "community": 114,
-      "community_name": "renderSidebarComments",
+      "community_name": "renderDOMIndicatorsForFile",
       "norm_label": "mergelocalcomments()"
     },
     {
@@ -2134,7 +2134,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_injectfabbutton",
       "community": 114,
-      "community_name": "renderSidebarComments",
+      "community_name": "renderDOMIndicatorsForFile",
       "norm_label": "injectfabbutton()"
     },
     {
@@ -2145,7 +2145,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_injecttoolbarbutton",
       "community": 114,
-      "community_name": "renderSidebarComments",
+      "community_name": "renderDOMIndicatorsForFile",
       "norm_label": "injecttoolbarbutton()"
     },
     {
@@ -2156,7 +2156,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_togglesidebar",
       "community": 114,
-      "community_name": "renderSidebarComments",
+      "community_name": "renderDOMIndicatorsForFile",
       "norm_label": "togglesidebar()"
     },
     {
@@ -2166,8 +2166,8 @@
       "source_location": "L685",
       "_origin": "ast",
       "id": "chrome_extension_src_content_getfilepathfromfilecontainer",
-      "community": 103,
-      "community_name": "attachCommentCardEvents",
+      "community": 112,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "getfilepathfromfilecontainer()"
     },
     {
@@ -2178,7 +2178,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_isgithubdarktheme",
       "community": 115,
-      "community_name": "injectGlobalStyles",
+      "community_name": "handlePageLoad",
       "norm_label": "isgithubdarktheme()"
     },
     {
@@ -2189,7 +2189,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_synctheme",
       "community": 115,
-      "community_name": "injectGlobalStyles",
+      "community_name": "handlePageLoad",
       "norm_label": "synctheme()"
     },
     {
@@ -2200,7 +2200,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_injectglobalstyles",
       "community": 115,
-      "community_name": "injectGlobalStyles",
+      "community_name": "handlePageLoad",
       "norm_label": "injectglobalstyles()"
     },
     {
@@ -2211,7 +2211,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_processprmarkdownfiles",
       "community": 106,
-      "community_name": "parseGitHubUrl",
+      "community_name": "renderSidebarComments",
       "norm_label": "processprmarkdownfiles()"
     },
     {
@@ -2222,7 +2222,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_rendercustommarkdownsourceview",
       "community": 106,
-      "community_name": "parseGitHubUrl",
+      "community_name": "renderSidebarComments",
       "norm_label": "rendercustommarkdownsourceview()"
     },
     {
@@ -2233,7 +2233,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_loadandrendercommentsforcontainer",
       "community": 106,
-      "community_name": "parseGitHubUrl",
+      "community_name": "renderSidebarComments",
       "norm_label": "loadandrendercommentsforcontainer()"
     },
     {
@@ -2243,8 +2243,8 @@
       "source_location": "L954",
       "_origin": "ast",
       "id": "chrome_extension_src_content_initrepoandmetadata",
-      "community": 106,
-      "community_name": "parseGitHubUrl",
+      "community": 113,
+      "community_name": "chrome-extension/src/githubAuth.ts",
       "norm_label": "initrepoandmetadata()"
     },
     {
@@ -2255,7 +2255,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_setactivefile",
       "community": 106,
-      "community_name": "parseGitHubUrl",
+      "community_name": "renderSidebarComments",
       "norm_label": "setactivefile()"
     },
     {
@@ -2265,8 +2265,8 @@
       "source_location": "L1093",
       "_origin": "ast",
       "id": "chrome_extension_src_content_finddiffguttercell",
-      "community": 103,
-      "community_name": "attachCommentCardEvents",
+      "community": 112,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "finddiffguttercell()"
     },
     {
@@ -2276,8 +2276,8 @@
       "source_location": "L1101",
       "_origin": "ast",
       "id": "chrome_extension_src_content_triggerandmovenativecomposer",
-      "community": 103,
-      "community_name": "attachCommentCardEvents",
+      "community": 112,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "triggerandmovenativecomposer()"
     },
     {
@@ -2287,8 +2287,8 @@
       "source_location": "L1281",
       "_origin": "ast",
       "id": "chrome_extension_src_content_showfallbackreplycomposer",
-      "community": 103,
-      "community_name": "attachCommentCardEvents",
+      "community": 112,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "showfallbackreplycomposer()"
     },
     {
@@ -2298,7 +2298,7 @@
       "source_location": "L1363",
       "_origin": "ast",
       "id": "chrome_extension_src_content_highlighttextinelement",
-      "community": 112,
+      "community": 114,
       "community_name": "renderDOMIndicatorsForFile",
       "norm_label": "highlighttextinelement()"
     },
@@ -2310,7 +2310,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_clearpendinghighlights",
       "community": 112,
-      "community_name": "renderDOMIndicatorsForFile",
+      "community_name": "openSidebarForNewInline",
       "norm_label": "clearpendinghighlights()"
     },
     {
@@ -2321,7 +2321,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_applypendinghighlight",
       "community": 112,
-      "community_name": "renderDOMIndicatorsForFile",
+      "community_name": "openSidebarForNewInline",
       "norm_label": "applypendinghighlight()"
     },
     {
@@ -2331,8 +2331,8 @@
       "source_location": "L1533",
       "_origin": "ast",
       "id": "chrome_extension_src_content_injectsidebar",
-      "community": 103,
-      "community_name": "attachCommentCardEvents",
+      "community": 115,
+      "community_name": "handlePageLoad",
       "norm_label": "injectsidebar()"
     },
     {
@@ -2343,7 +2343,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_opensidebar",
       "community": 114,
-      "community_name": "renderSidebarComments",
+      "community_name": "renderDOMIndicatorsForFile",
       "norm_label": "opensidebar()"
     },
     {
@@ -2353,8 +2353,8 @@
       "source_location": "L1705",
       "_origin": "ast",
       "id": "chrome_extension_src_content_closesidebar",
-      "community": 114,
-      "community_name": "renderSidebarComments",
+      "community": 115,
+      "community_name": "handlePageLoad",
       "norm_label": "closesidebar()"
     },
     {
@@ -2364,7 +2364,7 @@
       "source_location": "L1712",
       "_origin": "ast",
       "id": "chrome_extension_src_content_renderinstallationprompt",
-      "community": 114,
+      "community": 106,
       "community_name": "renderSidebarComments",
       "norm_label": "renderinstallationprompt()"
     },
@@ -2375,7 +2375,7 @@
       "source_location": "L1771",
       "_origin": "ast",
       "id": "chrome_extension_src_content_attachinstallationpromptevents",
-      "community": 114,
+      "community": 106,
       "community_name": "renderSidebarComments",
       "norm_label": "attachinstallationpromptevents()"
     },
@@ -2386,7 +2386,7 @@
       "source_location": "L1819",
       "_origin": "ast",
       "id": "chrome_extension_src_content_renderoauthprompt",
-      "community": 114,
+      "community": 106,
       "community_name": "renderSidebarComments",
       "norm_label": "renderoauthprompt()"
     },
@@ -2397,8 +2397,8 @@
       "source_location": "L1853",
       "_origin": "ast",
       "id": "chrome_extension_src_content_attachoauthevents",
-      "community": 113,
-      "community_name": "chrome-extension/src/githubAuth.ts",
+      "community": 106,
+      "community_name": "renderSidebarComments",
       "norm_label": "attachoauthevents()"
     },
     {
@@ -2408,7 +2408,7 @@
       "source_location": "L2017",
       "_origin": "ast",
       "id": "chrome_extension_src_content_rendersidebarcomments",
-      "community": 114,
+      "community": 106,
       "community_name": "renderSidebarComments",
       "norm_label": "rendersidebarcomments()"
     },
@@ -2441,8 +2441,8 @@
       "source_location": "L2296",
       "_origin": "ast",
       "id": "chrome_extension_src_content_hidecommenttooltip",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 114,
+      "community_name": "renderDOMIndicatorsForFile",
       "norm_label": "hidecommenttooltip()"
     },
     {
@@ -2452,8 +2452,8 @@
       "source_location": "L2303",
       "_origin": "ast",
       "id": "chrome_extension_src_content_showcommenttooltip",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 114,
+      "community_name": "renderDOMIndicatorsForFile",
       "norm_label": "showcommenttooltip()"
     },
     {
@@ -2464,7 +2464,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_scrolltocommenttext",
       "community": 112,
-      "community_name": "renderDOMIndicatorsForFile",
+      "community_name": "openSidebarForNewInline",
       "norm_label": "scrolltocommenttext()"
     },
     {
@@ -2485,8 +2485,8 @@
       "source_location": "L2738",
       "_origin": "ast",
       "id": "chrome_extension_src_content_opensidebarfornewinline",
-      "community": 103,
-      "community_name": "attachCommentCardEvents",
+      "community": 112,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "opensidebarfornewinline()"
     },
     {
@@ -2574,7 +2574,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_rendertabcontent",
       "community": 106,
-      "community_name": "parseGitHubUrl",
+      "community_name": "renderSidebarComments",
       "norm_label": "rendertabcontent()"
     },
     {
@@ -2585,7 +2585,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_loadandrenderfileintab",
       "community": 106,
-      "community_name": "parseGitHubUrl",
+      "community_name": "renderSidebarComments",
       "norm_label": "loadandrenderfileintab()"
     },
     {
@@ -2595,7 +2595,7 @@
       "source_location": "L3470",
       "_origin": "ast",
       "id": "chrome_extension_src_content_renderdomindicatorsforfile",
-      "community": 112,
+      "community": 114,
       "community_name": "renderDOMIndicatorsForFile",
       "norm_label": "renderdomindicatorsforfile()"
     },
@@ -2607,7 +2607,7 @@
       "_origin": "ast",
       "id": "chrome_extension_src_content_finddomparagraphs",
       "community": 112,
-      "community_name": "renderDOMIndicatorsForFile",
+      "community_name": "openSidebarForNewInline",
       "norm_label": "finddomparagraphs()"
     },
     {
@@ -2617,8 +2617,8 @@
       "source_location": "L3584",
       "_origin": "ast",
       "id": "chrome_extension_src_content_findheadingcontext",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 112,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "findheadingcontext()"
     },
     {
@@ -2815,8 +2815,8 @@
       "source_location": "L4010",
       "_origin": "ast",
       "id": "chrome_extension_src_content_findparagraphfornode",
-      "community": 1,
-      "community_name": "content.ts",
+      "community": 112,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "findparagraphfornode()"
     },
     {
@@ -2826,8 +2826,8 @@
       "source_location": "L4025",
       "_origin": "ast",
       "id": "chrome_extension_src_content_showselectionbutton",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 112,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "showselectionbutton()"
     },
     {
@@ -2837,8 +2837,8 @@
       "source_location": "L4125",
       "_origin": "ast",
       "id": "chrome_extension_src_content_hideselectionbutton",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 112,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "hideselectionbutton()"
     },
     {
@@ -2848,8 +2848,8 @@
       "source_location": "L4131",
       "_origin": "ast",
       "id": "chrome_extension_src_content_handletextselection",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 112,
+      "community_name": "openSidebarForNewInline",
       "norm_label": "handletextselection()"
     },
     {
@@ -3079,8 +3079,8 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "chrome_extension_src_githubauth_clearoauthtoken",
-      "community": 106,
-      "community_name": "parseGitHubUrl",
+      "community": 113,
+      "community_name": "chrome-extension/src/githubAuth.ts",
       "norm_label": "clearoauthtoken()"
     },
     {
@@ -3937,8 +3937,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "ref_obsidian",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "obsidian"
     },
     {
@@ -4256,8 +4256,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "obsidian_plugin_src_livepreview",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "livepreview.ts"
     },
     {
@@ -4267,8 +4267,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "obsidian_plugin_src_livepreview_createlivepreviewextension",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "createlivepreviewextension()"
     },
     {
@@ -4278,8 +4278,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "obsidian_plugin_src_main",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "main.ts"
     },
     {
@@ -4575,8 +4575,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "obsidian_plugin_src_readingview",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "readingview.ts"
     },
     {
@@ -4586,8 +4586,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "obsidian_plugin_src_readingview_fuzzymatch",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "fuzzymatch()"
     },
     {
@@ -4597,8 +4597,8 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "obsidian_plugin_src_readingview_highlighttextinelement",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "highlighttextinelement()"
     },
     {
@@ -4608,8 +4608,8 @@
       "source_location": "L114",
       "_origin": "ast",
       "id": "obsidian_plugin_src_readingview_registerreadingviewprocessor",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "registerreadingviewprocessor()"
     },
     {
@@ -4619,8 +4619,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "sidebarview.ts"
     },
     {
@@ -4630,8 +4630,8 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_displaynamecache",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "displaynamecache"
     },
     {
@@ -4641,8 +4641,8 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "obsidian_plugin_src_sidebarview_pendingfetches",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "pendingfetches"
     },
     {
@@ -4938,8 +4938,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_newid",
-      "community": 30,
-      "community_name": "CommentsFile",
+      "community": 89,
+      "community_name": "CommentStore",
       "norm_label": "newid()"
     },
     {
@@ -4993,8 +4993,8 @@
       "source_location": "L76",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore",
-      "community": 30,
-      "community_name": "CommentsFile",
+      "community": 89,
+      "community_name": "CommentStore",
       "norm_label": "commentstore"
     },
     {
@@ -5004,8 +5004,8 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_constructor",
-      "community": 30,
-      "community_name": "CommentsFile",
+      "community": 89,
+      "community_name": "CommentStore",
       "norm_label": ".constructor()"
     },
     {
@@ -5015,8 +5015,8 @@
       "source_location": "L82",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_getcommentspath",
-      "community": 30,
-      "community_name": "CommentsFile",
+      "community": 89,
+      "community_name": "CommentStore",
       "norm_label": ".getcommentspath()"
     },
     {
@@ -5026,8 +5026,8 @@
       "source_location": "L86",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_readcomments",
-      "community": 30,
-      "community_name": "CommentsFile",
+      "community": 89,
+      "community_name": "CommentStore",
       "norm_label": ".readcomments()"
     },
     {
@@ -5037,8 +5037,8 @@
       "source_location": "L120",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_writecomments",
-      "community": 30,
-      "community_name": "CommentsFile",
+      "community": 89,
+      "community_name": "CommentStore",
       "norm_label": ".writecomments()"
     },
     {
@@ -5048,8 +5048,8 @@
       "source_location": "L132",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_addinlinecomment",
-      "community": 30,
-      "community_name": "CommentsFile",
+      "community": 89,
+      "community_name": "CommentStore",
       "norm_label": ".addinlinecomment()"
     },
     {
@@ -5059,8 +5059,8 @@
       "source_location": "L162",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_addpagecomment",
-      "community": 30,
-      "community_name": "CommentsFile",
+      "community": 89,
+      "community_name": "CommentStore",
       "norm_label": ".addpagecomment()"
     },
     {
@@ -5070,8 +5070,8 @@
       "source_location": "L178",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_addreply",
-      "community": 30,
-      "community_name": "CommentsFile",
+      "community": 89,
+      "community_name": "CommentStore",
       "norm_label": ".addreply()"
     },
     {
@@ -5081,8 +5081,8 @@
       "source_location": "L202",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_deletecomment",
-      "community": 30,
-      "community_name": "CommentsFile",
+      "community": 89,
+      "community_name": "CommentStore",
       "norm_label": ".deletecomment()"
     },
     {
@@ -5092,8 +5092,8 @@
       "source_location": "L241",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_editcomment",
-      "community": 30,
-      "community_name": "CommentsFile",
+      "community": 89,
+      "community_name": "CommentStore",
       "norm_label": ".editcomment()"
     },
     {
@@ -5103,8 +5103,8 @@
       "source_location": "L289",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_resolvecomment",
-      "community": 30,
-      "community_name": "CommentsFile",
+      "community": 89,
+      "community_name": "CommentStore",
       "norm_label": ".resolvecomment()"
     },
     {
@@ -5114,8 +5114,8 @@
       "source_location": "L303",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_unresolvecomment",
-      "community": 30,
-      "community_name": "CommentsFile",
+      "community": 89,
+      "community_name": "CommentStore",
       "norm_label": ".unresolvecomment()"
     },
     {
@@ -5125,8 +5125,8 @@
       "source_location": "L317",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_togglereaction",
-      "community": 30,
-      "community_name": "CommentsFile",
+      "community": 89,
+      "community_name": "CommentStore",
       "norm_label": ".togglereaction()"
     },
     {
@@ -5136,8 +5136,8 @@
       "source_location": "L365",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_reanchorcomment",
-      "community": 30,
-      "community_name": "CommentsFile",
+      "community": 89,
+      "community_name": "CommentStore",
       "norm_label": ".reanchorcomment()"
     },
     {
@@ -5147,8 +5147,8 @@
       "source_location": "L389",
       "_origin": "ast",
       "id": "obsidian_plugin_src_storage_commentstore_updateorphanflags",
-      "community": 30,
-      "community_name": "CommentsFile",
+      "community": 89,
+      "community_name": "CommentStore",
       "norm_label": ".updateorphanflags()"
     },
     {
@@ -6299,8 +6299,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_anchor",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "anchor.ts"
     },
     {
@@ -6310,8 +6310,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "shared_anchor_fnv1ahash",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "fnv1ahash()"
     },
     {
@@ -6321,8 +6321,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "shared_anchor_computeanchorid",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "computeanchorid()"
     },
     {
@@ -6332,8 +6332,8 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "shared_anchor_normalizeanchortext",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "normalizeanchortext()"
     },
     {
@@ -6343,8 +6343,8 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "shared_anchor_parsemarkdownanchors",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "parsemarkdownanchors()"
     },
     {
@@ -6354,8 +6354,8 @@
       "source_location": "L126",
       "_origin": "ast",
       "id": "shared_anchor_findblockbyindex",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "findblockbyindex()"
     },
     {
@@ -6365,8 +6365,8 @@
       "source_location": "L130",
       "_origin": "ast",
       "id": "shared_anchor_findblockbyhash",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "findblockbyhash()"
     },
     {
@@ -6376,8 +6376,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_author",
-      "community": 104,
-      "community_name": "src/author.ts",
+      "community": 86,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "shared/author.ts"
     },
     {
@@ -6387,8 +6387,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "shared_author_clearauthorcache",
-      "community": 104,
-      "community_name": "src/author.ts",
+      "community": 86,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "clearauthorcache()"
     },
     {
@@ -6398,8 +6398,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "shared_author_getcachedauthor",
-      "community": 104,
-      "community_name": "src/author.ts",
+      "community": 86,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "getcachedauthor()"
     },
     {
@@ -6409,8 +6409,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "shared_author_setcachedauthor",
-      "community": 104,
-      "community_name": "src/author.ts",
+      "community": 86,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "setcachedauthor()"
     },
     {
@@ -6420,8 +6420,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "shared_author_iscachevalid",
-      "community": 104,
-      "community_name": "src/author.ts",
+      "community": 86,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "iscachevalid()"
     },
     {
@@ -6431,8 +6431,8 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "shared_author_fallbackauthor",
-      "community": 104,
-      "community_name": "src/author.ts",
+      "community": 86,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "fallbackauthor()"
     },
     {
@@ -6443,7 +6443,7 @@
       "_origin": "ast",
       "id": "shared_author_isgithublogin",
       "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "isgithublogin()"
     },
     {
@@ -6453,8 +6453,8 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "shared_author_githubprofileurl",
-      "community": 104,
-      "community_name": "src/author.ts",
+      "community": 86,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "githubprofileurl()"
     },
     {
@@ -6464,8 +6464,8 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "shared_author_githubavatarurl",
-      "community": 104,
-      "community_name": "src/author.ts",
+      "community": 86,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "githubavatarurl()"
     },
     {
@@ -6476,7 +6476,7 @@
       "_origin": "ast",
       "id": "shared_author_extractmentionlogins",
       "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "extractmentionlogins()"
     },
     {
@@ -6695,8 +6695,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_html",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "html.ts"
     },
     {
@@ -6706,7 +6706,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "shared_html_escapehtml",
-      "community": 89,
+      "community": 86,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "escapehtml()"
     },
@@ -6717,8 +6717,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_index",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "shared/index.ts"
     },
     {
@@ -7091,8 +7091,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_placement",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "shared/placement.ts"
     },
     {
@@ -7102,8 +7102,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "shared_placement_fuzzymatch",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "fuzzymatch()"
     },
     {
@@ -7113,8 +7113,8 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "shared_placement_placeinlinecomments",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "placeinlinecomments()"
     },
     {
@@ -7124,8 +7124,8 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "shared_placement_isorphanedplacement",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "isorphanedplacement()"
     },
     {
@@ -7135,8 +7135,8 @@
       "source_location": "L85",
       "_origin": "ast",
       "id": "shared_placement_unplacedororphan",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "unplacedororphan()"
     },
     {
@@ -7146,8 +7146,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_repodetector",
-      "community": 109,
-      "community_name": "repoManager.ts",
+      "community": 111,
+      "community_name": "commentStore.ts",
       "norm_label": "repodetector.ts"
     },
     {
@@ -7157,8 +7157,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_repodetector_githubrepoinfo",
-      "community": 109,
-      "community_name": "repoManager.ts",
+      "community": 111,
+      "community_name": "commentStore.ts",
       "norm_label": "githubrepoinfo"
     },
     {
@@ -7168,8 +7168,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "shared_repodetector_parsegithubremote",
-      "community": 109,
-      "community_name": "repoManager.ts",
+      "community": 111,
+      "community_name": "commentStore.ts",
       "norm_label": "parsegithubremote()"
     },
     {
@@ -7179,8 +7179,8 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "shared_repodetector_parsegithubpageurl",
-      "community": 109,
-      "community_name": "repoManager.ts",
+      "community": 111,
+      "community_name": "commentStore.ts",
       "norm_label": "parsegithubpageurl()"
     },
     {
@@ -7388,8 +7388,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_types",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "shared/types.ts"
     },
     {
@@ -7399,8 +7399,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_types_reaction",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "reaction"
     },
     {
@@ -7410,8 +7410,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "shared_types_reply",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "reply"
     },
     {
@@ -7421,8 +7421,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "shared_types_pagecomment",
-      "community": 12,
-      "community_name": "CommentsSidebarView",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "pagecomment"
     },
     {
@@ -7432,8 +7432,8 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "shared_types_inlinecomment",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "inlinecomment"
     },
     {
@@ -7454,8 +7454,8 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "shared_types_commentroottype",
-      "community": 30,
-      "community_name": "CommentsFile",
+      "community": 89,
+      "community_name": "CommentStore",
       "norm_label": "commentroottype"
     },
     {
@@ -7465,8 +7465,8 @@
       "source_location": "L52",
       "_origin": "ast",
       "id": "shared_types_anchorblock",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "anchorblock"
     },
     {
@@ -7476,8 +7476,8 @@
       "source_location": "L60",
       "_origin": "ast",
       "id": "shared_types_placementresult",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "placementresult"
     },
     {
@@ -8719,8 +8719,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_anchor_test",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "anchor.test.ts"
     },
     {
@@ -8741,8 +8741,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_placement_test",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "placement.test.ts"
     },
     {
@@ -8752,8 +8752,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_repodetector_test",
-      "community": 109,
-      "community_name": "repoManager.ts",
+      "community": 111,
+      "community_name": "commentStore.ts",
       "norm_label": "repodetector.test.ts"
     },
     {
@@ -10369,8 +10369,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "ref_vscode",
-      "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community": 111,
+      "community_name": "commentStore.ts",
       "norm_label": "vscode"
     },
     {
@@ -11139,8 +11139,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_author",
-      "community": 104,
-      "community_name": "src/author.ts",
+      "community": 86,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "src/author.ts"
     },
     {
@@ -11150,8 +11150,8 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "vscode_extension_src_author_execfileasync",
-      "community": 104,
-      "community_name": "src/author.ts",
+      "community": 86,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "execfileasync"
     },
     {
@@ -11162,7 +11162,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_author_warmauthorcache",
       "community": 111,
-      "community_name": "extension.ts",
+      "community_name": "commentStore.ts",
       "norm_label": "warmauthorcache()"
     },
     {
@@ -11172,8 +11172,8 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "vscode_extension_src_author_getauthor",
-      "community": 104,
-      "community_name": "src/author.ts",
+      "community": 111,
+      "community_name": "commentStore.ts",
       "norm_label": "getauthor()"
     },
     {
@@ -11183,8 +11183,8 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "vscode_extension_src_author_resolvegithubusername",
-      "community": 104,
-      "community_name": "src/author.ts",
+      "community": 86,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "resolvegithubusername()"
     },
     {
@@ -11194,8 +11194,8 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "vscode_extension_src_author_getusernamefromgithubsession",
-      "community": 104,
-      "community_name": "src/author.ts",
+      "community": 86,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "getusernamefromgithubsession()"
     },
     {
@@ -11205,8 +11205,8 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "vscode_extension_src_author_getusernamefromoauthtoken",
-      "community": 104,
-      "community_name": "src/author.ts",
+      "community": 86,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "getusernamefromoauthtoken()"
     },
     {
@@ -11216,8 +11216,8 @@
       "source_location": "L106",
       "_origin": "ast",
       "id": "vscode_extension_src_author_getusernamefromghcli",
-      "community": 104,
-      "community_name": "src/author.ts",
+      "community": 86,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "getusernamefromghcli()"
     },
     {
@@ -11227,8 +11227,8 @@
       "source_location": "L118",
       "_origin": "ast",
       "id": "vscode_extension_src_author_getusernamefromgitconfig",
-      "community": 104,
-      "community_name": "src/author.ts",
+      "community": 86,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "getusernamefromgitconfig()"
     },
     {
@@ -11238,8 +11238,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_codelensprovider",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "codelensprovider.ts"
     },
     {
@@ -11249,8 +11249,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "vscode_extension_src_codelensprovider_markdowncommentscodelensprovider",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "markdowncommentscodelensprovider"
     },
     {
@@ -11260,8 +11260,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "vscode_extension_src_codelensprovider_markdowncommentscodelensprovider_refresh",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": ".refresh()"
     },
     {
@@ -11271,8 +11271,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "vscode_extension_src_codelensprovider_markdowncommentscodelensprovider_providecodelenses",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": ".providecodelenses()"
     },
     {
@@ -11282,7 +11282,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_commentactions",
-      "community": 101,
+      "community": 111,
       "community_name": "commentStore.ts",
       "norm_label": "commentactions.ts"
     },
@@ -11293,7 +11293,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "vscode_extension_src_commentactions_resolvetext",
-      "community": 101,
+      "community": 111,
       "community_name": "commentStore.ts",
       "norm_label": "resolvetext()"
     },
@@ -11304,8 +11304,8 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "vscode_extension_src_commentactions_commentactionmessage",
-      "community": 118,
-      "community_name": "previewCommand.ts",
+      "community": 111,
+      "community_name": "commentStore.ts",
       "norm_label": "commentactionmessage"
     },
     {
@@ -11315,7 +11315,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "vscode_extension_src_commentactions_savedtoast",
-      "community": 101,
+      "community": 111,
       "community_name": "commentStore.ts",
       "norm_label": "savedtoast()"
     },
@@ -11326,7 +11326,7 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "vscode_extension_src_commentactions_executecommentaction",
-      "community": 101,
+      "community": 111,
       "community_name": "commentStore.ts",
       "norm_label": "executecommentaction()"
     },
@@ -11337,8 +11337,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel",
-      "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community": 111,
+      "community_name": "commentStore.ts",
       "norm_label": "commentpreviewpanel.ts"
     },
     {
@@ -11349,7 +11349,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel",
       "community": 111,
-      "community_name": "extension.ts",
+      "community_name": "commentStore.ts",
       "norm_label": "commentpreviewpanel"
     },
     {
@@ -11360,7 +11360,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_show",
       "community": 111,
-      "community_name": "extension.ts",
+      "community_name": "commentStore.ts",
       "norm_label": ".show()"
     },
     {
@@ -11371,7 +11371,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_refreshforuri",
       "community": 111,
-      "community_name": "extension.ts",
+      "community_name": "commentStore.ts",
       "norm_label": ".refreshforuri()"
     },
     {
@@ -11382,7 +11382,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_isopenforuri",
       "community": 111,
-      "community_name": "extension.ts",
+      "community_name": "commentStore.ts",
       "norm_label": ".isopenforuri()"
     },
     {
@@ -11393,7 +11393,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_closeforuri",
       "community": 111,
-      "community_name": "extension.ts",
+      "community_name": "commentStore.ts",
       "norm_label": ".closeforuri()"
     },
     {
@@ -11404,7 +11404,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_closeall",
       "community": 111,
-      "community_name": "extension.ts",
+      "community_name": "commentStore.ts",
       "norm_label": ".closeall()"
     },
     {
@@ -11415,7 +11415,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_constructor",
       "community": 111,
-      "community_name": "extension.ts",
+      "community_name": "commentStore.ts",
       "norm_label": ".constructor()"
     },
     {
@@ -11426,7 +11426,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_commentpreviewpanel_commentpreviewpanel_refresh",
       "community": 111,
-      "community_name": "extension.ts",
+      "community_name": "commentStore.ts",
       "norm_label": ".refresh()"
     },
     {
@@ -11436,7 +11436,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore",
-      "community": 101,
+      "community": 111,
       "community_name": "commentStore.ts",
       "norm_label": "commentstore.ts"
     },
@@ -11447,7 +11447,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_gitrefbackend",
-      "community": 101,
+      "community": 111,
       "community_name": "commentStore.ts",
       "norm_label": "gitrefbackend"
     },
@@ -11458,7 +11458,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_empty",
-      "community": 101,
+      "community": 111,
       "community_name": "commentStore.ts",
       "norm_label": "empty"
     },
@@ -11469,7 +11469,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_commentsuriformarkdown",
-      "community": 101,
+      "community": 111,
       "community_name": "commentStore.ts",
       "norm_label": "commentsuriformarkdown()"
     },
@@ -11480,7 +11480,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_commentsfspathformarkdown",
-      "community": 101,
+      "community": 111,
       "community_name": "commentStore.ts",
       "norm_label": "commentsfspathformarkdown()"
     },
@@ -11491,7 +11491,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_readcomments",
-      "community": 101,
+      "community": 111,
       "community_name": "commentStore.ts",
       "norm_label": "readcomments()"
     },
@@ -11502,7 +11502,7 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_writecomments",
-      "community": 101,
+      "community": 111,
       "community_name": "commentStore.ts",
       "norm_label": "writecomments()"
     },
@@ -11513,7 +11513,7 @@
       "source_location": "L79",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_newid",
-      "community": 101,
+      "community": 111,
       "community_name": "commentStore.ts",
       "norm_label": "newid()"
     },
@@ -11524,7 +11524,7 @@
       "source_location": "L83",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_normalizereply",
-      "community": 101,
+      "community": 111,
       "community_name": "commentStore.ts",
       "norm_label": "normalizereply()"
     },
@@ -11535,7 +11535,7 @@
       "source_location": "L94",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_normalizepagecomment",
-      "community": 101,
+      "community": 111,
       "community_name": "commentStore.ts",
       "norm_label": "normalizepagecomment()"
     },
@@ -11546,7 +11546,7 @@
       "source_location": "L108",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_normalizeinlinecomment",
-      "community": 101,
+      "community": 111,
       "community_name": "commentStore.ts",
       "norm_label": "normalizeinlinecomment()"
     },
@@ -11557,7 +11557,7 @@
       "source_location": "L128",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_normalizecommentsfile",
-      "community": 101,
+      "community": 111,
       "community_name": "commentStore.ts",
       "norm_label": "normalizecommentsfile()"
     },
@@ -11568,7 +11568,7 @@
       "source_location": "L139",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_addinlinecomment",
-      "community": 101,
+      "community": 111,
       "community_name": "commentStore.ts",
       "norm_label": "addinlinecomment()"
     },
@@ -11579,7 +11579,7 @@
       "source_location": "L169",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_addpagecomment",
-      "community": 101,
+      "community": 111,
       "community_name": "commentStore.ts",
       "norm_label": "addpagecomment()"
     },
@@ -11590,7 +11590,7 @@
       "source_location": "L188",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_addreply",
-      "community": 101,
+      "community": 111,
       "community_name": "commentStore.ts",
       "norm_label": "addreply()"
     },
@@ -11601,7 +11601,7 @@
       "source_location": "L212",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_deletecomment",
-      "community": 101,
+      "community": 111,
       "community_name": "commentStore.ts",
       "norm_label": "deletecomment()"
     },
@@ -11612,7 +11612,7 @@
       "source_location": "L250",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_editcomment",
-      "community": 101,
+      "community": 111,
       "community_name": "commentStore.ts",
       "norm_label": "editcomment()"
     },
@@ -11623,7 +11623,7 @@
       "source_location": "L297",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_resolvecomment",
-      "community": 101,
+      "community": 111,
       "community_name": "commentStore.ts",
       "norm_label": "resolvecomment()"
     },
@@ -11634,7 +11634,7 @@
       "source_location": "L315",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_unresolvecomment",
-      "community": 101,
+      "community": 111,
       "community_name": "commentStore.ts",
       "norm_label": "unresolvecomment()"
     },
@@ -11645,7 +11645,7 @@
       "source_location": "L333",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_applyreactiontoggle",
-      "community": 101,
+      "community": 111,
       "community_name": "commentStore.ts",
       "norm_label": "applyreactiontoggle()"
     },
@@ -11656,7 +11656,7 @@
       "source_location": "L349",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_togglereaction",
-      "community": 101,
+      "community": 111,
       "community_name": "commentStore.ts",
       "norm_label": "togglereaction()"
     },
@@ -11667,7 +11667,7 @@
       "source_location": "L376",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_reanchorcomment",
-      "community": 101,
+      "community": 111,
       "community_name": "commentStore.ts",
       "norm_label": "reanchorcomment()"
     },
@@ -11678,7 +11678,7 @@
       "source_location": "L400",
       "_origin": "ast",
       "id": "vscode_extension_src_commentstore_updateorphanflags",
-      "community": 101,
+      "community": 111,
       "community_name": "commentStore.ts",
       "norm_label": "updateorphanflags()"
     },
@@ -11690,7 +11690,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_extension",
       "community": 111,
-      "community_name": "extension.ts",
+      "community_name": "commentStore.ts",
       "norm_label": "extension.ts"
     },
     {
@@ -11701,7 +11701,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_extension_mdurifrommessage",
       "community": 111,
-      "community_name": "extension.ts",
+      "community_name": "commentStore.ts",
       "norm_label": "mdurifrommessage()"
     },
     {
@@ -11712,7 +11712,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_extension_updatestatusbar",
       "community": 111,
-      "community_name": "extension.ts",
+      "community_name": "commentStore.ts",
       "norm_label": "updatestatusbar()"
     },
     {
@@ -11723,7 +11723,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_extension_refreshpreview",
       "community": 111,
-      "community_name": "extension.ts",
+      "community_name": "commentStore.ts",
       "norm_label": "refreshpreview()"
     },
     {
@@ -11734,7 +11734,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_extension_handlepreviewaction",
       "community": 111,
-      "community_name": "extension.ts",
+      "community_name": "commentStore.ts",
       "norm_label": "handlepreviewaction()"
     },
     {
@@ -11745,7 +11745,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_extension_handleuri",
       "community": 111,
-      "community_name": "extension.ts",
+      "community_name": "commentStore.ts",
       "norm_label": "handleuri()"
     },
     {
@@ -11756,7 +11756,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_extension_activate",
       "community": 111,
-      "community_name": "extension.ts",
+      "community_name": "commentStore.ts",
       "norm_label": "activate()"
     },
     {
@@ -11767,7 +11767,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_extension_deactivate",
       "community": 111,
-      "community_name": "extension.ts",
+      "community_name": "commentStore.ts",
       "norm_label": "deactivate()"
     },
     {
@@ -11778,7 +11778,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth",
       "community": 111,
-      "community_name": "extension.ts",
+      "community_name": "commentStore.ts",
       "norm_label": "vscode-extension/src/githubauth.ts"
     },
     {
@@ -11789,7 +11789,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth_initializeauth",
       "community": 111,
-      "community_name": "extension.ts",
+      "community_name": "commentStore.ts",
       "norm_label": "initializeauth()"
     },
     {
@@ -11799,7 +11799,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth_hastokensync",
-      "community": 89,
+      "community": 86,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "hastokensync()"
     },
@@ -11811,7 +11811,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth_getoauthtoken",
       "community": 111,
-      "community_name": "extension.ts",
+      "community_name": "commentStore.ts",
       "norm_label": "getoauthtoken()"
     },
     {
@@ -11822,7 +11822,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth_devicecoderesponse",
       "community": 111,
-      "community_name": "extension.ts",
+      "community_name": "commentStore.ts",
       "norm_label": "devicecoderesponse"
     },
     {
@@ -11833,7 +11833,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth_requestdevicecode",
       "community": 111,
-      "community_name": "extension.ts",
+      "community_name": "commentStore.ts",
       "norm_label": "requestdevicecode()"
     },
     {
@@ -11844,7 +11844,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth_pollforaccesstoken",
       "community": 111,
-      "community_name": "extension.ts",
+      "community_name": "commentStore.ts",
       "norm_label": "pollforaccesstoken()"
     },
     {
@@ -11855,7 +11855,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth_signin",
       "community": 111,
-      "community_name": "extension.ts",
+      "community_name": "commentStore.ts",
       "norm_label": "signin()"
     },
     {
@@ -11866,7 +11866,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubauth_signout",
       "community": 111,
-      "community_name": "extension.ts",
+      "community_name": "commentStore.ts",
       "norm_label": "signout()"
     },
     {
@@ -11877,7 +11877,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubavatars",
       "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "githubavatars.ts"
     },
     {
@@ -11888,7 +11888,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubavatars_avatarcacheentry",
       "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "avatarcacheentry"
     },
     {
@@ -11899,7 +11899,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubavatars_avatarcache",
       "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "avatarcache"
     },
     {
@@ -11910,7 +11910,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubavatars_cachekey",
       "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "cachekey()"
     },
     {
@@ -11921,7 +11921,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubavatars_cacheentryvalid",
       "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "cacheentryvalid()"
     },
     {
@@ -11932,7 +11932,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubavatars_avatarfetchurl",
       "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "avatarfetchurl()"
     },
     {
@@ -11943,7 +11943,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubavatars_collectavatarlogins",
       "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "collectavatarlogins()"
     },
     {
@@ -11954,7 +11954,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubavatars_getavatardataurl",
       "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "getavatardataurl()"
     },
     {
@@ -11965,7 +11965,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubavatars_warmgithubavatars",
       "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "warmgithubavatars()"
     },
     {
@@ -11976,7 +11976,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubavatars_fetchavatardataurl",
       "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "fetchavatardataurl()"
     },
     {
@@ -11987,7 +11987,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames",
       "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "githubdisplaynames.ts"
     },
     {
@@ -11998,7 +11998,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_execfileasync",
       "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "execfileasync"
     },
     {
@@ -12009,7 +12009,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_cacheentry",
       "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "cacheentry"
     },
     {
@@ -12020,7 +12020,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_displaynamecache",
       "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "displaynamecache"
     },
     {
@@ -12031,7 +12031,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_cleargithubdisplaynamecache",
       "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "cleargithubdisplaynamecache()"
     },
     {
@@ -12042,7 +12042,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_cacheentryvalid",
       "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "cacheentryvalid()"
     },
     {
@@ -12053,7 +12053,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_collectgithublogins",
       "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "collectgithublogins()"
     },
     {
@@ -12064,7 +12064,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_getgithubdisplayname",
       "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "getgithubdisplayname()"
     },
     {
@@ -12075,7 +12075,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_authormatchkeys",
       "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "authormatchkeys()"
     },
     {
@@ -12085,8 +12085,8 @@
       "source_location": "L101",
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_authorsmatch",
-      "community": 101,
-      "community_name": "commentStore.ts",
+      "community": 86,
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "authorsmatch()"
     },
     {
@@ -12097,7 +12097,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_resolveauthorlogin",
       "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "resolveauthorlogin()"
     },
     {
@@ -12108,7 +12108,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_authordisplaylabel",
       "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "authordisplaylabel()"
     },
     {
@@ -12118,7 +12118,7 @@
       "source_location": "L146",
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_displaynamesmapforlogins",
-      "community": 89,
+      "community": 86,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "displaynamesmapforlogins()"
     },
@@ -12130,7 +12130,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_warmgithubdisplaynames",
       "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "warmgithubdisplaynames()"
     },
     {
@@ -12140,7 +12140,7 @@
       "source_location": "L187",
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_schedulepreviewrefreshafterdisplaynames",
-      "community": 89,
+      "community": 86,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "schedulepreviewrefreshafterdisplaynames()"
     },
@@ -12152,7 +12152,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_fetchdisplayname",
       "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "fetchdisplayname()"
     },
     {
@@ -12163,7 +12163,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_fetchnameviaghcli",
       "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "fetchnameviaghcli()"
     },
     {
@@ -12174,7 +12174,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_githubdisplaynames_fetchnameviagithubapi",
       "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "fetchnameviagithubapi()"
     },
     {
@@ -12185,7 +12185,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_logger",
       "community": 111,
-      "community_name": "extension.ts",
+      "community_name": "commentStore.ts",
       "norm_label": "logger.ts"
     },
     {
@@ -12196,7 +12196,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_logger_initializelogger",
       "community": 111,
-      "community_name": "extension.ts",
+      "community_name": "commentStore.ts",
       "norm_label": "initializelogger()"
     },
     {
@@ -12207,7 +12207,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_logger_logdebug",
       "community": 111,
-      "community_name": "extension.ts",
+      "community_name": "commentStore.ts",
       "norm_label": "logdebug()"
     },
     {
@@ -12218,7 +12218,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_logger_loginfo",
       "community": 111,
-      "community_name": "extension.ts",
+      "community_name": "commentStore.ts",
       "norm_label": "loginfo()"
     },
     {
@@ -12229,7 +12229,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_logger_logerror",
       "community": 111,
-      "community_name": "extension.ts",
+      "community_name": "commentStore.ts",
       "norm_label": "logerror()"
     },
     {
@@ -12239,7 +12239,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin",
-      "community": 89,
+      "community": 86,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "markdownitplugin.ts"
     },
@@ -12250,7 +12250,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_formattime",
-      "community": 89,
+      "community": 86,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "formattime()"
     },
@@ -12261,7 +12261,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_formatcommenttime",
-      "community": 89,
+      "community": 86,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "formatcommenttime()"
     },
@@ -12272,7 +12272,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_caneditcomment",
-      "community": 89,
+      "community": 86,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "caneditcomment()"
     },
@@ -12283,7 +12283,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_rendereditbtn",
-      "community": 89,
+      "community": 86,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "rendereditbtn()"
     },
@@ -12294,7 +12294,7 @@
       "source_location": "L88",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_actioniconbtn",
-      "community": 89,
+      "community": 86,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "actioniconbtn()"
     },
@@ -12305,7 +12305,7 @@
       "source_location": "L104",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_renderauthorlink",
-      "community": 89,
+      "community": 86,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "renderauthorlink()"
     },
@@ -12316,7 +12316,7 @@
       "source_location": "L116",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_rendercommentbody",
-      "community": 89,
+      "community": 86,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "rendercommentbody()"
     },
@@ -12328,7 +12328,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_collectmentioncandidates",
       "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "collectmentioncandidates()"
     },
     {
@@ -12339,7 +12339,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_authorinitials",
       "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "authorinitials()"
     },
     {
@@ -12349,7 +12349,7 @@
       "source_location": "L160",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_renderavatar",
-      "community": 89,
+      "community": 86,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "renderavatar()"
     },
@@ -12360,7 +12360,7 @@
       "source_location": "L175",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_threadfooterbtn",
-      "community": 89,
+      "community": 86,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "threadfooterbtn()"
     },
@@ -12371,7 +12371,7 @@
       "source_location": "L190",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_replycountlabel",
-      "community": 89,
+      "community": 86,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "replycountlabel()"
     },
@@ -12382,7 +12382,7 @@
       "source_location": "L197",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_renderrepliesblock",
-      "community": 89,
+      "community": 86,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "renderrepliesblock()"
     },
@@ -12393,7 +12393,7 @@
       "source_location": "L214",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_renderreactions",
-      "community": 89,
+      "community": 86,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "renderreactions()"
     },
@@ -12404,7 +12404,7 @@
       "source_location": "L233",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_renderreply",
-      "community": 89,
+      "community": 86,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "renderreply()"
     },
@@ -12415,7 +12415,7 @@
       "source_location": "L274",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_rendercard",
-      "community": 89,
+      "community": 86,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "rendercard()"
     },
@@ -12426,8 +12426,8 @@
       "source_location": "L349",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_rendercontext",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "rendercontext"
     },
     {
@@ -12437,7 +12437,7 @@
       "source_location": "L356",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_renderquoteexcerpt",
-      "community": 89,
+      "community": 86,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "renderquoteexcerpt()"
     },
@@ -12448,7 +12448,7 @@
       "source_location": "L363",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_rendersidebarthread",
-      "community": 89,
+      "community": 86,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "rendersidebarthread()"
     },
@@ -12459,7 +12459,7 @@
       "source_location": "L371",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_renderresolvedsummary",
-      "community": 89,
+      "community": 86,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "renderresolvedsummary()"
     },
@@ -12470,7 +12470,7 @@
       "source_location": "L378",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_renderresolvedthread",
-      "community": 89,
+      "community": 86,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "renderresolvedthread()"
     },
@@ -12481,7 +12481,7 @@
       "source_location": "L390",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_panelempty",
-      "community": 89,
+      "community": 86,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "panelempty()"
     },
@@ -12492,7 +12492,7 @@
       "source_location": "L394",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_buildsidebarhtml",
-      "community": 89,
+      "community": 86,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "buildsidebarhtml()"
     },
@@ -12503,7 +12503,7 @@
       "source_location": "L526",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_getreactionemojisjson",
-      "community": 89,
+      "community": 86,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "getreactionemojisjson()"
     },
@@ -12514,7 +12514,7 @@
       "source_location": "L534",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_getdefaultsidebarwidth",
-      "community": 89,
+      "community": 86,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "getdefaultsidebarwidth()"
     },
@@ -12525,7 +12525,7 @@
       "source_location": "L541",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_renderdocumentlayout",
-      "community": 89,
+      "community": 86,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "renderdocumentlayout()"
     },
@@ -12536,7 +12536,7 @@
       "source_location": "L599",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_getmduri",
-      "community": 89,
+      "community": 86,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "getmduri()"
     },
@@ -12547,8 +12547,8 @@
       "source_location": "L626",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_loadcontext",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "loadcontext()"
     },
     {
@@ -12558,7 +12558,7 @@
       "source_location": "L673",
       "_origin": "ast",
       "id": "vscode_extension_src_markdownitplugin_extendmarkdownit",
-      "community": 89,
+      "community": 86,
       "community_name": "markdownItPlugin.ts",
       "norm_label": "extendmarkdownit()"
     },
@@ -12570,7 +12570,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_markdownrender",
       "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "markdownrender.ts"
     },
     {
@@ -12581,7 +12581,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_markdownrender_getmarkdownengine",
       "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "getmarkdownengine()"
     },
     {
@@ -12592,7 +12592,7 @@
       "_origin": "ast",
       "id": "vscode_extension_src_markdownrender_rendermarkdownwithcomments",
       "community": 86,
-      "community_name": "githubDisplayNames.ts",
+      "community_name": "markdownItPlugin.ts",
       "norm_label": "rendermarkdownwithcomments()"
     },
     {
@@ -12690,7 +12690,7 @@
       "source_location": "L113",
       "_origin": "ast",
       "id": "vscode_extension_src_optimisticstore_globaloptimisticstore",
-      "community": 101,
+      "community": 111,
       "community_name": "commentStore.ts",
       "norm_label": "globaloptimisticstore"
     },
@@ -12701,8 +12701,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_orphan",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "orphan.ts"
     },
     {
@@ -12712,8 +12712,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "vscode_extension_src_orphan_scanorphansformarkdown",
-      "community": 89,
-      "community_name": "markdownItPlugin.ts",
+      "community": 30,
+      "community_name": "CommentsFile",
       "norm_label": "scanorphansformarkdown()"
     },
     {
@@ -12723,8 +12723,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_previewcommand",
-      "community": 118,
-      "community_name": "previewCommand.ts",
+      "community": 111,
+      "community_name": "commentStore.ts",
       "norm_label": "previewcommand.ts"
     },
     {
@@ -12734,8 +12734,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "vscode_extension_src_previewcommand_parsepreviewcommandarg",
-      "community": 118,
-      "community_name": "previewCommand.ts",
+      "community": 111,
+      "community_name": "commentStore.ts",
       "norm_label": "parsepreviewcommandarg()"
     },
     {
@@ -12745,8 +12745,8 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "vscode_extension_src_previewcommand_normalizeobject",
-      "community": 118,
-      "community_name": "previewCommand.ts",
+      "community": 111,
+      "community_name": "commentStore.ts",
       "norm_label": "normalizeobject()"
     },
     {
@@ -12756,8 +12756,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vscode_extension_src_repomanager",
-      "community": 109,
-      "community_name": "repoManager.ts",
+      "community": 111,
+      "community_name": "commentStore.ts",
       "norm_label": "repomanager.ts"
     },
     {
@@ -12767,8 +12767,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "vscode_extension_src_repomanager_execfileasync",
-      "community": 109,
-      "community_name": "repoManager.ts",
+      "community": 111,
+      "community_name": "commentStore.ts",
       "norm_label": "execfileasync"
     },
     {
@@ -12778,8 +12778,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "vscode_extension_src_repomanager_remoteurlcache",
-      "community": 109,
-      "community_name": "repoManager.ts",
+      "community": 111,
+      "community_name": "commentStore.ts",
       "norm_label": "remoteurlcache"
     },
     {
@@ -12789,8 +12789,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "vscode_extension_src_repomanager_getgitremoteurlsync",
-      "community": 109,
-      "community_name": "repoManager.ts",
+      "community": 111,
+      "community_name": "commentStore.ts",
       "norm_label": "getgitremoteurlsync()"
     },
     {
@@ -12800,8 +12800,8 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "vscode_extension_src_repomanager_getgitremoteurl",
-      "community": 109,
-      "community_name": "repoManager.ts",
+      "community": 111,
+      "community_name": "commentStore.ts",
       "norm_label": "getgitremoteurl()"
     },
     {
@@ -12811,8 +12811,8 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "vscode_extension_src_repomanager_commithashcache",
-      "community": 109,
-      "community_name": "repoManager.ts",
+      "community": 111,
+      "community_name": "commentStore.ts",
       "norm_label": "commithashcache"
     },
     {
@@ -12822,8 +12822,8 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "vscode_extension_src_repomanager_getgitcommithashsync",
-      "community": 109,
-      "community_name": "repoManager.ts",
+      "community": 111,
+      "community_name": "commentStore.ts",
       "norm_label": "getgitcommithashsync()"
     },
     {
@@ -12833,8 +12833,8 @@
       "source_location": "L70",
       "_origin": "ast",
       "id": "vscode_extension_src_repomanager_getgitcommithash",
-      "community": 109,
-      "community_name": "repoManager.ts",
+      "community": 111,
+      "community_name": "commentStore.ts",
       "norm_label": "getgitcommithash()"
     },
     {
@@ -12844,8 +12844,8 @@
       "source_location": "L80",
       "_origin": "ast",
       "id": "vscode_extension_src_repomanager_resolvestoragekeyforurisync",
-      "community": 109,
-      "community_name": "repoManager.ts",
+      "community": 111,
+      "community_name": "commentStore.ts",
       "norm_label": "resolvestoragekeyforurisync()"
     },
     {
@@ -12855,8 +12855,8 @@
       "source_location": "L119",
       "_origin": "ast",
       "id": "vscode_extension_src_repomanager_resolvestoragekeyforuri",
-      "community": 109,
-      "community_name": "repoManager.ts",
+      "community": 111,
+      "community_name": "commentStore.ts",
       "norm_label": "resolvestoragekeyforuri()"
     },
     {
@@ -13102,10 +13102,65 @@
       "norm_label": "md-comments.js"
     },
     {
+      "label": "decodeBase64Utf8()",
+      "file_type": "code",
+      "source_file": "website/demo-html/embed/md-comments.js",
+      "source_location": "L41",
+      "_origin": "ast",
+      "id": "website_demo_html_embed_md_comments_decodebase64utf8",
+      "community": 108,
+      "community_name": "CommentsApp",
+      "norm_label": "decodebase64utf8()"
+    },
+    {
+      "label": "parseYamlVal()",
+      "file_type": "code",
+      "source_file": "website/demo-html/embed/md-comments.js",
+      "source_location": "L56",
+      "_origin": "ast",
+      "id": "website_demo_html_embed_md_comments_parseyamlval",
+      "community": 108,
+      "community_name": "CommentsApp",
+      "norm_label": "parseyamlval()"
+    },
+    {
+      "label": "parseYamlComments()",
+      "file_type": "code",
+      "source_file": "website/demo-html/embed/md-comments.js",
+      "source_location": "L74",
+      "_origin": "ast",
+      "id": "website_demo_html_embed_md_comments_parseyamlcomments",
+      "community": 108,
+      "community_name": "CommentsApp",
+      "norm_label": "parseyamlcomments()"
+    },
+    {
+      "label": "stringifyYaml()",
+      "file_type": "code",
+      "source_file": "website/demo-html/embed/md-comments.js",
+      "source_location": "L174",
+      "_origin": "ast",
+      "id": "website_demo_html_embed_md_comments_stringifyyaml",
+      "community": 108,
+      "community_name": "CommentsApp",
+      "norm_label": "stringifyyaml()"
+    },
+    {
+      "label": "getCommentsPath()",
+      "file_type": "code",
+      "source_file": "website/demo-html/embed/md-comments.js",
+      "source_location": "L227",
+      "_origin": "ast",
+      "id": "website_demo_html_embed_md_comments_getcommentspath",
+      "community": 108,
+      "community_name": "CommentsApp",
+      "norm_label": "getcommentspath()"
+    },
+    {
       "label": "fetchGitHubViewer()",
       "file_type": "code",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L91",
+      "source_location": "L238",
       "_origin": "ast",
       "id": "website_demo_html_embed_md_comments_fetchgithubviewer",
       "community": 108,
@@ -13116,7 +13171,7 @@
       "label": "AuthModal",
       "file_type": "code",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L117",
+      "source_location": "L264",
       "_origin": "ast",
       "id": "website_demo_html_embed_md_comments_authmodal",
       "community": 108,
@@ -13127,7 +13182,7 @@
       "label": ".constructor()",
       "file_type": "code",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L118",
+      "source_location": "L265",
       "_origin": "ast",
       "id": "website_demo_html_embed_md_comments_authmodal_constructor",
       "community": 108,
@@ -13138,7 +13193,7 @@
       "label": ".show()",
       "file_type": "code",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L124",
+      "source_location": "L271",
       "_origin": "ast",
       "id": "website_demo_html_embed_md_comments_authmodal_show",
       "community": 108,
@@ -13149,7 +13204,7 @@
       "label": ".startRealDeviceFlow()",
       "file_type": "code",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L172",
+      "source_location": "L319",
       "_origin": "ast",
       "id": "website_demo_html_embed_md_comments_authmodal_startrealdeviceflow",
       "community": 108,
@@ -13160,7 +13215,7 @@
       "label": "CommentsApp",
       "file_type": "code",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L361",
+      "source_location": "L488",
       "_origin": "ast",
       "id": "website_demo_html_embed_md_comments_commentsapp",
       "community": 108,
@@ -13171,7 +13226,7 @@
       "label": ".constructor()",
       "file_type": "code",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L362",
+      "source_location": "L489",
       "_origin": "ast",
       "id": "website_demo_html_embed_md_comments_commentsapp_constructor",
       "community": 108,
@@ -13179,32 +13234,54 @@
       "norm_label": ".constructor()"
     },
     {
-      "label": ".loadStoredComments()",
+      "label": ".getAuthToken()",
       "file_type": "code",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L373",
+      "source_location": "L507",
       "_origin": "ast",
-      "id": "website_demo_html_embed_md_comments_commentsapp_loadstoredcomments",
+      "id": "website_demo_html_embed_md_comments_commentsapp_getauthtoken",
       "community": 108,
       "community_name": "CommentsApp",
-      "norm_label": ".loadstoredcomments()"
+      "norm_label": ".getauthtoken()"
     },
     {
-      "label": ".saveComments()",
+      "label": ".fetchGitHubApi()",
       "file_type": "code",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L391",
+      "source_location": "L511",
       "_origin": "ast",
-      "id": "website_demo_html_embed_md_comments_commentsapp_savecomments",
+      "id": "website_demo_html_embed_md_comments_commentsapp_fetchgithubapi",
       "community": 108,
       "community_name": "CommentsApp",
-      "norm_label": ".savecomments()"
+      "norm_label": ".fetchgithubapi()"
+    },
+    {
+      "label": ".loadCommentsFromGit()",
+      "file_type": "code",
+      "source_file": "website/demo-html/embed/md-comments.js",
+      "source_location": "L527",
+      "_origin": "ast",
+      "id": "website_demo_html_embed_md_comments_commentsapp_loadcommentsfromgit",
+      "community": 108,
+      "community_name": "CommentsApp",
+      "norm_label": ".loadcommentsfromgit()"
+    },
+    {
+      "label": ".commitCommentsToGit()",
+      "file_type": "code",
+      "source_file": "website/demo-html/embed/md-comments.js",
+      "source_location": "L633",
+      "_origin": "ast",
+      "id": "website_demo_html_embed_md_comments_commentsapp_commitcommentstogit",
+      "community": 108,
+      "community_name": "CommentsApp",
+      "norm_label": ".commitcommentstogit()"
     },
     {
       "label": ".init()",
       "file_type": "code",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L399",
+      "source_location": "L772",
       "_origin": "ast",
       "id": "website_demo_html_embed_md_comments_commentsapp_init",
       "community": 108,
@@ -13215,7 +13292,7 @@
       "label": ".injectDOMContainers()",
       "file_type": "code",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L423",
+      "source_location": "L795",
       "_origin": "ast",
       "id": "website_demo_html_embed_md_comments_commentsapp_injectdomcontainers",
       "community": 108,
@@ -13226,7 +13303,7 @@
       "label": ".scanDocumentAnchors()",
       "file_type": "code",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L497",
+      "source_location": "L878",
       "_origin": "ast",
       "id": "website_demo_html_embed_md_comments_commentsapp_scandocumentanchors",
       "community": 108,
@@ -13237,7 +13314,7 @@
       "label": ".bindSelectionListener()",
       "file_type": "code",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L515",
+      "source_location": "L893",
       "_origin": "ast",
       "id": "website_demo_html_embed_md_comments_commentsapp_bindselectionlistener",
       "community": 108,
@@ -13245,32 +13322,10 @@
       "norm_label": ".bindselectionlistener()"
     },
     {
-      "label": ".showSelectionBubble()",
-      "file_type": "code",
-      "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L561",
-      "_origin": "ast",
-      "id": "website_demo_html_embed_md_comments_commentsapp_showselectionbubble",
-      "community": 108,
-      "community_name": "CommentsApp",
-      "norm_label": ".showselectionbubble()"
-    },
-    {
-      "label": ".hideSelectionBubble()",
-      "file_type": "code",
-      "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L568",
-      "_origin": "ast",
-      "id": "website_demo_html_embed_md_comments_commentsapp_hideselectionbubble",
-      "community": 108,
-      "community_name": "CommentsApp",
-      "norm_label": ".hideselectionbubble()"
-    },
-    {
       "label": ".openComposerForSelection()",
       "file_type": "code",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L574",
+      "source_location": "L939",
       "_origin": "ast",
       "id": "website_demo_html_embed_md_comments_commentsapp_opencomposerforselection",
       "community": 108,
@@ -13281,7 +13336,7 @@
       "label": ".submitComment()",
       "file_type": "code",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L627",
+      "source_location": "L983",
       "_origin": "ast",
       "id": "website_demo_html_embed_md_comments_commentsapp_submitcomment",
       "community": 108,
@@ -13292,7 +13347,7 @@
       "label": ".renderHighlights()",
       "file_type": "code",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L650",
+      "source_location": "L1008",
       "_origin": "ast",
       "id": "website_demo_html_embed_md_comments_commentsapp_renderhighlights",
       "community": 108,
@@ -13303,7 +13358,7 @@
       "label": ".updateFABCount()",
       "file_type": "code",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L708",
+      "source_location": "L1063",
       "_origin": "ast",
       "id": "website_demo_html_embed_md_comments_commentsapp_updatefabcount",
       "community": 108,
@@ -13314,7 +13369,7 @@
       "label": ".toggleDrawer()",
       "file_type": "code",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L726",
+      "source_location": "L1081",
       "_origin": "ast",
       "id": "website_demo_html_embed_md_comments_commentsapp_toggledrawer",
       "community": 108,
@@ -13325,7 +13380,7 @@
       "label": ".openDrawer()",
       "file_type": "code",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L734",
+      "source_location": "L1089",
       "_origin": "ast",
       "id": "website_demo_html_embed_md_comments_commentsapp_opendrawer",
       "community": 108,
@@ -13336,7 +13391,7 @@
       "label": ".closeDrawer()",
       "file_type": "code",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L741",
+      "source_location": "L1096",
       "_origin": "ast",
       "id": "website_demo_html_embed_md_comments_commentsapp_closedrawer",
       "community": 108,
@@ -13347,7 +13402,7 @@
       "label": ".highlightThread()",
       "file_type": "code",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L747",
+      "source_location": "L1102",
       "_origin": "ast",
       "id": "website_demo_html_embed_md_comments_commentsapp_highlightthread",
       "community": 108,
@@ -13358,7 +13413,7 @@
       "label": ".renderDrawer()",
       "file_type": "code",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L758",
+      "source_location": "L1113",
       "_origin": "ast",
       "id": "website_demo_html_embed_md_comments_commentsapp_renderdrawer",
       "community": 108,
@@ -13369,7 +13424,7 @@
       "label": ".postReply()",
       "file_type": "code",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L934",
+      "source_location": "L1318",
       "_origin": "ast",
       "id": "website_demo_html_embed_md_comments_commentsapp_postreply",
       "community": 108,
@@ -13380,7 +13435,7 @@
       "label": ".formatTimeAgo()",
       "file_type": "code",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L950",
+      "source_location": "L1334",
       "_origin": "ast",
       "id": "website_demo_html_embed_md_comments_commentsapp_formattimeago",
       "community": 108,
@@ -13391,7 +13446,7 @@
       "label": ".escapeHTML()",
       "file_type": "code",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L961",
+      "source_location": "L1345",
       "_origin": "ast",
       "id": "website_demo_html_embed_md_comments_commentsapp_escapehtml",
       "community": 108,
@@ -16545,9 +16600,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 89,
+      "community": 30,
       "norm_label": "markdown comments key features",
-      "community_name": "markdownItPlugin.ts",
+      "community_name": "CommentsFile",
       "id": "readme_features"
     },
     {
@@ -45370,7 +45425,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L117",
+      "source_location": "L264",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments",
@@ -45381,7 +45436,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L361",
+      "source_location": "L488",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments",
@@ -45392,7 +45447,18 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L91",
+      "source_location": "L41",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "website_demo_html_embed_md_comments",
+      "target": "website_demo_html_embed_md_comments_decodebase64utf8",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "website/demo-html/embed/md-comments.js",
+      "source_location": "L238",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments",
@@ -45400,11 +45466,115 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "website/demo-html/embed/md-comments.js",
+      "source_location": "L227",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "website_demo_html_embed_md_comments",
+      "target": "website_demo_html_embed_md_comments_getcommentspath",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "website/demo-html/embed/md-comments.js",
+      "source_location": "L74",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "website_demo_html_embed_md_comments",
+      "target": "website_demo_html_embed_md_comments_parseyamlcomments",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "website/demo-html/embed/md-comments.js",
+      "source_location": "L56",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "website_demo_html_embed_md_comments",
+      "target": "website_demo_html_embed_md_comments_parseyamlval",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "website/demo-html/embed/md-comments.js",
+      "source_location": "L174",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "website_demo_html_embed_md_comments",
+      "target": "website_demo_html_embed_md_comments_stringifyyaml",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L327",
+      "source_location": "L544",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "website_demo_html_embed_md_comments_commentsapp_loadcommentsfromgit",
+      "target": "website_demo_html_embed_md_comments_decodebase64utf8",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "website/demo-html/embed/md-comments.js",
+      "source_location": "L130",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "website_demo_html_embed_md_comments_parseyamlcomments",
+      "target": "website_demo_html_embed_md_comments_parseyamlval",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "website/demo-html/embed/md-comments.js",
+      "source_location": "L545",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "website_demo_html_embed_md_comments_commentsapp_loadcommentsfromgit",
+      "target": "website_demo_html_embed_md_comments_parseyamlcomments",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "website/demo-html/embed/md-comments.js",
+      "source_location": "L685",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "website_demo_html_embed_md_comments_commentsapp_commitcommentstogit",
+      "target": "website_demo_html_embed_md_comments_stringifyyaml",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "website/demo-html/embed/md-comments.js",
+      "source_location": "L502",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "website_demo_html_embed_md_comments_commentsapp_constructor",
+      "target": "website_demo_html_embed_md_comments_getcommentspath",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "website/demo-html/embed/md-comments.js",
+      "source_location": "L454",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_authmodal_startrealdeviceflow",
@@ -45416,7 +45586,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L410",
+      "source_location": "L780",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp_init",
@@ -45427,7 +45597,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L118",
+      "source_location": "L265",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_authmodal",
@@ -45438,7 +45608,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L124",
+      "source_location": "L271",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_authmodal",
@@ -45449,7 +45619,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L172",
+      "source_location": "L319",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_authmodal",
@@ -45461,7 +45631,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L169",
+      "source_location": "L316",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_authmodal_show",
@@ -45473,7 +45643,19 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L611",
+      "source_location": "L638",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "website_demo_html_embed_md_comments_commentsapp_commitcommentstogit",
+      "target": "website_demo_html_embed_md_comments_authmodal_show",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "website/demo-html/embed/md-comments.js",
+      "source_location": "L971",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp_opencomposerforselection",
@@ -45485,7 +45667,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L779",
+      "source_location": "L1134",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp_renderdrawer",
@@ -45496,7 +45678,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L515",
+      "source_location": "L893",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp",
@@ -45507,7 +45689,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L741",
+      "source_location": "L1096",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp",
@@ -45518,7 +45700,18 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L362",
+      "source_location": "L633",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "website_demo_html_embed_md_comments_commentsapp",
+      "target": "website_demo_html_embed_md_comments_commentsapp_commitcommentstogit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "website/demo-html/embed/md-comments.js",
+      "source_location": "L489",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp",
@@ -45529,7 +45722,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L961",
+      "source_location": "L1345",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp",
@@ -45540,7 +45733,18 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L950",
+      "source_location": "L511",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "website_demo_html_embed_md_comments_commentsapp",
+      "target": "website_demo_html_embed_md_comments_commentsapp_fetchgithubapi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "website/demo-html/embed/md-comments.js",
+      "source_location": "L1334",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp",
@@ -45551,18 +45755,18 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L568",
+      "source_location": "L507",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp",
-      "target": "website_demo_html_embed_md_comments_commentsapp_hideselectionbubble",
+      "target": "website_demo_html_embed_md_comments_commentsapp_getauthtoken",
       "confidence_score": 1.0
     },
     {
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L747",
+      "source_location": "L1102",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp",
@@ -45573,7 +45777,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L399",
+      "source_location": "L772",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp",
@@ -45584,7 +45788,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L423",
+      "source_location": "L795",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp",
@@ -45595,18 +45799,18 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L373",
+      "source_location": "L527",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp",
-      "target": "website_demo_html_embed_md_comments_commentsapp_loadstoredcomments",
+      "target": "website_demo_html_embed_md_comments_commentsapp_loadcommentsfromgit",
       "confidence_score": 1.0
     },
     {
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L574",
+      "source_location": "L939",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp",
@@ -45617,7 +45821,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L734",
+      "source_location": "L1089",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp",
@@ -45628,7 +45832,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L934",
+      "source_location": "L1318",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp",
@@ -45639,7 +45843,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L758",
+      "source_location": "L1113",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp",
@@ -45650,7 +45854,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L650",
+      "source_location": "L1008",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp",
@@ -45661,18 +45865,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L391",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "website_demo_html_embed_md_comments_commentsapp",
-      "target": "website_demo_html_embed_md_comments_commentsapp_savecomments",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L497",
+      "source_location": "L878",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp",
@@ -45683,18 +45876,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L561",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "website_demo_html_embed_md_comments_commentsapp",
-      "target": "website_demo_html_embed_md_comments_commentsapp_showselectionbubble",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L627",
+      "source_location": "L983",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp",
@@ -45705,7 +45887,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L726",
+      "source_location": "L1081",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp",
@@ -45716,7 +45898,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L708",
+      "source_location": "L1063",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp",
@@ -45728,7 +45910,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L370",
+      "source_location": "L504",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp_constructor",
@@ -45740,11 +45922,11 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L363",
+      "source_location": "L634",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "website_demo_html_embed_md_comments_commentsapp_constructor",
-      "target": "website_demo_html_embed_md_comments_commentsapp_loadstoredcomments",
+      "source": "website_demo_html_embed_md_comments_commentsapp_commitcommentstogit",
+      "target": "website_demo_html_embed_md_comments_commentsapp_getauthtoken",
       "confidence_score": 1.0
     },
     {
@@ -45752,11 +45934,143 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L944",
+      "source_location": "L512",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "website_demo_html_embed_md_comments_commentsapp_fetchgithubapi",
+      "target": "website_demo_html_embed_md_comments_commentsapp_getauthtoken",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "website/demo-html/embed/md-comments.js",
+      "source_location": "L778",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "website_demo_html_embed_md_comments_commentsapp_init",
+      "target": "website_demo_html_embed_md_comments_commentsapp_getauthtoken",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "website/demo-html/embed/md-comments.js",
+      "source_location": "L689",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "website_demo_html_embed_md_comments_commentsapp_commitcommentstogit",
+      "target": "website_demo_html_embed_md_comments_commentsapp_fetchgithubapi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "website/demo-html/embed/md-comments.js",
+      "source_location": "L539",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "website_demo_html_embed_md_comments_commentsapp_loadcommentsfromgit",
+      "target": "website_demo_html_embed_md_comments_commentsapp_fetchgithubapi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "website/demo-html/embed/md-comments.js",
+      "source_location": "L792",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "website_demo_html_embed_md_comments_commentsapp_init",
+      "target": "website_demo_html_embed_md_comments_commentsapp_loadcommentsfromgit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "website/demo-html/embed/md-comments.js",
+      "source_location": "L535",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "website_demo_html_embed_md_comments_commentsapp_loadcommentsfromgit",
+      "target": "website_demo_html_embed_md_comments_commentsapp_renderdrawer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "website/demo-html/embed/md-comments.js",
+      "source_location": "L625",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "website_demo_html_embed_md_comments_commentsapp_loadcommentsfromgit",
+      "target": "website_demo_html_embed_md_comments_commentsapp_renderhighlights",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "website/demo-html/embed/md-comments.js",
+      "source_location": "L626",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "website_demo_html_embed_md_comments_commentsapp_loadcommentsfromgit",
+      "target": "website_demo_html_embed_md_comments_commentsapp_updatefabcount",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "website/demo-html/embed/md-comments.js",
+      "source_location": "L640",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "website_demo_html_embed_md_comments_commentsapp_commitcommentstogit",
+      "target": "website_demo_html_embed_md_comments_commentsapp_renderdrawer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "website/demo-html/embed/md-comments.js",
+      "source_location": "L767",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "website_demo_html_embed_md_comments_commentsapp_commitcommentstogit",
+      "target": "website_demo_html_embed_md_comments_commentsapp_renderhighlights",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "website/demo-html/embed/md-comments.js",
+      "source_location": "L768",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "website_demo_html_embed_md_comments_commentsapp_commitcommentstogit",
+      "target": "website_demo_html_embed_md_comments_commentsapp_updatefabcount",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "website/demo-html/embed/md-comments.js",
+      "source_location": "L1330",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp_postreply",
-      "target": "website_demo_html_embed_md_comments_commentsapp_savecomments",
+      "target": "website_demo_html_embed_md_comments_commentsapp_commitcommentstogit",
       "confidence_score": 1.0
     },
     {
@@ -45764,23 +46078,11 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L872",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "website_demo_html_embed_md_comments_commentsapp_renderdrawer",
-      "target": "website_demo_html_embed_md_comments_commentsapp_savecomments",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L642",
+      "source_location": "L1005",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp_submitcomment",
-      "target": "website_demo_html_embed_md_comments_commentsapp_savecomments",
+      "target": "website_demo_html_embed_md_comments_commentsapp_commitcommentstogit",
       "confidence_score": 1.0
     },
     {
@@ -45788,7 +46090,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L402",
+      "source_location": "L775",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp_init",
@@ -45800,7 +46102,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L400",
+      "source_location": "L773",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp_init",
@@ -45812,31 +46114,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L405",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "website_demo_html_embed_md_comments_commentsapp_init",
-      "target": "website_demo_html_embed_md_comments_commentsapp_renderdrawer",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L403",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "website_demo_html_embed_md_comments_commentsapp_init",
-      "target": "website_demo_html_embed_md_comments_commentsapp_renderhighlights",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L401",
+      "source_location": "L774",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp_init",
@@ -45848,7 +46126,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L418",
+      "source_location": "L787",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp_init",
@@ -45860,19 +46138,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L404",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "website_demo_html_embed_md_comments_commentsapp_init",
-      "target": "website_demo_html_embed_md_comments_commentsapp_updatefabcount",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L483",
+      "source_location": "L863",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp_injectdomcontainers",
@@ -45884,7 +46150,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L439",
+      "source_location": "L811",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp_injectdomcontainers",
@@ -45896,7 +46162,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L492",
+      "source_location": "L873",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp_injectdomcontainers",
@@ -45908,7 +46174,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L454",
+      "source_location": "L825",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp_injectdomcontainers",
@@ -45920,35 +46186,11 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L519",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "website_demo_html_embed_md_comments_commentsapp_bindselectionlistener",
-      "target": "website_demo_html_embed_md_comments_commentsapp_hideselectionbubble",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L554",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "website_demo_html_embed_md_comments_commentsapp_bindselectionlistener",
-      "target": "website_demo_html_embed_md_comments_commentsapp_showselectionbubble",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L575",
+      "source_location": "L948",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp_opencomposerforselection",
-      "target": "website_demo_html_embed_md_comments_commentsapp_hideselectionbubble",
+      "target": "website_demo_html_embed_md_comments_commentsapp_escapehtml",
       "confidence_score": 1.0
     },
     {
@@ -45956,7 +46198,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L576",
+      "source_location": "L942",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp_opencomposerforselection",
@@ -45968,7 +46210,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L613",
+      "source_location": "L973",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp_opencomposerforselection",
@@ -45980,7 +46222,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L615",
+      "source_location": "L974",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp_opencomposerforselection",
@@ -45992,7 +46234,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L645",
+      "source_location": "L1001",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp_submitcomment",
@@ -46004,7 +46246,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L646",
+      "source_location": "L1002",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp_submitcomment",
@@ -46016,7 +46258,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L647",
+      "source_location": "L1003",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp_submitcomment",
@@ -46028,7 +46270,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L874",
+      "source_location": "L1255",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp_renderdrawer",
@@ -46040,7 +46282,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L696",
+      "source_location": "L1052",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp_renderhighlights",
@@ -46052,7 +46294,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L695",
+      "source_location": "L1051",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp_renderhighlights",
@@ -46064,7 +46306,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L946",
+      "source_location": "L1329",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp_postreply",
@@ -46076,7 +46318,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L875",
+      "source_location": "L1256",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp_renderdrawer",
@@ -46088,7 +46330,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L728",
+      "source_location": "L1083",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp_toggledrawer",
@@ -46100,7 +46342,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L730",
+      "source_location": "L1085",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp_toggledrawer",
@@ -46112,7 +46354,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L738",
+      "source_location": "L1093",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp_opendrawer",
@@ -46124,7 +46366,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L945",
+      "source_location": "L1328",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp_postreply",
@@ -46136,7 +46378,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L820",
+      "source_location": "L1192",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp_renderdrawer",
@@ -46148,7 +46390,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "website/demo-html/embed/md-comments.js",
-      "source_location": "L807",
+      "source_location": "L1189",
       "weight": 1.0,
       "_origin": "ast",
       "source": "website_demo_html_embed_md_comments_commentsapp_renderdrawer",
@@ -48955,5 +49197,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "edbf19ec64536aa9c96124d6700dd38f3d662f4e"
+  "built_at_commit": "12ab91b45c3d4efa535b73169dcb73330464ad25"
 }

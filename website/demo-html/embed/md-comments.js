@@ -1,7 +1,7 @@
 /**
  * Markdown Comments - Standalone Redistributable Embed Runtime
  * Enables zero-dependency inline collaborative commenting on any static HTML page.
- * Real GitHub OAuth Device Flow authentication, text selection, and margin pins.
+ * Real Git Backend: Commits comments directly to GitHub orphan ref refs/md-comments/data.
  */
 
 (function () {
@@ -9,6 +9,7 @@
 
   const DEFAULT_CLIENT_ID = 'Iv23li9t461keXDcVS0T';
   const TOKEN_KEY = 'md_comments_oauth_token';
+  const ORPHAN_REF_NAME = 'refs/md-comments/data';
 
   // Extract config from script attributes or global options
   const currentScript = document.currentScript;
@@ -34,56 +35,202 @@
     scriptOptions
   );
 
-  const STORAGE_PREFIX = `md_comments_${options.repo}_${options.file}`;
+  // ==========================================
+  // Unicode Base64 & YAML Serialization Helpers
+  // ==========================================
+  function decodeBase64Utf8(base64Str) {
+    const clean = (base64Str || '').replace(/\s/g, '');
+    if (!clean) return '';
+    try {
+      const binary = atob(clean);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i);
+      }
+      return new TextDecoder('utf-8').decode(bytes);
+    } catch {
+      return atob(clean);
+    }
+  }
 
-  // Starter sample discussion threads for initial rendered demo
-  const SEED_COMMENTS = [
-    {
-      id: 'demo-thread-1',
-      anchorId: 'sec-auth-ttl',
-      selectedText:
-        'Should token lifetime be reduced from 60 minutes to 15 minutes for enhanced security?',
-      textPrefix: 'Discussion prompt: Should token lifetime',
-      status: 'open',
-      createdAt: new Date(Date.now() - 3600000 * 4).toISOString(),
-      author: {
-        login: 'alex-rivera',
-        name: 'Alex Rivera',
-        avatar_url:
-          'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
-      },
-      body: 'I strongly recommend 15-minute token expiry with silent background refresh via the `/auth/refresh` endpoint to minimize breach blast radius.',
-      replies: [
-        {
-          id: 'demo-reply-1',
-          createdAt: new Date(Date.now() - 3600000 * 2).toISOString(),
-          author: {
-            login: 'sarah-chen',
-            name: 'Sarah Chen',
-            avatar_url:
-              'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80',
-          },
-          body: 'Agreed! Verified with our mobile clients and the refresh retry logic handles 15m intervals smoothly.',
-        },
-      ],
-    },
-    {
-      id: 'demo-thread-2',
-      anchorId: 'sec-failover',
-      selectedText: 'autoFailover: boolean;',
-      textPrefix: 'export interface ClusterConfig',
-      status: 'open',
-      createdAt: new Date(Date.now() - 3600000 * 8).toISOString(),
-      author: {
-        login: 'marcus-ops',
-        name: 'Marcus Vance',
-        avatar_url:
-          'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80',
-      },
-      body: 'Should we add a `failoverTimeoutMs` threshold parameter to this interface for distributed quorum arbitration?',
-      replies: [],
-    },
-  ];
+  function parseYamlVal(val) {
+    if (!val) return '';
+    if (val === 'true') return true;
+    if (val === 'false') return false;
+    if (val === 'null' || val === '~') return null;
+    if (val === '[]') return [];
+    if (val === '{}') return {};
+    if (!isNaN(Number(val)) && val.trim() !== '') return Number(val);
+    if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+      try {
+        return JSON.parse(val);
+      } catch {
+        return val.slice(1, -1);
+      }
+    }
+    return val;
+  }
+
+  function parseYamlComments(str) {
+    if (!str || !str.trim()) return { inline_comments: [], page_comments: [] };
+    const trimmed = str.trim();
+    if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
+      try {
+        const parsed = JSON.parse(trimmed);
+        return {
+          inline_comments: parsed.inline_comments || [],
+          page_comments: parsed.page_comments || [],
+        };
+      } catch {
+        /* fall through to yaml parsing */
+      }
+    }
+
+    const lines = str.split(/\r?\n/);
+    const root = { inline_comments: [], page_comments: [] };
+    let currentSection = null;
+    let currentItem = null;
+    let currentReplies = null;
+    let currentReply = null;
+    let inReplies = false;
+
+    for (const rawLine of lines) {
+      const line = rawLine.replace(/\t/g, '  ');
+      const trimmedLine = line.trim();
+      if (!trimmedLine || trimmedLine.startsWith('#')) continue;
+
+      const indent = line.search(/\S/);
+
+      if (trimmedLine.startsWith('inline_comments:')) {
+        currentSection = 'inline_comments';
+        inReplies = false;
+        currentItem = null;
+        continue;
+      } else if (trimmedLine.startsWith('page_comments:')) {
+        currentSection = 'page_comments';
+        inReplies = false;
+        currentItem = null;
+        continue;
+      }
+
+      if (!currentSection) continue;
+
+      if (trimmedLine.startsWith('- ') && indent <= 4 && !inReplies) {
+        currentItem = {};
+        root[currentSection].push(currentItem);
+        inReplies = false;
+        currentReplies = null;
+        currentReply = null;
+
+        const rest = trimmedLine.slice(2).trim();
+        if (rest) {
+          const colonIdx = rest.indexOf(':');
+          if (colonIdx !== -1) {
+            const k = rest.slice(0, colonIdx).trim();
+            const v = parseYamlVal(rest.slice(colonIdx + 1).trim());
+            currentItem[k] = v;
+          }
+        }
+        continue;
+      }
+
+      if (currentItem && trimmedLine.startsWith('replies:')) {
+        inReplies = true;
+        currentReplies = [];
+        currentItem.replies = currentReplies;
+        continue;
+      }
+
+      if (inReplies && trimmedLine.startsWith('- ') && indent >= 4) {
+        currentReply = {};
+        if (currentReplies) currentReplies.push(currentReply);
+        const rest = trimmedLine.slice(2).trim();
+        if (rest) {
+          const colonIdx = rest.indexOf(':');
+          if (colonIdx !== -1) {
+            const k = rest.slice(0, colonIdx).trim();
+            const v = parseYamlVal(rest.slice(colonIdx + 1).trim());
+            currentReply[k] = v;
+          }
+        }
+        continue;
+      }
+
+      const colonIdx = trimmedLine.indexOf(':');
+      if (colonIdx !== -1) {
+        const k = trimmedLine.slice(0, colonIdx).trim();
+        const v = parseYamlVal(trimmedLine.slice(colonIdx + 1).trim());
+        if (inReplies && currentReply) {
+          currentReply[k] = v;
+        } else if (currentItem) {
+          currentItem[k] = v;
+        }
+      }
+    }
+
+    return root;
+  }
+
+  function stringifyYaml(obj, indent = 0) {
+    const pad = ' '.repeat(indent);
+    if (obj === null || obj === undefined) return 'null';
+    if (typeof obj === 'boolean' || typeof obj === 'number') return String(obj);
+    if (typeof obj === 'string') {
+      if (
+        obj.includes('\n') ||
+        /[:#[\]{},"'|>&*!%@`]/.test(obj) ||
+        obj.trim() !== obj ||
+        obj === ''
+      ) {
+        return JSON.stringify(obj);
+      }
+      return obj;
+    }
+    if (Array.isArray(obj)) {
+      if (obj.length === 0) return '[]';
+      return obj
+        .map((item) => {
+          if (typeof item === 'object' && item !== null && !Array.isArray(item)) {
+            const entries = Object.entries(item);
+            if (entries.length === 0) return `${pad}- {}`;
+            const first = entries[0];
+            const rest = entries.slice(1);
+            let str = `${pad}- ${first[0]}: ${stringifyYaml(first[1], indent + 4).trimStart()}`;
+            for (const [k, v] of rest) {
+              str += `\n${pad}  ${k}: ${stringifyYaml(v, indent + 4).trimStart()}`;
+            }
+            return str;
+          }
+          return `${pad}- ${stringifyYaml(item, indent + 2).trimStart()}`;
+        })
+        .join('\n');
+    }
+    if (typeof obj === 'object') {
+      const entries = Object.entries(obj);
+      if (entries.length === 0) return '{}';
+      return entries
+        .map(([k, v]) => {
+          if (
+            typeof v === 'object' &&
+            v !== null &&
+            (Array.isArray(v) ? v.length > 0 : Object.keys(v).length > 0)
+          ) {
+            return `${pad}${k}:\n${stringifyYaml(v, indent + 2)}`;
+          }
+          return `${pad}${k}: ${stringifyYaml(v, indent + 2)}`;
+        })
+        .join('\n');
+    }
+    return String(obj);
+  }
+
+  function getCommentsPath(rawFile) {
+    const clean = (rawFile || 'index.html')
+      .replace(/^\//, '')
+      .replace(/\.html?$/i, '')
+      .replace(/\.(?:[a-f0-9]{7,40}\.)?comments\.(?:yml|yaml)$/i, '');
+    return `${clean}.0000000.comments.yml`;
+  }
 
   // ==========================================
   // GitHub Real Authentication Helper
@@ -136,7 +283,7 @@
 
           <div class="md-comments-panel-oauth">
             <p class="md-comments-modal-desc">
-              Authorize Markdown Comments using GitHub's secure OAuth Device Flow:
+              Authorize Markdown Comments to commit discussions directly to Git:
             </p>
             <div class="md-comments-code-box">
               <span class="md-comments-code-label">One-Time Device Code:</span>
@@ -203,22 +350,6 @@
           pollUrl: 'http://127.0.0.1:4321/api/md-comments/auth/access-token',
         },
         {
-          codeUrl: 'http://localhost:4322/api/md-comments/auth/device-code',
-          pollUrl: 'http://localhost:4322/api/md-comments/auth/access-token',
-        },
-        {
-          codeUrl: 'http://127.0.0.1:4322/api/md-comments/auth/device-code',
-          pollUrl: 'http://127.0.0.1:4322/api/md-comments/auth/access-token',
-        },
-        {
-          codeUrl: 'http://localhost:3000/api/md-comments/auth/device-code',
-          pollUrl: 'http://localhost:3000/api/md-comments/auth/access-token',
-        },
-        {
-          codeUrl: 'http://127.0.0.1:3000/api/md-comments/auth/device-code',
-          pollUrl: 'http://127.0.0.1:3000/api/md-comments/auth/access-token',
-        },
-        {
           codeUrl: 'https://proxy.cors.sh/https://github.com/login/device/code',
           pollUrl: 'https://proxy.cors.sh/https://github.com/login/oauth/access_token',
         },
@@ -246,14 +377,14 @@
             }
           }
         } catch (e) {
-          /* try next candidate endpoint */
+          /* try next candidate */
         }
       }
 
       if (!deviceData) {
         codeEl.textContent = 'ERROR';
         statusText.innerHTML =
-          'Unable to initiate GitHub OAuth Device Flow.<br>Please check your connection and try again.';
+          'Unable to initiate GitHub OAuth Device Flow.<br>Please check your internet connection.';
         if (spinner) spinner.style.display = 'none';
         return;
       }
@@ -269,12 +400,10 @@
           ? `${deviceData.verification_uri}?user_code=${encodeURIComponent(deviceData.user_code)}`
           : 'https://github.com/login/device');
 
-      // Auto copy code to clipboard
       if (navigator.clipboard && deviceData.user_code) {
         navigator.clipboard.writeText(deviceData.user_code).catch(() => {});
       }
 
-      // Auto open GitHub authorization window
       try {
         window.open(verifyUrl, '_blank');
       } catch {
@@ -282,14 +411,12 @@
       }
 
       verifyBtn.onclick = () => {
-        // Copy user code to clipboard for user convenience
         if (navigator.clipboard && deviceData.user_code) {
           navigator.clipboard.writeText(deviceData.user_code).catch(() => {});
         }
         window.open(verifyUrl, '_blank', 'noopener,noreferrer');
       };
 
-      // Start polling for real access token
       this.isPolling = true;
       let interval = Math.max(deviceData.interval || 5, 5) * 1000;
       const startTime = Date.now();
@@ -298,7 +425,7 @@
       const poll = async () => {
         if (!this.isPolling) return;
         if (Date.now() - startTime > expiresIn) {
-          statusText.textContent = 'Device code expired. Please close and try again.';
+          statusText.textContent = 'Device code expired. Please try again.';
           if (spinner) spinner.style.display = 'none';
           return;
         }
@@ -343,7 +470,7 @@
             }
           }
         } catch (e) {
-          /* ignore polling transient errors */
+          /* transient network issue during poll */
         }
 
         if (this.isPolling) {
@@ -356,43 +483,289 @@
   }
 
   // ==========================================
-  // Main Comments Application
+  // Main Comments Application (Real Git Backend)
   // ==========================================
   class CommentsApp {
     constructor() {
-      this.comments = this.loadStoredComments();
+      this.comments = [];
       this.currentUser = null;
       this.activeTab = 'active'; // 'active' | 'resolved'
       this.activeThreadId = null;
       this.pendingSelection = null;
       this.isDrawerOpen = false;
+      this.isSaving = false;
+      this.isLoading = true;
+
+      const [owner, repo] = (options.repo || '').split('/');
+      this.repoOwner = owner;
+      this.repoName = repo;
+      this.commentsPath = getCommentsPath(options.file);
 
       this.init();
     }
 
-    loadStoredComments() {
-      try {
-        const stored = localStorage.getItem(STORAGE_PREFIX);
-        if (stored) {
-          return JSON.parse(stored);
-        }
-      } catch (e) {
-        console.warn('LocalStorage unavailable', e);
-      }
-      if (
-        window.location.pathname.includes('sandbox') ||
-        document.querySelector('[data-md-demo-seed]')
-      ) {
-        return [...SEED_COMMENTS];
-      }
-      return [];
+    getAuthToken() {
+      return localStorage.getItem(TOKEN_KEY) || null;
     }
 
-    saveComments() {
+    async fetchGitHubApi(url, fetchOpts = {}) {
+      const token = this.getAuthToken();
+      const headers = {
+        Accept: 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json',
+        ...(fetchOpts.headers || {}),
+      };
+      if (token) {
+        headers['Authorization'] = `Bearer ${token.trim()}`;
+      }
+      return fetch(url, { ...fetchOpts, headers });
+    }
+
+    /**
+     * Reads comments from GitHub orphan ref refs/md-comments/data
+     */
+    async loadCommentsFromGit() {
+      if (!this.repoOwner || !this.repoName) {
+        this.comments = [];
+        this.isLoading = false;
+        return;
+      }
+
+      this.isLoading = true;
+      this.renderDrawer();
+
       try {
-        localStorage.setItem(STORAGE_PREFIX, JSON.stringify(this.comments));
-      } catch (e) {
-        console.warn('Failed to save comments', e);
+        const contentUrl = `https://api.github.com/repos/${this.repoOwner}/${this.repoName}/contents/${this.commentsPath}?ref=${encodeURIComponent(ORPHAN_REF_NAME)}&t=${Date.now()}`;
+        const res = await this.fetchGitHubApi(contentUrl);
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.content) {
+            const rawYaml = decodeBase64Utf8(data.content);
+            const parsed = parseYamlComments(rawYaml);
+            const inlines = parsed.inline_comments || [];
+
+            this.comments = inlines.map((c) => ({
+              id: c.id,
+              anchorId: c.anchor_hash || '',
+              selectedText: c.anchor_text || '',
+              textPrefix: c.heading_context || '',
+              status: c.resolved ? 'resolved' : 'open',
+              createdAt: c.created_at || new Date().toISOString(),
+              author: {
+                login: c.author_login || c.author || 'Anonymous',
+                name: c.author || c.author_login || 'Anonymous',
+                avatar_url:
+                  c.author_avatar || `https://github.com/${c.author_login || 'ghost'}.png`,
+              },
+              body: c.body || '',
+              replies: (c.replies || []).map((r) => ({
+                id: r.id,
+                createdAt: r.created_at || new Date().toISOString(),
+                author: {
+                  login: r.author_login || r.author || 'Anonymous',
+                  name: r.author || r.author_login || 'Anonymous',
+                  avatar_url:
+                    r.author_avatar || `https://github.com/${r.author_login || 'ghost'}.png`,
+                },
+                body: r.body || '',
+              })),
+            }));
+          }
+        } else if (res.status === 404) {
+          // Check unhashed legacy path
+          const cleanFile = (options.file || 'index.html')
+            .replace(/^\//, '')
+            .replace(/\.html?$/i, '');
+          const legacyPath = `${cleanFile}.comments.yml`;
+          const legacyUrl = `https://api.github.com/repos/${this.repoOwner}/${this.repoName}/contents/${legacyPath}?ref=${encodeURIComponent(ORPHAN_REF_NAME)}&t=${Date.now()}`;
+          const legRes = await this.fetchGitHubApi(legacyUrl);
+          if (legRes.ok) {
+            const legData = await legRes.json();
+            if (legData && legData.content) {
+              const rawYaml = decodeBase64Utf8(legData.content);
+              const parsed = parseYamlComments(rawYaml);
+              this.comments = (parsed.inline_comments || []).map((c) => ({
+                id: c.id,
+                anchorId: c.anchor_hash || '',
+                selectedText: c.anchor_text || '',
+                textPrefix: c.heading_context || '',
+                status: c.resolved ? 'resolved' : 'open',
+                createdAt: c.created_at || new Date().toISOString(),
+                author: {
+                  login: c.author_login || c.author || 'Anonymous',
+                  name: c.author || c.author_login || 'Anonymous',
+                  avatar_url:
+                    c.author_avatar || `https://github.com/${c.author_login || 'ghost'}.png`,
+                },
+                body: c.body || '',
+                replies: (c.replies || []).map((r) => ({
+                  id: r.id,
+                  createdAt: r.created_at || new Date().toISOString(),
+                  author: {
+                    login: r.author_login || r.author || 'Anonymous',
+                    name: r.author || r.author_login || 'Anonymous',
+                    avatar_url:
+                      r.author_avatar || `https://github.com/${r.author_login || 'ghost'}.png`,
+                  },
+                  body: r.body || '',
+                })),
+              }));
+            }
+          } else {
+            this.comments = [];
+          }
+        }
+      } catch (err) {
+        console.warn('[md-comments] Error fetching comments from GitHub Git ref:', err);
+        this.comments = [];
+      } finally {
+        this.isLoading = false;
+        this.renderDrawer();
+        this.renderHighlights();
+        this.updateFABCount();
+      }
+    }
+
+    /**
+     * Commits comments directly to GitHub orphan ref refs/md-comments/data
+     */
+    async commitCommentsToGit() {
+      const token = this.getAuthToken();
+      if (!token) {
+        return new Promise((resolve) => {
+          const modal = new AuthModal(this);
+          modal.show(async (viewer) => {
+            this.currentUser = viewer;
+            this.renderDrawer();
+            const res = await this.commitCommentsToGit();
+            resolve(res);
+          });
+        });
+      }
+
+      if (!this.repoOwner || !this.repoName) {
+        alert('Repository configuration is missing (data-repo).');
+        return false;
+      }
+
+      this.isSaving = true;
+      this.renderDrawer();
+
+      try {
+        // Convert to standard CommentsFile format
+        const commentsFile = {
+          inline_comments: this.comments.map((c) => ({
+            id: c.id,
+            anchor_hash: c.anchorId || '',
+            anchor_text: c.selectedText || '',
+            paragraph_index: 0,
+            heading_context: c.textPrefix || '',
+            body: c.body || '',
+            created_at: c.createdAt || new Date().toISOString(),
+            author: c.author.name || c.author.login || 'GitHub User',
+            author_avatar: c.author.avatar_url || '',
+            author_login: c.author.login || '',
+            orphaned: false,
+            resolved: c.status === 'resolved',
+            reactions: [],
+            replies: (c.replies || []).map((r) => ({
+              id: r.id,
+              body: r.body || '',
+              created_at: r.createdAt || new Date().toISOString(),
+              author: r.author.name || r.author.login || 'GitHub User',
+              author_avatar: r.author.avatar_url || '',
+              author_login: r.author.login || '',
+              reactions: [],
+            })),
+          })),
+          page_comments: [],
+        };
+
+        const yamlString = stringifyYaml(commentsFile);
+
+        // 1. Get current commit of orphan ref
+        const refUrl = `https://api.github.com/repos/${this.repoOwner}/${this.repoName}/git/refs/md-comments/data`;
+        const refRes = await this.fetchGitHubApi(refUrl);
+        let currentCommitSha = null;
+        if (refRes.ok) {
+          const refData = await refRes.json();
+          currentCommitSha = refData.object?.sha || null;
+        }
+
+        // 2. Create Tree
+        const treeUrl = `https://api.github.com/repos/${this.repoOwner}/${this.repoName}/git/trees`;
+        const treeBody = {
+          tree: [{ path: this.commentsPath, mode: '100644', type: 'blob', content: yamlString }],
+        };
+        if (currentCommitSha) {
+          treeBody.base_tree = currentCommitSha;
+        }
+        const treeRes = await this.fetchGitHubApi(treeUrl, {
+          method: 'POST',
+          body: JSON.stringify(treeBody),
+        });
+
+        if (!treeRes.ok) {
+          const errText = await treeRes.text().catch(() => '');
+          throw new Error(
+            `Git Tree creation failed (${treeRes.status}). Verify user permissions on repository ${options.repo}. ${errText}`
+          );
+        }
+        const treeData = await treeRes.json();
+
+        // 3. Create Commit
+        const commitUrl = `https://api.github.com/repos/${this.repoOwner}/${this.repoName}/git/commits`;
+        const commitBody = {
+          message: `Update comments for ${options.file}`,
+          tree: treeData.sha,
+        };
+        if (currentCommitSha) {
+          commitBody.parents = [currentCommitSha];
+        }
+        const commitRes = await this.fetchGitHubApi(commitUrl, {
+          method: 'POST',
+          body: JSON.stringify(commitBody),
+        });
+
+        if (!commitRes.ok) {
+          const errText = await commitRes.text().catch(() => '');
+          throw new Error(`Git Commit creation failed (${commitRes.status}): ${errText}`);
+        }
+        const createdCommit = await commitRes.json();
+
+        // 4. Update or Create Ref
+        if (currentCommitSha) {
+          const patchRefRes = await this.fetchGitHubApi(refUrl, {
+            method: 'PATCH',
+            body: JSON.stringify({ sha: createdCommit.sha, force: false }),
+          });
+          if (!patchRefRes.ok) {
+            throw new Error(`Ref update failed: HTTP ${patchRefRes.status}`);
+          }
+        } else {
+          const createRefUrl = `https://api.github.com/repos/${this.repoOwner}/${this.repoName}/git/refs`;
+          const createRefRes = await this.fetchGitHubApi(createRefUrl, {
+            method: 'POST',
+            body: JSON.stringify({ ref: ORPHAN_REF_NAME, sha: createdCommit.sha }),
+          });
+          if (!createRefRes.ok) {
+            throw new Error(`Ref creation failed: HTTP ${createRefRes.status}`);
+          }
+        }
+
+        return true;
+      } catch (err) {
+        console.error('[md-comments] Git Commit Error:', err);
+        alert(
+          `Failed to commit comments to Git: ${err.message || err}\n\nMake sure your GitHub account has write access to ${options.repo}.`
+        );
+        return false;
+      } finally {
+        this.isSaving = false;
+        this.renderDrawer();
+        this.renderHighlights();
+        this.updateFABCount();
       }
     }
 
@@ -400,15 +773,11 @@
       this.injectDOMContainers();
       this.scanDocumentAnchors();
       this.bindSelectionListener();
-      this.renderHighlights();
-      this.updateFABCount();
-      this.renderDrawer();
 
       // Check stored token
-      const storedToken = localStorage.getItem(TOKEN_KEY);
+      const storedToken = this.getAuthToken();
       if (storedToken) {
         this.currentUser = await fetchGitHubViewer(storedToken);
-        this.renderDrawer();
       }
 
       // Global shortcut Cmd/Ctrl + Shift + C
@@ -418,6 +787,9 @@
           this.toggleDrawer();
         }
       });
+
+      // Load real comments from Git ref
+      await this.loadCommentsFromGit();
     }
 
     injectDOMContainers() {
@@ -439,164 +811,155 @@
         this.openComposerForSelection();
       });
 
-      // 2. Floating Action Button (FAB) with Official Logo
+      // 2. Floating Action Button (FAB)
       this.fabEl = document.createElement('button');
       this.fabEl.className = 'md-comments-fab-toggle';
-      this.fabEl.setAttribute('aria-label', 'Markdown Comments (Cmd/Ctrl+Shift+C)');
       this.fabEl.title = 'Markdown Comments (Cmd/Ctrl+Shift+C)';
       this.fabEl.innerHTML = `
-        <svg viewBox="0 0 512 512" width="30" height="30">
+        <svg viewBox="0 0 512 512" width="28" height="28">
           <path fill="#24292f" stroke="#ffffff" stroke-width="20" stroke-linejoin="round" d="M 136 64 L 376 64 C 424 64 456 96 456 144 L 456 304 C 456 352 424 384 376 384 L 216 384 C 184 384 150 404 126 428 C 118 436 104 430 104 418 L 104 384 C 72 380 56 352 56 304 L 56 144 C 56 96 88 64 136 64 Z"/>
           <path fill="#ffffff" d="M 132 168 L 164 168 L 192 232 L 220 168 L 252 168 L 252 280 L 226 280 L 226 212 L 201 268 L 183 268 L 158 212 L 158 280 L 132 280 Z M 276 168 L 324 168 C 358 168 380 188 380 224 C 380 260 358 280 324 280 L 276 280 Z M 302 192 L 302 256 L 322 256 C 342 256 352 246 352 224 C 352 202 342 192 322 192 Z"/>
         </svg>
         <span class="badge-count" style="display: none;">0</span>
       `;
-      this.fabEl.addEventListener('click', () => this.toggleDrawer());
+      this.fabEl.onclick = () => this.toggleDrawer();
       document.body.appendChild(this.fabEl);
 
-      // 3. Slide-over Comments Drawer
+      // 3. Comments Drawer Container
       this.drawerEl = document.createElement('div');
       this.drawerEl.className = 'md-comments-drawer';
       this.drawerEl.innerHTML = `
         <div class="md-comments-drawer-header">
-          <div class="md-comments-drawer-title">
+          <div class="md-comments-header-title">
             <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
               <path d="M1 2.75C1 1.784 1.784 1 2.75 1h10.5c.966 0 1.75.784 1.75 1.75v7.5A1.75 1.75 0 0 1 13.25 12H9.06l-2.573 2.573A1.458 1.458 0 0 1 4 13.543V12H2.75A1.75 1.75 0 0 1 1 10.25v-7.5Z"/>
             </svg>
-            <span>Comments</span>
+            <span>Comments (Git Ref)</span>
           </div>
           <div class="md-comments-header-actions">
             <div class="md-comments-user-badge"></div>
             <button class="md-comments-drawer-close" aria-label="Close">&times;</button>
           </div>
         </div>
+
         <div class="md-comments-tabs">
-          <button class="md-comments-tab-btn active" data-tab="active">Active (<span class="tab-count-active">0</span>)</button>
-          <button class="md-comments-tab-btn" data-tab="resolved">Resolved (<span class="tab-count-resolved">0</span>)</button>
+          <button class="md-comments-tab active" data-tab="active">
+            Active (<span class="tab-count-active">0</span>)
+          </button>
+          <button class="md-comments-tab" data-tab="resolved">
+            Resolved (<span class="tab-count-resolved">0</span>)
+          </button>
         </div>
+
+        <div class="md-comments-sync-banner" style="display: none; padding: 6px 12px; font-size: 11px; background: rgba(59, 130, 246, 0.1); color: var(--md-comments-primary); border-bottom: 1px solid var(--md-comments-border); display: flex; align-items: center; justify-content: space-between;">
+          <span class="sync-status-text">Git Ref: refs/md-comments/data</span>
+          <span class="sync-spinner" style="display: none;">Syncing...</span>
+        </div>
+
         <div class="md-comments-drawer-content"></div>
       `;
       document.body.appendChild(this.drawerEl);
 
-      this.drawerEl
-        .querySelector('.md-comments-drawer-close')
-        .addEventListener('click', () => this.closeDrawer());
+      this.drawerEl.querySelector('.md-comments-drawer-close').onclick = () => this.closeDrawer();
 
-      this.drawerEl.querySelectorAll('.md-comments-tab-btn').forEach((btn) => {
-        btn.addEventListener('click', () => {
-          this.activeTab = btn.getAttribute('data-tab');
+      // Tab switcher
+      this.drawerEl.querySelectorAll('.md-comments-tab').forEach((tabBtn) => {
+        tabBtn.onclick = () => {
           this.drawerEl
-            .querySelectorAll('.md-comments-tab-btn')
-            .forEach((b) => b.classList.remove('active'));
-          btn.classList.add('active');
+            .querySelectorAll('.md-comments-tab')
+            .forEach((t) => t.classList.remove('active'));
+          tabBtn.classList.add('active');
+          this.activeTab = tabBtn.getAttribute('data-tab');
           this.renderDrawer();
-        });
+        };
       });
     }
 
     scanDocumentAnchors() {
       const container = document.querySelector(options.selector) || document.body;
-      const blocks = container.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, blockquote, pre');
-      blocks.forEach((el, index) => {
-        if (!el.getAttribute('data-md-anchor-id')) {
-          const textExcerpt = (el.innerText || '')
+      const targetNodes = container.querySelectorAll(
+        'h1, h2, h3, h4, p, pre, code, blockquote, li'
+      );
+      targetNodes.forEach((node, idx) => {
+        if (!node.getAttribute('data-md-anchor-id')) {
+          const textExcerpt = (node.textContent || '')
             .trim()
-            .slice(0, 20)
-            .replace(/\W+/g, '-')
-            .toLowerCase();
-          el.setAttribute('data-md-anchor-id', `anchor-${index}-${textExcerpt}`);
-        }
-        if (getComputedStyle(el).position === 'static') {
-          el.style.position = 'relative';
+            .slice(0, 24)
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-');
+          node.setAttribute('data-md-anchor-id', `anchor-${idx}-${textExcerpt || 'node'}`);
         }
       });
     }
 
     bindSelectionListener() {
-      const handleSelection = () => {
-        const selection = window.getSelection();
-        if (!selection || selection.isCollapsed || !selection.toString().trim()) {
-          this.hideSelectionBubble();
+      const onSelectionChange = () => {
+        const sel = window.getSelection();
+        if (!sel || sel.isCollapsed || !sel.toString().trim()) {
+          this.bubbleEl.style.display = 'none';
           return;
         }
 
-        const text = selection.toString().trim();
-        if (selection.rangeCount === 0 || text.length < 2) {
-          this.hideSelectionBubble();
+        const text = sel.toString().trim();
+        if (!text) {
+          this.bubbleEl.style.display = 'none';
           return;
         }
 
-        const range = selection.getRangeAt(0);
-        const ancestor = range.commonAncestorContainer;
-        const node = ancestor instanceof HTMLElement ? ancestor : ancestor.parentElement;
+        const range = sel.getRangeAt(0);
+        let blockEl = range.commonAncestorContainer;
+        if (blockEl.nodeType === Node.TEXT_NODE) {
+          blockEl = blockEl.parentElement;
+        }
 
-        if (!node) {
-          this.hideSelectionBubble();
+        if (
+          blockEl.closest(
+            '.md-comments-drawer, .md-comments-selection-bubble, .md-comments-auth-modal'
+          )
+        ) {
+          this.bubbleEl.style.display = 'none';
           return;
         }
 
-        const block = node.closest('p, h1, h2, h3, h4, h5, h6, li, blockquote, pre');
-        if (!block) {
-          this.hideSelectionBubble();
-          return;
-        }
-
-        const anchorId = block.getAttribute('data-md-anchor-id') || 'general';
-        const textPrefix = (block.innerText || '').trim().slice(0, 40);
+        const anchorParent = blockEl.closest('[data-md-anchor-id]');
+        const anchorId = anchorParent ? anchorParent.getAttribute('data-md-anchor-id') : 'general';
+        const textPrefix = anchorParent ? anchorParent.textContent.trim().slice(0, 40) : '';
 
         this.pendingSelection = {
-          text,
-          anchorId,
-          textPrefix,
+          text: text,
+          anchorId: anchorId,
+          textPrefix: textPrefix,
+          range: range.cloneRange(),
         };
 
         const rect = range.getBoundingClientRect();
-        this.showSelectionBubble(rect);
+        this.bubbleEl.style.top = `${window.scrollY + rect.top - 38}px`;
+        this.bubbleEl.style.left = `${window.scrollX + rect.left + rect.width / 2 - 40}px`;
+        this.bubbleEl.style.display = 'inline-flex';
       };
 
-      document.addEventListener('selectionchange', handleSelection);
-      document.addEventListener('mouseup', () => setTimeout(handleSelection, 20));
-    }
-
-    showSelectionBubble(rect) {
-      if (!this.bubbleEl) return;
-      this.bubbleEl.style.top = `${window.scrollY + rect.top - 40}px`;
-      this.bubbleEl.style.left = `${window.scrollX + rect.left + rect.width / 2 - 40}px`;
-      this.bubbleEl.style.display = 'inline-flex';
-    }
-
-    hideSelectionBubble() {
-      if (this.bubbleEl) {
-        this.bubbleEl.style.display = 'none';
-      }
+      document.addEventListener('mouseup', () => setTimeout(onSelectionChange, 10));
+      document.addEventListener('selectionchange', onSelectionChange);
     }
 
     openComposerForSelection() {
-      this.hideSelectionBubble();
+      if (!this.pendingSelection) return;
+      this.bubbleEl.style.display = 'none';
       this.openDrawer();
 
       const content = this.drawerEl.querySelector('.md-comments-drawer-content');
-      let composer = content.querySelector('.md-comments-new-composer');
-
-      if (!composer) {
-        composer = document.createElement('div');
-        composer.className = 'md-comments-composer md-comments-new-composer';
-        content.insertBefore(composer, content.firstChild);
-      }
-
-      const selText = this.pendingSelection ? this.pendingSelection.text : '';
-
+      const composer = document.createElement('div');
+      composer.className = 'md-comments-thread-card new-composer';
       composer.innerHTML = `
-        <div class="md-comments-thread-anchor">
-          "${selText.length > 60 ? selText.slice(0, 57) + '...' : selText}"
-        </div>
-        <textarea placeholder="${this.currentUser ? 'Write a comment or question...' : 'Sign in with GitHub to post a comment...'}"></textarea>
-        <div class="md-comments-composer-actions">
+        <div class="md-comments-thread-anchor">"${this.escapeHTML(this.pendingSelection.text)}"</div>
+        <textarea placeholder="${this.currentUser ? 'Write a comment (commits to Git ref)...' : 'Sign in with GitHub to commit comment...'}" style="width: 100%; min-height: 70px; padding: 8px; font-size: 13px; border-radius: 6px; border: 1px solid var(--md-comments-border); background: var(--md-comments-bg); color: var(--md-comments-text); box-sizing: border-box; resize: vertical;"></textarea>
+        <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px;">
           <button class="md-comments-btn-sm cancel-new-btn">Cancel</button>
-          <button class="md-comments-btn-primary submit-new-btn">${this.currentUser ? 'Post Comment' : 'Sign in with GitHub'}</button>
+          <button class="md-comments-btn-primary submit-new-btn" style="font-size: 12px; padding: 6px 12px;">Commit Comment</button>
         </div>
       `;
 
+      content.prepend(composer);
       const textarea = composer.querySelector('textarea');
       textarea.focus();
 
@@ -605,26 +968,25 @@
         this.pendingSelection = null;
       };
 
-      composer.querySelector('.submit-new-btn').onclick = () => {
+      composer.querySelector('.submit-new-btn').onclick = async () => {
+        const body = textarea.value.trim();
+        if (!body) return;
+
         if (!this.currentUser) {
           const modal = new AuthModal(this);
-          modal.show((viewer) => {
+          modal.show(async (viewer) => {
             this.currentUser = viewer;
             this.renderDrawer();
-            if (textarea.value.trim()) {
-              this.submitComment(textarea.value.trim(), composer);
-            }
+            await this.submitComment(body, composer);
           });
           return;
         }
 
-        const body = textarea.value.trim();
-        if (!body) return;
-        this.submitComment(body, composer);
+        await this.submitComment(body, composer);
       };
     }
 
-    submitComment(body, composerEl) {
+    async submitComment(body, composerEl) {
       if (!this.currentUser) return;
       const newThread = {
         id: `thread-${Date.now()}`,
@@ -639,16 +1001,17 @@
       };
 
       this.comments.unshift(newThread);
-      this.saveComments();
       this.pendingSelection = null;
       if (composerEl) composerEl.remove();
+
       this.renderDrawer();
       this.renderHighlights();
       this.updateFABCount();
+
+      await this.commitCommentsToGit();
     }
 
     renderHighlights() {
-      // 1. Remove existing comment anchor spans and restore original text
       const existingAnchors = document.querySelectorAll('.md-comments-text-anchor');
       existingAnchors.forEach((el) => {
         const parent = el.parentNode;
@@ -670,7 +1033,6 @@
           : null;
         if (!targetEl) targetEl = container;
 
-        // Traverse text nodes within targetEl to find and wrap the exact string
         const walker = document.createTreeWalker(targetEl, NodeFilter.SHOW_TEXT, null);
         let textNode;
         while ((textNode = walker.nextNode())) {
@@ -696,7 +1058,6 @@
                 this.highlightThread(th.id);
               });
             } catch (e) {
-              // If cross-tag, mark parent element
               targetEl.classList.add('md-comments-text-anchor');
             }
             break;
@@ -784,7 +1145,34 @@
         }
       }
 
+      const syncBanner = this.drawerEl.querySelector('.md-comments-sync-banner');
+      if (syncBanner) {
+        syncBanner.style.display = 'flex';
+        const syncText = syncBanner.querySelector('.sync-status-text');
+        const syncSpinner = syncBanner.querySelector('.sync-spinner');
+        if (this.isSaving) {
+          syncText.textContent = 'Committing to Git...';
+          syncSpinner.style.display = 'inline-block';
+        } else if (this.isLoading) {
+          syncText.textContent = 'Loading from Git ref...';
+          syncSpinner.style.display = 'inline-block';
+        } else {
+          syncText.textContent = `${this.repoOwner}/${this.repoName} (refs/md-comments/data)`;
+          syncSpinner.style.display = 'none';
+        }
+      }
+
       const content = this.drawerEl.querySelector('.md-comments-drawer-content');
+      if (this.isLoading) {
+        content.innerHTML = `
+          <div style="text-align: center; padding: 40px 10px; color: var(--md-comments-text-muted);">
+            <div class="md-comments-spinner" style="display: inline-block; width: 24px; height: 24px; margin-bottom: 12px;"></div>
+            <p style="font-size: 13px;">Fetching comments from GitHub orphan ref...</p>
+          </div>
+        `;
+        return;
+      }
+
       const filtered = this.comments.filter((c) =>
         this.activeTab === 'resolved' ? c.status === 'resolved' : c.status !== 'resolved'
       );
@@ -796,7 +1184,7 @@
               <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
             </svg>
             <p style="font-size: 14px; font-weight: 500; margin-bottom: 6px;">No ${this.activeTab} discussions</p>
-            <p style="font-size: 12px;">Highlight any text on the page to start a new discussion thread!</p>
+            <p style="font-size: 12px;">Highlight any text on the page to start a new discussion committed directly to Git!</p>
           </div>
         `;
         return;
@@ -807,12 +1195,12 @@
           const timeAgo = this.formatTimeAgo(th.createdAt);
           return `
           <div class="md-comments-thread-card" data-thread-id="${th.id}">
-            ${th.selectedText ? `<div class="md-comments-thread-anchor">"${th.selectedText}"</div>` : ''}
+            ${th.selectedText ? `<div class="md-comments-thread-anchor">"${this.escapeHTML(th.selectedText)}"</div>` : ''}
             <div class="md-comments-thread-header">
               <div class="md-comments-user-info">
                 <img class="md-comments-avatar" src="${th.author.avatar_url}" alt="${th.author.login}" />
                 <div>
-                  <div class="md-comments-username">${th.author.name || th.author.login}</div>
+                  <div class="md-comments-username">${this.escapeHTML(th.author.name || th.author.login)}</div>
                   <div class="md-comments-time">${timeAgo}</div>
                 </div>
               </div>
@@ -829,7 +1217,7 @@
                   <div class="md-comments-reply-item">
                     <div class="md-comments-user-info">
                       <img class="md-comments-avatar" style="width: 20px; height: 20px;" src="${rep.author.avatar_url}" alt="${rep.author.login}" />
-                      <span class="md-comments-username" style="font-size: 12px;">${rep.author.name || rep.author.login}</span>
+                      <span class="md-comments-username" style="font-size: 12px;">${this.escapeHTML(rep.author.name || rep.author.login)}</span>
                       <span class="md-comments-time">${this.formatTimeAgo(rep.createdAt)}</span>
                     </div>
                     <div class="md-comments-body" style="font-size: 12px;">${this.escapeHTML(rep.body)}</div>
@@ -851,7 +1239,7 @@
             </div>
 
             <div class="reply-composer-container" id="reply-box-${th.id}" style="display: none; margin-top: 8px;">
-              <textarea placeholder="${this.currentUser ? 'Write a reply...' : 'Sign in with GitHub to post a reply...'}" style="width: 100%; min-height: 50px; padding: 6px; font-size: 12px; border-radius: 4px; border: 1px solid var(--md-comments-border); background: var(--md-comments-bg); color: var(--md-comments-text); box-sizing: border-box;"></textarea>
+              <textarea placeholder="${this.currentUser ? 'Write a reply (commits to Git)...' : 'Sign in with GitHub to reply...'}" style="width: 100%; min-height: 50px; padding: 6px; font-size: 12px; border-radius: 4px; border: 1px solid var(--md-comments-border); background: var(--md-comments-bg); color: var(--md-comments-text); box-sizing: border-box;"></textarea>
               <div style="display: flex; justify-content: flex-end; gap: 6px; margin-top: 6px;">
                 <button class="md-comments-btn-sm cancel-reply-btn" data-id="${th.id}">Cancel</button>
                 <button class="md-comments-btn-primary send-reply-btn" data-id="${th.id}" style="font-size: 11px; padding: 4px 10px;">Post Reply</button>
@@ -864,27 +1252,29 @@
 
       // Bind action listeners
       content.querySelectorAll('.resolve-btn').forEach((btn) => {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', async () => {
           const id = btn.getAttribute('data-id');
           const thread = this.comments.find((t) => t.id === id);
           if (thread) {
             thread.status = thread.status === 'resolved' ? 'open' : 'resolved';
-            this.saveComments();
             this.renderDrawer();
             this.renderHighlights();
             this.updateFABCount();
+            await this.commitCommentsToGit();
           }
         });
       });
 
       content.querySelectorAll('.delete-btn').forEach((btn) => {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', async () => {
           const id = btn.getAttribute('data-id');
-          this.comments = this.comments.filter((t) => t.id !== id);
-          this.saveComments();
-          this.renderDrawer();
-          this.renderHighlights();
-          this.updateFABCount();
+          if (confirm('Delete this comment thread permanently from Git?')) {
+            this.comments = this.comments.filter((t) => t.id !== id);
+            this.renderDrawer();
+            this.renderHighlights();
+            this.updateFABCount();
+            await this.commitCommentsToGit();
+          }
         });
       });
 
@@ -910,7 +1300,7 @@
       });
 
       content.querySelectorAll('.send-reply-btn').forEach((btn) => {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', async () => {
           const id = btn.getAttribute('data-id');
           const box = document.getElementById(`reply-box-${id}`);
           const text = box.querySelector('textarea').value.trim();
@@ -918,20 +1308,20 @@
 
           if (!this.currentUser) {
             const modal = new AuthModal(this);
-            modal.show((viewer) => {
+            modal.show(async (viewer) => {
               this.currentUser = viewer;
               this.renderDrawer();
-              this.postReply(id, text);
+              await this.postReply(id, text);
             });
             return;
           }
 
-          this.postReply(id, text);
+          await this.postReply(id, text);
         });
       });
     }
 
-    postReply(threadId, text) {
+    async postReply(threadId, text) {
       const thread = this.comments.find((t) => t.id === threadId);
       if (thread) {
         if (!thread.replies) thread.replies = [];
@@ -941,9 +1331,9 @@
           author: this.currentUser,
           body: text,
         });
-        this.saveComments();
         this.renderDrawer();
         this.updateFABCount();
+        await this.commitCommentsToGit();
       }
     }
 
