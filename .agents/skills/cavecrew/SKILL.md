@@ -15,17 +15,17 @@ Cavecrew = three subagent presets that emit caveman output. Same job as Anthropi
 
 ## When to use cavecrew vs alternatives
 
-| Task                                                       | Use                                         |
-| ---------------------------------------------------------- | ------------------------------------------- |
-| "Where is X defined / what calls Y / list uses of Z"       | `cavecrew-investigator`                     |
-| Same but you also want suggestions/architecture commentary | `Explore` (vanilla)                         |
-| Surgical edit, ≤2 files, scope obvious                     | `cavecrew-builder`                          |
-| New feature / 3+ files / cross-cutting refactor            | Main thread or `feature-dev:code-architect` |
-| Review diff, branch, or file for bugs                      | `cavecrew-reviewer`                         |
-| Deep code review with rationale + alternatives             | `Code Reviewer` (vanilla)                   |
-| One-line answer you already know                           | Main thread, no subagent                    |
+| Task                                                       | Use                                                 |
+| ---------------------------------------------------------- | --------------------------------------------------- |
+| "Where is X defined / what calls Y / list uses of Z"       | `codegraph` (if indexed) or `cavecrew-investigator` |
+| Same but you also want suggestions/architecture commentary | `Explore` (vanilla) or `codegraph explore`          |
+| Surgical edit, ≤2 files, scope obvious                     | `cavecrew-builder`                                  |
+| New feature / 3+ files / cross-cutting refactor            | Main thread or `feature-dev:code-architect`         |
+| Review diff, branch, or file for bugs                      | `cavecrew-reviewer`                                 |
+| Deep code review with rationale + alternatives             | `Code Reviewer` (vanilla)                           |
+| One-line answer you already know                           | Main thread, no subagent                            |
 
-Rule of thumb: **if you'd want the subagent's output in 1/3 the tokens, pick cavecrew. If you'd want prose, pick vanilla.**
+Rule of thumb: **If `.codegraph/` exists, query `codegraph_explore` / `codegraph callers` directly for surgical code lookups. If delegating to a subagent, pick cavecrew for 1/3 the tokens, or vanilla for prose.**
 
 ## Why this exists (the real win)
 
@@ -67,9 +67,9 @@ Or `No issues.` Findings sorted file → line ascending.
 
 **Locate → fix → verify** (most common):
 
-1. `cavecrew-investigator` returns site list.
+1. Query `codegraph explore` / `codegraph callers` (or spawn `cavecrew-investigator` if not indexed).
 2. Main thread picks 1-2 sites, hands paths to `cavecrew-builder`.
-3. `cavecrew-reviewer` audits the diff.
+3. `cavecrew-reviewer` audits the diff (optionally checking `codegraph impact`).
 
 **Parallel scout** (when investigation is broad):
 Spawn 2-3 `cavecrew-investigator` calls in one message (different angles: defs vs callers vs tests). Aggregate in main thread.

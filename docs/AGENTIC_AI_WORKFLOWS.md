@@ -52,6 +52,10 @@ When pair-programming with an Antigravity coding assistant or using local agent 
 4. **Repository Briefing & Context Density (`/context-pack`)**:
    - Compiles a high-signal briefing of key files, entry points, and active changes to orient coding agents without costly repository scans.
 
+5. **Semantic Code Intelligence & Call Graphs (`/codegraph`)**:
+   - Pre-indexed local knowledge graph (`.codegraph/`) parsing TypeScript, JavaScript, Python, and Astro ASTs into symbols and call relationships.
+   - Allows agents to explore architectures, trace cross-package callers/callees, analyze blast radius (`codegraph impact`), and identify affected test suites (`codegraph affected`) in one shot without crawling directories or reading raw files repeatedly.
+
 ---
 
 ## 🔒 Security Static Analysis (SAST) & Pre-Commit Checks

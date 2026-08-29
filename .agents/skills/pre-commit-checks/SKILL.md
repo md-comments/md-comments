@@ -64,7 +64,19 @@ Run the following checks from the root directory:
 > [!TIP]
 > You can run the entire diagnostic suite in a single command with `pnpm check`.
 
-7. **FOSSA Scan (SCA / License & Vulnerability Compliance)**:
+7. **CodeGraph Affected Tests & Index Sync**:
+
+   ```bash
+   # Check if modified source files have affected test suites:
+   codegraph affected [modified_files...]
+
+   # Verify graph index is in sync:
+   codegraph status
+   ```
+
+   _Identifies any test files impacted by your changes across monorepo packages, and ensures `.codegraph/` remains synchronized._
+
+8. **FOSSA Scan (SCA / License & Vulnerability Compliance)**:
    ```bash
    FOSSA_API_KEY=<your-key> fossa analyze
    ```

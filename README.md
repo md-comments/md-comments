@@ -194,6 +194,7 @@ pnpm test:coverage    # Runs unit tests and outputs coverage reports
 pnpm lint             # Lints code across the workspace (ESLint)
 pnpm format           # Formats codebase (Prettier)
 pnpm typecheck        # Checks types across all packages (TypeScript)
+pnpm codegraph:status # Shows CodeGraph knowledge graph index status
 ```
 
 ### Running

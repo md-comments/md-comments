@@ -29,6 +29,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
+    "codegraph:status": "codegraph status",
+    "codegraph:sync": "codegraph sync",
     "check": "pnpm audit --prod --audit-level high && pnpm lint && pnpm format:check && pnpm typecheck && pnpm test:coverage && pnpm build"
   },
   "devDependencies": {
