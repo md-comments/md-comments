@@ -1,12 +1,17 @@
 # Astro & Starlight Plugin (`@md-comments/starlight`)
 
-The `@md-comments/starlight` package provides an official Astro integration and Starlight plugin to bring the Markdown Comments system directly to documentation websites and blogs—**with zero browser extensions required for visitors and reviewers**.
+> ### **AI-Orchestrated Docs. Human-Orchestrated Comments.**
+>
+> Docs live directly in your repository, and comments live as a native layer on top, never locked in third-party SaaS silos. AI agents orchestrate the documentation as code evolves, while humans orchestrate the reviews and discussions on rendered views.
+
+The `@md-comments/starlight` package provides an official Astro integration and Starlight plugin to bring the Markdown Comments system directly to documentation websites and blogs—**with zero browser extensions and zero SaaS subscription silos**.
 
 ---
 
 ## Features
 
-- 💬 **Inline Discussions on Prose**: Readers can highlight any sentence or paragraph in documentation to leave comments or view discussion threads.
+- 💬 **Inline Discussions on Rendered Prose**: Readers and team members can highlight any sentence or paragraph in documentation to leave comments or view discussion threads.
+- 🤖 **AI-Agent Ready**: Keeps repository Markdown source 100% free of inline HTML comment pollution, allowing AI coding assistants to cleanly read, maintain, and generate documentation.
 - 📌 **Gutter Pins & Count Badges**: Floating margin badges show active comment threads next to paragraphs.
 - ⚡ **Zero-Extension / Zero-Server Client**: Works entirely in the browser using the **GitHub OAuth Device Flow** and direct GitHub API calls. Public documentation reads require **no login**.
 - 🔄 **100% Cross-Platform Compatibility**: Uses the same `refs/md-comments/data` Git ref backend and FNV-1a hashing as the **VS Code / Cursor / Antigravity Extension**, **Obsidian Plugin**, and **Chrome Extension**.

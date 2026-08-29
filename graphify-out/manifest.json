@@ -15,13 +15,13 @@
     "semantic_hash": ""
   },
   "chrome-extension/manifest.json": {
-    "mtime": 1787791668.945168,
-    "ast_hash": "08e056148ec03ac35bce6b46fcedfd54",
+    "mtime": 1788014065.6566243,
+    "ast_hash": "cca7014cfc5a74c41b649af478a510ad",
     "semantic_hash": ""
   },
   "chrome-extension/package.json": {
-    "mtime": 1787883690.6033957,
-    "ast_hash": "6695178972ba668852ad6ffeb46096ca",
+    "mtime": 1788014069.0017161,
+    "ast_hash": "0f41542ec13e9a1e7122e0e8856be094",
     "semantic_hash": ""
   },
   "chrome-extension/src/content.ts": {
@@ -40,13 +40,13 @@
     "semantic_hash": "406bb0cd9a4b8c76f9f0f1a23552ae33"
   },
   "obsidian-plugin/manifest.json": {
-    "mtime": 1787791668.9489622,
-    "ast_hash": "06be8bc4c166d1ac8b257e0607452885",
+    "mtime": 1788014058.9886253,
+    "ast_hash": "4057c13420aa5d2781b99552427527b5",
     "semantic_hash": ""
   },
   "obsidian-plugin/package.json": {
-    "mtime": 1787883694.1619833,
-    "ast_hash": "a266f27fc94e8ac0a0c0dfecc6d35525",
+    "mtime": 1788014062.2988,
+    "ast_hash": "cf671253c753bec99be8007bc07609aa",
     "semantic_hash": ""
   },
   "obsidian-plugin/src/livePreview.ts": {
@@ -140,8 +140,8 @@
     "semantic_hash": ""
   },
   "vscode-extension/package.json": {
-    "mtime": 1787883697.622652,
-    "ast_hash": "a70401148930e2889986803407a6ee1b",
+    "mtime": 1788014055.5988784,
+    "ast_hash": "3dd8dd350b27f85c8e80d414fb5a0e52",
     "semantic_hash": ""
   },
   "vscode-extension/src/author.ts": {
@@ -220,18 +220,18 @@
     "semantic_hash": "0bc020d491fca99550c1ea3de0a5f862"
   },
   "README.md": {
-    "mtime": 1787877915.515086,
-    "ast_hash": "1d8382c0ae3264baeaecff7aee32bc3b",
+    "mtime": 1788014078.7830093,
+    "ast_hash": "0fd446e458c081bf82b537d478c97b57",
     "semantic_hash": ""
   },
   "docs/example.md": {
-    "mtime": 1786303236.8101647,
-    "ast_hash": "5d80d380a1a4c56f9906009b6cd6266a",
+    "mtime": 1788014078.6699243,
+    "ast_hash": "9157d66b1148b316bb05a573c7e023fa",
     "semantic_hash": ""
   },
   "obsidian-plugin/README.md": {
-    "mtime": 1787791668.948833,
-    "ast_hash": "f226d17df9d649c0a7cf3c9921bf803b",
+    "mtime": 1788014078.6943734,
+    "ast_hash": "156a3cfa54dc17ed3b4e81e80e6f530c",
     "semantic_hash": ""
   },
   "pnpm-workspace.yaml": {
@@ -480,8 +480,8 @@
     "semantic_hash": ""
   },
   "docs/AGENTIC_AI_WORKFLOWS.md": {
-    "mtime": 1785361019.9225457,
-    "ast_hash": "813b777d68c5e916c4f964cc71647be5",
+    "mtime": 1788014078.6673064,
+    "ast_hash": "b6c3689e5bc8a9dd36e711074814de44",
     "semantic_hash": ""
   },
   ".agents/skills/context-pack/SKILL.md": {
@@ -635,8 +635,8 @@
     "semantic_hash": ""
   },
   "vscode-extension/README.md": {
-    "mtime": 1787791668.9501984,
-    "ast_hash": "4a5fc74a83d6a9b2842a588d6d21f045",
+    "mtime": 1788014078.9847374,
+    "ast_hash": "86331306d410201fb115cd66402acd61",
     "semantic_hash": ""
   },
   "scripts/test-publish-local.sh": {
@@ -715,8 +715,8 @@
     "semantic_hash": ""
   },
   "starlight-plugin/package.json": {
-    "mtime": 1787883687.3233469,
-    "ast_hash": "4c60edebca4bcf1c1a4a81dfcd8cb19c",
+    "mtime": 1788014072.3566144,
+    "ast_hash": "bc01b5265763052e7282921185064fd9",
     "semantic_hash": ""
   },
   "starlight-plugin/src/astro.ts": {
@@ -785,8 +785,8 @@
     "semantic_hash": ""
   },
   "docs/starlight-plugin.md": {
-    "mtime": 1787878114.5630617,
-    "ast_hash": "104ad1cde1d7c564bd760705b61b5cbd",
+    "mtime": 1788014078.6775417,
+    "ast_hash": "810be2f17ac2289be88a16d021b565e1",
     "semantic_hash": ""
   },
   "starlight-plugin/src/client/bootstrap.ts": {
@@ -815,23 +815,23 @@
     "semantic_hash": ""
   },
   "demo-astro/src/content/docs/guides/architecture.md": {
-    "mtime": 1787880855.7491252,
-    "ast_hash": "904f626b78414e02d08b3e3813613191",
+    "mtime": 1788014078.648162,
+    "ast_hash": "ccba4fa2f0f53136a6ad2032988c0a56",
     "semantic_hash": ""
   },
   "demo-astro/src/content/docs/guides/how-it-works.md": {
-    "mtime": 1787879984.0475998,
-    "ast_hash": "8894ef703e26d3d4738c17c8267f59c2",
+    "mtime": 1788014078.6519787,
+    "ast_hash": "6fc134394127e2ea69013ba4f9f61e63",
     "semantic_hash": ""
   },
   "demo-astro/src/content/docs/guides/sandbox.md": {
-    "mtime": 1787879984.0520623,
-    "ast_hash": "d93b1b15468e24afd153d06ccab60f6c",
+    "mtime": 1788014078.655571,
+    "ast_hash": "1bcf5dca9165a0de84c9c0b0602ffe0c",
     "semantic_hash": ""
   },
   "demo-astro/src/content/docs/index.md": {
-    "mtime": 1787880852.4566422,
-    "ast_hash": "abc215b551919318c29c192d8aca84a4",
+    "mtime": 1788014078.658729,
+    "ast_hash": "6da2a129e7579298958a0bf671dbf23a",
     "semantic_hash": ""
   },
   "demo-astro/public/favicon.svg": {

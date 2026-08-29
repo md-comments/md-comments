@@ -1,21 +1,26 @@
-# Markdown Comments for VS Code
+# Markdown Comments for VS Code, Cursor & Antigravity
 
-Bring rich inline commenting to Markdown files directly inside VS Code, Cursor, or Antigravity, powered by GitHub as the primary backend.
+> ### **AI-Orchestrated Docs. Human-Orchestrated Comments.**
+>
+> Docs live directly in your repository, and comments live as a native layer on top, never locked in third-party SaaS silos. AI agents orchestrate the documentation as code evolves, while humans orchestrate the reviews and discussions on rendered views.
 
-All comments, replies, and reactions are stored directly on GitHub (in dedicated orphan git references `refs/md-comments/data`), requiring **zero commits, zero branches, and zero PR overhead** in your workspace codebase.
+Bring rich, zero-friction inline commenting to Markdown files directly inside VS Code, Cursor, and Antigravity, powered by git-native backend storage.
+
+All comments, replies, and reactions are stored directly on GitHub in dedicated orphan git references (`refs/md-comments/data`), requiring **zero commits, zero branches, and zero PR overhead** in your workspace codebase. AI agents author and edit Markdown with pristine ASTs, while developers review and collaborate on rendered views.
 
 ---
 
 ## Key Features
 
-- **Inline Highlights & Comments**: Leave comments on specific text selections or paragraphs.
+- **Inline Highlights on Rendered Prose**: Leave comments on specific text selections or paragraphs directly in the preview.
+- **AI-Friendly Repository Docs**: Markdown files remain 100% free of inline HTML comment tags, keeping LLM prompts clean.
 - **Custom Git Refs Backend**: Comments auto-save live to GitHub (`refs/md-comments/data`) with zero commits or branch overhead.
 - **Git Commit-Hashed Storage**: Stores comment files with 7-character commit short SHAs (`doc.<commit_sha>.comments.yml`) and aggregates historical page comments across file rollbacks.
 - **Fuzzy Anchoring Cascade**: Comments are robustly anchored using a cascade matching strategy:
   1. **Paragraph Hash**: Exact match of the normalized FNV-1a hash of the text.
   2. **Fuzzy Text Match**: Selection-based substring search to identify the text even if slightly edited.
   3. **Heading + Paragraph Index**: Contextual paragraph offset within the closest heading.
-- **Threaded Conversations**: Support for nested replies, emoji reactions, and thread status (Open / Resolved) for page-level and text-selection comments.
+- **Threaded Conversations & Reactions**: Support for nested replies, emoji reactions, and thread status (Open / Resolved) for page-level and text-selection comments.
 - **Git/GitHub Integration**: Resolves local Git/GitHub configuration to display actual GitHub display names and avatars. Mentions using `@username` link to GitHub profiles.
 - **Code Lens Integration**: See comment counts directly inline above your Markdown paragraphs. Click the lens to open the comments panel.
 - **Orphan Detection**: Detect and manage comments whose anchors are lost due to drastic document changes.

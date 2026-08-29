@@ -1,14 +1,19 @@
 # Markdown Comments — Obsidian Plugin
 
-An Obsidian plugin that brings inline commenting to Markdown files, powered by custom git refs (`refs/md-comments/data`).
+> ### **AI-Orchestrated Docs. Human-Orchestrated Comments.**
+>
+> Docs live directly in your repository, and comments live as a native layer on top, never locked in third-party SaaS silos. AI agents orchestrate the documentation as code evolves, while humans orchestrate the reviews and discussions on rendered views.
 
-Comments are stored directly on GitHub via dedicated orphan git references (`refs/md-comments/data`), enabling zero-commit, zero-PR collaboration across your notes.
+An Obsidian plugin that brings inline commenting to Markdown files and knowledge vaults, powered by custom git refs (`refs/md-comments/data`).
+
+Comments are stored directly on GitHub via dedicated orphan git references (`refs/md-comments/data`), enabling zero-commit, zero-PR collaboration across your notes without lock-in to external SaaS silos.
 
 ---
 
 ## Features
 
-- **Inline Highlights & Comments**: Works in both **Reading View** (via post-processor) and **Editing/Live Preview Mode** (via CodeMirror 6 plugin).
+- **Inline Highlights & Comments on Rendered Prose**: Works in both **Reading View** (via post-processor) and **Editing/Live Preview Mode** (via CodeMirror 6 plugin).
+- **Clean Markdown for AI Agents**: Preserves pristine Markdown source files with zero injected HTML comments.
 - **Custom Sidebar**: Dedicated right sidebar tab displaying Page comments, Inline comments, Resolved comments, and Orphaned comments.
 - **Custom Git Refs Backend**: Auto-saves comments to GitHub without cluttering your Git repository tree, requiring zero commits or PR overhead.
 - **Commit-Hashed Storage**: Supports 7-character commit short SHA comment filenames (`doc.<commit_sha>.comments.yml`) and merges historical page comments across file revisions.

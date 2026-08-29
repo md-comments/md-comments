@@ -3,7 +3,7 @@ title: Markdown Comments Demo
 description: Live interactive demonstration of Markdown Comments on Astro Starlight.
 template: splash
 hero:
-  tagline: Experience real-time inline Markdown commenting right in your documentation. Highlight any text below to leave a comment!
+  tagline: AI-orchestrated docs. Human-orchestrated comments. Highlight any text on rendered views to leave comments without SaaS silos!
   actions:
     - text: Try the Interactive Sandbox
       link: /demo-astro/guides/sandbox/
@@ -16,16 +16,17 @@ hero:
 ---
 
 <div class="demo-banner">
-  <h3>💡 Try It Now: Highlight Any Text on This Page</h3>
+  <h3>💡 Try It Now: Highlight Any Text on This Rendered Page</h3>
   <p>
-    Select any sentence or paragraph on this page. A floating comment button will appear near your selection.
-    Click it to start a discussion thread anchored to that exact text!
+    Docs live in your git repository. AI agents keep them updated as code changes.
+    Select any sentence or paragraph on this rendered page to leave inline feedback, discuss technical decisions, and resolve threads!
   </p>
 </div>
 
 ## Key Features in This Demo
 
-- **Zero Browser Extensions**: Readers and contributors can comment directly on documentation without installing anything.
-- **Git Native & AI Friendly**: Comments are stored in custom Git refs (`refs/md-comments/data`) outside your source branches, keeping Markdown files clean for AI tools.
+- **Rendered View Commenting**: Comment directly on rendered web prose with zero browser extensions required for visitors.
+- **AI-Friendly & Zero Inline Noise**: Markdown files stay pristine in git—zero inline HTML comment pollution, zero token bloat in LLM contexts.
+- **Git-Native Storage (`refs/md-comments/data`)**: Discussion threads save live to custom git refs with zero branch or PR clutter, avoiding third-party SaaS lock-in.
 - **GitHub OAuth Device Flow**: Authenticate safely using standard GitHub OAuth Device Flow with zero custom backend servers required.
-- **Multi-Platform Sync**: Discussions left here sync seamlessly with VS Code, Cursor, Antigravity, Obsidian, and GitHub Chrome extension.
+- **Universal Multi-Platform Sync**: Discussions left here sync seamlessly with VS Code, Cursor, Antigravity, Obsidian, and GitHub PR reviews.

@@ -3,7 +3,11 @@ title: Interactive Discussion Sandbox
 description: Test highlighting, threaded discussions, and margin pins in this sandbox environment.
 ---
 
-Welcome to the live interactive sandbox! Use the sections below to test various commenting scenarios.
+> ### **AI-Orchestrated Docs. Human-Orchestrated Comments.**
+>
+> Docs live directly in your repository, and comments live as a native layer on top, never locked in third-party SaaS silos. AI agents orchestrate the documentation as code evolves, while humans orchestrate the reviews and discussions on rendered views.
+
+Welcome to the live interactive sandbox! Use the sample technical spec below to test commenting on rendered views.
 
 ## Sample Technical Specification
 
@@ -12,7 +16,7 @@ Welcome to the live interactive sandbox! Use the sections below to test various 
 All client applications communicate with the backend via mutual TLS and JWT bearer tokens. Tokens expire after 60 minutes and must be refreshed using the `/auth/refresh` endpoint.
 
 > **Discussion prompt**: Should token lifetime be reduced from 60 minutes to 15 minutes for enhanced security?
-> Highlight the sentence above and leave your vote!
+> Highlight the sentence above and leave your feedback!
 
 ### Data Storage Architecture
 

@@ -1,26 +1,60 @@
-# Agentic AI Code Review Guide
+# Agentic AI & Documentation Workflows
 
-This project contains custom agent skills and guidelines configured under the `.agents/` workspace directory. These resources allow AI coding assistants (like Antigravity or Gemini) to run specialized review passes and quality checks.
+> ### **AI-Orchestrated Docs. Human-Orchestrated Comments.**
+>
+> Docs live directly in your repository, and comments live as a native layer on top, never locked in third-party SaaS silos. AI agents orchestrate the documentation as code evolves, while humans orchestrate the reviews and discussions on rendered views.
 
-## AI Review Commands
+This repository is engineered for a seamless collaboration loop between AI coding agents and human reviewers.
 
-When pair-programming with an Antigravity coding assistant, you can invoke the following commands:
+---
+
+## 🔄 The AI-Human Documentation Loop
+
+```mermaid
+flowchart LR
+    A[Code Changes / Features] -->|AI Agent generates & updates| B[Repo Markdown Docs]
+    B -->|Rendered in IDE / Web / PR| C[Rendered Documentation Views]
+    C -->|Human Reviewers highlight & discuss| D[refs/md-comments/data]
+    D -->|AI Agent reads structured threads| B
+```
+
+### 1. AI-Orchestrated Documentation
+
+- **Clean Markdown in the Repository**: AI agents (Antigravity, Cursor, Claude Code, GitHub Copilot) create and maintain technical specifications, guides, and architectural docs alongside source code.
+- **Zero Inline HTML Pollution**: Unlike legacy comment systems that insert `<!-- comment id="abc" -->` tags directly into markdown files, Markdown Comments stores comments outside your source branches (`refs/md-comments/data`). LLM prompts, token budgets, and AST parsers stay 100% clean and free of noise or merge conflicts.
+
+### 2. Human-Orchestrated Comments on Rendered Views
+
+- **Visual Review Everywhere**: Engineers, product managers, and team members review the documentation where it looks best—rendered previews in VS Code/Cursor/Antigravity, live Astro/Starlight documentation sites, Obsidian knowledge bases, or GitHub PR diffs.
+- **Fuzzy Anchoring Cascade**: Comments anchor to exact sentences and paragraphs using normalized FNV-1a hashes and fuzzy text matching, surviving document edits and refactoring passes.
+
+### 3. Agentic Resolution & Iteration
+
+- **Git-Native Storage**: Comment threads and status (Open / Resolved) are versioned in `refs/md-comments/data` as structured YAML/JSON.
+- **Agent Consumption**: AI coding agents can read these threads to understand human feedback, apply requested updates to the markdown documentation or codebase, and resolve feedback loops directly.
+
+---
+
+## 🛠️ AI Review & Developer Commands
+
+When pair-programming with an Antigravity coding assistant or using local agent skills, you can invoke the following workflows:
 
 1. **Over-Engineering & Bloat Audit (`/ponytail-review` / `/ponytail-audit`)**:
-   - Instructs the agent to check your current diff or the entire repository for complex structures, redundant dependencies, or reinvented standard library features.
-   - Highlights components that can be simplified, deleted, or replaced with native JS/TS methods.
+   - Instructs the agent to check your diff or repository for unnecessary abstractions, dead code, or reinvented standard library utilities.
+   - Recommends minimal, maintainable implementations.
 
 2. **Ultra-Compressed Code Review (`/caveman-review`)**:
-   - Requests a dense, high-signal code review. The agent will output one concise line per issue (pointing to file, line, problem, and expected fix) to minimize context token clutter.
+   - Requests a dense, high-signal review outputting one line per finding (location, problem, suggested fix) to conserve context window space.
 
 3. **Conventional Commit Generator (`/caveman-commit`)**:
-   - Generates minimal and meaningful Conventional Commits based strictly on staged changes, keeping commit logs clean.
+   - Generates minimal and meaningful Conventional Commits based on staged diffs, maintaining clean git logs.
 
 4. **Repository Briefing & Context Density (`/context-pack`)**:
-   - Generates a compact, high-signal repository briefing containing primary languages, entry points, active changes, and high-signal files.
-   - Helps onboard coding agents to the repository without wasting prompt budget on a blind tree walk.
+   - Compiles a high-signal briefing of key files, entry points, and active changes to orient coding agents without costly repository scans.
 
-## Security Static Analysis (SAST) & SCA
+---
 
-- Ensure ESLint security plugins check for vulnerable dynamic templates.
-- Always run `pnpm audit` locally before committing to check for dependency vulnerabilities.
+## 🔒 Security Static Analysis (SAST) & Pre-Commit Checks
+
+- **Automated Verification**: Run `pnpm check` to execute dependencies audit, ESLint security rules, Prettier formatting, TypeScript static checks, and unit tests before committing changes.
+- **FOSSA Compliance**: Local and CI scans ensure full license and third-party dependency compliance.

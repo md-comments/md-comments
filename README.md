@@ -7,24 +7,37 @@
 
 🌐 **Website & Demo:** [md-comments.com](https://md-comments.com/)
 
-A collaboration tool for Markdown documentation. Markdown excels at authoring, version control, and agent workflows, but it has no built-in way to highlight a passage and leave feedback inline. **Markdown Comments** closes that gap with a visual commenting UI. Comments auto-save live via custom git refs (`refs/md-comments/data`) placed outside the standard `refs/heads/` branch namespace — requiring **zero commits, zero branches, and zero PR overhead**. Anyone logged into GitHub can review and comment on Markdown documents instantly.
+> ### **AI-Orchestrated Docs. Human-Orchestrated Comments.**
+>
+> Docs live directly in your repository, and comments live as a native layer on top, never locked in third-party SaaS silos. AI agents orchestrate the documentation as code evolves, while humans orchestrate the reviews and discussions on rendered views.
 
-Works in **VS Code** ([Marketplace](https://marketplace.visualstudio.com/items?itemName=md-comments.md-preview-comments) or [Open VSX](https://open-vsx.org/extension/md-comments/md-preview-comments)), **Cursor**, **Antigravity**, **Obsidian**, **Astro / Starlight** ([@md-comments/starlight](https://www.npmjs.com/package/@md-comments/starlight)), and **GitHub** ([Chrome Extension](https://chromewebstore.google.com/detail/markdown-comments/mjlhdjonjfcedkbpajkfeidfebefhkpp)).
+Markdown and prose excel at authoring, version control, and agent workflows, but have lacked a built-in way to highlight passages and collaborate directly on rendered views. **Markdown Comments** provides a universal, zero-overhead commenting layer that works everywhere you read and review documentation.
+
+Comments auto-save live via custom git refs (`refs/md-comments/data`) placed outside the standard `refs/heads/` branch namespace — requiring **zero commits, zero branches, and zero PR overhead**. Clean Markdown stays clean for AI tools and codebases, while humans get rich, real-time discussions across editors, documentation portals, and pull requests.
+
+### 🌐 Comments Everywhere on Rendered Views
+
+- **IDEs & Code Editors**: **VS Code** ([Marketplace](https://marketplace.visualstudio.com/items?itemName=md-comments.md-preview-comments) / [Open VSX](https://open-vsx.org/extension/md-comments/md-preview-comments)), **Cursor**, and **Antigravity**.
+- **Documentation Sites & Frameworks**: **Astro & Starlight** ([@md-comments/starlight](https://www.npmjs.com/package/@md-comments/starlight)), HTML, Docusaurus, VitePress, Next.js, Hugo, and MkDocs.
+- **Knowledge Bases**: **Obsidian** native plugin.
+- **Pull Requests & Code Review**: **GitHub** ([Chrome Extension](https://chromewebstore.google.com/detail/markdown-comments/mjlhdjonjfcedkbpajkfeidfebefhkpp)).
 
 ---
 
 ## 🚀 Key Features
 
-- **Zero-Commit Custom Git Refs Backend**: All comments, replies, and reactions auto-save instantly via custom git refs (`refs/md-comments/data`) outside standard branch namespace. No manual git commits or branches needed.
+- **AI-Human Feedback Loop**: AI coding agents maintain repository documentation as code evolves, while human engineers leave structured feedback on rendered views. Agents can read comments via git refs to iterate on documents automatically.
+- **Zero-Commit Custom Git Refs Backend**: All comments, replies, and reactions auto-save instantly via custom git refs (`refs/md-comments/data`) outside the standard branch namespace. Zero manual git commits, zero branch clutter, and zero SaaS database lock-in.
+- **Zero Inline HTML Pollution**: Unlike legacy tools that inject `<!-- comment -->` tags into source markdown, Markdown Comments keeps `.md` files pristine for LLMs, linters, and static site generators.
 - **Git Commit-Hashed Storage & Rollback Preservation**: Comment files are stored with the 7-character short commit SHA (`doc.<commit_sha>.comments.yml`). When checking out or rolling back a file to an earlier commit, page (footer) comments across revisions remain intact and aggregated (Confluence-style page rollback), while inline comments re-anchor to matching text in the active revision. Legacy `doc.comments.yml` files are automatically migrated upon write.
-- **Fuzzy Anchoring Cascade**: Comments are robustly anchored using a cascade matching strategy:
+- **Fuzzy Anchoring Cascade**: Comments are robustly anchored across document revisions using a cascade matching strategy:
   1. **Paragraph Hash**: Exact match of the normalized FNV-1a hash of the text.
   2. **Fuzzy Text Match**: Selection-based substring search to identify the text even if slightly edited.
   3. **Heading + Paragraph Index**: Contextual paragraph offset within the closest heading.
-- **Threaded Conversations**: Support for nested replies, emoji reactions, and thread status (Open / Resolved) for page-level and text-selection comments.
+- **Threaded Conversations & Emoji Reactions**: Support for nested replies, emoji reactions, and thread status (Open / Resolved) for page-level and text-selection comments.
 - **Direct GitHub File & Line Linking**: Every comment entry contains clickable links back to the target file and line range (`docs/architecture.md#L15`).
 - **Orphan Detection**: Detect and manage comments whose anchors are lost due to drastic document changes.
-- **Astro & Starlight Integration**: Embed in documentation sites with zero extensions required for readers.
+- **Zero-Extension Web Docs**: Embed in documentation sites with zero extensions required for readers via GitHub OAuth Device Flow.
 - **OIDC & Trusted Publishing**: Automated npm releases with verifiable build provenance.
 
 ---

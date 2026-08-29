@@ -1,7 +1,7 @@
 {
   "name": "obsidian-md-comments",
   "version": "1.1.5",
-  "description": "Rich inline commenting on Markdown preview powered by custom git refs backend for Obsidian",
+  "description": "AI-orchestrated docs & human-orchestrated comments on rendered views powered by custom git refs backend for Obsidian",
   "main": "main.js",
   "scripts": {
     "dev": "node esbuild.config.mjs",

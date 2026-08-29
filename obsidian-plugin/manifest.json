@@ -3,7 +3,7 @@
   "name": "Markdown Comments",
   "version": "1.1.5",
   "minAppVersion": "1.0.0",
-  "description": "Rich inline commenting on Markdown preview powered by custom git refs backend",
+  "description": "AI-orchestrated docs & human-orchestrated comments on rendered views powered by custom git refs backend",
   "author": "md-comments",
   "authorUrl": "https://github.com/md-comments/md-comments",
   "isDesktopOnly": false

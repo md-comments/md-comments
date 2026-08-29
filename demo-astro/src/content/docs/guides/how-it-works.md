@@ -3,14 +3,18 @@ title: How Markdown Comments Works
 description: Learn how the inline comments overlay integrates with Astro Starlight.
 ---
 
-Markdown Comments enables collaborative review workflows for technical documentation, specifications, and proposals directly in the browser and in code editors.
+> ### **AI-Orchestrated Docs. Human-Orchestrated Comments.**
+>
+> Docs live directly in your repository, and comments live as a native layer on top, never locked in third-party SaaS silos. AI agents orchestrate the documentation as code evolves, while humans orchestrate the reviews and discussions on rendered views.
 
-## 1. Highlighting Text
+Markdown Comments enables frictionless, real-time collaboration for technical documentation, specifications, and proposals directly on rendered views across browsers and code editors.
 
-When you read a documentation page, select any string of text. The Markdown Comments plugin tracks the DOM text node and its character offset relative to the Markdown source AST.
+## 1. Highlighting Rendered Prose
+
+When you read a documentation page or preview, select any string of text. The Markdown Comments engine tracks the rendered DOM text and computes a robust anchor cascade (paragraph hash, fuzzy text match, heading offset).
 
 > **Try highlighting this sentence right now!**
-> A tooltip button with a comment icon will appear. Clicking it opens the comment creation dialog.
+> A floating tooltip button with a comment icon will appear. Clicking it opens the comment creation dialog.
 
 ## 2. Leaving a Comment
 
