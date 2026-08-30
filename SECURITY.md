@@ -4,10 +4,10 @@
 
 Only the latest release of Markdown Comments is actively supported with security updates. We recommend always upgrading to the latest version to ensure you have the latest security patches.
 
-| Version | Supported          |
-| ------- | ------------------ |
-| >= 1.0  | :white_check_mark: |
-| < 1.0   | :x:                |
+| Version | Supported |
+| ------- | :-------: |
+| >= 1.0  |    ✅     |
+| < 1.0   |    ❌     |
 
 ## Reporting a Vulnerability
 
@@ -36,6 +36,17 @@ When reporting a vulnerability, please provide the following details:
 - Steps to reproduce the issue (including proof of concept or sample code if possible).
 - The potential impact of the vulnerability.
 - The environment details (OS, extension host, version of Markdown Comments).
+
+## Security & Authorization Boundaries
+
+Markdown Comments enforces security through a combination of client-side capability checks and GitHub's native API-level authorization:
+
+| User Role / Access Level                                          |                Read Comments                |    Write / Post Comments     |       Source Code Modification (`refs/heads/*`)        | Enforcement Mechanism                                                                          |
+| :---------------------------------------------------------------- | :-----------------------------------------: | :--------------------------: | :----------------------------------------------------: | :--------------------------------------------------------------------------------------------- |
+| **Public Visitor (Unauthenticated)**                              | ✅ Yes (Public repo) / ❌ No (Private repo) |            ❌ No             |                         ❌ No                          | Client read-only UI; GitHub API rejects unauthenticated Git writes with `401 Unauthorized`     |
+| **Authenticated GitHub User (No Repo Write Access)**              | ✅ Yes (Public repo) / ❌ No (Private repo) |            ❌ No             |                         ❌ No                          | Client UI sets `isWritable = false`; GitHub API rejects ref updates with `403 Forbidden`       |
+| **Repo Collaborator / Maintainer (`WRITE`, `MAINTAIN`, `ADMIN`)** |                   ✅ Yes                    |            ✅ Yes            | 🛡️ Governed by Repository Rulesets / Branch Protection | Client enables composer UI; GitHub API allows commits & ref updates to `refs/md-comments/data` |
+| **GitHub App / Token**                                            |                   ✅ Yes                    | ✅ Yes (Scoped repositories) |  🛡️ Restricted when rulesets protect `refs/heads/**`   | GitHub App repository selection & GitHub Rulesets bypass settings                              |
 
 ## GitHub App & Git Ref Security Hardening
 

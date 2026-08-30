@@ -230,7 +230,9 @@ pnpm codegraph:status # Shows CodeGraph knowledge graph index status
 
 ## 🔒 Security & Hardening Git Ref Access
 
-Markdown Comments operates on custom Git references (`refs/md-comments/data`) stored outside standard branch namespaces (`refs/heads/*`). While GitHub App permissions for repository contents (`contents: write`) are repository-wide by default, you can restrict write access to protect source code branches:
+Markdown Comments operates on custom Git references (`refs/md-comments/data`) stored outside standard branch namespaces (`refs/heads/*`). While GitHub App permissions for repository contents (`contents: write`) are repository-wide by default, you can restrict write access to protect source code branches.
+
+For a complete breakdown of user roles, write permissions, and API-level enforcement, see the [Security & Authorization Boundaries table in SECURITY.md](SECURITY.md#security--authorization-boundaries).
 
 ### GitHub Repository Rulesets / Branch Protection
 
@@ -241,8 +243,7 @@ Protect your codebase branches while allowing Markdown Comments to synchronize c
 3. Enable **"Restrict creations"**, **"Restrict updates"**, **"Restrict deletions"**, and/or **"Require a pull request before merging"**.
 4. Ensure the GitHub App / commenting token is **not** added to the **Bypass list**.
 
-> [!TIP]
-> Because `refs/md-comments/data` lives outside the `refs/heads/**` branch namespace, the app can freely record comment threads and reactions without any ability to directly push commits or alter source code branches.
+> 💡 **Tip:** Because `refs/md-comments/data` lives outside the `refs/heads/**` branch namespace, the app can freely record comment threads and reactions without any ability to directly push commits or alter source code branches.
 
 ## Privacy Policy
 
