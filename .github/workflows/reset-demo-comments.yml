@@ -71,15 +71,22 @@ jobs:
                   }
                 }
 
-                // 2. Create empty tree
-                console.log(`Creating fresh empty git tree...`);
+                // 2. Create fresh tree with initial placeholder
+                console.log(`Creating fresh git tree...`);
                 const treeRes = await github.rest.git.createTree({
                   owner,
                   repo,
-                  tree: [],
+                  tree: [
+                    {
+                      path: '.gitkeep',
+                      mode: '100644',
+                      type: 'blob',
+                      content: '# Markdown Comments Data\nThis orphan ref stores comments for demo repositories.\n',
+                    },
+                  ],
                 });
                 const treeSha = treeRes.data.sha;
-                console.log(`✅ Created empty tree with SHA: ${treeSha}`);
+                console.log(`✅ Created tree with SHA: ${treeSha}`);
 
                 // 3. Create initial empty commit with no parents (orphan commit)
                 console.log(`Creating initial orphan commit...`);
