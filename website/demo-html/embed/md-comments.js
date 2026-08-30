@@ -377,9 +377,12 @@
             <button class="md-comments-modal-close modal-close-btn" aria-label="Close">&times;</button>
           </div>
           <div class="md-comments-auth-panel">
-            <p class="md-comments-modal-desc">
-              Authenticate using GitHub Device Flow to leave comments directly on repository <strong>${escapeHtml(options.repo)}</strong>:
+            <p class="md-comments-modal-desc" style="font-size: 13px; line-height: 1.5; margin-bottom: 10px;">
+              Comments on this demo are <strong>public to view</strong>. To add or reply to comments, authenticate using GitHub Device Flow:
             </p>
+            <div style="font-size: 12px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 6px; padding: 8px 12px; margin-bottom: 14px; color: var(--text-color, #e2e8f0); line-height: 1.4;">
+              🔑 <strong>Need write access?</strong> Submitting comments requires collaborator access. <a href="https://github.com/md-comments/demo-access/issues/new?template=request-demo-access.md" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; text-decoration: underline; font-weight: 600;">Request 1-click access</a> to automatically join the <strong>@md-comments/demo-commenters</strong> team.
+            </div>
             <div class="md-comments-code-container">
               <span class="md-comments-code-label">One-Time Activation Code</span>
               <div class="md-comments-user-code" style="display: none;">------</div>
@@ -794,7 +797,17 @@
         return true;
       } catch (err) {
         console.error('[md-comments] Git Commit Error:', err);
-        alert(`Failed to commit comments to Git: ${err.message || err}`);
+        const isPermissionError =
+          String(err).includes('403') ||
+          String(err).includes('permission') ||
+          String(err).includes('Tree creation failed');
+        if (isPermissionError) {
+          alert(
+            'Failed to save comment: Write permission required on the demo repository.\n\nPlease request 1-click access to join the @md-comments/demo-commenters team:\nhttps://github.com/md-comments/demo-access/issues/new?template=request-demo-access.md'
+          );
+        } else {
+          alert(`Failed to commit comments to Git: ${err.message || err}`);
+        }
         return false;
       } finally {
         this.isSaving = false;
