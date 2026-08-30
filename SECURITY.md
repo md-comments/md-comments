@@ -36,3 +36,16 @@ When reporting a vulnerability, please provide the following details:
 - Steps to reproduce the issue (including proof of concept or sample code if possible).
 - The potential impact of the vulnerability.
 - The environment details (OS, extension host, version of Markdown Comments).
+
+## GitHub App & Git Ref Security Hardening
+
+Markdown Comments stores comments in isolated Git references (`refs/md-comments/data`) separate from your source codebase (`refs/heads/*`).
+
+### Restricting Access with Repository Rulesets
+
+Because GitHub's `contents: write` API permission is repository-wide, organizations and repository owners should configure GitHub Repository Rulesets to enforce the principle of least privilege:
+
+1. **Protect Source Branches:** Configure rulesets targeting **All branches** (`refs/heads/**`) and **All tags** (`refs/tags/**`) requiring Pull Requests, linear history, or restricting direct push privileges.
+2. **Exclude the App from Bypass Lists:** Do not grant bypass rights to Markdown Comments tokens or GitHub Apps.
+3. **Isolate Custom Ref Namespace:** Because `refs/md-comments/data` is outside `refs/heads/**`, the commenting system retains read and write capabilities exclusively for comment data, while source branches remain protected from unauthorized direct modifications.
+4. **Scope App Installations:** Install GitHub Apps only on specific, selected repositories rather than organization-wide.

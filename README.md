@@ -210,6 +210,22 @@ pnpm codegraph:status # Shows CodeGraph knowledge graph index status
   pnpm watch:chrome
   ```
 
+## 🔒 Security & Hardening Git Ref Access
+
+Markdown Comments operates on custom Git references (`refs/md-comments/data`) stored outside standard branch namespaces (`refs/heads/*`). While GitHub App permissions for repository contents (`contents: write`) are repository-wide by default, you can restrict write access to protect source code branches:
+
+### GitHub Repository Rulesets / Branch Protection
+
+Protect your codebase branches while allowing Markdown Comments to synchronize comments:
+
+1. In your GitHub repository, navigate to **Settings** → **Rules** → **Rulesets** (or **Branches**).
+2. Create a ruleset targeting **All branches** (`refs/heads/**`) and **All tags** (`refs/tags/**`).
+3. Enable **"Restrict creations"**, **"Restrict updates"**, **"Restrict deletions"**, and/or **"Require a pull request before merging"**.
+4. Ensure the GitHub App / commenting token is **not** added to the **Bypass list**.
+
+> [!TIP]
+> Because `refs/md-comments/data` lives outside the `refs/heads/**` branch namespace, the app can freely record comment threads and reactions without any ability to directly push commits or alter source code branches.
+
 ## Privacy Policy
 
 For details on how the Chrome Extension, VS Code Extension, and Obsidian Plugin handle user data, settings, and permissions, please refer to our [Privacy Policy](PRIVACY.md).
