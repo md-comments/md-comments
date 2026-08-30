@@ -1,5 +1,7 @@
 # Cross-Browser Extension Expansion Plan & Store Publishing Roadmap
 
+[![Markdown Comments](https://img.shields.io/badge/markdown--comments-active-6366f1?style=flat-square&logo=github&logoColor=white)](https://chromewebstore.google.com/detail/markdown-comments/mjlhdjonjfcedkbpajkfeidfebefhkpp)
+
 ## Overview
 
 Currently, the Markdown Comments extension is built and configured exclusively for **Google Chrome (Manifest V3)** under `chrome-extension/`.
