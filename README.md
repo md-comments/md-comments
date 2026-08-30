@@ -120,6 +120,24 @@ Alternatively, to run the extension locally for development:
 
 ---
 
+## 💬 Signaling Active Comments in Markdown Files
+
+When viewing Markdown files directly on GitHub, readers without the browser extension do not see inline discussions by default.
+
+To ensure reviewers and collaborators know that comments exist on a document and can view or participate in threads, place the **Markdown Comments badge** at the top of `.md` files, RFCs, and plans:
+
+```markdown
+[![Markdown Comments](https://img.shields.io/badge/markdown--comments-active-6366f1?style=flat-square&logo=github&logoColor=white)](https://chromewebstore.google.com/detail/markdown-comments/mjlhdjonjfcedkbpajkfeidfebefhkpp)
+```
+
+This renders as:
+
+[![Markdown Comments](https://img.shields.io/badge/markdown--comments-active-6366f1?style=flat-square&logo=github&logoColor=white)](https://chromewebstore.google.com/detail/markdown-comments/mjlhdjonjfcedkbpajkfeidfebefhkpp)
+
+Clicking the badge provides a direct link to install the extension so readers can view and participate in comments immediately.
+
+---
+
 ## ⚙️ Settings
 
 ### VS Code
