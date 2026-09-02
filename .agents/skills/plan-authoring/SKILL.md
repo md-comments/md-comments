@@ -1,13 +1,13 @@
 ---
 name: plan-authoring
-description: Guidelines and standards for creating and updating plan files and architecture proposals in .plans/. Ensures plan structure, clear milestone definitions, and mandatory Markdown Comments header badge.
+description: Guidelines and standards for creating, updating, and lifecycle management of plan files and architecture proposals in .plans/. Ensures plan structure, clear milestone definitions, mandatory Markdown Comments header badge, and removal of plans once fully implemented.
 metadata:
-  short-description: Standards for authoring plans in .plans/
+  short-description: Standards for authoring and lifecycle of plans in .plans/
 ---
 
 # Plan Authoring Standards
 
-Use this skill when drafting, creating, or updating implementation plans, RFCs, architecture proposals, or roadmaps under `.plans/`.
+Use this skill when drafting, creating, updating, or completing implementation plans, RFCs, architecture proposals, or roadmaps under `.plans/`.
 
 ## Mandatory Markdown Comments Badge
 
@@ -28,3 +28,7 @@ When plans are reviewed directly on GitHub, reviewers without the Markdown Comme
 3. **Overview & Objectives**: Problem definition, goals, and non-goals.
 4. **Current State vs. Proposed Architecture**: Technical trade-offs, schemas, or data flow.
 5. **Milestones & Action Items**: Phased implementation steps with verification criteria.
+
+## Plan Lifecycle & Cleanup Rule
+
+- **Removal After Full Implementation**: Once all milestones and tasks in a plan have been fully implemented and verified, the plan file under `.plans/` **MUST be removed/deleted**. Do not keep completed plan files around in `.plans/` after implementation is complete.

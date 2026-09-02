@@ -22,6 +22,7 @@ export default defineConfig({
       customCss: ['./src/styles/custom.css'],
       components: {
         Banner: './src/components/Banner.astro',
+        Header: './src/components/Header.astro',
       },
       social: {
         github: 'https://github.com/md-comments/md-comments',

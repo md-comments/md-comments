@@ -1082,6 +1082,7 @@
             const hasStaleLockInText = (normalized.inline_comments || []).some((c) =>
               (c.anchor_text || '').toLowerCase().includes('zero lock-in')
             );
+            // If stored comments are non-stale and contain a full comment set (or user-created threads)
             if (!hasStaleLockInText && (normalized.inline_comments || []).length >= 5) {
               validComments = normalized;
             }

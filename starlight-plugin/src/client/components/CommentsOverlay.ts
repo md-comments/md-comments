@@ -191,6 +191,7 @@ export class CommentsOverlay {
       e.stopPropagation();
       this.toggleDrawer();
     });
+
     document.body.appendChild(this.fabEl);
 
     // Global keyboard shortcut: Cmd/Ctrl+Shift+C

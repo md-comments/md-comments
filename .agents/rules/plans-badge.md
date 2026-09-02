@@ -9,3 +9,7 @@ Whenever creating or editing plan files, design documents, specifications, or RF
 ## Why
 
 When viewing rendered markdown files on GitHub, there is no native indicator that inline comments and review threads exist unless the user has installed the browser extension. This badge signals to viewers that comments are enabled on the file and links directly to the extension in the Chrome Web Store.
+
+## Plan Removal After Implementation
+
+- Once all milestones and tasks in a plan under `.plans/` have been fully implemented and verified, the plan file **MUST be deleted/removed**. Do not retain completed plan files in `.plans/`.

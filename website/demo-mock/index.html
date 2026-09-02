@@ -3,20 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Markdown Comments - Plain HTML Live Demo</title>
+    <title>Markdown Comments - Instant Interactive Demo (Zero-Auth Mock Mode)</title>
     <meta
       name="description"
-      content="Live interactive demonstration of Markdown Comments in Plain HTML with zero dependencies and GitHub custom Git refs backend."
+      content="Live interactive demonstration of Markdown Comments in zero-auth Mock Mode with zero dependencies, simulated personas, and local storage."
     />
     <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
     <link rel="stylesheet" href="demo.css" />
 
-    <!-- Drop-in Redistributable Markdown Comments Embed -->
+    <!-- Drop-in Redistributable Markdown Comments Embed (Mock Mode Enabled) -->
     <link rel="stylesheet" href="./embed/md-comments.css" />
     <script
       src="./embed/md-comments.js"
-      data-repo="md-comments/html-demo-comments"
-      data-file="demo-html/index.html"
+      data-repo="md-comments/mock-demo"
+      data-file="demo-mock/index.html"
+      data-mock="true"
       async
     ></script>
     <script src="demo.js" defer></script>
@@ -25,9 +26,8 @@
     <!-- Global Announcement Banner -->
     <div class="demo-site-banner" role="region" aria-label="Demo Notice">
       <div class="demo-banner-inner">
-        <span class="demo-banner-badge">Demo Notice</span>
         <span class="demo-banner-text">
-          Comments are wiped every day at <strong>00:00 UTC</strong> to clean up and avoid moderation.
+          This is a mock demo. Comments are saved in your local browser session.
         </span>
       </div>
     </div>
@@ -48,7 +48,6 @@
             <polyline points="8 6 2 12 8 18"></polyline>
           </svg>
           <span>Markdown Comments</span>
-          <span class="brand-badge">Plain HTML</span>
         </a>
 
         <div class="nav-actions">
@@ -75,29 +74,18 @@
           <h1 class="hero-title">AI-Orchestrated Docs.<br /><span class="gradient-text">Human-Orchestrated Comments.</span></h1>
           <p class="hero-subtitle">
             Highlight any text on this rendered page to leave inline feedback, discuss architectural
-            specs, and test collaborative review committing directly to custom Git refs.
+            specs, and test collaborative review in instant mock mode.
           </p>
 
-          <!-- Permission / Collaborator Banner -->
-          <div class="demo-access-callout">
-            <div class="demo-access-header">
-              <span>🔑</span>
-              <span>Instructions to Get Write Access to Leave Comments</span>
+          <!-- Interactive Mock Callout -->
+          <div class="demo-access-callout" style="border-color: #6366f1; background: rgba(99, 102, 241, 0.08);">
+            <div class="demo-access-header" style="color: #818cf8;">
+              <span>⚡</span>
+              <span>Instant Zero-Auth Interactive Playground Active</span>
             </div>
             <p class="demo-access-desc">
-              Comments on this demo are <strong>public to view</strong> for everyone. However, to add or reply to comments, GitHub requires repository collaborator access. Complete this 1-click step to get write access, or explore the <a href="../demo-mock/" style="color: #60a5fa; text-decoration: underline; font-weight: 700;">Instant Zero-Auth Mock Demo</a> with simulated personas and zero GitHub setup:
+              You are automatically logged in as a <strong>Demo Persona</strong> (e.g. <em>Alice</em>, <em>Bob</em>, <em>Charlie</em>, or <em>Dana</em>). Highlight any sentence below to test comments, add threaded replies, react with emojis, or switch simulated personas right from the comments drawer!
             </p>
-            <div class="demo-access-action">
-              <a
-                href="https://github.com/md-comments/demo-access/issues/new?template=request-demo-access.md"
-                target="_blank"
-                rel="noopener"
-                class="btn-access-request"
-              >
-                👉 Request 1-Click Write Access (Join @md-comments/demo-commenters) &rarr;
-              </a>
-              <span class="demo-access-hint">Instant automated bot approval &bull; Or try <a href="../demo-mock/" style="color: #60a5fa; font-weight: 700;">Mock Demo &rarr;</a></span>
-            </div>
           </div>
         </div>
 

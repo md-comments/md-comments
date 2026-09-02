@@ -1,5 +1,5 @@
 ---
-// Global announcement banner for demo website
+// Global announcement banner & demo attention hint for demo website
 ---
 
 <div class="sl-banner demo-site-banner" role="region" aria-label="Demo Notice">
@@ -10,6 +10,67 @@
     </span>
   </div>
 </div>
+
+<!-- Floating Attention Arrow pointing to FAB on the Demo Website -->
+<div class="md-comments-attention-hint" id="demo-attention-hint">
+  <div class="md-comments-hint-bubble">
+    <span class="md-comments-hint-dot"></span>
+    <span>Click here to explore & write comments!</span>
+  </div>
+  <svg class="md-comments-bouncing-arrow" viewBox="0 0 64 64" width="56" height="56" fill="none">
+    <defs>
+      <linearGradient id="mdCommentsArrowGradDemo" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#c084fc"></stop>
+        <stop offset="50%" stop-color="#818cf8"></stop>
+        <stop offset="100%" stop-color="#38bdf8"></stop>
+      </linearGradient>
+    </defs>
+    <path d="M 14 10 C 26 10, 44 20, 46 42" stroke="url(#mdCommentsArrowGradDemo)" stroke-width="4.5" stroke-linecap="round"></path>
+    <path d="M 32 36 L 47 45 L 49 29" fill="none" stroke="url(#mdCommentsArrowGradDemo)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"></path>
+  </svg>
+</div>
+
+<script>
+  function setupAttentionHint() {
+    const hint = document.getElementById('demo-attention-hint');
+    if (!hint) return;
+
+    function dismissHint() {
+      if (!hint) return;
+      hint.classList.add('dismissing');
+      setTimeout(() => hint.remove(), 260);
+    }
+
+    hint.addEventListener('click', () => {
+      dismissHint();
+      const fab = document.getElementById('md-comments-fab-toggle');
+      if (fab) fab.click();
+    });
+
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement | null;
+      if (
+        target &&
+        target.closest('#md-comments-fab-toggle, .md-comments-drawer-close, .md-comments-drawer')
+      ) {
+        dismissHint();
+      }
+    });
+
+    const observer = new MutationObserver(() => {
+      if (document.documentElement.classList.contains('md-comments-panel-open')) {
+        dismissHint();
+      }
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupAttentionHint);
+  } else {
+    setupAttentionHint();
+  }
+</script>
 
 <style>
   .demo-site-banner {
@@ -48,5 +109,88 @@
   .demo-banner-text strong {
     color: #38bdf8;
     font-weight: 600;
+  }
+</style>
+
+<style is:global>
+  .md-comments-attention-hint {
+    position: fixed !important;
+    bottom: 96px !important;
+    right: 18px !important;
+    z-index: 99998 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-end !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    animation: md-comments-bounce-diag 1.4s ease-in-out infinite !important;
+    transition:
+      opacity 0.25s ease,
+      transform 0.25s ease !important;
+  }
+
+  .md-comments-attention-hint.dismissing,
+  html.md-comments-panel-open .md-comments-attention-hint,
+  body.md-comments-panel-open .md-comments-attention-hint {
+    opacity: 0 !important;
+    transform: scale(0.85) translateY(12px) !important;
+    pointer-events: none !important;
+  }
+
+  .md-comments-hint-bubble {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #9333ea 100%) !important;
+    color: #ffffff !important;
+    padding: 9px 16px !important;
+    border-radius: 20px 20px 6px 20px !important;
+    font-family: var(--sl-font, system-ui, sans-serif) !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    box-shadow:
+      0 8px 24px rgba(79, 70, 229, 0.45),
+      0 0 12px rgba(147, 51, 234, 0.35) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    margin-bottom: 2px !important;
+    white-space: nowrap !important;
+    letter-spacing: 0.3px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+
+  .md-comments-hint-dot {
+    width: 8px !important;
+    height: 8px !important;
+    background-color: #38bdf8 !important;
+    border-radius: 50% !important;
+    display: inline-block !important;
+    box-shadow: 0 0 8px #38bdf8 !important;
+    animation: md-comments-pulse-dot 1.4s infinite !important;
+  }
+
+  @keyframes md-comments-pulse-dot {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.35;
+      transform: scale(0.7);
+    }
+  }
+
+  .md-comments-bouncing-arrow {
+    filter: drop-shadow(0 6px 12px rgba(124, 58, 237, 0.5)) !important;
+    margin-right: 14px !important;
+  }
+
+  @keyframes md-comments-bounce-diag {
+    0%,
+    100% {
+      transform: translate(0, 0);
+    }
+    50% {
+      transform: translate(3px, 9px);
+    }
   }
 </style>

@@ -121,7 +121,8 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(PORT, '0.0.0.0', () => {
   console.log(`\n🚀 Website dev server running at: http://localhost:${PORT}/`);
-  console.log(`   Demo site available at:        http://localhost:${PORT}/demo-html/`);
+  console.log(`   Instant Mock Demo at:          http://localhost:${PORT}/demo-mock/`);
+  console.log(`   Git Live Demo at:              http://localhost:${PORT}/demo-html/`);
   console.log(
     `   GitHub OAuth proxy active at:  http://localhost:${PORT}/api/md-comments/auth/*\n`
   );
