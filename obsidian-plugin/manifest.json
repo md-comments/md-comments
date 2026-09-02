@@ -1,7 +1,7 @@
 {
   "id": "md-comments",
   "name": "Markdown Comments",
-  "version": "1.1.5",
+  "version": "1.2.2",
   "minAppVersion": "1.0.0",
   "description": "AI-orchestrated docs & human-orchestrated comments on rendered views powered by custom git refs backend",
   "author": "md-comments",
