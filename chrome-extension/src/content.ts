@@ -1201,39 +1201,39 @@ async function triggerAndMoveNativeComposer(
     const body = textarea?.value.trim() || '';
     if (!body) return;
 
-    if (textarea) {
-      textarea.value = '';
-    }
-    if (draftKey) {
-      saveDraft(draftKey, '');
-    }
-
     const submitBtn =
       (nativeForm?.querySelector(
         'button[type="submit"], button.btn-primary, button.js-addition-comment-submit, button.js-comment-submit-button, input[type="submit"]'
       ) as HTMLElement | null) ||
       ((e.target as HTMLElement | null)?.closest('button') as HTMLElement | null);
+    const cancelBtn = nativeForm?.querySelector(
+      '.js-cancel-comment, button.js-cancel-comment-button, button[class*="cancel"]'
+    ) as HTMLElement | null;
     try {
       submitBtn?.setAttribute('disabled', 'true');
       submitBtn?.classList.add('loading');
-      if (textarea) textarea.disabled = true;
+      if (cancelBtn) cancelBtn.style.display = 'none';
+      if (textarea) textarea.readOnly = true;
 
       await onSubmit(body);
+      if (textarea) {
+        textarea.value = '';
+      }
+      if (draftKey) {
+        saveDraft(draftKey, '');
+      }
       nativeForm?.remove();
       cleanupListeners();
     } catch (err) {
       alert('Failed to save comment: ' + err);
-      if (textarea) {
-        textarea.value = body;
-        textarea.disabled = false;
-      }
       if (draftKey) {
         saveDraft(draftKey, body);
       }
     } finally {
       submitBtn?.removeAttribute('disabled');
       submitBtn?.classList.remove('loading');
-      if (textarea) textarea.disabled = false;
+      if (cancelBtn) cancelBtn.style.display = '';
+      if (textarea) textarea.readOnly = false;
     }
   };
 
@@ -1334,25 +1334,25 @@ function showFallbackReplyComposer(
     const body = textarea.value.trim();
     if (!body) return;
 
-    textarea.value = '';
-    if (draftKey) {
-      saveDraft(draftKey, '');
-    }
-
     submitBtn.disabled = true;
     submitBtn.classList.add('loading');
-    textarea.disabled = true;
+    cancelBtn.style.display = 'none';
+    textarea.readOnly = true;
     try {
       await onSubmit(body);
+      textarea.value = '';
+      if (draftKey) {
+        saveDraft(draftKey, '');
+      }
     } catch (e) {
       alert('Failed to save reply: ' + e);
-      textarea.value = body;
       if (draftKey) {
         saveDraft(draftKey, body);
       }
       submitBtn.disabled = false;
       submitBtn.classList.remove('loading');
-      textarea.disabled = false;
+      cancelBtn.style.display = '';
+      textarea.readOnly = false;
     }
   };
 
@@ -1565,8 +1565,14 @@ function injectSidebar() {
     <div class="unauthorized-container" style="display: none; flex-direction: column; flex: 1; padding: 16px;"></div>
 
     <div class="tab-header">
-      <button class="tab-btn active" data-tab="inline">Inline</button>
-      <button class="tab-btn" data-tab="page">Document</button>
+      <button class="tab-btn active" data-tab="inline">
+        <span>Inline</span>
+        <span class="md-comments-tab-count inline-tab-count">0</span>
+      </button>
+      <button class="tab-btn" data-tab="page">
+        <span>Document</span>
+        <span class="md-comments-tab-count page-tab-count">0</span>
+      </button>
     </div>
 
     <div class="tab-content" id="tab-inline" style="display: flex; flex-direction: column; flex: 1; min-height: 0;">
@@ -1620,23 +1626,21 @@ function injectSidebar() {
     const body = textarea?.value.trim();
     if (!body) return;
 
-    textarea.value = '';
     const pageDraftKey = getDraftKey('page');
-    saveDraft(pageDraftKey, '');
-
-    textarea.disabled = true;
+    if (textarea) textarea.readOnly = true;
     if (btn) {
       btn.disabled = true;
       btn.classList.add('loading');
     }
     try {
       await saveNewPageComment(body);
+      if (textarea) textarea.value = '';
+      saveDraft(pageDraftKey, '');
     } catch (e) {
       alert('Failed to save comment: ' + e);
-      if (textarea) textarea.value = body;
       saveDraft(pageDraftKey, body);
     } finally {
-      if (textarea) textarea.disabled = false;
+      if (textarea) textarea.readOnly = false;
       if (btn) {
         btn.disabled = false;
         btn.classList.remove('loading');
@@ -2079,6 +2083,12 @@ function renderSidebarComments() {
         if (tabInline) tabInline.style.display = activeTab === 'inline' ? 'flex' : 'none';
         if (tabPage) tabPage.style.display = activeTab === 'page' ? 'flex' : 'none';
 
+        const inlineCountEl = activeSidebarHost!.querySelector('.inline-tab-count');
+        const pageCountEl = activeSidebarHost!.querySelector('.page-tab-count');
+        if (inlineCountEl)
+          inlineCountEl.textContent = String(loadedComments.inline_comments.length);
+        if (pageCountEl) pageCountEl.textContent = String(loadedComments.page_comments.length);
+
         const pageComposer = activeSidebarHost!.querySelector(
           '.page-composer'
         ) as HTMLElement | null;
@@ -2128,26 +2138,61 @@ function renderSidebarComments() {
   });
 }
 
+function isCommentAuthor(author: string): boolean {
+  if (!author) return true;
+  const userMeta = document.querySelector('meta[name="user-login"]')?.getAttribute('content');
+  const currentLogin = (userMeta || currentDisplayAuthor || '').trim().toLowerCase();
+  const authorNorm = author.trim().toLowerCase();
+
+  if (!currentLogin) return true;
+  if (authorNorm === currentLogin) return true;
+  if (authorNorm === 'anonymous' || authorNorm === 'github-user') return true;
+
+  const cachedName = (displayNameCache.get(currentLogin) || '').trim().toLowerCase();
+  if (cachedName && authorNorm === cachedName) return true;
+
+  for (const [loginKey, displayName] of displayNameCache.entries()) {
+    if (loginKey === currentLogin && displayName.toLowerCase() === authorNorm) return true;
+    if (loginKey === authorNorm && displayName.toLowerCase() === currentLogin) return true;
+  }
+
+  const meta = parseGitHubUrl(window.location.href);
+  if (meta && meta.owner.toLowerCase() === currentLogin) return true;
+
+  return false;
+}
+
+function renderAvatar(authorOrUrl: string, size = 32, alt = ''): string {
+  const val = (authorOrUrl || '').trim();
+  const isUrl =
+    val.startsWith('http://') || val.startsWith('https://') || val.startsWith('data:image/');
+  const src = isUrl
+    ? val
+    : isGitHubLogin(val)
+      ? `https://avatars.githubusercontent.com/${encodeURIComponent(val)}?s=${size}`
+      : `https://github.com/${encodeURIComponent(val || 'Anonymous')}.png?size=${size}`;
+  const initial =
+    (val || 'A').replace(/^https?:\/\/.*\/|^data:image\/.*|\.png.*$/i, '')[0]?.toUpperCase() || 'A';
+
+  return `<span class="md-comments-avatar-wrap" style="width: ${size}px; height: ${size}px; position: relative; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; border-radius: 4px; overflow: hidden; background: var(--sidebar-border);"><span class="md-comments-avatar-fallback" style="font-size: ${Math.max(10, Math.floor(size * 0.4))}px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; line-height: 1;">${escapeHtml(initial)}</span><img class="md-comments-avatar" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 4px; margin: 0; padding: 0; border: none;" src="${src}" alt="${escapeHtml(alt || val)}" onerror="this.style.display='none'" /></span>`;
+}
+
 function renderCommentCard(comment: InlineComment | PageComment, type: 'inline' | 'page'): string {
   const isInline = type === 'inline';
   const inlineComment = comment as InlineComment;
-  const isAuthor =
-    comment.author &&
-    currentDisplayAuthor &&
-    comment.author.trim().toLowerCase() === currentDisplayAuthor.trim().toLowerCase();
 
   let headerContextHtml = '';
   if (isInline) {
     headerContextHtml = `
-      <div class="comment-context" style="margin-bottom: 8px; font-size: 11px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-        <span class="context-heading" style="color: var(--accent-color); font-weight: 600;">${inlineComment.heading_context || 'Top level'}</span>
-        ${inlineComment.orphaned ? `<span class="context-badge orphan" style="background-color: rgba(210, 153, 34, 0.15); color: var(--warn-color); border: 1px solid rgba(210, 153, 34, 0.3); font-size: 9px; padding: 1px 4px; border-radius: 10px;">Orphaned</span>` : ''}
-        ${inlineComment.resolved ? `<span class="context-badge resolved" style="background-color: rgba(63, 185, 80, 0.15); color: var(--success-color); border: 1px solid rgba(63, 185, 80, 0.3); font-size: 9px; padding: 1px 4px; border-radius: 10px;">Resolved</span>` : ''}
+      <div class="md-comments-context-row">
+        <span class="md-comments-context-heading">${escapeHtml(inlineComment.heading_context || 'Top level')}</span>
+        ${inlineComment.orphaned ? `<span class="md-comments-badge orphan">Orphaned</span>` : ''}
+        ${inlineComment.resolved ? `<span class="md-comments-badge resolved">Resolved</span>` : ''}
       </div>
       ${
         inlineComment.anchor_text
           ? `
-        <div class="comment-anchor-quote" style="border-left: 2px solid var(--sidebar-border); padding-left: 8px; color: var(--text-secondary); font-size: 12px; font-style: italic; margin-bottom: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">"${escapeHtml(inlineComment.anchor_text)}"</div>
+        <div class="md-comments-anchor-quote" title="${escapeHtml(inlineComment.anchor_text)}">"${escapeHtml(inlineComment.anchor_text)}"</div>
       `
           : ''
       }
@@ -2155,29 +2200,25 @@ function renderCommentCard(comment: InlineComment | PageComment, type: 'inline' 
   } else {
     const pageComment = comment as PageComment;
     headerContextHtml = `
-      <div class="comment-context" style="margin-bottom: 8px;">
-        ${pageComment.resolved ? `<span class="context-badge resolved" style="background-color: rgba(63, 185, 80, 0.15); color: var(--success-color); border: 1px solid rgba(63, 185, 80, 0.3); font-size: 9px; padding: 1px 4px; border-radius: 10px;">Resolved</span>` : ''}
+      <div class="md-comments-context-row">
+        ${pageComment.resolved ? `<span class="md-comments-badge resolved">Resolved</span>` : ''}
       </div>
     `;
   }
 
   const repliesHtml = comment.replies
     .map((r) => {
-      const isReplyAuthor =
-        r.author &&
-        currentDisplayAuthor &&
-        r.author.trim().toLowerCase() === currentDisplayAuthor.trim().toLowerCase();
       return `
       <div class="reply-item" id="reply-${r.id}" data-reply-id="${r.id}">
-        <img class="avatar" src="https://github.com/${encodeURIComponent(r.author)}.png?size=32" alt="${escapeHtml(r.author)}">
+        ${renderAvatar(r.author, 24, r.author)}
         <div class="reply-content">
-          <div class="reply-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+          <div class="reply-header">
             <div>
               ${renderAuthor(r.author)}
-              <span class="time">${formatRelativeTime(r.created_at)}</span>
+              <span class="md-comments-time">${formatRelativeTime(r.created_at)}</span>
             </div>
             ${
-              isWritable && isReplyAuthor
+              isWritable
                 ? `
               <div class="reply-actions" style="display: flex; gap: 4px;">
                 <button class="icon-action-btn edit-reply-btn" title="Edit Reply">${ICON_EDIT}</button>
@@ -2187,7 +2228,7 @@ function renderCommentCard(comment: InlineComment | PageComment, type: 'inline' 
                 : ''
             }
           </div>
-          <div class="reply-body" style="font-size: 12px; color: var(--text-primary); word-break: break-word; line-height: 1.4; margin-top: 2px;">${escapeHtml(r.body)}</div>
+          <div class="reply-body">${escapeHtml(r.body)}</div>
         </div>
       </div>
     `;
@@ -2195,61 +2236,50 @@ function renderCommentCard(comment: InlineComment | PageComment, type: 'inline' 
     .join('');
 
   return `
-    <div class="comment-card" id="comment-${comment.id}" data-id="${comment.id}" style="border: 1px solid var(--sidebar-border); border-radius: 6px; background-color: var(--card-bg); padding: 12px; display: flex; flex-direction: column; gap: 6px; box-sizing: border-box; margin-bottom: 12px;">
+    <div class="md-comments-card" id="comment-${comment.id}" data-id="${comment.id}" data-type="${type}">
       ${headerContextHtml}
-      <div class="comment-header" style="display: flex; gap: 8px; align-items: flex-start; justify-content: space-between;">
-        <div style="display: flex; gap: 8px; align-items: center;">
-          <img class="avatar" src="https://github.com/${encodeURIComponent(comment.author)}.png?size=40" alt="${escapeHtml(comment.author)}" style="width: 28px; height: 28px; border-radius: 4px;">
-          <div class="comment-meta" style="display: flex; flex-direction: column;">
+      <div class="md-comments-card-header">
+        <div class="md-comments-author-section">
+          ${renderAvatar(comment.author, 32, comment.author)}
+          <div class="md-comments-author-meta">
             ${renderAuthor(comment.author)}
-            <span class="time" style="font-size: 11px; color: var(--text-secondary);">${formatRelativeTime(comment.created_at)}</span>
+            <span class="md-comments-time">${formatRelativeTime(comment.created_at)}</span>
           </div>
         </div>
         ${
           isWritable
             ? `
-            <div class="emoji-picker-container" style="position: relative; display: inline-block;">
+          <div class="md-comments-card-actions">
+            <div class="emoji-picker-container">
               <button class="icon-action-btn emoji-picker-btn" title="Add Reaction">${ICON_REACT}</button>
-              <div class="emoji-popover" style="display: none; position: absolute; right: 0; top: 100%; background: var(--composer-bg); border: 1px solid var(--sidebar-border); border-radius: 6px; padding: 4px; z-index: 100; gap: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+              <div class="emoji-popover" style="display: none;">
                 ${['👍', '👀', '❤️', '🎉', '❓']
                   .map(
                     (e) =>
-                      `<button class="emoji-opt-btn" data-id="${comment.id}" data-type="${type}" data-emoji="${e}" style="background: transparent; border: none; cursor: pointer; font-size: 14px; padding: 4px;">${e}</button>`
+                      `<button class="emoji-opt-btn" data-id="${comment.id}" data-type="${type}" data-emoji="${e}">${e}</button>`
                   )
                   .join('')}
               </div>
             </div>
-            ${
-              isAuthor
-                ? `
-              <button class="icon-action-btn edit-comment-btn" title="Edit Comment">${ICON_EDIT}</button>
-              <button class="icon-action-btn delete-comment-btn" title="Delete Comment">${ICON_DELETE}</button>
-            `
-                : ''
-            }
-            ${
-              !comment.resolved
-                ? `
-              <button class="icon-action-btn resolve-btn" title="Resolve Thread">${ICON_RESOLVE}</button>
-            `
-                : `
-              <button class="icon-action-btn unresolve-btn" title="Reopen Thread">${ICON_REOPEN}</button>
-            `
-            }
+            <button class="icon-action-btn edit-comment-btn" data-id="${comment.id}" title="Edit Comment">${ICON_EDIT}</button>
+            <button class="icon-action-btn delete-comment-btn" data-id="${comment.id}" data-type="${type}" title="Delete Comment">${ICON_DELETE}</button>
+            <button class="icon-action-btn resolve-btn" data-id="${comment.id}" data-type="${type}" data-resolved="${comment.resolved ? 'true' : 'false'}" title="${comment.resolved ? 'Reopen Thread' : 'Resolve Thread'}">
+              ${comment.resolved ? ICON_REOPEN : ICON_RESOLVE}
+            </button>
           </div>
         `
             : ''
         }
       </div>
-      <div class="comment-body" style="font-size: 13px; color: var(--text-primary); white-space: pre-wrap; line-height: 1.4; margin-top: 4px;">${escapeHtml(comment.body)}</div>
+      <div class="md-comments-card-body">${escapeHtml(comment.body)}</div>
       
       ${
         comment.reactions && comment.reactions.length > 0
-          ? `<div class="reactions-row" style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px;">
+          ? `<div class="reactions-row">
               ${comment.reactions
                 .map(
                   (r) =>
-                    `<button class="reaction-chip" data-id="${comment.id}" data-type="${type}" data-emoji="${escapeHtml(r.emoji)}" style="background: var(--composer-bg); border: 1px solid var(--sidebar-border); border-radius: 12px; padding: 2px 8px; font-size: 12px; cursor: pointer; color: var(--text-primary); display: inline-flex; align-items: center; gap: 4px;">${escapeHtml(r.emoji)} <span>${r.users.length}</span></button>`
+                    `<button class="reaction-chip" data-id="${comment.id}" data-type="${type}" data-emoji="${escapeHtml(r.emoji)}">${escapeHtml(r.emoji)} <span>${r.users.length}</span></button>`
                 )
                 .join('')}
             </div>`
@@ -2386,7 +2416,7 @@ function scrollToCommentText(commentId: string) {
 }
 
 function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page') {
-  container.querySelectorAll('.comment-card').forEach((card) => {
+  container.querySelectorAll('.md-comments-card, .comment-card').forEach((card) => {
     const commentId = card.getAttribute('data-id') || '';
 
     const emojiPickerBtn = card.querySelector('.emoji-picker-btn');
@@ -2527,21 +2557,14 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
       }
     }
 
-    // Resolve button
-    card.querySelector('.resolve-btn')?.addEventListener('click', async () => {
+    // Resolve / Reopen button
+    const resolveBtn = card.querySelector('.resolve-btn') as HTMLButtonElement | null;
+    resolveBtn?.addEventListener('click', async () => {
       try {
-        await toggleResolve(commentId, type, true);
+        const isResolved = resolveBtn.getAttribute('data-resolved') === 'true';
+        await toggleResolve(commentId, type, !isResolved);
       } catch (e) {
-        alert('Failed to resolve: ' + e);
-      }
-    });
-
-    // Unresolve button
-    card.querySelector('.unresolve-btn')?.addEventListener('click', async () => {
-      try {
-        await toggleResolve(commentId, type, false);
-      } catch (e) {
-        alert('Failed to reopen thread: ' + e);
+        alert('Failed to update thread status: ' + e);
       }
     });
 
@@ -2552,7 +2575,7 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
       const hasEditDraft = editDraftKey && draftsStore[editDraftKey];
 
       const handleEditClick = (initialValue?: string) => {
-        const bodyEl = card.querySelector('.comment-body') as HTMLElement;
+        const bodyEl = card.querySelector('.md-comments-card-body, .comment-body') as HTMLElement;
         if (!bodyEl) return;
 
         if (card.querySelector('.comment-edit-textarea')) return;
@@ -2599,16 +2622,23 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
           const newBody = textarea.value.trim();
           if (!newBody) return;
 
-          textarea.value = '';
-          if (editDraftKey) {
-            saveDraft(editDraftKey, '');
-          }
-          bodyEl.innerHTML = escapeHtml(newBody);
+          saveBtn.disabled = true;
+          saveBtn.classList.add('loading');
+          cancelBtn.style.display = 'none';
+          textarea.readOnly = true;
 
           try {
             await editComment(commentId, type, newBody);
+            if (editDraftKey) {
+              saveDraft(editDraftKey, '');
+            }
+            bodyEl.innerHTML = escapeHtml(newBody);
           } catch (err) {
             alert('Failed to edit comment: ' + err);
+            saveBtn.disabled = false;
+            saveBtn.classList.remove('loading');
+            cancelBtn.style.display = '';
+            textarea.readOnly = false;
           }
         });
       };
@@ -2696,16 +2726,23 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
             const newBody = textarea.value.trim();
             if (!newBody) return;
 
-            textarea.value = '';
-            if (editReplyDraftKey) {
-              saveDraft(editReplyDraftKey, '');
-            }
-            bodyEl.innerHTML = escapeHtml(newBody);
+            saveBtn.disabled = true;
+            saveBtn.classList.add('loading');
+            cancelBtn.style.display = 'none';
+            textarea.readOnly = true;
 
             try {
               await editReply(commentId, replyId, type, newBody);
+              if (editReplyDraftKey) {
+                saveDraft(editReplyDraftKey, '');
+              }
+              bodyEl.innerHTML = escapeHtml(newBody);
             } catch (err) {
               alert('Failed to edit reply: ' + err);
+              saveBtn.disabled = false;
+              saveBtn.classList.remove('loading');
+              cancelBtn.style.display = '';
+              textarea.readOnly = false;
             }
           });
         };
@@ -3944,9 +3981,9 @@ function renderAuthor(author: string): string {
   const displayName = resolveDisplayName(login);
   if (isGitHubLogin(login)) {
     const title = displayName !== login ? ` title="@${escapeHtml(login)}"` : '';
-    return `<a href="https://github.com/${encodeURIComponent(login)}" class="username" target="_blank" rel="noopener noreferrer"${title}>${escapeHtml(displayName)}</a>`;
+    return `<a href="https://github.com/${encodeURIComponent(login)}" class="md-comments-username" target="_blank" rel="noopener noreferrer"${title}>${escapeHtml(displayName)}</a>`;
   }
-  return `<span class="username">${escapeHtml(displayName)}</span>`;
+  return `<span class="md-comments-username">${escapeHtml(displayName)}</span>`;
 }
 
 function collectCommentAuthors(comments: CommentsFile): string[] {

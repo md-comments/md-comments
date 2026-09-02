@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Markdown Comments",
-  "version": "1.1.5",
+  "version": "1.2.2",
   "description": "Visual inline comments for documentation on GitHub pull requests powered by custom git refs (refs/md-comments/data).",
   "permissions": ["storage"],
   "host_permissions": [
@@ -31,6 +31,7 @@
     {
       "matches": ["https://github.com/*"],
       "js": ["content.js"],
+      "css": ["sidebar.css"],
       "run_at": "document_end"
     }
   ],

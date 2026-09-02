@@ -18,8 +18,9 @@ Thumbs.db
 vscode-extension/icon.png
 chrome-extension/icons/
 
-# Test coverage reports
+# Test coverage reports & test artifacts
 coverage/
+tests/*.png
 
 # Local environment variables
 .env
@@ -27,6 +28,8 @@ coverage/
 # Temporary profiles & artifacts
 temp-chrome-profile/
 temp-chrome-profile-clean/
+.chrome-test-profile/
+.temp/
 scratch/
 artifacts/
 docs/.vscode/
