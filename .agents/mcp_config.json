@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "codegraph": {
+      "command": "/opt/homebrew/bin/codegraph",
+      "args": ["serve", "--mcp", "--path", "/Users/maratstrelets/git/md-comments/md-comments"],
+      "env": {
+        "CODEGRAPH_MCP_TOOLS": "explore,node,search,callers,callees,impact,files,status"
+      }
+    }
+  }
+}

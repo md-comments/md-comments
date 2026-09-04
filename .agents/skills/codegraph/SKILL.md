@@ -24,17 +24,18 @@ Reach for CodeGraph **before** running grep, glob, or reading multiple source fi
 
 ## MCP Tools & CLI Commands
 
-| Intent                           | MCP Tool (Primary)               | CLI Command (Shell)                 |
-| -------------------------------- | -------------------------------- | ----------------------------------- |
-| **Explore Area / Architecture**  | `codegraph_explore(query="...")` | `codegraph explore "<query>"`       |
-| **Inspect Symbol / File Source** | `codegraph_node(name="...")`     | `codegraph node "<symbol or path>"` |
-| **Search Symbols**               | `codegraph_query(query="...")`   | `codegraph query "<term>"`          |
-| **Find Callers**                 | `codegraph_explore` / MCP        | `codegraph callers "<symbol>"`      |
-| **Find Callees**                 | `codegraph_explore` / MCP        | `codegraph callees "<symbol>"`      |
-| **Analyze Blast Radius**         | `codegraph_explore` / MCP        | `codegraph impact "<symbol>"`       |
-| **Find Affected Tests**          | MCP / CLI                        | `codegraph affected [files...]`     |
-| **Check Index Status**           | —                                | `codegraph status`                  |
-| **Force Graph Sync**             | —                                | `codegraph sync .`                  |
+| Intent                           | MCP Tool (Primary)                              | CLI Command (Shell)                 |
+| -------------------------------- | ----------------------------------------------- | ----------------------------------- |
+| **Explore Area / Architecture**  | `codegraph_explore(query="...")`                | `codegraph explore "<query>"`       |
+| **Inspect Symbol / File Source** | `codegraph_node(symbol="...")` / `(file="...")` | `codegraph node "<symbol or path>"` |
+| **Search Symbols**               | `codegraph_search(query="...")`                 | `codegraph query "<term>"`          |
+| **Find Callers**                 | `codegraph_callers(symbol="...")`               | `codegraph callers "<symbol>"`      |
+| **Find Callees**                 | `codegraph_callees(symbol="...")`               | `codegraph callees "<symbol>"`      |
+| **Analyze Blast Radius**         | `codegraph_impact(symbol="...")`                | `codegraph impact "<symbol>"`       |
+| **Inspect Files / Tree**         | `codegraph_files(...)`                          | `codegraph files`                   |
+| **Check Index Status**           | `codegraph_status`                              | `codegraph status`                  |
+| **Find Affected Tests**          | CLI                                             | `codegraph affected [files...]`     |
+| **Force Graph Sync**             | —                                               | `codegraph sync .`                  |
 
 ---
 
