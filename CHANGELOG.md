@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.3] - 2026-09-03
+
+### Fixed
+
+- **GitHub Extension Commit Hashing & Path Encoding**: Resolve real commit SHA on GitHub blob pages via DOM metadata and GraphQL API to prevent saving under fallback `0000000` hash. Properly decode URL components in `parseGitHubUrl` and handle URI encoding for paths with spaces in GitHub REST API.
+- **Orphan Ref 0000000 Migration**: Automatically migrate any legacy `0000000` comment files into commit-hashed comment files upon read.
+- **DOM Table & Occurrence Scoping**: Scope table row paragraphs and support targeted occurrence highlighting in the Chrome extension.
+
 ## [1.2.2] - 2026-09-02
 
 ### Added
