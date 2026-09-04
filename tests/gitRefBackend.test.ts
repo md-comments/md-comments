@@ -294,5 +294,72 @@ describe('GitHubOrphanRefBackend', () => {
       expect(result.page_comments.map((c) => c.id)).toContain('p-commit');
       expect(result.page_comments.map((c) => c.id)).toContain('p-legacy');
     });
+
+    it('migrates 0000000 fallback comments into commit-hashed comments file', async () => {
+      const zeroComments: CommentsFile = {
+        inline_comments: [],
+        page_comments: [
+          {
+            id: 'p-zero',
+            author: 'alice',
+            body: 'Comment created without commit hash',
+            created_at: '2026-08-25T10:00:00Z',
+            resolved: false,
+            reactions: [],
+            replies: [],
+          },
+        ],
+      };
+
+      const base64Zero = Buffer.from(yaml.dump(zeroComments)).toString('base64');
+
+      // 1. Fetch target commit-hashed file -> 404 (not found yet)
+      fetchMock.mockResolvedValueOnce({ ok: false, status: 404 });
+      // 2. Fetch 0000000 file -> 200 (found)
+      fetchMock.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ content: base64Zero, encoding: 'base64' }),
+      });
+
+      // Mocks for write call during migration:
+      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ object: { sha: 'c1' } }) });
+      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ sha: 't1' }) });
+      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ sha: 'c2' }) });
+      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ object: { sha: 'c2' } }) });
+
+      // Mocks for deleteFileFromRef call during cleanup of 0000000:
+      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ object: { sha: 'c2' } }) });
+      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ tree: { sha: 't2' } }) });
+      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ sha: 't3' }) });
+      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ sha: 'c3' }) });
+      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ object: { sha: 'c3' } }) });
+
+      // 3. Fetch legacy file -> 404 (not present)
+      fetchMock.mockResolvedValueOnce({ ok: false, status: 404 });
+
+      const result = await backend.read({
+        owner: 'test-owner',
+        repo: 'test-repo',
+        filePath: 'docs/test.md',
+        commitHash: 'a1b2c3d4e5f',
+      });
+
+      expect(result.page_comments.length).toBe(1);
+      expect(result.page_comments[0].id).toBe('p-zero');
+    });
+
+    it('properly encodes paths with spaces when fetching comments', async () => {
+      fetchMock.mockResolvedValueOnce({ ok: false, status: 404 });
+
+      await backend.read({
+        owner: 'test-owner',
+        repo: 'test-repo',
+        filePath: 'docs/ADR T9 Context Engine.md',
+        commitHash: '0000000',
+      });
+
+      const firstCallUrl = fetchMock.mock.calls[0][0];
+      expect(firstCallUrl).toContain('docs/ADR%20T9%20Context%20Engine.0000000.comments.yml');
+    });
   });
 });

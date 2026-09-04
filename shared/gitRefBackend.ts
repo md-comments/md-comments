@@ -109,9 +109,26 @@ export class GitHubOrphanRefBackend implements CommentBackend {
     repo: string,
     path: string
   ): Promise<CommentsFile | null> {
-    const contentUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${ORPHAN_REF_NAME}`;
+    const encodedPath = path
+      .split('/')
+      .map((segment) => encodeURIComponent(segment))
+      .join('/');
+    const contentUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${encodedPath}?ref=${ORPHAN_REF_NAME}`;
     try {
-      const res = await this.fetchApi(contentUrl);
+      let res = await this.fetchApi(contentUrl);
+      if (!res.ok && path.includes(' ')) {
+        // Fallback: check if the file was previously committed with literal '%20' in the tree
+        const doubleEncoded = path
+          .split('/')
+          .map((seg) => encodeURIComponent(seg.replace(/ /g, '%20')))
+          .join('/');
+        const fallbackRes = await this.fetchApi(
+          `https://api.github.com/repos/${owner}/${repo}/contents/${doubleEncoded}?ref=${ORPHAN_REF_NAME}`
+        );
+        if (fallbackRes.ok) {
+          res = fallbackRes;
+        }
+      }
       if (res.ok) {
         const data = (await res.json()) as { content?: string; encoding?: string };
         if (data.content) {
@@ -139,6 +156,7 @@ export class GitHubOrphanRefBackend implements CommentBackend {
       .replace(/\.(?:[a-f0-9]{7,40}\.)?comments\.(?:yml|yaml)$/i, '')
       .replace(/\.md$/i, '');
     const legacyPath = `${cleanPath}.comments.yml`;
+    const zeroPath = `${cleanPath}.0000000.comments.yml`;
 
     let accumulated: CommentsFile = { page_comments: [], inline_comments: [] };
 
@@ -148,7 +166,17 @@ export class GitHubOrphanRefBackend implements CommentBackend {
       accumulated = mergeCommentsFiles(accumulated, targetComments);
     }
 
-    // 2. Fetch legacy un-hashed comments file if present; migrate & DELETE immediately!
+    // 2. Fetch 0000000 fallback comments file if target was a specific commit hash; migrate & DELETE!
+    if (targetPath !== zeroPath) {
+      const zeroComments = await this.fetchPathContent(key.owner, key.repo, zeroPath);
+      if (zeroComments) {
+        accumulated = mergeCommentsFiles(accumulated, zeroComments);
+        await this.write(key, accumulated);
+        await this.deleteFileFromRef(key.owner, key.repo, zeroPath);
+      }
+    }
+
+    // 3. Fetch legacy un-hashed comments file if present; migrate & DELETE immediately!
     const legacyComments = await this.fetchPathContent(key.owner, key.repo, legacyPath);
     if (legacyComments) {
       accumulated = mergeCommentsFiles(accumulated, legacyComments);

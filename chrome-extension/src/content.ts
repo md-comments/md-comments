@@ -99,8 +99,8 @@ function parseGitHubUrl(urlStr: string): ParsedUrl | null {
     if (url.hostname !== 'github.com') return null;
     const parts = url.pathname.split('/').filter(Boolean);
     if (parts.length < 3) return null;
-    const owner = parts[0];
-    const repo = parts[1];
+    const owner = decodeURIComponent(parts[0]);
+    const repo = decodeURIComponent(parts[1]);
 
     if (parts[2] === 'pull') {
       if (parts.length < 4) return null;
@@ -111,8 +111,8 @@ function parseGitHubUrl(urlStr: string): ParsedUrl | null {
 
     if (parts[2] === 'blob' || parts[2] === 'raw') {
       if (parts.length < 5) return null;
-      const branch = parts[3];
-      const filePath = parts.slice(4).join('/');
+      const branch = decodeURIComponent(parts[3]);
+      const filePath = decodeURIComponent(parts.slice(4).join('/'));
       if (!filePath.endsWith('.md') && !filePath.endsWith('.markdown')) return null;
       return { type: 'blob', owner, repo, branch, filePath };
     }
@@ -194,6 +194,85 @@ function getPRHeadBranchFromDom(): string | null {
     }
   }
   return null;
+}
+
+function getCommitHashFromDom(): string | null {
+  // 1. Check octolytics meta tags for blob or commit sha
+  const blobSha =
+    document
+      .querySelector('meta[name="octolytics-dimension-blob_commit_sha"]')
+      ?.getAttribute('content') ||
+    document.querySelector('meta[name="octolytics-dimension-commit_sha"]')?.getAttribute('content');
+  if (blobSha && /^[0-9a-f]{7,40}$/i.test(blobSha.trim())) {
+    return blobSha.trim();
+  }
+
+  // 2. Check permalink anchor (hotkey 'y')
+  const permalink = document.querySelector('a[data-hotkey="y"]')?.getAttribute('href');
+  if (permalink) {
+    const match = permalink.match(/\/blob\/([0-9a-f]{7,40})\//i);
+    if (match) return match[1];
+  }
+
+  // 3. Check React embedded JSON payload
+  try {
+    const reactDataEl = document.querySelector('script[data-target="react-app.embeddedData"]');
+    if (reactDataEl && reactDataEl.textContent) {
+      const parsed = JSON.parse(reactDataEl.textContent);
+      const oid =
+        parsed?.payload?.blob?.commitOid ||
+        parsed?.payload?.currentOid ||
+        parsed?.payload?.blob?.rawBlob?.oid;
+      if (oid && /^[0-9a-f]{7,40}$/i.test(oid)) {
+        return oid;
+      }
+    }
+  } catch {
+    /* ignore */
+  }
+
+  return null;
+}
+
+async function resolveBlobCommitHash(
+  owner: string,
+  repo: string,
+  branch: string
+): Promise<string | undefined> {
+  // 1. If branch is already a commit SHA (40-char or 7+ char hex)
+  if (/^[0-9a-f]{7,40}$/i.test(branch)) {
+    return branch;
+  }
+
+  // 2. Check DOM fast-path (no network round-trip)
+  const domSha = getCommitHashFromDom();
+  if (domSha) {
+    return domSha;
+  }
+
+  // 3. Check cached repoInfo
+  if (repoInfo?.headOid) {
+    return repoInfo.headOid;
+  }
+
+  // 4. Query GitHub GraphQL API
+  if (currentToken) {
+    if (!githubApi) {
+      githubApi = new GitHubApi(currentToken);
+    }
+    try {
+      const info = await githubApi.getRepoInfo(owner, repo, branch);
+      if (info) {
+        repoInfo = info;
+        if (info.headOid) return info.headOid;
+        if (info.defaultBranchHeadOid) return info.defaultBranchHeadOid;
+      }
+    } catch (err) {
+      console.warn('[md-comments] Failed to fetch commit hash via getRepoInfo:', err);
+    }
+  }
+
+  return undefined;
 }
 
 async function getAuthToken(): Promise<string | null> {
@@ -496,16 +575,14 @@ async function handlePageLoad() {
 }
 
 async function loadDocumentComments(meta: ParsedUrl & { type: 'blob' }) {
+  const commitHash = await resolveBlobCommitHash(meta.owner, meta.repo, meta.branch);
+
   currentMetadata = {
     owner: meta.owner,
     repo: meta.repo,
     branch: meta.branch,
     filePath: meta.filePath,
   };
-
-  const commitHash = /^[0-9a-f]{7,40}$/i.test(meta.branch)
-    ? meta.branch
-    : repoInfo?.headOid || undefined;
 
   const key = {
     owner: meta.owner,
@@ -536,23 +613,15 @@ async function loadDocumentComments(meta: ParsedUrl & { type: 'blob' }) {
     appInstallationStatus = { checked: false, installed: true, repoAccess: true };
   }
 
-  if (
-    currentToken &&
-    appInstallationStatus.checked &&
-    (!appInstallationStatus.installed || !appInstallationStatus.repoAccess)
-  ) {
-    loadedComments = { page_comments: [], inline_comments: [] };
-  } else {
-    try {
-      const fetched = await gitRefBackend.read(key);
-      loadedComments = mergeLocalComments(loadedComments, fetched);
-    } catch (err) {
-      console.warn('[md-comments] Error reading comments from GitHubOrphanRefBackend:', err);
-      loadedComments = mergeLocalComments(loadedComments, {
-        page_comments: [],
-        inline_comments: [],
-      });
-    }
+  try {
+    const fetched = await gitRefBackend.read(key);
+    loadedComments = mergeLocalComments(loadedComments, fetched);
+  } catch (err) {
+    console.warn('[md-comments] Error reading comments from GitHubOrphanRefBackend:', err);
+    loadedComments = mergeLocalComments(loadedComments, {
+      page_comments: [],
+      inline_comments: [],
+    });
   }
 
   try {
@@ -3682,10 +3751,7 @@ async function commitCommentFileChanges(updatedComments: CommentsFile, _action: 
     return;
   }
 
-  const commitHash =
-    meta && 'branch' in meta && /^[0-9a-f]{7,40}$/i.test(meta.branch)
-      ? meta.branch
-      : repoInfo?.headOid || undefined;
+  const commitHash = (await resolveBlobCommitHash(meta.owner, meta.repo, meta.branch)) || undefined;
 
   const key = {
     owner: meta.owner,
