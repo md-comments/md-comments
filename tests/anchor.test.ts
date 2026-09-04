@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { fnv1aHash, parseMarkdownAnchors, normalizeAnchorText } from '../shared/anchor';
+import {
+  fnv1aHash,
+  parseMarkdownAnchors,
+  normalizeAnchorText,
+  findOccurrenceIndex,
+} from '../shared/anchor';
 import { escapeHtml } from '../shared/html';
 
 describe('normalizeAnchorText', () => {
@@ -78,5 +83,39 @@ Paragraph under sub header.
     expect(anchors[2].heading_context).toBe('Sub Header');
     expect(anchors[3].anchor_text).toBe('Paragraph under sub header.');
     expect(anchors[3].heading_context).toBe('Sub Header');
+  });
+
+  it('parses markdown table rows as separate anchor blocks and normalizes pipes', () => {
+    const md = `
+| Key | Value |
+| --- | --- |
+| title | T9 Context Engine |
+| summary | T9 ingests product data |
+    `;
+    const anchors = parseMarkdownAnchors(md);
+    expect(anchors).toHaveLength(3);
+    expect(anchors[0].anchor_text).toBe('Key Value');
+    expect(anchors[1].anchor_text).toBe('title T9 Context Engine');
+    expect(anchors[2].anchor_text).toBe('summary T9 ingests product data');
+  });
+});
+
+describe('findOccurrenceIndex', () => {
+  it('returns 0 when text only occurs once or text is empty', () => {
+    expect(findOccurrenceIndex('hello world', 'hello', 0)).toBe(0);
+    expect(findOccurrenceIndex('hello world', 'missing', 0)).toBe(0);
+    expect(findOccurrenceIndex('', 'test', 0)).toBe(0);
+  });
+
+  it('correctly identifies the closest occurrence index based on char offset', () => {
+    // "T9" occurs at index 0, index 46, and index 63
+    const fullText =
+      'T9 is a context engine. Some services consume T9 via MCP. More T9 details here.';
+    expect(findOccurrenceIndex(fullText, 'T9', 0)).toBe(0);
+    expect(findOccurrenceIndex(fullText, 'T9', 10)).toBe(0);
+    expect(findOccurrenceIndex(fullText, 'T9', 40)).toBe(1);
+    expect(findOccurrenceIndex(fullText, 'T9', 48)).toBe(1);
+    expect(findOccurrenceIndex(fullText, 'T9', 60)).toBe(2);
+    expect(findOccurrenceIndex(fullText, 'T9', 80)).toBe(2);
   });
 });

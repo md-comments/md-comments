@@ -31,6 +31,7 @@ export interface InlineComment {
   anchor_hash: string;
   paragraph_index: number;
   heading_context: string;
+  anchor_occurrence?: number;
   body: string;
   created_at: string;
   updated_at?: string;

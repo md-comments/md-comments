@@ -1,5 +1,10 @@
 import * as yaml from 'js-yaml';
-import { parseMarkdownAnchors, fnv1aHash, normalizeAnchorText } from '../../shared/anchor';
+import {
+  parseMarkdownAnchors,
+  fnv1aHash,
+  normalizeAnchorText,
+  findOccurrenceIndex,
+} from '../../shared/anchor';
 import { placeInlineComments, isOrphanedPlacement, fuzzyMatch } from '../../shared/placement';
 import type {
   CommentsFile,
@@ -1364,7 +1369,8 @@ function highlightTextInElement(
   el: HTMLElement,
   searchText: string,
   commentId: string,
-  isPending = false
+  isPending = false,
+  targetOccurrence?: number
 ) {
   if (!searchText) return;
   const normalizedSearch = searchText.replace(/\s+/g, ' ').trim().toLowerCase();
@@ -1407,14 +1413,21 @@ function highlightTextInElement(
     return;
   }
 
-  const matches: { start: number; end: number }[] = [];
+  const allMatches: { start: number; end: number }[] = [];
   let match;
   while ((match = regex.exec(fullRawText)) !== null) {
-    matches.push({ start: match.index, end: match.index + match[0].length });
+    allMatches.push({ start: match.index, end: match.index + match[0].length });
     if (match.index === regex.lastIndex) {
       regex.lastIndex++;
     }
   }
+
+  if (allMatches.length === 0) return;
+
+  const selectedMatch =
+    targetOccurrence !== undefined ? allMatches[targetOccurrence] || allMatches[0] : allMatches[0];
+
+  const matches = [selectedMatch];
 
   for (const nodeInfo of textNodesWithOffsets) {
     const { node: n, start: nodeStart, end: nodeEnd } = nodeInfo;
@@ -1467,6 +1480,7 @@ let activePendingHighlightParams: {
   paragraphIndex?: number;
   anchorHash?: string;
   anchorText?: string;
+  occurrenceIndex?: number;
 } | null = null;
 
 function clearPendingHighlights() {
@@ -1489,12 +1503,19 @@ function applyPendingHighlight(
   filePath: string,
   paragraphIndex: number,
   anchorHash: string,
-  anchorText: string
+  anchorText: string,
+  occurrenceIndex: number = 0
 ) {
   clearPendingHighlights();
   if (!anchorText || !anchorText.trim()) return;
 
-  activePendingHighlightParams = { filePath, paragraphIndex, anchorHash, anchorText };
+  activePendingHighlightParams = {
+    filePath,
+    paragraphIndex,
+    anchorHash,
+    anchorText,
+    occurrenceIndex,
+  };
 
   const markdownBodies = document.querySelectorAll('.markdown-body');
   markdownBodies.forEach((markdownBody) => {
@@ -1523,7 +1544,7 @@ function applyPendingHighlight(
     }
 
     if (targetEl) {
-      highlightTextInElement(targetEl, anchorText, 'pending-new-inline', true);
+      highlightTextInElement(targetEl, anchorText, 'pending-new-inline', true, occurrenceIndex);
     }
   });
 }
@@ -2781,6 +2802,7 @@ function openSidebarForNewInline(fields: {
   anchor_hash: string;
   anchor_text: string;
   heading_context: string;
+  anchor_occurrence?: number;
 }) {
   injectSidebar();
   openSidebar('inline');
@@ -2790,7 +2812,8 @@ function openSidebarForNewInline(fields: {
       currentMetadata.filePath,
       fields.paragraph_index,
       fields.anchor_hash,
-      fields.anchor_text
+      fields.anchor_text,
+      fields.anchor_occurrence ?? 0
     );
   }
 
@@ -2839,7 +2862,8 @@ function openSidebarForNewInline(fields: {
         fields.paragraph_index,
         fields.anchor_hash,
         fields.anchor_text,
-        fields.heading_context
+        fields.heading_context,
+        fields.anchor_occurrence
       );
       resetInlineComposerUI();
     },
@@ -2857,7 +2881,8 @@ function openSidebarForNewInline(fields: {
           fields.paragraph_index,
           fields.anchor_hash,
           fields.anchor_text,
-          fields.heading_context
+          fields.heading_context,
+          fields.anchor_occurrence
         );
         resetInlineComposerUI();
       },
@@ -3547,7 +3572,13 @@ function renderDOMIndicatorsForFile(
     for (const placement of matchedPlacements) {
       const comment = placement.comment;
       if (comment.anchor_text && comment.anchor_text !== text && !comment.resolved) {
-        highlightTextInElement(el, comment.anchor_text, comment.id);
+        highlightTextInElement(
+          el,
+          comment.anchor_text,
+          comment.id,
+          false,
+          comment.anchor_occurrence
+        );
       }
     }
 
@@ -3576,7 +3607,8 @@ function renderDOMIndicatorsForFile(
       filePath,
       activePendingHighlightParams.paragraphIndex ?? 0,
       activePendingHighlightParams.anchorHash ?? '',
-      activePendingHighlightParams.anchorText
+      activePendingHighlightParams.anchorText,
+      activePendingHighlightParams.occurrenceIndex ?? 0
     );
   }
 }
@@ -3602,28 +3634,37 @@ function findDomParagraphs(markdownBody: HTMLElement): HTMLElement[] {
         elements.push(tr as HTMLElement);
       }
     } else if (tagName === 'blockquote') {
-      const children = Array.from(htmlChild.querySelectorAll('p, li'));
+      const children = Array.from(htmlChild.querySelectorAll('p, li, tr'));
       if (children.length > 0) {
         children.forEach((c) => elements.push(c as HTMLElement));
       } else {
         elements.push(htmlChild);
       }
     } else if (tagName === 'details') {
-      const children = Array.from(htmlChild.querySelectorAll('p, li, summary'));
+      const children = Array.from(htmlChild.querySelectorAll('p, li, summary, tr'));
       if (children.length > 0) {
         children.forEach((c) => elements.push(c as HTMLElement));
       } else {
         elements.push(htmlChild);
       }
     } else {
-      elements.push(htmlChild);
+      const children = Array.from(htmlChild.querySelectorAll('p, li, tr, summary'));
+      if (children.length > 0) {
+        children.forEach((c) => elements.push(c as HTMLElement));
+      } else {
+        elements.push(htmlChild);
+      }
     }
   }
   return elements;
 }
 
 function findHeadingContext(el: HTMLElement): string {
-  let prev = el.previousElementSibling;
+  let curr: HTMLElement | null = el;
+  while (curr && curr.parentElement && !curr.parentElement.classList.contains('markdown-body')) {
+    curr = curr.parentElement;
+  }
+  let prev = (curr || el).previousElementSibling;
   while (prev) {
     if (/^h[1-6]$/i.test(prev.tagName)) {
       return prev.textContent?.trim() || '';
@@ -3698,7 +3739,8 @@ async function saveNewInlineComment(
   paragraphIndex: number,
   hash: string,
   anchorText: string,
-  heading: string
+  heading: string,
+  occurrence?: number
 ) {
   const author = await getDisplayAuthor();
   const newComment: InlineComment = {
@@ -3708,6 +3750,7 @@ async function saveNewInlineComment(
     anchor_hash: hash,
     paragraph_index: paragraphIndex,
     heading_context: heading,
+    anchor_occurrence: occurrence,
     body,
     created_at: new Date().toISOString(),
     orphaned: false,
@@ -4151,12 +4194,24 @@ function showSelectionButton(
     );
     const hash = block ? block.anchor_hash : matchHash;
 
+    let charOffset = 0;
+    try {
+      const preRange = document.createRange();
+      preRange.selectNodeContents(paragraphEl);
+      preRange.setEnd(range.startContainer, range.startOffset);
+      charOffset = preRange.toString().length;
+    } catch {
+      charOffset = 0;
+    }
+    const occurrenceIndex = findOccurrenceIndex(paragraphEl.innerText, anchorText, charOffset);
+
     setActiveFile(filePath, fileAnchors, fileComments);
     openSidebarForNewInline({
       paragraph_index: paragraphIndex,
       anchor_hash: hash,
       anchor_text: anchorText,
       heading_context: findHeadingContext(paragraphEl),
+      anchor_occurrence: occurrenceIndex,
     });
 
     hideSelectionButton();

@@ -24,9 +24,51 @@ export function normalizeAnchorText(text: string): string {
     .replace(/~~(.*?)~~/g, '$1')
     .replace(/`([^`]+)`/g, '$1')
     .replace(/<[^>]+>/g, '')
+    .replace(/\|/g, ' ')
     .replace(/^[\s\-*+>\d.]+/g, '');
 
   return cleaned.replace(/\s+/g, ' ').trim();
+}
+
+/**
+ * Finds which occurrence of `searchText` is closest to `charOffset` within `fullText`.
+ * Returns 0-based index of the occurrence.
+ */
+export function findOccurrenceIndex(
+  fullText: string,
+  searchText: string,
+  charOffset: number
+): number {
+  if (!fullText || !searchText) return 0;
+  const escaped = searchText.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
+  const pattern = escaped.replace(/\s+/g, '\\s+');
+  let regex: RegExp;
+  try {
+    // eslint-disable-next-line security/detect-non-literal-regexp
+    regex = new RegExp(pattern, 'gi');
+  } catch {
+    return 0;
+  }
+
+  const matchIndices: number[] = [];
+  let match: RegExpExecArray | null;
+  while ((match = regex.exec(fullText)) !== null) {
+    matchIndices.push(match.index);
+    if (match.index === regex.lastIndex) regex.lastIndex++;
+  }
+
+  if (matchIndices.length <= 1) return 0;
+
+  let closestIdx = 0;
+  let minDiff = Infinity;
+  for (let i = 0; i < matchIndices.length; i++) {
+    const diff = Math.abs(matchIndices[i] - charOffset);
+    if (diff < minDiff) {
+      minDiff = diff;
+      closestIdx = i;
+    }
+  }
+  return closestIdx;
 }
 
 /**
@@ -95,7 +137,8 @@ export function parseMarkdownAnchors(markdown: string): AnchorBlock[] {
     }
 
     if (/^\s*\|/.test(line)) {
-      if (/^\s*\|[\s:-|-]+\|\s*$/.test(line)) {
+      // eslint-disable-next-line security/detect-unsafe-regex
+      if (/^\s*\|(?:\s*:?-+:?\s*\|)+\s*$/.test(line)) {
         flush();
         continue;
       }
