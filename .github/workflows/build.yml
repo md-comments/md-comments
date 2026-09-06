@@ -53,11 +53,11 @@ jobs:
       - name: Static Typecheck
         run: pnpm typecheck
 
-      - name: Run Tests with Coverage
-        run: pnpm test:coverage
-
       - name: Verify Bundle Builds
         run: pnpm build
+
+      - name: Run Tests with Coverage
+        run: pnpm test:coverage
 
       - name: Run FOSSA Scan & Test
         env:

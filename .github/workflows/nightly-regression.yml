@@ -36,6 +36,9 @@ jobs:
       - name: Validate Knowledge Graph Integrity
         run: pnpm test tests/qualityGraph.test.ts
 
+      - name: Build Extension Artifacts
+        run: pnpm build:shared && pnpm build:chrome
+
       - name: Run Vitest Unit Tests with V8 Coverage
         run: pnpm test:coverage
 
