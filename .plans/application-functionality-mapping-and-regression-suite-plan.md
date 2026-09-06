@@ -916,9 +916,9 @@ jobs:
 
 ### Phase 3: Open-Source Allure Drill-Down Test Reporting Setup
 
-- [ ] Install `allure-playwright` and `allure-vitest`.
-- [ ] Configure Playwright and Vitest to emit Allure test results with Epic, Feature, Story, and Step metadata.
-- [ ] Add `pnpm test:report` script to generate and open the interactive Allure HTML dashboard.
+- [x] Install `allure-playwright` and `allure-vitest`.
+- [x] Configure Playwright and Vitest to emit Allure test results with Epic, Feature, Story, and Step metadata.
+- [x] Add `pnpm test:report` script to generate and open the interactive Allure HTML dashboard.
 
 ### Phase 4: Headless Playwright Regression Test Suites
 

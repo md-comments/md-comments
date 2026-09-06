@@ -21,6 +21,8 @@ chrome-extension/icons/
 
 # Test coverage reports & test artifacts
 coverage/
+allure-results/
+allure-report/
 tests/*.png
 
 # Local environment variables

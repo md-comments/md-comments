@@ -1,6 +1,4 @@
 import { describe, it, expect } from 'vitest';
-import fs from 'fs';
-import path from 'path';
 import { createCoverageHelper } from './e2e/fixtures/coverageHelper.js';
 import mcrConfig from '../mcr.config.js';
 import MCR from 'monocart-coverage-reports';
