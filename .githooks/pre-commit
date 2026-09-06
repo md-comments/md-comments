@@ -1,0 +1,21 @@
+#!/bin/sh
+set -e
+
+echo "==> Running proactive pre-commit gates..."
+
+echo "1/5 Verifying extension packaging compatibility..."
+node scripts/verify-packaging-compat.js
+
+echo "2/5 Checking code formatting..."
+pnpm format:check
+
+echo "3/5 Running zero-warning lint..."
+pnpm lint
+
+echo "4/5 Checking static types..."
+pnpm typecheck
+
+echo "5/5 Running unit test suite..."
+pnpm test
+
+echo "==> All pre-commit gates passed cleanly!"

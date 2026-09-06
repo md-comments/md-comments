@@ -24,7 +24,9 @@
     "preview:pages": "pnpm build:demo-astro && pnpm build:pages && npx serve _site",
     "build": "pnpm copy-icons && pnpm build:shared && pnpm --filter md-preview-comments run compile && pnpm --filter obsidian-md-comments run build && pnpm --filter chrome-md-comments run build && pnpm --filter @md-comments/starlight run build && pnpm --filter md-comments-demo-astro run build",
     "package:vscode": "pnpm copy-icons && pnpm --filter md-preview-comments run package",
-    "lint": "eslint .",
+    "verify:packaging": "node scripts/verify-packaging-compat.js",
+    "prepare": "git config core.hooksPath .githooks || true",
+    "lint": "eslint . --max-warnings=0",
     "format:check": "prettier --check \"**/*.{ts,js,json,css,md}\"",
     "format": "prettier --write \"**/*.{ts,js,json,css,md}\"",
     "typecheck": "pnpm quality:build && pnpm build:shared && pnpm build:starlight && pnpm --recursive run typecheck && tsc --noEmit -p tsconfig.tests.json",
@@ -45,7 +47,7 @@
     "codegraph:status": "codegraph status",
     "codegraph:sync": "codegraph sync",
     "deps:outdated": "pnpm outdated",
-    "check": "pnpm audit --prod --audit-level high && pnpm lint && pnpm format:check && pnpm typecheck && pnpm build && pnpm test:coverage"
+    "check": "pnpm audit --prod --audit-level high && pnpm verify:packaging && pnpm lint && pnpm format:check && pnpm typecheck && pnpm build && pnpm test:coverage"
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",
