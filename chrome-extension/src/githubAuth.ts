@@ -5,30 +5,161 @@
  * 2. OAuth Device Flow for zero-config one-time authorization
  */
 
-const CLIENT_ID = 'Iv23li9t461keXDcVS0T'; // Markdown Comments registered GitHub App Client ID
+export const CLIENT_ID = 'Iv23li9t461keXDcVS0T'; // Markdown Comments registered GitHub App Client ID
+
+export interface StoredTokens {
+  oauthToken: string | null;
+  refreshToken: string | null;
+  tokenExpiresAt: number | null;
+  refreshTokenExpiresAt: number | null;
+  fallbackToken: string | null;
+}
+
+export interface SaveTokenPayload {
+  accessToken: string;
+  refreshToken?: string;
+  expiresIn?: number;
+  refreshTokenExpiresIn?: number;
+}
+
+export async function getStoredTokens(): Promise<StoredTokens> {
+  return new Promise((resolve) => {
+    chrome.storage.local.get(
+      {
+        fallbackToken: '',
+        oauthToken: '',
+        refreshToken: '',
+        tokenExpiresAt: 0,
+        refreshTokenExpiresAt: 0,
+      },
+      (items) => {
+        resolve({
+          oauthToken: items.oauthToken || null,
+          refreshToken: items.refreshToken || null,
+          tokenExpiresAt: items.tokenExpiresAt || null,
+          refreshTokenExpiresAt: items.refreshTokenExpiresAt || null,
+          fallbackToken: items.fallbackToken || null,
+        });
+      }
+    );
+  });
+}
 
 export async function getStoredToken(): Promise<string | null> {
+  const tokens = await getStoredTokens();
+  return tokens.oauthToken || tokens.fallbackToken || null;
+}
+
+export async function saveOAuthTokens(payload: SaveTokenPayload): Promise<void> {
   return new Promise((resolve) => {
-    chrome.storage.local.get({ fallbackToken: '', oauthToken: '' }, (items) => {
-      resolve(items.oauthToken || items.fallbackToken || null);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const data: Record<string, any> = {
+      oauthToken: payload.accessToken,
+    };
+    if (payload.refreshToken) {
+      data.refreshToken = payload.refreshToken;
+    }
+    if (payload.expiresIn) {
+      // Expiration in ms
+      data.tokenExpiresAt = Date.now() + payload.expiresIn * 1000;
+    }
+    if (payload.refreshTokenExpiresIn) {
+      // Refresh token expiration in ms
+      data.refreshTokenExpiresAt = Date.now() + payload.refreshTokenExpiresIn * 1000;
+    }
+    chrome.storage.local.set(data, () => {
+      resolve();
     });
   });
 }
 
 export async function saveOAuthToken(token: string): Promise<void> {
-  return new Promise((resolve) => {
-    chrome.storage.local.set({ oauthToken: token }, () => {
-      resolve();
-    });
-  });
+  return saveOAuthTokens({ accessToken: token });
 }
 
 export async function clearOAuthToken(): Promise<void> {
   return new Promise((resolve) => {
-    chrome.storage.local.remove(['oauthToken'], () => {
-      resolve();
-    });
+    chrome.storage.local.remove(
+      ['oauthToken', 'refreshToken', 'tokenExpiresAt', 'refreshTokenExpiresAt'],
+      () => {
+        resolve();
+      }
+    );
   });
+}
+
+export async function refreshAccessToken(clientId: string = CLIENT_ID): Promise<string | null> {
+  const { refreshToken } = await getStoredTokens();
+  if (!refreshToken) {
+    console.warn('[githubAuth] Cannot refresh token: no refresh_token stored.');
+    return null;
+  }
+
+  return new Promise((resolve) => {
+    try {
+      chrome.runtime.sendMessage(
+        {
+          type: 'REFRESH_ACCESS_TOKEN',
+          clientId,
+          refreshToken,
+        },
+        async (response) => {
+          if (chrome.runtime.lastError) {
+            console.error('[githubAuth] Refresh message error:', chrome.runtime.lastError);
+            resolve(null);
+            return;
+          }
+
+          if (response && response.success && response.data) {
+            const data = response.data;
+            if (data.access_token) {
+              console.log('[githubAuth] Token refreshed successfully!');
+              await saveOAuthTokens({
+                accessToken: data.access_token,
+                refreshToken: data.refresh_token, // Rotated refresh token
+                expiresIn: data.expires_in,
+                refreshTokenExpiresIn: data.refresh_token_expires_in,
+              });
+              resolve(data.access_token);
+              return;
+            } else if (data.error) {
+              console.warn('[githubAuth] Refresh token rejected by GitHub:', data.error);
+              if (data.error === 'bad_refresh_token' || data.error === 'invalid_grant') {
+                await clearOAuthToken();
+              }
+              resolve(null);
+              return;
+            }
+          }
+          console.warn('[githubAuth] Token refresh failed:', response?.error);
+          resolve(null);
+        }
+      );
+    } catch (err) {
+      console.error('[githubAuth] Error invoking token refresh:', err);
+      resolve(null);
+    }
+  });
+}
+
+export async function getValidAuthToken(clientId: string = CLIENT_ID): Promise<string | null> {
+  const tokens = await getStoredTokens();
+
+  if (tokens.oauthToken) {
+    // Proactively refresh if token expires within 5 minutes (300,000 ms)
+    const isExpiringSoon = tokens.tokenExpiresAt && Date.now() >= tokens.tokenExpiresAt - 300000;
+
+    if (isExpiringSoon && tokens.refreshToken) {
+      console.log('[githubAuth] Access token is expiring or expired. Silently refreshing...');
+      const newToken = await refreshAccessToken(clientId);
+      if (newToken) {
+        return newToken;
+      }
+    }
+    return tokens.oauthToken;
+  }
+
+  return tokens.fallbackToken || null;
 }
 
 export interface DeviceCodeResponse {
@@ -92,7 +223,12 @@ export async function pollForAccessToken(
             const data = await res.json();
             if (data.access_token) {
               clearInterval(timer);
-              await saveOAuthToken(data.access_token);
+              await saveOAuthTokens({
+                accessToken: data.access_token,
+                refreshToken: data.refresh_token,
+                expiresIn: data.expires_in,
+                refreshTokenExpiresIn: data.refresh_token_expires_in,
+              });
               resolve(data.access_token);
             } else if (
               data.error &&

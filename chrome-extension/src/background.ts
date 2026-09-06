@@ -36,6 +36,20 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       });
     return true; // Keep channel open for async response
   }
+
+  if (message.type === 'REFRESH_ACCESS_TOKEN') {
+    console.log('[background.js] Received REFRESH_ACCESS_TOKEN message');
+    refreshDeviceToken(message.clientId || DEFAULT_CLIENT_ID, message.refreshToken)
+      .then((res) => {
+        console.log('[background.js] REFRESH_ACCESS_TOKEN response payload:', res);
+        sendResponse({ success: true, data: res });
+      })
+      .catch((err) => {
+        console.error('[background.js] REFRESH_ACCESS_TOKEN error:', err);
+        sendResponse({ success: false, error: String(err?.message || err) });
+      });
+    return true; // Keep channel open for async response
+  }
 });
 
 interface DeviceCodeResponse {
@@ -92,6 +106,28 @@ async function checkDeviceToken(clientId: string, deviceCode: string) {
 
   if (!res.ok) {
     throw new Error(`Token exchange failed with status ${res.status}`);
+  }
+
+  return await res.json();
+}
+
+async function refreshDeviceToken(clientId: string, refreshToken: string) {
+  console.log('[background.js] Sending token refresh request to GitHub...');
+  const res = await fetch('https://github.com/login/oauth/access_token', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      client_id: clientId,
+      grant_type: 'refresh_token',
+      refresh_token: refreshToken,
+    }),
+  });
+
+  if (!res.ok) {
+    throw new Error(`Token refresh failed with status ${res.status}`);
   }
 
   return await res.json();

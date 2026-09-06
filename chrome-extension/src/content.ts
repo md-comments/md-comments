@@ -14,7 +14,15 @@ import type {
   AnchorBlock,
 } from '../../shared/types';
 import { GitHubOrphanRefBackend } from '../../shared/gitRefBackend';
-import { getStoredToken, saveOAuthToken, clearOAuthToken } from './githubAuth';
+import {
+  getStoredToken,
+  saveOAuthToken,
+  saveOAuthTokens,
+  clearOAuthToken,
+  getValidAuthToken,
+  refreshAccessToken,
+  CLIENT_ID,
+} from './githubAuth';
 import { GitHubApi, RepoMetadata } from './githubApi';
 import { isGitHubLogin, extractMentionLogins } from '../../shared/author';
 import { escapeHtml } from '../../shared/html';
@@ -26,7 +34,7 @@ import {
   CollaboratorUser,
 } from '../../shared/mentions';
 
-const gitRefBackend = new GitHubOrphanRefBackend(() => getStoredToken());
+const gitRefBackend = new GitHubOrphanRefBackend(() => currentToken || getAuthToken());
 const displayNameCache = new Map<string, string>();
 const pendingFetches = new Set<string>();
 
@@ -541,17 +549,13 @@ async function resolveBlobCommitHash(
 }
 
 async function getAuthToken(): Promise<string | null> {
-  return new Promise((resolve) => {
-    chrome.storage.local.get({ fallbackToken: '', oauthToken: '' }, (items) => {
-      const token = items.oauthToken || items.fallbackToken || null;
-      if (token) {
-        console.log('[md-comments] Found GitHub token in local storage');
-      } else {
-        console.log('[md-comments] No GitHub token found in local storage');
-      }
-      resolve(token);
-    });
-  });
+  const token = await getValidAuthToken();
+  if (token) {
+    console.log('[md-comments] Found valid GitHub token (or refreshed)');
+  } else {
+    console.log('[md-comments] No GitHub token found in local storage');
+  }
+  return token;
 }
 
 async function getDisplayAuthor(): Promise<string> {
@@ -809,14 +813,25 @@ async function handlePageLoad() {
       .then((viewer) => {
         console.log('[md-comments] Stored GitHub token is valid. User:', viewer.login);
       })
-      .catch((err) => {
+      .catch(async (err) => {
         const errMsg = err instanceof Error ? err.message : String(err);
         if (
           errMsg.includes('401') ||
           errMsg.includes('Unauthorized') ||
           errMsg.includes('Bad credentials')
         ) {
-          console.warn('[md-comments] Stored token is revoked or expired. Clearing token.');
+          console.warn(
+            '[md-comments] Stored token rejected with 401. Attempting silent refresh before clearing...'
+          );
+          const refreshedToken = await refreshAccessToken();
+          if (refreshedToken) {
+            console.log('[md-comments] Successfully refreshed token after 401 rejection on init!');
+            currentToken = refreshedToken;
+            githubApi = new GitHubApi(refreshedToken);
+            return;
+          }
+
+          console.warn('[md-comments] Stored token is revoked or refresh failed. Clearing token.');
           currentToken = null;
           githubApi = new GitHubApi(null);
           clearOAuthToken().catch(() => {});
@@ -1393,12 +1408,19 @@ async function initRepoAndMetadata(owner: string, repo: string, branch: string) 
     isWritable = false;
     lastAuthError = e instanceof Error ? e.message : String(e);
     if (lastAuthError.includes('401') || lastAuthError.includes('Unauthorized')) {
-      console.log(
-        '[md-comments] Token is unauthorized (401). Clearing active token to fallback to anonymous fetch.'
-      );
-      currentToken = null;
-      githubApi = new GitHubApi(null);
-      clearOAuthToken().catch(() => {});
+      const refreshedToken = await refreshAccessToken();
+      if (refreshedToken) {
+        console.log('[md-comments] Token refreshed after 401 in repo permissions check.');
+        currentToken = refreshedToken;
+        githubApi = new GitHubApi(refreshedToken);
+      } else {
+        console.log(
+          '[md-comments] Token is unauthorized (401) and refresh failed. Clearing active token to fallback to anonymous fetch.'
+        );
+        currentToken = null;
+        githubApi = new GitHubApi(null);
+        clearOAuthToken().catch(() => {});
+      }
     }
   }
 }
@@ -2227,7 +2249,7 @@ function attachOAuthEvents(container: HTMLElement) {
         statusEl.style.display = 'none';
       }
 
-      const clientId = 'Iv23li9t461keXDcVS0T';
+      const clientId = CLIENT_ID;
 
       chrome.runtime.sendMessage(
         {
@@ -2313,8 +2335,15 @@ function attachOAuthEvents(container: HTMLElement) {
                   if (pollRes && pollRes.success && pollRes.data) {
                     const data = pollRes.data;
                     if (data.access_token) {
-                      console.log('[md-comments] Successfully obtained access token!');
-                      await saveOAuthToken(data.access_token);
+                      console.log(
+                        '[md-comments] Successfully obtained access token and refresh token!'
+                      );
+                      await saveOAuthTokens({
+                        accessToken: data.access_token,
+                        refreshToken: data.refresh_token,
+                        expiresIn: data.expires_in,
+                        refreshTokenExpiresIn: data.refresh_token_expires_in,
+                      });
                       currentToken = data.access_token;
                       githubApi = new GitHubApi(data.access_token);
                       if (statusEl) statusEl.innerText = '✅ Authorized with GitHub!';
@@ -4064,17 +4093,30 @@ async function commitCommentFileChanges(updatedComments: CommentsFile, _action: 
     console.error('[md-comments] Error writing comment to GitHub orphan ref:', err);
     const errMsg = String(err?.message || err);
     if (errMsg.includes('401') || errMsg.includes('Unauthorized')) {
-      lastAuthError =
-        'GitHub authorization failed (401). Please enter a valid Personal Access Token (PAT) with repo scope below.';
+      console.log(
+        '[md-comments] Comment write received 401. Attempting silent token refresh and retry...'
+      );
+      const refreshedToken = await refreshAccessToken();
+      if (refreshedToken) {
+        currentToken = refreshedToken;
+        githubApi = new GitHubApi(refreshedToken);
+        try {
+          await gitRefBackend.write(key, updatedComments, previousComments);
+          console.log('[md-comments] Comment write retry succeeded after silent token refresh!');
+          return;
+        } catch (retryErr) {
+          console.error('[md-comments] Comment write retry after refresh failed:', retryErr);
+        }
+      }
+
+      lastAuthError = 'GitHub authorization failed (401). Please re-authorize via the sidebar.';
       isWritable = false;
       currentToken = null;
       githubApi = new GitHubApi(null);
       clearOAuthToken().catch(() => {});
       injectSidebar();
       renderSidebarComments();
-      alert(
-        'Authentication error (401). Please enter your GitHub Personal Access Token (PAT) in the sidebar to post comments.'
-      );
+      alert('Authentication error (401). Please re-authorize in the sidebar to post comments.');
     } else {
       alert('Failed to save comment to GitHub: ' + errMsg);
     }

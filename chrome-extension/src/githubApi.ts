@@ -17,6 +17,14 @@ export class GitHubApi {
     this.token = token;
   }
 
+  public setToken(token: string | null): void {
+    this.token = token;
+  }
+
+  public getToken(): string | null {
+    return this.token;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private async fetchGraphQL(query: string, variables: Record<string, unknown> = {}): Promise<any> {
     const headers: Record<string, string> = {

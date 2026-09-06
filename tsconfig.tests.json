@@ -6,7 +6,8 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "typeRoots": ["node_modules/@types", "chrome-extension/node_modules/@types"]
   },
   "include": ["tests/**/*", "vitest.config.mts"]
 }
