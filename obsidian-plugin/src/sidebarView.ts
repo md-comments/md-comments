@@ -340,7 +340,7 @@ export class CommentsSidebarView extends ItemView {
       const replyList = comment.replies.map((r) => this.renderReply(r, comment.id, type)).join('');
 
       repliesHtml = `
-        <div class="md-comments-replies-block" data-root-id="${comment.id}">
+        <div class="md-comments-replies-block${isCollapsed ? ' md-comments-replies-collapsed' : ''}" data-root-id="${comment.id}">
           <div class="md-comments-replies-list">${replyList}</div>
           <footer class="md-comments-thread-footer">
             <button type="button" class="md-comments-thread-footer-btn" data-action="show-reply-form" data-root-id="${comment.id}" data-type="${type}">

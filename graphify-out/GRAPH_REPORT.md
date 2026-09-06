@@ -1,16 +1,16 @@
 # Graph Report - md-comments  (2026-09-06)
 
 ## Corpus Check
-- 283 files · ~417,454 words
+- 283 files · ~417,435 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 3394 nodes · 9513 edges · 246 communities (209 shown, 37 thin omitted)
+- 3393 nodes · 9510 edges · 248 communities (213 shown, 35 thin omitted)
 - Extraction: 87% EXTRACTED · 13% INFERRED · 0% AMBIGUOUS · INFERRED: 1206 edges (avg confidence: 0.67)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `6d413f81`
+- Built from commit: `1bdfd4fc`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -96,7 +96,7 @@
 - background.ts
 - typescript
 - Astro & Starlight Plugin (`@md-comments/starlight`)
-- isGitHubLogin
+- markdownItPlugin.ts
 - defaultSettingsView-Ds6CBOo0.js
 - Zero-Auth Offline Mock Mode for Embedded Runtime
 - Workflows & Patterns
@@ -139,8 +139,8 @@
 - repository
 - CLAUDE.md
 - CommentsSidebarView
-- i
-- markdownItPlugin.ts
+- s
+- ec
 - k
 - Markdown Comments Test Fixture
 - test-mention-pw.mjs
@@ -199,9 +199,9 @@
 - velite.config.ts
 - commentStore.ts
 - eslint
-- add
-- bu
-- uo
+- t
+- toString
+- n
 - INV-FAST-FORWARD-RETRY.md
 - INV-OAUTH-ONLY.md
 - INV-XSS-SANITIZED.md
@@ -210,36 +210,38 @@
 - sw.bundle.js
 - mentions.ts
 - G
-- ic
+- us
 - Live Test Repository Playwright Automation on md-comments-test
 - Hermetic Playwright E2E Automation for Chrome Extension
 - pop
 - uiMode.CU5KtEkS.js
-- constructor
-- ts
+- rn
+- J
 - Obsidian Plugin Guide
-- C
+- a
 - parseDocument
 - get
 - getEntriesGenerator
 - CommentStore
-- nl
-- update
+- i
+- constructor
 - fi
 - vn
 - dispatch
-- mr
+- q
 - init
 - r
 - constructor
 - _absoluteLocation
 - generateLocator
 - mentionAutocomplete.js
-- Markdown Comments Overview
-- um
+- commitCommentFileChanges
+- renderSidebarComments
 - _onProject
 - _onConfigure
-- $f
+- loadDocumentComments
+- D
+- _onTestBegin
 
 ## God Nodes (most connected - your core abstractions)
 1. `i()` - 181 edges
@@ -268,23 +270,23 @@
 ## Import Cycles
 - None detected.
 
-## Communities (246 total, 37 thin omitted)
+## Communities (248 total, 35 thin omitted)
 
 ### Community 0 - "Comprehensive Application Functionality Mapping & Regression Testing Suite Plan"
 Cohesion: 0.07
 Nodes (29): 1.1 Context, 1.2 Core Pillars of the Testing Framework, 1. Executive Summary & Objectives, 2.1 Feature Specification Example (`quality/features/comments/FEAT-COMM-INLINE.md`), 2.2 OSS Content Compilation Engine (Velite Integration), 2.3 OSS Declarative Scaffolding (Plop.js), 2. Docs-as-Code Quality Knowledge Graph (`quality/features/`), 3.1 Playwright Test Integration (`tests/e2e/inlineComment.spec.ts`) (+21 more)
 
 ### Community 1 - "content.ts"
-Cohesion: 0.06
-Nodes (93): activeIndicators, appInstallationStatus, applyPendingHighlight(), attachCommentCardEvents(), attachInstallationPromptEvents(), attachOAuthEvents(), cachedSelectedClasses, checkPageChange() (+85 more)
+Cohesion: 0.08
+Nodes (42): activeIndicators, appInstallationStatus, applyPendingHighlight(), cachedSelectedClasses, cleanupInjections(), clearPendingHighlights(), collectCommentAuthors(), displayNameCache (+34 more)
 
 ### Community 2 - "validate.py"
 Cohesion: 0.07
 Nodes (45): benchmark_pair(), count_tokens(), main(), print_table(), main(), print_usage(), backup_dir_for(), build_compress_prompt() (+37 more)
 
 ### Community 3 - "main.ts"
-Cohesion: 0.13
-Nodes (29): findHeadingContext(), findParagraphForNode(), handleTextSelection(), hideSelectionButton(), showSelectionButton(), createLivePreviewExtension(), DEFAULT_SETTINGS, MarkdownCommentsSettings (+21 more)
+Cohesion: 0.17
+Nodes (26): handleTextSelection(), hideSelectionButton(), showSelectionButton(), createLivePreviewExtension(), fuzzyMatch(), highlightTextInElement(), registerReadingViewProcessor(), Markdown Comments Key Features (+18 more)
 
 ### Community 4 - "CommentsOverlay"
 Cohesion: 0.06
@@ -366,6 +368,10 @@ Nodes (19): applyPendingAnchorHighlight(), clearPendingAnchorHighlight(), escape
 Cohesion: 0.05
 Nodes (44): scripts, build, build:chrome, build:demo-astro, build:obsidian, build:pages, build:shared, build:starlight (+36 more)
 
+### Community 25 - "GitHubApi"
+Cohesion: 0.16
+Nodes (3): GitHubApi, RepoMetadata, ViewerInfo
+
 ### Community 26 - "starlight-plugin/package.json"
 Cohesion: 0.07
 Nodes (28): dependencies, js-yaml, @md-comments/shared, description, devDependencies, @types/js-yaml, @types/node, typescript (+20 more)
@@ -380,7 +386,7 @@ Nodes (5): copyPlugin, esbuild, fs, outdir, path
 
 ### Community 30 - "shared/types.ts"
 Cohesion: 0.08
-Nodes (28): displayNameCache, pendingFetches, EMPTY, normalizeCommentsFile(), normalizeInlineComment(), normalizePageComment(), normalizeReply(), CommentBackend (+20 more)
+Nodes (25): displayNameCache, pendingFetches, EMPTY, CommentBackend, CommentStorageKey, dispatchCommitCommentNotification(), DispatchParams, findNewlyMentionedEvents() (+17 more)
 
 ### Community 31 - "compilerOptions"
 Cohesion: 0.13
@@ -502,13 +508,13 @@ Nodes (13): compilerOptions, declaration, esModuleInterop, forceConsistentCasing
 Cohesion: 0.20
 Nodes (9): 1. Configure in `astro.config.mjs`, 2. Standard Astro Sites (Non-Starlight), Astro & Starlight Plugin (`@md-comments/starlight`), Authentication: GitHub OAuth Device Flow, Configuration Options, Custom Page-Level Comments, Features, Installation (+1 more)
 
-### Community 84 - "isGitHubLogin"
-Cohesion: 0.14
-Nodes (31): isGitHubLogin(), avatarCache, AvatarCacheEntry, avatarFetchUrl(), cacheEntryValid(), cacheKey(), collectAvatarLogins(), fetchAvatarDataUrl() (+23 more)
+### Community 84 - "markdownItPlugin.ts"
+Cohesion: 0.09
+Nodes (57): extractMentionLogins(), isGitHubLogin(), escapeHtml(), hasTokenSync(), avatarCache, AvatarCacheEntry, avatarFetchUrl(), cacheEntryValid() (+49 more)
 
 ### Community 86 - "defaultSettingsView-Ds6CBOo0.js"
 Cohesion: 0.02
-Nodes (139): addMaskedElements(), addUserOverlay(), ar(), ariaSnapshotForCall(), atDocument(), be(), _bringToFront(), ch() (+131 more)
+Nodes (161): _activelyFocused(), addMaskedElements(), addUserOverlay(), ariaSnapshot(), ariaSnapshotForCall(), ariaSnapshotForRecorder(), ariaSnapshotJSON(), atDocument() (+153 more)
 
 ### Community 87 - "Zero-Auth Offline Mock Mode for Embedded Runtime"
 Cohesion: 0.50
@@ -559,8 +565,8 @@ Cohesion: 0.33
 Nodes (5): Context Pack, Guardrails, Output Focus, Patterns, Workflow
 
 ### Community 103 - "codeMirrorModule-BbkfBe3n.js"
-Cohesion: 0.04
-Nodes (155): aa(), ac(), ai(), an(), ao(), as(), ba(), bi() (+147 more)
+Cohesion: 0.07
+Nodes (66): aa(), an(), ao(), ba(), Bs(), ca(), co(), cs() (+58 more)
 
 ### Community 104 - "Plan Authoring Standards"
 Cohesion: 0.25
@@ -583,16 +589,16 @@ Cohesion: 0.18
 Nodes (11): @types/vscode, devDependencies, @types/js-yaml, @types/node, @types/vscode, typescript, @vscode/vsce, @types/js-yaml (+3 more)
 
 ### Community 111 - "extension.ts"
-Cohesion: 0.17
-Nodes (22): vscode, CommentActionMessage, CommentPreviewPanel, activate(), handlePreviewAction(), handleUri(), mdUriFromMessage(), refreshPreview() (+14 more)
+Cohesion: 0.18
+Nodes (21): warmAuthorCache(), CommentPreviewPanel, activate(), handlePreviewAction(), handleUri(), mdUriFromMessage(), refreshPreview(), updateStatusBar() (+13 more)
 
 ### Community 112 - "mdComments.sidebarWidth"
 Cohesion: 0.22
 Nodes (9): properties, title, configuration, default, description, maximum, minimum, type (+1 more)
 
 ### Community 113 - "chrome-extension/src/githubAuth.ts"
-Cohesion: 0.22
-Nodes (16): getAuthToken(), getBranchFromDom(), initRepoAndMetadata(), clearOAuthToken(), DeviceCodeResponse, getStoredToken(), getStoredTokens(), getValidAuthToken() (+8 more)
+Cohesion: 0.18
+Nodes (19): attachOAuthEvents(), getAuthToken(), getBranchFromDom(), handleDevicePageAutofill(), handlePageLoad(), initRepoAndMetadata(), clearOAuthToken(), DeviceCodeResponse (+11 more)
 
 ### Community 115 - "mdComments.reactionEmojis"
 Cohesion: 0.29
@@ -646,17 +652,17 @@ Nodes (3): CODEGRAPH_MCP_TOOLS, codegraph, codegraph
 Cohesion: 0.50
 Nodes (4): repository, directory, type, url
 
-### Community 132 - "i"
-Cohesion: 0.07
-Nodes (153): A(), C(), D(), Do(), ei(), en(), es(), M() (+145 more)
+### Community 132 - "s"
+Cohesion: 0.08
+Nodes (90): en(), A(), aa(), ap(), at(), Au(), bp(), bt() (+82 more)
 
-### Community 133 - "markdownItPlugin.ts"
-Cohesion: 0.18
-Nodes (26): escapeHtml(), renderPreviewHtml(), hasTokenSync(), actionIconBtn(), authorInitials(), buildSidebarHtml(), canEditComment(), formatCommentTime() (+18 more)
+### Community 133 - "ec"
+Cohesion: 0.10
+Nodes (36): bi(), ci(), di(), ec(), fi(), ft(), gi(), gr() (+28 more)
 
 ### Community 134 - "k"
-Cohesion: 0.12
-Nodes (69): Ae(), at(), B(), be(), Ce(), ct(), De(), e() (+61 more)
+Cohesion: 0.15
+Nodes (58): Ae(), at(), B(), be(), Ce(), ct(), De(), e() (+50 more)
 
 ### Community 135 - "Markdown Comments Test Fixture"
 Cohesion: 0.33
@@ -871,44 +877,44 @@ Cohesion: 0.50
 Nodes (3): Overview, Real-Time Sidebar Comment & Author Search, User Journey (Gherkin Scenarios)
 
 ### Community 190 - "commentStore.ts"
-Cohesion: 0.21
-Nodes (26): executeCommentAction(), resolveText(), savedToast(), addInlineComment(), addPageComment(), addReply(), applyReactionToggle(), commentsFsPathForMarkdown() (+18 more)
+Cohesion: 0.19
+Nodes (29): vscode, CommentActionMessage, executeCommentAction(), resolveText(), savedToast(), addInlineComment(), addPageComment(), addReply() (+21 more)
 
-### Community 192 - "add"
-Cohesion: 0.06
-Nodes (60): add(), addIn(), appendChild(), Bf(), bl(), bt(), cf(), chainLocators() (+52 more)
-
-### Community 193 - "bu"
+### Community 192 - "t"
 Cohesion: 0.09
-Nodes (58): ac(), ad(), bd(), bu(), cd(), clone(), ct(), Cu() (+50 more)
+Nodes (37): appendChild(), bs(), cf(), chainLocators(), _commit(), deepEventTarget(), df(), _errorDescriptorsFromActions() (+29 more)
 
-### Community 194 - "uo"
+### Community 193 - "toString"
 Cohesion: 0.06
-Nodes (53): Ko(), _activelyFocused(), _ariaSnapshotForExpect(), ariaSnapshotForExpectFailure(), blurNode(), Bo(), _checkElementIsStable(), checkElementStates() (+45 more)
+Nodes (77): ad(), ai(), bd(), cd(), cm(), compose(), createNode(), createPair() (+69 more)
+
+### Community 194 - "n"
+Cohesion: 0.07
+Nodes (86): Ko(), add(), addIn(), as(), b(), bc(), Bf(), Bo() (+78 more)
 
 ### Community 211 - "src/author.ts"
-Cohesion: 0.27
-Nodes (16): clearAuthorCache(), extractMentionLogins(), fallbackAuthor(), getCachedAuthor(), githubAvatarUrl(), githubProfileUrl(), isCacheValid(), setCachedAuthor() (+8 more)
+Cohesion: 0.30
+Nodes (14): clearAuthorCache(), fallbackAuthor(), getCachedAuthor(), githubAvatarUrl(), githubProfileUrl(), isCacheValid(), setCachedAuthor(), execFileAsync (+6 more)
 
 ### Community 212 - "repoManager.ts"
-Cohesion: 0.21
-Nodes (14): GitHubRepoInfo, parseGitHubPageUrl(), parseGitHubRemote(), handleTurboLoad(), loadContext(), commitHashCache, execFileAsync, getGitCommitHash() (+6 more)
+Cohesion: 0.17
+Nodes (12): GitHubRepoInfo, parseGitHubPageUrl(), parseGitHubRemote(), handleTurboLoad(), commitHashCache, execFileAsync, getGitCommitHash(), getGitCommitHashSync() (+4 more)
 
 ### Community 213 - "sw.bundle.js"
 Cohesion: 0.05
-Nodes (30): v(), actions(), addFrameSnapshot(), addResource(), _appendEvent(), appendTrace(), B(), _collectSnapshotPhase() (+22 more)
+Nodes (36): actions(), addFrameSnapshot(), _appendEvent(), appendTrace(), B(), _collectSnapshotPhase(), concat(), fromBits() (+28 more)
 
 ### Community 214 - "mentions.ts"
 Cohesion: 0.26
 Nodes (10): attachMentionAutocomplete(), CacheEntry, clearCollaboratorCache(), collaboratorCache, CollaboratorUser, fetchCollaborators(), filterCollaborators(), formatCommentBodyWithMentions() (+2 more)
 
 ### Community 215 - "G"
-Cohesion: 0.09
-Nodes (46): _activeSelectorForEvent(), ariaSnapshot(), ariaSnapshotForRecorder(), ariaSnapshotJSON(), _captureAutoExpectSnapshot(), _commit(), _commitAssertValue(), _computeAutoExpectPrecondition() (+38 more)
-
-### Community 216 - "ic"
 Cohesion: 0.10
-Nodes (41): af(), an(), ao(), bc(), Ca(), cc(), ci(), co() (+33 more)
+Nodes (40): _activeSelectorForEvent(), _captureAutoExpectSnapshot(), _commitAssertValue(), _computeAutoExpectPrecondition(), _consumeRightButtonEvent(), _elementHasValue(), firstBox(), firstTooltipBox() (+32 more)
+
+### Community 216 - "us"
+Cohesion: 0.15
+Nodes (34): ai(), as(), ds(), fs(), G(), gs(), hn(), hs() (+26 more)
 
 ### Community 217 - "Live Test Repository Playwright Automation on md-comments-test"
 Cohesion: 0.50
@@ -926,69 +932,69 @@ Nodes (36): am(), _applyAttribute(), _assert(), atIndentedComment(), blockMap(),
 Cohesion: 0.07
 Nodes (8): ve(), collectTestIds(), fileNames(), flattenForSingleProject(), flatTreeItems(), L(), ne(), sortAndPropagateStatus()
 
-### Community 221 - "constructor"
-Cohesion: 0.10
-Nodes (30): an(), c(), closestScreenshot(), cn(), constructor(), dn(), en(), getRandomValues() (+22 more)
+### Community 221 - "rn"
+Cohesion: 0.11
+Nodes (26): an(), c(), closestScreenshot(), cn(), dn(), en(), getRandomValues(), h() (+18 more)
 
-### Community 222 - "ts"
-Cohesion: 0.09
-Nodes (29): ai(), checkDeprecatedSelectorUsage(), elementPicked(), expectHitTarget(), fs(), _generateSelectors(), generateSelectorSimple(), Ht() (+21 more)
+### Community 222 - "J"
+Cohesion: 0.19
+Nodes (27): A(), ac(), bt(), C(), cc(), D(), ei(), er() (+19 more)
 
 ### Community 223 - "Obsidian Plugin Guide"
-Cohesion: 0.21
-Nodes (5): Obsidian Plugin Guide, CommentComposerModal, MarkdownCommentsPlugin, MarkdownCommentsSettingTab, SuccessModal
+Cohesion: 0.13
+Nodes (14): App Icon PNG, App Icon SVG, Comments Example Note, Obsidian Plugin Guide, CommentComposerModal, DEFAULT_SETTINGS, MarkdownCommentsPlugin, MarkdownCommentsSettings (+6 more)
 
-### Community 224 - "C"
-Cohesion: 0.17
-Nodes (25): begin(), C(), _cached(), _callMatches(), _callQuery(), _checkSelector(), _createVisibleEngine(), end() (+17 more)
+### Community 224 - "a"
+Cohesion: 0.07
+Nodes (67): ac(), af(), an(), ao(), _ariaSnapshotForExpect(), ariaSnapshotForExpectFailure(), be(), begin() (+59 more)
 
 ### Community 225 - "parseDocument"
 Cohesion: 0.26
 Nodes (24): atLineEnd(), charAt(), continueScalar(), getLine(), hasChars(), lex(), parseBlockScalar(), parseBlockScalarHeader() (+16 more)
 
 ### Community 226 - "get"
-Cohesion: 0.13
-Nodes (22): _a(), ba(), Ca(), ga(), get(), ha(), hasEntry(), re() (+14 more)
+Cohesion: 0.11
+Nodes (25): _a(), ba(), Ca(), Dr(), ga(), get(), ha(), hasEntry() (+17 more)
 
 ### Community 227 - "getEntriesGenerator"
-Cohesion: 0.18
-Nodes (20): Ei(), aa(), ea(), getData(), getEntries(), getEntriesGenerator(), gt(), i() (+12 more)
+Cohesion: 0.20
+Nodes (19): aa(), ea(), getData(), getEntries(), getEntriesGenerator(), gt(), i(), ia() (+11 more)
 
 ### Community 228 - "CommentStore"
-Cohesion: 0.33
-Nodes (3): CommentStore, newId(), CommentRootType
+Cohesion: 0.24
+Nodes (7): CommentStore, newId(), normalizeCommentsFile(), normalizeInlineComment(), normalizePageComment(), normalizeReply(), CommentRootType
 
-### Community 229 - "nl"
-Cohesion: 0.22
-Nodes (17): Al(), dl(), fl(), gl(), hl(), kl(), la(), Ml() (+9 more)
+### Community 229 - "i"
+Cohesion: 0.14
+Nodes (37): Al(), ba(), bl(), Cl(), dl(), el(), eo(), fl() (+29 more)
 
-### Community 230 - "update"
-Cohesion: 0.15
-Nodes (17): _block(), calculate(), concat(), _crypt(), decrypt(), digest(), encrypt(), _f() (+9 more)
+### Community 230 - "constructor"
+Cohesion: 0.16
+Nodes (17): _block(), calculate(), constructor(), _crypt(), decrypt(), digest(), encrypt(), _f() (+9 more)
 
 ### Community 231 - "fi"
-Cohesion: 0.17
-Nodes (15): bi(), bn(), br(), cr(), er(), fi(), fr(), Hn() (+7 more)
+Cohesion: 0.12
+Nodes (20): ar(), bi(), bn(), br(), Dr(), Ed(), er(), fi() (+12 more)
 
 ### Community 232 - "vn"
 Cohesion: 0.16
 Nodes (15): jn(), append(), bn(), close(), gn(), hn(), Jn(), Kn() (+7 more)
 
 ### Community 233 - "dispatch"
-Cohesion: 0.13
-Nodes (15): _createTestResult(), dispatch(), F(), _handleOnError(), _onAttach(), _onBegin(), _onEnd(), _onError() (+7 more)
+Cohesion: 0.17
+Nodes (12): dispatch(), F(), _handleOnError(), _onAttach(), _onBegin(), _onEnd(), _onError(), _onExit() (+4 more)
 
-### Community 234 - "mr"
-Cohesion: 0.27
-Nodes (14): ar(), br(), cr(), fr(), kr(), lr(), mr(), pr() (+6 more)
+### Community 234 - "q"
+Cohesion: 0.09
+Nodes (40): ar(), Bn(), br(), cn(), cr(), dn(), Dr(), fn() (+32 more)
 
 ### Community 235 - "init"
-Cohesion: 0.25
-Nodes (14): Ar(), Dr(), Fr(), Gr(), ht(), init(), Ir(), jr() (+6 more)
+Cohesion: 0.26
+Nodes (13): v(), addResource(), Ar(), Fr(), init(), Ir(), jr(), kr() (+5 more)
 
 ### Community 236 - "r"
-Cohesion: 0.17
-Nodes (13): $e(), g(), inflate(), inflateEnd(), inflateInit(), ke(), r(), read_byte() (+5 more)
+Cohesion: 0.25
+Nodes (9): $e(), g(), ke(), r(), read_byte(), resourceByUrl(), serveResource(), writeUint8Array() (+1 more)
 
 ### Community 237 - "constructor"
 Cohesion: 0.21
@@ -1006,13 +1012,13 @@ Nodes (9): generateLocator(), Jt(), quote(), regexToSourceString(), regexToStrin
 Cohesion: 0.50
 Nodes (8): applyMention(), bindTextarea(), getMentionQuery(), loadDisplayNames(), loadMentionUsers(), removeMentionMenu(), scan(), showMentionMenu()
 
-### Community 241 - "Markdown Comments Overview"
-Cohesion: 0.29
-Nodes (7): App Icon PNG, App Icon SVG, Comments Example Note, PNPM Monorepo Configuration, Markdown Comments Overview, Monorepo Package Structure, VS Code Extension Icon PNG
+### Community 241 - "commitCommentFileChanges"
+Cohesion: 0.19
+Nodes (21): attachCommentCardEvents(), commitCommentFileChanges(), deleteComment(), deleteReply(), editComment(), editReply(), findDiffGutterCell(), getDisplayAuthor() (+13 more)
 
-### Community 242 - "um"
-Cohesion: 0.40
-Nodes (6): cm(), compose(), dm(), lm(), streamInfo(), um()
+### Community 242 - "renderSidebarComments"
+Cohesion: 0.29
+Nodes (14): fetchCommentsFile(), fetchFileContent(), getCurrentRepoOwnerAndName(), getPRHeadBranchFromDom(), loadAndRenderCommentsForContainer(), loadAndRenderFileInTab(), parseGitHubUrl(), processPRMarkdownFiles() (+6 more)
 
 ### Community 243 - "_onProject"
 Cohesion: 0.40
@@ -1022,19 +1028,31 @@ Nodes (5): _absolutePath(), N(), _onProject(), _parseProject(), project()
 Cohesion: 0.67
 Nodes (3): I(), _onConfigure(), _parseConfig()
 
+### Community 245 - "loadDocumentComments"
+Cohesion: 0.20
+Nodes (12): attachInstallationPromptEvents(), checkPageChange(), closeSidebar(), getCommitHashFromDom(), injectFABButton(), injectToolbarButton(), isSidebarOpen(), loadDocumentComments() (+4 more)
+
+### Community 246 - "D"
+Cohesion: 0.33
+Nodes (7): D(), from(), getObject(), jd(), kd(), setObject(), sf()
+
+### Community 247 - "_onTestBegin"
+Cohesion: 0.67
+Nodes (3): _createTestResult(), _onTestBegin(), setStartTimeNumber()
+
 ## Knowledge Gaps
 - **824 isolated node(s):** `codegraph`, `CODEGRAPH_MCP_TOOLS`, `root`, `parser`, `browser` (+819 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **37 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **35 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `p()` connect `i` to `bu`, `main.ts`, `k`, `codeMirrorModule-BbkfBe3n.js`, `defaultSettingsView-Ds6CBOo0.js`, `constructor`?**
-  _High betweenness centrality (0.145) - this node is a cross-community bridge._
-- **Why does `registerReadingViewProcessor()` connect `main.ts` to `i`, `Obsidian Plugin Guide`?**
-  _High betweenness centrality (0.072) - this node is a cross-community bridge._
-- **Why does `keywords` connect `keywords` to `vscode-extension/package.json`, `extension.ts`?**
+- **Why does `p()` connect `J` to `n`, `main.ts`, `s`, `i`, `k`, `constructor`, `defaultSettingsView-Ds6CBOo0.js`?**
+  _High betweenness centrality (0.143) - this node is a cross-community bridge._
+- **Why does `registerReadingViewProcessor()` connect `main.ts` to `J`, `Obsidian Plugin Guide`?**
+  _High betweenness centrality (0.073) - this node is a cross-community bridge._
+- **Why does `keywords` connect `keywords` to `vscode-extension/package.json`, `commentStore.ts`?**
   _High betweenness centrality (0.034) - this node is a cross-community bridge._
 - **Are the 82 inferred relationships involving `i()` (e.g. with `A()` and `br()`) actually correct?**
   _`i()` has 82 INFERRED edges - model-reasoned connections that need verification._

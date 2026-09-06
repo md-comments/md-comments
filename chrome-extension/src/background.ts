@@ -77,7 +77,7 @@ async function handleDeviceFlow(clientId: string) {
 
   const deviceData = (await deviceRes.json()) as DeviceCodeResponse;
   if ('error' in deviceData) {
-    const err = deviceData as any;
+    const err = deviceData as { error_description?: string; error?: string };
     throw new Error(err.error_description || err.error);
   }
 

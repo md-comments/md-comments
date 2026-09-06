@@ -448,7 +448,8 @@ export class GitHubApi {
 
       // Find the installation for this owner (login)
       const installation = installations.find(
-        (inst: any) => inst.account.login.toLowerCase() === owner.toLowerCase()
+        (inst: { account?: { login?: string } }) =>
+          inst.account?.login?.toLowerCase() === owner.toLowerCase()
       );
 
       const appSlug = installations[0]?.app_slug;
@@ -488,7 +489,9 @@ export class GitHubApi {
 
       const reposData = await reposRes.json();
       const repos = reposData.repositories || [];
-      const hasRepo = repos.some((r: any) => r.name.toLowerCase() === repoName.toLowerCase());
+      const hasRepo = repos.some(
+        (r: { name?: string }) => r.name?.toLowerCase() === repoName.toLowerCase()
+      );
 
       const result = {
         installed: true,

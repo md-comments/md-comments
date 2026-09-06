@@ -25,13 +25,13 @@
     "semantic_hash": ""
   },
   "chrome-extension/src/content.ts": {
-    "mtime": 1788728477.7394922,
-    "ast_hash": "45c63a62e63d1a6429e2e66ad7445ed1",
+    "mtime": 1788732778.7212446,
+    "ast_hash": "d530515d423d4cc21f11c15f98bded94",
     "semantic_hash": ""
   },
   "chrome-extension/src/githubApi.ts": {
-    "mtime": 1788662756.1183622,
-    "ast_hash": "3c83f9f65cf9396ba01142b97d04c585",
+    "mtime": 1788732711.6723313,
+    "ast_hash": "af95b3f295e59af4017ea9f2351403ab",
     "semantic_hash": ""
   },
   "obsidian-plugin/esbuild.config.mjs": {
@@ -65,8 +65,8 @@
     "semantic_hash": ""
   },
   "obsidian-plugin/src/sidebarView.ts": {
-    "mtime": 1787875905.3815944,
-    "ast_hash": "a4507cb20d03b3d6d5483d406eb65516",
+    "mtime": 1788732700.3036165,
+    "ast_hash": "a46b74872089031a4dc912cbf19db0f6",
     "semantic_hash": ""
   },
   "obsidian-plugin/src/storage.ts": {
@@ -140,8 +140,8 @@
     "semantic_hash": ""
   },
   "vscode-extension/package.json": {
-    "mtime": 1788727404.469986,
-    "ast_hash": "7596fdbceb37d8477fbc5308d209deec",
+    "mtime": 1788732685.238667,
+    "ast_hash": "b6b38ec6f81bc445fb6888ce0c74dc03",
     "semantic_hash": ""
   },
   "vscode-extension/src/author.ts": {
@@ -645,8 +645,8 @@
     "semantic_hash": ""
   },
   "chrome-extension/src/background.ts": {
-    "mtime": 1788662892.5962722,
-    "ast_hash": "b8ec4d35171a6f047ea4fad4a77f580a",
+    "mtime": 1788732720.0555756,
+    "ast_hash": "1b030c6ddfbfca194e53627dff5719db",
     "semantic_hash": ""
   },
   "chrome-extension/src/githubAuth.ts": {
@@ -1030,8 +1030,8 @@
     "semantic_hash": ""
   },
   "scripts/test-repo-cleanup.ts": {
-    "mtime": 1788732396.6084185,
-    "ast_hash": "4edaf247270ddfb93810a63c40e9699a",
+    "mtime": 1788732768.6318924,
+    "ast_hash": "b300ca1654dc97421cf53b7bd760074e",
     "semantic_hash": ""
   },
   "shared/githubNotifications.ts": {

@@ -56,8 +56,9 @@ export async function resetTestRepository(options: CleanupOptions = {}): Promise
           `[Test Repo] Warning: DELETE ref ${ref} returned status ${res.status}: ${text}`
         );
       }
-    } catch (err: any) {
-      console.warn(`[Test Repo] Failed to clean ref ${ref}:`, err.message);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.warn(`[Test Repo] Failed to clean ref ${ref}:`, msg);
     }
   }
 
@@ -68,7 +69,7 @@ export async function resetTestRepository(options: CleanupOptions = {}): Promise
       headers,
     });
     if (commentsRes.ok) {
-      const commentsList: any = await commentsRes.json();
+      const commentsList = (await commentsRes.json()) as Array<{ id: number | string }>;
       if (Array.isArray(commentsList)) {
         for (const comment of commentsList) {
           try {
@@ -79,17 +80,16 @@ export async function resetTestRepository(options: CleanupOptions = {}): Promise
             if (delRes.status === 204 || delRes.status === 200) {
               console.log(`[Test Repo] Deleted commit comment: ${comment.id}`);
             }
-          } catch (delErr: any) {
-            console.warn(
-              `[Test Repo] Failed to delete commit comment ${comment.id}:`,
-              delErr.message
-            );
+          } catch (delErr: unknown) {
+            const delMsg = delErr instanceof Error ? delErr.message : String(delErr);
+            console.warn(`[Test Repo] Failed to delete commit comment ${comment.id}:`, delMsg);
           }
         }
       }
     }
-  } catch (err: any) {
-    console.warn('[Test Repo] Failed to fetch commit comments for deletion:', err.message);
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.warn('[Test Repo] Failed to fetch commit comments for deletion:', msg);
   }
 
   // 3. Synchronize README.md test fixture
@@ -108,7 +108,7 @@ export async function resetTestRepository(options: CleanupOptions = {}): Promise
     });
 
     if (getRes.ok) {
-      const data: any = await getRes.json();
+      const data = (await getRes.json()) as { sha?: string; content?: string };
       existingSha = data.sha;
       if (data.content) {
         const currentContent = Buffer.from(data.content.replace(/\s/g, ''), 'base64').toString(
@@ -141,8 +141,9 @@ export async function resetTestRepository(options: CleanupOptions = {}): Promise
       const errText = await putRes.text();
       console.warn(`[Test Repo] Could not reset README.md (status ${putRes.status}): ${errText}`);
     }
-  } catch (err: any) {
-    console.warn('[Test Repo] Notice: Failed to synchronize README.md fixture:', err.message);
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.warn('[Test Repo] Notice: Failed to synchronize README.md fixture:', msg);
   }
 }
 

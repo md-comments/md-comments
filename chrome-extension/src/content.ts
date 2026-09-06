@@ -16,7 +16,6 @@ import type {
 import { GitHubOrphanRefBackend } from '../../shared/gitRefBackend';
 import {
   getStoredToken,
-  saveOAuthToken,
   saveOAuthTokens,
   clearOAuthToken,
   getValidAuthToken,
@@ -746,7 +745,7 @@ async function handleDevicePageAutofill() {
   try {
     const result = await new Promise<{ pendingUserCode?: string }>((resolve) => {
       chrome.storage.local.get({ pendingUserCode: '' }, (items) => {
-        resolve(items as any);
+        resolve(items as { pendingUserCode?: string });
       });
     });
     const userCode = result?.pendingUserCode;
@@ -2523,30 +2522,6 @@ function renderSidebarComments() {
   });
 }
 
-function isCommentAuthor(author: string): boolean {
-  if (!author) return true;
-  const userMeta = document.querySelector('meta[name="user-login"]')?.getAttribute('content');
-  const currentLogin = (userMeta || currentDisplayAuthor || '').trim().toLowerCase();
-  const authorNorm = author.trim().toLowerCase();
-
-  if (!currentLogin) return true;
-  if (authorNorm === currentLogin) return true;
-  if (authorNorm === 'anonymous' || authorNorm === 'github-user') return true;
-
-  const cachedName = (displayNameCache.get(currentLogin) || '').trim().toLowerCase();
-  if (cachedName && authorNorm === cachedName) return true;
-
-  for (const [loginKey, displayName] of displayNameCache.entries()) {
-    if (loginKey === currentLogin && displayName.toLowerCase() === authorNorm) return true;
-    if (loginKey === authorNorm && displayName.toLowerCase() === currentLogin) return true;
-  }
-
-  const meta = parseGitHubUrl(window.location.href);
-  if (meta && meta.owner.toLowerCase() === currentLogin) return true;
-
-  return false;
-}
-
 function renderAvatar(authorOrUrl: string, size = 32, alt = ''): string {
   const val = (authorOrUrl || '').trim();
   const isUrl =
@@ -4089,9 +4064,9 @@ async function commitCommentFileChanges(updatedComments: CommentsFile, _action: 
 
   try {
     await gitRefBackend.write(key, updatedComments, previousComments);
-  } catch (err: any) {
+  } catch (err) {
     console.error('[md-comments] Error writing comment to GitHub orphan ref:', err);
-    const errMsg = String(err?.message || err);
+    const errMsg = err instanceof Error ? err.message : String(err);
     if (errMsg.includes('401') || errMsg.includes('Unauthorized')) {
       console.log(
         '[md-comments] Comment write received 401. Attempting silent token refresh and retry...'
@@ -4291,10 +4266,10 @@ async function deleteReply(commentId: string, replyId: string, _type: 'inline' |
   const targetCommentId = commentId.trim();
   const targetReplyId = replyId.trim();
 
-  const filterReplies = (comments: Array<any>) =>
+  const filterReplies = <T extends InlineComment | PageComment>(comments: Array<T>): Array<T> =>
     comments.map((c) => {
-      if (c.id.trim() === targetCommentId) {
-        const updatedReplies = c.replies.filter((r: any) => r.id.trim() !== targetReplyId);
+      if (c.id.trim() === targetCommentId && c.replies) {
+        const updatedReplies = c.replies.filter((r: Reply) => r.id.trim() !== targetReplyId);
         return { ...c, replies: updatedReplies };
       }
       return c;
