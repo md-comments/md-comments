@@ -57,11 +57,13 @@ export const test = base.extend<ExtensionFixtures>({
       }
     }
 
-    const token = process.env.TEST_GITHUB_TOKEN || 'mock-oauth-session-token';
+    const token =
+      process.env.TEST_GITHUB_TOKEN || process.env.GITHUB_TOKEN || 'mock-oauth-session-token';
+    const login = process.env.TEST_GITHUB_USER || 'md-comments-test-bot';
     const user = {
-      login: 'test-runner-bot',
-      name: 'Test Runner Bot',
-      avatar_url: 'https://github.com/ghost.png',
+      login,
+      name: 'MD Comments Test Bot',
+      avatar_url: `https://avatars.githubusercontent.com/${login}?s=48`,
     };
 
     if (backgroundWorker) {
@@ -107,6 +109,27 @@ export const test = base.extend<ExtensionFixtures>({
 
   testPage: async ({ context }, use) => {
     const page = await context.newPage();
+    const login = process.env.TEST_GITHUB_USER || 'md-comments-test-bot';
+
+    // Inject GitHub user-login meta tag into DOM to simulate real logged-in GitHub session
+    await page.addInitScript((botLogin) => {
+      const injectMeta = () => {
+        let meta = document.querySelector('meta[name="user-login"]');
+        if (!meta) {
+          meta = document.createElement('meta');
+          meta.setAttribute('name', 'user-login');
+          (document.head || document.documentElement).appendChild(meta);
+        }
+        meta.setAttribute('content', botLogin);
+      };
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', injectMeta);
+      } else {
+        injectMeta();
+      }
+    }, login);
+
     await use(page);
     await page.close();
   },

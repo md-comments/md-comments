@@ -22,7 +22,7 @@ export async function resetTestRepository(options: CleanupOptions = {}): Promise
 
   if (!token && !isMockOrLocal) {
     console.warn(
-      '[Test Repo] TEST_GITHUB_TOKEN not provided and not using local mock. Skipping remote repository cleanup.'
+      '[Test Repo] TEST_GITHUB_TOKEN or GITHUB_TOKEN not provided and not using local mock. Skipping remote repository cleanup.'
     );
     return;
   }
