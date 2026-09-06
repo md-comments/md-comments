@@ -1,5 +1,11 @@
 import http, { type IncomingMessage, type ServerResponse } from 'node:http';
 import crypto from 'node:crypto';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export interface MockRef {
   ref: string;
@@ -300,6 +306,45 @@ export class LocalMockServer {
             message: bodyJson?.message || 'Update file',
           },
         });
+      }
+    }
+
+    // 7. Collaborators API: /repos/:owner/:repo/collaborators
+    const collaboratorsMatch = pathname.match(/^\/repos\/[^/]+\/[^/]+\/collaborators$/);
+    if (collaboratorsMatch && method === 'GET') {
+      return sendJson(200, [
+        { login: 'alice', id: 101, avatar_url: 'https://github.com/alice.png' },
+        { login: 'bob', id: 102, avatar_url: 'https://github.com/bob.png' },
+        { login: 'carol', id: 103, avatar_url: 'https://github.com/carol.png' },
+        { login: 'test-runner-bot', id: 999999, avatar_url: 'https://github.com/ghost.png' },
+      ]);
+    }
+
+    // 8. Rate limit API: /rate_limit
+    if (pathname === '/rate_limit' && method === 'GET') {
+      return sendJson(200, {
+        resources: {
+          core: {
+            limit: 5000,
+            remaining: 5000,
+            reset: Math.floor(Date.now() / 1000) + 3600,
+            used: 0,
+          },
+        },
+      });
+    }
+
+    // 9. Fixture HTML: /fixture or /md-comments/md-test/blob/main/README.md
+    if (pathname === '/fixture' || pathname.endsWith('.html') || pathname.includes('/blob/')) {
+      const fixturePath = path.resolve(__dirname, '../fixtures/github-markdown-page.html');
+      if (fs.existsSync(fixturePath)) {
+        const html = fs.readFileSync(fixturePath, 'utf8');
+        res.writeHead(200, {
+          'Content-Type': 'text/html; charset=utf-8',
+          'Access-Control-Allow-Origin': '*',
+        });
+        res.end(html);
+        return;
       }
     }
 
