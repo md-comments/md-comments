@@ -77,10 +77,17 @@ Run the following checks from the root directory:
    _Identifies any test files impacted by your changes across monorepo packages, and ensures `.codegraph/` remains synchronized._
 
 8. **FOSSA Scan (SCA / License & Vulnerability Compliance)**:
+
    ```bash
    FOSSA_API_KEY=<your-key> fossa analyze
    ```
+
    _Runs FOSSA analysis to scan for license compliance and third-party vulnerabilities. Ensure your FOSSA API key is exported or provided._
+
+9. **Test Enhancement & Knowledge Graph Co-Evolution Check**:
+   - **Test Evolution**: Verify that every modified source file is accompanied by new or updated tests under `tests/`. Commits modifying features, bug fixes, or logic without test enhancements are prohibited.
+   - **Knowledge Graph Sync**: If any feature, flow, or invariant was added or altered, verify that `shared/knowledge-graph/` is updated. Run `pnpm test tests/knowledgeGraph.test.ts` to confirm graph integrity.
+   - **100% Coverage Gate**: Run `pnpm test:coverage` to confirm that 100% test coverage thresholds are preserved.
 
 ## Execution Workflow
 

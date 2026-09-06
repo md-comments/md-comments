@@ -9,3 +9,10 @@ In repositories indexed by CodeGraph (a `.codegraph/` directory exists at the re
 
 If there is no `.codegraph/` directory, skip CodeGraph entirely — indexing is the user's decision.
 <!-- CODEGRAPH_END -->
+
+## GitHub Extension Authentication (Zero PAT Invariant: INV-NO-PAT)
+
+- **NEVER consider, suggest, design, or implement Personal Access Token (PAT) authentication** for the GitHub browser extension (`chrome-extension`).
+- No PAT input fields, forms, prompts, or fallback instructions.
+- All auth must strictly use frictionless **OAuth Device Flow** or native session auth.
+- In tests, always mock OAuth tokens in `chrome.storage.local`; never test or mock PAT entry.

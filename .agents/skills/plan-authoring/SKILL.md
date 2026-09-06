@@ -27,7 +27,21 @@ When plans are reviewed directly on GitHub, reviewers without the Markdown Comme
 2. **Badge**: Single Markdown Comments badge directly below the title.
 3. **Overview & Objectives**: Problem definition, goals, and non-goals.
 4. **Current State vs. Proposed Architecture**: Technical trade-offs, schemas, or data flow.
-5. **Milestones & Action Items**: Phased implementation steps with verification criteria.
+5. **Mandatory Test Enhancement & Knowledge Graph Specification**:
+   - Explicit list of new tests to create (Unit, Integration, and Headless Playwright E2E).
+   - Existing tests that must be updated to prevent behavioral drift.
+   - Identified nodes to add or modify in the In-Code Knowledge Graph (`shared/knowledge-graph/`).
+   - Strategy to guarantee 100% code coverage is preserved.
+6. **Milestones & Action Items**: Phased implementation steps with verification criteria.
+
+## Mandatory Test Co-Evolution Rule
+
+- **No Untested Plans**: Any plan or RFC proposing a code change, new feature, bug fix, or refactoring MUST define corresponding test enhancements. A plan without test enhancements is considered incomplete and cannot proceed to execution.
+- **Knowledge Graph Synchronicity**: Every planned user flow or feature must define its representation in the in-code Knowledge Graph before code implementation begins.
+
+## Mandatory Authentication Invariant (Zero PAT for GitHub Extension)
+
+- **Strict Prohibition (`INV-NO-PAT`)**: Plans touching the GitHub browser extension (`chrome-extension`) MUST NEVER consider, propose, or include Personal Access Token (PAT) authentication. Only frictionless OAuth Device Flow or native auth flows are permitted. Plans proposing PAT inputs, forms, or fallbacks are strictly invalid.
 
 ## Plan Lifecycle & Cleanup Rule
 
