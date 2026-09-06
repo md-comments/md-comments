@@ -35,6 +35,8 @@
     "graphify-out",
     "artifacts",
     "scratch",
-    "temp-chrome-profile*"
+    "temp-chrome-profile*",
+    "playwright-report",
+    "test-results"
   ]
 }

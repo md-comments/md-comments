@@ -107,6 +107,13 @@ jobs:
           name: playwright-report
           path: playwright-report/
 
+      - name: Upload Playwright Traces
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: playwright-traces
+          path: test-results/
+
   coverage-and-reporting-gate:
     name: Consolidate 100% Coverage & Publish Allure Summary
     needs: [knowledge-graph-and-unit, headless-playwright-e2e]

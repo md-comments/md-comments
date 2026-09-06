@@ -1010,8 +1010,8 @@
     "semantic_hash": ""
   },
   "playwright.config.ts": {
-    "mtime": 1788726307.401994,
-    "ast_hash": "fe47886d95409e381948a28097bbb859",
+    "mtime": 1788728293.159123,
+    "ast_hash": "90b7e27c2fb7ed591288fa46d790a4ef",
     "semantic_hash": ""
   },
   "plopfile.mjs": {
@@ -1220,8 +1220,8 @@
     "semantic_hash": ""
   },
   ".github/workflows/nightly-regression.yml": {
-    "mtime": 1788726307.3978105,
-    "ast_hash": "a1fd2b8dd4f698035e96aa7e10fed62f",
+    "mtime": 1788728296.487686,
+    "ast_hash": "128d9d33371ebda0ae3d086638b9abbe",
     "semantic_hash": ""
   },
   "chrome-extension/README.md": {
