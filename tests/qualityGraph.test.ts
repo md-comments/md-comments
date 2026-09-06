@@ -4,8 +4,8 @@ import path from 'path';
 import { features, invariants } from '../.velite';
 
 describe('Quality Knowledge Graph Invariants', () => {
-  it('validates that all 34 features are loaded with mapped test implementations', () => {
-    expect(features.length).toBeGreaterThanOrEqual(34);
+  it('validates that all 49 features are loaded with mapped test implementations', () => {
+    expect(features.length).toBeGreaterThanOrEqual(49);
     for (const feature of features) {
       expect(feature.verifiedIn.length).toBeGreaterThan(0);
       for (const testPath of feature.verifiedIn) {

@@ -188,6 +188,85 @@ describe('shared/mentions', () => {
       expect(cached).toHaveLength(1);
       expect(cached[0].login).toBe('user1');
     });
+
+    it('returns cached users when subsequent fetch returns non-ok or non-array', async () => {
+      let callCount = 0;
+      const mockFetch = vi.fn().mockImplementation(async () => {
+        callCount++;
+        if (callCount === 1) {
+          return { ok: true, json: async () => [{ login: 'cached-user' }] };
+        }
+        return { ok: false, status: 500 };
+      });
+
+      // 1. Initial success
+      const first = await fetchCollaborators('cache-owner', 'repo', () => null, mockFetch as any);
+      expect(first[0].login).toBe('cached-user');
+
+      // 2. Fetch fails with non-ok, should return cached
+      const fallbackOnFail = await fetchCollaborators(
+        'cache-owner',
+        'repo',
+        () => null,
+        mockFetch as any
+      );
+      expect(fallbackOnFail[0].login).toBe('cached-user');
+
+      // 3. Fetch returns non-array, should return cached
+      const nonArrayFetch = vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({ error: 'bad data' }),
+      });
+      const fallbackOnNonArray = await fetchCollaborators(
+        'cache-owner',
+        'repo',
+        () => null,
+        nonArrayFetch as any
+      );
+      expect(fallbackOnNonArray[0].login).toBe('cached-user');
+    });
+
+    it('returns empty array when cold fetch fails on both endpoints and no cache exists', async () => {
+      const failingFetch = vi.fn().mockResolvedValue({
+        ok: false,
+        status: 404,
+      });
+
+      const users = await fetchCollaborators(
+        'cold-owner',
+        'cold-repo',
+        () => null,
+        failingFetch as any
+      );
+      expect(users).toEqual([]);
+    });
+
+    it('returns empty array when cold fetch returns non-array json data and no cache exists', async () => {
+      const nonArrayColdFetch = vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({ message: 'Not found' }),
+      });
+
+      const users = await fetchCollaborators(
+        'cold-nonarray-owner',
+        'cold-nonarray-repo',
+        () => null,
+        nonArrayColdFetch as any
+      );
+      expect(users).toEqual([]);
+    });
+
+    it('catches network exceptions when fetching assignees and contributors and returns fallback', async () => {
+      const rejectingFetch = vi.fn().mockRejectedValue(new Error('Network error'));
+
+      const users = await fetchCollaborators(
+        'cold-throw-owner',
+        'cold-throw-repo',
+        () => null,
+        rejectingFetch as any
+      );
+      expect(users).toEqual([]);
+    });
   });
 
   describe('formatCommentBodyWithMentions', () => {
@@ -206,6 +285,14 @@ describe('shared/mentions', () => {
       expect(res).toBe(
         'Hello <a href="https://github.com/mstrelex" class="md-comments-mention" target="_blank" rel="noopener noreferrer">@mstrelex</a> please check'
       );
+    });
+
+    it('leaves text unchanged if isGitHubLogin returns false for matched handle', async () => {
+      const authorModule = await import('../shared/author');
+      const spy = vi.spyOn(authorModule, 'isGitHubLogin').mockReturnValueOnce(false);
+      const res = formatCommentBodyWithMentions('Hello @invaliduser');
+      expect(res).toBe('Hello @invaliduser');
+      spy.mockRestore();
     });
 
     it('resolves @login to the person name when resolver is provided', () => {

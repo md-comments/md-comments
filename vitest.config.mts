@@ -12,7 +12,14 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       include: ['shared/**/*.ts'],
+      exclude: ['shared/types.ts', 'shared/commentStorage.ts', 'shared/**/*.d.ts'],
       reporter: ['text', 'json', 'html'],
+      thresholds: {
+        lines: 100,
+        statements: 100,
+        functions: 100,
+        branches: 90,
+      },
     },
   },
 });

@@ -10,14 +10,23 @@ const __dirname = path.dirname(__filename);
 
 export const pathToExtension = path.resolve(__dirname, '../../../chrome-extension/dist');
 
+import { createCoverageHelper, type CoverageHelper } from './coverageHelper.js';
+
 export interface ExtensionFixtures {
   context: BrowserContext;
   extensionId: string;
   testPage: Page;
+  coverageHelper: CoverageHelper;
 }
 
 export const test = base.extend<ExtensionFixtures>({
-  context: async (_unused, use) => {
+  coverageHelper: async (_unused, use) => {
+    const helper = createCoverageHelper('./coverage/cdp');
+    await use(helper);
+    await helper.stopAndCollect();
+  },
+
+  context: async ({ coverageHelper }, use) => {
     // 1. Clean test repo before starting
     await resetTestRepository();
 
@@ -35,6 +44,9 @@ export const test = base.extend<ExtensionFixtures>({
         '--disable-gpu',
       ],
     });
+
+    // Attach CDP coverage to service worker if possible
+    await coverageHelper.startServiceWorkerCoverage(context);
 
     // 4. Inject OAuth session credentials into chrome.storage.local
     let [backgroundWorker] = context.serviceWorkers();

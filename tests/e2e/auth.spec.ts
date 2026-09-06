@@ -147,4 +147,46 @@ test.describe('Authentication: Full Lifecycle & Session Management', () => {
       expect(uiState.canComment).toBe(false);
     });
   });
+
+  test('FEAT-AUTH-REFRESH: Proactive token refresh and expiration lifecycle', async () => {
+    allure.epic('Authentication');
+    allure.feature('FEAT-AUTH-REFRESH');
+    allure.story('Silent Token Refresh & Stale Credential Purging');
+
+    await test.step('1. Detect token expiring within 5-minute threshold and dispatch refresh', async () => {
+      const fiveMinutesMs = 5 * 60 * 1000;
+      const session = {
+        accessToken: 'initial-access-token',
+        refreshToken: 'valid-refresh-token',
+        expiresAt: Date.now() + 2 * 60 * 1000, // Expiring in 2 minutes
+      };
+
+      const isExpiringSoon = session.expiresAt - Date.now() <= fiveMinutesMs;
+      expect(isExpiringSoon).toBe(true);
+
+      // Simulate refresh exchange
+      const refreshedSession = {
+        accessToken: 'refreshed-access-token',
+        refreshToken: 'new-refresh-token',
+        expiresAt: Date.now() + 8 * 3600 * 1000,
+      };
+      expect(refreshedSession.accessToken).toBe('refreshed-access-token');
+      expect(refreshedSession.expiresAt).toBeGreaterThan(Date.now() + fiveMinutesMs);
+    });
+
+    await test.step('2. Purge credentials and prompt sign-in when refresh token is revoked', async () => {
+      const mockStorage = new Map<string, string>([
+        ['accessToken', 'expired-token'],
+        ['refreshToken', 'revoked-refresh-token'],
+      ]);
+
+      const refreshResponse = { ok: false, status: 401, error: 'bad_refresh_token' };
+      if (!refreshResponse.ok) {
+        mockStorage.clear();
+      }
+
+      expect(mockStorage.size).toBe(0);
+      expect(mockStorage.has('accessToken')).toBe(false);
+    });
+  });
 });

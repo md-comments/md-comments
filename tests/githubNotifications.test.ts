@@ -97,7 +97,15 @@ describe('shared/githubNotifications', () => {
             orphaned: false,
             resolved: false,
             reactions: [],
-            replies: [],
+            replies: [
+              {
+                id: 'r-old',
+                author: 'bob',
+                body: 'Prior inline reply @alice',
+                created_at: '2026-09-01T00:30:00Z',
+                reactions: [],
+              },
+            ],
           },
         ],
         page_comments: [],
@@ -150,6 +158,61 @@ describe('shared/githubNotifications', () => {
       expect(events).toHaveLength(1);
       expect(events[0].commentId).toBe('p1');
       expect(events[0].newMentions).toEqual(['eva']);
+    });
+
+    it('detects mentions in page comments and page comment replies while ignoring prior mentions', () => {
+      const prevComments: CommentsFile = {
+        inline_comments: [],
+        page_comments: [
+          {
+            id: 'p1',
+            author: 'alice',
+            body: 'Old page comment @bob',
+            created_at: '2026-09-01T00:00:00Z',
+            resolved: false,
+            reactions: [],
+            replies: [
+              {
+                id: 'pr1',
+                author: 'bob',
+                body: 'Prior reply @alice',
+                created_at: '2026-09-01T01:00:00Z',
+                reactions: [],
+              },
+            ],
+          },
+        ],
+      };
+
+      const newComments: CommentsFile = {
+        inline_comments: [],
+        page_comments: [
+          {
+            id: 'p1',
+            author: 'alice',
+            body: 'Old page comment @bob and new @carol',
+            created_at: '2026-09-01T00:00:00Z',
+            resolved: false,
+            reactions: [],
+            replies: [
+              {
+                id: 'pr1',
+                author: 'bob',
+                body: 'Prior reply @alice with new @david',
+                created_at: '2026-09-01T01:00:00Z',
+                reactions: [],
+              },
+            ],
+          },
+        ],
+      };
+
+      const events = findNewlyMentionedEvents(prevComments, newComments, meta);
+      expect(events).toHaveLength(2);
+      expect(events[0].commentId).toBe('p1');
+      expect(events[0].newMentions).toEqual(['carol']);
+      expect(events[1].commentId).toBe('pr1');
+      expect(events[1].newMentions).toEqual(['david']);
     });
   });
 
@@ -215,6 +278,115 @@ describe('shared/githubNotifications', () => {
       });
 
       expect(success).toBe(false);
+    });
+
+    it('handles network throw gracefully without throwing', async () => {
+      const mockFetch = vi.fn().mockRejectedValue(new Error('Network connection timeout'));
+
+      const event: NotificationEvent = {
+        commentId: 'c2',
+        author: 'alice',
+        body: 'Please review @bob',
+        filePath: 'docs/intro.md',
+        newMentions: ['bob'],
+      };
+
+      const success = await dispatchCommitCommentNotification({
+        owner: 'my-org',
+        repo: 'my-repo',
+        commitSha: 'commit1234567',
+        event,
+        getToken: () => 'auth-token',
+        fetchFn: mockFetch as unknown as typeof fetch,
+      });
+
+      expect(success).toBe(false);
+    });
+
+    it('falls back to global fetch when fetchFn parameter is omitted', async () => {
+      const origFetch = globalThis.fetch;
+      const globalMockFetch = vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({ id: 1 }),
+      });
+      globalThis.fetch = globalMockFetch as any;
+
+      try {
+        const event: NotificationEvent = {
+          commentId: 'c3',
+          author: 'alice',
+          body: 'Hello @carol',
+          filePath: 'docs/intro.md',
+          newMentions: ['carol'],
+        };
+
+        const success = await dispatchCommitCommentNotification({
+          owner: 'my-org',
+          repo: 'my-repo',
+          commitSha: 'commit1234567',
+          event,
+          getToken: () => 'token',
+        });
+
+        expect(success).toBe(true);
+        expect(globalMockFetch).toHaveBeenCalled();
+      } finally {
+        globalThis.fetch = origFetch;
+      }
+    });
+  });
+
+  describe('findNewlyMentionedEvents edge cases', () => {
+    it('handles comments objects where arrays or replies are undefined', () => {
+      const meta = { owner: 'owner', repo: 'repo', filePath: 'docs/api.md' };
+      const prevComments = {
+        inline_comments: [
+          {
+            id: 'c1',
+            author: 'alice',
+            anchor_text: 'sample',
+            anchor_hash: 'h1',
+            paragraph_index: 0,
+            heading_context: '',
+            body: 'Hello @user1',
+            created_at: '',
+            orphaned: false,
+            resolved: false,
+            reactions: [],
+            // replies undefined
+          } as any,
+        ],
+        page_comments: [
+          {
+            id: 'pc1',
+            author: 'bob',
+            body: 'Page @user2',
+            created_at: '',
+            resolved: false,
+            reactions: [],
+            // replies undefined
+          } as any,
+        ],
+      };
+
+      const newComments = {
+        // inline_comments undefined
+        page_comments: [
+          {
+            id: 'pc2',
+            author: 'charlie',
+            body: 'New page comment @newuser',
+            created_at: '',
+            resolved: false,
+            reactions: [],
+            // replies undefined
+          } as any,
+        ],
+      };
+
+      const events = findNewlyMentionedEvents(prevComments as any, newComments as any, meta);
+      expect(events).toHaveLength(1);
+      expect(events[0].newMentions).toEqual(['newuser']);
     });
   });
 });

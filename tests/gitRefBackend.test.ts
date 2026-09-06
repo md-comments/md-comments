@@ -4,11 +4,26 @@ import {
   GitHubOrphanRefBackend,
   commentsFilePathForMarkdown,
   mergeCommentsFiles,
+  decodeBase64,
   ORPHAN_REF_NAME,
 } from '../shared/gitRefBackend';
 import type { CommentsFile } from '../shared/types';
 
 describe('GitHubOrphanRefBackend', () => {
+  describe('decodeBase64', () => {
+    it('uses browser atob and TextDecoder fallback when Buffer is undefined', () => {
+      const origBuffer = globalThis.Buffer;
+      try {
+        (globalThis as any).Buffer = undefined;
+        const text = 'Hello world from browser atob fallback 🚀';
+        const base64 = btoa(unescape(encodeURIComponent(text)));
+        expect(decodeBase64(base64)).toBe(text);
+      } finally {
+        globalThis.Buffer = origBuffer;
+      }
+    });
+  });
+
   describe('commentsFilePathForMarkdown', () => {
     it('converts .md extensions to hashed .comments.yml path with fallback hash if unprovided', () => {
       expect(commentsFilePathForMarkdown('README.md')).toBe('README.0000000.comments.yml');
@@ -102,6 +117,123 @@ describe('GitHubOrphanRefBackend', () => {
       expect(merged.inline_comments.length).toBe(2);
       expect(merged.inline_comments.find((c) => c.id === 'c1')?.replies.length).toBe(1);
       expect(merged.inline_comments.find((c) => c.id === 'c2')?.body).toBe('Comment 2');
+    });
+
+    it('merges new local inline comments, local replies, and overlapping page comments with replies', () => {
+      const local: CommentsFile = {
+        inline_comments: [
+          {
+            id: 'c1',
+            author: 'alice',
+            anchor_text: 'hello',
+            anchor_hash: 'h1',
+            paragraph_index: 0,
+            heading_context: '',
+            body: 'Updated local body',
+            created_at: '',
+            orphaned: false,
+            resolved: false,
+            reactions: [],
+            replies: [
+              {
+                id: 'r-local',
+                author: 'alice',
+                body: 'Local reply',
+                created_at: '',
+                reactions: [],
+              },
+            ],
+          },
+          {
+            id: 'c-brand-new',
+            author: 'david',
+            anchor_text: 'new section',
+            anchor_hash: 'h3',
+            paragraph_index: 2,
+            heading_context: '',
+            body: 'Brand new local comment',
+            created_at: '',
+            orphaned: false,
+            resolved: false,
+            reactions: [],
+            replies: [],
+          },
+        ],
+        page_comments: [
+          {
+            id: 'p1',
+            author: 'alice',
+            body: 'Page comment edited locally',
+            created_at: '',
+            resolved: false,
+            reactions: [],
+            replies: [
+              {
+                id: 'pr-local',
+                author: 'alice',
+                body: 'Local page reply',
+                created_at: '',
+                reactions: [],
+              },
+            ],
+          },
+        ],
+      };
+
+      const remote: CommentsFile = {
+        inline_comments: [
+          {
+            id: 'c1',
+            author: 'alice',
+            anchor_text: 'hello',
+            anchor_hash: 'h1',
+            paragraph_index: 0,
+            heading_context: '',
+            body: 'Old body',
+            created_at: '',
+            orphaned: false,
+            resolved: false,
+            reactions: [],
+            replies: [
+              {
+                id: 'r-remote',
+                author: 'bob',
+                body: 'Remote reply',
+                created_at: '',
+                reactions: [],
+              },
+            ],
+          },
+        ],
+        page_comments: [
+          {
+            id: 'p1',
+            author: 'alice',
+            body: 'Original page comment',
+            created_at: '',
+            resolved: false,
+            reactions: [],
+            replies: [
+              {
+                id: 'pr-remote',
+                author: 'bob',
+                body: 'Remote page reply',
+                created_at: '',
+                reactions: [],
+              },
+            ],
+          },
+        ],
+      };
+
+      const merged = mergeCommentsFiles(local, remote);
+      expect(merged.inline_comments).toHaveLength(2);
+      expect(merged.inline_comments.find((c) => c.id === 'c-brand-new')).toBeDefined();
+      expect(merged.inline_comments.find((c) => c.id === 'c1')?.replies).toHaveLength(2);
+
+      expect(merged.page_comments).toHaveLength(1);
+      expect(merged.page_comments[0].replies).toHaveLength(2);
+      expect(merged.page_comments[0].body).toBe('Page comment edited locally');
     });
   });
 
@@ -264,7 +396,12 @@ describe('GitHubOrphanRefBackend', () => {
         ok: true,
         json: async () => ({ content: base64Commit, encoding: 'base64' }),
       });
-      // 2. Fetch legacy file (docs/test.comments.yml)
+      // 2. Fetch 0000000 fallback file (docs/test.0000000.comments.yml) -> 404 not found
+      fetchMock.mockResolvedValueOnce({
+        ok: false,
+        status: 404,
+      });
+      // 3. Fetch legacy file (docs/test.comments.yml)
       fetchMock.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ content: base64Legacy, encoding: 'base64' }),
@@ -362,6 +499,29 @@ describe('GitHubOrphanRefBackend', () => {
       expect(firstCallUrl).toContain('docs/ADR%20T9%20Context%20Engine.0000000.comments.yml');
     });
 
+    it('falls back to double-encoded path when fetching comments with spaces in name', async () => {
+      fetchMock.mockImplementation(async (url: string) => {
+        if (url.includes('docs/ADR%2520T9%2520Context%2520Engine.0000000.comments.yml')) {
+          return {
+            ok: true,
+            json: async () => ({
+              content: Buffer.from('inline_comments: []\npage_comments: []\n').toString('base64'),
+              encoding: 'base64',
+            }),
+          };
+        }
+        return { ok: false, status: 404 };
+      });
+
+      const res = await backend.read({
+        owner: 'test-owner',
+        repo: 'test-repo',
+        filePath: 'docs/ADR T9 Context Engine.md',
+        commitHash: '0000000',
+      });
+      expect(res).toEqual({ inline_comments: [], page_comments: [] });
+    });
+
     it('dispatches a commit comment notification when new mentions exist in written comments', async () => {
       // 1. GET ref -> ok
       fetchMock.mockResolvedValueOnce({
@@ -426,6 +586,582 @@ describe('GitHubOrphanRefBackend', () => {
       expect(lastCallBody.body).toContain(
         '*Sent via [Markdown Comments](https://md-comments.com)*'
       );
+    });
+
+    it('throws descriptive error when commit creation API fails after retries', async () => {
+      fetchMock.mockImplementation(async (url: string) => {
+        if (url.includes('/git/ref/')) {
+          return { ok: true, json: async () => ({ object: { sha: 'sha-c' } }) };
+        }
+        if (url.includes('/git/blobs')) {
+          return { ok: true, json: async () => ({ sha: 'sha-b' }) };
+        }
+        if (url.includes('/git/trees')) {
+          return { ok: true, json: async () => ({ sha: 'sha-t' }) };
+        }
+        if (url.includes('/git/commits')) {
+          return { ok: false, status: 403, text: async () => 'Push access denied' };
+        }
+        return { ok: false, status: 404 };
+      });
+
+      await expect(
+        backend.write(
+          { owner: 'my-org', repo: 'my-repo', filePath: 'docs/test.md' },
+          { inline_comments: [], page_comments: [] }
+        )
+      ).rejects.toThrow(/Failed to write comments.*Commit creation failed \(403\)/);
+    });
+
+    it('throws error when ref PATCH returns unexpected status code after retries', async () => {
+      fetchMock.mockImplementation(async (url: string, opts?: any) => {
+        if (opts?.method === 'PATCH') {
+          return { ok: false, status: 500 };
+        }
+        if (url.includes('/git/refs/md-comments/data')) {
+          return { ok: true, json: async () => ({ object: { sha: 'sha-c' } }) };
+        }
+        if (url.includes('/git/blobs')) {
+          return { ok: true, json: async () => ({ sha: 'sha-b' }) };
+        }
+        if (url.includes('/git/trees')) {
+          return { ok: true, json: async () => ({ sha: 'sha-t' }) };
+        }
+        if (url.includes('/git/commits')) {
+          return { ok: true, json: async () => ({ sha: 'sha-new' }) };
+        }
+        return { ok: false, status: 404 };
+      });
+
+      await expect(
+        backend.write(
+          { owner: 'my-org', repo: 'my-repo', filePath: 'docs/test.md' },
+          { inline_comments: [], page_comments: [] }
+        )
+      ).rejects.toThrow(/Failed to write comments.*Ref update failed: 500/);
+    });
+
+    it('throws descriptive error when tree creation API fails', async () => {
+      fetchMock.mockImplementation(async (url: string) => {
+        if (url.includes('/git/ref/')) {
+          return { ok: true, json: async () => ({ object: { sha: 'sha-c' } }) };
+        }
+        if (url.includes('/git/blobs')) {
+          return { ok: true, json: async () => ({ sha: 'sha-b' }) };
+        }
+        if (url.includes('/git/trees')) {
+          return { ok: false, status: 400, text: async () => 'Invalid tree path' };
+        }
+        return { ok: false, status: 404 };
+      });
+
+      await expect(
+        backend.write(
+          { owner: 'my-org', repo: 'my-repo', filePath: 'docs/test.md' },
+          { inline_comments: [], page_comments: [] }
+        )
+      ).rejects.toThrow(/Tree creation failed \(400\)/);
+    });
+
+    it('retries when initial ref creation returns 422 conflict and succeeds on next attempt', async () => {
+      let createRefAttempt = 0;
+      fetchMock.mockImplementation(async (url: string, opts?: any) => {
+        const method = (opts?.method || 'GET').toUpperCase();
+        if (url.includes('/git/blobs')) {
+          return { ok: true, json: async () => ({ sha: 'sha-b' }) };
+        }
+        if (url.includes('/git/trees')) {
+          return { ok: true, json: async () => ({ sha: 'sha-t' }) };
+        }
+        if (url.includes('/git/commits')) {
+          return { ok: true, json: async () => ({ sha: 'sha-commit' }) };
+        }
+        // Ref endpoint
+        if (url.includes('/git/refs/md-comments/data') && method === 'GET') {
+          // On attempt 1, ref does not exist yet (404)
+          if (createRefAttempt === 0) {
+            return { ok: false, status: 404 };
+          }
+          // On attempt 2, ref was created by another worker
+          return { ok: true, json: async () => ({ object: { sha: 'sha-concurrent' } }) };
+        }
+        if (url.includes('/git/refs') && method === 'POST') {
+          createRefAttempt++;
+          // First attempt to create ref collides with concurrent creator (422)
+          return { ok: false, status: 422 };
+        }
+        if (method === 'PATCH') {
+          return { ok: true, json: async () => ({}) };
+        }
+        return { ok: false, status: 404 };
+      });
+
+      await expect(
+        backend.write(
+          { owner: 'my-org', repo: 'my-repo', filePath: 'docs/test.md' },
+          { inline_comments: [], page_comments: [] }
+        )
+      ).resolves.toBeUndefined();
+
+      expect(createRefAttempt).toBe(1);
+    });
+
+    it('throws error when initial ref creation returns unexpected status code after retries', async () => {
+      fetchMock.mockImplementation(async (url: string, opts?: any) => {
+        const method = (opts?.method || 'GET').toUpperCase();
+        if (url.includes('/git/refs') && method === 'POST') {
+          return { ok: false, status: 500 };
+        }
+        if (url.includes('/git/blobs')) {
+          return { ok: true, json: async () => ({ sha: 'sha-b' }) };
+        }
+        if (url.includes('/git/trees')) {
+          return { ok: true, json: async () => ({ sha: 'sha-t' }) };
+        }
+        if (url.includes('/git/commits')) {
+          return { ok: true, json: async () => ({ sha: 'sha-new' }) };
+        }
+        // Ref lookup returns 404
+        return { ok: false, status: 404 };
+      });
+
+      await expect(
+        backend.write(
+          { owner: 'my-org', repo: 'my-repo', filePath: 'docs/test.md' },
+          { inline_comments: [], page_comments: [] }
+        )
+      ).rejects.toThrow(/Failed to write comments.*Ref creation failed: 500/);
+    });
+
+    it('gracefully catches and logs errors when dispatchNotifications encounters an exception', async () => {
+      fetchMock.mockImplementation(async (url: string, opts?: any) => {
+        const method = (opts?.method || 'GET').toUpperCase();
+        if (url.includes('/git/refs/md-comments/data') && method === 'GET') {
+          return { ok: true, json: async () => ({ object: { sha: 'sha-1' } }) };
+        }
+        if (url.includes('/git/blobs') || url.includes('/git/trees')) {
+          return { ok: true, json: async () => ({ sha: 'sha-x' }) };
+        }
+        if (url.includes('/git/commits') && method === 'POST') {
+          // If this is the commit comment notification endpoint, throw an error
+          if (url.includes('/comments')) {
+            throw new Error('Notification API exploded');
+          }
+          return { ok: true, json: async () => ({ sha: 'sha-commit-1' }) };
+        }
+        if (method === 'PATCH') {
+          return { ok: true, json: async () => ({}) };
+        }
+        return { ok: false, status: 404 };
+      });
+
+      // Write comments containing a mention so notification dispatch is triggered
+      await expect(
+        backend.write(
+          { owner: 'my-org', repo: 'my-repo', filePath: 'docs/test.md' },
+          {
+            inline_comments: [
+              {
+                id: 'c-mention',
+                author: 'alice',
+                anchor_text: 'text',
+                anchor_hash: 'h',
+                paragraph_index: 0,
+                heading_context: '',
+                body: 'Hello @collaborator',
+                created_at: '',
+                orphaned: false,
+                resolved: false,
+                reactions: [],
+                replies: [],
+              },
+            ],
+            page_comments: [],
+          }
+        )
+      ).resolves.toBeUndefined();
+    });
+
+    it('handles unexpected exceptions in dispatchNotifications without throwing', async () => {
+      // Calling dispatchNotifications with invalid key arguments triggers catch block safely
+      await expect(
+        (backend as any).dispatchNotifications(null, null, null, 'sha-1')
+      ).resolves.toBeUndefined();
+    });
+
+    it('ignores read failure when refetching remote comments during CAS retry', async () => {
+      let attempt = 0;
+      fetchMock.mockImplementation(async (url: string, opts?: any) => {
+        const method = (opts?.method || 'GET').toUpperCase();
+        if (url.includes('/git/refs/md-comments/data') && method === 'GET') {
+          return { ok: true, json: async () => ({ object: { sha: 'sha-1' } }) };
+        }
+        if (
+          url.includes('/git/blobs') ||
+          url.includes('/git/trees') ||
+          url.includes('/git/commits')
+        ) {
+          return { ok: true, json: async () => ({ sha: 'sha-x' }) };
+        }
+        if (method === 'PATCH') {
+          attempt++;
+          if (attempt === 1) {
+            return { ok: false, status: 422 };
+          }
+          return { ok: true, json: async () => ({}) };
+        }
+        return { ok: false, status: 404 };
+      });
+
+      const readSpy = vi
+        .spyOn(backend, 'read')
+        .mockRejectedValueOnce(new Error('Simulated read failure during CAS retry'));
+
+      await expect(
+        backend.write(
+          { owner: 'my-org', repo: 'my-repo', filePath: 'docs/test.md' },
+          { inline_comments: [], page_comments: [] }
+        )
+      ).resolves.toBeUndefined();
+
+      readSpy.mockRestore();
+    });
+
+    it('catches and logs unexpected network throws inside traceAndMigrateRename', async () => {
+      fetchMock.mockImplementation(async (url: string) => {
+        if (url.includes('0000000.comments.yml')) {
+          return { ok: false, status: 404 };
+        }
+        if (url.includes('/commits?path=')) {
+          throw new Error('Network hardware failure');
+        }
+        return { ok: false, status: 404 };
+      });
+
+      const result = await backend.read({
+        owner: 'my-org',
+        repo: 'my-repo',
+        filePath: 'docs/network-fail.md',
+      });
+      expect(result).toEqual({ inline_comments: [], page_comments: [] });
+    });
+
+    describe('traceAndMigrateRename & deleteFileFromRef', () => {
+      it('migrates comments when file was renamed in Git history and deletes old path', async () => {
+        const oldYml = `
+inline_comments:
+  - id: migrated-1
+    author: alice
+    anchor_text: old heading
+    anchor_hash: h1
+    paragraph_index: 0
+    heading_context: Intro
+    body: Migrated comment
+    created_at: 2026-09-01T00:00:00Z
+    orphaned: false
+    resolved: false
+    reactions: []
+    replies: []
+page_comments: []
+`;
+        const base64OldYml = Buffer.from(oldYml).toString('base64');
+
+        fetchMock.mockImplementation(async (url: string, opts?: any) => {
+          const method = (opts?.method || 'GET').toUpperCase();
+          // 1. Reading new path returns 404
+          if (url.includes('docs/new-file.0000000.comments.yml') && method === 'GET') {
+            return { ok: false, status: 404 };
+          }
+          // 2. Commit log search for new file
+          if (url.includes('/commits?path=docs%2Fnew-file.md')) {
+            return { ok: true, json: async () => [{ sha: 'commit-rename-123' }] };
+          }
+          // 3. Commit detail search
+          if (url.includes('/commits/commit-rename-123')) {
+            return {
+              ok: true,
+              json: async () => ({
+                files: [
+                  {
+                    filename: 'docs/new-file.md',
+                    status: 'renamed',
+                    previous_filename: 'docs/old-file.md',
+                  },
+                ],
+              }),
+            };
+          }
+          // 4. Old comment contents
+          if (url.includes('docs/old-file.0000000.comments.yml') && method === 'GET') {
+            return {
+              ok: true,
+              json: async () => ({
+                content: base64OldYml,
+                encoding: 'base64',
+              }),
+            };
+          }
+          // 5. Write methods (blobs, trees, commits, refs)
+          if (url.includes('/git/blobs')) {
+            return { ok: true, json: async () => ({ sha: 'sha-blob' }) };
+          }
+          if (url.includes('/git/trees')) {
+            return { ok: true, json: async () => ({ sha: 'sha-tree' }) };
+          }
+          if (url.includes('/git/commits/sha-current-ref')) {
+            return { ok: true, json: async () => ({ tree: { sha: 'sha-tree-base' } }) };
+          }
+          if (url.includes('/git/commits')) {
+            return { ok: true, json: async () => ({ sha: 'sha-commit-new' }) };
+          }
+          if (url.includes('/git/refs/md-comments/data')) {
+            if (method === 'PATCH') {
+              return { ok: true, json: async () => ({}) };
+            }
+            return { ok: true, json: async () => ({ object: { sha: 'sha-current-ref' } }) };
+          }
+          return { ok: false, status: 404 };
+        });
+
+        const comments = await backend.read({
+          owner: 'my-org',
+          repo: 'my-repo',
+          filePath: 'docs/new-file.md',
+        });
+
+        expect(comments).not.toBeNull();
+        expect(comments.inline_comments).toHaveLength(1);
+        expect(comments.inline_comments[0].body).toBe('Migrated comment');
+      });
+
+      it('returns empty comments file when commit history fails or has no rename events', async () => {
+        // Commits endpoint returns error
+        fetchMock.mockImplementation(async (url: string) => {
+          if (url.includes('0000000.comments.yml')) {
+            return { ok: false, status: 404 };
+          }
+          if (url.includes('/commits?path=')) {
+            return { ok: false, status: 500 };
+          }
+          return { ok: false, status: 404 };
+        });
+
+        const result1 = await backend.read({
+          owner: 'my-org',
+          repo: 'my-repo',
+          filePath: 'docs/no-commits.md',
+        });
+        expect(result1).toEqual({ inline_comments: [], page_comments: [] });
+
+        // Commits endpoint returns non-array
+        fetchMock.mockImplementation(async (url: string) => {
+          if (url.includes('0000000.comments.yml')) return { ok: false, status: 404 };
+          if (url.includes('/commits?path='))
+            return { ok: true, json: async () => ({ error: 'bad' }) };
+          return { ok: false, status: 404 };
+        });
+
+        const result2 = await backend.read({
+          owner: 'my-org',
+          repo: 'my-repo',
+          filePath: 'docs/bad-commits.md',
+        });
+        expect(result2).toEqual({ inline_comments: [], page_comments: [] });
+
+        // Commit detail returns 404 or without rename
+        fetchMock.mockImplementation(async (url: string) => {
+          if (url.includes('0000000.comments.yml')) return { ok: false, status: 404 };
+          if (url.includes('/commits?path='))
+            return { ok: true, json: async () => [{ sha: 'c-plain' }] };
+          if (url.includes('/commits/c-plain')) return { ok: false, status: 404 };
+          return { ok: false, status: 404 };
+        });
+
+        const result3 = await backend.read({
+          owner: 'my-org',
+          repo: 'my-repo',
+          filePath: 'docs/plain-commits.md',
+        });
+        expect(result3).toEqual({ inline_comments: [], page_comments: [] });
+      });
+
+      it('handles deleteFileFromRef errors gracefully without throwing', async () => {
+        const oldYml = `
+inline_comments:
+  - id: c-del-err
+    author: alice
+    anchor_text: text
+    anchor_hash: h
+    paragraph_index: 0
+    heading_context: ''
+    body: Survives delete failure
+    created_at: ''
+    orphaned: false
+    resolved: false
+    reactions: []
+    replies: []
+page_comments: []
+`;
+        let deleteRefAttempt = false;
+
+        fetchMock.mockImplementation(async (url: string, opts?: any) => {
+          const method = (opts?.method || 'GET').toUpperCase();
+          if (url.includes('docs/new-file.0000000.comments.yml') && method === 'GET') {
+            return { ok: false, status: 404 };
+          }
+          if (url.includes('/commits?path=')) {
+            return { ok: true, json: async () => [{ sha: 'c-err' }] };
+          }
+          if (url.includes('/commits/c-err')) {
+            return {
+              ok: true,
+              json: async () => ({
+                files: [
+                  {
+                    filename: 'docs/new-file.md',
+                    status: 'renamed',
+                    previous_filename: 'docs/old-file.md',
+                  },
+                ],
+              }),
+            };
+          }
+          if (url.includes('docs/old-file.0000000.comments.yml') && method === 'GET') {
+            return {
+              ok: true,
+              json: async () => ({
+                content: Buffer.from(oldYml).toString('base64'),
+                encoding: 'base64',
+              }),
+            };
+          }
+          if (url.includes('/git/blobs') || url.includes('/git/trees')) {
+            return { ok: true, json: async () => ({ sha: 'sha-x' }) };
+          }
+          if (url.includes('/git/commits/sha-current-ref')) {
+            return { ok: true, json: async () => ({ tree: { sha: 'sha-tree-base' } }) };
+          }
+          if (url.includes('/git/commits')) {
+            return { ok: true, json: async () => ({ sha: 'sha-commit-x' }) };
+          }
+          if (url.includes('/git/refs/md-comments/data')) {
+            if (method === 'PATCH') {
+              if (deleteRefAttempt) {
+                throw new Error('Ref deletion network failure');
+              }
+              deleteRefAttempt = true;
+              return { ok: true, json: async () => ({}) };
+            }
+            return { ok: true, json: async () => ({ object: { sha: 'sha-current-ref' } }) };
+          }
+          return { ok: false, status: 404 };
+        });
+
+        const result = await backend.read({
+          owner: 'my-org',
+          repo: 'my-repo',
+          filePath: 'docs/new-file.md',
+        });
+        // Comments are successfully migrated even if deletion of legacy ref file threw an error
+        expect(result.inline_comments).toHaveLength(1);
+        expect(result.inline_comments[0].body).toBe('Survives delete failure');
+      });
+
+      it('gracefully handles non-OK responses during deleteFileFromRef steps', async () => {
+        const oldYml = `
+inline_comments:
+  - id: c-del-step
+    author: alice
+    anchor_text: text
+    anchor_hash: h
+    paragraph_index: 0
+    heading_context: ''
+    body: Survives step failure
+    created_at: ''
+    orphaned: false
+    resolved: false
+    reactions: []
+    replies: []
+page_comments: []
+`;
+        for (const failingStep of ['ref', 'commit', 'tree', 'newCommit']) {
+          let stepAttempt = 0;
+          fetchMock.mockImplementation(async (url: string, opts?: any) => {
+            const method = (opts?.method || 'GET').toUpperCase();
+            if (url.includes('docs/new-file.0000000.comments.yml') && method === 'GET') {
+              return { ok: false, status: 404 };
+            }
+            if (url.includes('/commits?path=')) {
+              return { ok: true, json: async () => [{ sha: 'c-step' }] };
+            }
+            if (url.includes('/commits/c-step')) {
+              return {
+                ok: true,
+                json: async () => ({
+                  files: [
+                    {
+                      filename: 'docs/new-file.md',
+                      status: 'renamed',
+                      previous_filename: 'docs/old-file.md',
+                    },
+                  ],
+                }),
+              };
+            }
+            if (url.includes('docs/old-file.0000000.comments.yml') && method === 'GET') {
+              return {
+                ok: true,
+                json: async () => ({
+                  content: Buffer.from(oldYml).toString('base64'),
+                  encoding: 'base64',
+                }),
+              };
+            }
+            if (url.includes('/git/blobs')) {
+              return { ok: true, json: async () => ({ sha: 'sha-blob' }) };
+            }
+            if (url.includes('/git/trees')) {
+              stepAttempt++;
+              // If failing on tree creation during deleteFileFromRef (attempt 2 of tree creation)
+              if (failingStep === 'tree' && stepAttempt >= 2) {
+                return { ok: false, status: 500 };
+              }
+              return { ok: true, json: async () => ({ sha: 'sha-t' }) };
+            }
+            if (url.includes('/git/commits/sha-current-ref')) {
+              if (failingStep === 'commit') {
+                return { ok: false, status: 404, text: async () => '' };
+              }
+              return { ok: true, json: async () => ({ tree: { sha: 'sha-tree-base' } }) };
+            }
+            if (url.includes('/git/commits')) {
+              const bodyStr = typeof opts?.body === 'string' ? opts.body : '';
+              if (failingStep === 'newCommit' && bodyStr.includes('Migrate comments: delete')) {
+                return { ok: false, status: 500, text: async () => '' };
+              }
+              return { ok: true, json: async () => ({ sha: 'sha-commit' }) };
+            }
+            if (url.includes('/git/refs/md-comments/data')) {
+              if (method === 'PATCH') {
+                return { ok: true, json: async () => ({}) };
+              }
+              const bodyStr = typeof opts?.body === 'string' ? opts.body : '';
+              if (failingStep === 'ref' && stepAttempt >= 1 && !bodyStr) {
+                return { ok: false, status: 404, text: async () => '' };
+              }
+              return { ok: true, json: async () => ({ object: { sha: 'sha-current-ref' } }) };
+            }
+            return { ok: false, status: 404, text: async () => '' };
+          });
+
+          const result = await backend.read({
+            owner: 'my-org',
+            repo: 'my-repo',
+            filePath: 'docs/new-file.md',
+          });
+          expect(result.inline_comments).toHaveLength(1);
+        }
+      });
     });
   });
 });

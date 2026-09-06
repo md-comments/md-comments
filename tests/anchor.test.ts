@@ -31,10 +31,16 @@ describe('escapeHtml', () => {
   });
 });
 
-describe('fnv1aHash', () => {
+describe('fnv1aHash and computeAnchorId', () => {
   it('generates consistent 8-character hex hashes', () => {
     expect(fnv1aHash('hello world')).toBe('d58b3fa7');
     expect(fnv1aHash('hello   world')).toBe('d58b3fa7'); // due to internal normalization
+  });
+
+  it('computes anchor ID with and without paragraph index', async () => {
+    const { computeAnchorId } = await import('../shared/anchor');
+    expect(computeAnchorId('hello world')).toBe('a_d58b3fa7');
+    expect(computeAnchorId('hello world', 2)).toBe('a_2_d58b3fa7');
   });
 });
 
@@ -98,6 +104,22 @@ Paragraph under sub header.
     expect(anchors[1].anchor_text).toBe('title T9 Context Engine');
     expect(anchors[2].anchor_text).toBe('summary T9 ingests product data');
   });
+
+  it('parses lists, blockquotes, and ignores blocks that normalize to empty text', () => {
+    const md = `
+- Bullet item one
+* Bullet item two
+1. Numbered item
+
+> Blockquote insight statement
+
+** **
+`;
+    const anchors = parseMarkdownAnchors(md);
+    expect(anchors.length).toBeGreaterThanOrEqual(4);
+    expect(anchors.some((a) => a.anchor_text === 'Bullet item one')).toBe(true);
+    expect(anchors.some((a) => a.anchor_text === 'Blockquote insight statement')).toBe(true);
+  });
 });
 
 describe('findOccurrenceIndex', () => {
@@ -105,6 +127,7 @@ describe('findOccurrenceIndex', () => {
     expect(findOccurrenceIndex('hello world', 'hello', 0)).toBe(0);
     expect(findOccurrenceIndex('hello world', 'missing', 0)).toBe(0);
     expect(findOccurrenceIndex('', 'test', 0)).toBe(0);
+    expect(findOccurrenceIndex('hello', '', 0)).toBe(0);
   });
 
   it('correctly identifies the closest occurrence index based on char offset', () => {
@@ -117,5 +140,43 @@ describe('findOccurrenceIndex', () => {
     expect(findOccurrenceIndex(fullText, 'T9', 48)).toBe(1);
     expect(findOccurrenceIndex(fullText, 'T9', 60)).toBe(2);
     expect(findOccurrenceIndex(fullText, 'T9', 80)).toBe(2);
+  });
+
+  it('handles regex compilation exceptions gracefully', () => {
+    const origRegExp = globalThis.RegExp;
+    try {
+      (globalThis as any).RegExp = function () {
+        throw new Error('Pattern compile error');
+      };
+      expect(findOccurrenceIndex('text', 'pattern', 0)).toBe(0);
+    } finally {
+      globalThis.RegExp = origRegExp;
+    }
+  });
+});
+
+describe('findBlockByIndex and findBlockByHash', () => {
+  it('finds blocks by paragraph index and hash correctly', async () => {
+    const { findBlockByIndex, findBlockByHash } = await import('../shared/anchor');
+    const blocks = [
+      {
+        paragraph_index: 0,
+        anchor_hash: 'hash-0',
+        anchor_text: 'first block',
+        heading_context: 'Intro',
+      },
+      {
+        paragraph_index: 1,
+        anchor_hash: 'hash-1',
+        anchor_text: 'second block',
+        heading_context: 'Intro',
+      },
+    ];
+
+    expect(findBlockByIndex(blocks, 0)?.anchor_text).toBe('first block');
+    expect(findBlockByIndex(blocks, 99)).toBeUndefined();
+
+    expect(findBlockByHash(blocks, 'hash-1')?.anchor_text).toBe('second block');
+    expect(findBlockByHash(blocks, 'missing-hash')).toBeUndefined();
   });
 });

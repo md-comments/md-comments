@@ -11,8 +11,10 @@ describe('fuzzyMatch', () => {
     expect(fuzzyMatch('brown fox', 'The quick brown fox jumps')).toBe(true);
   });
 
-  it('handles negative matches', () => {
+  it('handles negative matches and empty strings', () => {
     expect(fuzzyMatch('hello', 'world')).toBe(false);
+    expect(fuzzyMatch('', 'world')).toBe(false);
+    expect(fuzzyMatch('hello', '')).toBe(false);
   });
 });
 
@@ -69,6 +71,54 @@ describe('placeInlineComments', () => {
     expect(placements[0].placed).toBe(true);
     expect(placements[0].paragraphIndex).toBe(0); // fuzzy matched back to correct index
   });
+
+  it('matches when anchorText length >= 12 and contains blockText', () => {
+    expect(fuzzyMatch('this is a very long anchor text', 'long anchor')).toBe(true);
+  });
+
+  it('places comment by paragraph index and matching heading context when hash and fuzzy fail', () => {
+    const comment: InlineComment = {
+      id: 'c3',
+      author: 'alice',
+      anchor_text: 'completely different text',
+      anchor_hash: 'unmatched-hash',
+      paragraph_index: 0,
+      heading_context: 'Heading 1',
+      body: 'Placed by index and heading',
+      created_at: '',
+      orphaned: false,
+      resolved: false,
+      reactions: [],
+      replies: [],
+    };
+
+    const placements = placeInlineComments(blocks, [comment]);
+    expect(placements).toHaveLength(1);
+    expect(placements[0].placed).toBe(true);
+    expect(placements[0].paragraphIndex).toBe(0);
+  });
+
+  it('returns unplaced result when all placement strategies fail', () => {
+    const comment: InlineComment = {
+      id: 'c4',
+      author: 'alice',
+      anchor_text: 'unmatched text',
+      anchor_hash: 'unmatched-hash',
+      paragraph_index: 55,
+      heading_context: 'Different Heading',
+      body: 'Cannot be placed',
+      created_at: '',
+      orphaned: false,
+      resolved: false,
+      reactions: [],
+      replies: [],
+    };
+
+    const placements = placeInlineComments(blocks, [comment]);
+    expect(placements).toHaveLength(1);
+    expect(placements[0].placed).toBe(false);
+    expect(placements[0].paragraphIndex).toBeNull();
+  });
 });
 
 describe('isOrphanedPlacement', () => {
@@ -123,5 +173,105 @@ describe('isOrphanedPlacement', () => {
       paragraphIndex: 0,
     };
     expect(isOrphanedPlacement(blocks, placement)).toBe(true);
+  });
+
+  it('detects a comment as orphaned if placed is false', () => {
+    const placement = {
+      comment: {
+        id: 'c2',
+        author: 'alice',
+        anchor_text: 'Text',
+        anchor_hash: '9f82d1c6',
+        paragraph_index: 0,
+        heading_context: '',
+        body: '',
+        created_at: '',
+        orphaned: false,
+        resolved: false,
+        reactions: [],
+        replies: [],
+      },
+      placed: false,
+      paragraphIndex: 0,
+    };
+    expect(isOrphanedPlacement(blocks, placement)).toBe(true);
+  });
+
+  it('detects a comment as orphaned if block is not found at paragraphIndex', () => {
+    const placement = {
+      comment: {
+        id: 'c3',
+        author: 'alice',
+        anchor_text: 'Text',
+        anchor_hash: '9f82d1c6',
+        paragraph_index: 999,
+        heading_context: '',
+        body: '',
+        created_at: '',
+        orphaned: false,
+        resolved: false,
+        reactions: [],
+        replies: [],
+      },
+      placed: true,
+      paragraphIndex: 999,
+    };
+    expect(isOrphanedPlacement(blocks, placement)).toBe(true);
+  });
+});
+
+describe('unplacedOrOrphan', () => {
+  it('filters out valid placed comments and retains orphaned comments', async () => {
+    const { unplacedOrOrphan } = await import('../shared/placement');
+    const blocks = [
+      {
+        paragraph_index: 0,
+        heading_context: 'H1',
+        anchor_hash: 'valid-hash',
+        anchor_text: 'valid text',
+      },
+    ];
+
+    const validPlacement = {
+      comment: {
+        id: 'v1',
+        author: 'alice',
+        anchor_text: 'valid text',
+        anchor_hash: 'valid-hash',
+        paragraph_index: 0,
+        heading_context: 'H1',
+        body: 'ok',
+        created_at: '',
+        orphaned: false,
+        resolved: false,
+        reactions: [],
+        replies: [],
+      },
+      placed: true,
+      paragraphIndex: 0,
+    };
+
+    const orphanPlacement = {
+      comment: {
+        id: 'o1',
+        author: 'bob',
+        anchor_text: 'lost text',
+        anchor_hash: 'lost-hash',
+        paragraph_index: 0,
+        heading_context: 'H1',
+        body: 'lost',
+        created_at: '',
+        orphaned: true,
+        resolved: false,
+        reactions: [],
+        replies: [],
+      },
+      placed: false,
+      paragraphIndex: 0,
+    };
+
+    const result = unplacedOrOrphan(blocks, [validPlacement, orphanPlacement]);
+    expect(result).toHaveLength(1);
+    expect(result[0].comment.id).toBe('o1');
   });
 });
