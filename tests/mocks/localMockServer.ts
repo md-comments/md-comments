@@ -26,6 +26,7 @@ export class LocalMockServer {
   public files: Map<string, MockFile> = new Map();
   public commits: Map<string, any> = new Map();
   public trees: Map<string, any> = new Map();
+  public commitComments: any[] = [];
 
   constructor(options: MockServerOptions = {}) {
     this.port = options.port ?? 0;
@@ -37,6 +38,7 @@ export class LocalMockServer {
     this.files.clear();
     this.commits.clear();
     this.trees.clear();
+    this.commitComments = [];
 
     // Default main ref
     const initSha = this.generateSha('init-commit');
@@ -298,6 +300,27 @@ export class LocalMockServer {
       return sendJson(201, commitObj);
     }
 
+    // 5b. Commit comments: /repos/:owner/:repo/commits/:sha/comments
+    const commitCommentsMatch = pathname.match(
+      /^\/repos\/[^/]+\/[^/]+\/commits\/([^/]+)\/comments$/
+    );
+    if (commitCommentsMatch) {
+      if (method === 'POST') {
+        const commentId = Math.floor(Math.random() * 1000000);
+        const commentObj = {
+          id: commentId,
+          body: bodyJson?.body || '',
+          commit_id: commitCommentsMatch[1],
+          created_at: new Date().toISOString(),
+        };
+        this.commitComments.push(commentObj);
+        return sendJson(201, commentObj);
+      }
+      if (method === 'GET') {
+        return sendJson(200, this.commitComments);
+      }
+    }
+
     // 6. Contents API: /repos/:owner/:repo/contents/:path*
     const contentsMatch = pathname.match(/^\/repos\/[^/]+\/[^/]+\/contents\/(.+)$/);
     if (contentsMatch) {
@@ -353,6 +376,11 @@ export class LocalMockServer {
         { login: 'alice', id: 101, avatar_url: 'https://github.com/alice.png' },
         { login: 'bob', id: 102, avatar_url: 'https://github.com/bob.png' },
         { login: 'carol', id: 103, avatar_url: 'https://github.com/carol.png' },
+        {
+          login: 'md-comments-test-mention',
+          id: 104,
+          avatar_url: 'https://github.com/md-comments-test-mention.png',
+        },
         { login: 'test-runner-bot', id: 999999, avatar_url: 'https://github.com/ghost.png' },
       ]);
     }

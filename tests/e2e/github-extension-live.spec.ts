@@ -49,7 +49,7 @@ test.describe('GitHub Extension: Live Repository Smoke & Regression', () => {
         await pageTabBtn.click();
       });
 
-      const commentBody = `Live Playwright Smoke Run (${new Date().toISOString()}): Verification comment.`;
+      const commentBody = `Live Playwright Smoke Run (${new Date().toISOString()}): Verification comment mentioning @md-comments-test-mention.`;
 
       await test.step('5. Compose and submit live comment', async () => {
         const textarea = testPage.locator('.page-textarea');
@@ -67,6 +67,11 @@ test.describe('GitHub Extension: Live Repository Smoke & Regression', () => {
         });
         await expect(card).toBeVisible({ timeout: 15000 });
 
+        const mentionLink = card
+          .locator('a.md-comments-mention')
+          .filter({ hasText: '@md-comments-test-mention' });
+        await expect(mentionLink).toBeVisible();
+
         // Query GitHub REST API directly to verify ref creation
         const refRes = await fetch(
           `https://api.github.com/repos/${owner}/${repo}/git/refs/md-comments/data`,
@@ -81,9 +86,74 @@ test.describe('GitHub Extension: Live Repository Smoke & Regression', () => {
         expect(refRes.status).toBe(200);
         const refData: any = await refRes.json();
         expect(refData.object?.sha).toBeDefined();
+
+        // Verify that GitHub native commit comment notification was posted for @md-comments-test-mention
+        const commitSha = refData.object.sha;
+        await expect
+          .poll(
+            async () => {
+              const commentsRes = await fetch(
+                `https://api.github.com/repos/${owner}/${repo}/commits/${commitSha}/comments`,
+                {
+                  headers: {
+                    Accept: 'application/vnd.github.v3+json',
+                    Authorization: `token ${token}`,
+                    'User-Agent': 'md-comments-test-verification',
+                  },
+                }
+              );
+              if (!commentsRes.ok) return false;
+              const commentsList: any = await commentsRes.json();
+              return commentsList.some((c: any) => c.body?.includes('@md-comments-test-mention'));
+            },
+            { timeout: 15000, intervals: [1000, 2000] }
+          )
+          .toBeTruthy();
+      });
+
+      await test.step('7. Select markdown text and create inline comment with mention', async () => {
+        await testPage.evaluate(() => {
+          const p = document.querySelector('.markdown-body p');
+          if (!p) throw new Error('Markdown paragraph not found');
+          const range = document.createRange();
+          range.selectNodeContents(p);
+          const sel = window.getSelection();
+          sel?.removeAllRanges();
+          sel?.addRange(range);
+          document.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
+        });
+
+        const selBtn = testPage.locator('#md-comments-selection-button');
+        await expect(selBtn).toBeVisible({ timeout: 5000 });
+        await selBtn.click();
+
+        const inlineComposer = testPage.locator('.new-inline-composer-wrapper');
+        await expect(inlineComposer).toBeVisible({ timeout: 5000 });
+
+        const inlineTextarea = testPage.locator(
+          '.new-inline-composer-container .fallback-reply-textarea'
+        );
+        await expect(inlineTextarea).toBeVisible({ timeout: 5000 });
+
+        const inlineCommentBody = `Live Inline Smoke Comment (${new Date().toISOString()}): Target text verified mentioning @md-comments-test-mention.`;
+        await inlineTextarea.fill(inlineCommentBody);
+
+        const submitBtn = testPage.locator('.new-inline-composer-container .fallback-submit-btn');
+        await expect(submitBtn).toBeVisible();
+        await submitBtn.click();
+
+        const inlineCard = testPage
+          .locator('#tab-inline .md-comments-card-body')
+          .filter({ hasText: 'Live Inline Smoke Comment' });
+        await expect(inlineCard).toBeVisible({ timeout: 15000 });
+
+        const mentionLink = inlineCard
+          .locator('a.md-comments-mention')
+          .filter({ hasText: '@md-comments-test-mention' });
+        await expect(mentionLink).toBeVisible();
       });
     } finally {
-      await test.step('7. Post-test cleanup on test repository', async () => {
+      await test.step('8. Post-test cleanup on test repository', async () => {
         await resetTestRepository({ token, owner, repo });
       });
     }

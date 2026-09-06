@@ -116,7 +116,8 @@ test.describe('GitHub Extension: Hermetic Playwright E2E Lifecycle', () => {
       const textarea = testPage.locator('.page-textarea');
       await expect(textarea).toBeVisible({ timeout: 5000 });
 
-      const commentText = 'Hermetic Playwright E2E Comment: Automated verification on GitHub DOM.';
+      const commentText =
+        'Hermetic Playwright E2E Comment: Automated verification on GitHub DOM mentioning @md-comments-test-mention.';
       await textarea.fill(commentText);
       await expect(textarea).toHaveValue(commentText);
 
@@ -135,6 +136,12 @@ test.describe('GitHub Extension: Hermetic Playwright E2E Lifecycle', () => {
         .filter({ hasText: 'Hermetic Playwright E2E Comment' });
       await expect(commentCard).toBeVisible({ timeout: 10000 });
 
+      // Assert that the mention rendered as an interactive link
+      const mentionLink = commentCard
+        .locator('a.md-comments-mention')
+        .filter({ hasText: '@md-comments-test-mention' });
+      await expect(mentionLink).toBeVisible();
+
       // Verify that the mock GitHub server has the updated comment ref
       await expect
         .poll(
@@ -152,6 +159,80 @@ test.describe('GitHub Extension: Hermetic Playwright E2E Lifecycle', () => {
           }
         )
         .toBeTruthy();
+
+      // Verify that notification commit comment was dispatched for @md-comments-test-mention
+      await expect
+        .poll(() => mockServer.commitComments.length, {
+          timeout: 10000,
+          intervals: [500, 1000],
+        })
+        .toBeGreaterThan(0);
+
+      const notificationComment = mockServer.commitComments.find((c) =>
+        c.body.includes('@md-comments-test-mention')
+      );
+      expect(notificationComment).toBeDefined();
+    });
+
+    await test.step('7. Select text in markdown paragraph and submit inline comment', async () => {
+      // Clear previous commit comments on mock server to isolate inline notification assertion
+      mockServer.commitComments = [];
+
+      await testPage.evaluate(() => {
+        const p = document.getElementById('p-1');
+        if (!p) throw new Error('Paragraph #p-1 not found');
+        const range = document.createRange();
+        range.selectNodeContents(p);
+        const sel = window.getSelection();
+        sel?.removeAllRanges();
+        sel?.addRange(range);
+        document.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
+      });
+
+      const selBtn = testPage.locator('#md-comments-selection-button');
+      await expect(selBtn).toBeVisible({ timeout: 5000 });
+      await selBtn.click();
+
+      // The inline composer wrapper in the drawer becomes visible
+      const inlineComposer = testPage.locator('.new-inline-composer-wrapper');
+      await expect(inlineComposer).toBeVisible({ timeout: 5000 });
+
+      const inlineTextarea = testPage.locator(
+        '.new-inline-composer-container .fallback-reply-textarea'
+      );
+      await expect(inlineTextarea).toBeVisible({ timeout: 5000 });
+
+      const inlineCommentText =
+        'Hermetic Inline E2E Comment: Anchored to paragraph mentioning @md-comments-test-mention.';
+      await inlineTextarea.fill(inlineCommentText);
+
+      const submitBtn = testPage.locator('.new-inline-composer-container .fallback-submit-btn');
+      await expect(submitBtn).toBeVisible();
+      await submitBtn.click();
+
+      // Assert inline comment card appears in #tab-inline
+      const inlineCard = testPage
+        .locator('#tab-inline .md-comments-card-body')
+        .filter({ hasText: 'Hermetic Inline E2E Comment' });
+      await expect(inlineCard).toBeVisible({ timeout: 10000 });
+
+      const mentionLink = inlineCard
+        .locator('a.md-comments-mention')
+        .filter({ hasText: '@md-comments-test-mention' });
+      await expect(mentionLink).toBeVisible();
+
+      // Verify inline notification commit comment was dispatched
+      await expect
+        .poll(() => mockServer.commitComments.length, {
+          timeout: 10000,
+          intervals: [500, 1000],
+        })
+        .toBeGreaterThan(0);
+
+      const inlineNotif = mockServer.commitComments.find((c) =>
+        c.body.includes('@md-comments-test-mention')
+      );
+      expect(inlineNotif).toBeDefined();
     });
   });
 });

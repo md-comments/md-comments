@@ -1170,8 +1170,8 @@
     "semantic_hash": ""
   },
   "tests/mocks/localMockServer.ts": {
-    "mtime": 1788726307.402523,
-    "ast_hash": "f8218223596c5b8fde383cca58a02e71",
+    "mtime": 1788727034.5698419,
+    "ast_hash": "b43bb7ca45d76187503be1831e28bd2b",
     "semantic_hash": ""
   },
   "tests/phase0-orchestration.test.ts": {
@@ -1525,13 +1525,13 @@
     "semantic_hash": ""
   },
   "tests/e2e/github-extension-hermetic.spec.ts": {
-    "mtime": 1788725363.8287454,
-    "ast_hash": "142f6c8591aa62eac4b17445e55d26f4",
+    "mtime": 1788727259.4964926,
+    "ast_hash": "3ce895f79ef4257afefa63941c1939fc",
     "semantic_hash": ""
   },
   "tests/e2e/github-extension-live.spec.ts": {
-    "mtime": 1788725099.781976,
-    "ast_hash": "3519cfa487b600edf6c6c49d53ebcfce",
+    "mtime": 1788727274.32775,
+    "ast_hash": "dd8b8a5bd19b9eb09d0cee60f8865de6",
     "semantic_hash": ""
   },
   "quality/features/extension/FEAT-EXT-PLAYWRIGHT-LIVE.md": {
