@@ -11,7 +11,7 @@ dependsOn: []
 implementedIn:
   - 'shared/githubNotifications.ts'
 verifiedIn:
-  - 'tests/githubNotifications.test.ts'
+  - 'tests/e2e/notifications.spec.ts'
 invariants: []
 minCoverage: 100
 ---

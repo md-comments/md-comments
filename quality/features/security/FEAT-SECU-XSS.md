@@ -12,7 +12,7 @@ dependsOn: []
 implementedIn:
   - 'chrome-extension/src/content.ts'
 verifiedIn:
-  - 'tests/placement.test.ts'
+  - 'tests/e2e/security.spec.ts'
 invariants:
   - 'INV-XSS-SANITIZED'
 minCoverage: 100

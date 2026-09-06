@@ -12,7 +12,7 @@ dependsOn:
 implementedIn:
   - 'shared/gitRefBackend.ts'
 verifiedIn:
-  - 'tests/gitRefBackend.test.ts'
+  - 'tests/e2e/comments.spec.ts'
 invariants:
   - 'INV-XSS-SANITIZED'
 minCoverage: 100

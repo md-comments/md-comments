@@ -11,7 +11,7 @@ dependsOn: []
 implementedIn:
   - 'shared/mentions.ts'
 verifiedIn:
-  - 'tests/mentions.test.ts'
+  - 'tests/e2e/mentions.spec.ts'
 invariants: []
 minCoverage: 100
 ---

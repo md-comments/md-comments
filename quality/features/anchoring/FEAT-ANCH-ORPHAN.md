@@ -13,7 +13,7 @@ implementedIn:
   - 'vscode-extension/src/orphan.ts'
   - 'chrome-extension/src/content.ts'
 verifiedIn:
-  - 'tests/anchor.test.ts'
+  - 'tests/e2e/anchoring.spec.ts'
 invariants: []
 minCoverage: 100
 ---

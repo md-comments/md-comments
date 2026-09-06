@@ -12,7 +12,7 @@ dependsOn:
 implementedIn:
   - 'shared/gitRefBackend.ts'
 verifiedIn:
-  - 'tests/gitRefBackend.test.ts'
+  - 'tests/e2e/storage.spec.ts'
 invariants:
   - 'INV-FAST-FORWARD-RETRY'
 minCoverage: 100

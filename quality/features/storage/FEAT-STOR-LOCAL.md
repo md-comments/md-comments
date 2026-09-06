@@ -10,7 +10,7 @@ dependsOn: []
 implementedIn:
   - 'shared/localFileBackend.ts'
 verifiedIn:
-  - 'tests/vscodeStorage.test.ts'
+  - 'tests/e2e/storage.spec.ts'
 invariants: []
 minCoverage: 100
 ---

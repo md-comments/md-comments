@@ -11,7 +11,7 @@ dependsOn: []
 implementedIn:
   - 'chrome-extension/src/content.ts'
 verifiedIn:
-  - 'tests/placement.test.ts'
+  - 'tests/e2e/comments.spec.ts'
 invariants: []
 minCoverage: 100
 ---

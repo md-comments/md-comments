@@ -11,7 +11,7 @@ dependsOn: []
 implementedIn:
   - 'chrome-extension/manifest.json'
 verifiedIn:
-  - 'tests/phase0-orchestration.test.ts'
+  - 'tests/e2e/security.spec.ts'
 invariants: []
 minCoverage: 100
 ---

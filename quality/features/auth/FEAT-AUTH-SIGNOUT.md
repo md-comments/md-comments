@@ -12,7 +12,7 @@ dependsOn:
 implementedIn:
   - 'chrome-extension/src/githubAuth.ts'
 verifiedIn:
-  - 'tests/chromeAuth.test.ts'
+  - 'tests/e2e/auth.spec.ts'
 invariants:
   - 'INV-OAUTH-ONLY'
 minCoverage: 100
