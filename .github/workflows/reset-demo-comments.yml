@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Reset Demo Orphan Ref
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         env:
           CUSTOM_TOKEN: ${{ secrets.DEMO_RESET_PAT || secrets.GITHUB_TOKEN }}
           INPUT_REPOS: ${{ github.event.inputs.target_repos }}
