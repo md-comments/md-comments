@@ -1,9 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 export interface CleanupOptions {
   token?: string;
@@ -15,7 +11,7 @@ export interface CleanupOptions {
 export async function resetTestRepository(options: CleanupOptions = {}): Promise<void> {
   const token = options.token || process.env.TEST_GITHUB_TOKEN || process.env.GITHUB_TOKEN;
   const owner = options.owner || process.env.TEST_REPO_OWNER || 'md-comments';
-  const repo = options.repo || process.env.TEST_REPO_NAME || 'md-test';
+  const repo = options.repo || process.env.TEST_REPO_NAME || 'md-comments-test';
   const apiBase = (
     options.apiBase ||
     process.env.TEST_GITHUB_API_URL ||
@@ -67,7 +63,7 @@ export async function resetTestRepository(options: CleanupOptions = {}): Promise
 
   // 2. Synchronize README.md test fixture
   try {
-    const fixturePath = path.resolve(__dirname, '../tests/fixtures/sample-doc.md');
+    const fixturePath = path.resolve(process.cwd(), 'tests/fixtures/sample-doc.md');
     let fixtureContent =
       '# Test Fixture Document\n\nThis is a clean markdown document used for automated testing.\n';
     if (fs.existsSync(fixturePath)) {

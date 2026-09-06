@@ -23,6 +23,7 @@ chrome-extension/icons/
 coverage/
 allure-results/
 allure-report/
+playwright-report/
 test-results/
 tests/*.png
 

@@ -8,6 +8,7 @@ export default defineConfig({
   workers: 1, // Single worker to ensure isolated extension Chrome instances
   reporter: [
     ['list'],
+    ['html', { open: 'never', outputFolder: 'playwright-report' }],
     [
       'allure-playwright',
       {

@@ -2,13 +2,9 @@ import { test as base, chromium, type BrowserContext, type Page } from '@playwri
 import path from 'path';
 import fs from 'fs';
 import os from 'os';
-import { fileURLToPath } from 'url';
-import { resetTestRepository } from '../../../scripts/test-repo-cleanup';
+import { resetTestRepository } from '../../../scripts/test-repo-cleanup.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-export const pathToExtension = path.resolve(__dirname, '../../../chrome-extension/dist');
+export const pathToExtension = path.resolve(process.cwd(), 'chrome-extension/dist');
 
 import { createCoverageHelper, type CoverageHelper } from './coverageHelper.js';
 
@@ -20,7 +16,8 @@ export interface ExtensionFixtures {
 }
 
 export const test = base.extend<ExtensionFixtures>({
-  coverageHelper: async (_unused, use) => {
+  // eslint-disable-next-line no-empty-pattern
+  coverageHelper: async ({}, use) => {
     const helper = createCoverageHelper('./coverage/cdp');
     await use(helper);
     await helper.stopAndCollect();
@@ -60,19 +57,27 @@ export const test = base.extend<ExtensionFixtures>({
       }
     }
 
+    const token = process.env.TEST_GITHUB_TOKEN || 'mock-oauth-session-token';
+    const user = {
+      login: 'test-runner-bot',
+      name: 'Test Runner Bot',
+      avatar_url: 'https://github.com/ghost.png',
+    };
+
     if (backgroundWorker) {
-      await backgroundWorker.evaluate(async () => {
-        if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
-          await chrome.storage.local.set({
-            oauth_token: 'mock-oauth-session-token',
-            github_user: {
-              login: 'test-runner-bot',
-              name: 'Test Runner Bot',
-              avatar_url: 'https://github.com/ghost.png',
-            },
-          });
-        }
-      });
+      await backgroundWorker.evaluate(
+        async ({ token, user }) => {
+          if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+            await chrome.storage.local.set({
+              oauthToken: token,
+              oauth_token: token,
+              github_user: user,
+              githubUser: user,
+            });
+          }
+        },
+        { token, user }
+      );
     }
 
     await use(context);

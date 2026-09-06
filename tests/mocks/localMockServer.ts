@@ -2,10 +2,6 @@ import http, { type IncomingMessage, type ServerResponse } from 'node:http';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 export interface MockRef {
   ref: string;
@@ -152,6 +148,47 @@ export class LocalMockServer {
         name: 'Test Runner Bot',
         avatar_url: 'https://github.com/ghost.png',
         html_url: 'https://github.com/test-runner-bot',
+      });
+    }
+
+    // 1b. GET /user/installations
+    if (pathname === '/user/installations' && method === 'GET') {
+      return sendJson(200, {
+        total_count: 1,
+        installations: [
+          {
+            id: 12345,
+            account: {
+              login: 'md-comments',
+            },
+            repository_selection: 'all',
+            app_slug: 'markdown-comments',
+          },
+        ],
+      });
+    }
+
+    // 1c. POST /graphql
+    if (pathname === '/graphql' && method === 'POST') {
+      return sendJson(200, {
+        data: {
+          viewer: {
+            login: 'test-runner-bot',
+            avatarUrl: 'https://github.com/ghost.png',
+          },
+          repository: {
+            id: 'repo_node_id_123',
+            viewerPermission: 'ADMIN',
+            defaultBranchRef: {
+              name: 'main',
+              target: { oid: '1111222233334444555566667777888899990000' },
+            },
+            ref: {
+              target: { oid: '1111222233334444555566667777888899990000' },
+              branchProtectionRule: null,
+            },
+          },
+        },
       });
     }
 
@@ -336,7 +373,7 @@ export class LocalMockServer {
 
     // 9. Fixture HTML: /fixture or /md-comments/md-test/blob/main/README.md
     if (pathname === '/fixture' || pathname.endsWith('.html') || pathname.includes('/blob/')) {
-      const fixturePath = path.resolve(__dirname, '../fixtures/github-markdown-page.html');
+      const fixturePath = path.resolve(process.cwd(), 'tests/fixtures/github-markdown-page.html');
       if (fs.existsSync(fixturePath)) {
         const html = fs.readFileSync(fixturePath, 'utf8');
         res.writeHead(200, {
