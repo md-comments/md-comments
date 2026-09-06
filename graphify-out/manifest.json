@@ -80,8 +80,8 @@
     "semantic_hash": ""
   },
   "package.json": {
-    "mtime": 1788722619.9168298,
-    "ast_hash": "b6fa41dac89a727f62cf916f294b41e8",
+    "mtime": 1788724377.7732937,
+    "ast_hash": "8916238e34cd32708a93431948b7bee3",
     "semantic_hash": ""
   },
   "shared/anchor.ts": {
@@ -1220,8 +1220,8 @@
     "semantic_hash": ""
   },
   ".github/workflows/nightly-regression.yml": {
-    "mtime": 1788723785.8234558,
-    "ast_hash": "e2f657086001eeb1bdfb7ba7d79eacdf",
+    "mtime": 1788724385.8160548,
+    "ast_hash": "6f26bbfc0076182ebfc07379a2965c21",
     "semantic_hash": ""
   },
   "chrome-extension/README.md": {
@@ -1420,8 +1420,8 @@
     "semantic_hash": ""
   },
   "quality/features/starlight/FEAT-STARLIGHT-DOCS.md": {
-    "mtime": 1788721036.185187,
-    "ast_hash": "5db8f7bfc74aa9c6dfe908b49fa71ebe",
+    "mtime": 1788724352.2529783,
+    "ast_hash": "07a9f64f3c56779c50098aba075e5e93",
     "semantic_hash": ""
   },
   "quality/features/storage/FEAT-STOR-GITREF.md": {
@@ -1497,6 +1497,31 @@
   "tests/fixtures/sample-doc.md": {
     "mtime": 1788715910.1925008,
     "ast_hash": "17c896a68571f3f51392f3103a7f257a",
+    "semantic_hash": ""
+  },
+  "tests/e2e/embedded.spec.ts": {
+    "mtime": 1788724418.1124535,
+    "ast_hash": "ec1016357d4f158e07c482e9a4f0108a",
+    "semantic_hash": ""
+  },
+  "tests/e2e/fixtures/staticServer.ts": {
+    "mtime": 1788724323.9709516,
+    "ast_hash": "e40ca79c323127156a6c3acb6e9b28b5",
+    "semantic_hash": ""
+  },
+  "tests/e2e/starlight.spec.ts": {
+    "mtime": 1788724418.1504214,
+    "ast_hash": "03c32f307e66bb784b2708545b45027f",
+    "semantic_hash": ""
+  },
+  "quality/features/embed/FEAT-EMBED-MOCK.md": {
+    "mtime": 1788724361.8610704,
+    "ast_hash": "d80446c1939b9f1d45159f2be3a0297a",
+    "semantic_hash": ""
+  },
+  "quality/features/embed/FEAT-EMBED-RUNTIME.md": {
+    "mtime": 1788724357.389422,
+    "ast_hash": "81c68ccf26e48fa2a6314a65189d3e2b",
     "semantic_hash": ""
   }
 }

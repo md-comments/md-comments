@@ -9,8 +9,10 @@ dependsOn:
   - 'FEAT-COMM-INLINE'
 implementedIn:
   - 'starlight-plugin/src/starlight.ts'
+  - 'starlight-plugin/src/client/components/CommentsOverlay.ts'
 verifiedIn:
   - 'tests/starlight-plugin.test.ts'
+  - 'tests/e2e/starlight.spec.ts'
 invariants:
   - 'INV-OAUTH-ONLY'
 minCoverage: 100

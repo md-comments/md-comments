@@ -32,6 +32,8 @@
     "test:watch": "pnpm quality:build && vitest",
     "test:coverage": "pnpm quality:build && vitest run --coverage",
     "test:e2e": "playwright test tests/e2e/",
+    "test:e2e:embed": "playwright test tests/e2e/embedded.spec.ts",
+    "test:e2e:starlight": "playwright test tests/e2e/starlight.spec.ts",
     "coverage:consolidate": "node scripts/consolidate-coverage.mjs",
     "test:report": "node scripts/generate-allure-report.mjs",
     "quality:build": "velite build",
