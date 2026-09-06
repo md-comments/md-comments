@@ -910,9 +910,9 @@ jobs:
 
 ### Phase 2: Free 100% Code Coverage Tooling Setup
 
-- [ ] Configure `monocart-coverage-reports` via `mcr.config.ts` to unify Vitest V8 outputs and Playwright CDP JS profiler dumps.
-- [ ] Implement `tests/e2e/fixtures/coverageHelper.ts` to attach CDP sessions to MV3 background service workers and content scripts.
-- [ ] Set 100% coverage thresholds across lines, statements, functions, and branches.
+- [x] Configure `monocart-coverage-reports` via `mcr.config.ts` to unify Vitest V8 outputs and Playwright CDP JS profiler dumps.
+- [x] Implement `tests/e2e/fixtures/coverageHelper.ts` to attach CDP sessions to MV3 background service workers and content scripts.
+- [x] Set 100% coverage thresholds across lines, statements, functions, and branches.
 
 ### Phase 3: Open-Source Allure Drill-Down Test Reporting Setup
 
