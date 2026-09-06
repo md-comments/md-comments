@@ -1030,8 +1030,8 @@
     "semantic_hash": ""
   },
   "scripts/test-repo-cleanup.ts": {
-    "mtime": 1788728159.8526661,
-    "ast_hash": "f8c0cce865c983e9eb0a508a9a31705c",
+    "mtime": 1788732396.6084185,
+    "ast_hash": "4edaf247270ddfb93810a63c40e9699a",
     "semantic_hash": ""
   },
   "shared/githubNotifications.ts": {
@@ -1090,8 +1090,8 @@
     "semantic_hash": ""
   },
   "tests/e2e/fixtures/extensionFixture.ts": {
-    "mtime": 1788726307.4023273,
-    "ast_hash": "47d2933d288be0fe146efb4a8d323df5",
+    "mtime": 1788731080.3198023,
+    "ast_hash": "1a2e9826b28e62a1ac614e0f5ddfdc02",
     "semantic_hash": ""
   },
   "tests/e2e/highlights.spec.ts": {
@@ -1175,8 +1175,8 @@
     "semantic_hash": ""
   },
   "tests/phase0-orchestration.test.ts": {
-    "mtime": 1788715910.225774,
-    "ast_hash": "d096f0ca6be1402bdf4cd6f131f4dcc7",
+    "mtime": 1788732356.1883535,
+    "ast_hash": "6bdf23d2bfcfbbf0eb1c114558e8ddee",
     "semantic_hash": ""
   },
   "tests/phase2-coverage.test.ts": {
@@ -1530,8 +1530,8 @@
     "semantic_hash": ""
   },
   "tests/e2e/github-extension-live.spec.ts": {
-    "mtime": 1788727893.463608,
-    "ast_hash": "537088e3931309e62dba35ae2fd1e635",
+    "mtime": 1788731808.3942807,
+    "ast_hash": "c39f452797b83fad4e6882f1d7c86611",
     "semantic_hash": ""
   },
   "quality/features/extension/FEAT-EXT-PLAYWRIGHT-LIVE.md": {
@@ -1542,6 +1542,71 @@
   "quality/features/extension/FEAT-EXT-PLAYWRIGHT-MOCK.md": {
     "mtime": 1788725297.3501003,
     "ast_hash": "2fbdcfcabf8ceec44e39c23c55165638",
+    "semantic_hash": ""
+  },
+  "playwright-ci-report/trace/assets/codeMirrorModule-BbkfBe3n.js": {
+    "mtime": 1788732395.6475017,
+    "ast_hash": "6f2d2e8907ffe9ad35ea72717b6f36a3",
+    "semantic_hash": ""
+  },
+  "playwright-ci-report/trace/assets/defaultSettingsView-Ds6CBOo0.js": {
+    "mtime": 1788732396.2126975,
+    "ast_hash": "4f4300c75a9a429a9813e6a097c5b7d4",
+    "semantic_hash": ""
+  },
+  "playwright-ci-report/trace/assets/urlMatch-L3liM589.js": {
+    "mtime": 1788732396.216586,
+    "ast_hash": "0d86dde4cad0d2cc5864cd22bbf14e2d",
+    "semantic_hash": ""
+  },
+  "playwright-ci-report/trace/index.B4cLoZK3.js": {
+    "mtime": 1788732396.322252,
+    "ast_hash": "1dfe61da7aea2f56fb87e3e26c9cc7c0",
+    "semantic_hash": ""
+  },
+  "playwright-ci-report/trace/snapshot.B_Jk1wbt.js": {
+    "mtime": 1788732396.3239672,
+    "ast_hash": "d1b2f5ce5c6f6188f46522b15544c288",
+    "semantic_hash": ""
+  },
+  "playwright-ci-report/trace/sw.bundle.js": {
+    "mtime": 1788732396.4096575,
+    "ast_hash": "4d003f28677c89e902822041fa34de74",
+    "semantic_hash": ""
+  },
+  "playwright-ci-report/trace/uiMode.CU5KtEkS.js": {
+    "mtime": 1788732396.4406786,
+    "ast_hash": "cffba4a1666b0ff6d2de0ebe5bad6d65",
+    "semantic_hash": ""
+  },
+  ".github/workflows/md-comments-test-nightly.yml": {
+    "mtime": 1788731105.7200246,
+    "ast_hash": "404b8c44c1e426ff05670c1b5a70be59",
+    "semantic_hash": ""
+  },
+  "playwright-ci-report/index.html": {
+    "mtime": 1788731980.6507092,
+    "ast_hash": "8a18c427a5317390a0b74a43553302a6",
+    "semantic_hash": ""
+  },
+  "playwright-ci-report/trace/index.html": {
+    "mtime": 1788731980.6616569,
+    "ast_hash": "723f3406f165f1f1ea157f44535ed0a7",
+    "semantic_hash": ""
+  },
+  "playwright-ci-report/trace/snapshot.html": {
+    "mtime": 1788731980.662187,
+    "ast_hash": "7518ae5d0dfe02a23d581da77f08643e",
+    "semantic_hash": ""
+  },
+  "playwright-ci-report/trace/uiMode.html": {
+    "mtime": 1788731980.6640782,
+    "ast_hash": "5f0ba974c58ddd4ff526010f5d8bf199",
+    "semantic_hash": ""
+  },
+  "playwright-ci-report/trace/playwright-logo.svg": {
+    "mtime": 1788731980.6619358,
+    "ast_hash": "3a2e616a4c02faa220f078f403535bfa",
     "semantic_hash": ""
   }
 }

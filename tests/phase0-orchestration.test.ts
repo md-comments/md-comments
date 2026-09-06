@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest';
 import fs from 'fs';
 import path from 'path';
 import { createLocalMockServer, LocalMockServer } from './mocks/localMockServer.js';
@@ -130,6 +130,22 @@ describe('Phase 0: Test Environment Orchestration Framework', () => {
       const readmeData: any = await readmeRes.json();
       const content = Buffer.from(readmeData.content, 'base64').toString('utf8');
       expect(content).toContain('Markdown Comments Test Fixture');
+    });
+
+    it('is idempotent and skips updating README.md if content is already identical', async () => {
+      const consoleSpy = vi.spyOn(console, 'log');
+
+      await resetTestRepository({
+        apiBase: serverUrl,
+        token: 'mock-token',
+        owner: 'md-comments',
+        repo: 'md-test',
+      });
+
+      expect(consoleSpy).toHaveBeenCalledWith(
+        expect.stringContaining('README.md fixture is already up to date (skipping commit)')
+      );
+      consoleSpy.mockRestore();
     });
 
     it('gracefully handles missing token in offline mode without throwing', async () => {

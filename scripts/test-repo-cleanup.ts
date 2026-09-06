@@ -110,6 +110,16 @@ export async function resetTestRepository(options: CleanupOptions = {}): Promise
     if (getRes.ok) {
       const data: any = await getRes.json();
       existingSha = data.sha;
+      if (data.content) {
+        const currentContent = Buffer.from(data.content.replace(/\s/g, ''), 'base64').toString(
+          'utf8'
+        );
+        const normalize = (s: string) => s.replace(/\r\n/g, '\n').trim();
+        if (normalize(currentContent) === normalize(fixtureContent)) {
+          console.log('[Test Repo] README.md fixture is already up to date (skipping commit).');
+          return;
+        }
+      }
     }
 
     const putRes = await fetch(`${apiBase}/repos/${owner}/${repo}/contents/README.md`, {
