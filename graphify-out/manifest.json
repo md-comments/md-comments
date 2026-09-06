@@ -25,8 +25,8 @@
     "semantic_hash": ""
   },
   "chrome-extension/src/content.ts": {
-    "mtime": 1788727943.1713037,
-    "ast_hash": "51f69235247307d7d8fc6364d7a85223",
+    "mtime": 1788728477.7394922,
+    "ast_hash": "45c63a62e63d1a6429e2e66ad7445ed1",
     "semantic_hash": ""
   },
   "chrome-extension/src/githubApi.ts": {
@@ -430,8 +430,8 @@
     "semantic_hash": ""
   },
   ".eslintrc.json": {
-    "mtime": 1788045484.221518,
-    "ast_hash": "92b2ef0cc693ba81902b6c8854aeb1bd",
+    "mtime": 1788728374.1696403,
+    "ast_hash": "1c7b0af962a938d5aeae98a51f102f83",
     "semantic_hash": ""
   },
   "chrome-extension/tsconfig.json": {
