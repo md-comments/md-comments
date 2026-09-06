@@ -2,11 +2,11 @@ import { test, expect } from '@playwright/test';
 import { allure } from 'allure-playwright';
 import type { InlineComment, Reply } from '../../shared/types.js';
 
-test.describe('Threads: Threaded Replies and Resolve/Reopen Lifecycle', () => {
-  test('FEAT-THRD-REPLY & FEAT-THRD-RESOLVE: Appends replies and tracks resolution state', async () => {
+test.describe('Threads: Replies, Resolution Lifecycle & State Filtering', () => {
+  test('FEAT-THRD-REPLY: Appends threaded replies and preserves hierarchy', async () => {
     allure.epic('Threads');
     allure.feature('FEAT-THRD-REPLY');
-    allure.story('Threaded Replies & Resolve Lifecycle');
+    allure.story('Threaded Replies Hierarchy');
 
     const thread: InlineComment = {
       id: 'thread-1',
@@ -39,7 +39,42 @@ test.describe('Threads: Threaded Replies and Resolve/Reopen Lifecycle', () => {
       expect(thread.replies[0].author).toBe('dev-2');
     });
 
-    await test.step('2. Resolve thread and verify resolution metadata', async () => {
+    await test.step('2. Add second reply in conversation chain', async () => {
+      const reply2: Reply = {
+        id: 'reply-2',
+        author: 'dev-3',
+        body: 'Agreed. I can review the PR.',
+        created_at: new Date().toISOString(),
+        reactions: [],
+      };
+      thread.replies?.push(reply2);
+
+      expect(thread.replies?.length).toBe(2);
+      expect(thread.replies?.[1].author).toBe('dev-3');
+    });
+  });
+
+  test('FEAT-THRD-RESOLVE: Resolves and reopens comment threads with audit metadata', async () => {
+    allure.epic('Threads');
+    allure.feature('FEAT-THRD-RESOLVE');
+    allure.story('Thread Resolve & Reopen Lifecycle');
+
+    const thread: InlineComment = {
+      id: 'thread-lifecycle-1',
+      author: 'alice',
+      body: 'Verify error handling logic',
+      created_at: new Date().toISOString(),
+      anchor_hash: 'hash123',
+      paragraph_index: 1,
+      heading_context: 'API',
+      anchor_text: 'Error handling text',
+      orphaned: false,
+      resolved: false,
+      reactions: [],
+      replies: [],
+    };
+
+    await test.step('1. Mark thread as resolved', async () => {
       thread.resolved = true;
       thread.resolved_at = new Date().toISOString();
 
@@ -47,12 +82,66 @@ test.describe('Threads: Threaded Replies and Resolve/Reopen Lifecycle', () => {
       expect(thread.resolved_at).toBeDefined();
     });
 
-    await test.step('3. Reopen thread and verify status cleared', async () => {
+    await test.step('2. Reopen thread and clear resolution audit fields', async () => {
       thread.resolved = false;
       delete thread.resolved_at;
 
       expect(thread.resolved).toBe(false);
       expect(thread.resolved_at).toBeUndefined();
+    });
+  });
+
+  test('FEAT-THRD-FILTER: Filters threads between All, Open, and Resolved views', async () => {
+    allure.epic('Threads');
+    allure.feature('FEAT-THRD-FILTER');
+    allure.story('Filter Open vs Resolved Threads');
+
+    const threads: InlineComment[] = [
+      {
+        id: 't-1',
+        author: 'alice',
+        body: 'Open question',
+        created_at: new Date().toISOString(),
+        anchor_hash: 'h1',
+        paragraph_index: 0,
+        heading_context: 'Doc',
+        anchor_text: 'Text 1',
+        orphaned: false,
+        resolved: false,
+        reactions: [],
+        replies: [],
+      },
+      {
+        id: 't-2',
+        author: 'bob',
+        body: 'Completed feedback',
+        created_at: new Date().toISOString(),
+        anchor_hash: 'h2',
+        paragraph_index: 1,
+        heading_context: 'Doc',
+        anchor_text: 'Text 2',
+        orphaned: false,
+        resolved: true,
+        resolved_at: new Date().toISOString(),
+        reactions: [],
+        replies: [],
+      },
+    ];
+
+    await test.step('1. Filter for Open threads', async () => {
+      const openThreads = threads.filter((t) => !t.resolved);
+      expect(openThreads.length).toBe(1);
+      expect(openThreads[0].id).toBe('t-1');
+    });
+
+    await test.step('2. Filter for Resolved threads', async () => {
+      const resolvedThreads = threads.filter((t) => t.resolved);
+      expect(resolvedThreads.length).toBe(1);
+      expect(resolvedThreads[0].id).toBe('t-2');
+    });
+
+    await test.step('3. Filter for All threads', async () => {
+      expect(threads.length).toBe(2);
     });
   });
 });
