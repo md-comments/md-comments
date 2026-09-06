@@ -57,7 +57,7 @@ let commitPattern = '';
 // Load settings at startup
 chrome.storage.local.get({ useConventionalCommits: false, commitPattern: '' }, (items) => {
   useConventionalCommits = !!items.useConventionalCommits;
-  commitPattern = items.commitPattern || '';
+  commitPattern = (items.commitPattern as string) || '';
 });
 let currentMetadata: RepoMetadata | null = null;
 let repoInfo: {
@@ -4725,7 +4725,10 @@ function handleTextSelection() {
 chrome.storage.onChanged.addListener((changes, areaName) => {
   if (areaName === 'local') {
     if (changes.oauthToken || changes.fallbackToken) {
-      const newToken = changes.oauthToken?.newValue || changes.fallbackToken?.newValue || null;
+      const newToken =
+        (changes.oauthToken?.newValue as string | undefined) ||
+        (changes.fallbackToken?.newValue as string | undefined) ||
+        null;
       currentToken = newToken;
       githubApi = new GitHubApi(newToken);
       const meta = parseGitHubUrl(window.location.href);
@@ -4737,7 +4740,7 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
       useConventionalCommits = !!changes.useConventionalCommits.newValue;
     }
     if (changes.commitPattern) {
-      commitPattern = changes.commitPattern.newValue || '';
+      commitPattern = (changes.commitPattern.newValue as string) || '';
     }
   }
 });

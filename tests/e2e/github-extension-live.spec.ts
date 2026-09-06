@@ -59,6 +59,10 @@ test.describe('GitHub Extension: Live Repository Smoke & Regression', () => {
         const submitBtn = testPage.locator('.submit-page-btn');
         await expect(submitBtn).toBeVisible();
         await submitBtn.click();
+
+        // Wait for async persistence to complete
+        await expect(textarea).toHaveValue('', { timeout: 10000 });
+        await expect(submitBtn).not.toHaveClass(/loading/, { timeout: 10000 });
       });
 
       await test.step('6. Assert comment rendered in DOM and verified on remote GitHub API', async () => {
@@ -72,23 +76,31 @@ test.describe('GitHub Extension: Live Repository Smoke & Regression', () => {
           .filter({ hasText: '@md-comments-test-mention' });
         await expect(mentionLink).toBeVisible();
 
-        // Query GitHub REST API directly to verify ref creation
-        const refRes = await fetch(
-          `https://api.github.com/repos/${owner}/${repo}/git/refs/md-comments/data`,
-          {
-            headers: {
-              Accept: 'application/vnd.github.v3+json',
-              Authorization: `token ${token}`,
-              'User-Agent': 'md-comments-test-verification',
+        // Query GitHub REST API directly to verify ref creation with polling
+        let commitSha = '';
+        await expect
+          .poll(
+            async () => {
+              const refRes = await fetch(
+                `https://api.github.com/repos/${owner}/${repo}/git/refs/md-comments/data`,
+                {
+                  headers: {
+                    Accept: 'application/vnd.github.v3+json',
+                    Authorization: `token ${token}`,
+                    'User-Agent': 'md-comments-test-verification',
+                  },
+                }
+              );
+              if (!refRes.ok) return null;
+              const refData: any = await refRes.json();
+              commitSha = refData.object?.sha;
+              return commitSha;
             },
-          }
-        );
-        expect(refRes.status).toBe(200);
-        const refData: any = await refRes.json();
-        expect(refData.object?.sha).toBeDefined();
+            { timeout: 15000, intervals: [1000, 2000] }
+          )
+          .toBeTruthy();
 
         // Verify that GitHub native commit comment notification was posted for @md-comments-test-mention
-        const commitSha = refData.object.sha;
         await expect
           .poll(
             async () => {
@@ -154,6 +166,12 @@ test.describe('GitHub Extension: Live Repository Smoke & Regression', () => {
       });
     } finally {
       await test.step('8. Post-test cleanup on test repository', async () => {
+        if (process.env.KEEP_TEST_COMMENTS === 'true') {
+          console.log(
+            '[Test Repo] KEEP_TEST_COMMENTS=true: Preserving created comments on remote repository.'
+          );
+          return;
+        }
         await resetTestRepository({ token, owner, repo });
       });
     }

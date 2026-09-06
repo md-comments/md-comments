@@ -34,11 +34,11 @@ export async function getStoredTokens(): Promise<StoredTokens> {
       },
       (items) => {
         resolve({
-          oauthToken: items.oauthToken || null,
-          refreshToken: items.refreshToken || null,
-          tokenExpiresAt: items.tokenExpiresAt || null,
-          refreshTokenExpiresAt: items.refreshTokenExpiresAt || null,
-          fallbackToken: items.fallbackToken || null,
+          oauthToken: (items.oauthToken as string) || null,
+          refreshToken: (items.refreshToken as string) || null,
+          tokenExpiresAt: (items.tokenExpiresAt as number) || null,
+          refreshTokenExpiresAt: (items.refreshTokenExpiresAt as number) || null,
+          fallbackToken: (items.fallbackToken as string) || null,
         });
       }
     );

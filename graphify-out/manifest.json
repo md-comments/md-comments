@@ -20,13 +20,13 @@
     "semantic_hash": ""
   },
   "chrome-extension/package.json": {
-    "mtime": 1788484700.962091,
-    "ast_hash": "a2b6252266b9cddce6cc59555b2d6330",
+    "mtime": 1788727404.4615147,
+    "ast_hash": "d103c0cf5b525d6d6e76c3fc906df2d8",
     "semantic_hash": ""
   },
   "chrome-extension/src/content.ts": {
-    "mtime": 1788662892.7129953,
-    "ast_hash": "63cc57c65d9920201b2741793858a467",
+    "mtime": 1788727943.1713037,
+    "ast_hash": "51f69235247307d7d8fc6364d7a85223",
     "semantic_hash": ""
   },
   "chrome-extension/src/githubApi.ts": {
@@ -45,8 +45,8 @@
     "semantic_hash": ""
   },
   "obsidian-plugin/package.json": {
-    "mtime": 1788726307.354005,
-    "ast_hash": "77e9c4986e14f7421795bd2f252f186e",
+    "mtime": 1788727404.4663076,
+    "ast_hash": "9b950b7bbfb81b077ab4834d92d77c7f",
     "semantic_hash": ""
   },
   "obsidian-plugin/src/livePreview.ts": {
@@ -140,8 +140,8 @@
     "semantic_hash": ""
   },
   "vscode-extension/package.json": {
-    "mtime": 1788484741.2742352,
-    "ast_hash": "b6b38ec6f81bc445fb6888ce0c74dc03",
+    "mtime": 1788727404.469986,
+    "ast_hash": "7596fdbceb37d8477fbc5308d209deec",
     "semantic_hash": ""
   },
   "vscode-extension/src/author.ts": {
@@ -650,8 +650,8 @@
     "semantic_hash": ""
   },
   "chrome-extension/src/githubAuth.ts": {
-    "mtime": 1788662751.0995493,
-    "ast_hash": "5b0936e4b9fa1ef6eb332fe0f02a4bde",
+    "mtime": 1788727946.5437806,
+    "ast_hash": "159ec10283ed96c8ce65ab038aea4642",
     "semantic_hash": ""
   },
   "shared/commentStorage.ts": {
@@ -800,8 +800,8 @@
     "semantic_hash": ""
   },
   "demo-astro/package.json": {
-    "mtime": 1787883701.237302,
-    "ast_hash": "b9ff1bac75c361f5fa6c807e8902e328",
+    "mtime": 1788727969.3835268,
+    "ast_hash": "52c74487c4b18ae5c0c49d37d998d93f",
     "semantic_hash": ""
   },
   "demo-astro/src/content.config.ts": {
@@ -1170,7 +1170,7 @@
     "semantic_hash": ""
   },
   "tests/mocks/localMockServer.ts": {
-    "mtime": 1788727034.5698419,
+    "mtime": 1788727404.4854186,
     "ast_hash": "b43bb7ca45d76187503be1831e28bd2b",
     "semantic_hash": ""
   },
@@ -1525,13 +1525,13 @@
     "semantic_hash": ""
   },
   "tests/e2e/github-extension-hermetic.spec.ts": {
-    "mtime": 1788727259.4964926,
+    "mtime": 1788727404.4847958,
     "ast_hash": "3ce895f79ef4257afefa63941c1939fc",
     "semantic_hash": ""
   },
   "tests/e2e/github-extension-live.spec.ts": {
-    "mtime": 1788727274.32775,
-    "ast_hash": "dd8b8a5bd19b9eb09d0cee60f8865de6",
+    "mtime": 1788727893.463608,
+    "ast_hash": "537088e3931309e62dba35ae2fd1e635",
     "semantic_hash": ""
   },
   "quality/features/extension/FEAT-EXT-PLAYWRIGHT-LIVE.md": {

@@ -2509,8 +2509,8 @@
       "source_location": "L2055",
       "_origin": "ast",
       "id": "chrome_extension_src_content_opensidebar",
-      "community": 86,
-      "community_name": "commitCommentFileChanges",
+      "community": 134,
+      "community_name": "loadDocumentComments",
       "norm_label": "opensidebar()"
     },
     {
@@ -2531,8 +2531,8 @@
       "source_location": "L2099",
       "_origin": "ast",
       "id": "chrome_extension_src_content_renderinstallationprompt",
-      "community": 103,
-      "community_name": "parseGitHubUrl",
+      "community": 134,
+      "community_name": "loadDocumentComments",
       "norm_label": "renderinstallationprompt()"
     },
     {
@@ -2542,8 +2542,8 @@
       "source_location": "L2158",
       "_origin": "ast",
       "id": "chrome_extension_src_content_attachinstallationpromptevents",
-      "community": 103,
-      "community_name": "parseGitHubUrl",
+      "community": 134,
+      "community_name": "loadDocumentComments",
       "norm_label": "attachinstallationpromptevents()"
     },
     {
@@ -2553,8 +2553,8 @@
       "source_location": "L2206",
       "_origin": "ast",
       "id": "chrome_extension_src_content_renderoauthprompt",
-      "community": 103,
-      "community_name": "parseGitHubUrl",
+      "community": 134,
+      "community_name": "loadDocumentComments",
       "norm_label": "renderoauthprompt()"
     },
     {
@@ -2564,8 +2564,8 @@
       "source_location": "L2240",
       "_origin": "ast",
       "id": "chrome_extension_src_content_attachoauthevents",
-      "community": 103,
-      "community_name": "parseGitHubUrl",
+      "community": 134,
+      "community_name": "loadDocumentComments",
       "norm_label": "attachoauthevents()"
     },
     {
@@ -2575,8 +2575,8 @@
       "source_location": "L2410",
       "_origin": "ast",
       "id": "chrome_extension_src_content_rendersidebarcomments",
-      "community": 103,
-      "community_name": "parseGitHubUrl",
+      "community": 134,
+      "community_name": "loadDocumentComments",
       "norm_label": "rendersidebarcomments()"
     },
     {
@@ -2938,8 +2938,8 @@
       "source_location": "L4382",
       "_origin": "ast",
       "id": "chrome_extension_src_content_fetchdisplayname",
-      "community": 103,
-      "community_name": "parseGitHubUrl",
+      "community": 134,
+      "community_name": "loadDocumentComments",
       "norm_label": "fetchdisplayname()"
     },
     {
@@ -2971,8 +2971,8 @@
       "source_location": "L4426",
       "_origin": "ast",
       "id": "chrome_extension_src_content_collectcommentauthors",
-      "community": 134,
-      "community_name": "loadDocumentComments",
+      "community": 103,
+      "community_name": "parseGitHubUrl",
       "norm_label": "collectcommentauthors()"
     },
     {
@@ -2982,8 +2982,8 @@
       "source_location": "L4461",
       "_origin": "ast",
       "id": "chrome_extension_src_content_warmdisplaynames",
-      "community": 134,
-      "community_name": "loadDocumentComments",
+      "community": 103,
+      "community_name": "parseGitHubUrl",
       "norm_label": "warmdisplaynames()"
     },
     {
@@ -26405,7 +26405,7 @@
       "relation": "indirect_call",
       "confidence": "INFERRED",
       "source_file": "chrome-extension/src/content.ts",
-      "source_location": "L4745",
+      "source_location": "L4748",
       "weight": 1.0,
       "_origin": "ast",
       "context": "argument",
@@ -26428,7 +26428,7 @@
       "relation": "indirect_call",
       "confidence": "INFERRED",
       "source_file": "chrome-extension/src/content.ts",
-      "source_location": "L4747",
+      "source_location": "L4750",
       "weight": 1.0,
       "_origin": "ast",
       "context": "argument",
@@ -66477,5 +66477,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "92f5e3a64bb814b5e17f63e6aa4fff2d7dcab366"
+  "built_at_commit": "3de78f699caad2dacbd47be20fc7506fb3704ee7"
 }

@@ -1,7 +1,7 @@
 # Graph Report - md-comments  (2026-09-06)
 
 ## Corpus Check
-- 276 files · ~189,419 words
+- 276 files · ~189,838 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `92f5e3a6`
+- Built from commit: `3de78f69`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -473,8 +473,8 @@ Cohesion: 0.13
 Nodes (32): vscode, isGitHubLogin(), avatarCache, AvatarCacheEntry, avatarFetchUrl(), cacheEntryValid(), cacheKey(), collectAvatarLogins() (+24 more)
 
 ### Community 86 - "commitCommentFileChanges"
-Cohesion: 0.18
-Nodes (22): attachCommentCardEvents(), commitCommentFileChanges(), deleteComment(), deleteReply(), editComment(), editReply(), findDiffGutterCell(), getDisplayAuthor() (+14 more)
+Cohesion: 0.19
+Nodes (21): attachCommentCardEvents(), commitCommentFileChanges(), deleteComment(), deleteReply(), editComment(), editReply(), findDiffGutterCell(), getDisplayAuthor() (+13 more)
 
 ### Community 87 - "Zero-Auth Offline Mock Mode for Embedded Runtime"
 Cohesion: 0.50
@@ -525,8 +525,8 @@ Cohesion: 0.33
 Nodes (5): Context Pack, Guardrails, Output Focus, Patterns, Workflow
 
 ### Community 103 - "parseGitHubUrl"
-Cohesion: 0.21
-Nodes (18): attachInstallationPromptEvents(), attachOAuthEvents(), fetchCommentsFile(), fetchDisplayName(), fetchFileContent(), getCurrentRepoOwnerAndName(), getPRHeadBranchFromDom(), isCommentAuthor() (+10 more)
+Cohesion: 0.26
+Nodes (14): collectCommentAuthors(), fetchCommentsFile(), fetchFileContent(), getCurrentRepoOwnerAndName(), getPRHeadBranchFromDom(), isCommentAuthor(), loadAndRenderCommentsForContainer(), loadAndRenderFileInTab() (+6 more)
 
 ### Community 104 - "Plan Authoring Standards"
 Cohesion: 0.25
@@ -617,8 +617,8 @@ Cohesion: 0.13
 Nodes (34): formatRelativeTime(), renderAuthor(), renderAvatar(), renderCommentBody(), renderCommentCard(), resolveDisplayName(), showCommentTooltip(), escapeHtml() (+26 more)
 
 ### Community 134 - "loadDocumentComments"
-Cohesion: 0.21
-Nodes (13): checkPageChange(), closeSidebar(), collectCommentAuthors(), getAuthToken(), handleDevicePageAutofill(), handlePageLoad(), injectFABButton(), injectToolbarButton() (+5 more)
+Cohesion: 0.17
+Nodes (18): attachInstallationPromptEvents(), attachOAuthEvents(), checkPageChange(), closeSidebar(), fetchDisplayName(), getAuthToken(), handleDevicePageAutofill(), handlePageLoad() (+10 more)
 
 ### Community 135 - "Markdown Comments Test Fixture"
 Cohesion: 0.33
