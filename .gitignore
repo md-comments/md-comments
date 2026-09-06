@@ -24,6 +24,7 @@ coverage/
 allure-results/
 allure-report/
 playwright-report/
+playwright-ci-report/
 test-results/
 tests/*.png
 

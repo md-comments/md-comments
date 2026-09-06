@@ -54,6 +54,9 @@ export async function getGitRemoteUrl(cwd: string): Promise<string | null> {
 const commitHashCache = new Map<string, string | null>();
 
 export function getGitCommitHashSync(cwd: string): string | null {
+  if (commitHashCache.has(cwd)) {
+    return commitHashCache.get(cwd) ?? null;
+  }
   try {
     const stdout = execFileSync('git', ['rev-parse', 'HEAD'], {
       cwd,
@@ -61,13 +64,19 @@ export function getGitCommitHashSync(cwd: string): string | null {
       timeout: 2000,
     });
     const hash = stdout.trim() || null;
+    commitHashCache.set(cwd, hash);
     return hash;
   } catch (err) {
+    logDebug(`getGitCommitHashSync failed for cwd: ${cwd}`, err);
+    commitHashCache.set(cwd, null);
     return null;
   }
 }
 
 export async function getGitCommitHash(cwd: string): Promise<string | null> {
+  if (commitHashCache.has(cwd)) {
+    return commitHashCache.get(cwd) ?? null;
+  }
   try {
     const { stdout } = await execFileAsync('git', ['rev-parse', 'HEAD'], { cwd });
     const hash = stdout.trim() || null;

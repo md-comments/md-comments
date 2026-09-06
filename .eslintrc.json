@@ -37,6 +37,21 @@
     "scratch",
     "temp-chrome-profile*",
     "playwright-report",
-    "test-results"
+    "playwright-ci-report",
+    "allure-results",
+    "allure-report",
+    "test-results",
+    "website/**/embed/**"
+  ],
+  "overrides": [
+    {
+      "files": ["tests/**/*.{ts,js}", "**/*.spec.ts"],
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "off",
+        "security/detect-non-literal-fs-filename": "off",
+        "security/detect-unsafe-regex": "off",
+        "no-undef": "off"
+      }
+    }
   ]
 }

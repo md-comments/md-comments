@@ -32,7 +32,7 @@ test.describe('Threads: In-Drawer Real-Time Search & Filtering', () => {
 
       await page.evaluate(() => {
         const input = document.getElementById('filter-input') as HTMLInputElement;
-        const cards = document.querySelectorAll('.comment-card') as NodeListOf<HTMLElement>;
+        const cards = document.querySelectorAll<HTMLElement>('.comment-card');
 
         input.addEventListener('input', () => {
           const query = input.value.toLowerCase().trim();

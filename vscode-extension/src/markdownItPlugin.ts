@@ -77,10 +77,6 @@ const ICON_DELETE =
   '<svg class="md-comments-icon-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 7h14M9 7V5h6v2M8 7l1 12h6l1-12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const ICON_EDIT =
   '<svg class="md-comments-icon-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 18.5h2.5L17 9l-2.5-2.5L5 16v2.5zM15.5 5.5L18.5 8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-const ICON_PARAGRAPH_COMMENT =
-  '<svg class="md-comments-icon-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 4.5h11.5a1.5 1.5 0 0 1 1.5 1.5v7a1.5 1.5 0 0 1-1.5 1.5H9.5L6.5 17.5V6a1.5 1.5 0 0 1 1.5-1.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8.5 8h7.5M8.5 10.5h7.5M8.5 13h4.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>';
-const ICON_COLLAPSE_REPLIES =
-  '<svg class="md-comments-icon-svg md-comments-icon-collapse" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 15l4-4 4 4M8 9l4 4 4-4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const ICON_REANCHOR =
   '<svg class="md-comments-icon-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
 const ICON_REFRESH =
@@ -179,13 +175,6 @@ function threadFooterBtn(
     })
     .join('');
   return `<button type="button" class="md-comments-thread-footer-btn" data-md-action="${escapeHtml(action)}" aria-label="${escapeHtml(label)}"${dataAttrs}>${icon}<span>${escapeHtml(label)}</span></button>`;
-}
-
-function replyCountLabel(count: number, hidden: boolean): string {
-  if (count === 1) {
-    return hidden ? 'Show reply' : 'Hide reply';
-  }
-  return hidden ? `Show ${count} replies` : `Hide ${count} replies`;
 }
 
 function renderRepliesBlock(
@@ -362,91 +351,11 @@ function renderSidebarThread(
   return `<article class="md-comments-sidebar-thread">${quote}${cardHtml}</article>`;
 }
 
-function renderResolvedSummary(author: string, created_at: string, excerpt: string): string {
-  const short = excerpt.length > 72 ? `${excerpt.slice(0, 72)}…` : excerpt;
-  return `<span class="md-comments-resolved-summary-author">${renderAuthorLink(author)}</span>
-    <span class="md-comments-resolved-summary-time">${escapeHtml(formatTime(created_at))}</span>
-    <span class="md-comments-resolved-summary-excerpt">${escapeHtml(short)}</span>`;
-}
-
-function renderResolvedThread(
-  cardHtml: string,
-  author: string,
-  created_at: string,
-  excerpt: string
-): string {
-  return `<details class="md-comments-resolved-collapse">
-    <summary class="md-comments-resolved-summary">${renderResolvedSummary(author, created_at, excerpt)}</summary>
-    <div class="md-comments-resolved-body">${cardHtml}</div>
-  </details>`;
-}
-
 function panelEmpty(message: string): string {
   return `<p class="md-comments-sidebar-empty">${escapeHtml(message)}</p>`;
 }
 
 function buildSidebarHtml(ctx: RenderContext): string {
-  const pageActive = ctx.comments.page_comments.filter((c) => !c.resolved);
-  const pageResolved = ctx.comments.page_comments.filter((c) => c.resolved);
-
-  const inlineOpen = ctx.placements
-    .filter((p) => p.placed && !p.comment.resolved && !isOrphanedPlacement(ctx.blocks, p))
-    .sort(
-      (a, b) =>
-        (a.paragraphIndex ?? 0) - (b.paragraphIndex ?? 0) ||
-        a.comment.created_at.localeCompare(b.comment.created_at)
-    );
-  const inlineResolved = ctx.placements
-    .filter((p) => p.placed && p.comment.resolved)
-    .sort((a, b) => b.comment.created_at.localeCompare(a.comment.created_at));
-  const orphans = ctx.placements.filter(
-    (p) => !p.comment.resolved && isOrphanedPlacement(ctx.blocks, p)
-  );
-
-  const resolvedAll = [
-    ...pageResolved.map((c) => ({
-      kind: 'page' as const,
-      card: renderCard(
-        c.id,
-        c.author,
-        c.created_at,
-        c.body,
-        'page',
-        c.reactions,
-        c.replies,
-        false,
-        undefined,
-        true,
-        c.updated_at
-      ),
-      author: c.author,
-      created_at: c.created_at,
-      excerpt: c.body,
-    })),
-    ...inlineResolved.map((p) => {
-      const c = p.comment;
-      return {
-        kind: 'inline' as const,
-        card: renderCard(
-          c.id,
-          c.author,
-          c.created_at,
-          c.body,
-          'inline',
-          c.reactions,
-          c.replies,
-          c.orphaned,
-          { paragraphIndex: c.paragraph_index, anchorText: c.anchor_text },
-          true,
-          c.updated_at
-        ),
-        author: c.author,
-        created_at: c.created_at,
-        excerpt: c.anchor_text,
-      };
-    }),
-  ].sort((a, b) => b.created_at.localeCompare(a.created_at));
-
   const allInline = ctx.comments.inline_comments || [];
   const allPage = ctx.comments.page_comments || [];
 
@@ -718,12 +627,6 @@ export function extendMarkdownIt(md: any): any {
     function (tokens: any, idx: any, options: any, env: any, self: any) {
       return self.renderToken(tokens, idx, options);
     };
-
-  function getAttr(token: any, name: string): string | null {
-    if (!token.attrs) return null;
-    const attr = token.attrs.find((a: any) => a[0] === name);
-    return attr ? attr[1] : null;
-  }
 
   md.renderer.rules.paragraph_close = (
     tokens: any,

@@ -159,6 +159,7 @@
       e.preventDefault();
       removeEl('md-comments-selection-bar');
       if (pendingAnchor) {
+        applyPendingAnchorHighlight(pendingAnchor);
         showSidebarNewCommentComposer(pendingAnchor, false);
       }
     });
