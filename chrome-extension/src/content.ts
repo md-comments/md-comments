@@ -16,8 +16,15 @@ import type {
 import { GitHubOrphanRefBackend } from '../../shared/gitRefBackend';
 import { getStoredToken, saveOAuthToken, clearOAuthToken } from './githubAuth';
 import { GitHubApi, RepoMetadata } from './githubApi';
-import { isGitHubLogin } from '../../shared/author';
+import { isGitHubLogin, extractMentionLogins } from '../../shared/author';
 import { escapeHtml } from '../../shared/html';
+import {
+  getMentionQueryAtCursor,
+  filterCollaborators,
+  fetchCollaborators,
+  formatCommentBodyWithMentions,
+  CollaboratorUser,
+} from '../../shared/mentions';
 
 const gitRefBackend = new GitHubOrphanRefBackend(() => getStoredToken());
 const displayNameCache = new Map<string, string>();
@@ -121,6 +128,264 @@ function parseGitHubUrl(urlStr: string): ParsedUrl | null {
   } catch {
     return null;
   }
+}
+
+function getCurrentRepoOwnerAndName(): { owner: string; repo: string } | null {
+  if (currentMetadata?.owner && currentMetadata?.repo) {
+    return { owner: currentMetadata.owner, repo: currentMetadata.repo };
+  }
+  const parsed = parseGitHubUrl(window.location.href);
+  if (parsed) {
+    return { owner: parsed.owner, repo: parsed.repo };
+  }
+  try {
+    const parts = window.location.pathname.split('/').filter(Boolean);
+    if (parts.length >= 2) {
+      return { owner: decodeURIComponent(parts[0]), repo: decodeURIComponent(parts[1]) };
+    }
+  } catch {
+    /* ignore */
+  }
+  return null;
+}
+
+const BOUND_MENTION = 'data-md-mention-bound';
+
+function attachMentionAutocomplete(textarea: HTMLTextAreaElement) {
+  if (!textarea || textarea.getAttribute(BOUND_MENTION) === 'true') {
+    return;
+  }
+  textarea.setAttribute(BOUND_MENTION, 'true');
+
+  let activeIndex = 0;
+  let currentFiltered: CollaboratorUser[] = [];
+  let currentCtx: ReturnType<typeof getMentionQueryAtCursor> = null;
+
+  function removeMentionMenu() {
+    const el = document.getElementById('md-comments-mention-menu');
+    if (el) el.remove();
+  }
+
+  function applyMention(login: string) {
+    if (!currentCtx) return;
+    const value = textarea.value;
+    const before = value.slice(0, currentCtx.start);
+    const after = value.slice(currentCtx.end);
+    textarea.value = before + '@' + login + ' ' + after;
+    const newCaret = currentCtx.start + login.length + 2;
+    textarea.setSelectionRange(newCaret, newCaret);
+    textarea.focus();
+    textarea.dispatchEvent(new Event('input', { bubbles: true }));
+    removeMentionMenu();
+  }
+
+  async function updateMentionMenu() {
+    const pos =
+      textarea.selectionStart !== null &&
+      textarea.selectionStart !== undefined &&
+      textarea.selectionStart > 0
+        ? textarea.selectionStart
+        : textarea.value.length;
+    const ctx = getMentionQueryAtCursor(textarea.value, pos);
+    if (!ctx) {
+      removeMentionMenu();
+      return;
+    }
+    currentCtx = ctx;
+
+    const repoInfo = getCurrentRepoOwnerAndName();
+    if (!repoInfo) {
+      removeMentionMenu();
+      return;
+    }
+
+    const candidateMap = new Map<string, CollaboratorUser>();
+
+    // 1. Repo owner
+    if (repoInfo.owner && isGitHubLogin(repoInfo.owner)) {
+      candidateMap.set(repoInfo.owner.toLowerCase(), {
+        login: repoInfo.owner,
+        avatarUrl: `https://avatars.githubusercontent.com/${encodeURIComponent(repoInfo.owner)}?s=48`,
+      });
+    }
+
+    // 2. Current author
+    if (currentDisplayAuthor && isGitHubLogin(currentDisplayAuthor)) {
+      candidateMap.set(currentDisplayAuthor.toLowerCase(), {
+        login: currentDisplayAuthor,
+        avatarUrl: `https://avatars.githubusercontent.com/${encodeURIComponent(currentDisplayAuthor)}?s=48`,
+      });
+    }
+
+    // 3. Comment authors and mentions in loadedComments
+    if (loadedComments) {
+      const addLogin = (author?: string, body?: string) => {
+        if (author && isGitHubLogin(author)) {
+          const l = author.trim();
+          if (!candidateMap.has(l.toLowerCase())) {
+            candidateMap.set(l.toLowerCase(), {
+              login: l,
+              avatarUrl: `https://avatars.githubusercontent.com/${encodeURIComponent(l)}?s=48`,
+            });
+          }
+        }
+        if (body) {
+          for (const m of extractMentionLogins(body)) {
+            if (!candidateMap.has(m.toLowerCase())) {
+              candidateMap.set(m.toLowerCase(), {
+                login: m,
+                avatarUrl: `https://avatars.githubusercontent.com/${encodeURIComponent(m)}?s=48`,
+              });
+            }
+          }
+        }
+      };
+
+      for (const c of loadedComments.inline_comments || []) {
+        addLogin(c.author, c.body);
+        for (const r of c.replies || []) {
+          addLogin(r.author, r.body);
+        }
+      }
+      for (const c of loadedComments.page_comments || []) {
+        addLogin(c.author, c.body);
+        for (const r of c.replies || []) {
+          addLogin(r.author, r.body);
+        }
+      }
+    }
+
+    // 4. Remote collaborators, assignees, or contributors via GitHub API
+    try {
+      const users = await fetchCollaborators(repoInfo.owner, repoInfo.repo, () => getStoredToken());
+      for (const u of users) {
+        candidateMap.set(u.login.toLowerCase(), u);
+        if (u.name && u.name.trim()) {
+          displayNameCache.set(u.login.toLowerCase(), u.name.trim());
+        }
+      }
+    } catch {
+      /* ignore */
+    }
+
+    const allUsers = Array.from(candidateMap.values());
+    currentFiltered = filterCollaborators(allUsers, ctx.query, 8);
+    if (!currentFiltered.length) {
+      removeMentionMenu();
+      return;
+    }
+
+    removeMentionMenu();
+    const menu = document.createElement('div');
+    menu.id = 'md-comments-mention-menu';
+    menu.className = 'md-comments-mention-menu md-comments-scope';
+
+    activeIndex = 0;
+    currentFiltered.forEach((user, idx) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = `md-comments-mention-item ${idx === activeIndex ? 'active' : ''}`;
+
+      const avatar = document.createElement('img');
+      avatar.className = 'md-comments-mention-avatar';
+      avatar.src = user.avatarUrl;
+      avatar.alt = user.login;
+
+      const loginSpan = document.createElement('span');
+      loginSpan.className = 'md-comments-mention-login';
+      loginSpan.textContent = `@${user.login}`;
+
+      btn.appendChild(avatar);
+      btn.appendChild(loginSpan);
+
+      if (user.name) {
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'md-comments-mention-name';
+        nameSpan.textContent = user.name;
+        btn.appendChild(nameSpan);
+      }
+
+      btn.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        applyMention(user.login);
+      });
+
+      menu.appendChild(btn);
+    });
+
+    document.body.appendChild(menu);
+    const rect = textarea.getBoundingClientRect();
+    const menuHeight = Math.min(currentFiltered.length * 36 + 8, 280);
+    const spaceBelow = window.innerHeight - rect.bottom;
+    if (spaceBelow < menuHeight && rect.top > menuHeight) {
+      menu.style.top = `${rect.top - menuHeight - 4}px`;
+    } else {
+      menu.style.top = `${rect.bottom + 4}px`;
+    }
+    const maxLeft = Math.max(8, window.innerWidth - 270);
+    const menuLeft = Math.min(Math.max(rect.left, 8), maxLeft);
+    menu.style.left = `${menuLeft}px`;
+  }
+
+  textarea.addEventListener('input', () => {
+    void updateMentionMenu();
+  });
+
+  textarea.addEventListener('keydown', (e: KeyboardEvent) => {
+    const menu = document.getElementById('md-comments-mention-menu');
+    if (!menu || !currentFiltered.length) return;
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      e.stopPropagation();
+      activeIndex = (activeIndex + 1) % currentFiltered.length;
+      updateActiveItem();
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      e.stopPropagation();
+      activeIndex = (activeIndex - 1 + currentFiltered.length) % currentFiltered.length;
+      updateActiveItem();
+    } else if (e.key === 'Enter' || e.key === 'Tab') {
+      if (currentFiltered[activeIndex]) {
+        e.preventDefault();
+        e.stopPropagation();
+        applyMention(currentFiltered[activeIndex].login);
+      }
+    } else if (e.key === 'Escape') {
+      e.preventDefault();
+      e.stopPropagation();
+      removeMentionMenu();
+    }
+
+    function updateActiveItem() {
+      const items = menu?.querySelectorAll('.md-comments-mention-item');
+      items?.forEach((item, idx) => {
+        if (idx === activeIndex) {
+          item.classList.add('active');
+          (item as HTMLElement).scrollIntoView({ block: 'nearest' });
+        } else {
+          item.classList.remove('active');
+        }
+      });
+    }
+  });
+
+  textarea.addEventListener('blur', () => {
+    setTimeout(removeMentionMenu, 150);
+  });
+}
+
+if (typeof document !== 'undefined') {
+  document.addEventListener(
+    'focusin',
+    (e) => {
+      const target = e.target as HTMLElement | null;
+      if (target && target.tagName === 'TEXTAREA') {
+        attachMentionAutocomplete(target as HTMLTextAreaElement);
+      }
+    },
+    true
+  );
 }
 
 function getBranchFromDom(): string | null {
@@ -616,6 +881,7 @@ async function loadDocumentComments(meta: ParsedUrl & { type: 'blob' }) {
   try {
     const fetched = await gitRefBackend.read(key);
     loadedComments = mergeLocalComments(loadedComments, fetched);
+    warmDisplayNames(loadedComments);
   } catch (err) {
     console.warn('[md-comments] Error reading comments from GitHubOrphanRefBackend:', err);
     loadedComments = mergeLocalComments(loadedComments, {
@@ -2318,7 +2584,7 @@ function renderCommentCard(comment: InlineComment | PageComment, type: 'inline' 
                 : ''
             }
           </div>
-          <div class="reply-body">${escapeHtml(r.body)}</div>
+          <div class="reply-body" data-raw-body="${escapeHtml(r.body)}">${renderCommentBody(r.body)}</div>
         </div>
       </div>
     `;
@@ -2361,7 +2627,7 @@ function renderCommentCard(comment: InlineComment | PageComment, type: 'inline' 
             : ''
         }
       </div>
-      <div class="md-comments-card-body">${escapeHtml(comment.body)}</div>
+      <div class="md-comments-card-body" data-raw-body="${escapeHtml(comment.body)}">${renderCommentBody(comment.body)}</div>
       
       ${
         comment.reactions && comment.reactions.length > 0
@@ -2438,7 +2704,7 @@ function showCommentTooltip(targetEl: HTMLElement, commentId: string) {
       <span class="tooltip-author">${escapeHtml(comment.author)}</span>
       <span class="tooltip-time">${formatRelativeTime(comment.created_at)}</span>
     </div>
-    <div class="tooltip-body">${escapeHtml(bodyText)}</div>
+    <div class="tooltip-body">${renderCommentBody(bodyText)}</div>
   `;
 
   document.body.appendChild(tooltip);
@@ -2536,6 +2802,17 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
         const emoji = btn.getAttribute('data-emoji');
         if (emoji) {
           await toggleEmojiReaction(commentId, type, emoji);
+        }
+      });
+    });
+
+    // Ensure mention links are clickable and open safely in a new tab
+    card.querySelectorAll('a.md-comments-mention').forEach((mentionLink) => {
+      mentionLink.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const href = (mentionLink as HTMLAnchorElement).href;
+        if (href) {
+          window.open(href, '_blank', 'noopener,noreferrer');
         }
       });
     });
@@ -2670,7 +2947,7 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
 
         if (card.querySelector('.comment-edit-textarea')) return;
 
-        const originalBody = bodyEl.innerText;
+        const originalBody = bodyEl.getAttribute('data-raw-body') || bodyEl.innerText;
         const originalContent = bodyEl.innerHTML;
 
         const draftValue = initialValue !== undefined ? initialValue : originalBody;
@@ -2722,7 +2999,8 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
             if (editDraftKey) {
               saveDraft(editDraftKey, '');
             }
-            bodyEl.innerHTML = escapeHtml(newBody);
+            bodyEl.setAttribute('data-raw-body', newBody);
+            bodyEl.innerHTML = renderCommentBody(newBody);
           } catch (err) {
             alert('Failed to edit comment: ' + err);
             saveBtn.disabled = false;
@@ -2774,7 +3052,7 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
           if (!bodyEl) return;
           if (replyItem.querySelector('.reply-edit-textarea')) return;
 
-          const originalBody = bodyEl.innerText;
+          const originalBody = bodyEl.getAttribute('data-raw-body') || bodyEl.innerText;
           const originalContent = bodyEl.innerHTML;
 
           const draftValue = initialValue !== undefined ? initialValue : originalBody;
@@ -2826,7 +3104,8 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
               if (editReplyDraftKey) {
                 saveDraft(editReplyDraftKey, '');
               }
-              bodyEl.innerHTML = escapeHtml(newBody);
+              bodyEl.setAttribute('data-raw-body', newBody);
+              bodyEl.innerHTML = renderCommentBody(newBody);
             } catch (err) {
               alert('Failed to edit reply: ' + err);
               saveBtn.disabled = false;
@@ -3761,8 +4040,11 @@ async function commitCommentFileChanges(updatedComments: CommentsFile, _action: 
     commitHash,
   };
 
+  const previousComments = loadedComments;
+
   // Optimistically update local comments state and render UI immediately
   loadedComments = updatedComments;
+  warmDisplayNames(loadedComments);
   if (meta.filePath) {
     const existing = loadedFileContexts.get(meta.filePath);
     loadedFileContexts.set(meta.filePath, {
@@ -3777,7 +4059,7 @@ async function commitCommentFileChanges(updatedComments: CommentsFile, _action: 
   renderSidebarComments();
 
   try {
-    await gitRefBackend.write(key, updatedComments);
+    await gitRefBackend.write(key, updatedComments, previousComments);
   } catch (err: any) {
     console.error('[md-comments] Error writing comment to GitHub orphan ref:', err);
     const errMsg = String(err?.message || err);
@@ -4070,16 +4352,16 @@ async function fetchDisplayName(login: string): Promise<void> {
     });
     if (res.ok) {
       const data = await res.json();
-      if (data && typeof data.name === 'string') {
-        const trimmed = data.name.trim();
-        if (trimmed) {
-          displayNameCache.set(key, trimmed);
-          renderSidebarComments();
-        }
-      }
+      const resolvedName =
+        data && typeof data.name === 'string' && data.name.trim() ? data.name.trim() : login;
+      displayNameCache.set(key, resolvedName);
+      renderSidebarComments();
+    } else {
+      displayNameCache.set(key, login);
     }
   } catch (e) {
     console.error('[md-comments] Failed to fetch display name:', e);
+    displayNameCache.set(key, login);
   } finally {
     pendingFetches.delete(key);
   }
@@ -4095,6 +4377,10 @@ function renderAuthor(author: string): string {
   return `<span class="md-comments-username">${escapeHtml(displayName)}</span>`;
 }
 
+function renderCommentBody(body: string): string {
+  return formatCommentBodyWithMentions(body, (login) => resolveDisplayName(login));
+}
+
 function collectCommentAuthors(comments: CommentsFile): string[] {
   const authors = new Set<string>();
   const addAuthor = (author: string) => {
@@ -4103,16 +4389,28 @@ function collectCommentAuthors(comments: CommentsFile): string[] {
       authors.add(clean);
     }
   };
-  for (const c of comments.page_comments) {
+  for (const c of comments.page_comments || []) {
     addAuthor(c.author);
-    for (const r of c.replies) {
+    for (const m of extractMentionLogins(c.body || '')) {
+      addAuthor(m);
+    }
+    for (const r of c.replies || []) {
       addAuthor(r.author);
+      for (const m of extractMentionLogins(r.body || '')) {
+        addAuthor(m);
+      }
     }
   }
-  for (const c of comments.inline_comments) {
+  for (const c of comments.inline_comments || []) {
     addAuthor(c.author);
-    for (const r of c.replies) {
+    for (const m of extractMentionLogins(c.body || '')) {
+      addAuthor(m);
+    }
+    for (const r of c.replies || []) {
       addAuthor(r.author);
+      for (const m of extractMentionLogins(r.body || '')) {
+        addAuthor(m);
+      }
     }
   }
   return [...authors];

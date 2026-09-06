@@ -361,5 +361,71 @@ describe('GitHubOrphanRefBackend', () => {
       const firstCallUrl = fetchMock.mock.calls[0][0];
       expect(firstCallUrl).toContain('docs/ADR%20T9%20Context%20Engine.0000000.comments.yml');
     });
+
+    it('dispatches a commit comment notification when new mentions exist in written comments', async () => {
+      // 1. GET ref -> ok
+      fetchMock.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ object: { sha: 'parent-sha' } }),
+      });
+      // 2. POST tree -> ok
+      fetchMock.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ sha: 'tree-sha-1' }),
+      });
+      // 3. POST commit -> ok
+      fetchMock.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ sha: 'new-commit-sha' }),
+      });
+      // 4. PATCH ref -> ok
+      fetchMock.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ object: { sha: 'new-commit-sha' } }),
+      });
+      // 5. POST commit comment -> ok
+      fetchMock.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ id: 456 }),
+      });
+
+      const commentsWithMention: CommentsFile = {
+        inline_comments: [
+          {
+            id: 'c-mention',
+            author: 'alice',
+            anchor_text: 'sample text',
+            anchor_hash: 'hash1',
+            paragraph_index: 0,
+            heading_context: '',
+            body: 'Hey @octocat can you review this?',
+            created_at: '2026-09-01T00:00:00Z',
+            orphaned: false,
+            resolved: false,
+            reactions: [],
+            replies: [],
+          },
+        ],
+        page_comments: [],
+      };
+
+      await backend.write(
+        { owner: 'my-org', repo: 'my-repo', filePath: 'docs/test.md', branch: 'main' },
+        commentsWithMention
+      );
+
+      // Verify 5 calls made (4 for git write + 1 for commit comment notification)
+      expect(fetchMock).toHaveBeenCalledTimes(5);
+      const lastCallUrl = fetchMock.mock.calls[4][0];
+      expect(lastCallUrl).toBe(
+        'https://api.github.com/repos/my-org/my-repo/commits/new-commit-sha/comments'
+      );
+      const lastCallBody = JSON.parse(fetchMock.mock.calls[4][1].body);
+      expect(lastCallBody.body).toContain('💬 **@alice** mentioned you');
+      expect(lastCallBody.body).toContain('Hey @octocat can you review this?');
+      expect(lastCallBody.body).toContain(
+        '*Sent via [Markdown Comments](https://md-comments.com)*'
+      );
+    });
   });
 });

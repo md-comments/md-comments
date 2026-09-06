@@ -16,6 +16,7 @@ import { parseMarkdownAnchors, fnv1aHash, normalizeAnchorText } from '../../shar
 import { placeInlineComments, isOrphanedPlacement, fuzzyMatch } from '../../shared/placement';
 import type { CommentsFile, PlacementResult } from '../../shared/types';
 import { escapeHtml } from '../../shared/html';
+import { formatCommentBodyWithMentions } from '../../shared/mentions';
 import { readComments } from './commentStore';
 import { globalOptimisticStore } from './optimisticStore';
 import { resolveStorageKeyForUriSync } from './repoManager';
@@ -114,14 +115,7 @@ function renderAuthorLink(author: string): string {
 }
 
 function renderCommentBody(body: string): string {
-  const escaped = escapeHtml(body);
-  return escaped.replace(/@([a-zA-Z0-9](?:[a-zA-Z0-9-]{0,37}))/g, (match, login: string) => {
-    if (!isGitHubLogin(login)) {
-      return match;
-    }
-    const href = githubProfileUrl(login);
-    return `<a href="${escapeHtml(href)}" class="md-comments-mention" target="_blank" rel="noopener noreferrer">@${escapeHtml(login)}</a>`;
-  });
+  return formatCommentBodyWithMentions(body, (login) => authorDisplayLabel(login));
 }
 
 function collectMentionCandidates(comments: CommentsFile): string[] {

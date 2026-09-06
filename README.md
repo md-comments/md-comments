@@ -35,6 +35,7 @@ Comments auto-save live via custom git refs (`refs/md-comments/data`) placed out
   2. **Fuzzy Text Match**: Selection-based substring search to identify the text even if slightly edited.
   3. **Heading + Paragraph Index**: Contextual paragraph offset within the closest heading.
 - **Threaded Conversations & Emoji Reactions**: Support for nested replies, emoji reactions, and thread status (Open / Resolved) for page-level and text-selection comments.
+- **`@mention` Tagging & Native GitHub Notifications**: Mention team members and collaborators using `@username` with autocomplete across comment editors. Tagged collaborators receive native GitHub notifications (Web inbox bell, GitHub Mobile push, and email) dispatched via commit comments on the data ref—zero external services or configuration needed.
 - **Direct GitHub File & Line Linking**: Every comment entry contains clickable links back to the target file and line range (`docs/architecture.md#L15`).
 - **Orphan Detection**: Detect and manage comments whose anchors are lost due to drastic document changes.
 - **Zero-Extension Web Docs**: Embed in documentation sites with zero extensions required for readers via GitHub OAuth Device Flow.
@@ -115,7 +116,7 @@ Alternatively, to run the extension locally for development:
 3. Click the **Comments** tab to view the dedicated Markdown Comments workspace.
 4. When viewing file diffs, hover over any Markdown paragraph to reveal the **+** (Add Comment) button next to it, or select a specific range of text to add an inline selection comment.
 5. You can also click the floating message bubble icon in the bottom-right corner of the page to toggle the **Comments Sidebar** from any PR tab.
-6. Compose your comment: comments auto-save instantly via custom git refs (`refs/md-comments/data`) with zero commits or branch overhead.
+6. Compose your comment: tag collaborators with `@username` autocomplete assistance. Comments auto-save instantly via custom git refs (`refs/md-comments/data`) with zero commits or branch overhead, and tagged collaborators receive native GitHub notifications.
 7. Read, reply to, and resolve comment threads directly from the sidebar or the Comments workspace tab.
 
 ---

@@ -2,6 +2,10 @@
 import * as yaml from 'js-yaml';
 import type { CommentBackend, CommentStorageKey } from './commentStorage.js';
 import type { CommentsFile, InlineComment, PageComment, Reply } from './types.js';
+import {
+  findNewlyMentionedEvents,
+  dispatchCommitCommentNotification,
+} from './githubNotifications.js';
 
 export const ORPHAN_REF_NAME = 'refs/md-comments/data';
 
@@ -307,16 +311,31 @@ export class GitHubOrphanRefBackend implements CommentBackend {
 
   /**
    * Writes comments to the orphan ref using compare-and-swap (CAS) retry logic.
+   * Dispatches GitHub native commit comment notifications for newly mentioned users.
    */
-  async write(key: CommentStorageKey, data: CommentsFile): Promise<void> {
+  async write(
+    key: CommentStorageKey,
+    data: CommentsFile,
+    previousData?: CommentsFile | null
+  ): Promise<void> {
     const commentsPath = commentsFilePathForMarkdown(key.filePath, key.commitHash);
     const maxRetries = 5;
     let currentData = data;
 
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
-        const success = await this.tryWriteCommit(key, commentsPath, currentData);
-        if (success) return;
+        const result = await this.tryWriteCommit(key, commentsPath, currentData);
+        if (result.success) {
+          if (result.createdSha) {
+            await this.dispatchNotifications(
+              key,
+              previousData ?? null,
+              currentData,
+              result.createdSha
+            );
+          }
+          return;
+        }
 
         try {
           const remote = await this.read(key);
@@ -335,11 +354,40 @@ export class GitHubOrphanRefBackend implements CommentBackend {
     }
   }
 
+  private async dispatchNotifications(
+    key: CommentStorageKey,
+    previousComments: CommentsFile | null,
+    newComments: CommentsFile,
+    commitSha: string
+  ): Promise<void> {
+    try {
+      const events = findNewlyMentionedEvents(previousComments, newComments, {
+        owner: key.owner,
+        repo: key.repo,
+        filePath: key.filePath,
+      });
+
+      for (const event of events) {
+        await dispatchCommitCommentNotification({
+          owner: key.owner,
+          repo: key.repo,
+          commitSha,
+          event,
+          defaultBranch: key.branch,
+          getToken: () => this.getToken(),
+          fetchFn: (url, opts) => this.fetchApi(String(url), opts),
+        });
+      }
+    } catch (e) {
+      console.warn('[md-comments] Error dispatching mention notifications:', e);
+    }
+  }
+
   private async tryWriteCommit(
     key: CommentStorageKey,
     commentsPath: string,
     newData: CommentsFile
-  ): Promise<boolean> {
+  ): Promise<{ success: boolean; createdSha?: string }> {
     const refUrl = `https://api.github.com/repos/${key.owner}/${key.repo}/git/refs/md-comments/data`;
     const refRes = await this.fetchApi(refUrl);
 
@@ -398,9 +446,9 @@ export class GitHubOrphanRefBackend implements CommentBackend {
         method: 'PATCH',
         body: JSON.stringify({ sha: createdCommitData.sha, force: false }),
       });
-      if (patchRefRes.ok) return true;
+      if (patchRefRes.ok) return { success: true, createdSha: createdCommitData.sha };
       if (patchRefRes.status === 422) {
-        return false;
+        return { success: false };
       }
       throw new Error(`Ref update failed: ${patchRefRes.status}`);
     } else {
@@ -409,9 +457,9 @@ export class GitHubOrphanRefBackend implements CommentBackend {
         method: 'POST',
         body: JSON.stringify({ ref: ORPHAN_REF_NAME, sha: createdCommitData.sha }),
       });
-      if (createRefRes.ok) return true;
+      if (createRefRes.ok) return { success: true, createdSha: createdCommitData.sha };
       if (createRefRes.status === 422) {
-        return false;
+        return { success: false };
       }
       throw new Error(`Ref creation failed: ${createRefRes.status}`);
     }
