@@ -3,8 +3,14 @@
  * Proxies `/api/md-comments/auth/*` requests to GitHub to bypass browser CORS in development.
  */
 
+import type { IncomingMessage, ServerResponse } from 'http';
+
 export function createAuthMiddleware() {
-  return async (req: any, res: any, next: any) => {
+  return async (
+    req: IncomingMessage & { body?: unknown },
+    res: ServerResponse,
+    next: () => void
+  ) => {
     const rawUrl = req.url || '';
     const url = rawUrl.split('?')[0].replace(/\/+$/, '');
 
@@ -62,12 +68,13 @@ export function createAuthMiddleware() {
         'Access-Control-Allow-Origin': '*',
       });
       res.end(JSON.stringify(data));
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Internal proxy error';
       res.writeHead(500, {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
       });
-      res.end(JSON.stringify({ error: err?.message || 'Internal proxy error' }));
+      res.end(JSON.stringify({ error: msg }));
     }
   };
 }
@@ -76,7 +83,7 @@ export function createAuthProxyVitePlugin() {
   const middleware = createAuthMiddleware();
   return {
     name: 'md-comments-auth-proxy',
-    configureServer(server: any) {
+    configureServer(server: { middlewares: { use: (middleware: unknown) => void } }) {
       server.middlewares.use(middleware);
     },
   };

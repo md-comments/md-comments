@@ -5,9 +5,9 @@ export interface StarlightPlugin {
   name: string;
   hooks: {
     'config:setup': (args: {
-      config: any;
-      updateConfig: (newConfig: any) => void;
-      addIntegration: (integration: any) => void;
+      config: { base?: string; [key: string]: unknown };
+      updateConfig: (newConfig: Record<string, unknown>) => void;
+      addIntegration: (integration: unknown) => void;
     }) => void;
   };
 }
@@ -39,7 +39,15 @@ export function starlightMdComments(options: MdCommentsPluginOptions = {}): Star
   return {
     name: '@md-comments/starlight',
     hooks: {
-      'config:setup'({ config, updateConfig, addIntegration }: any) {
+      'config:setup'({
+        config,
+        updateConfig,
+        addIntegration,
+      }: {
+        config: { base?: string; [key: string]: unknown };
+        updateConfig: (newConfig: Record<string, unknown>) => void;
+        addIntegration: (integration: unknown) => void;
+      }) {
         const mergedOptions: MdCommentsPluginOptions = {
           base: config?.base,
           ...options,
@@ -67,7 +75,13 @@ export function starlightMdComments(options: MdCommentsPluginOptions = {}): Star
         addIntegration({
           name: '@md-comments/starlight-client-runtime',
           hooks: {
-            'astro:config:setup'({ updateConfig: updateAstroConfig, injectScript }: any) {
+            'astro:config:setup'({
+              updateConfig: updateAstroConfig,
+              injectScript,
+            }: {
+              updateConfig?: (config: Record<string, unknown>) => void;
+              injectScript: (stage: string, content: string) => void;
+            }) {
               if (updateAstroConfig) {
                 updateAstroConfig({
                   vite: {
@@ -85,7 +99,11 @@ export function starlightMdComments(options: MdCommentsPluginOptions = {}): Star
               }
               injectScript('page', `import '@md-comments/starlight/client/bootstrap';`);
             },
-            'astro:server:setup'({ server }: any) {
+            'astro:server:setup'({
+              server,
+            }: {
+              server?: { middlewares?: { use: (middleware: unknown) => void } };
+            }) {
               if (server?.middlewares) {
                 server.middlewares.use(createAuthMiddleware());
               }

@@ -183,8 +183,10 @@ export async function requestDeviceCode(
 
     const data = await res.json();
     return { data, pollUrl: 'https://github.com/login/oauth/access_token' };
-  } catch (err: any) {
-    if (err?.name === 'TypeError' || err?.message?.includes('fetch')) {
+  } catch (err: unknown) {
+    const isTypeError = err instanceof TypeError;
+    const msg = err instanceof Error ? err.message : String(err);
+    if (isTypeError || msg.includes('fetch')) {
       throw new Error(
         'Unable to connect to GitHub authorization service. Please check your network connection and try again.'
       );
@@ -235,14 +237,14 @@ export async function pollForAccessToken(
         }),
       });
 
-      let data: any = {};
+      let data: Record<string, unknown> = {};
       try {
-        data = await res.json();
+        data = (await res.json()) as Record<string, unknown>;
       } catch {
         // non-JSON response, retry next cycle
       }
 
-      if (data.access_token) {
+      if (typeof data.access_token === 'string') {
         saveOAuthToken(data.access_token);
         if (onStatusChange) onStatusChange('authorized');
         return data.access_token;
@@ -259,14 +261,11 @@ export async function pollForAccessToken(
       } else if (data.error === 'access_denied') {
         throw new Error('Authorization cancelled on GitHub.');
       } else if (data.error && data.error !== 'authorization_pending') {
-        throw new Error(data.error_description || data.error);
+        throw new Error(String(data.error_description || data.error));
       }
-    } catch (err: any) {
-      if (
-        err?.message?.includes('cancelled') ||
-        err?.message?.includes('expired') ||
-        err?.message?.includes('denied')
-      ) {
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      if (msg.includes('cancelled') || msg.includes('expired') || msg.includes('denied')) {
         throw err;
       }
       // Transient error, continue loop

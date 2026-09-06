@@ -127,11 +127,12 @@ export class AuthModal {
         this.close();
         onSuccess(token);
       })
-      .catch((err: Error | any) => {
+      .catch((err: unknown) => {
         if (!this.isPolling) return;
         if (spinner) spinner.style.display = 'none';
         if (statusText) {
-          statusText.textContent = `Authorization error: ${err?.message || err}`;
+          const msg = err instanceof Error ? err.message : String(err);
+          statusText.textContent = `Authorization error: ${msg}`;
         }
       });
   }

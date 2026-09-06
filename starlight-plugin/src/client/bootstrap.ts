@@ -11,7 +11,9 @@ function mountMdComments(): void {
 
   // Prevent multiple initializations on the same page
   if (container && !document.querySelector('.md-comments-drawer')) {
-    const options = (window as any).__MD_COMMENTS_OPTIONS__ || {};
+    const options =
+      (window as unknown as { __MD_COMMENTS_OPTIONS__?: Record<string, unknown> })
+        .__MD_COMMENTS_OPTIONS__ || {};
     const overlay = new CommentsOverlay(container as HTMLElement, options);
     overlay.init().catch(console.error);
   }

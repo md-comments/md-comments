@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable security/detect-non-literal-fs-filename */
 
 /**
  * Lightweight local dev server for the website with built-in GitHub OAuth Device Flow proxy.
@@ -90,7 +91,12 @@ const server = http.createServer(async (req, res) => {
   }
 
   // 2. Static File Serving
-  let filePath = path.join(WEBSITE_DIR, pathname);
+  let filePath = path.resolve(WEBSITE_DIR, '.' + path.normalize(pathname));
+  if (!filePath.startsWith(WEBSITE_DIR)) {
+    res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
+    res.end('403 Forbidden');
+    return;
+  }
 
   // Handle directory index
   if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {

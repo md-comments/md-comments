@@ -680,8 +680,8 @@
     "semantic_hash": ""
   },
   "shared/gitRefBackend.ts": {
-    "mtime": 1788658959.1906824,
-    "ast_hash": "d9dda8598df3c0675e46f7cacfda4e69",
+    "mtime": 1788733141.6913066,
+    "ast_hash": "6a3bdb851e6981ca0bfec20ddc85dcf4",
     "semantic_hash": ""
   },
   "tests/gitRefBackend.test.ts": {
@@ -720,13 +720,13 @@
     "semantic_hash": ""
   },
   "starlight-plugin/src/astro.ts": {
-    "mtime": 1788008902.882724,
-    "ast_hash": "b017f1895524bb04dea33e0a2d646ce7",
+    "mtime": 1788733074.2056406,
+    "ast_hash": "0597b6e615bbede446c09d7bc37ef982",
     "semantic_hash": ""
   },
   "starlight-plugin/src/client/components/AuthModal.ts": {
-    "mtime": 1788042699.1112819,
-    "ast_hash": "686ff463c38c3c368fd39d23edd80df9",
+    "mtime": 1788733106.2595434,
+    "ast_hash": "ebedffe18c1d03347465f52945db7bd0",
     "semantic_hash": ""
   },
   "starlight-plugin/src/client/components/CommentsOverlay.ts": {
@@ -740,8 +740,8 @@
     "semantic_hash": ""
   },
   "starlight-plugin/src/client/githubAuth.ts": {
-    "mtime": 1788036169.7803128,
-    "ast_hash": "38c7d1452e5c290608c50f678f2f44aa",
+    "mtime": 1788733163.9594371,
+    "ast_hash": "6ad6c9fb26d13b8e5009fedc86ec8e18",
     "semantic_hash": ""
   },
   "starlight-plugin/src/client/placement.ts": {
@@ -765,8 +765,8 @@
     "semantic_hash": ""
   },
   "starlight-plugin/src/starlight.ts": {
-    "mtime": 1788009388.9224124,
-    "ast_hash": "d0ab2af344e1925a8bc5ed504d633a48",
+    "mtime": 1788733087.628353,
+    "ast_hash": "28ad0d0188f5769bfc8c2acbeee368c2",
     "semantic_hash": ""
   },
   "starlight-plugin/src/types.ts": {
@@ -790,8 +790,8 @@
     "semantic_hash": ""
   },
   "starlight-plugin/src/client/bootstrap.ts": {
-    "mtime": 1787879226.6980114,
-    "ast_hash": "6b42cccf7a6ce6cdc64be3ab41a9d0b0",
+    "mtime": 1788733098.8643577,
+    "ast_hash": "1cb82c385837df6ac28ed8e4eb61768a",
     "semantic_hash": ""
   },
   "demo-astro/astro.config.mjs": {
@@ -840,8 +840,8 @@
     "semantic_hash": ""
   },
   "starlight-plugin/src/server/authProxy.ts": {
-    "mtime": 1787881124.9393263,
-    "ast_hash": "5f32f7cf6d0da53f3bf173a8adf63c6a",
+    "mtime": 1788733128.5814037,
+    "ast_hash": "5937616c0953d795cd18510a6f6c307c",
     "semantic_hash": ""
   },
   "demo-astro/src/components/Banner.astro": {
@@ -870,8 +870,8 @@
     "semantic_hash": ""
   },
   "scripts/serve-website.js": {
-    "mtime": 1788219309.195132,
-    "ast_hash": "1a3cb9f2d2e7bf4bfe5524c0315dff62",
+    "mtime": 1788733050.653654,
+    "ast_hash": "1c376ea3e9019cd7b5cb10d9b9bcccf4",
     "semantic_hash": ""
   },
   ".github/workflows/reset-demo-comments.yml": {

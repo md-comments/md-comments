@@ -9,10 +9,17 @@ import {
 
 export const ORPHAN_REF_NAME = 'refs/md-comments/data';
 
+export function stripMarkdownOrCommentsExtension(filePath: string): string {
+  let clean = filePath;
+  if (/\.comments\.(?:yml|yaml)$/i.test(clean)) {
+    clean = clean.replace(/\.comments\.(?:yml|yaml)$/i, '');
+    clean = clean.replace(/\.[a-f0-9]{7,40}$/i, '');
+  }
+  return clean.replace(/\.md$/i, '');
+}
+
 export function commentsFilePathForMarkdown(filePath: string, commitHash?: string): string {
-  const cleanPath = filePath
-    .replace(/\.(?:[a-f0-9]{7,40}\.)?comments\.(?:yml|yaml)$/i, '')
-    .replace(/\.md$/i, '');
+  const cleanPath = stripMarkdownOrCommentsExtension(filePath);
   const hash = (commitHash && commitHash.trim() ? commitHash : '0000000').slice(0, 7).toLowerCase();
   return `${cleanPath}.${hash}.comments.yml`;
 }
@@ -99,7 +106,7 @@ export class GitHubOrphanRefBackend implements CommentBackend {
       headers['Authorization'] = `Bearer ${token}`;
     }
     const method = options.method || 'GET';
-    const fetchOptions: any = { ...options, headers };
+    const fetchOptions: RequestInit & { cache?: string } = { ...options, headers };
     if (method.toUpperCase() === 'GET') {
       fetchOptions.cache = 'no-store';
       const connector = url.includes('?') ? '&' : '?';
@@ -156,9 +163,7 @@ export class GitHubOrphanRefBackend implements CommentBackend {
    */
   async read(key: CommentStorageKey): Promise<CommentsFile> {
     const targetPath = commentsFilePathForMarkdown(key.filePath, key.commitHash);
-    const cleanPath = key.filePath
-      .replace(/\.(?:[a-f0-9]{7,40}\.)?comments\.(?:yml|yaml)$/i, '')
-      .replace(/\.md$/i, '');
+    const cleanPath = stripMarkdownOrCommentsExtension(key.filePath);
     const legacyPath = `${cleanPath}.comments.yml`;
     const zeroPath = `${cleanPath}.0000000.comments.yml`;
 
@@ -343,10 +348,11 @@ export class GitHubOrphanRefBackend implements CommentBackend {
         } catch {
           /* ignore read failure on retry */
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         if (attempt === maxRetries) {
+          const msg = err instanceof Error ? err.message : String(err);
           throw new Error(
-            `Failed to write comments to orphan ref after ${maxRetries} attempts: ${err?.message || err}`
+            `Failed to write comments to orphan ref after ${maxRetries} attempts: ${msg}`
           );
         }
       }
