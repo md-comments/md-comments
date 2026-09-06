@@ -6458,8 +6458,8 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "package_devdependencies_eslint",
-      "community": 131,
-      "community_name": "eslint",
+      "community": 78,
+      "community_name": "devDependencies",
       "norm_label": "eslint"
     },
     {
@@ -6469,8 +6469,8 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "eslint",
-      "community": 131,
-      "community_name": "eslint",
+      "community": 78,
+      "community_name": "devDependencies",
       "norm_label": "eslint"
     },
     {
@@ -6502,8 +6502,8 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "package_devdependencies_js_yaml",
-      "community": 78,
-      "community_name": "devDependencies",
+      "community": 131,
+      "community_name": "js-yaml",
       "norm_label": "js-yaml"
     },
     {
@@ -6513,8 +6513,8 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "package_json_js_yaml",
-      "community": 78,
-      "community_name": "devDependencies",
+      "community": 131,
+      "community_name": "js-yaml",
       "norm_label": "js-yaml"
     },
     {
@@ -10973,7 +10973,7 @@
       "label": "createLocalMockServer()",
       "file_type": "code",
       "source_file": "tests/mocks/localMockServer.ts",
-      "source_location": "L421",
+      "source_location": "L435",
       "_origin": "ast",
       "id": "tests_mocks_localmockserver_createlocalmockserver",
       "community": 70,
@@ -46801,7 +46801,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/mocks/localMockServer.ts",
-      "source_location": "L421",
+      "source_location": "L435",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tests_mocks_localmockserver",
@@ -66477,5 +66477,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "3de78f699caad2dacbd47be20fc7506fb3704ee7"
+  "built_at_commit": "e46c07665b301495bcc7157fcbe3cd025361d7a1"
 }

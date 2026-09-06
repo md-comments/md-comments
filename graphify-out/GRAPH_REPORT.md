@@ -1,7 +1,7 @@
 # Graph Report - md-comments  (2026-09-06)
 
 ## Corpus Check
-- 276 files · ~189,838 words
+- 276 files · ~189,990 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `3de78f69`
+- Built from commit: `e46c0766`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -138,7 +138,7 @@
 - codegraph
 - repository
 - CLAUDE.md
-- eslint
+- js-yaml
 - markdownItPlugin.ts
 - loadDocumentComments
 - Markdown Comments Test Fixture
@@ -458,7 +458,7 @@ Nodes (25): astro, @astrojs/check, @astrojs/starlight, dependencies, @md-comment
 
 ### Community 78 - "devDependencies"
 Cohesion: 0.07
-Nodes (29): allure-commandline, allure-playwright, allure-vitest, eslint-plugin-security, monocart-coverage-reports, devDependencies, allure-commandline, allure-playwright (+21 more)
+Nodes (29): allure-commandline, allure-playwright, allure-vitest, eslint, eslint-plugin-security, monocart-coverage-reports, devDependencies, allure-commandline (+21 more)
 
 ### Community 79 - "compilerOptions"
 Cohesion: 0.14

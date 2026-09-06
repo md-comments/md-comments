@@ -61,7 +61,38 @@ export async function resetTestRepository(options: CleanupOptions = {}): Promise
     }
   }
 
-  // 2. Synchronize README.md test fixture
+  // 2. Delete commit comments
+  try {
+    const commentsRes = await fetch(`${apiBase}/repos/${owner}/${repo}/comments`, {
+      method: 'GET',
+      headers,
+    });
+    if (commentsRes.ok) {
+      const commentsList: any = await commentsRes.json();
+      if (Array.isArray(commentsList)) {
+        for (const comment of commentsList) {
+          try {
+            const delRes = await fetch(`${apiBase}/repos/${owner}/${repo}/comments/${comment.id}`, {
+              method: 'DELETE',
+              headers,
+            });
+            if (delRes.status === 204 || delRes.status === 200) {
+              console.log(`[Test Repo] Deleted commit comment: ${comment.id}`);
+            }
+          } catch (delErr: any) {
+            console.warn(
+              `[Test Repo] Failed to delete commit comment ${comment.id}:`,
+              delErr.message
+            );
+          }
+        }
+      }
+    }
+  } catch (err: any) {
+    console.warn('[Test Repo] Failed to fetch commit comments for deletion:', err.message);
+  }
+
+  // 3. Synchronize README.md test fixture
   try {
     const fixturePath = path.resolve(process.cwd(), 'tests/fixtures/sample-doc.md');
     let fixtureContent =

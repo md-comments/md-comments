@@ -321,6 +321,20 @@ export class LocalMockServer {
       }
     }
 
+    // 5c. Repository commit comments list & delete: /repos/:owner/:repo/comments/:id
+    const repoCommentsMatch = pathname.match(/^\/repos\/[^/]+\/[^/]+\/comments(?:\/(\d+))?$/);
+    if (repoCommentsMatch) {
+      const commentIdStr = repoCommentsMatch[1];
+      if (commentIdStr && method === 'DELETE') {
+        const idNum = parseInt(commentIdStr, 10);
+        this.commitComments = this.commitComments.filter((c) => c.id !== idNum);
+        return sendJson(204, {});
+      }
+      if (method === 'GET') {
+        return sendJson(200, this.commitComments);
+      }
+    }
+
     // 6. Contents API: /repos/:owner/:repo/contents/:path*
     const contentsMatch = pathname.match(/^\/repos\/[^/]+\/[^/]+\/contents\/(.+)$/);
     if (contentsMatch) {
