@@ -922,14 +922,14 @@ jobs:
 
 ### Phase 4: Headless Playwright Regression Test Suites
 
-- [ ] Implement Playwright regression tests importing flows directly from feature definitions and using `test.step()` hierarchies:
-  - [ ] OAuth Device Flow (`FEAT-AUTH-DEVICE`)
-  - [ ] Native IDE Auth Session (`FEAT-AUTH-IDE`)
-  - [ ] Anchor Hashing & Fuzzy Relocation (`FEAT-ANCH-HASH`, `FEAT-ANCH-RELOCATE`)
-  - [ ] Inline & Page Comment Creation (`FEAT-COMM-INLINE`, `FEAT-COMM-PAGE`)
-  - [ ] Threaded Replies & Resolve Lifecycle (`FEAT-THRD-REPLY`)
-  - [ ] Emoji Reactions & Mentions (`FEAT-REAC-TOGGLE`, `FEAT-MENT-DROPDOWN`)
-  - [ ] GitHub DOM Injection & SPA Turbo Soft Navigation (`FEAT-DOMI-BLOB`, `FEAT-DOMI-TURBO`)
+- [x] Implement Playwright regression tests importing flows directly from feature definitions and using `test.step()` hierarchies:
+  - [x] OAuth Device Flow (`FEAT-AUTH-DEVICE`)
+  - [x] Native IDE Auth Session (`FEAT-AUTH-IDE`)
+  - [x] Anchor Hashing & Fuzzy Relocation (`FEAT-ANCH-HASH`, `FEAT-ANCH-RELOCATE`)
+  - [x] Inline & Page Comment Creation (`FEAT-COMM-INLINE`, `FEAT-COMM-PAGE`)
+  - [x] Threaded Replies & Resolve Lifecycle (`FEAT-THRD-REPLY`)
+  - [x] Emoji Reactions & Mentions (`FEAT-REAC-TOGGLE`, `FEAT-MENT-DROPDOWN`)
+  - [x] GitHub DOM Injection & SPA Turbo Soft Navigation (`FEAT-DOMI-BLOB`, `FEAT-DOMI-TURBO`)
 
 ### Phase 5: CI/CD Pipeline & 100% Coverage Gate Integration
 

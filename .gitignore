@@ -23,6 +23,7 @@ chrome-extension/icons/
 coverage/
 allure-results/
 allure-report/
+test-results/
 tests/*.png
 
 # Local environment variables
