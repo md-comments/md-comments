@@ -95,13 +95,6 @@ jobs:
           name: allure-results
           path: allure-results/
 
-      - name: Upload CDP Coverage
-        if: always()
-        uses: actions/upload-artifact@v6
-        with:
-          name: cdp-coverage
-          path: coverage/cdp/
-
   coverage-and-reporting-gate:
     name: Consolidate 100% Coverage & Publish Allure Summary
     needs: [knowledge-graph-and-unit, headless-playwright-e2e]
@@ -126,12 +119,6 @@ jobs:
         with:
           name: unit-coverage
           path: coverage/
-
-      - uses: actions/download-artifact@v8
-        continue-on-error: true
-        with:
-          name: cdp-coverage
-          path: coverage/cdp/
 
       - name: Setup Java for Allure Report Generator
         uses: actions/setup-java@v5
