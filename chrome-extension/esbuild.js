@@ -1,17 +1,23 @@
+/* eslint-disable security/detect-non-literal-fs-filename */
 const esbuild = require('esbuild');
 const fs = require('fs');
 const path = require('path');
 
-const prod = process.argv[2] === 'production';
-const outdir = path.join(__dirname, 'dist');
+const args = process.argv.slice(2);
+const prod = args.includes('production');
+const targetArg = args.find((a) => a.startsWith('--target='));
+const target = targetArg ? targetArg.split('=')[1] : 'all';
 
-function copyStaticFiles() {
+function copyStaticFiles(outdir, manifestSource) {
   if (!fs.existsSync(outdir)) {
     fs.mkdirSync(outdir, { recursive: true });
   }
 
   // Copy manifest
-  fs.copyFileSync(path.join(__dirname, 'manifest.json'), path.join(outdir, 'manifest.json'));
+  const manifestPath = path.join(__dirname, manifestSource);
+  if (fs.existsSync(manifestPath)) {
+    fs.copyFileSync(manifestPath, path.join(outdir, 'manifest.json'));
+  }
 
   // Copy CSS styles
   const cssSrc = path.join(__dirname, 'src', 'sidebar.css');
@@ -32,19 +38,19 @@ function copyStaticFiles() {
     }
   }
 
-  console.log('Static files copied to dist/');
+  console.log(`Static files copied to ${path.relative(__dirname, outdir)}/`);
 }
 
-const copyPlugin = {
-  name: 'copy-plugin',
-  setup(build) {
-    build.onEnd(() => {
-      copyStaticFiles();
-    });
-  },
-};
+async function buildTarget(outdir, manifestSource, isWatch) {
+  const copyPlugin = {
+    name: 'copy-plugin',
+    setup(build) {
+      build.onEnd(() => {
+        copyStaticFiles(outdir, manifestSource);
+      });
+    },
+  };
 
-async function main() {
   const context = await esbuild.context({
     entryPoints: [
       path.join(__dirname, 'src', 'content.ts'),
@@ -60,12 +66,47 @@ async function main() {
     logLevel: 'info',
   });
 
-  if (prod) {
-    await context.rebuild();
-    context.dispose();
-  } else {
+  if (isWatch) {
     await context.watch();
-    console.log('Watching for changes...');
+    console.log(`Watching for changes in ${path.relative(__dirname, outdir)}...`);
+  } else {
+    await context.rebuild();
+    await context.dispose();
+  }
+}
+
+async function main() {
+  const isWatch = !prod && args.includes('--watch');
+
+  if (target === 'chrome') {
+    await buildTarget(
+      path.join(__dirname, 'dist', 'chrome'),
+      'manifests/manifest.chrome.json',
+      isWatch
+    );
+    // Also sync to legacy dist/
+    copyStaticFiles(path.join(__dirname, 'dist'), 'manifests/manifest.chrome.json');
+  } else if (target === 'safari') {
+    await buildTarget(
+      path.join(__dirname, 'dist', 'safari'),
+      'manifests/manifest.safari.json',
+      isWatch
+    );
+  } else {
+    // Build all targets
+    console.log('Building all targets (Chrome & Safari)...');
+    await buildTarget(
+      path.join(__dirname, 'dist', 'chrome'),
+      'manifests/manifest.chrome.json',
+      false
+    );
+    await buildTarget(
+      path.join(__dirname, 'dist', 'safari'),
+      'manifests/manifest.safari.json',
+      false
+    );
+    // Maintain standard dist/ for backward compatibility with root Playwright tests
+    await buildTarget(path.join(__dirname, 'dist'), 'manifest.json', isWatch);
   }
 }
 

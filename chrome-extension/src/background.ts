@@ -1,56 +1,74 @@
 /**
- * Service Worker Background Script for Chrome Extension.
+ * Service Worker Background Script for Cross-Browser Extension (Chrome & Safari).
  * Handles CORS-free GitHub App Device Flow.
  */
 
+import { getBrowserNamespace } from './browserApi';
+
 const DEFAULT_CLIENT_ID = 'Iv23li9t461keXDcVS0T';
 
-chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
-  if (message.type === 'START_DEVICE_FLOW') {
-    console.log('[background.js] Received START_DEVICE_FLOW message');
-    handleDeviceFlow(message.clientId || DEFAULT_CLIENT_ID)
-      .then((res) => {
-        console.log('[background.js] Device flow started successfully:', res);
-        sendResponse({ success: true, ...res });
-      })
-      .catch((err) => {
-        console.error('[background.js] START_DEVICE_FLOW error:', err);
-        sendResponse({ success: false, error: String(err?.message || err) });
-      });
-    return true; // Keep channel open for async response
-  }
+const api = getBrowserNamespace();
+const runtime = api?.runtime || (typeof chrome !== 'undefined' ? chrome.runtime : undefined);
 
-  if (message.type === 'CHECK_DEVICE_TOKEN') {
-    console.log(
-      '[background.js] Received CHECK_DEVICE_TOKEN message for code:',
-      message.deviceCode
-    );
-    checkDeviceToken(message.clientId || DEFAULT_CLIENT_ID, message.deviceCode)
-      .then((res) => {
-        console.log('[background.js] CHECK_DEVICE_TOKEN response payload:', res);
-        sendResponse({ success: true, data: res });
-      })
-      .catch((err) => {
-        console.error('[background.js] CHECK_DEVICE_TOKEN error:', err);
-        sendResponse({ success: false, error: String(err?.message || err) });
-      });
-    return true; // Keep channel open for async response
-  }
+interface ExtensionMessage {
+  type?: string;
+  clientId?: string;
+  deviceCode?: string;
+  refreshToken?: string;
+}
 
-  if (message.type === 'REFRESH_ACCESS_TOKEN') {
-    console.log('[background.js] Received REFRESH_ACCESS_TOKEN message');
-    refreshDeviceToken(message.clientId || DEFAULT_CLIENT_ID, message.refreshToken)
-      .then((res) => {
-        console.log('[background.js] REFRESH_ACCESS_TOKEN response payload:', res);
-        sendResponse({ success: true, data: res });
-      })
-      .catch((err) => {
-        console.error('[background.js] REFRESH_ACCESS_TOKEN error:', err);
-        sendResponse({ success: false, error: String(err?.message || err) });
-      });
-    return true; // Keep channel open for async response
+runtime?.onMessage.addListener(
+  (
+    message: ExtensionMessage,
+    _sender: chrome.runtime.MessageSender,
+    sendResponse: (res?: Record<string, unknown>) => void
+  ) => {
+    if (message.type === 'START_DEVICE_FLOW') {
+      console.log('[background.js] Received START_DEVICE_FLOW message');
+      handleDeviceFlow(message.clientId || DEFAULT_CLIENT_ID)
+        .then((res) => {
+          console.log('[background.js] Device flow started successfully:', res);
+          sendResponse({ success: true, ...res });
+        })
+        .catch((err) => {
+          console.error('[background.js] START_DEVICE_FLOW error:', err);
+          sendResponse({ success: false, error: String(err?.message || err) });
+        });
+      return true; // Keep channel open for async response
+    }
+
+    if (message.type === 'CHECK_DEVICE_TOKEN') {
+      console.log(
+        '[background.js] Received CHECK_DEVICE_TOKEN message for code:',
+        message.deviceCode
+      );
+      checkDeviceToken(message.clientId || DEFAULT_CLIENT_ID, message.deviceCode || '')
+        .then((res) => {
+          console.log('[background.js] CHECK_DEVICE_TOKEN response payload:', res);
+          sendResponse({ success: true, data: res });
+        })
+        .catch((err) => {
+          console.error('[background.js] CHECK_DEVICE_TOKEN error:', err);
+          sendResponse({ success: false, error: String(err?.message || err) });
+        });
+      return true; // Keep channel open for async response
+    }
+
+    if (message.type === 'REFRESH_ACCESS_TOKEN') {
+      console.log('[background.js] Received REFRESH_ACCESS_TOKEN message');
+      refreshDeviceToken(message.clientId || DEFAULT_CLIENT_ID, message.refreshToken || '')
+        .then((res) => {
+          console.log('[background.js] REFRESH_ACCESS_TOKEN response payload:', res);
+          sendResponse({ success: true, data: res });
+        })
+        .catch((err) => {
+          console.error('[background.js] REFRESH_ACCESS_TOKEN error:', err);
+          sendResponse({ success: false, error: String(err?.message || err) });
+        });
+      return true; // Keep channel open for async response
+    }
   }
-});
+);
 
 interface DeviceCodeResponse {
   device_code: string;

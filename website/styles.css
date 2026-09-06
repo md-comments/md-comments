@@ -1173,9 +1173,10 @@ h6 {
 }
 
 .btn-chrome svg,
+.btn-safari svg,
 .btn-vscode svg,
 .btn-openvsx svg {
-  margin-right: 8px;
+  margin-right: 10px;
   flex-shrink: 0;
 }
 
@@ -1223,6 +1224,37 @@ h6 {
 
 .browser-icon-btn.disabled:hover {
   opacity: 0.45;
+}
+
+.browser-icon-btn:not(.disabled) {
+  cursor: pointer;
+}
+
+.browser-icon-btn:not(.disabled):hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.btn-safari {
+  background: linear-gradient(135deg, #0071e3, #47a0ff);
+  color: #ffffff !important;
+  border: none;
+}
+
+.btn-safari:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 0 20px rgba(0, 113, 227, 0.4);
+}
+
+.safari-setup-card {
+  margin-top: 10px;
+  padding: 14px 18px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 [data-theme='light'] .browser-icon-btn.disabled {

@@ -1,0 +1,63 @@
+name: Safari WebExtension Build & E2E
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'chrome-extension/**'
+      - 'safari-extension/**'
+      - 'scripts/build-safari-app.sh'
+      - 'scripts/package-dmg.sh'
+      - 'tests/e2e/safari-extension.spec.ts'
+      - '.github/workflows/safari-build.yml'
+  pull_request:
+    paths:
+      - 'chrome-extension/**'
+      - 'safari-extension/**'
+      - 'scripts/build-safari-app.sh'
+      - 'scripts/package-dmg.sh'
+      - 'tests/e2e/safari-extension.spec.ts'
+      - '.github/workflows/safari-build.yml'
+
+jobs:
+  build-and-test-safari:
+    runs-on: macos-14
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright WebKit
+        run: npx playwright install webkit
+
+      - name: Build Safari Extension & Native macOS App
+        run: ./scripts/build-safari-app.sh
+
+      - name: Package Release DMG
+        run: ./scripts/package-dmg.sh
+
+      - name: Run Vitest Unit Tests
+        run: pnpm vitest run tests/browserApi.test.ts tests/safariAuth.test.ts
+
+      - name: Run Playwright WebKit E2E Tests
+        run: npx playwright test tests/e2e/safari-extension.spec.ts --project=webkit
+
+      - name: Upload DMG Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Markdown-Comments-macOS-DMG
+          path: artifacts/Markdown-Comments-macOS.dmg

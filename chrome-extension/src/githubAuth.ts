@@ -1,9 +1,4 @@
-/**
- * GitHub Authentication Manager for Chrome Extension.
- * Supports:
- * 1. Stored OAuth token or PAT from chrome.storage.local
- * 2. OAuth Device Flow for zero-config one-time authorization
- */
+import { browserStorage, browserRuntime } from './browserApi';
 
 export const CLIENT_ID = 'Iv23li9t461keXDcVS0T'; // Markdown Comments registered GitHub App Client ID
 
@@ -23,26 +18,27 @@ export interface SaveTokenPayload {
 }
 
 export async function getStoredTokens(): Promise<StoredTokens> {
-  return new Promise((resolve) => {
-    chrome.storage.local.get(
-      {
-        fallbackToken: '',
-        oauthToken: '',
-        refreshToken: '',
-        tokenExpiresAt: 0,
-        refreshTokenExpiresAt: 0,
-      },
-      (items) => {
-        resolve({
-          oauthToken: (items.oauthToken as string) || null,
-          refreshToken: (items.refreshToken as string) || null,
-          tokenExpiresAt: (items.tokenExpiresAt as number) || null,
-          refreshTokenExpiresAt: (items.refreshTokenExpiresAt as number) || null,
-          fallbackToken: (items.fallbackToken as string) || null,
-        });
-      }
-    );
+  const items = await browserStorage.get<{
+    fallbackToken?: string;
+    oauthToken?: string;
+    refreshToken?: string;
+    tokenExpiresAt?: number;
+    refreshTokenExpiresAt?: number;
+  }>({
+    fallbackToken: '',
+    oauthToken: '',
+    refreshToken: '',
+    tokenExpiresAt: 0,
+    refreshTokenExpiresAt: 0,
   });
+
+  return {
+    oauthToken: items.oauthToken || null,
+    refreshToken: items.refreshToken || null,
+    tokenExpiresAt: items.tokenExpiresAt || null,
+    refreshTokenExpiresAt: items.refreshTokenExpiresAt || null,
+    fallbackToken: items.fallbackToken || null,
+  };
 }
 
 export async function getStoredToken(): Promise<string | null> {
@@ -51,26 +47,20 @@ export async function getStoredToken(): Promise<string | null> {
 }
 
 export async function saveOAuthTokens(payload: SaveTokenPayload): Promise<void> {
-  return new Promise((resolve) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const data: Record<string, any> = {
-      oauthToken: payload.accessToken,
-    };
-    if (payload.refreshToken) {
-      data.refreshToken = payload.refreshToken;
-    }
-    if (payload.expiresIn) {
-      // Expiration in ms
-      data.tokenExpiresAt = Date.now() + payload.expiresIn * 1000;
-    }
-    if (payload.refreshTokenExpiresIn) {
-      // Refresh token expiration in ms
-      data.refreshTokenExpiresAt = Date.now() + payload.refreshTokenExpiresIn * 1000;
-    }
-    chrome.storage.local.set(data, () => {
-      resolve();
-    });
-  });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const data: Record<string, any> = {
+    oauthToken: payload.accessToken,
+  };
+  if (payload.refreshToken) {
+    data.refreshToken = payload.refreshToken;
+  }
+  if (payload.expiresIn) {
+    data.tokenExpiresAt = Date.now() + payload.expiresIn * 1000;
+  }
+  if (payload.refreshTokenExpiresIn) {
+    data.refreshTokenExpiresAt = Date.now() + payload.refreshTokenExpiresIn * 1000;
+  }
+  await browserStorage.set(data);
 }
 
 export async function saveOAuthToken(token: string): Promise<void> {
@@ -78,14 +68,12 @@ export async function saveOAuthToken(token: string): Promise<void> {
 }
 
 export async function clearOAuthToken(): Promise<void> {
-  return new Promise((resolve) => {
-    chrome.storage.local.remove(
-      ['oauthToken', 'refreshToken', 'tokenExpiresAt', 'refreshTokenExpiresAt'],
-      () => {
-        resolve();
-      }
-    );
-  });
+  await browserStorage.remove([
+    'oauthToken',
+    'refreshToken',
+    'tokenExpiresAt',
+    'refreshTokenExpiresAt',
+  ]);
 }
 
 export async function refreshAccessToken(clientId: string = CLIENT_ID): Promise<string | null> {
@@ -95,51 +83,38 @@ export async function refreshAccessToken(clientId: string = CLIENT_ID): Promise<
     return null;
   }
 
-  return new Promise((resolve) => {
-    try {
-      chrome.runtime.sendMessage(
-        {
-          type: 'REFRESH_ACCESS_TOKEN',
-          clientId,
-          refreshToken,
-        },
-        async (response) => {
-          if (chrome.runtime.lastError) {
-            console.error('[githubAuth] Refresh message error:', chrome.runtime.lastError);
-            resolve(null);
-            return;
-          }
+  try {
+    const response = await browserRuntime.sendMessage({
+      type: 'REFRESH_ACCESS_TOKEN',
+      clientId,
+      refreshToken,
+    });
 
-          if (response && response.success && response.data) {
-            const data = response.data;
-            if (data.access_token) {
-              console.log('[githubAuth] Token refreshed successfully!');
-              await saveOAuthTokens({
-                accessToken: data.access_token,
-                refreshToken: data.refresh_token, // Rotated refresh token
-                expiresIn: data.expires_in,
-                refreshTokenExpiresIn: data.refresh_token_expires_in,
-              });
-              resolve(data.access_token);
-              return;
-            } else if (data.error) {
-              console.warn('[githubAuth] Refresh token rejected by GitHub:', data.error);
-              if (data.error === 'bad_refresh_token' || data.error === 'invalid_grant') {
-                await clearOAuthToken();
-              }
-              resolve(null);
-              return;
-            }
-          }
-          console.warn('[githubAuth] Token refresh failed:', response?.error);
-          resolve(null);
+    if (response && response.success && response.data) {
+      const data = response.data;
+      if (data.access_token) {
+        console.log('[githubAuth] Token refreshed successfully!');
+        await saveOAuthTokens({
+          accessToken: data.access_token,
+          refreshToken: data.refresh_token, // Rotated refresh token
+          expiresIn: data.expires_in,
+          refreshTokenExpiresIn: data.refresh_token_expires_in,
+        });
+        return data.access_token;
+      } else if (data.error) {
+        console.warn('[githubAuth] Refresh token rejected by GitHub:', data.error);
+        if (data.error === 'bad_refresh_token' || data.error === 'invalid_grant') {
+          await clearOAuthToken();
         }
-      );
-    } catch (err) {
-      console.error('[githubAuth] Error invoking token refresh:', err);
-      resolve(null);
+        return null;
+      }
     }
-  });
+    console.warn('[githubAuth] Token refresh failed:', response?.error);
+    return null;
+  } catch (err) {
+    console.error('[githubAuth] Error invoking token refresh:', err);
+    return null;
+  }
 }
 
 export async function getValidAuthToken(clientId: string = CLIENT_ID): Promise<string | null> {

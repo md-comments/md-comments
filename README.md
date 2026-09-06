@@ -20,7 +20,7 @@ Comments auto-save live via custom git refs (`refs/md-comments/data`) placed out
 - **IDEs & Code Editors**: **VS Code** ([Marketplace](https://marketplace.visualstudio.com/items?itemName=md-comments.md-preview-comments) / [Open VSX](https://open-vsx.org/extension/md-comments/md-preview-comments)), **Cursor**, and **Antigravity**.
 - **Documentation Sites & Frameworks**: **Astro & Starlight** ([@md-comments/starlight](https://www.npmjs.com/package/@md-comments/starlight)), HTML, Docusaurus, VitePress, Next.js, Hugo, and MkDocs.
 - **Knowledge Bases**: **Obsidian** native plugin.
-- **Pull Requests & Code Review**: **GitHub** ([Chrome Extension](https://chromewebstore.google.com/detail/markdown-comments/mjlhdjonjfcedkbpajkfeidfebefhkpp)).
+- **Pull Requests & Code Review**: **GitHub** ([Chrome Extension](https://chromewebstore.google.com/detail/markdown-comments/mjlhdjonjfcedkbpajkfeidfebefhkpp) & [Safari Extension](docs/safari-extension-guide.md)).
 
 ---
 
@@ -88,6 +88,14 @@ Alternatively, to run the extension locally for development:
 1. Open Chrome and navigate to `chrome://extensions/`.
 2. Enable **Developer mode** using the toggle switch in the top right.
 3. Click the **Load unpacked** button in the top left and select the `chrome-extension/dist` folder in this repository.
+
+### GitHub (Safari Extension for macOS)
+
+Download the latest release: [`Markdown-Comments-macOS.dmg`](https://github.com/md-comments/md-comments/releases/latest/download/Markdown-Comments-macOS.dmg).
+
+Open the `.dmg`, move **Markdown Comments.app** to `/Applications`, and launch it to guide you through setup.
+
+For details, see the [Safari Extension Guide](docs/safari-extension-guide.md).
 
 ---
 

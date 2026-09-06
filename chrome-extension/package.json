@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "node esbuild.js",
     "build": "node esbuild.js production",
+    "build:chrome": "node esbuild.js production --target=chrome",
+    "build:safari": "node esbuild.js production --target=safari",
     "typecheck": "tsc --noEmit"
   },
   "author": "mstrelex",

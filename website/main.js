@@ -59,6 +59,49 @@ const initTheme = () => {
       });
     });
   });
+
+  // --- 3. Dynamic Browser Detection & Selector (Chrome & Safari) ---
+  const detectBrowser = () => {
+    const ua = navigator.userAgent;
+    const isSafari =
+      (/^((?!chrome|android).)*safari/i.test(ua) || window.safari !== undefined) &&
+      !/chrome|crios|crmo/i.test(ua);
+    return isSafari ? 'safari' : 'chrome';
+  };
+
+  const selectBrowser = (browserName) => {
+    const browserButtons = document.querySelectorAll('.browser-icon-btn[data-browser]');
+    const panes = document.querySelectorAll('.browser-install-pane');
+
+    browserButtons.forEach((btn) => {
+      if (btn.getAttribute('data-browser') === browserName) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+
+    panes.forEach((pane) => {
+      if (pane.id === `pane-${browserName}`) {
+        pane.style.display = 'block';
+      } else {
+        pane.style.display = 'none';
+      }
+    });
+  };
+
+  const browserButtons = document.querySelectorAll('.browser-icon-btn[data-browser]');
+  browserButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const browser = btn.getAttribute('data-browser');
+      if (browser) {
+        selectBrowser(browser);
+      }
+    });
+  });
+
+  // Pre-select detected browser on page load
+  selectBrowser(detectBrowser());
 };
 
 if (document.readyState === 'loading') {

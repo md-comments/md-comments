@@ -1,4 +1,10 @@
 import * as yaml from 'js-yaml';
+
+// Cross-browser compatibility polyfill: ensure `chrome` namespace is populated in Safari
+const globalScope = globalThis as unknown as Record<string, unknown>;
+if (typeof globalScope.chrome === 'undefined' && typeof globalScope.browser !== 'undefined') {
+  globalScope.chrome = globalScope.browser;
+}
 import {
   parseMarkdownAnchors,
   fnv1aHash,

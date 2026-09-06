@@ -27,6 +27,7 @@
   "ignorePatterns": [
     "dist",
     "out",
+    "safari-extension/build",
     "_site",
     ".astro",
     "node_modules",
