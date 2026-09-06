@@ -45,8 +45,8 @@
     "semantic_hash": ""
   },
   "obsidian-plugin/package.json": {
-    "mtime": 1788484716.5130906,
-    "ast_hash": "1e0c7a041d78bd9d4364599fa78e150a",
+    "mtime": 1788726307.354005,
+    "ast_hash": "77e9c4986e14f7421795bd2f252f186e",
     "semantic_hash": ""
   },
   "obsidian-plugin/src/livePreview.ts": {
@@ -80,8 +80,8 @@
     "semantic_hash": ""
   },
   "package.json": {
-    "mtime": 1788724377.7732937,
-    "ast_hash": "8916238e34cd32708a93431948b7bee3",
+    "mtime": 1788726307.4018438,
+    "ast_hash": "8ec44a4fd04a2cb70706a0f1d3a9ba2e",
     "semantic_hash": ""
   },
   "shared/anchor.ts": {
@@ -470,8 +470,8 @@
     "semantic_hash": ""
   },
   ".github/dependabot.yml": {
-    "mtime": 1785357514.139991,
-    "ast_hash": "a11061a0c9fcf8c5f95f348b521eef3c",
+    "mtime": 1788726307.3974364,
+    "ast_hash": "26b292beab3a95da7262954d5dc4c567",
     "semantic_hash": ""
   },
   ".github/workflows/ci.yml": {
@@ -555,8 +555,8 @@
     "semantic_hash": ""
   },
   ".agents/skills/pre-commit-checks/SKILL.md": {
-    "mtime": 1788713415.7446868,
-    "ast_hash": "882493820bb614338e9532a28f36ef8a",
+    "mtime": 1788726307.3972516,
+    "ast_hash": "c3cbec2b809d6abb3393d64b4f33ee68",
     "semantic_hash": ""
   },
   "fossa-deps.json": {
@@ -875,8 +875,8 @@
     "semantic_hash": ""
   },
   ".github/workflows/reset-demo-comments.yml": {
-    "mtime": 1788117505.555316,
-    "ast_hash": "c6986d00e11d4b30bacc1b6c92551dc7",
+    "mtime": 1788726307.3538182,
+    "ast_hash": "c7ae68cf694caf3efbca1f45bb833375",
     "semantic_hash": ""
   },
   ".plans/cross-browser-extension.md": {
@@ -900,8 +900,8 @@
     "semantic_hash": ""
   },
   ".github/workflows/dependabot-auto-merge.yml": {
-    "mtime": 1788045895.2128384,
-    "ast_hash": "63676409b0a30fb09f30ae21afb33f13",
+    "mtime": 1788726307.3976135,
+    "ast_hash": "4fcedfa356aaea64e356ad1b37ed1135",
     "semantic_hash": ""
   },
   ".plans/application-functionality-mapping-and-regression-suite-plan.md": {
@@ -1010,8 +1010,8 @@
     "semantic_hash": ""
   },
   "playwright.config.ts": {
-    "mtime": 1788716489.3320315,
-    "ast_hash": "e9637d97848cc1e3215c214848c41e69",
+    "mtime": 1788726307.401994,
+    "ast_hash": "fe47886d95409e381948a28097bbb859",
     "semantic_hash": ""
   },
   "plopfile.mjs": {
@@ -1030,8 +1030,8 @@
     "semantic_hash": ""
   },
   "scripts/test-repo-cleanup.ts": {
-    "mtime": 1788715910.0487835,
-    "ast_hash": "33ff89bbd4e636a93b518580eb0993d8",
+    "mtime": 1788726307.4021769,
+    "ast_hash": "19aa7c94a44ddd510806c06095c64e48",
     "semantic_hash": ""
   },
   "shared/githubNotifications.ts": {
@@ -1090,8 +1090,8 @@
     "semantic_hash": ""
   },
   "tests/e2e/fixtures/extensionFixture.ts": {
-    "mtime": 1788721239.0539012,
-    "ast_hash": "e37af151d0931695251692d300a67f2a",
+    "mtime": 1788726307.4023273,
+    "ast_hash": "47d2933d288be0fe146efb4a8d323df5",
     "semantic_hash": ""
   },
   "tests/e2e/highlights.spec.ts": {
@@ -1170,8 +1170,8 @@
     "semantic_hash": ""
   },
   "tests/mocks/localMockServer.ts": {
-    "mtime": 1788719922.2457225,
-    "ast_hash": "f295121c7b16507438d01d1761153515",
+    "mtime": 1788726307.402523,
+    "ast_hash": "f8218223596c5b8fde383cca58a02e71",
     "semantic_hash": ""
   },
   "tests/phase0-orchestration.test.ts": {
@@ -1220,8 +1220,8 @@
     "semantic_hash": ""
   },
   ".github/workflows/nightly-regression.yml": {
-    "mtime": 1788724385.8160548,
-    "ast_hash": "6f26bbfc0076182ebfc07379a2965c21",
+    "mtime": 1788726307.3978105,
+    "ast_hash": "a1fd2b8dd4f698035e96aa7e10fed62f",
     "semantic_hash": ""
   },
   "chrome-extension/README.md": {
@@ -1522,6 +1522,26 @@
   "quality/features/embed/FEAT-EMBED-RUNTIME.md": {
     "mtime": 1788724357.389422,
     "ast_hash": "81c68ccf26e48fa2a6314a65189d3e2b",
+    "semantic_hash": ""
+  },
+  "tests/e2e/github-extension-hermetic.spec.ts": {
+    "mtime": 1788725363.8287454,
+    "ast_hash": "142f6c8591aa62eac4b17445e55d26f4",
+    "semantic_hash": ""
+  },
+  "tests/e2e/github-extension-live.spec.ts": {
+    "mtime": 1788725099.781976,
+    "ast_hash": "3519cfa487b600edf6c6c49d53ebcfce",
+    "semantic_hash": ""
+  },
+  "quality/features/extension/FEAT-EXT-PLAYWRIGHT-LIVE.md": {
+    "mtime": 1788725301.0344048,
+    "ast_hash": "ed241a8560449ab741b0c1f4f495edb3",
+    "semantic_hash": ""
+  },
+  "quality/features/extension/FEAT-EXT-PLAYWRIGHT-MOCK.md": {
+    "mtime": 1788725297.3501003,
+    "ast_hash": "2fbdcfcabf8ceec44e39c23c55165638",
     "semantic_hash": ""
   }
 }

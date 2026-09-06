@@ -17,7 +17,7 @@ Run the following checks from the root directory:
    pnpm audit --prod --audit-level high
    ```
 
-   _Checks for vulnerable dependencies using pnpm's audit mechanism._
+   _Checks for known CVE vulnerabilities using pnpm's audit mechanism (note: `pnpm audit` scans for security vulnerabilities, whereas Dependabot also checks for package version updates; run `pnpm outdated` or `pnpm deps:outdated` to check for newer package releases)._
 
 2. **Linting (SAST / Code Quality)**:
 
