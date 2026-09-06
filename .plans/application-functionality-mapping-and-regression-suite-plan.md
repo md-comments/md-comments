@@ -903,10 +903,10 @@ jobs:
 
 ### Phase 1: OSS Docs-as-Code Setup & Feature Catalog Scaffolding
 
-- [ ] Install and configure `velite` (`velite.config.ts`) to validate and compile `quality/features/**/*.md` into type-safe data.
-- [ ] Configure `plopfile.mjs` for templated feature scaffolding (`pnpm plop feature`).
-- [ ] Scaffold all 34+ feature markdown files across `quality/features/` with YAML frontmatter and Gherkin scenarios.
-- [ ] Implement `tests/qualityGraph.test.ts` to assert zero orphaned features and 100% test mappings.
+- [x] Install and configure `velite` (`velite.config.ts`) to validate and compile `quality/features/**/*.md` into type-safe data.
+- [x] Configure `plopfile.mjs` for templated feature scaffolding (`pnpm plop feature`).
+- [x] Scaffold all 34+ feature markdown files across `quality/features/` with YAML frontmatter and Gherkin scenarios.
+- [x] Implement `tests/qualityGraph.test.ts` to assert zero orphaned features and 100% test mappings.
 
 ### Phase 2: Free 100% Code Coverage Tooling Setup
 

@@ -6,6 +6,7 @@ dist/
 out/
 _site/
 .astro/
+.velite/
 *.vsix
 *.tsbuildinfo
 obsidian-plugin/main.js

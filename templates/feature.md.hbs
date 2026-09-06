@@ -1,0 +1,33 @@
+---
+id: '{{id}}'
+title: '{{title}}'
+category: '{{category}}'
+interfaces:
+  - 'chrome-mv3'
+  - 'firefox-mv3'
+  - 'vscode'
+  - 'cursor'
+  - 'antigravity'
+  - 'starlight'
+  - 'embed-js'
+flowId: '{{flowId}}'
+dependsOn: []
+implementedIn:
+  - 'chrome-extension/src/content.ts'
+verifiedIn:
+  - 'tests/e2e/{{dashCase id}}.spec.ts'
+invariants: []
+minCoverage: 100
+---
+
+# {{title}}
+
+## Overview
+
+Description of {{title}}.
+
+## User Journey (Gherkin Scenarios)
+
+- **Given** an authenticated user
+- **When** an action is performed
+- **Then** expected result occurs
