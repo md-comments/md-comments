@@ -933,8 +933,8 @@ jobs:
 
 ### Phase 5: CI/CD Pipeline & 100% Coverage Gate Integration
 
-- [ ] Commit `.github/workflows/nightly-regression.yml` with scheduled cron and manual dispatch.
-- [ ] Validate full green test run, Allure report artifact generation, and 100% coverage gate pass on GitHub Actions.
+- [x] Commit `.github/workflows/nightly-regression.yml` with scheduled cron and manual dispatch.
+- [x] Validate full green test run, Allure report artifact generation, and 100% coverage gate pass on GitHub Actions.
 
 ---
 

@@ -1,0 +1,173 @@
+name: Comprehensive Regression & Knowledge Graph Suite
+
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Trigger reason'
+        default: 'Manual drift verification'
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  knowledge-graph-and-unit:
+    name: Knowledge Graph Integrity & Unit Coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Compile Feature Graph with Velite
+        run: pnpm quality:build
+
+      - name: Validate Knowledge Graph Integrity
+        run: pnpm test tests/qualityGraph.test.ts
+
+      - name: Run Vitest Unit Tests with V8 Coverage
+        run: pnpm test:coverage
+
+      - name: Upload Unit Coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-coverage
+          path: coverage/
+
+  headless-playwright-e2e:
+    name: Headless Playwright Extension E2E
+    needs: knowledge-graph-and-unit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Chrome Extension & Packages
+        run: pnpm build:shared && pnpm build:chrome
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Pre-Flight Clean Test Repository
+        env:
+          TEST_GITHUB_TOKEN: ${{ secrets.TEST_GITHUB_TOKEN }}
+          TEST_REPO_OWNER: 'md-comments'
+          TEST_REPO_NAME: 'md-test'
+        run: npx tsx scripts/test-repo-cleanup.ts
+
+      - name: Run Headless Playwright Tests with Allure Reporter
+        env:
+          TEST_GITHUB_TOKEN: ${{ secrets.TEST_GITHUB_TOKEN }}
+        run: pnpm test:e2e
+
+      - name: Post-Test Cleanup Test Repository
+        if: always()
+        env:
+          TEST_GITHUB_TOKEN: ${{ secrets.TEST_GITHUB_TOKEN }}
+        run: npx tsx scripts/test-repo-cleanup.ts
+
+      - name: Upload Allure Results & Coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results/
+
+  coverage-and-reporting-gate:
+    name: Consolidate 100% Coverage & Publish Allure Summary
+    needs: [knowledge-graph-and-unit, headless-playwright-e2e]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results/
+
+      - name: Setup Java for Allure Report Generator
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Generate Allure Report
+        run: pnpm test:report
+
+      - name: Consolidate Coverage with Free Monocart Reporter
+        run: pnpm coverage:consolidate
+
+      - name: Publish Summary to Step Summary
+        run: |
+          echo "## 📊 Test Regression & 100% Coverage Verification" >> $GITHUB_STEP_SUMMARY
+          if [ -f coverage/consolidated/summary.md ]; then
+            cat coverage/consolidated/summary.md >> $GITHUB_STEP_SUMMARY
+          fi
+
+  ai-diagnostic-and-alert:
+    name: AI Diagnostic Packet & Regression Alert
+    if: failure()
+    needs: [knowledge-graph-and-unit, headless-playwright-e2e, coverage-and-reporting-gate]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Upload AI Triage Packets
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-triage-packets
+          path: artifacts/ai-triage/
+
+      - name: Create GitHub Issue with Embedded AI Diagnostic Packet
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            const triageDir = path.resolve('artifacts/ai-triage');
+            let issueBody = `## 🚨 Automated Regression Drift Detected (${new Date().toISOString().split('T')[0]})\n\n`;
+
+            if (fs.existsSync(triageDir)) {
+              const files = fs.readdirSync(triageDir).filter(f => f.endsWith('.md'));
+              for (const file of files) {
+                const content = fs.readFileSync(path.join(triageDir, file), 'utf8');
+                issueBody += `\n<details><summary><b>Failure Packet: ${file}</b></summary>\n\n${content}\n\n</details>\n`;
+              }
+            } else {
+              issueBody += `Nightly regression suite failed. Inspect Actions run [${context.runId}](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}) for traces.\n`;
+            }
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🚨 Regression Failure: Behavioral Drift Detected (${new Date().toISOString().split('T')[0]})`,
+              body: issueBody,
+              labels: ['bug', 'automated-regression', 'ai-triage']
+            });
