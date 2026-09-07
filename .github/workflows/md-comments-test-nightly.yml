@@ -15,21 +15,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout md-comments-test
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Checkout md-comments codebase
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: md-comments/md-comments
           path: md-comments-src
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
         with:
           version: 9
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 20
           cache: 'pnpm'
@@ -59,14 +59,14 @@ jobs:
 
       - name: Upload Playwright Report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: playwright-report
           path: md-comments-src/playwright-report/
 
       - name: Upload Allure Results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: allure-results
           path: md-comments-src/allure-results/
