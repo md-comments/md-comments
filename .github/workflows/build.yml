@@ -92,8 +92,8 @@ jobs:
 
       - name: Package Chrome Extension
         run: |
-          cd chrome-extension/dist
-          zip -r ../../chrome-extension.zip .
+          cd chrome-extension/dist/chrome
+          zip -r ../../../chrome-extension.zip .
 
       - name: Get Version
         id: get_version

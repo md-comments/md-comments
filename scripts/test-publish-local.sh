@@ -54,9 +54,9 @@ cd ..
 
 # 4. Package Chrome Extension
 echo "Packaging Chrome extension..."
-cd chrome-extension/dist
-zip -r ../../artifacts/chrome-extension.zip .
-cd ../..
+cd chrome-extension/dist/chrome
+zip -r ../../../artifacts/chrome-extension.zip .
+cd ../../..
 
 echo "Artifacts prepared successfully in $(pwd)/artifacts:"
 ls -la artifacts
