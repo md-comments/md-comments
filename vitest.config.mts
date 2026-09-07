@@ -12,7 +12,12 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       include: ['shared/**/*.ts'],
-      exclude: ['shared/types.ts', 'shared/commentStorage.ts', 'shared/**/*.d.ts'],
+      exclude: [
+        'shared/types.ts',
+        'shared/commentStorage.ts',
+        'shared/**/*.d.ts',
+        'shared/src/telemetry/otelTypes.ts',
+      ],
       reporter: ['text', 'json', 'html'],
       thresholds: {
         lines: 100,

@@ -6,6 +6,7 @@ import {
   TelemetryKillSwitch,
   OtelTelemetryClient,
   TelemetryTransport,
+  HttpTelemetryTransport,
 } from '../shared/telemetry';
 
 describe('Shared Telemetry Core (sharedTelemetry)', () => {
@@ -209,6 +210,144 @@ onTurboLoad@https://github.com/dist/content.js:450:12`;
       const record = await client.captureException(new Error('Test error'));
       expect(record).toBeNull();
       expect(mockTransport.send).not.toHaveBeenCalled();
+    });
+
+    it('handles falsy or non-string inputs in sanitizer and stackNormalizer', () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      expect(UniversalSanitizer.sanitizeString(null as any)).toBe('');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      expect(UniversalSanitizer.sanitizeString(undefined as any)).toBe('');
+      expect(StackNormalizer.normalize(undefined)).toEqual({
+        normalizedStack: '',
+        topFrame: 'unknown',
+      });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      expect(StackNormalizer.normalize(123 as any)).toEqual({
+        normalizedStack: '',
+        topFrame: 'unknown',
+      });
+    });
+
+    it('respects environment and browser doNotTrack flags', async () => {
+      const origDnt = process.env.DO_NOT_TRACK;
+      const origMdt = process.env.MD_COMMENTS_TELEMETRY_DISABLED;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const origNav = Object.getOwnPropertyDescriptor(globalThis, 'navigator');
+
+      try {
+        process.env.DO_NOT_TRACK = '1';
+        expect(TelemetryKillSwitch.isEnabled()).toBe(false);
+
+        delete process.env.DO_NOT_TRACK;
+        process.env.MD_COMMENTS_TELEMETRY_DISABLED = '1';
+        expect(TelemetryKillSwitch.isEnabled()).toBe(false);
+
+        delete process.env.MD_COMMENTS_TELEMETRY_DISABLED;
+
+        Object.defineProperty(globalThis, 'navigator', {
+          value: { doNotTrack: '1' },
+          configurable: true,
+          writable: true,
+        });
+        expect(TelemetryKillSwitch.isEnabled()).toBe(false);
+
+        Object.defineProperty(globalThis, 'navigator', {
+          value: { doNotTrack: 'yes' },
+          configurable: true,
+          writable: true,
+        });
+        expect(TelemetryKillSwitch.isEnabled()).toBe(false);
+      } finally {
+        if (origDnt !== undefined) process.env.DO_NOT_TRACK = origDnt;
+        else delete process.env.DO_NOT_TRACK;
+        if (origMdt !== undefined) process.env.MD_COMMENTS_TELEMETRY_DISABLED = origMdt;
+        else delete process.env.MD_COMMENTS_TELEMETRY_DISABLED;
+
+        if (origNav) {
+          Object.defineProperty(globalThis, 'navigator', origNav);
+        } else {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          delete (globalThis as any).navigator;
+        }
+      }
+    });
+
+    it('handles throw inside purge callback gracefully', async () => {
+      TelemetryKillSwitch.onPurge(() => {
+        throw new Error('Purge callback exploded');
+      });
+      await expect(TelemetryKillSwitch.triggerPurge()).resolves.toBeUndefined();
+    });
+
+    it('handles enabledByDefault: false and breadcrumb metadata', async () => {
+      const client = new OtelTelemetryClient({
+        serviceVersion: '1.3.0',
+        clientInterface: 'chrome-extension',
+        enabledByDefault: false,
+      });
+      expect(TelemetryKillSwitch.isEnabled()).toBe(false);
+
+      await TelemetryKillSwitch.setEnabled(true);
+      client.recordBreadcrumb('network', 'API Fetch', {
+        endpoint: '/api/v1/comments?token=secret',
+        count: 5,
+        cached: true,
+      });
+
+      const breadcrumbs = client.getBreadcrumbs();
+      expect(breadcrumbs).toHaveLength(1);
+      expect(breadcrumbs[0].data?.endpoint).toBe('/api/v1/comments?query=[REDACTED]');
+      expect(breadcrumbs[0].data?.count).toBe(5);
+    });
+
+    it('handles non-Error objects and options in captureException', async () => {
+      const mockTransport: TelemetryTransport = {
+        send: vi.fn().mockResolvedValue(false),
+        flush: vi.fn().mockResolvedValue(undefined),
+      };
+
+      const client = new OtelTelemetryClient({
+        serviceVersion: '1.3.0',
+        clientInterface: 'chrome-extension',
+        transport: mockTransport,
+      });
+
+      const record = await client.captureException('Raw string error thrown', {
+        severity: 'WARN',
+        escaped: false,
+      });
+
+      expect(record).not.toBeNull();
+      expect(record?.severity).toBe('WARN');
+      expect(record?.exception.escaped).toBe(false);
+      expect(record?.exception.message).toBe('Raw string error thrown');
+      // Because send returned false, queue keeps record
+      expect(client.getQueueLength()).toBe(1);
+    });
+
+    it('handles HttpTelemetryTransport send edge cases and network errors', async () => {
+      const transport = new HttpTelemetryTransport('https://example.com');
+      // Empty records
+      await expect(transport.send([])).resolves.toBe(true);
+
+      // Network error during fetch
+      vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('Network offline')));
+      await expect(
+        transport.send([
+          {
+            serviceName: 'md-comments',
+            serviceVersion: '1.3.0',
+            clientInterface: 'chrome-extension',
+            timestamp: Date.now(),
+            severity: 'ERROR',
+            exception: { type: 'Error', message: 'test' },
+            fingerprint: '1234567890abcdef',
+            breadcrumbs: [],
+          },
+        ])
+      ).resolves.toBe(false);
+
+      await expect(transport.flush()).resolves.toBeUndefined();
     });
   });
 });
