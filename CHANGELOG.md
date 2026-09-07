@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-09-06
+
+### Added
+
+- **Safari Web Extension & macOS Companion App**: Native Safari Web Extension and macOS companion app with DMG packaging, cross-browser storage/runtime abstraction, and zero-PAT Device Flow OAuth parity.
+- **OpenTelemetry Exception Monitoring & Automated Triage**: Universal zero-secret telemetry proxy worker with PII sanitization, client-side killswitch, stack normalization, and closed-loop GitHub Action alert triage across all interfaces.
+- **Native @Mentions & Notifications**: In-app mentions autocomplete and real-time commit comment notification dispatch on documentation changes.
+- **Auth UX Parity & Robustness**: Streamlined GitHub Device Flow authentication waiting modal, proactive session auto-refresh, and clean error handling.
+
 ## [1.2.3] - 2026-09-03
 
 ### Fixed

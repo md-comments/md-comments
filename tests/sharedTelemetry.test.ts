@@ -146,7 +146,7 @@ onTurboLoad@https://github.com/dist/content.js:450:12`;
   describe('TelemetryKillSwitch & OtelTelemetryClient (INV-TELEMETRY-KILLSWITCH)', () => {
     it('should limit breadcrumbs to maximum of 10 items (FIFO)', () => {
       const client = new OtelTelemetryClient({
-        serviceVersion: '1.2.3',
+        serviceVersion: '1.3.0',
         clientInterface: 'chrome-extension',
       });
 
@@ -167,7 +167,7 @@ onTurboLoad@https://github.com/dist/content.js:450:12`;
       };
 
       const client = new OtelTelemetryClient({
-        serviceVersion: '1.2.3',
+        serviceVersion: '1.3.0',
         clientInterface: 'chrome-extension',
         transport: mockTransport,
       });
@@ -190,7 +190,7 @@ onTurboLoad@https://github.com/dist/content.js:450:12`;
       };
 
       const client = new OtelTelemetryClient({
-        serviceVersion: '1.2.3',
+        serviceVersion: '1.3.0',
         clientInterface: 'chrome-extension',
         transport: mockTransport,
       });
