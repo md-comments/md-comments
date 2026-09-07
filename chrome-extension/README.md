@@ -108,4 +108,4 @@ Right-click the Markdown Comments extension icon in Chrome's toolbar and select 
 
 - All API communications occur directly between your browser and the official GitHub REST API (`api.github.com`).
 - No comment text, document contents, or authentication tokens are ever transmitted to third-party servers.
-- See our full [Privacy Policy](../PRIVACY.md) and [Security Guide](../SECURITY.md) for details.
+- Anonymous crash diagnostics respect your browser's "Do Not Track" (DNT) setting and can be disabled anytime. See our full [Privacy Policy](../PRIVACY.md) and [Security Guide](../SECURITY.md) for details.

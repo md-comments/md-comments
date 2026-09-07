@@ -254,9 +254,9 @@ Protect your codebase branches while allowing Markdown Comments to synchronize c
 
 > 💡 **Tip:** Because `refs/md-comments/data` lives outside the `refs/heads/**` branch namespace, the app can freely record comment threads and reactions without any ability to directly push commits or alter source code branches.
 
-## Privacy Policy
+## Privacy & Telemetry
 
-For details on how the Chrome Extension, VS Code Extension, and Obsidian Plugin handle user data, settings, and permissions, please refer to our [Privacy Policy](PRIVACY.md).
+For details on how our interfaces handle user data, settings, permissions, and anonymous technical crash diagnostics—including instructions on how to disable telemetry across all editors and browser extensions—please refer to our [Privacy Policy](PRIVACY.md).
 
 ## License
 

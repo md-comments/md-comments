@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Last Updated:** August 29, 2026
+**Last Updated:** September 7, 2026
 
 Your privacy is extremely important to us. This Privacy Policy describes how the **Markdown Comments** suite of tools—including the **VS Code Extension**, **Obsidian Plugin**, **Chrome Extension**, and **Embeddable Web Component** (collectively, the "Software")—handles data and information.
 
@@ -11,8 +11,8 @@ Your privacy is extremely important to us. This Privacy Policy describes how the
 - **Local-First & Serverless:** The Software runs entirely client-side on your local machine, editor, or browser.
 - **Not a PII Processor or Keeper:** Because data is stored directly in your own designated GitHub repository and we operate no backend servers or databases, Markdown Comments is neither a data processor nor a keeper/custodian of any direct or linkable Personally Identifiable Information (PII).
 - **Public Demo Sites (24-Hour Maximum Retention):** For public interactive demo sites and sandboxes, any comments and associated public identifiers are retained for a maximum of 24 hours, as demo data is automatically wiped every 24 hours.
-- **No Third-Party Servers or Telemetry:** We do not host central databases, tracking pixels, analytics, or telemetry scripts.
-- **Direct GitHub Communication:** Network requests occur directly between your client and official GitHub endpoints (`https://api.github.com` and `https://raw.githubusercontent.com`).
+- **Anonymous Technical Diagnostics (Opt-Out Guaranteed):** To troubleshoot runtime bugs and improve client stability, optional non-identifiable technical error diagnostics (crash stacks, error types) may be relayed via a zero-secret Cloudflare Worker proxy to monitoring dashboards (Grafana Cloud). Document text, comment bodies, repo paths, user IDs, and tokens are scrubbed client-side and never transmitted. End users can unconditionally disable telemetry across all interfaces with instant buffer purging and zero network egress.
+- **Direct GitHub Communication:** Primary application requests occur directly between your client and official GitHub endpoints (`https://api.github.com` and `https://raw.githubusercontent.com`).
 - **Local Storage:** All settings, configurations, cached profiles, and authentication credentials are saved strictly on your local device.
 
 ---
@@ -65,17 +65,77 @@ The Software requests only the necessary permissions required to operate:
 
 ---
 
-## 4. Third-Party Services
+## 4. Telemetry, Crash Diagnostics & Kill-Switch
+
+Markdown Comments includes an OpenTelemetry-compatible diagnostic subsystem to monitor unhandled runtime exceptions and improve software reliability across platforms.
+
+### What Is Collected
+
+- **Sanitized Exception Type & Stack Traces**: Normalized error class names and function call frames (V8 and JavaScriptCore compatible).
+- **Platform Metadata**: Client interface name (e.g., `vscode-extension`, `obsidian-plugin`, `chrome-extension`), operating system family (e.g., macOS, Windows, Linux), and extension version.
+- **Strict Data Scrubbing (`INV-ZERO-CUSTOMER-DATA`):** All repository names, local file system directory paths (such as `/Users/username/...`), authorization headers, GitHub tokens, and markdown document contents are stripped client-side before any diagnostic record is constructed.
+- **Zero Client Secrets (`INV-ZERO-CLIENT-SECRETS`):** Client interfaces hold no API keys or upstream monitoring tokens. Diagnostics are dispatched to a stateless Cloudflare Worker reverse proxy that verifies request structure and applies strict rate limiting before relaying to upstream APM backends (Grafana Cloud / SigNoz).
+
+### Universal Kill-Switch Guarantee (`INV-TELEMETRY-KILLSWITCH`)
+
+Whenever telemetry is disabled, the Software guarantees:
+
+1. Immediate cessation of all diagnostic network transmissions.
+2. Immediate termination of background flush timers and workers.
+3. Immediate local memory and persistent storage queue purging (`md_telemetry_queue`).
+4. Total runtime no-op behavior for error handlers.
+
+### How to Disable Telemetry Across Interfaces
+
+Users can unconditionally opt out of diagnostic telemetry at any time:
+
+#### 1. Desktop IDEs (VS Code, Cursor, Google Antigravity)
+
+The desktop extension automatically respects your IDE's global telemetry preferences:
+
+- **Via Settings UI:** Open Settings (`Cmd+,` or `Ctrl+,`), search for **"Telemetry: Telemetry Level"**, and select **`off`** (or uncheck **"Telemetry: Enable Telemetry"**).
+- **Via `settings.json`:** Add `"telemetry.telemetryLevel": "off"`.
+- The extension listens for runtime changes to this setting and disables error logging immediately.
+
+#### 2. Obsidian Plugin
+
+- Open Obsidian **Settings** (`Cmd+,` or `Ctrl+,`).
+- Under **Community Plugins**, select **Markdown Comments**.
+- Scroll to **Anonymous Technical Diagnostics** and toggle it **OFF**.
+- Telemetry shuts down instantly and buffered logs are cleared.
+
+#### 3. Browser Extensions (Chrome & Safari MV3)
+
+- **Browser Privacy Signal (Do Not Track):** Turn on **"Send a 'Do Not Track' request with your browsing traffic"** (or Global Privacy Control) in your browser privacy settings. The extension checks `navigator.doNotTrack`; if active (`'1'` or `'yes'`), telemetry is completely disabled.
+- **Storage Setting:** Setting the extension storage key `md_telemetry_enabled` to `false` (via extension preferences or runtime message `{ type: "OTEL_SET_ENABLED", enabled: false }`) permanently disables dispatch and purges all queued records.
+
+#### 4. Environment Variables (CLI, Embeds, Node.js & Headless Environments)
+
+Set either of the following standard environment variables:
+
+```bash
+export DO_NOT_TRACK=1
+# or
+export MD_COMMENTS_TELEMETRY_DISABLED=1
+```
+
+The client runtime checks these variables at startup and disables telemetry immediately.
+
+---
+
+## 5. Third-Party Services
 
 When using GitHub integration features or public profile resolution, your computer interacts directly with GitHub. These interactions are subject to:
 
 - [GitHub's Privacy Statement](https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement)
 
-We have no control over, and assume no responsibility for, the content, privacy policies, or practices of any third-party websites or services (including GitHub).
+When anonymous diagnostics are enabled, sanitized crash stack traces are routed through a Cloudflare Worker proxy to monitoring infrastructure. These transmissions do not contain personal identifiers, account names, or repository files.
+
+We have no control over, and assume no responsibility for, the content, privacy policies, or practices of third-party platforms.
 
 ---
 
-## 5. Security
+## 6. Security
 
 We take the security of your local files and authentication credentials very seriously.
 
@@ -84,13 +144,13 @@ We take the security of your local files and authentication credentials very ser
 
 ---
 
-## 6. Changes to This Policy
+## 7. Changes to This Policy
 
 We may update our Privacy Policy from time to time. Any changes will be posted by updating the `PRIVACY.md` file in this repository. We encourage you to review this page periodically for any changes.
 
 ---
 
-## 7. Contact Us
+## 8. Contact Us
 
 If you have any questions or suggestions about this Privacy Policy, do not hesitate to contact us:
 

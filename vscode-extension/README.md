@@ -78,6 +78,7 @@ Customize the extension's behavior in your VS Code settings:
 
 - `mdComments.sidebarWidth`: Default width of the comments side panel in pixels (default: `340`, min: `260`, max: `600`).
 - `mdComments.reactionEmojis`: List of emoji options for comment reactions (default: `["👍", "👀", "❤️", "🎉", "❓"]`).
+- **Telemetry & Crash Diagnostics**: The extension automatically honors your editor's global setting (`telemetry.telemetryLevel: "off"`). When disabled, error reporting stops immediately and local buffers are purged. See our [Privacy Policy](../PRIVACY.md) for details.
 
 ---
 

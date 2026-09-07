@@ -77,7 +77,7 @@
       <article class="privacy-content">
         <div class="privacy-header-section">
           <h1>Privacy Policy</h1>
-          <div class="privacy-last-updated">Last Updated: August 29, 2026</div>
+          <div class="privacy-last-updated">Last Updated: September 7, 2026</div>
         </div>
 
         <div class="privacy-body-section">
@@ -108,8 +108,7 @@
               for a maximum of 24 hours, as demo data is automatically wiped every 24 hours.
             </li>
             <li>
-              <strong>No Third-Party Servers or Telemetry:</strong> We do not host any remote
-              servers, databases, tracking pixels, analytics, or telemetry scripts.
+              <strong>Anonymous Technical Diagnostics (Opt-Out Guaranteed):</strong> To troubleshoot runtime bugs and improve client stability, optional non-identifiable technical error diagnostics (crash stacks, error types) may be relayed via a zero-secret Cloudflare Worker proxy to monitoring dashboards (Grafana Cloud). Document text, comment bodies, repo paths, user IDs, and tokens are scrubbed client-side and never transmitted. End users can unconditionally disable telemetry across all interfaces with instant buffer purging and zero network egress.
             </li>
             <li>
               <strong>Direct GitHub Communication:</strong> Network requests are limited to direct,
@@ -195,7 +194,7 @@
             </li>
           </ul>
 
-          <h2>3. Browser & System Permissions Explained</h2>
+          <h2>3. Browser &amp; System Permissions Explained</h2>
           <p>The Software requests only the necessary permissions required to operate:</p>
 
           <h3>Chrome Extension</h3>
@@ -228,7 +227,61 @@
             </li>
           </ul>
 
-          <h2>4. Third-Party Services</h2>
+          <h2>4. Telemetry, Crash Diagnostics &amp; Kill-Switch</h2>
+          <p>
+            Markdown Comments includes an OpenTelemetry-compatible diagnostic subsystem to monitor unhandled runtime exceptions and improve software reliability across platforms.
+          </p>
+
+          <h3>What Is Collected</h3>
+          <ul>
+            <li><strong>Sanitized Exception Type &amp; Stack Traces:</strong> Normalized error class names and function call frames (V8 and JavaScriptCore compatible).</li>
+            <li><strong>Platform Metadata:</strong> Client interface name (e.g., <code>vscode-extension</code>, <code>obsidian-plugin</code>, <code>chrome-extension</code>), operating system family (e.g., macOS, Windows, Linux), and extension version.</li>
+            <li><strong>Strict Data Scrubbing (<code>INV-ZERO-CUSTOMER-DATA</code>):</strong> All repository names, local file system directory paths (such as <code>/Users/username/...</code>), authorization headers, GitHub tokens, and markdown document contents are stripped client-side before any diagnostic record is constructed.</li>
+            <li><strong>Zero Client Secrets (<code>INV-ZERO-CLIENT-SECRETS</code>):</strong> Client interfaces hold no API keys or upstream monitoring tokens. Diagnostics are dispatched to a stateless Cloudflare Worker reverse proxy that verifies request structure and applies strict rate limiting before relaying to upstream APM backends (Grafana Cloud / SigNoz).</li>
+          </ul>
+
+          <h3>Universal Kill-Switch Guarantee (<code>INV-TELEMETRY-KILLSWITCH</code>)</h3>
+          <p>Whenever telemetry is disabled, the Software guarantees:</p>
+          <ol>
+            <li>Immediate cessation of all diagnostic network transmissions.</li>
+            <li>Immediate termination of background flush timers and workers.</li>
+            <li>Immediate local memory and persistent storage queue purging (<code>md_telemetry_queue</code>).</li>
+            <li>Total runtime no-op behavior for error handlers.</li>
+          </ol>
+
+          <h3>How to Disable Telemetry Across Interfaces</h3>
+          <p>Users can unconditionally opt out of diagnostic telemetry at any time:</p>
+
+          <h4>1. Desktop IDEs (VS Code, Cursor, Google Antigravity)</h4>
+          <p>The desktop extension automatically respects your IDE's global telemetry preferences:</p>
+          <ul>
+            <li><strong>Via Settings UI:</strong> Open Settings (<code>Cmd+,</code> or <code>Ctrl+,</code>), search for <strong>"Telemetry: Telemetry Level"</strong>, and select <strong><code>off</code></strong> (or uncheck <strong>"Telemetry: Enable Telemetry"</strong>).</li>
+            <li><strong>Via <code>settings.json</code>:</strong> Add <code>"telemetry.telemetryLevel": "off"</code>.</li>
+            <li>The extension listens for runtime changes to this setting and disables error logging immediately.</li>
+          </ul>
+
+          <h4>2. Obsidian Plugin</h4>
+          <ul>
+            <li>Open Obsidian <strong>Settings</strong> (<code>Cmd+,</code> or <code>Ctrl+,</code>).</li>
+            <li>Under <strong>Community Plugins</strong>, select <strong>Markdown Comments</strong>.</li>
+            <li>Scroll to <strong>Anonymous Technical Diagnostics</strong> and toggle it <strong>OFF</strong>.</li>
+            <li>Telemetry shuts down instantly and buffered logs are cleared.</li>
+          </ul>
+
+          <h4>3. Browser Extensions (Chrome &amp; Safari MV3)</h4>
+          <ul>
+            <li><strong>Browser Privacy Signal (Do Not Track):</strong> Turn on <strong>"Send a 'Do Not Track' request with your browsing traffic"</strong> (or Global Privacy Control) in your browser privacy settings. The extension checks <code>navigator.doNotTrack</code>; if active (<code>'1'</code> or <code>'yes'</code>), telemetry is completely disabled.</li>
+            <li><strong>Storage Setting:</strong> Setting the extension storage key <code>md_telemetry_enabled</code> to <code>false</code> (via extension preferences or runtime message <code>{ type: "OTEL_SET_ENABLED", enabled: false }</code>) permanently disables dispatch and purges all queued records.</li>
+          </ul>
+
+          <h4>4. Environment Variables (CLI, Embeds, Node.js &amp; Headless Environments)</h4>
+          <p>Set either of the following standard environment variables:</p>
+          <pre><code>export DO_NOT_TRACK=1
+# or
+export MD_COMMENTS_TELEMETRY_DISABLED=1</code></pre>
+          <p>The client runtime checks these variables at startup and disables telemetry immediately.</p>
+
+          <h2>5. Third-Party Services</h2>
           <p>
             When using GitHub integration features or public profile resolution, your computer
             interacts directly with GitHub. These interactions are subject to:
@@ -244,11 +297,14 @@
             </li>
           </ul>
           <p>
+            When anonymous diagnostics are enabled, sanitized crash stack traces are routed through a Cloudflare Worker proxy to monitoring infrastructure. These transmissions do not contain personal identifiers, account names, or repository files.
+          </p>
+          <p>
             We have no control over, and assume no responsibility for, the content, privacy
             policies, or practices of any third-party websites or services (including GitHub).
           </p>
 
-          <h2>5. Security</h2>
+          <h2>6. Security</h2>
           <p>
             We take the security of your local files and authentication credentials very seriously.
           </p>
@@ -264,14 +320,14 @@
             </li>
           </ul>
 
-          <h2>6. Changes to This Policy</h2>
+          <h2>7. Changes to This Policy</h2>
           <p>
             We may update our Privacy Policy from time to time. Any changes will be posted by
             updating the <code>PRIVACY.md</code> file in this repository. We encourage you to review
             this page periodically for any changes.
           </p>
 
-          <h2>7. Contact Us</h2>
+          <h2>8. Contact Us</h2>
           <p>
             If you have any questions or suggestions about this Privacy Policy, do not hesitate to
             contact us:
