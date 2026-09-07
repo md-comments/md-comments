@@ -22,7 +22,7 @@ jobs:
       - uses: pnpm/action-setup@v6
         with:
           version: 9
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v7
         with:
           node-version: 20
           cache: 'pnpm'
@@ -43,7 +43,7 @@ jobs:
         run: pnpm test:coverage
 
       - name: Upload Unit Coverage
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: unit-coverage
           path: coverage/
@@ -57,7 +57,7 @@ jobs:
       - uses: pnpm/action-setup@v6
         with:
           version: 9
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v7
         with:
           node-version: 20
           cache: 'pnpm'
@@ -95,21 +95,21 @@ jobs:
         run: npx tsx scripts/test-repo-cleanup.ts
 
       - name: Upload Allure Results & Coverage
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: allure-results
           path: allure-results/
 
       - name: Upload Playwright HTML Report
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: playwright-report
           path: playwright-report/
 
       - name: Upload Playwright Traces
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
   vscode-electron-e2e:
     name: VS Code Electron E2E
@@ -120,7 +120,7 @@ jobs:
       - uses: pnpm/action-setup@v6
         with:
           version: 9
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v7
         with:
           node-version: 20
           cache: 'pnpm'
@@ -132,7 +132,7 @@ jobs:
         run: pnpm build:vscode
 
       - name: Cache VS Code Electron Binary
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: .vscode-test
           key: vscode-electron-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
@@ -144,7 +144,7 @@ jobs:
 
       - name: Upload VS Code Test Traces & Results
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: vscode-playwright-traces
           path: test-results/
@@ -158,7 +158,7 @@ jobs:
       - uses: pnpm/action-setup@v6
         with:
           version: 9
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v7
         with:
           node-version: 20
           cache: 'pnpm'
@@ -175,7 +175,7 @@ jobs:
           path: coverage/
 
       - name: Setup Java for Allure Report Generator
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           distribution: 'temurin'
           java-version: '17'
@@ -202,7 +202,7 @@ jobs:
       - uses: actions/checkout@v7
       - name: Upload AI Triage Packets
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: ai-triage-packets
           path: artifacts/ai-triage/
