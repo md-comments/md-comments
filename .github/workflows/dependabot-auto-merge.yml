@@ -33,20 +33,26 @@ jobs:
 
       - name: Fetch Dependabot Metadata
         id: metadata
-        if: steps.pr_info.outputs.pr_number != ''
+        if: github.event_name == 'pull_request'
         uses: dependabot/fetch-metadata@v3
         with:
           github-token: '${{ secrets.GITHUB_TOKEN }}'
-          target-pr-number: ${{ steps.pr_info.outputs.pr_number }}
 
       - name: Enable Auto-Merge
-        if: steps.pr_info.outputs.pr_number != '' && steps.metadata.outputs.update-type != 'version-update:semver-major'
+        if: >-
+          github.event_name == 'pull_request' &&
+          (steps.metadata.outputs.update-type != 'version-update:semver-major' || steps.metadata.outputs.dependency-group == 'actions')
         run: |
           PR_URL="${{ steps.pr_info.outputs.pr_url }}"
           gh pr review --approve "$PR_URL" || true
           gh pr merge --auto --squash "$PR_URL" || true
-          if [ "${{ github.event_name }}" = "workflow_run" ]; then
-            gh pr merge --squash "$PR_URL" || true
-          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Merge Approved Dependabot PR on CI Completion
+        if: github.event_name == 'workflow_run' && steps.pr_info.outputs.pr_number != ''
+        run: |
+          PR_URL="${{ steps.pr_info.outputs.pr_url }}"
+          gh pr merge --squash "$PR_URL" || true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
