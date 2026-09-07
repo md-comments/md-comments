@@ -293,3 +293,57 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release upload ${{ github.event.release.tag_name }} artifacts/Markdown-Comments-macOS.dmg --clobber
+
+  update-website:
+    name: Update Website Release Links & Deploy Pages
+    needs: [deploy-safari]
+    if: github.event.release.draft == false && github.event.release.prerelease == false
+    runs-on: ubuntu-latest
+    environment: Production
+    permissions:
+      contents: write
+      actions: write
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+        with:
+          ref: main
+
+      - name: Setup Git Identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Update Release Download Link in Website
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Updating website download links to production release $RELEASE_TAG..."
+          
+          # Update Safari DMG download link in website/index.html
+          sed -i -E "s|href=\"https://github\.com/md-comments/md-comments/releases/(latest\|download/[^/]+)/download/Markdown-Comments-macOS\.dmg\"|href=\"https://github.com/md-comments/md-comments/releases/download/$RELEASE_TAG/Markdown-Comments-macOS.dmg\"|g" website/index.html
+          sed -i -E "s|href=\"https://github\.com/md-comments/md-comments/releases/download/[^/]+/Markdown-Comments-macOS\.dmg\"|href=\"https://github.com/md-comments/md-comments/releases/download/$RELEASE_TAG/Markdown-Comments-macOS.dmg\"|g" website/index.html
+
+          # Update docs if present
+          if [ -f "docs/safari-extension-guide.md" ]; then
+            sed -i -E "s|https://github\.com/md-comments/md-comments/releases/download/[^/]+/Markdown-Comments-macOS\.dmg|https://github.com/md-comments/md-comments/releases/download/$RELEASE_TAG/Markdown-Comments-macOS.dmg|g" docs/safari-extension-guide.md
+          fi
+
+          # Ensure release is marked latest and non-prerelease
+          gh release edit "$RELEASE_TAG" --prerelease=false --latest || true
+
+          if git diff --quiet; then
+            echo "Website is already up to date with release $RELEASE_TAG."
+          else
+            git add website/index.html docs/safari-extension-guide.md || true
+            git commit -m "chore(website): update Safari download link to $RELEASE_TAG"
+            git push origin main
+          fi
+
+      - name: Trigger GitHub Pages Deployment
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run deploy-pages.yml --ref main || echo "Pages deployment workflow triggered via push or dispatch"
+

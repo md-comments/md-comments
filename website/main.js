@@ -102,6 +102,30 @@ const initTheme = () => {
 
   // Pre-select detected browser on page load
   selectBrowser(detectBrowser());
+
+  // --- 4. Dynamic Release Asset Link Updater ---
+  const updateReleaseDownloadLinks = async () => {
+    try {
+      const response = await fetch(
+        'https://api.github.com/repos/md-comments/md-comments/releases/latest'
+      );
+      if (!response.ok) return;
+      const release = await response.json();
+      const dmgAsset = release.assets?.find(
+        (asset) => asset.name === 'Markdown-Comments-macOS.dmg'
+      );
+      if (dmgAsset?.browser_download_url) {
+        const safariLinks = document.querySelectorAll('.btn-safari');
+        safariLinks.forEach((link) => {
+          link.href = dmgAsset.browser_download_url;
+        });
+      }
+    } catch {
+      // Fallback silently to static href
+    }
+  };
+
+  updateReleaseDownloadLinks();
 };
 
 if (document.readyState === 'loading') {

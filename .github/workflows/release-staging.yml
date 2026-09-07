@@ -64,11 +64,29 @@ jobs:
           name: safari-dmg
           path: artifacts
 
-      - name: Create Pre-release
+      - name: Check Existing Release Status
+        id: check-release-status
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="v${{ needs.build.outputs.version }}"
+          IS_PRERELEASE=$(gh release view "$TAG" --json isPrerelease -q .isPrerelease 2>/dev/null || echo "not_found")
+          echo "Existing release isPrerelease: $IS_PRERELEASE"
+          if [ "$IS_PRERELEASE" = "false" ]; then
+            echo "Release $TAG is already a published production release! Preserving production status."
+            echo "prerelease=false" >> "$GITHUB_OUTPUT"
+            echo "make_latest=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "prerelease=true" >> "$GITHUB_OUTPUT"
+            echo "make_latest=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create or Update Release
         uses: softprops/action-gh-release@v2
         with:
           draft: false
-          prerelease: true
+          prerelease: ${{ steps.check-release-status.outputs.prerelease == 'true' }}
+          make_latest: ${{ steps.check-release-status.outputs.make_latest }}
           tag_name: v${{ needs.build.outputs.version }}
           name: Release v${{ needs.build.outputs.version }}
           files: |
@@ -76,3 +94,4 @@ jobs:
             artifacts/obsidian-plugin.zip
             artifacts/chrome-extension.zip
             artifacts/Markdown-Comments-macOS.dmg
+
