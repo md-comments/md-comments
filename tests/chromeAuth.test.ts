@@ -172,3 +172,159 @@ describe('chrome-extension/githubAuth', () => {
     expect(token).toBe('personal-access-token-xyz');
   });
 });
+
+describe('chrome-extension/githubApi checkAppInstallation', () => {
+  it('caches installation status and invalidates with forceRefresh', async () => {
+    const { GitHubApi } = await import('../chrome-extension/src/githubApi');
+    const api = new GitHubApi('fake-token');
+
+    let callCount = 0;
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = vi.fn(async (url: string) => {
+      callCount++;
+      if (url.includes('/user/installations')) {
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({
+            installations: [
+              {
+                id: 101,
+                account: { login: 'octocat' },
+                repository_selection: 'all',
+                app_slug: 'markdown-comments',
+              },
+            ],
+          }),
+        } as any;
+      }
+      return { ok: false, status: 404 } as any;
+    }) as any;
+
+    try {
+      // First call: fetches from API
+      const res1 = await api.checkAppInstallation('octocat', 'hello-world');
+      expect(res1.installed).toBe(true);
+      expect(res1.repoAccess).toBe(true);
+      expect(res1.installationId).toBe(101);
+      expect(callCount).toBe(1);
+
+      // Second call: served from cache
+      const res2 = await api.checkAppInstallation('octocat', 'hello-world');
+      expect(res2.installed).toBe(true);
+      expect(callCount).toBe(1);
+
+      // Third call with forceRefresh: true fetches from API
+      const res3 = await api.checkAppInstallation('octocat', 'hello-world', true);
+      expect(res3.installed).toBe(true);
+      expect(callCount).toBe(2);
+
+      // Fourth call after clearAppInstallationCache: fetches from API
+      api.clearAppInstallationCache('octocat', 'hello-world');
+      const res4 = await api.checkAppInstallation('octocat', 'hello-world');
+      expect(res4.installed).toBe(true);
+      expect(callCount).toBe(3);
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
+  });
+
+  it('returns installed: false when no installation exists for owner', async () => {
+    const { GitHubApi } = await import('../chrome-extension/src/githubApi');
+    const api = new GitHubApi('fake-token');
+
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = vi.fn(async () => ({
+      ok: true,
+      status: 200,
+      json: async () => ({
+        installations: [
+          {
+            id: 201,
+            account: { login: 'other-user' },
+            repository_selection: 'all',
+            app_slug: 'markdown-comments',
+          },
+        ],
+      }),
+    })) as any;
+
+    try {
+      const res = await api.checkAppInstallation('target-user', 'some-repo');
+      expect(res.installed).toBe(false);
+      expect(res.repoAccess).toBe(false);
+      expect(res.appSlug).toBe('markdown-comments');
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
+  });
+
+  it('evaluates selected repository access correctly', async () => {
+    const { GitHubApi } = await import('../chrome-extension/src/githubApi');
+    const api = new GitHubApi('fake-token');
+
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = vi.fn(async (url: string) => {
+      if (url.includes('/user/installations/301/repositories')) {
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({
+            repositories: [{ name: 'allowed-repo' }],
+          }),
+        } as any;
+      }
+      if (url.includes('/user/installations')) {
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({
+            installations: [
+              {
+                id: 301,
+                account: { login: 'octocat' },
+                repository_selection: 'selected',
+                app_slug: 'markdown-comments',
+              },
+            ],
+          }),
+        } as any;
+      }
+      return { ok: false, status: 404 } as any;
+    }) as any;
+
+    try {
+      // Allowed repo has repoAccess: true
+      const resAllowed = await api.checkAppInstallation('octocat', 'allowed-repo');
+      expect(resAllowed.installed).toBe(true);
+      expect(resAllowed.repoAccess).toBe(true);
+      expect(resAllowed.installationId).toBe(301);
+
+      // Disallowed repo has repoAccess: false
+      const resDisallowed = await api.checkAppInstallation('octocat', 'forbidden-repo');
+      expect(resDisallowed.installed).toBe(true);
+      expect(resDisallowed.repoAccess).toBe(false);
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
+  });
+
+  it('gracefully handles API network error with fail-open fallback', async () => {
+    const { GitHubApi } = await import('../chrome-extension/src/githubApi');
+    const api = new GitHubApi('fake-token');
+
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = vi.fn(async () => {
+      throw new Error('Network error');
+    }) as any;
+
+    try {
+      const res = await api.checkAppInstallation('octocat', 'network-error-repo');
+      // Fail-open strategy prevents blocking users when the installations API errors out
+      expect(res.installed).toBe(true);
+      expect(res.repoAccess).toBe(true);
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
+  });
+});

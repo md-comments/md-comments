@@ -412,9 +412,18 @@ export class GitHubApi {
     { installed: boolean; repoAccess: boolean; appSlug?: string; installationId?: number }
   >();
 
+  clearAppInstallationCache(owner?: string, repoName?: string) {
+    if (owner && repoName) {
+      this.appInstallationCache.delete(`${owner.toLowerCase()}/${repoName.toLowerCase()}`);
+    } else {
+      this.appInstallationCache.clear();
+    }
+  }
+
   async checkAppInstallation(
     owner: string,
-    repoName: string
+    repoName: string,
+    forceRefresh = false
   ): Promise<{
     installed: boolean;
     repoAccess: boolean;
@@ -422,7 +431,9 @@ export class GitHubApi {
     installationId?: number;
   }> {
     const cacheKey = `${owner.toLowerCase()}/${repoName.toLowerCase()}`;
-    if (this.appInstallationCache.has(cacheKey)) {
+    if (forceRefresh) {
+      this.appInstallationCache.delete(cacheKey);
+    } else if (this.appInstallationCache.has(cacheKey)) {
       return this.appInstallationCache.get(cacheKey)!;
     }
 

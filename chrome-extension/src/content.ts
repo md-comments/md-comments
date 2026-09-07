@@ -82,6 +82,9 @@ let appInstallationStatus: {
   appSlug?: string;
   installationId?: number;
 } = { checked: false, installed: true, repoAccess: true };
+let isCheckingAppInstallation = false;
+let isWaitingForAppInstallation = false;
+let hasInstalledFocusListener = false;
 let isWritable = false;
 let writeBranch = '';
 let lastAuthError: string | null = null;
@@ -89,6 +92,18 @@ let activeSelectionButton: HTMLButtonElement | null = null;
 let isTabContentRendered = false;
 let cachedSelectedClasses: string[] = [];
 let currentDisplayAuthor = '';
+const pendingSubmissionIds = new Set<string>();
+
+function removeSubmittingProgress(id: string) {
+  pendingSubmissionIds.delete(id);
+  const el = document.getElementById(`submitting-line-${id}`);
+  if (el) {
+    el.classList.add('fade-out');
+    setTimeout(() => {
+      el.remove();
+    }, 300);
+  }
+}
 
 const draftsStore: Record<string, string> = {};
 
@@ -881,6 +896,8 @@ async function loadDocumentComments(meta: ParsedUrl & { type: 'blob' }) {
     if (!githubApi) {
       githubApi = new GitHubApi(currentToken);
     }
+    isCheckingAppInstallation = true;
+    renderSidebarComments();
     try {
       const status = await githubApi.checkAppInstallation(meta.owner, meta.repo);
       appInstallationStatus = {
@@ -893,9 +910,12 @@ async function loadDocumentComments(meta: ParsedUrl & { type: 'blob' }) {
     } catch (err) {
       console.warn('[md-comments] Failed to verify app installation:', err);
       appInstallationStatus = { checked: true, installed: true, repoAccess: true };
+    } finally {
+      isCheckingAppInstallation = false;
     }
   } else {
     appInstallationStatus = { checked: false, installed: true, repoAccess: true };
+    isCheckingAppInstallation = false;
   }
 
   try {
@@ -1568,39 +1588,23 @@ async function triggerAndMoveNativeComposer(
     const body = textarea?.value.trim() || '';
     if (!body) return;
 
-    const submitBtn =
-      (nativeForm?.querySelector(
-        'button[type="submit"], button.btn-primary, button.js-addition-comment-submit, button.js-comment-submit-button, input[type="submit"]'
-      ) as HTMLElement | null) ||
-      ((e.target as HTMLElement | null)?.closest('button') as HTMLElement | null);
-    const cancelBtn = nativeForm?.querySelector(
-      '.js-cancel-comment, button.js-cancel-comment-button, button[class*="cancel"]'
-    ) as HTMLElement | null;
-    try {
-      submitBtn?.setAttribute('disabled', 'true');
-      submitBtn?.classList.add('loading');
-      if (cancelBtn) cancelBtn.style.display = 'none';
-      if (textarea) textarea.readOnly = true;
+    // Optimistically clear textarea, draft, and form immediately
+    if (textarea) {
+      textarea.value = '';
+    }
+    if (draftKey) {
+      saveDraft(draftKey, '');
+    }
+    nativeForm?.remove();
+    cleanupListeners();
 
+    try {
       await onSubmit(body);
-      if (textarea) {
-        textarea.value = '';
-      }
-      if (draftKey) {
-        saveDraft(draftKey, '');
-      }
-      nativeForm?.remove();
-      cleanupListeners();
     } catch (err) {
       alert('Failed to save comment: ' + err);
       if (draftKey) {
         saveDraft(draftKey, body);
       }
-    } finally {
-      submitBtn?.removeAttribute('disabled');
-      submitBtn?.classList.remove('loading');
-      if (cancelBtn) cancelBtn.style.display = '';
-      if (textarea) textarea.readOnly = false;
     }
   };
 
@@ -1701,25 +1705,20 @@ function showFallbackReplyComposer(
     const body = textarea.value.trim();
     if (!body) return;
 
-    submitBtn.disabled = true;
-    submitBtn.classList.add('loading');
-    cancelBtn.style.display = 'none';
-    textarea.readOnly = true;
+    // Optimistically clear textarea and draft immediately
+    textarea.value = '';
+    if (draftKey) {
+      saveDraft(draftKey, '');
+    }
+
     try {
       await onSubmit(body);
-      textarea.value = '';
-      if (draftKey) {
-        saveDraft(draftKey, '');
-      }
     } catch (e) {
       alert('Failed to save reply: ' + e);
+      if (textarea) textarea.value = body;
       if (draftKey) {
         saveDraft(draftKey, body);
       }
-      submitBtn.disabled = false;
-      submitBtn.classList.remove('loading');
-      cancelBtn.style.display = '';
-      textarea.readOnly = false;
     }
   };
 
@@ -2004,30 +2003,21 @@ function injectSidebar() {
 
   // Submit new page comment
   activeSidebarHost.querySelector('.submit-page-btn')?.addEventListener('click', async () => {
-    const btn = activeSidebarHost?.querySelector('.submit-page-btn') as HTMLButtonElement;
     const textarea = activeSidebarHost?.querySelector('.page-textarea') as HTMLTextAreaElement;
     const body = textarea?.value.trim();
     if (!body) return;
 
     const pageDraftKey = getDraftKey('page');
-    if (textarea) textarea.readOnly = true;
-    if (btn) {
-      btn.disabled = true;
-      btn.classList.add('loading');
-    }
+    // Optimistic UI: clear textarea and draft immediately
+    if (textarea) textarea.value = '';
+    saveDraft(pageDraftKey, '');
+
     try {
       await saveNewPageComment(body);
-      if (textarea) textarea.value = '';
-      saveDraft(pageDraftKey, '');
     } catch (e) {
       alert('Failed to save comment: ' + e);
+      if (textarea) textarea.value = body;
       saveDraft(pageDraftKey, body);
-    } finally {
-      if (textarea) textarea.readOnly = false;
-      if (btn) {
-        btn.disabled = false;
-        btn.classList.remove('loading');
-      }
     }
   });
 
@@ -2101,6 +2091,22 @@ function closeSidebar() {
   document.body.classList.remove('md-comments-push-active');
 }
 
+function renderInstallationValidatingCard(owner?: string, repo?: string): string {
+  const repoLabel =
+    owner && repo ? `${escapeHtml(owner)}/${escapeHtml(repo)}` : escapeHtml(owner || 'repository');
+  return `
+    <div class="installation-loading-card">
+      <div class="md-comments-spinner"></div>
+      <div style="font-size: 13px; font-weight: 600; color: var(--text-primary); margin-top: 4px;">
+        Checking GitHub App Installation...
+      </div>
+      <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.4;">
+        Verifying permissions and access for <strong>${repoLabel}</strong>
+      </div>
+    </div>
+  `;
+}
+
 function renderInstallationPrompt(
   owner: string,
   repo: string,
@@ -2117,6 +2123,18 @@ function renderInstallationPrompt(
   const githubIcon = `<svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor" style="vertical-align: middle;"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>`;
   const gearIcon = `<svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor" style="vertical-align: middle;"><path d="M8 0a8.2 8.2 0 0 1 .701.031C9.444.095 9.99.645 10.16 1.29l.288 1.107c.018.066.079.158.212.224.231.114.454.243.668.386.123.082.233.09.299.071l1.103-.303c.644-.176 1.392.021 1.82.63.27.385.506.792.704 1.218.315.675.111 1.422-.364 1.891l-.814.806c-.049.048-.098.147-.088.294.016.257.016.515 0 .772-.01.147.038.246.088.294l.814.806c.475.469.679 1.216.364 1.891a7.977 7.977 0 0 1-.704 1.217c-.428.61-1.176.807-1.82.63l-1.102-.302c-.067-.019-.177-.011-.3.071a5.909 5.909 0 0 1-.668.386c-.133.066-.194.158-.211.224l-.29 1.106c-.168.646-.715 1.196-1.458 1.26a8.006 8.006 0 0 1-1.402 0c-.743-.064-1.289-.614-1.458-1.26l-.289-1.106c-.018-.066-.079-.158-.212-.224a5.738 5.738 0 0 1-.668-.386c-.123-.082-.233-.09-.299-.071l-1.103.303c-.644.176-1.392-.021-1.82-.63a8.12 8.12 0 0 1-.704-1.218c-.315-.675-.111-1.422.363-1.891l.815-.806c.05-.048.098-.147.088-.294a6.214 6.214 0 0 1 0-.772c.01-.147-.038-.246-.088-.294l-.815-.806C.635 6.045.431 5.298.746 4.623a7.92 7.92 0 0 1 .704-1.217c.428-.61 1.176-.807 1.82-.63l1.102.302c.067.019.177.011.3-.071.214-.143.437-.272.668-.386.133-.066.194-.158.211-.224l.29-1.106C6.009.645 6.556.095 7.299.03 7.53.01 7.764 0 8 0Zm-.571 1.525c-.036.003-.108.036-.137.146l-.289 1.105c-.147.561-.549.967-.998 1.189-.173.086-.34.183-.5.29-.417.278-.97.423-1.529.27l-1.103-.303c-.109-.03-.175.016-.195.045-.22.312-.412.644-.573.99-.014.031-.021.11.059.19l.815.806c.411.406.562.957.53 1.456a4.709 4.709 0 0 0 0 .582c.032.499-.119 1.05-.53 1.456l-.815.806c-.081.08-.073.159-.059.19.162.346.353.677.573.989.02.03.085.076.195.046l1.102-.303c.56-.153 1.113-.008 1.53.27.161.107.328.204.501.29.447.222.85.629.997 1.189l.289 1.105c.029.109.101.143.137.146a6.6 6.6 0 0 0 1.142 0c.036-.003.108-.036.137-.146l.289-1.105c.147-.561.549-.967.998-1.189.173-.086.34-.183.5-.29.417-.278.97-.423 1.529-.27l1.103.303c.109.029.175-.016.195-.045.22-.313.411-.644.573-.99.014-.031.021-.11-.059-.19l-.815-.806c-.411-.406-.562-.957-.53-1.456a4.709 4.709 0 0 0 0-.582c-.032-.499.119-1.05.53-1.456l.815-.806c.081-.08.073-.159.059-.19a6.464 6.464 0 0 0-.573-.989c-.02-.03-.085-.076-.195-.046l-1.102.303c-.56.153-1.113.008-1.53-.27a4.44 4.44 0 0 0-.501-.29c-.447-.222-.85-.629-.997-1.189l-.289-1.105c-.029-.11-.101-.143-.137-.146a6.6 6.6 0 0 0-1.142 0ZM11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM9.5 8a1.5 1.5 0 1 0-3.001.001A1.5 1.5 0 0 0 9.5 8Z"/></svg>`;
 
+  const waitingBannerHtml = isWaitingForAppInstallation
+    ? `
+      <div class="installation-waiting-banner" style="margin-top: 4px;">
+        <span class="md-comments-spinner-sm md-comments-spinner-warn"></span>
+        <div style="font-size: 11px; line-height: 1.4;">
+          <strong style="color: var(--text-primary); display: block;">Waiting for GitHub App setup...</strong>
+          <span style="color: var(--text-secondary);">Complete setup in GitHub, then return here. The panel will automatically verify access.</span>
+        </div>
+      </div>
+    `
+    : '';
+
   if (!installed) {
     return `
       <div class="oauth-prompt-banner" style="margin: 12px 16px; padding: 14px; border-radius: 8px; background: rgba(240, 180, 0, 0.1); border: 1px solid rgba(240, 180, 0, 0.3); display: flex; flex-direction: column; gap: 10px;">
@@ -2126,15 +2144,17 @@ function renderInstallationPrompt(
         <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.4;">
           The Markdown Comments GitHub App must be installed on the <strong>${escapeHtml(owner)}</strong> account to store and load comments.
         </div>
-        <a href="${installUrl}" target="_blank" style="text-decoration: none;">
-          <button class="btn btn-primary" style="background-color: #238636; color: white; border: none; padding: 8px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%;">
+        ${waitingBannerHtml}
+        <a href="${installUrl}" target="_blank" style="text-decoration: none;" class="install-app-link">
+          <button class="btn btn-primary install-app-btn" style="background-color: #238636; color: white; border: none; padding: 8px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%;">
             ${githubIcon}
             Install
           </button>
         </a>
-        <button class="btn check-installation-btn" style="background: none; border: 1px solid var(--sidebar-border); color: var(--text-primary); padding: 6px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; width: 100%;">
+        <button class="btn check-installation-btn" style="background: none; border: 1px solid var(--sidebar-border); color: var(--text-primary); padding: 6px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px;">
           Check installation status again
         </button>
+        <div class="installation-status-feedback" style="display: none; margin-top: 2px;"></div>
       </div>
     `;
   } else {
@@ -2146,15 +2166,17 @@ function renderInstallationPrompt(
         <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.4;">
           The Markdown Comments GitHub App is installed on <strong>${escapeHtml(owner)}</strong>, but does not have access to <strong>${escapeHtml(repo)}</strong>.
         </div>
-        <a href="${configureUrl}" target="_blank" style="text-decoration: none;">
-          <button class="btn" style="background-color: var(--accent-color); color: white; border: none; padding: 8px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%;">
+        ${waitingBannerHtml}
+        <a href="${configureUrl}" target="_blank" style="text-decoration: none;" class="configure-app-link">
+          <button class="btn configure-app-btn" style="background-color: var(--accent-color); color: white; border: none; padding: 8px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%;">
             ${gearIcon}
             Configure
           </button>
         </a>
-        <button class="btn check-installation-btn" style="background: none; border: 1px solid var(--sidebar-border); color: var(--text-primary); padding: 6px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; width: 100%;">
+        <button class="btn check-installation-btn" style="background: none; border: 1px solid var(--sidebar-border); color: var(--text-primary); padding: 6px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px;">
           Check installation status again
         </button>
+        <div class="installation-status-feedback" style="display: none; margin-top: 2px;"></div>
       </div>
     `;
   }
@@ -2162,12 +2184,45 @@ function renderInstallationPrompt(
 
 function attachInstallationPromptEvents(container: HTMLElement) {
   const checkBtn = container.querySelector('.check-installation-btn') as HTMLButtonElement | null;
-  if (!checkBtn) return;
+  const installOrConfigBtn = container.querySelector(
+    '.install-app-btn, .configure-app-btn'
+  ) as HTMLButtonElement | null;
+  const feedbackEl = container.querySelector('.installation-status-feedback') as HTMLElement | null;
 
-  checkBtn.addEventListener('click', async () => {
+  if (installOrConfigBtn) {
+    installOrConfigBtn.addEventListener('click', () => {
+      isWaitingForAppInstallation = true;
+      if (feedbackEl) {
+        feedbackEl.style.display = 'block';
+        feedbackEl.innerHTML = `
+          <div class="installation-waiting-banner" style="margin-top: 6px;">
+            <span class="md-comments-spinner-sm md-comments-spinner-warn"></span>
+            <div style="font-size: 11px; line-height: 1.4;">
+              <strong style="color: var(--text-primary); display: block;">Waiting for GitHub App setup...</strong>
+              <span style="color: var(--text-secondary);">Complete setup in GitHub, then return here. The panel will automatically verify access.</span>
+            </div>
+          </div>
+        `;
+      }
+    });
+  }
+
+  const runVerification = async () => {
+    if (!checkBtn || checkBtn.disabled) return;
     checkBtn.disabled = true;
+    checkBtn.classList.add('loading');
     const originalText = checkBtn.innerText;
     checkBtn.innerText = 'Checking...';
+
+    if (feedbackEl) {
+      feedbackEl.style.display = 'block';
+      feedbackEl.innerHTML = `
+        <div style="display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 11px; color: var(--text-secondary); padding: 6px 0;">
+          <span class="md-comments-spinner-sm"></span>
+          <span>Verifying installation on GitHub...</span>
+        </div>
+      `;
+    }
 
     if (currentMetadata && currentToken) {
       if (!githubApi) {
@@ -2176,7 +2231,8 @@ function attachInstallationPromptEvents(container: HTMLElement) {
       try {
         const status = await githubApi.checkAppInstallation(
           currentMetadata.owner,
-          currentMetadata.repo
+          currentMetadata.repo,
+          true // Force fresh API check
         );
         appInstallationStatus = {
           checked: true,
@@ -2187,25 +2243,66 @@ function attachInstallationPromptEvents(container: HTMLElement) {
         };
 
         if (appInstallationStatus.installed && appInstallationStatus.repoAccess) {
+          isWaitingForAppInstallation = false;
+          if (feedbackEl) {
+            feedbackEl.innerHTML = `
+              <div style="font-size: 12px; color: #2da44e; font-weight: 600; text-align: center; padding: 4px 0;">
+                ✓ GitHub App verified! Loading comments...
+              </div>
+            `;
+          }
           const meta = parseGitHubUrl(window.location.href);
           if (meta && meta.type === 'blob') {
             await loadDocumentComments(meta);
           } else {
             renderSidebarComments();
           }
+          return;
         } else {
-          renderSidebarComments();
+          if (feedbackEl) {
+            const reason = !status.installed
+              ? `App not yet installed on account "${escapeHtml(currentMetadata.owner)}".`
+              : `App installed, but repository "${escapeHtml(currentMetadata.repo)}" is not selected.`;
+            feedbackEl.innerHTML = `
+              <div style="font-size: 11px; color: #d29922; line-height: 1.4; padding: 4px 0; text-align: center;">
+                ⚠️ ${reason}
+              </div>
+            `;
+          }
         }
       } catch (err) {
         console.error('[md-comments] Error checking installation status:', err);
+        if (feedbackEl) {
+          feedbackEl.innerHTML = `
+            <div style="font-size: 11px; color: var(--warn-color); padding: 4px 0; text-align: center;">
+              Failed to verify status. Please try again.
+            </div>
+          `;
+        }
+      } finally {
         checkBtn.disabled = false;
+        checkBtn.classList.remove('loading');
         checkBtn.innerText = originalText;
       }
     } else {
       checkBtn.disabled = false;
+      checkBtn.classList.remove('loading');
       checkBtn.innerText = originalText;
     }
-  });
+  };
+
+  if (checkBtn) {
+    checkBtn.addEventListener('click', runVerification);
+  }
+
+  if (!hasInstalledFocusListener) {
+    hasInstalledFocusListener = true;
+    window.addEventListener('focus', () => {
+      if (isWaitingForAppInstallation && currentMetadata && currentToken) {
+        runVerification();
+      }
+    });
+  }
 }
 
 function renderOAuthPrompt(owner: string): string {
@@ -2302,6 +2399,13 @@ function attachOAuthEvents(container: HTMLElement) {
                   </a>
                   <div style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-top: 4px;">3. Click <span style="color: var(--accent-color);">Continue</span> on GitHub</div>
                   <div style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-top: 4px;">4. Click <span style="color: var(--accent-color);">Authorize</span> on GitHub</div>
+                  <div class="auth-waiting-box" id="auth-waiting-indicator">
+                    <span class="md-comments-spinner-sm"></span>
+                    <div style="display: flex; flex-direction: column; gap: 2px;">
+                      <span style="font-weight: 600; font-size: 12px; color: var(--text-primary);">Waiting for GitHub authorization...</span>
+                      <span style="font-size: 11px; color: var(--text-secondary);">Complete the activation above. This panel will update automatically once authorized.</span>
+                    </div>
+                  </div>
                 </div>
               `;
 
@@ -2351,11 +2455,29 @@ function attachOAuthEvents(container: HTMLElement) {
                       });
                       currentToken = data.access_token;
                       githubApi = new GitHubApi(data.access_token);
-                      if (statusEl) statusEl.innerText = '✅ Authorized with GitHub!';
+                      isCheckingAppInstallation = true;
+                      if (statusEl) {
+                        statusEl.innerHTML = `
+                          <div class="auth-validating-card" style="margin: 8px 0; padding: 20px 14px;">
+                            <div class="md-comments-spinner"></div>
+                            <div style="font-weight: 600; font-size: 13px; color: var(--text-primary); margin-top: 4px;">
+                              Authorized with GitHub!
+                            </div>
+                            <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.4;">
+                              Verifying GitHub App installation and repository permissions...
+                            </div>
+                          </div>
+                        `;
+                      }
                       setTimeout(() => {
                         const meta = parseGitHubUrl(window.location.href);
-                        if (meta && meta.type === 'blob') loadDocumentComments(meta);
-                      }, 500);
+                        if (meta && meta.type === 'blob') {
+                          loadDocumentComments(meta);
+                        } else {
+                          isCheckingAppInstallation = false;
+                          renderSidebarComments();
+                        }
+                      }, 400);
                       return; // Stop polling
                     }
 
@@ -2437,7 +2559,25 @@ function renderSidebarComments() {
     const oauthPromptHtml = renderOAuthPrompt(ownerName);
 
     if (currentToken) {
-      if (
+      if (isCheckingAppInstallation) {
+        if (unauthContainer) {
+          unauthContainer.style.display = 'flex';
+          unauthContainer.innerHTML = renderInstallationValidatingCard(
+            currentMetadata?.owner || metaForOwner?.owner || '',
+            currentMetadata?.repo || metaForOwner?.repo || ''
+          );
+        }
+        if (tabHeader) tabHeader.style.display = 'none';
+        if (tabInline) tabInline.style.display = 'none';
+        if (tabPage) tabPage.style.display = 'none';
+
+        const pageComposer = activeSidebarHost!.querySelector(
+          '.page-composer'
+        ) as HTMLElement | null;
+        if (pageComposer) {
+          pageComposer.style.display = 'none';
+        }
+      } else if (
         appInstallationStatus.checked &&
         (!appInstallationStatus.installed || !appInstallationStatus.repoAccess)
       ) {
@@ -2513,8 +2653,10 @@ function renderSidebarComments() {
     } else {
       if (unauthContainer) {
         unauthContainer.style.display = 'flex';
-        unauthContainer.innerHTML = oauthPromptHtml;
-        attachOAuthEvents(unauthContainer);
+        if (!unauthContainer.querySelector('.auth-status-flow')) {
+          unauthContainer.innerHTML = oauthPromptHtml;
+          attachOAuthEvents(unauthContainer);
+        }
       }
       if (tabHeader) tabHeader.style.display = 'none';
       if (tabInline) tabInline.style.display = 'none';
@@ -2596,6 +2738,7 @@ function renderCommentCard(comment: InlineComment | PageComment, type: 'inline' 
           </div>
           <div class="reply-body" data-raw-body="${escapeHtml(r.body)}">${renderCommentBody(r.body)}</div>
         </div>
+        ${pendingSubmissionIds.has(r.id) ? `<div class="md-comments-submitting-line" id="submitting-line-${r.id}"></div>` : ''}
       </div>
     `;
     })
@@ -2664,6 +2807,7 @@ function renderCommentCard(comment: InlineComment | PageComment, type: 'inline' 
       `
           : ''
       }
+      ${pendingSubmissionIds.has(comment.id) ? `<div class="md-comments-submitting-line" id="submitting-line-${comment.id}"></div>` : ''}
     </div>
   `;
 }
@@ -2873,8 +3017,8 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
           showFallbackReplyComposer(
             replyWrapper,
             async (body) => {
-              await saveReply(commentId, type, body);
               resetReplyUI();
+              await saveReply(commentId, type, body);
             },
             () => {
               resetReplyUI();
@@ -2896,8 +3040,8 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
                 line,
                 replyWrapper,
                 async (body) => {
-                  await saveReply(commentId, type, body);
                   resetReplyUI();
+                  await saveReply(commentId, type, body);
                 },
                 () => {
                   resetReplyUI();
@@ -2916,8 +3060,8 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
           showFallbackReplyComposer(
             replyWrapper,
             async (body) => {
-              await saveReply(commentId, type, body);
               resetReplyUI();
+              await saveReply(commentId, type, body);
             },
             () => {
               resetReplyUI();
@@ -3215,6 +3359,7 @@ function openSidebarForNewInline(fields: {
     line,
     container,
     async (body) => {
+      resetInlineComposerUI();
       await saveNewInlineComment(
         body,
         fields.paragraph_index,
@@ -3223,7 +3368,6 @@ function openSidebarForNewInline(fields: {
         fields.heading_context,
         fields.anchor_occurrence
       );
-      resetInlineComposerUI();
     },
     () => {
       resetInlineComposerUI();
@@ -3234,6 +3378,7 @@ function openSidebarForNewInline(fields: {
     showFallbackReplyComposer(
       container,
       async (body) => {
+        resetInlineComposerUI();
         await saveNewInlineComment(
           body,
           fields.paragraph_index,
@@ -3242,7 +3387,6 @@ function openSidebarForNewInline(fields: {
           fields.heading_context,
           fields.anchor_occurrence
         );
-        resetInlineComposerUI();
       },
       () => {
         resetInlineComposerUI();
@@ -4131,19 +4275,24 @@ async function saveNewInlineComment(
   };
 
   localCreatedIds.add(newComment.id);
+  pendingSubmissionIds.add(newComment.id);
 
   const updated = {
     ...loadedComments,
     inline_comments: [...loadedComments.inline_comments, newComment],
   };
 
-  await commitCommentFileChanges(updated, 'add inline comment');
-  setTimeout(() => {
-    const el = document.getElementById(`comment-${newComment.id}`);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-  }, 100);
+  try {
+    await commitCommentFileChanges(updated, 'add inline comment');
+    setTimeout(() => {
+      const el = document.getElementById(`comment-${newComment.id}`);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }, 100);
+  } finally {
+    removeSubmittingProgress(newComment.id);
+  }
 }
 
 async function saveNewPageComment(body: string) {
@@ -4159,13 +4308,18 @@ async function saveNewPageComment(body: string) {
   };
 
   localCreatedIds.add(newComment.id);
+  pendingSubmissionIds.add(newComment.id);
 
   const updated = {
     ...loadedComments,
     page_comments: [...loadedComments.page_comments, newComment],
   };
 
-  await commitCommentFileChanges(updated, 'add page comment');
+  try {
+    await commitCommentFileChanges(updated, 'add page comment');
+  } finally {
+    removeSubmittingProgress(newComment.id);
+  }
 }
 
 async function saveReply(commentId: string, type: 'inline' | 'page', body: string) {
@@ -4179,6 +4333,7 @@ async function saveReply(commentId: string, type: 'inline' | 'page', body: strin
   };
 
   localCreatedIds.add(reply.id);
+  pendingSubmissionIds.add(reply.id);
 
   const updated = { ...loadedComments };
   if (type === 'inline') {
@@ -4197,7 +4352,11 @@ async function saveReply(commentId: string, type: 'inline' | 'page', body: strin
     });
   }
 
-  await commitCommentFileChanges(updated, 'add reply:' + commentId);
+  try {
+    await commitCommentFileChanges(updated, 'add reply:' + commentId);
+  } finally {
+    removeSubmittingProgress(reply.id);
+  }
 }
 
 async function editComment(commentId: string, type: 'inline' | 'page', body: string) {

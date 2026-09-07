@@ -125,8 +125,9 @@ test.describe('GitHub Extension: Hermetic Playwright E2E Lifecycle', () => {
       await expect(submitBtn).toBeVisible();
       await submitBtn.click();
 
-      // Wait for async persistence to complete (textarea is cleared upon successful write)
+      // Optimistic submission: textarea cleared immediately, remains interactive (not readonly), and no button loading spinner
       await expect(textarea).toHaveValue('', { timeout: 10000 });
+      await expect(textarea).not.toHaveAttribute('readonly');
       await expect(submitBtn).not.toHaveClass(/loading/, { timeout: 10000 });
     });
 
@@ -135,6 +136,11 @@ test.describe('GitHub Extension: Hermetic Playwright E2E Lifecycle', () => {
         .locator('#tab-page .md-comments-card-body')
         .filter({ hasText: 'Hermetic Playwright E2E Comment' });
       await expect(commentCard).toBeVisible({ timeout: 10000 });
+
+      // Submitting progress line disappears once background write completes
+      await expect(testPage.locator('.md-comments-submitting-line')).toHaveCount(0, {
+        timeout: 10000,
+      });
 
       // Assert that the mention rendered as an interactive link
       const mentionLink = commentCard
@@ -210,11 +216,19 @@ test.describe('GitHub Extension: Hermetic Playwright E2E Lifecycle', () => {
       await expect(submitBtn).toBeVisible();
       await submitBtn.click();
 
+      // Assert inline composer UI is hidden immediately upon submission
+      await expect(inlineComposer).toBeHidden();
+
       // Assert inline comment card appears in #tab-inline
       const inlineCard = testPage
         .locator('#tab-inline .md-comments-card-body')
         .filter({ hasText: 'Hermetic Inline E2E Comment' });
       await expect(inlineCard).toBeVisible({ timeout: 10000 });
+
+      // Submitting progress line disappears once async commit finishes
+      await expect(testPage.locator('.md-comments-submitting-line')).toHaveCount(0, {
+        timeout: 10000,
+      });
 
       const mentionLink = inlineCard
         .locator('a.md-comments-mention')
