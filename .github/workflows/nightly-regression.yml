@@ -69,7 +69,7 @@ jobs:
         run: pnpm build:shared && pnpm build:chrome && pnpm build:starlight && pnpm build:demo-astro
 
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install --with-deps chromium webkit
 
       - name: Pre-Flight Clean Test Repository
         env:

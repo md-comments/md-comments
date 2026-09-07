@@ -26,6 +26,7 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium-headless',
+      testIgnore: /.*safari-extension\.spec\.ts/,
       use: {
         ...devices['Desktop Chrome'],
         channel: 'chromium',
@@ -33,6 +34,7 @@ export default defineConfig({
     },
     {
       name: 'webkit',
+      testMatch: /.*safari-extension\.spec\.ts/,
       use: {
         ...devices['Desktop Safari'],
       },

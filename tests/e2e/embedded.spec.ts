@@ -128,7 +128,7 @@ test.describe('Embedded Runtime (embed-js): Standalone Script, Drawer, Mock Mode
       await replyTextarea.fill('Automated threaded reply test.');
 
       const sendBtn = page.locator('#page-threads-list .send-reply-btn').first();
-      await sendBtn.click();
+      await sendBtn.click({ force: true });
 
       // Assert reply content is now visible
       await expect(

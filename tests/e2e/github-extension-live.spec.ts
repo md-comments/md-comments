@@ -218,6 +218,34 @@ test.describe('GitHub Extension: Live Repository Smoke & Regression', () => {
           .locator('#tab-inline .md-comments-card-body')
           .filter({ hasText: timestamp });
         await expect(inlineCard).toBeVisible({ timeout: 15000 });
+
+        // Submitting progress line disappears once async commit finishes
+        await expect(testPage.locator('.md-comments-submitting-line')).toHaveCount(0, {
+          timeout: 20000,
+        });
+
+        // Verify that the new commit for the inline comment has been persisted to refs/md-comments/data
+        await expect
+          .poll(
+            async () => {
+              const refRes = await fetch(
+                `https://api.github.com/repos/${owner}/${repo}/git/refs/md-comments/data`,
+                {
+                  headers: {
+                    Accept: 'application/vnd.github.v3+json',
+                    Authorization: `token ${token}`,
+                    'User-Agent': 'md-comments-test-verification',
+                  },
+                }
+              );
+              if (!refRes.ok) return null;
+              const refData: any = await refRes.json();
+              const newSha = refData.object?.sha;
+              return newSha && newSha !== commitSha ? newSha : null;
+            },
+            { timeout: 20000, intervals: [1000, 2000] }
+          )
+          .toBeTruthy();
       });
 
       await test.step('9. Reload page and assert comments reload from remote ref', async () => {

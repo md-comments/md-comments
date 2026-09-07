@@ -1710,6 +1710,9 @@ function showFallbackReplyComposer(
     const body = textarea.value.trim();
     if (!body) return;
 
+    submitBtn.disabled = true;
+    submitBtn.classList.add('loading');
+
     // Optimistically clear textarea and draft immediately
     textarea.value = '';
     if (draftKey) {
@@ -1724,6 +1727,9 @@ function showFallbackReplyComposer(
       if (draftKey) {
         saveDraft(draftKey, body);
       }
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.classList.remove('loading');
     }
   };
 
@@ -3364,15 +3370,18 @@ function openSidebarForNewInline(fields: {
     line,
     container,
     async (body) => {
-      resetInlineComposerUI();
-      await saveNewInlineComment(
-        body,
-        fields.paragraph_index,
-        fields.anchor_hash,
-        fields.anchor_text,
-        fields.heading_context,
-        fields.anchor_occurrence
-      );
+      try {
+        await saveNewInlineComment(
+          body,
+          fields.paragraph_index,
+          fields.anchor_hash,
+          fields.anchor_text,
+          fields.heading_context,
+          fields.anchor_occurrence
+        );
+      } finally {
+        resetInlineComposerUI();
+      }
     },
     () => {
       resetInlineComposerUI();
@@ -3383,15 +3392,18 @@ function openSidebarForNewInline(fields: {
     showFallbackReplyComposer(
       container,
       async (body) => {
-        resetInlineComposerUI();
-        await saveNewInlineComment(
-          body,
-          fields.paragraph_index,
-          fields.anchor_hash,
-          fields.anchor_text,
-          fields.heading_context,
-          fields.anchor_occurrence
-        );
+        try {
+          await saveNewInlineComment(
+            body,
+            fields.paragraph_index,
+            fields.anchor_hash,
+            fields.anchor_text,
+            fields.heading_context,
+            fields.anchor_occurrence
+          );
+        } finally {
+          resetInlineComposerUI();
+        }
       },
       () => {
         resetInlineComposerUI();
