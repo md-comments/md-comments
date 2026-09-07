@@ -66,6 +66,7 @@ function verifyManifestsExist() {
   const requiredFiles = [
     'obsidian-plugin/manifest.json',
     'chrome-extension/manifest.json',
+    'safari-extension/HOW-TO-OPEN.txt',
     'assets/icon.png',
   ];
 

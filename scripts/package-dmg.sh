@@ -32,6 +32,11 @@ cp -R "$APP_PATH" "$TEMP_DMG_DIR/"
 # Create symlink to /Applications
 ln -s /Applications "$TEMP_DMG_DIR/Applications"
 
+# Copy installation & Gatekeeper bypass instructions into staging
+if [ -f "$REPO_ROOT/safari-extension/HOW-TO-OPEN.txt" ]; then
+  cp "$REPO_ROOT/safari-extension/HOW-TO-OPEN.txt" "$TEMP_DMG_DIR/HOW TO OPEN.txt"
+fi
+
 # Create DMG using hdiutil
 if command -v hdiutil &> /dev/null; then
   hdiutil create \
@@ -44,8 +49,8 @@ if command -v hdiutil &> /dev/null; then
   echo "==> DMG successfully created at: $DMG_PATH"
 else
   # Fallback to .zip if hdiutil is not available (e.g. non-macOS environment)
-  cd "$BUILD_DIR"
-  zip -r "$ARTIFACTS_DIR/Markdown-Comments-macOS.zip" "Markdown Comments.app"
+  cd "$TEMP_DMG_DIR"
+  zip -r "$ARTIFACTS_DIR/Markdown-Comments-macOS.zip" "Markdown Comments.app" "HOW TO OPEN.txt"
   echo "==> ZIP archive successfully created at: $ARTIFACTS_DIR/Markdown-Comments-macOS.zip"
 fi
 

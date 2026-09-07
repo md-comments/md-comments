@@ -7,16 +7,19 @@ The **Markdown Comments Safari Web Extension** brings native, inline markdown co
 ## 1. Quick Installation (macOS)
 
 1. Download the latest release: [`Markdown-Comments-macOS.dmg`](https://github.com/md-comments/md-comments/releases/latest/download/Markdown-Comments-macOS.dmg).
-2. Open the `.dmg` and drag **Markdown Comments.app** into your `/Applications` folder.
+2. Open the `.dmg` and drag **Markdown Comments.app** into your `/Applications` folder (the DMG also includes `HOW TO OPEN.txt` with these instructions).
 3. Launch **Markdown Comments** from `/Applications`.
 
 > [!NOTE]
 > **First Launch Gatekeeper Notice**: Because this open-source tool is self-signed without Apple's $99/year developer subscription, macOS may display _"cannot be opened because the developer cannot be verified"_.
-> To open, simply **Right-Click (Control-Click) -> Open -> Open**, or run:
+> To open:
 >
-> ```bash
-> xattr -cr "/Applications/Markdown Comments.app"
-> ```
+> - **Method A (Right-Click)**: Right-Click (Control-Click) the app in `/Applications` → select **Open** → click **Open**.
+> - **Method B (macOS Sequoia Settings)**: If blocked, open **System Settings → Privacy & Security**, scroll to **Security**, and click **Open Anyway**.
+> - **Method C (Terminal)**: Run:
+>   ```bash
+>   xattr -cr "/Applications/Markdown Comments.app"
+>   ```
 
 ---
 

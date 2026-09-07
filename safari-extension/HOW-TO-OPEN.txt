@@ -1,0 +1,68 @@
+================================================================================
+  Markdown Comments for Safari (macOS)
+  How to Open & Install (Unnotarized / Self-Signed App)
+================================================================================
+
+Markdown Comments is an open-source, community-driven tool.
+Because this application is self-signed without an Apple Developer ID subscription,
+macOS Gatekeeper blocks unnotarized apps by default upon first launch, displaying:
+
+  "Markdown Comments" cannot be opened because Apple cannot check it
+  for malicious software.
+  (or "the developer cannot be verified")
+
+This is standard macOS security behavior for apps distributed outside the Mac
+App Store without Apple notarization. The app is 100% open-source, safe, and sandboxed.
+
+Follow the quick steps below to install and run the app.
+
+--------------------------------------------------------------------------------
+STEP 1: INSTALL TO APPLICATIONS
+--------------------------------------------------------------------------------
+Drag "Markdown Comments.app" into the "Applications" shortcut in this window.
+
+--------------------------------------------------------------------------------
+STEP 2: OPEN THE APP (BYPASS GATEKEEPER)
+--------------------------------------------------------------------------------
+Choose ANY ONE of the following methods to open the app for the first time:
+
+METHOD A: Right-Click / Control-Click (Recommended)
+  1. Open your "Applications" folder in Finder.
+  2. Right-click (or hold the Control key and click) on "Markdown Comments.app".
+  3. Select "Open" from the context menu.
+  4. In the security dialog that appears, click "Open".
+     (You only need to do this once; subsequent launches will open normally).
+
+METHOD B: System Settings (macOS Sequoia / Sonoma)
+  1. If you double-clicked the app and saw the warning dialog, click "Done" (or "Cancel").
+  2. Open "System Settings" -> "Privacy & Security".
+  3. Scroll down to the "Security" section.
+  4. Look for the message:
+     '"Markdown Comments" was blocked from use because it is not from an identified developer.'
+  5. Click "Open Anyway", authenticate with Touch ID or your Mac password, and click "Open".
+
+METHOD C: Terminal Command (Fastest for Developers)
+  1. Open the Terminal app.
+  2. Run the following command to remove the quarantine flag:
+
+     xattr -cr "/Applications/Markdown Comments.app"
+
+  3. Double-click "Markdown Comments.app" in Applications to open it directly.
+
+--------------------------------------------------------------------------------
+STEP 3: ACTIVATE EXTENSION IN SAFARI
+--------------------------------------------------------------------------------
+Once the Markdown Comments companion app has been launched:
+  1. Open Safari -> Settings (or Preferences) -> Advanced.
+  2. Check "Show Develop menu in menu bar"
+     (or "Show features for web developers" in newer Safari versions).
+  3. In Safari's menu bar: click Develop -> check "Allow Unsigned Extensions"
+     (enter your Mac password / Touch ID when prompted).
+  4. In Safari Settings -> Extensions, check the box next to "Markdown Comments".
+  5. Visit https://github.com, click the Markdown Comments icon in Safari's toolbar,
+     and select "Always Allow on This Website".
+
+--------------------------------------------------------------------------------
+Source Code & Issue Tracker:
+https://github.com/md-comments/md-comments
+================================================================================
