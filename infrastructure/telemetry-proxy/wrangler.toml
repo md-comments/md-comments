@@ -1,0 +1,11 @@
+name = "md-comments-telemetry-proxy"
+main = "src/worker.ts"
+compatibility_date = "2024-03-01"
+
+[vars]
+UPSTREAM_OTLP_ENDPOINT = "https://otlp-gateway-prod-us-east-0.grafana.net/otlp"
+MAX_REQUESTS_PER_MINUTE = "20"
+ALLOWED_ORIGINS = "*"
+
+# UPSTREAM_AUTH_HEADER is kept as a secret:
+# Set via: npx wrangler secret put UPSTREAM_AUTH_HEADER

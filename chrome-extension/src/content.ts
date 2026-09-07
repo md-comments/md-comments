@@ -38,8 +38,13 @@ import {
   formatCommentBodyWithMentions,
   CollaboratorUser,
 } from '../../shared/mentions';
+import { contentTelemetry } from './telemetry/contentTelemetry';
+
+// Initialize content script error boundaries & telemetry
+contentTelemetry.init();
 
 const gitRefBackend = new GitHubOrphanRefBackend(() => currentToken || getAuthToken());
+
 const displayNameCache = new Map<string, string>();
 const pendingFetches = new Set<string>();
 

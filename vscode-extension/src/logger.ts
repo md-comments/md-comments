@@ -1,9 +1,12 @@
+import { ideTelemetry } from './telemetry/ideTelemetry';
+
 let outputChannel: { appendLine: (value: string) => void; dispose?: () => unknown } | undefined;
 
 export function initializeLogger(context: {
   subscriptions: Array<{ dispose?: () => unknown }>;
 }): void {
   try {
+    ideTelemetry.init();
     // Dynamic import to support unit testing environment where vscode module is not available
     const vscode = require('vscode');
     outputChannel = vscode.window.createOutputChannel('Markdown Comments');
@@ -49,4 +52,9 @@ export function logError(message: string, error?: unknown): void {
   if (outputChannel) {
     outputChannel.appendLine(line);
   }
+
+  // Relay sanitized error to OpenTelemetry proxy (INV-ZERO-CLIENT-SECRETS)
+  ideTelemetry.captureException(error || new Error(message)).catch(() => {
+    // Ignore telemetry send errors
+  });
 }

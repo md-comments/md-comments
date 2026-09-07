@@ -17,14 +17,18 @@ import { parseMarkdownAnchors } from '../../shared/anchor';
 import { placeInlineComments, isOrphanedPlacement } from '../../shared/placement';
 import type { AnchorBlock } from '../../shared/types';
 
+import { ObsidianTelemetryAdapter } from './telemetry';
+
 export interface MarkdownCommentsSettings {
   authorName: string;
   reactionEmojis: string[];
+  telemetryEnabled: boolean;
 }
 
 const DEFAULT_SETTINGS: MarkdownCommentsSettings = {
   authorName: '',
   reactionEmojis: ['👍', '👀', '❤️', '🎉', '❓'],
+  telemetryEnabled: true,
 };
 
 export default class MarkdownCommentsPlugin extends Plugin {
@@ -36,6 +40,13 @@ export default class MarkdownCommentsPlugin extends Plugin {
 
   async onload() {
     await this.loadSettings();
+
+    // Initialize telemetry respecting user preference (INV-TELEMETRY-KILLSWITCH)
+    ObsidianTelemetryAdapter.getInstance().setEnabled(this.settings.telemetryEnabled !== false);
+    ObsidianTelemetryAdapter.getInstance().recordBreadcrumb(
+      'lifecycle',
+      'Obsidian plugin initialized'
+    );
 
     // Set up Storage
     this.store = new CommentStore(this.app, () => this.settings.authorName || 'anonymous');
@@ -470,6 +481,19 @@ class MarkdownCommentsSettingTab extends PluginSettingTab {
               list.length > 0 ? list : DEFAULT_SETTINGS.reactionEmojis;
             await this.plugin.saveSettings();
           })
+      );
+
+    new Setting(containerEl)
+      .setName('Anonymous Technical Diagnostics')
+      .setDesc(
+        'Help improve md-comments by reporting non-identifiable technical machine diagnostics and crash stacks to Grafana Cloud via Cloudflare Worker. Zero document contents or comments are ever sent.'
+      )
+      .addToggle((toggle) =>
+        toggle.setValue(this.plugin.settings.telemetryEnabled !== false).onChange(async (value) => {
+          this.plugin.settings.telemetryEnabled = value;
+          ObsidianTelemetryAdapter.getInstance().setEnabled(value);
+          await this.plugin.saveSettings();
+        })
       );
   }
 }

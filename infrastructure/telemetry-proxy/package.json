@@ -1,0 +1,17 @@
+{
+  "name": "@md-comments/telemetry-proxy",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Cloudflare Worker proxy for OpenTelemetry logs & traces relaying to Grafana/SigNoz",
+  "main": "src/worker.ts",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240208.0",
+    "typescript": "^5.3.3",
+    "wrangler": "^3.30.1"
+  }
+}

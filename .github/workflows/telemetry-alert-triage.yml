@@ -1,0 +1,133 @@
+name: Telemetry Alert Triage & Issue Remediation Loop
+
+on:
+  repository_dispatch:
+    types: [telemetry_alert, new_error_fingerprint]
+  workflow_dispatch:
+    inputs:
+      fingerprint:
+        description: 'Deterministic Error Fingerprint (16-char hex)'
+        required: true
+        default: 'a1b2c3d4e5f67890'
+      client_interface:
+        description: 'Client Interface'
+        required: true
+        default: 'chrome-extension'
+      exception_type:
+        description: 'Exception Type (e.g. TypeError)'
+        required: true
+        default: 'TypeError'
+      exception_message:
+        description: 'Sanitized Error Message'
+        required: true
+        default: 'Cannot read properties of null'
+      stacktrace:
+        description: 'Sanitized Stack Trace'
+        required: false
+        default: 'renderSidebar (dist/content.js:124:18)'
+      service_version:
+        description: 'Application Release Version'
+        required: false
+        default: '1.2.3'
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  triage-exception:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Parse Alert Payload
+        id: parse
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "fingerprint=${{ github.event.inputs.fingerprint }}" >> $GITHUB_OUTPUT
+            echo "client_interface=${{ github.event.inputs.client_interface }}" >> $GITHUB_OUTPUT
+            echo "exception_type=${{ github.event.inputs.exception_type }}" >> $GITHUB_OUTPUT
+            echo "exception_message=${{ github.event.inputs.exception_message }}" >> $GITHUB_OUTPUT
+            echo "stacktrace=${{ github.event.inputs.stacktrace }}" >> $GITHUB_OUTPUT
+            echo "service_version=${{ github.event.inputs.service_version }}" >> $GITHUB_OUTPUT
+          else
+            echo "fingerprint=${{ github.event.client_payload.fingerprint }}" >> $GITHUB_OUTPUT
+            echo "client_interface=${{ github.event.client_payload.client_interface }}" >> $GITHUB_OUTPUT
+            echo "exception_type=${{ github.event.client_payload.exception_type }}" >> $GITHUB_OUTPUT
+            echo "exception_message=${{ github.event.client_payload.exception_message }}" >> $GITHUB_OUTPUT
+            echo "stacktrace=${{ github.event.client_payload.stacktrace }}" >> $GITHUB_OUTPUT
+            echo "service_version=${{ github.event.client_payload.service_version }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Search for Existing Issue
+        id: find_issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fingerprint = '${{ steps.parse.outputs.fingerprint }}';
+            const query = `repo:${context.repo.owner}/${context.repo.repo} is:issue in:title "[Telemetry] ${fingerprint}"`;
+            const searchRes = await github.rest.search.issuesAndPullRequests({ q: query });
+            if (searchRes.data.items && searchRes.data.items.length > 0) {
+              core.setOutput('issue_number', searchRes.data.items[0].number);
+              core.setOutput('exists', 'true');
+            } else {
+              core.setOutput('exists', 'false');
+            }
+
+      - name: Comment on Existing Issue
+        if: steps.find_issue.outputs.exists == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueNumber = parseInt('${{ steps.find_issue.outputs.issue_number }}', 10);
+            const body = `### 🚨 Telemetry Spike Detected\n\n- **Version**: \`${{ steps.parse.outputs.service_version }}\`\n- **Interface**: \`${{ steps.parse.outputs.client_interface }}\`\n- **Timestamp**: ${new Date().toISOString()}\n\n*Recurrence detected by OpenTelemetry monitoring.*`;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              body: body,
+            });
+
+      - name: Create New Telemetry Remediation Issue
+        if: steps.find_issue.outputs.exists != 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fingerprint = '${{ steps.parse.outputs.fingerprint }}';
+            const clientInterface = '${{ steps.parse.outputs.client_interface }}';
+            const excType = '${{ steps.parse.outputs.exception_type }}';
+            const excMsg = '${{ steps.parse.outputs.exception_message }}';
+            const stack = '${{ steps.parse.outputs.stacktrace }}';
+            const version = '${{ steps.parse.outputs.service_version }}';
+
+            const title = `[Telemetry] ${fingerprint} - ${excType}: ${excMsg}`;
+            const body = `## 🐞 Unhandled Exception Captured in Production
+
+**Fingerprint**: \`${fingerprint}\`
+**Interface**: \`${clientInterface}\`
+**Version**: \`${version}\`
+
+### Exception Details
+\`\`\`text
+${excType}: ${excMsg}
+${stack}
+\`\`\`
+
+---
+
+### Closed-Loop Remediation Checklist
+- [ ] **Reproduction**: Create automated regression test in \`tests/\` or \`tests/e2e/\` reproducing this stack frame.
+- [ ] **Quality Knowledge Graph**: Link scenario in \`quality/features/\`.
+- [ ] **Fix**: Apply defensive boundary or null-check in \`${clientInterface}\`.
+- [ ] **Verification**: Run \`pnpm test\` and deploy patch; verify occurrences drop to 0.
+
+> *Note: This issue was generated automatically by the Markdown Comments Closed-Loop OpenTelemetry Pipeline. No customer data or PII is contained in this report.*`;
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: title,
+              body: body,
+              labels: ['bug:runtime-exception', `interface:${clientInterface}`, 'needs-triage'],
+            });

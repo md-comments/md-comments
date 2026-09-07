@@ -7,8 +7,11 @@
   "host_permissions": [
     "https://github.com/*",
     "https://api.github.com/*",
-    "https://raw.githubusercontent.com/*"
+    "https://raw.githubusercontent.com/*",
+    "https://*.workers.dev/*",
+    "https://*.md-comments.org/*"
   ],
+
   "background": {
     "service_worker": "background.js"
   },

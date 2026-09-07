@@ -7,3 +7,4 @@ export * from './repoDetector.js';
 export * from './commentStorage.js';
 export * from './gitRefBackend.js';
 export * from './localFileBackend.js';
+export * from './telemetry.js';

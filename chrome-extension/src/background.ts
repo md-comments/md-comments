@@ -4,8 +4,15 @@
  */
 
 import { getBrowserNamespace } from './browserApi';
+import { backgroundTelemetry } from './telemetry/otelBackground';
+import type { TelemetryRecord } from '../../shared/telemetry';
 
 const DEFAULT_CLIENT_ID = 'Iv23li9t461keXDcVS0T';
+
+// Initialize background telemetry and error handlers
+backgroundTelemetry.init().catch((err) => {
+  console.warn('[background.js] Failed to initialize telemetry:', err);
+});
 
 const api = getBrowserNamespace();
 const runtime = api?.runtime || (typeof chrome !== 'undefined' ? chrome.runtime : undefined);
@@ -15,6 +22,8 @@ interface ExtensionMessage {
   clientId?: string;
   deviceCode?: string;
   refreshToken?: string;
+  payload?: Record<string, unknown>;
+  enabled?: boolean;
 }
 
 runtime?.onMessage.addListener(
@@ -23,6 +32,30 @@ runtime?.onMessage.addListener(
     _sender: chrome.runtime.MessageSender,
     sendResponse: (res?: Record<string, unknown>) => void
   ) => {
+    if (message.type === 'OTEL_LOG_RECORD' && message.payload) {
+      backgroundTelemetry
+        .handleIncomingRecord(message.payload as unknown as TelemetryRecord)
+        .then(() => sendResponse({ success: true }))
+        .catch(() => sendResponse({ success: false }));
+      return true;
+    }
+
+    if (message.type === 'OTEL_SET_ENABLED') {
+      backgroundTelemetry
+        .setEnabled(Boolean(message.enabled))
+        .then(() => sendResponse({ success: true }))
+        .catch(() => sendResponse({ success: false }));
+      return true;
+    }
+
+    if (message.type === 'OTEL_FLUSH') {
+      backgroundTelemetry
+        .flushQueue()
+        .then(() => sendResponse({ success: true }))
+        .catch(() => sendResponse({ success: false }));
+      return true;
+    }
+
     if (message.type === 'START_DEVICE_FLOW') {
       console.log('[background.js] Received START_DEVICE_FLOW message');
       handleDeviceFlow(message.clientId || DEFAULT_CLIENT_ID)

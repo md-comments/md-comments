@@ -1,0 +1,15 @@
+# Cloudflare Account & API Credentials
+cloudflare_account_id = "your_cloudflare_account_id"
+cloudflare_api_token  = "your_cloudflare_api_token"
+
+# Upstream Grafana Cloud / SigNoz OTLP Endpoint & Auth
+upstream_otlp_endpoint = "https://otlp-gateway-prod-us-east-0.grafana.net/otlp"
+upstream_auth_header   = "Basic MTIzNDU2OmdsY19leU..."
+
+# Rate Limiting & Security (INV-QUOTA-DEFENSE)
+rate_limit_per_minute = 20
+allowed_origins       = "*"
+
+# Optional Custom Domain (leave empty to use free *.workers.dev domain)
+# custom_domain      = "telemetry.md-comments.org"
+# cloudflare_zone_id = "your_zone_id"
