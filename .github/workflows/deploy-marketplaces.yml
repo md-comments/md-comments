@@ -237,3 +237,59 @@ jobs:
           echo "Obsidian plugins are published by uploading manifest.json, main.js, and styles.css as assets to the GitHub Release."
           echo "These assets were already uploaded during the pre-release/release phase."
           echo "Obsidian pulls updates directly from the GitHub Release."
+
+  deploy-safari:
+    name: Package and Attach Safari DMG
+    if: github.event.release.draft == false && github.event.release.prerelease == false
+    runs-on: macos-15
+    environment: Production
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+
+      - name: Check Existing Release Assets
+        id: check-asset
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ASSETS=$(gh release view ${{ github.event.release.tag_name }} --json assets -q '.assets[].name')
+          if echo "$ASSETS" | grep -q "Markdown-Comments-macOS.dmg"; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Markdown-Comments-macOS.dmg is already attached to release ${{ github.event.release.tag_name }}."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "Markdown-Comments-macOS.dmg is missing from release. Packaging now."
+          fi
+
+      - name: Setup Node.js
+        if: steps.check-asset.outputs.exists != 'true'
+        uses: actions/setup-node@v5
+        with:
+          node-version: 20
+
+      - name: Setup pnpm
+        if: steps.check-asset.outputs.exists != 'true'
+        uses: pnpm/action-setup@v6
+        with:
+          version: 9
+
+      - name: Install Dependencies
+        if: steps.check-asset.outputs.exists != 'true'
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Safari Extension & Native macOS App
+        if: steps.check-asset.outputs.exists != 'true'
+        run: ./scripts/build-safari-app.sh
+
+      - name: Package Release DMG
+        if: steps.check-asset.outputs.exists != 'true'
+        run: ./scripts/package-dmg.sh
+
+      - name: Attach Safari DMG to Release
+        if: steps.check-asset.outputs.exists != 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload ${{ github.event.release.tag_name }} artifacts/Markdown-Comments-macOS.dmg --clobber

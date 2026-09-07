@@ -12,9 +12,41 @@ jobs:
       environment: 'Staging'
     secrets: inherit
 
+  build-safari:
+    name: Build Safari DMG
+    runs-on: macos-15
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 20
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 9
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Safari Extension & Native macOS App
+        run: ./scripts/build-safari-app.sh
+
+      - name: Package Release DMG
+        run: ./scripts/package-dmg.sh
+
+      - name: Upload Safari DMG Artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: safari-dmg
+          path: artifacts/Markdown-Comments-macOS.dmg
+
   prerelease:
     name: Publish Pre-release
-    needs: build
+    needs: [build, build-safari]
     runs-on: ubuntu-latest
     environment: Staging
     permissions:
@@ -24,6 +56,12 @@ jobs:
         uses: actions/download-artifact@v8
         with:
           name: build-artifacts
+          path: artifacts
+
+      - name: Download Safari DMG
+        uses: actions/download-artifact@v8
+        with:
+          name: safari-dmg
           path: artifacts
 
       - name: Create Pre-release
@@ -37,3 +75,4 @@ jobs:
             artifacts/**/*.vsix
             artifacts/obsidian-plugin.zip
             artifacts/chrome-extension.zip
+            artifacts/Markdown-Comments-macOS.dmg
