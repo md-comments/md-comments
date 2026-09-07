@@ -13,3 +13,5 @@ out/
 _site/
 .astro/
 node_modules/
+.vscode-test/
+

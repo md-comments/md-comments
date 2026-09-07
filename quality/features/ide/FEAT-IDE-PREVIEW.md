@@ -13,6 +13,15 @@ implementedIn:
   - 'vscode-extension/src/markdownItPlugin.ts'
 verifiedIn:
   - 'tests/vscodeStorage.test.ts'
+  - 'tests/e2e/vscode-extension-smoke.spec.ts'
+  - 'tests/e2e/vscode-comment-preview.spec.ts'
+  - 'tests/e2e/vscode-inline-anchors.spec.ts'
+  - 'tests/e2e/vscode-thread-lifecycle.spec.ts'
+  - 'tests/e2e/vscode-reactions.spec.ts'
+  - 'tests/e2e/vscode-mentions.spec.ts'
+  - 'tests/e2e/vscode-native-preview.spec.ts'
+  - 'tests/e2e/vscode-search-drafts.spec.ts'
+  - 'tests/e2e/vscode-codelens.spec.ts'
 invariants:
   - 'INV-XSS-SANITIZED'
 minCoverage: 100

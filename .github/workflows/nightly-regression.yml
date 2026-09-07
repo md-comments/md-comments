@@ -111,12 +111,47 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v6
         with:
-          name: playwright-traces
+  vscode-electron-e2e:
+    name: VS Code Electron E2E
+    needs: knowledge-graph-and-unit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 9
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build VS Code Extension
+        run: pnpm build:vscode
+
+      - name: Cache VS Code Electron Binary
+        uses: actions/cache@v4
+        with:
+          path: .vscode-test
+          key: vscode-electron-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            vscode-electron-${{ runner.os }}-
+
+      - name: Run VS Code Electron Tests (xvfb)
+        run: xvfb-run -a pnpm test:e2e:vscode
+
+      - name: Upload VS Code Test Traces & Results
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: vscode-playwright-traces
           path: test-results/
 
   coverage-and-reporting-gate:
     name: Consolidate 100% Coverage & Publish Allure Summary
-    needs: [knowledge-graph-and-unit, headless-playwright-e2e]
+    needs: [knowledge-graph-and-unit, headless-playwright-e2e, vscode-electron-e2e]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7

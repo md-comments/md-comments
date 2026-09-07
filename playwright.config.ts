@@ -26,7 +26,7 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium-headless',
-      testIgnore: /.*safari-extension\.spec\.ts/,
+      testIgnore: [/.*safari-extension\.spec\.ts/, /.*vscode-.*\.spec\.ts/],
       use: {
         ...devices['Desktop Chrome'],
         channel: 'chromium',
@@ -38,6 +38,11 @@ export default defineConfig({
       use: {
         ...devices['Desktop Safari'],
       },
+    },
+    {
+      name: 'vscode-electron',
+      testMatch: /.*vscode-.*\.spec\.ts/,
+      timeout: 60000,
     },
   ],
 });

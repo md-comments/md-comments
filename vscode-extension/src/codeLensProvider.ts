@@ -3,11 +3,14 @@ import { readComments } from './commentStore';
 import { parseMarkdownAnchors } from '../../shared/anchor';
 import { placeInlineComments, isOrphanedPlacement } from '../../shared/placement';
 
+import { logDebug } from './logger';
+
 export class MarkdownCommentsCodeLensProvider implements vscode.CodeLensProvider {
   private _onDidChangeCodeLenses: vscode.EventEmitter<void> = new vscode.EventEmitter<void>();
   public readonly onDidChangeCodeLenses: vscode.Event<void> = this._onDidChangeCodeLenses.event;
 
   public refresh(): void {
+    logDebug('MarkdownCommentsCodeLensProvider.refresh fired');
     this._onDidChangeCodeLenses.fire();
   }
 
@@ -20,9 +23,17 @@ export class MarkdownCommentsCodeLensProvider implements vscode.CodeLensProvider
     }
 
     try {
+      logDebug(
+        'MarkdownCommentsCodeLensProvider.provideCodeLenses called for:',
+        document.uri.toString()
+      );
       const markdown = document.getText();
       const blocks = parseMarkdownAnchors(markdown);
       const comments = await readComments(document.uri);
+      logDebug('MarkdownCommentsCodeLensProvider loaded comments:', {
+        inline: comments.inline_comments?.length,
+        page: comments.page_comments?.length,
+      });
 
       if (!comments.inline_comments || comments.inline_comments.length === 0) {
         return [];

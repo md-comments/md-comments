@@ -118,14 +118,13 @@
       return;
     }
     textarea.setAttribute(BOUND, 'true');
-    const users = loadMentionUsers();
-
     textarea.addEventListener('input', function () {
       const ctx = getMentionQuery(textarea);
       if (!ctx) {
         removeMentionMenu();
         return;
       }
+      const users = loadMentionUsers();
       showMentionMenu(textarea, users, ctx);
     });
 

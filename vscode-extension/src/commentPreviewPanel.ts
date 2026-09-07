@@ -79,6 +79,7 @@ export class CommentPreviewPanel {
         await executeCommentAction(this.mdUri, msg);
         await this.refresh(false); // optimistic UI refresh
         await vscode.commands.executeCommand('markdown.preview.refresh');
+        await vscode.commands.executeCommand('mdComments.refreshPreview');
       },
       undefined,
       this.disposables

@@ -147,8 +147,6 @@ export function activate(context: vscode.ExtensionContext): {
             `Pre-warmed comments onDidChangeActiveTextEditor, count: inline=${comments.inline_comments.length}, page=${comments.page_comments.length}`
           );
         });
-      } else {
-        CommentPreviewPanel.closeAll();
       }
     }),
     vscode.window.registerUriHandler({

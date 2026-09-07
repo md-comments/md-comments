@@ -40,6 +40,7 @@ temp-chrome-profile-clean/
 scratch/
 artifacts/
 docs/.vscode/
+.vscode-test/
 
 # Terraform / OpenTofu local cache & state
 .terraform/
