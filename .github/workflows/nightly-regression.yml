@@ -196,7 +196,7 @@ jobs:
   ai-diagnostic-and-alert:
     name: AI Diagnostic Packet & Regression Alert
     if: failure()
-    needs: [knowledge-graph-and-unit, headless-playwright-e2e, coverage-and-reporting-gate]
+    needs: [knowledge-graph-and-unit, headless-playwright-e2e, vscode-electron-e2e, coverage-and-reporting-gate]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
