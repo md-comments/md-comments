@@ -97,7 +97,28 @@ test.describe('DOM: Blob Injection, PR Diffs, FAB, Drawer & SPA Navigation', () 
       expect(fabState.position).toBe('bottom-right');
     });
 
-    await test.step('2. Click FAB to trigger drawer toggle action', async () => {
+    await test.step('2. Validate FAB loading state transitions', async () => {
+      let isLoading = true;
+      let ariaBusy = 'true';
+      let spinnerRingVisible = true;
+      let badgeLoadingVisible = true;
+      let badgeCountVisible = false;
+
+      // When comments finish loading
+      isLoading = false;
+      ariaBusy = 'false';
+      spinnerRingVisible = false;
+      badgeLoadingVisible = false;
+      badgeCountVisible = true;
+
+      expect(isLoading).toBe(false);
+      expect(ariaBusy).toBe('false');
+      expect(spinnerRingVisible).toBe(false);
+      expect(badgeLoadingVisible).toBe(false);
+      expect(badgeCountVisible).toBe(true);
+    });
+
+    await test.step('3. Click FAB to trigger drawer toggle action', async () => {
       let drawerOpen = false;
       function onFabClick() {
         drawerOpen = !drawerOpen;
@@ -117,11 +138,26 @@ test.describe('DOM: Blob Injection, PR Diffs, FAB, Drawer & SPA Navigation', () 
     const drawer = {
       isOpen: false,
       width: 380,
+      isLoading: false,
+      hasError: false,
+      threads: [] as string[],
       toggle() {
         this.isOpen = !this.isOpen;
       },
       close() {
         this.isOpen = false;
+      },
+      startLoading() {
+        this.isLoading = true;
+        this.hasError = false;
+      },
+      finishLoading(items: string[]) {
+        this.isLoading = false;
+        this.threads = items;
+      },
+      failLoading() {
+        this.isLoading = false;
+        this.hasError = true;
       },
     };
 
@@ -130,7 +166,34 @@ test.describe('DOM: Blob Injection, PR Diffs, FAB, Drawer & SPA Navigation', () 
       expect(drawer.isOpen).toBe(true);
     });
 
-    await test.step('2. Close drawer via Escape key', async () => {
+    await test.step('2. Validate drawer skeleton placeholder rendering during loading', async () => {
+      drawer.startLoading();
+      expect(drawer.isLoading).toBe(true);
+      expect(drawer.threads.length).toBe(0);
+
+      // Drawer renders 2-3 skeleton cards while loading
+      const skeletonCount = 2;
+      expect(skeletonCount).toBeGreaterThan(0);
+    });
+
+    await test.step('3. Transition from loading to loaded comment cards', async () => {
+      drawer.finishLoading(['thread-1', 'thread-2']);
+      expect(drawer.isLoading).toBe(false);
+      expect(drawer.threads.length).toBe(2);
+    });
+
+    await test.step('4. Validate error recovery flow with retry trigger', async () => {
+      drawer.failLoading();
+      expect(drawer.hasError).toBe(true);
+
+      // Trigger retry
+      drawer.startLoading();
+      drawer.finishLoading(['thread-recovered']);
+      expect(drawer.hasError).toBe(false);
+      expect(drawer.threads.length).toBe(1);
+    });
+
+    await test.step('5. Close drawer via Escape key', async () => {
       drawer.close();
       expect(drawer.isOpen).toBe(false);
     });

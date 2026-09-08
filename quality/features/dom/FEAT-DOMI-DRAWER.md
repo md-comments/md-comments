@@ -25,5 +25,11 @@ Sidebar drawer rendering all document threads with search, filters, and resoluti
 ## User Journey (Gherkin Scenarios)
 
 - Given an open comment drawer
+- When comments are actively loading over the network
+- Then animated shimmer skeleton cards and a loading status banner are displayed
+- When comments successfully load
+- Then thread cards replace the skeleton cards without abrupt layout shifts
+- When a network error occurs during comment fetch
+- Then an error card with a retry button is displayed, allowing one-click reloading
 - When user interacts with thread cards
 - Then corresponding paragraph anchors are highlighted in the document

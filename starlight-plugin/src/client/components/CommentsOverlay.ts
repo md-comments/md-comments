@@ -113,6 +113,8 @@ export class CommentsOverlay {
   private drawerEl: HTMLElement | null = null;
   private selectionBubbleEl: HTMLElement | null = null;
   private fabEl: HTMLElement | null = null;
+  private isLoadingComments: boolean = false;
+  private lastLoadCommentsError: string | null = null;
   private activeTab: 'inline' | 'page' = 'inline';
   private editingCommentId: string | null = null;
   private editingReplyId: string | null = null;
@@ -178,14 +180,17 @@ export class CommentsOverlay {
     this.fabEl = document.createElement('button');
     this.fabEl.id = 'md-comments-fab-toggle';
     this.fabEl.className = 'md-comments-fab-toggle';
+    this.fabEl.classList.add('md-comments-fab-toggle');
     this.fabEl.title = 'Markdown Comments (Cmd/Ctrl+Shift+C)';
     this.fabEl.setAttribute('aria-label', 'Markdown Comments');
     this.fabEl.innerHTML = `
+      <div class="md-comments-fab-spinner-ring"></div>
       <svg viewBox="0 0 512 512" width="30" height="30">
         <path fill="#24292f" stroke="#ffffff" stroke-width="20" stroke-linejoin="round" d="M 136 64 L 376 64 C 424 64 456 96 456 144 L 456 304 C 456 352 424 384 376 384 L 216 384 C 184 384 150 404 126 428 C 118 436 104 430 104 418 L 104 384 C 72 380 56 352 56 304 L 56 144 C 56 96 88 64 136 64 Z"/>
         <path fill="#ffffff" d="M 132 168 L 164 168 L 192 232 L 220 168 L 252 168 L 252 280 L 226 280 L 226 212 L 201 268 L 183 268 L 158 212 L 158 280 L 132 280 Z M 276 168 L 324 168 C 358 168 380 188 380 224 C 380 260 358 280 324 280 L 276 280 Z M 302 192 L 302 256 L 322 256 C 342 256 352 246 352 224 C 352 202 342 192 322 192 Z"/>
       </svg>
       <span class="badge-count" style="display: none;">0</span>
+      <span class="badge-loading" style="display: none;"><span class="md-comments-spinner-sm"></span></span>
     `;
     this.fabEl.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -406,10 +411,37 @@ export class CommentsOverlay {
     }
   }
 
+  private updateFABLoading(isLoading: boolean): void {
+    if (!this.fabEl) return;
+    if (isLoading) {
+      this.fabEl.classList.add('is-loading');
+      this.fabEl.setAttribute('aria-busy', 'true');
+      this.fabEl.title = 'Markdown Comments (Loading comments... Cmd/Ctrl+Shift+C)';
+    } else {
+      this.fabEl.classList.remove('is-loading');
+      this.fabEl.setAttribute('aria-busy', 'false');
+      this.fabEl.title = 'Markdown Comments (Cmd/Ctrl+Shift+C)';
+    }
+
+    const badgeCount = this.fabEl.querySelector<HTMLElement>('.badge-count');
+    const badgeLoading = this.fabEl.querySelector<HTMLElement>('.badge-loading');
+    if (badgeLoading) {
+      badgeLoading.style.display = isLoading ? 'inline-flex' : 'none';
+    }
+    if (badgeCount && isLoading) {
+      badgeCount.style.display = 'none';
+    }
+  }
+
   private async loadComments(): Promise<void> {
     if (!this.options.repo) return;
     const [owner, repo] = this.options.repo.split('/');
     if (!owner || !repo) return;
+
+    this.isLoadingComments = true;
+    this.lastLoadCommentsError = null;
+    this.updateFABLoading(true);
+    this.renderDrawerContent();
 
     const filePath = this.getDocumentFilePath();
     try {
@@ -418,11 +450,17 @@ export class CommentsOverlay {
         repo,
         filePath,
       });
-    } catch {
+      this.lastLoadCommentsError = null;
+    } catch (err) {
+      this.lastLoadCommentsError = err instanceof Error ? err.message : String(err);
       this.comments = { inline_comments: [], page_comments: [] };
+    } finally {
+      this.isLoadingComments = false;
+      this.updateFABLoading(false);
     }
     this.renderInlineHighlights();
     this.updateFABCount();
+    this.renderDrawerContent();
   }
 
   private updateFABCount(): void {
@@ -434,14 +472,26 @@ export class CommentsOverlay {
     const badge = this.fabEl.querySelector<HTMLElement>('.badge-count');
     if (badge) {
       badge.textContent = String(totalOpen);
-      badge.style.display = totalOpen > 0 ? 'inline-block' : 'none';
+      badge.style.display = !this.isLoadingComments && totalOpen > 0 ? 'inline-block' : 'none';
     }
 
     if (this.drawerEl) {
       const inlineCountEl = this.drawerEl.querySelector('.inline-tab-count');
       const pageCountEl = this.drawerEl.querySelector('.page-tab-count');
-      if (inlineCountEl) inlineCountEl.textContent = String(inlineOpen);
-      if (pageCountEl) pageCountEl.textContent = String(pageOpen);
+      if (inlineCountEl) {
+        if (this.isLoadingComments) {
+          inlineCountEl.innerHTML = '<span class="md-comments-spinner-sm"></span>';
+        } else {
+          inlineCountEl.textContent = String(inlineOpen);
+        }
+      }
+      if (pageCountEl) {
+        if (this.isLoadingComments) {
+          pageCountEl.innerHTML = '<span class="md-comments-spinner-sm"></span>';
+        } else {
+          pageCountEl.textContent = String(pageOpen);
+        }
+      }
     }
   }
 
@@ -764,41 +814,111 @@ export class CommentsOverlay {
     // 1. Render Inline comments
     const inlineListEl = this.drawerEl.querySelector('#starlight-inline-threads');
     if (inlineListEl) {
-      const inlines = this.comments.inline_comments || [];
-      if (inlines.length === 0) {
-        inlineListEl.innerHTML = `
-          <div style="text-align: center; padding: 36px 12px; color: var(--text-secondary);">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 10px; opacity: 0.5;">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-            </svg>
-            <p style="font-size: 13px; font-weight: 500; margin: 0 0 4px;">No inline comments yet</p>
-            <p style="font-size: 11px; margin: 0;">Highlight any text on the page to leave an inline comment.</p>
-          </div>
-        `;
+      if (this.isLoadingComments) {
+        inlineListEl.innerHTML = this.renderLoadingSkeleton('inline');
+      } else if (this.lastLoadCommentsError) {
+        inlineListEl.innerHTML = this.renderLoadError(this.lastLoadCommentsError);
+        this.bindRetryEvents(inlineListEl);
       } else {
-        inlineListEl.innerHTML = inlines.map((c) => this.renderCommentCard(c, 'inline')).join('');
+        const inlines = this.comments.inline_comments || [];
+        if (inlines.length === 0) {
+          inlineListEl.innerHTML = `
+            <div style="text-align: center; padding: 36px 12px; color: var(--text-secondary);">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 10px; opacity: 0.5;">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
+              <p style="font-size: 13px; font-weight: 500; margin: 0 0 4px;">No inline comments yet</p>
+              <p style="font-size: 11px; margin: 0;">Highlight any text on the page to leave an inline comment.</p>
+            </div>
+          `;
+        } else {
+          inlineListEl.innerHTML = inlines.map((c) => this.renderCommentCard(c, 'inline')).join('');
+        }
+        this.bindCardEvents(inlineListEl);
       }
-      this.bindCardEvents(inlineListEl);
     }
 
     // 2. Render Page comments
     const pageListEl = this.drawerEl.querySelector('#starlight-page-threads');
     if (pageListEl) {
-      const pages = this.comments.page_comments || [];
-      if (pages.length === 0) {
-        pageListEl.innerHTML = `
-          <div style="text-align: center; padding: 36px 12px; color: var(--text-secondary);">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 10px; opacity: 0.5;">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-            </svg>
-            <p style="font-size: 13px; font-weight: 500; margin: 0 0 4px;">No document discussion yet</p>
-            <p style="font-size: 11px; margin: 0;">Use the composer below to start a discussion.</p>
-          </div>
-        `;
+      if (this.isLoadingComments) {
+        pageListEl.innerHTML = this.renderLoadingSkeleton('page');
+      } else if (this.lastLoadCommentsError) {
+        pageListEl.innerHTML = this.renderLoadError(this.lastLoadCommentsError);
+        this.bindRetryEvents(pageListEl);
       } else {
-        pageListEl.innerHTML = pages.map((c) => this.renderCommentCard(c, 'page')).join('');
+        const pages = this.comments.page_comments || [];
+        if (pages.length === 0) {
+          pageListEl.innerHTML = `
+            <div style="text-align: center; padding: 36px 12px; color: var(--text-secondary);">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 10px; opacity: 0.5;">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
+              <p style="font-size: 13px; font-weight: 500; margin: 0 0 4px;">No document discussion yet</p>
+              <p style="font-size: 11px; margin: 0;">Use the composer below to start a discussion.</p>
+            </div>
+          `;
+        } else {
+          pageListEl.innerHTML = pages.map((c) => this.renderCommentCard(c, 'page')).join('');
+        }
+        this.bindCardEvents(pageListEl);
       }
-      this.bindCardEvents(pageListEl);
+    }
+  }
+
+  private renderLoadingSkeleton(tabType: 'inline' | 'page'): string {
+    const subtitle =
+      tabType === 'inline'
+        ? 'Fetching line annotations from repository'
+        : 'Fetching document discussions from repository';
+
+    return `
+      <div class="panel-loading-container" role="status" aria-live="polite">
+        <div class="panel-loading-banner">
+          <div class="md-comments-spinner"></div>
+          <div class="panel-loading-text">
+            <span class="panel-loading-title">Loading comments...</span>
+            <span class="panel-loading-subtext">${subtitle}</span>
+          </div>
+        </div>
+        <div class="comment-skeleton-list">
+          <div class="comment-skeleton-card">
+            <div class="skeleton-header">
+              <div class="skeleton-avatar skeleton-shimmer"></div>
+              <div class="skeleton-meta">
+                <div class="skeleton-line skeleton-author skeleton-shimmer"></div>
+                <div class="skeleton-line skeleton-time skeleton-shimmer"></div>
+              </div>
+            </div>
+            ${tabType === 'inline' ? '<div class="skeleton-quote skeleton-shimmer"></div>' : ''}
+            <div class="skeleton-body">
+              <div class="skeleton-line skeleton-text-full skeleton-shimmer"></div>
+              <div class="skeleton-line skeleton-text-partial skeleton-shimmer"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  private renderLoadError(errorMessage: string): string {
+    return `
+      <div class="panel-error-container" role="alert">
+        <div class="panel-error-icon">⚠️</div>
+        <div class="panel-error-title">Failed to load comments</div>
+        <div class="panel-error-msg">${errorMessage || 'Could not connect to GitHub to retrieve comments.'}</div>
+        <button class="md-comments-btn-primary retry-load-btn" type="button">Retry</button>
+      </div>
+    `;
+  }
+
+  private bindRetryEvents(container: Element): void {
+    const retryBtn = container.querySelector('.retry-load-btn');
+    if (retryBtn) {
+      retryBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        void this.loadComments();
+      });
     }
   }
 

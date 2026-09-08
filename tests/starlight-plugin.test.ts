@@ -348,6 +348,150 @@ describe('CommentsOverlay FAB and Drawer', () => {
     expect(drawer?.classList.contains('md-comments-drawer-open')).toBe(false);
   });
 
+  it('renders loading indicators on FAB and skeleton placeholders in drawer while loading', async () => {
+    const elements: any[] = [];
+    const classListMap = new Map<any, Set<string>>();
+
+    function makeElement(tag: string) {
+      const el: any = {
+        tagName: tag.toUpperCase(),
+        id: '',
+        className: '',
+        title: '',
+        style: {},
+        innerHTML: '',
+        textContent: '',
+        classList: {
+          add: (cls: string) => {
+            const set = classListMap.get(el) || new Set();
+            set.add(cls);
+            classListMap.set(el, set);
+            el.className = Array.from(set).join(' ');
+          },
+          remove: (cls: string) => {
+            const set = classListMap.get(el) || new Set();
+            set.delete(cls);
+            classListMap.set(el, set);
+            el.className = Array.from(set).join(' ');
+          },
+          contains: (cls: string) => {
+            const set = classListMap.get(el) || new Set();
+            return set.has(cls);
+          },
+          toggle: (cls: string, force?: boolean) => {
+            const set = classListMap.get(el) || new Set();
+            const shouldAdd = force !== undefined ? force : !set.has(cls);
+            if (shouldAdd) set.add(cls);
+            else set.delete(cls);
+            classListMap.set(el, set);
+            el.className = Array.from(set).join(' ');
+            return shouldAdd;
+          },
+        },
+        setAttribute: (k: string, v: string) => {
+          if (k === 'id') el.id = v;
+          if (k === 'class') el.className = v;
+          if (k === 'aria-busy') el['aria-busy'] = v;
+        },
+        getAttribute: (k: string) => (k === 'id' ? el.id : el[k] || null),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        querySelector: (sel: string) => {
+          if (sel === '.badge-count') return makeElement('span');
+          if (sel === '.badge-loading') return makeElement('span');
+          if (sel === '.md-comments-fab-spinner-ring') return makeElement('div');
+          if (sel === '.md-comments-drawer-close') return makeElement('button');
+          if (sel === '.md-comments-drawer-content') return makeElement('div');
+          if (sel === '.md-comments-auth-user') return makeElement('div');
+          if (sel === '#starlight-inline-threads') return inlineThreads;
+          if (sel === '#starlight-page-threads') return pageThreads;
+          if (sel === '.inline-tab-count') return inlineCountEl;
+          if (sel === '.page-tab-count') return pageCountEl;
+          return null;
+        },
+        querySelectorAll: () => [],
+        contains: () => true,
+        getBoundingClientRect: () => ({ top: 0, left: 0, width: 100, height: 20 }),
+      };
+      return el;
+    }
+
+    const inlineThreads = makeElement('div');
+    const pageThreads = makeElement('div');
+    const inlineCountEl = makeElement('span');
+    const pageCountEl = makeElement('span');
+
+    const docEl = makeElement('html');
+    const bodyEl = makeElement('body');
+    bodyEl.appendChild = (child: any) => {
+      elements.push(child);
+      return child;
+    };
+
+    (globalThis as any).document = {
+      createElement: (tag: string) => makeElement(tag),
+      getElementById: (id: string) => elements.find((e) => e.id === id) || null,
+      querySelector: (sel: string) => {
+        if (sel === '.md-comments-drawer')
+          return elements.find((e) => e.className?.includes('md-comments-drawer'));
+        return null;
+      },
+      querySelectorAll: () => [],
+      documentElement: docEl,
+      body: bodyEl,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+    };
+
+    const container = makeElement('main');
+    const { CommentsOverlay } =
+      await import('../starlight-plugin/src/client/components/CommentsOverlay');
+    const overlay = new CommentsOverlay(container as unknown as HTMLElement, {
+      repo: 'test/repo',
+    });
+
+    (overlay as any).initDOM();
+
+    // Verify FAB structure includes spinner ring and badge-loading
+    const fab = (overlay as any).fabEl;
+    expect(fab.innerHTML).toContain('md-comments-fab-spinner-ring');
+    expect(fab.innerHTML).toContain('badge-loading');
+
+    // Test updateFABLoading(true)
+    (overlay as any).updateFABLoading(true);
+    expect(fab.classList.contains('is-loading')).toBe(true);
+    expect(fab.getAttribute('aria-busy')).toBe('true');
+    expect(fab.title).toContain('Loading comments');
+
+    // Test updateFABLoading(false)
+    (overlay as any).updateFABLoading(false);
+    expect(fab.classList.contains('is-loading')).toBe(false);
+    expect(fab.getAttribute('aria-busy')).toBe('false');
+
+    // Test skeleton rendering
+    (overlay as any).isLoadingComments = true;
+    (overlay as any).renderDrawerContent();
+    expect(inlineThreads.innerHTML).toContain('panel-loading-container');
+    expect(inlineThreads.innerHTML).toContain('comment-skeleton-card');
+    expect(inlineThreads.innerHTML).toContain('skeleton-shimmer');
+    expect(inlineCountEl.innerHTML).toContain('md-comments-spinner-sm');
+
+    // Test error state rendering
+    (overlay as any).isLoadingComments = false;
+    (overlay as any).lastLoadCommentsError = 'Simulated network timeout';
+    (overlay as any).renderDrawerContent();
+    expect(inlineThreads.innerHTML).toContain('panel-error-container');
+    expect(inlineThreads.innerHTML).toContain('Simulated network timeout');
+    expect(inlineThreads.innerHTML).toContain('retry-load-btn');
+
+    // Test loaded empty state
+    (overlay as any).lastLoadCommentsError = null;
+    (overlay as any).comments = { inline_comments: [], page_comments: [] };
+    (overlay as any).renderDrawerContent();
+    expect(inlineThreads.innerHTML).toContain('No inline comments yet');
+    expect(inlineCountEl.textContent).toBe('0');
+  });
+
   it('renders inline comment highlights on matching document elements', async () => {
     const classListMap = new Map<any, Set<string>>();
     function makeElement(tag: string, text: string = '') {

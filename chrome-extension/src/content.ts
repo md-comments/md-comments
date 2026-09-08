@@ -89,6 +89,8 @@ let appInstallationStatus: {
 } = { checked: false, installed: true, repoAccess: true };
 let isCheckingAppInstallation = false;
 let isWaitingForAppInstallation = false;
+let isLoadingComments = false;
+let lastLoadCommentsError: string | null = null;
 let hasInstalledFocusListener = false;
 let isWritable = false;
 let writeBranch = '';
@@ -871,87 +873,101 @@ async function handlePageLoad() {
   isWritable = true;
 
   if (meta.type === 'blob' && meta.filePath && meta.filePath.toLowerCase().endsWith('.md')) {
+    injectFABButton(0, true);
     await loadDocumentComments(meta as ParsedUrl & { type: 'blob' });
   } else {
     closeSidebar();
     const floatingBadge = document.querySelector('.md-comments-floating-badge');
     if (floatingBadge) (floatingBadge as HTMLElement).style.display = 'none';
+    const fab = document.getElementById('md-comments-fab-toggle');
+    if (fab) fab.style.display = 'none';
   }
 }
 
 async function loadDocumentComments(meta: ParsedUrl & { type: 'blob' }) {
-  const commitHash = await resolveBlobCommitHash(meta.owner, meta.repo, meta.branch);
+  isLoadingComments = true;
+  lastLoadCommentsError = null;
+  injectFABButton(0, true);
+  renderSidebarComments();
 
-  currentMetadata = {
-    owner: meta.owner,
-    repo: meta.repo,
-    branch: meta.branch,
-    filePath: meta.filePath,
-  };
+  try {
+    const commitHash = await resolveBlobCommitHash(meta.owner, meta.repo, meta.branch);
 
-  const key = {
-    owner: meta.owner,
-    repo: meta.repo,
-    branch: meta.branch,
-    filePath: meta.filePath,
-    commitHash,
-  };
+    currentMetadata = {
+      owner: meta.owner,
+      repo: meta.repo,
+      branch: meta.branch,
+      filePath: meta.filePath,
+    };
 
-  if (currentToken) {
-    if (!githubApi) {
-      githubApi = new GitHubApi(currentToken);
-    }
-    isCheckingAppInstallation = true;
-    renderSidebarComments();
-    try {
-      const status = await githubApi.checkAppInstallation(meta.owner, meta.repo);
-      appInstallationStatus = {
-        checked: true,
-        installed: status.installed,
-        repoAccess: status.repoAccess,
-        appSlug: status.appSlug,
-        installationId: status.installationId,
-      };
-    } catch (err) {
-      console.warn('[md-comments] Failed to verify app installation:', err);
-      appInstallationStatus = { checked: true, installed: true, repoAccess: true };
-    } finally {
+    const key = {
+      owner: meta.owner,
+      repo: meta.repo,
+      branch: meta.branch,
+      filePath: meta.filePath,
+      commitHash,
+    };
+
+    if (currentToken) {
+      if (!githubApi) {
+        githubApi = new GitHubApi(currentToken);
+      }
+      isCheckingAppInstallation = true;
+      renderSidebarComments();
+      try {
+        const status = await githubApi.checkAppInstallation(meta.owner, meta.repo);
+        appInstallationStatus = {
+          checked: true,
+          installed: status.installed,
+          repoAccess: status.repoAccess,
+          appSlug: status.appSlug,
+          installationId: status.installationId,
+        };
+      } catch (err) {
+        console.warn('[md-comments] Failed to verify app installation:', err);
+        appInstallationStatus = { checked: true, installed: true, repoAccess: true };
+      } finally {
+        isCheckingAppInstallation = false;
+      }
+    } else {
+      appInstallationStatus = { checked: false, installed: true, repoAccess: true };
       isCheckingAppInstallation = false;
     }
-  } else {
-    appInstallationStatus = { checked: false, installed: true, repoAccess: true };
-    isCheckingAppInstallation = false;
-  }
 
-  try {
-    const fetched = await gitRefBackend.read(key);
-    loadedComments = mergeLocalComments(loadedComments, fetched);
-    warmDisplayNames(loadedComments);
-  } catch (err) {
-    console.warn('[md-comments] Error reading comments from GitHubOrphanRefBackend:', err);
-    loadedComments = mergeLocalComments(loadedComments, {
-      page_comments: [],
-      inline_comments: [],
-    });
-  }
-
-  try {
-    const rawMarkdown = await fetchFileContent(
-      meta.owner,
-      meta.repo,
-      meta.branch,
-      meta.filePath,
-      currentToken
-    );
-    if (rawMarkdown) {
-      parsedAnchors = parseMarkdownAnchors(rawMarkdown);
+    try {
+      const fetched = await gitRefBackend.read(key);
+      loadedComments = mergeLocalComments(loadedComments, fetched);
+      warmDisplayNames(loadedComments);
+      lastLoadCommentsError = null;
+    } catch (err) {
+      console.warn('[md-comments] Error reading comments from GitHubOrphanRefBackend:', err);
+      lastLoadCommentsError = err instanceof Error ? err.message : String(err);
+      loadedComments = mergeLocalComments(loadedComments, {
+        page_comments: [],
+        inline_comments: [],
+      });
     }
-  } catch (err) {
-    console.warn('[md-comments] Failed to fetch raw file anchors:', err);
+
+    try {
+      const rawMarkdown = await fetchFileContent(
+        meta.owner,
+        meta.repo,
+        meta.branch,
+        meta.filePath,
+        currentToken
+      );
+      if (rawMarkdown) {
+        parsedAnchors = parseMarkdownAnchors(rawMarkdown);
+      }
+    } catch (err) {
+      console.warn('[md-comments] Failed to fetch raw file anchors:', err);
+    }
+  } finally {
+    isLoadingComments = false;
   }
 
   const totalCount = loadedComments.inline_comments.length + loadedComments.page_comments.length;
-  injectFABButton(totalCount);
+  injectFABButton(totalCount, false);
   injectToolbarButton(totalCount);
 
   const markdownBody = document.querySelector('.markdown-body') as HTMLElement;
@@ -1028,29 +1044,49 @@ function mergeLocalComments(local: CommentsFile, fetched: CommentsFile): Comment
   };
 }
 
-function injectFABButton(count: number = 0) {
+function injectFABButton(count: number = 0, isLoading: boolean = false) {
   let fab = document.getElementById('md-comments-fab-toggle');
   if (!fab) {
     fab = document.createElement('button');
     fab.id = 'md-comments-fab-toggle';
-    fab.title = 'Markdown Comments (Cmd/Ctrl+Shift+C)';
+    fab.className = 'md-comments-fab';
+    fab.setAttribute('aria-label', 'Markdown Comments');
     fab.innerHTML = `
+      <div class="md-comments-fab-spinner-ring"></div>
       <svg viewBox="0 0 512 512" width="30" height="30">
         <path fill="#24292f" stroke="#ffffff" stroke-width="20" stroke-linejoin="round" d="M 136 64 L 376 64 C 424 64 456 96 456 144 L 456 304 C 456 352 424 384 376 384 L 216 384 C 184 384 150 404 126 428 C 118 436 104 430 104 418 L 104 384 C 72 380 56 352 56 304 L 56 144 C 56 96 88 64 136 64 Z"/>
         <path fill="#ffffff" d="M 132 168 L 164 168 L 192 232 L 220 168 L 252 168 L 252 280 L 226 280 L 226 212 L 201 268 L 183 268 L 158 212 L 158 280 L 132 280 Z M 276 168 L 324 168 C 358 168 380 188 380 224 C 380 260 358 280 324 280 L 276 280 Z M 302 192 L 302 256 L 322 256 C 342 256 352 246 352 224 C 352 202 342 192 322 192 Z"/>
       </svg>
-      <span class="badge-count" style="display: ${count > 0 ? 'inline-block' : 'none'}">${count}</span>
+      <span class="badge-count" style="display: ${!isLoading && count > 0 ? 'inline-block' : 'none'}">${count}</span>
+      <span class="badge-loading" style="display: ${isLoading ? 'inline-flex' : 'none'};"><span class="md-comments-spinner-sm"></span></span>
     `;
     fab.addEventListener('click', () => {
       toggleSidebar('inline');
     });
     document.body.appendChild(fab);
+  }
+
+  fab.style.display = isSidebarOpen() ? 'none' : 'flex';
+
+  if (isLoading) {
+    fab.classList.add('is-loading');
+    fab.setAttribute('aria-busy', 'true');
+    fab.title = 'Markdown Comments (Loading comments... Cmd/Ctrl+Shift+C)';
   } else {
-    const badge = fab.querySelector('.badge-count');
-    if (badge) {
-      badge.textContent = String(count);
-      (badge as HTMLElement).style.display = count > 0 ? 'inline-block' : 'none';
-    }
+    fab.classList.remove('is-loading');
+    fab.setAttribute('aria-busy', 'false');
+    fab.title = 'Markdown Comments (Cmd/Ctrl+Shift+C)';
+  }
+
+  const badgeCount = fab.querySelector('.badge-count');
+  if (badgeCount) {
+    badgeCount.textContent = String(count);
+    (badgeCount as HTMLElement).style.display = !isLoading && count > 0 ? 'inline-block' : 'none';
+  }
+
+  const badgeLoading = fab.querySelector('.badge-loading');
+  if (badgeLoading) {
+    (badgeLoading as HTMLElement).style.display = isLoading ? 'inline-flex' : 'none';
   }
 }
 
@@ -2626,19 +2662,54 @@ function renderSidebarComments() {
 
         const inlineCountEl = activeSidebarHost!.querySelector('.inline-tab-count');
         const pageCountEl = activeSidebarHost!.querySelector('.page-tab-count');
-        if (inlineCountEl)
-          inlineCountEl.textContent = String(loadedComments.inline_comments.length);
-        if (pageCountEl) pageCountEl.textContent = String(loadedComments.page_comments.length);
+        if (inlineCountEl) {
+          if (isLoadingComments) {
+            inlineCountEl.innerHTML = '<span class="md-comments-spinner-sm"></span>';
+          } else {
+            inlineCountEl.textContent = String(loadedComments.inline_comments.length);
+          }
+        }
+        if (pageCountEl) {
+          if (isLoadingComments) {
+            pageCountEl.innerHTML = '<span class="md-comments-spinner-sm"></span>';
+          } else {
+            pageCountEl.textContent = String(loadedComments.page_comments.length);
+          }
+        }
 
         const pageComposer = activeSidebarHost!.querySelector(
           '.page-composer'
         ) as HTMLElement | null;
         if (pageComposer) {
           pageComposer.style.display = 'flex';
+          const pageTextarea = pageComposer.querySelector(
+            '.page-textarea'
+          ) as HTMLTextAreaElement | null;
+          const pageSubmitBtn = pageComposer.querySelector(
+            '.submit-page-btn'
+          ) as HTMLButtonElement | null;
+          if (pageTextarea && pageSubmitBtn) {
+            if (isLoadingComments) {
+              pageTextarea.disabled = true;
+              pageTextarea.placeholder = 'Waiting for comments to load...';
+              pageSubmitBtn.disabled = true;
+            } else {
+              pageTextarea.disabled = false;
+              pageTextarea.placeholder = currentDisplayAuthor
+                ? 'Write a comment on this document...'
+                : 'Leave a comment...';
+              pageSubmitBtn.disabled = false;
+            }
+          }
         }
 
         if (inlineList) {
-          if (loadedComments.inline_comments.length === 0) {
+          if (isLoadingComments) {
+            inlineList.innerHTML = renderLoadingSkeleton('inline');
+          } else if (lastLoadCommentsError) {
+            inlineList.innerHTML = renderLoadError(lastLoadCommentsError);
+            attachRetryEvents(inlineList as HTMLElement);
+          } else if (loadedComments.inline_comments.length === 0) {
             inlineList.innerHTML =
               '<div class="empty-state" style="padding: 24px; text-align: center; color: var(--text-secondary); font-size: 13px;">No inline comments yet. Hover over paragraphs to add feedback.</div>';
           } else {
@@ -2650,7 +2721,12 @@ function renderSidebarComments() {
         }
 
         if (pageList) {
-          if (loadedComments.page_comments.length === 0) {
+          if (isLoadingComments) {
+            pageList.innerHTML = renderLoadingSkeleton('page');
+          } else if (lastLoadCommentsError) {
+            pageList.innerHTML = renderLoadError(lastLoadCommentsError);
+            attachRetryEvents(pageList as HTMLElement);
+          } else if (loadedComments.page_comments.length === 0) {
             pageList.innerHTML =
               '<div class="empty-state" style="padding: 24px; text-align: center; color: var(--text-secondary); font-size: 13px;">No page discussion comments yet. Use the composer below to start.</div>';
           } else {
@@ -2679,6 +2755,79 @@ function renderSidebarComments() {
       }
     }
   });
+}
+
+function renderLoadingSkeleton(tabType: 'inline' | 'page'): string {
+  const subtitle =
+    tabType === 'inline'
+      ? 'Fetching line annotations from repository'
+      : 'Fetching document discussions from repository';
+
+  return `
+    <div class="panel-loading-container" role="status" aria-live="polite">
+      <div class="panel-loading-banner">
+        <div class="md-comments-spinner"></div>
+        <div class="panel-loading-text">
+          <span class="panel-loading-title">Loading comments...</span>
+          <span class="panel-loading-subtext">${escapeHtml(subtitle)}</span>
+        </div>
+      </div>
+      <div class="comment-skeleton-list">
+        <div class="comment-skeleton-card">
+          <div class="skeleton-header">
+            <div class="skeleton-avatar skeleton-shimmer"></div>
+            <div class="skeleton-meta">
+              <div class="skeleton-line skeleton-author skeleton-shimmer"></div>
+              <div class="skeleton-line skeleton-time skeleton-shimmer"></div>
+            </div>
+          </div>
+          ${tabType === 'inline' ? '<div class="skeleton-quote skeleton-shimmer"></div>' : ''}
+          <div class="skeleton-body">
+            <div class="skeleton-line skeleton-text-full skeleton-shimmer"></div>
+            <div class="skeleton-line skeleton-text-partial skeleton-shimmer"></div>
+          </div>
+        </div>
+        <div class="comment-skeleton-card">
+          <div class="skeleton-header">
+            <div class="skeleton-avatar skeleton-shimmer"></div>
+            <div class="skeleton-meta">
+              <div class="skeleton-line skeleton-author skeleton-shimmer"></div>
+              <div class="skeleton-line skeleton-time skeleton-shimmer"></div>
+            </div>
+          </div>
+          ${tabType === 'inline' ? '<div class="skeleton-quote skeleton-shimmer"></div>' : ''}
+          <div class="skeleton-body">
+            <div class="skeleton-line skeleton-text-full skeleton-shimmer"></div>
+            <div class="skeleton-line skeleton-text-partial skeleton-shimmer" style="width: 45%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderLoadError(errorMessage: string): string {
+  return `
+    <div class="panel-error-container" role="alert">
+      <div class="panel-error-icon">⚠️</div>
+      <div class="panel-error-title">Failed to load comments</div>
+      <div class="panel-error-msg">${escapeHtml(errorMessage || 'Could not connect to GitHub to retrieve comments.')}</div>
+      <button class="md-comments-btn-primary retry-load-btn" type="button">Retry</button>
+    </div>
+  `;
+}
+
+function attachRetryEvents(container: HTMLElement) {
+  const retryBtn = container.querySelector('.retry-load-btn');
+  if (retryBtn) {
+    retryBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const meta = parseGitHubUrl(window.location.href);
+      if (meta && meta.type === 'blob') {
+        void loadDocumentComments(meta);
+      }
+    });
+  }
 }
 
 function renderAvatar(authorOrUrl: string, size = 32, alt = ''): string {
