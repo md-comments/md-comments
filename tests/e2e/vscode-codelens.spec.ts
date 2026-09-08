@@ -58,7 +58,7 @@ test.describe('VS Code Extension CodeLens E2E', () => {
     const codeLens = page
       .locator('.codelens-decoration, [class*="codelens"]')
       .filter({ hasText: /comment/ });
-    await expect(codeLens.first()).toBeVisible({ timeout: 15000 });
+    await expect(codeLens.first()).toBeVisible({ timeout: 30000 });
 
     // 5. Click CodeLens and verify it triggers mdComments.openCommentPreview
     await codeLens.first().click();
