@@ -557,7 +557,15 @@ describe('GitHubOrphanRefBackend', () => {
             orphaned: false,
             resolved: false,
             reactions: [],
-            replies: [],
+            replies: [
+              {
+                id: 'r-deleted-with-c1',
+                author: 'bob',
+                body: 'Reply deleted with parent',
+                created_at: '',
+                reactions: [],
+              },
+            ],
           },
           {
             id: 'c2',
@@ -571,16 +579,84 @@ describe('GitHubOrphanRefBackend', () => {
             orphaned: false,
             resolved: false,
             reactions: [],
-            replies: [],
+            replies: [
+              {
+                id: 'r1',
+                author: 'bob',
+                body: 'Kept reply',
+                created_at: '',
+                reactions: [],
+              },
+              {
+                id: 'r2',
+                author: 'charlie',
+                body: 'Deleted reply',
+                created_at: '',
+                reactions: [],
+              },
+            ],
           },
         ],
-        page_comments: [],
+        page_comments: [
+          {
+            id: 'p1',
+            author: 'dave',
+            body: 'To be deleted page comment',
+            created_at: '',
+            resolved: false,
+            reactions: [],
+            replies: [
+              {
+                id: 'pr-deleted-with-p1',
+                author: 'eve',
+                body: 'Page reply deleted with parent',
+                created_at: '',
+                reactions: [],
+              },
+            ],
+          },
+          {
+            id: 'p2',
+            author: 'frank',
+            body: 'Kept page comment',
+            created_at: '',
+            resolved: false,
+            reactions: [],
+            replies: [
+              {
+                id: 'pr1',
+                author: 'grace',
+                body: 'Kept page reply',
+                created_at: '',
+                reactions: [],
+              },
+              {
+                id: 'pr2',
+                author: 'heidi',
+                body: 'Deleted page reply',
+                created_at: '',
+                reactions: [],
+              },
+            ],
+          },
+        ],
       };
 
-      // Current data has c1 removed
+      // Current data has c1 removed, c2 kept with r1 (r2 removed);
+      // p1 removed, p2 kept with pr1 (pr2 removed)
       const currentComments: CommentsFile = {
-        inline_comments: [prevComments.inline_comments[1]],
-        page_comments: [],
+        inline_comments: [
+          {
+            ...prevComments.inline_comments[1],
+            replies: [prevComments.inline_comments[1].replies![0]],
+          },
+        ],
+        page_comments: [
+          {
+            ...prevComments.page_comments[1],
+            replies: [prevComments.page_comments[1].replies![0]],
+          },
+        ],
       };
 
       let writtenDataText = '';
@@ -615,7 +691,7 @@ describe('GitHubOrphanRefBackend', () => {
           }
           return { ok: true, json: async () => ({ object: { sha: 'final-sha' } }) };
         }
-        // When read(key) is invoked on retry, remote still contains c1 and c2!
+        // When read(key) is invoked on retry, remote still contains all comments and replies!
         if (url.includes('docs/test.a1b2c3d.comments.yml')) {
           fetchMock.mock.calls.push(['refetch-remote']);
           return {
@@ -629,6 +705,7 @@ describe('GitHubOrphanRefBackend', () => {
         return { ok: false, status: 404 };
       });
 
+      const explicitDeleted = new Set<string>(['explicit-deleted-id']);
       await backend.write(
         {
           owner: 'test-owner',
@@ -637,13 +714,20 @@ describe('GitHubOrphanRefBackend', () => {
           commitHash: 'a1b2c3d',
         },
         currentComments,
-        prevComments
+        prevComments,
+        explicitDeleted
       );
 
-      // The written blob content on retry must NOT have c1!
+      // The written blob content on retry must NOT have c1, r2, p1, pr2!
       const parsed = yaml.load(writtenDataText) as CommentsFile;
       expect(parsed.inline_comments.length).toBe(1);
       expect(parsed.inline_comments[0].id).toBe('c2');
+      expect(parsed.inline_comments[0].replies?.length).toBe(1);
+      expect(parsed.inline_comments[0].replies?.[0].id).toBe('r1');
+      expect(parsed.page_comments.length).toBe(1);
+      expect(parsed.page_comments[0].id).toBe('p2');
+      expect(parsed.page_comments[0].replies?.length).toBe(1);
+      expect(parsed.page_comments[0].replies?.[0].id).toBe('pr1');
     });
 
     it('properly encodes paths with spaces when fetching comments', async () => {
