@@ -60,7 +60,12 @@ export async function readComments(mdUri: vscode.Uri, forceRefresh = false): Pro
   return normalizeCommentsFile(fileData);
 }
 
-export async function writeComments(mdUri: vscode.Uri, data: CommentsFile): Promise<string> {
+export async function writeComments(
+  mdUri: vscode.Uri,
+  data: CommentsFile,
+  previousData?: CommentsFile,
+  deletedIds?: Set<string>
+): Promise<string> {
   logDebug(`writeComments called for: ${mdUri.toString()}`);
   const key = await resolveStorageKeyForUri(mdUri);
   logDebug(`writeComments resolved storage key:`, key);
@@ -71,7 +76,7 @@ export async function writeComments(mdUri: vscode.Uri, data: CommentsFile): Prom
   const normalized = normalizeCommentsFile(data);
   globalOptimisticStore.updateComments(key, normalized, () => {
     logDebug(`writeComments triggering remote write for key:`, key);
-    return gitRefBackend.write(key, normalized);
+    return gitRefBackend.write(key, normalized, previousData, deletedIds);
   });
   return `${key.owner}/${key.repo}/${key.filePath}`;
 }
@@ -217,6 +222,7 @@ export async function deleteComment(
   rootId?: string
 ): Promise<string> {
   const data = await readComments(mdUri);
+  const previousData = JSON.parse(JSON.stringify(data)) as CommentsFile;
   if (kind === 'reply') {
     const roots = type === 'page' ? data.page_comments : data.inline_comments;
     const root = roots.find((c) => c.id === rootId);
@@ -228,7 +234,7 @@ export async function deleteComment(
       throw new Error(`Reply ${id} not found`);
     }
     root.replies.splice(idx, 1);
-    return writeComments(mdUri, data);
+    return writeComments(mdUri, data, previousData, new Set([id]));
   }
 
   if (type === 'page') {
@@ -244,7 +250,7 @@ export async function deleteComment(
     }
     data.inline_comments.splice(idx, 1);
   }
-  return writeComments(mdUri, data);
+  return writeComments(mdUri, data, previousData, new Set([id]));
 }
 
 export async function editComment(

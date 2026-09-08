@@ -20,8 +20,11 @@ export function stripMarkdownOrCommentsExtension(filePath: string): string {
 
 export function commentsFilePathForMarkdown(filePath: string, commitHash?: string): string {
   const cleanPath = stripMarkdownOrCommentsExtension(filePath);
-  const hash = (commitHash && commitHash.trim() ? commitHash : '0000000').slice(0, 7).toLowerCase();
-  return `${cleanPath}.${hash}.comments.yml`;
+  if (commitHash && commitHash.trim() && commitHash.trim() !== '0000000') {
+    const hash = commitHash.trim().slice(0, 7).toLowerCase();
+    return `${cleanPath}.${hash}.comments.yml`;
+  }
+  return `${cleanPath}.comments.yml`;
 }
 
 export function decodeBase64(base64Str: string): string {
@@ -37,22 +40,37 @@ export function decodeBase64(base64Str: string): string {
   return new TextDecoder('utf-8').decode(bytes);
 }
 
-export function mergeCommentsFiles(local: CommentsFile, remote: CommentsFile): CommentsFile {
+export function mergeCommentsFiles(
+  local: CommentsFile,
+  remote: CommentsFile,
+  deletedIds?: Set<string>
+): CommentsFile {
+  const isDeleted = (id: string) => (deletedIds ? deletedIds.has(id) : false);
+
   const inlineMap = new Map<string, InlineComment>();
   for (const c of remote.inline_comments || []) {
-    inlineMap.set(c.id, c);
+    if (!isDeleted(c.id)) {
+      inlineMap.set(c.id, {
+        ...c,
+        replies: (c.replies || []).filter((r) => !isDeleted(r.id)),
+      });
+    }
   }
   for (const c of local.inline_comments || []) {
+    if (isDeleted(c.id)) continue;
     const existing = inlineMap.get(c.id);
     if (!existing) {
-      inlineMap.set(c.id, c);
+      inlineMap.set(c.id, {
+        ...c,
+        replies: (c.replies || []).filter((r) => !isDeleted(r.id)),
+      });
     } else {
       const replyMap = new Map<string, Reply>();
       for (const r of existing.replies || []) {
-        replyMap.set(r.id, r);
+        if (!isDeleted(r.id)) replyMap.set(r.id, r);
       }
       for (const r of c.replies || []) {
-        replyMap.set(r.id, r);
+        if (!isDeleted(r.id)) replyMap.set(r.id, r);
       }
       inlineMap.set(c.id, {
         ...existing,
@@ -64,19 +82,28 @@ export function mergeCommentsFiles(local: CommentsFile, remote: CommentsFile): C
 
   const pageMap = new Map<string, PageComment>();
   for (const c of remote.page_comments || []) {
-    pageMap.set(c.id, c);
+    if (!isDeleted(c.id)) {
+      pageMap.set(c.id, {
+        ...c,
+        replies: (c.replies || []).filter((r) => !isDeleted(r.id)),
+      });
+    }
   }
   for (const c of local.page_comments || []) {
+    if (isDeleted(c.id)) continue;
     const existing = pageMap.get(c.id);
     if (!existing) {
-      pageMap.set(c.id, c);
+      pageMap.set(c.id, {
+        ...c,
+        replies: (c.replies || []).filter((r) => !isDeleted(r.id)),
+      });
     } else {
       const replyMap = new Map<string, Reply>();
       for (const r of existing.replies || []) {
-        replyMap.set(r.id, r);
+        if (!isDeleted(r.id)) replyMap.set(r.id, r);
       }
       for (const r of c.replies || []) {
-        replyMap.set(r.id, r);
+        if (!isDeleted(r.id)) replyMap.set(r.id, r);
       }
       pageMap.set(c.id, {
         ...existing,
@@ -165,32 +192,25 @@ export class GitHubOrphanRefBackend implements CommentBackend {
     const targetPath = commentsFilePathForMarkdown(key.filePath, key.commitHash);
     const cleanPath = stripMarkdownOrCommentsExtension(key.filePath);
     const legacyPath = `${cleanPath}.comments.yml`;
-    const zeroPath = `${cleanPath}.0000000.comments.yml`;
 
     let accumulated: CommentsFile = { page_comments: [], inline_comments: [] };
 
-    // 1. Fetch target commit-hashed comments file
+    // 1. Fetch target comments file
     const targetComments = await this.fetchPathContent(key.owner, key.repo, targetPath);
     if (targetComments) {
       accumulated = mergeCommentsFiles(accumulated, targetComments);
     }
 
-    // 2. Fetch 0000000 fallback comments file if target was a specific commit hash; migrate & DELETE!
-    if (targetPath !== zeroPath) {
-      const zeroComments = await this.fetchPathContent(key.owner, key.repo, zeroPath);
-      if (zeroComments) {
-        accumulated = mergeCommentsFiles(accumulated, zeroComments);
-        await this.write(key, accumulated);
-        await this.deleteFileFromRef(key.owner, key.repo, zeroPath);
+    // 2. Fetch legacy un-hashed comments file if present; migrate & DELETE immediately!
+    if (targetPath !== legacyPath) {
+      const legacyComments = await this.fetchPathContent(key.owner, key.repo, legacyPath);
+      if (legacyComments) {
+        if (!targetComments) {
+          accumulated = mergeCommentsFiles(accumulated, legacyComments);
+          await this.write(key, accumulated);
+        }
+        await this.deleteFileFromRef(key.owner, key.repo, legacyPath);
       }
-    }
-
-    // 3. Fetch legacy un-hashed comments file if present; migrate & DELETE immediately!
-    const legacyComments = await this.fetchPathContent(key.owner, key.repo, legacyPath);
-    if (legacyComments) {
-      accumulated = mergeCommentsFiles(accumulated, legacyComments);
-      await this.write(key, accumulated);
-      await this.deleteFileFromRef(key.owner, key.repo, legacyPath);
     }
 
     // If comments were loaded, return the merged set
@@ -198,7 +218,7 @@ export class GitHubOrphanRefBackend implements CommentBackend {
       return accumulated;
     }
 
-    // 3. Rename trace fallback via GitHub Commits API
+    // 4. Rename trace fallback via GitHub Commits API
     const traceResult = await this.traceAndMigrateRename(key);
     if (traceResult) {
       return mergeCommentsFiles(accumulated, traceResult);
@@ -321,11 +341,44 @@ export class GitHubOrphanRefBackend implements CommentBackend {
   async write(
     key: CommentStorageKey,
     data: CommentsFile,
-    previousData?: CommentsFile | null
+    previousData?: CommentsFile | null,
+    deletedIds?: Set<string>
   ): Promise<void> {
     const commentsPath = commentsFilePathForMarkdown(key.filePath, key.commitHash);
     const maxRetries = 5;
     let currentData = data;
+
+    const deleted = new Set<string>(deletedIds || []);
+    if (previousData) {
+      const currentInlineIds = new Set(data.inline_comments.map((c) => c.id));
+      for (const prevC of previousData.inline_comments || []) {
+        if (!currentInlineIds.has(prevC.id)) {
+          deleted.add(prevC.id);
+        }
+        const currentReplyIds = new Set(
+          (data.inline_comments.find((c) => c.id === prevC.id)?.replies || []).map((r) => r.id)
+        );
+        for (const prevR of prevC.replies || []) {
+          if (!currentReplyIds.has(prevR.id)) {
+            deleted.add(prevR.id);
+          }
+        }
+      }
+      const currentPageIds = new Set(data.page_comments.map((c) => c.id));
+      for (const prevC of previousData.page_comments || []) {
+        if (!currentPageIds.has(prevC.id)) {
+          deleted.add(prevC.id);
+        }
+        const currentReplyIds = new Set(
+          (data.page_comments.find((c) => c.id === prevC.id)?.replies || []).map((r) => r.id)
+        );
+        for (const prevR of prevC.replies || []) {
+          if (!currentReplyIds.has(prevR.id)) {
+            deleted.add(prevR.id);
+          }
+        }
+      }
+    }
 
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
@@ -344,7 +397,7 @@ export class GitHubOrphanRefBackend implements CommentBackend {
 
         try {
           const remote = await this.read(key);
-          currentData = mergeCommentsFiles(currentData, remote);
+          currentData = mergeCommentsFiles(currentData, remote, deleted);
         } catch {
           /* ignore read failure on retry */
         }

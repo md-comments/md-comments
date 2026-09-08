@@ -534,24 +534,34 @@ function getCommitHashFromDom(): string | null {
   return null;
 }
 
+const resolvedBlobCommitHashCache = new Map<string, string>();
+
 async function resolveBlobCommitHash(
   owner: string,
   repo: string,
   branch: string
 ): Promise<string | undefined> {
+  const cacheKey = `${owner}/${repo}/${branch}`;
+  if (resolvedBlobCommitHashCache.has(cacheKey)) {
+    return resolvedBlobCommitHashCache.get(cacheKey);
+  }
+
   // 1. If branch is already a commit SHA (40-char or 7+ char hex)
   if (/^[0-9a-f]{7,40}$/i.test(branch)) {
+    resolvedBlobCommitHashCache.set(cacheKey, branch);
     return branch;
   }
 
   // 2. Check DOM fast-path (no network round-trip)
   const domSha = getCommitHashFromDom();
   if (domSha) {
+    resolvedBlobCommitHashCache.set(cacheKey, domSha);
     return domSha;
   }
 
   // 3. Check cached repoInfo
   if (repoInfo?.headOid) {
+    resolvedBlobCommitHashCache.set(cacheKey, repoInfo.headOid);
     return repoInfo.headOid;
   }
 
@@ -564,8 +574,14 @@ async function resolveBlobCommitHash(
       const info = await githubApi.getRepoInfo(owner, repo, branch);
       if (info) {
         repoInfo = info;
-        if (info.headOid) return info.headOid;
-        if (info.defaultBranchHeadOid) return info.defaultBranchHeadOid;
+        if (info.headOid) {
+          resolvedBlobCommitHashCache.set(cacheKey, info.headOid);
+          return info.headOid;
+        }
+        if (info.defaultBranchHeadOid) {
+          resolvedBlobCommitHashCache.set(cacheKey, info.defaultBranchHeadOid);
+          return info.defaultBranchHeadOid;
+        }
       }
     } catch (err) {
       console.warn('[md-comments] Failed to fetch commit hash via getRepoInfo:', err);
@@ -958,6 +974,15 @@ async function loadDocumentComments(meta: ParsedUrl & { type: 'blob' }) {
       );
       if (rawMarkdown) {
         parsedAnchors = parseMarkdownAnchors(rawMarkdown);
+        if (loadedComments && loadedComments.inline_comments) {
+          const placements = placeInlineComments(parsedAnchors, loadedComments.inline_comments);
+          loadedComments.inline_comments.forEach((c) => {
+            const placement = placements.find((p) => p.comment.id === c.id);
+            if (placement) {
+              c.orphaned = isOrphanedPlacement(parsedAnchors, placement);
+            }
+          });
+        }
       }
     } catch (err) {
       console.warn('[md-comments] Failed to fetch raw file anchors:', err);
@@ -4390,7 +4415,11 @@ function findHeadingContext(el: HTMLElement): string {
   return '';
 }
 
-async function commitCommentFileChanges(updatedComments: CommentsFile, _action: string) {
+async function commitCommentFileChanges(
+  updatedComments: CommentsFile,
+  _action: string,
+  deletedIds?: Set<string>
+) {
   const meta = parseGitHubUrl(window.location.href);
   if (!meta || meta.type !== 'blob') {
     loadedComments = updatedComments;
@@ -4427,7 +4456,7 @@ async function commitCommentFileChanges(updatedComments: CommentsFile, _action: 
   renderSidebarComments();
 
   try {
-    await gitRefBackend.write(key, updatedComments, previousComments);
+    await gitRefBackend.write(key, updatedComments, previousComments, deletedIds);
   } catch (err) {
     console.error('[md-comments] Error writing comment to GitHub orphan ref:', err);
     const errMsg = err instanceof Error ? err.message : String(err);
@@ -4605,7 +4634,7 @@ async function deleteComment(commentId: string, _type: 'inline' | 'page') {
     inline_comments: loadedComments.inline_comments.filter((c) => c.id.trim() !== targetId),
     page_comments: loadedComments.page_comments.filter((c) => c.id.trim() !== targetId),
   };
-  await commitCommentFileChanges(updated, 'delete comment');
+  await commitCommentFileChanges(updated, 'delete comment', new Set([targetId]));
 }
 
 async function editReply(
@@ -4668,7 +4697,7 @@ async function deleteReply(commentId: string, replyId: string, _type: 'inline' |
     inline_comments: filterReplies(loadedComments.inline_comments),
     page_comments: filterReplies(loadedComments.page_comments),
   };
-  await commitCommentFileChanges(updated, 'delete reply');
+  await commitCommentFileChanges(updated, 'delete reply', new Set([targetReplyId]));
 }
 
 async function toggleResolve(commentId: string, type: 'inline' | 'page', resolved: boolean) {

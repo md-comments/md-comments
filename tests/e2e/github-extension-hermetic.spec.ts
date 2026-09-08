@@ -31,6 +31,9 @@ test.describe('GitHub Extension: Hermetic Playwright E2E Lifecycle', () => {
     const filePath = 'README.md';
     const githubBlobUrl = `https://github.com/${owner}/${repo}/blob/main/${filePath}`;
 
+    const interceptedApiUrls: string[] = [];
+    const interceptedPostBodies: string[] = [];
+
     await test.step('1. Setup hermetic routing for GitHub DOM and API', async () => {
       // Intercept github.com requests to serve fixture HTML and raw markdown
       await context.route('https://github.com/**', async (route) => {
@@ -65,6 +68,11 @@ test.describe('GitHub Extension: Hermetic Playwright E2E Lifecycle', () => {
         const headers = route.request().headers();
         const method = route.request().method();
         const postData = route.request().postData();
+
+        interceptedApiUrls.push(reqUrl.pathname + reqUrl.search);
+        if (postData) {
+          interceptedPostBodies.push(postData);
+        }
 
         try {
           const res = await fetch(targetUrl, {
@@ -344,6 +352,67 @@ test.describe('GitHub Extension: Hermetic Playwright E2E Lifecycle', () => {
       await expect(testPage.locator('.md-comments-submitting-line')).toHaveCount(0, {
         timeout: 10000,
       });
+    });
+
+    await test.step('11. Assert comment and reply deletion persistence across page refresh and zero 0000000 requests', async () => {
+      // Auto-accept confirmation dialogs for deletion
+      testPage.on('dialog', async (dialog) => {
+        await dialog.accept();
+      });
+
+      const pageCard = testPage.locator('#tab-page .md-comments-card').first();
+      const replyItem = pageCard.locator('.reply-item').first();
+      const deleteReplyBtn = replyItem.locator('.delete-reply-btn');
+      await expect(deleteReplyBtn).toBeVisible();
+      await deleteReplyBtn.click();
+
+      // Assert reply item disappears immediately
+      await expect(replyItem).toBeHidden();
+
+      // Wait for background write to finish
+      await expect(testPage.locator('.md-comments-submitting-line')).toHaveCount(0, {
+        timeout: 10000,
+      });
+
+      // Now delete the parent comment
+      const deleteCommentBtn = pageCard.locator('.delete-comment-btn');
+      await expect(deleteCommentBtn).toBeVisible();
+      await deleteCommentBtn.click();
+
+      // Assert comment card disappears immediately
+      await expect(pageCard).toBeHidden();
+
+      // Wait for background write to finish
+      await expect(testPage.locator('.md-comments-submitting-line')).toHaveCount(0, {
+        timeout: 10000,
+      });
+
+      // Refresh the page
+      await testPage.reload({ waitUntil: 'load' });
+      await expect(testPage.locator('.markdown-body')).toBeVisible();
+
+      // Wait for extension FAB and open drawer
+      const fab = testPage.locator('#md-comments-fab-toggle');
+      await expect(fab).toBeVisible({ timeout: 15000 });
+      await fab.click();
+
+      const drawer = testPage.locator('.md-comments-drawer, #md-comments-sidebar');
+      await expect(drawer).toBeVisible({ timeout: 5000 });
+
+      // Switch to Page Comments tab
+      const pageTabBtn = testPage.locator('.tab-btn[data-tab="page"]');
+      await pageTabBtn.click();
+
+      // Assert the deleted comment is completely gone (not resurrected)
+      const pageCardsAfterReload = testPage.locator('#tab-page .md-comments-card');
+      await expect(pageCardsAfterReload).toHaveCount(0);
+
+      // Verify that 0000000 was NEVER requested or sent anywhere
+      const hasZeroHashUrl = interceptedApiUrls.some((u) => u.includes('0000000'));
+      expect(hasZeroHashUrl).toBe(false);
+
+      const hasZeroHashBody = interceptedPostBodies.some((b) => b && b.includes('0000000'));
+      expect(hasZeroHashBody).toBe(false);
     });
   });
 });

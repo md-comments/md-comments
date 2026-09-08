@@ -3,7 +3,8 @@ import type { CommentsFile } from '../../shared/types';
 import { logDebug } from './logger';
 
 function keyToString(key: CommentStorageKey): string {
-  return `${key.owner}/${key.repo}/${key.filePath}`;
+  const hash = key.commitHash ? `:${key.commitHash.slice(0, 7)}` : '';
+  return `${key.owner}/${key.repo}/${key.filePath}${hash}`;
 }
 
 const DEFAULT_TTL_MS = 15000; // 15 seconds cache TTL

@@ -394,7 +394,7 @@
       .replace(/^\//, '')
       .replace(/\.html?$/i, '')
       .replace(/\.(?:[a-f0-9]{7,40}\.)?comments\.(?:yml|yaml)$/i, '');
-    return `${clean}.0000000.comments.yml`;
+    return `${clean}.comments.yml`;
   }
 
   // ==========================================

@@ -10,7 +10,12 @@ export interface CommentStorageKey {
 
 export interface CommentBackend {
   read(key: CommentStorageKey): Promise<CommentsFile>;
-  write(key: CommentStorageKey, data: CommentsFile): Promise<void>;
+  write(
+    key: CommentStorageKey,
+    data: CommentsFile,
+    previousData?: CommentsFile | null,
+    deletedIds?: Set<string>
+  ): Promise<void>;
   addComment?(
     key: CommentStorageKey,
     type: 'inline' | 'page',
