@@ -35,7 +35,7 @@
     "test": "pnpm quality:build && vitest run",
     "test:watch": "pnpm quality:build && vitest",
     "test:coverage": "pnpm quality:build && vitest run --coverage",
-    "test:e2e": "playwright test tests/e2e/",
+    "test:e2e": "playwright test tests/e2e/ --project=chromium-headless --project=webkit",
     "test:e2e:embed": "playwright test tests/e2e/embedded.spec.ts",
     "test:e2e:starlight": "playwright test tests/e2e/starlight.spec.ts",
     "test:e2e:safari": "playwright test tests/e2e/safari-extension.spec.ts --project=webkit",
