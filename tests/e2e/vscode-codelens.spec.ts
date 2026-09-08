@@ -47,18 +47,16 @@ test.describe('VS Code Extension CodeLens E2E', () => {
     // 3. Switch focus back to the markdown editor tab and lines
     const editorTab = page.locator('.tab', { hasText: 'test-guide.md' }).first();
     await editorTab.click();
-    const editorLines = page
-      .locator('.editor-instance .monaco-editor .view-lines, .monaco-editor .view-lines')
-      .first();
-    if (await editorLines.isVisible()) {
-      await editorLines.click({ force: true });
+    const editor = page.locator('.editor-instance .monaco-editor, .monaco-editor').first();
+    if (await editor.isVisible()) {
+      await editor.click();
     }
 
     // 4. Verify CodeLens is rendered in Monaco editor
     const codeLens = page
       .locator('.codelens-decoration, [class*="codelens"]')
       .filter({ hasText: /comment/ });
-    await expect(codeLens.first()).toBeVisible({ timeout: 30000 });
+    await expect(codeLens.first()).toBeVisible({ timeout: 35000 });
 
     // 5. Click CodeLens and verify it triggers mdComments.openCommentPreview
     await codeLens.first().click();

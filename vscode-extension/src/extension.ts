@@ -49,10 +49,22 @@ async function updateStatusBar(): Promise<void> {
 
 async function refreshPreview(): Promise<void> {
   logDebug('refreshPreview triggered');
-  await warmAuthorCache();
-  await updateStatusBar();
-  await vscode.commands.executeCommand('markdown.preview.refresh');
   globalCodeLensProvider?.refresh();
+  try {
+    await warmAuthorCache();
+  } catch (err) {
+    logError('refreshPreview warmAuthorCache failed', err);
+  }
+  try {
+    await updateStatusBar();
+  } catch (err) {
+    logError('refreshPreview updateStatusBar failed', err);
+  }
+  try {
+    await vscode.commands.executeCommand('markdown.preview.refresh');
+  } catch (err) {
+    logDebug('refreshPreview markdown.preview.refresh failed or preview not open', err);
+  }
 }
 
 async function handlePreviewAction(raw: unknown): Promise<void> {

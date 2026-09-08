@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { executeCommentAction, type CommentActionMessage } from './commentActions';
 import { renderMarkdownWithComments } from './markdownRender';
 import { escapeHtml } from '../../shared/html';
-import { logDebug } from './logger';
+import { logDebug, logError } from './logger';
 
 const VIEW_TYPE = 'mdComments.commentPreview';
 
@@ -78,8 +78,16 @@ export class CommentPreviewPanel {
         logDebug('CommentPreviewPanel webview message received:', msg);
         await executeCommentAction(this.mdUri, msg);
         await this.refresh(false); // optimistic UI refresh
-        await vscode.commands.executeCommand('markdown.preview.refresh');
-        await vscode.commands.executeCommand('mdComments.refreshPreview');
+        try {
+          await vscode.commands.executeCommand('mdComments.refreshPreview');
+        } catch (err) {
+          logError('Failed to execute mdComments.refreshPreview:', err);
+        }
+        try {
+          await vscode.commands.executeCommand('markdown.preview.refresh');
+        } catch {
+          // ignore if native preview is not active
+        }
       },
       undefined,
       this.disposables

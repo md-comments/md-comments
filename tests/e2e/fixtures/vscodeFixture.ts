@@ -36,15 +36,23 @@ export const test = base.extend<{ vscode: VSCodeTestContext }>({
 
     const userSettingsDir = path.join(userDataDir, 'User');
     await fs.mkdir(userSettingsDir, { recursive: true });
-    await fs.writeFile(
-      path.join(userSettingsDir, 'settings.json'),
-      JSON.stringify({
+    const settingsPayload = JSON.stringify(
+      {
         'editor.codeLens': true,
         'diffEditor.codeLens': true,
         'markdown.editor.codeLens.enabled': true,
-      }),
-      'utf8'
+        '[markdown]': {
+          'editor.codeLens': true,
+        },
+      },
+      null,
+      2
     );
+    await fs.writeFile(path.join(userSettingsDir, 'settings.json'), settingsPayload, 'utf8');
+
+    const workspaceSettingsDir = path.join(workspaceDir, '.vscode');
+    await fs.mkdir(workspaceSettingsDir, { recursive: true });
+    await fs.writeFile(path.join(workspaceSettingsDir, 'settings.json'), settingsPayload, 'utf8');
 
     const testDocPath = path.join(workspaceDir, 'test-guide.md');
     const sampleMarkdown = [

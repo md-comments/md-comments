@@ -161,7 +161,11 @@ export async function executeCommentAction(
         globalOptimisticStore.invalidate(key);
       }
       await readComments(mdUri, true);
-      await vscode.commands.executeCommand('markdown.preview.refresh');
+      try {
+        await vscode.commands.executeCommand('markdown.preview.refresh');
+      } catch {
+        // ignore if native preview is not active
+      }
       vscode.window.showInformationMessage('Markdown Comments: Comments refreshed');
       break;
     }
