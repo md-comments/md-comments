@@ -30,3 +30,4 @@ Wraps the Safari WebExtension in a native macOS companion application (`Markdown
 - When the native build pipeline packages the macOS bundle
 - Then the `Markdown Comments Extension.appex` is embedded in the application's `PlugIns/` directory
 - And the bundle is ad-hoc signed so users can enable it with Safari's "Allow Unsigned Extensions"
+- And the native companion app displays 4 setup steps including granting permissions on `github.com`

@@ -127,4 +127,38 @@ test.describe('Safari WebExtension & WebKit Lifecycle', () => {
     const ua = await page.evaluate(() => navigator.userAgent);
     expect(ua.length).toBeGreaterThan(0);
   });
+
+  test('FEAT-EXT-SAFARI-APPEX: Verifies macOS companion app onboarding defines 4-step activation instructions', async () => {
+    allure.epic('Safari Extension');
+    allure.feature('FEAT-EXT-SAFARI-APPEX');
+    allure.story('Companion App 4-Step Instructions & GitHub Permissions');
+
+    const mainSwiftPath = path.resolve(process.cwd(), 'safari-extension/src/App/main.swift');
+    expect(fs.existsSync(mainSwiftPath)).toBe(true);
+    const mainSwiftContent = fs.readFileSync(mainSwiftPath, 'utf8');
+
+    // Verify all 4 steps are declared in order in main.swift
+    expect(mainSwiftContent).toContain('createStepRow(\n            number: "1"');
+    expect(mainSwiftContent).toContain('title: "Allow Unsigned Extensions"');
+    expect(mainSwiftContent).toContain('createStepRow(\n            number: "2"');
+    expect(mainSwiftContent).toContain('title: "Enable Extension"');
+    expect(mainSwiftContent).toContain('createStepRow(\n            number: "3"');
+    expect(mainSwiftContent).toContain('title: "One-Click Direct Load (Instant Alternative)"');
+    expect(mainSwiftContent).toContain('createStepRow(\n            number: "4"');
+    expect(mainSwiftContent).toContain('title: "Grant GitHub Permissions"');
+    expect(mainSwiftContent).toContain('Always Allow on This Website');
+    expect(mainSwiftContent).toContain('let windowHeight: CGFloat = 500');
+
+    // Verify build script contains step 4 instructions
+    const buildScriptPath = path.resolve(process.cwd(), 'scripts/build-safari-app.sh');
+    const buildScriptContent = fs.readFileSync(buildScriptPath, 'utf8');
+    expect(buildScriptContent).toContain(
+      '4. On github.com, click extension icon -> Always Allow on This Website'
+    );
+
+    // Verify documentation contains step 4
+    const docPath = path.resolve(process.cwd(), 'docs/safari-extension-guide.md');
+    const docContent = fs.readFileSync(docPath, 'utf8');
+    expect(docContent).toContain('**Step 4: Grant GitHub Permissions**');
+  });
 });

@@ -18,7 +18,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         let windowWidth: CGFloat = 520
-        let windowHeight: CGFloat = 450
+        let windowHeight: CGFloat = 500
 
         window = NSWindow(
             contentRect: NSRect(x: 0, y: 0, width: windowWidth, height: windowHeight),
@@ -134,6 +134,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         )
         boxStack.addArrangedSubview(step3)
         step3.widthAnchor.constraint(equalTo: boxStack.widthAnchor, constant: -32).isActive = true
+
+        // Step 4
+        let step4 = createStepRow(
+            number: "4",
+            title: "Grant GitHub Permissions",
+            detail: "Navigate to https://github.com, click the Markdown Comments icon in Safari's toolbar, and select \"Always Allow on This Website\"."
+        )
+        boxStack.addArrangedSubview(step4)
+        step4.widthAnchor.constraint(equalTo: boxStack.widthAnchor, constant: -32).isActive = true
 
         box.contentView = NSView()
         box.contentView!.addSubview(boxStack)

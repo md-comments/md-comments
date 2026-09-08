@@ -34,7 +34,9 @@ Safari requires user permission before activating self-signed extensions:
 2. **Step 2: Enable Markdown Comments**:
    - Open **Safari → Settings → Extensions**.
    - Check the checkbox next to **Markdown Comments**.
-3. **Step 3: Grant GitHub Permission**:
+3. **Step 3: One-Click Direct Load (Instant Alternative)**:
+   - In Safari's menu bar: **Develop → Add Temporary Extension…** then select the extension folder (`PlugIns/Markdown Comments Extension.appex/Contents/Resources` or `chrome-extension/dist/safari`).
+4. **Step 4: Grant GitHub Permissions**:
    - Navigate to any pull request or markdown file on `https://github.com`.
    - Click the **Markdown Comments** icon in the Safari toolbar / address bar and select **"Always Allow on This Website"** (or "Always Allow on Every Website").
 
