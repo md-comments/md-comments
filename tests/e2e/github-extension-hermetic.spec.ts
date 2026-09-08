@@ -248,5 +248,102 @@ test.describe('GitHub Extension: Hermetic Playwright E2E Lifecycle', () => {
       );
       expect(inlineNotif).toBeDefined();
     });
+
+    await test.step('9. Assert optimistic comment editing with progress line', async () => {
+      // Switch back to page tab
+      const pageTabBtn = testPage.locator('.tab-btn[data-tab="page"]');
+      await pageTabBtn.click();
+
+      const pageCard = testPage.locator('#tab-page .md-comments-card').first();
+      await expect(pageCard).toBeVisible();
+
+      // Click Edit Comment button
+      const editBtn = pageCard.locator('.edit-comment-btn');
+      await expect(editBtn).toBeVisible();
+      await editBtn.click();
+
+      // Assert edit form and textarea appear
+      const editTextarea = pageCard.locator('.comment-edit-textarea');
+      await expect(editTextarea).toBeVisible();
+
+      const updatedText =
+        'Hermetic Playwright E2E Comment (Edited Optimistically with Progress Line)';
+      await editTextarea.fill(updatedText);
+
+      const saveBtn = pageCard.locator('.edit-save-btn');
+      await expect(saveBtn).toBeVisible();
+      await saveBtn.click();
+
+      // Assert editable form immediately disappears without waiting for async git write
+      await expect(testPage.locator('.comment-edit-textarea')).toHaveCount(0);
+      await expect(testPage.locator('.comment-edit-form')).toHaveCount(0);
+
+      // Assert edited text rendered immediately in card body
+      const cardBody = pageCard.locator('.md-comments-card-body');
+      await expect(cardBody).toContainText('(Edited Optimistically with Progress Line)');
+
+      // Submitting progress line disappears once background write completes
+      await expect(testPage.locator('.md-comments-submitting-line')).toHaveCount(0, {
+        timeout: 10000,
+      });
+
+      // Verify ref was updated on mock server
+      await expect
+        .poll(
+          async () => {
+            const refRes = await fetch(
+              `${mockUrl}/repos/${owner}/${repo}/git/refs/md-comments/data`
+            );
+            if (!refRes.ok) return null;
+            const refData: any = await refRes.json();
+            return refData.object?.sha;
+          },
+          {
+            timeout: 10000,
+            intervals: [500, 1000],
+          }
+        )
+        .toBeTruthy();
+    });
+
+    await test.step('10. Assert optimistic reply editing with progress line and keyboard shortcut', async () => {
+      const pageCard = testPage.locator('#tab-page .md-comments-card').first();
+      const replyInput = pageCard.locator('.reply-input');
+      await replyInput.click();
+
+      const replyComposer = pageCard.locator('.reply-composer-wrapper textarea');
+      await expect(replyComposer).toBeVisible();
+      await replyComposer.fill('Original thread reply message');
+
+      const submitReplyBtn = pageCard.locator('.reply-composer-wrapper .fallback-submit-btn');
+      await submitReplyBtn.click();
+
+      const replyItem = pageCard.locator('.reply-item').first();
+      await expect(replyItem).toBeVisible({ timeout: 10000 });
+      await expect(replyItem.locator('.reply-body')).toContainText('Original thread reply message');
+
+      // Edit the reply
+      const editReplyBtn = replyItem.locator('.edit-reply-btn');
+      await editReplyBtn.click();
+
+      const editReplyTextarea = replyItem.locator('.reply-edit-textarea');
+      await expect(editReplyTextarea).toBeVisible();
+      await editReplyTextarea.fill('Updated reply text (Optimistically Saved)');
+
+      // Submit edit using Control+Enter keyboard shortcut
+      await editReplyTextarea.press('Control+Enter');
+
+      // Assert reply edit form immediately dismissed
+      await expect(testPage.locator('.reply-edit-textarea')).toHaveCount(0);
+      await expect(testPage.locator('.reply-edit-form')).toHaveCount(0);
+
+      // Assert updated reply text immediately visible
+      await expect(replyItem.locator('.reply-body')).toContainText('(Optimistically Saved)');
+
+      // Submitting progress line disappears once background commit completes
+      await expect(testPage.locator('.md-comments-submitting-line')).toHaveCount(0, {
+        timeout: 10000,
+      });
+    });
   });
 });

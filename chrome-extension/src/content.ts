@@ -3297,30 +3297,54 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
           }
         });
 
-        saveBtn.addEventListener('click', async (e) => {
-          e.preventDefault();
-          e.stopPropagation();
+        const handleSave = async () => {
           const newBody = textarea.value.trim();
           if (!newBody) return;
 
-          saveBtn.disabled = true;
-          saveBtn.classList.add('loading');
-          cancelBtn.style.display = 'none';
-          textarea.readOnly = true;
+          // Optimistic UI update:
+          // 1. Clear draft immediately
+          if (editDraftKey) {
+            saveDraft(editDraftKey, '');
+          }
+
+          // 2. Immediately dismiss editable form and render updated comment body
+          bodyEl.setAttribute('data-raw-body', newBody);
+          bodyEl.innerHTML = renderCommentBody(newBody);
+
+          // 3. Immediately show the progress line on the card
+          pendingSubmissionIds.add(commentId);
+          if (!card.querySelector(`#submitting-line-${commentId}`)) {
+            const line = document.createElement('div');
+            line.className = 'md-comments-submitting-line';
+            line.id = `submitting-line-${commentId}`;
+            card.appendChild(line);
+          }
 
           try {
             await editComment(commentId, type, newBody);
-            if (editDraftKey) {
-              saveDraft(editDraftKey, '');
-            }
-            bodyEl.setAttribute('data-raw-body', newBody);
-            bodyEl.innerHTML = renderCommentBody(newBody);
           } catch (err) {
             alert('Failed to edit comment: ' + err);
-            saveBtn.disabled = false;
-            saveBtn.classList.remove('loading');
-            cancelBtn.style.display = '';
-            textarea.readOnly = false;
+            // On failure, reopen the edit form with the user's attempted newBody and restore draft
+            handleEditClick(newBody);
+            if (editDraftKey) {
+              saveDraft(editDraftKey, newBody);
+            }
+          } finally {
+            removeSubmittingProgress(commentId);
+          }
+        };
+
+        saveBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          handleSave();
+        });
+
+        textarea.addEventListener('keydown', (e: KeyboardEvent) => {
+          if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+            e.preventDefault();
+            e.stopPropagation();
+            handleSave();
           }
         });
       };
@@ -3402,30 +3426,54 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
             }
           });
 
-          saveBtn.addEventListener('click', async (e) => {
-            e.preventDefault();
-            e.stopPropagation();
+          const handleSaveReply = async () => {
             const newBody = textarea.value.trim();
             if (!newBody) return;
 
-            saveBtn.disabled = true;
-            saveBtn.classList.add('loading');
-            cancelBtn.style.display = 'none';
-            textarea.readOnly = true;
+            // Optimistic UI update:
+            // 1. Clear draft immediately
+            if (editReplyDraftKey) {
+              saveDraft(editReplyDraftKey, '');
+            }
+
+            // 2. Immediately dismiss editable form and render updated reply body
+            bodyEl.setAttribute('data-raw-body', newBody);
+            bodyEl.innerHTML = renderCommentBody(newBody);
+
+            // 3. Immediately show the progress line on the reply item
+            pendingSubmissionIds.add(replyId);
+            if (!replyItem.querySelector(`#submitting-line-${replyId}`)) {
+              const line = document.createElement('div');
+              line.className = 'md-comments-submitting-line';
+              line.id = `submitting-line-${replyId}`;
+              replyItem.appendChild(line);
+            }
 
             try {
               await editReply(commentId, replyId, type, newBody);
-              if (editReplyDraftKey) {
-                saveDraft(editReplyDraftKey, '');
-              }
-              bodyEl.setAttribute('data-raw-body', newBody);
-              bodyEl.innerHTML = renderCommentBody(newBody);
             } catch (err) {
               alert('Failed to edit reply: ' + err);
-              saveBtn.disabled = false;
-              saveBtn.classList.remove('loading');
-              cancelBtn.style.display = '';
-              textarea.readOnly = false;
+              // On failure, reopen the edit form with the user's attempted newBody and restore draft
+              handleEditReplyClick(newBody);
+              if (editReplyDraftKey) {
+                saveDraft(editReplyDraftKey, newBody);
+              }
+            } finally {
+              removeSubmittingProgress(replyId);
+            }
+          };
+
+          saveBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handleSaveReply();
+          });
+
+          textarea.addEventListener('keydown', (e: KeyboardEvent) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+              e.preventDefault();
+              e.stopPropagation();
+              handleSaveReply();
             }
           });
         };
@@ -4526,6 +4574,7 @@ async function saveReply(commentId: string, type: 'inline' | 'page', body: strin
 }
 
 async function editComment(commentId: string, type: 'inline' | 'page', body: string) {
+  pendingSubmissionIds.add(commentId);
   const updated = { ...loadedComments };
   if (type === 'inline') {
     updated.inline_comments = updated.inline_comments.map((c) => {
@@ -4542,7 +4591,11 @@ async function editComment(commentId: string, type: 'inline' | 'page', body: str
       return c;
     });
   }
-  await commitCommentFileChanges(updated, 'edit comment');
+  try {
+    await commitCommentFileChanges(updated, 'edit comment');
+  } finally {
+    removeSubmittingProgress(commentId);
+  }
 }
 
 async function deleteComment(commentId: string, _type: 'inline' | 'page') {
@@ -4561,6 +4614,7 @@ async function editReply(
   type: 'inline' | 'page',
   body: string
 ) {
+  pendingSubmissionIds.add(replyId);
   const updated = { ...loadedComments };
   if (type === 'inline') {
     updated.inline_comments = updated.inline_comments.map((c) => {
@@ -4589,7 +4643,11 @@ async function editReply(
       return c;
     });
   }
-  await commitCommentFileChanges(updated, 'edit reply');
+  try {
+    await commitCommentFileChanges(updated, 'edit reply');
+  } finally {
+    removeSubmittingProgress(replyId);
+  }
 }
 
 async function deleteReply(commentId: string, replyId: string, _type: 'inline' | 'page') {

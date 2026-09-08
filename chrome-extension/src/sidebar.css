@@ -779,6 +779,7 @@ html[data-color-mode='light'] .md-comments-scope {
 
 .reply-item {
   position: relative !important;
+  overflow: hidden !important;
   display: flex !important;
   flex-direction: row !important;
   gap: 8px !important;

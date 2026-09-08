@@ -9,10 +9,13 @@ interfaces:
 flowId: 'FLOW-COMM-EDIT'
 dependsOn:
   - 'FEAT-COMM-INLINE'
+  - 'FEAT-COMM-PROGRESS-LINE'
 implementedIn:
   - 'shared/gitRefBackend.ts'
+  - 'chrome-extension/src/content.ts'
 verifiedIn:
   - 'tests/e2e/comments.spec.ts'
+  - 'tests/e2e/github-extension-hermetic.spec.ts'
 invariants:
   - 'INV-XSS-SANITIZED'
 minCoverage: 100
@@ -22,10 +25,13 @@ minCoverage: 100
 
 ## Overview
 
-Allows comment authors to edit comment bodies in place with updated timestamp preservation.
+Allows comment authors to edit comment bodies in place with immediate optimistic UI updates, animated progress line feedback, and updated timestamp preservation.
 
 ## User Journey (Gherkin Scenarios)
 
-- Given a comment submitted by the current user
+- Given a comment or reply submitted by the current user
 - When user clicks Edit and submits updated text
-- Then the comment body is updated and rendered with an (edited) badge
+- Then the editable form immediately disappears and the updated text renders in place
+- And an active 2px progress line appears underneath the card or reply item while background persistence is in flight
+- When the background commit finishes
+- Then the progress line smoothly fades away and is removed from the card
