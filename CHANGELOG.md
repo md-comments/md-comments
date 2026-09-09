@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.1] - 2026-09-08
+
+### Added
+
+- **Safari Companion App Step 4**: Dedicated origin permission guidance in macOS companion app and setup documentation for github.com.
+- **Optimistic Editing & UI Feedback**: Real-time progress bar on comment updates, and visual loading states on floating action button and side drawer.
+- **VS Code Playwright Electron Parity**: Full cross-platform end-to-end Electron test harness with zero flaky CodeLens refreshes.
+- **Pre-Bump Regression Gate**: Automated regression test suite enforcement before any version bump or release branch cut.
+
+### Fixed
+
+- **Comment Deletion Persistence**: Prevent deleted comments from reappearing and eradicate legacy fallback `0000000` git ref hashes.
+- **CI & Release Automation**: Automated website release link synchronization and preserved production release status invariants.
+
 ## [1.3.0] - 2026-09-06
 
 ### Added

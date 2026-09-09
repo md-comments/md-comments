@@ -38,9 +38,19 @@ When cutting, promoting, or publishing a production release for `md-comments`, f
 
 ## Step-by-Step Production Release Workflow
 
-### Step 1: Version Bumping and Quality Gates
+### Step 1: Pre-Bump Full Regression & Version Bumping
 
-Ensure all versions across manifests and packages are updated:
+Before bumping any version numbers or cutting a release branch, run the mandatory full regression suite:
+
+```bash
+pnpm test:regression
+# Or run individually:
+# pnpm check && pnpm test:e2e
+```
+
+Do NOT proceed with version bumping if any check fails or errors out.
+
+Once regression passes with 0 errors, update all versions across manifests and packages:
 
 - `package.json`
 - `vscode-extension/package.json`
@@ -52,7 +62,7 @@ Ensure all versions across manifests and packages are updated:
 - `demo-astro/package.json`
 - Telemetry `serviceVersion` strings across packages
 
-Run full verification:
+Run final validation:
 
 ```bash
 pnpm check

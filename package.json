@@ -51,7 +51,8 @@
     "codegraph:status": "codegraph status",
     "codegraph:sync": "codegraph sync",
     "deps:outdated": "pnpm outdated",
-    "check": "pnpm audit --prod --audit-level high && pnpm verify:packaging && pnpm lint && pnpm format:check && pnpm typecheck && pnpm build && pnpm test:coverage"
+    "check": "pnpm audit --prod --audit-level high && pnpm verify:packaging && pnpm lint && pnpm format:check && pnpm typecheck && pnpm build && pnpm test:coverage",
+    "test:regression": "pnpm check && pnpm test:e2e"
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Markdown Comments",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "Visual inline comments on Markdown documentation across GitHub repositories powered by custom git refs — zero commits, zero PRs.",
   "permissions": ["storage"],
   "host_permissions": [

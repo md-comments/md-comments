@@ -13,3 +13,7 @@ Whenever working on release branches, publishing GitHub releases, or bumping ver
 
 3. **Asset Availability Verification**:
    - Always verify that all release assets (`Markdown-Comments-macOS.dmg`, `chrome-extension.zip`, `.vsix`, `obsidian-plugin.zip`) return HTTP 200 via `curl -ILs`.
+
+4. **Full Regression Gate Before Version Bump**:
+   - Never bump version numbers in manifests or package files without first running and passing the full regression suite (`pnpm test:regression` or `pnpm check && pnpm test:e2e`).
+   - Any failing test, type error, or coverage drop blocks version bumping immediately.
