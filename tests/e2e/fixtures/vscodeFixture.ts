@@ -100,6 +100,10 @@ export const test = base.extend<{ vscode: VSCodeTestContext }>({
       ],
     });
 
+    const childProc = electronApp.process();
+    childProc.stdout?.on('data', (d) => process.stdout.write(d));
+    childProc.stderr?.on('data', (d) => process.stderr.write(d));
+
     const page = await electronApp.firstWindow();
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.waitForLoadState('domcontentloaded');
@@ -127,6 +131,9 @@ export const test = base.extend<{ vscode: VSCodeTestContext }>({
       await openCommandPalette();
       await page.keyboard.type(commandTitle, { delay: 30 });
       await page.keyboard.press('Enter');
+      await page
+        .waitForSelector('.quick-input-widget', { state: 'hidden', timeout: 5000 })
+        .catch(() => {});
     };
 
     // Helper to open comment preview panel

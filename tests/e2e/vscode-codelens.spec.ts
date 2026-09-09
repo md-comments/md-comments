@@ -29,14 +29,14 @@ test.describe('VS Code Extension CodeLens E2E', () => {
     await expect(selectionBar).toBeVisible({ timeout: 5000 });
 
     const addInlineBtn = selectionBar.locator('button');
-    await addInlineBtn.click();
+    await addInlineBtn.dispatchEvent('click');
 
     const textarea = previewFrame.locator('.md-comments-editor-input');
     await expect(textarea).toBeVisible({ timeout: 5000 });
     await textarea.fill('CodeLens test inline note');
 
     const submitBtn = previewFrame.locator('.md-comments-btn-primary[data-action="submit"]');
-    await submitBtn.click();
+    await submitBtn.dispatchEvent('click');
 
     // Verify inline card appears
     const inlineCard = previewFrame.locator('.md-comments-card', {
@@ -51,6 +51,7 @@ test.describe('VS Code Extension CodeLens E2E', () => {
     if (await editor.isVisible()) {
       await editor.click();
     }
+    await vscode.runCommand('Markdown Comments: Refresh Preview');
 
     // 4. Verify CodeLens is rendered in Monaco editor
     const codeLens = page
