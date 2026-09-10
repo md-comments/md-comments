@@ -199,7 +199,25 @@ export function activate(context: vscode.ExtensionContext): {
           doc = vscode.window.activeTextEditor?.document;
         }
 
+        const targetUri = doc?.uri || (uriArg instanceof vscode.Uri ? uriArg : undefined);
         logInfo('Command mdComments.openCommentPreview invoked, doc exists:', !!doc);
+
+        const previewMode = vscode.workspace
+          .getConfiguration('mdComments')
+          .get<string>('previewMode', 'standalone');
+
+        if (previewMode === 'builtin') {
+          try {
+            await vscode.commands.executeCommand('markdown.showPreviewToSide', targetUri);
+            return;
+          } catch (err) {
+            logError(
+              'Failed to open native markdown preview to side, falling back to standalone:',
+              err
+            );
+          }
+        }
+
         if (!doc || (doc.languageId !== 'markdown' && !doc.uri.path.endsWith('.md'))) {
           vscode.window.showWarningMessage('Open a Markdown (.md) file first');
           return;
@@ -209,14 +227,46 @@ export function activate(context: vscode.ExtensionContext): {
       }
     ),
     vscode.commands.registerCommand(
+      'mdComments.openStandaloneCommentPreview',
+      async (uriArg?: vscode.Uri) => {
+        let doc: vscode.TextDocument | undefined;
+        if (uriArg && uriArg instanceof vscode.Uri) {
+          try {
+            doc = await vscode.workspace.openTextDocument(uriArg);
+          } catch (err) {
+            logError('Failed to open document from URI arg:', err);
+          }
+        }
+        if (!doc) {
+          doc = vscode.window.activeTextEditor?.document;
+        }
+        if (!doc || (doc.languageId !== 'markdown' && !doc.uri.path.endsWith('.md'))) {
+          vscode.window.showWarningMessage('Open a Markdown (.md) file first');
+          return;
+        }
+        CommentPreviewPanel.show(context.extensionUri, doc, vscode.ViewColumn.Beside);
+        logInfo(`Opened standalone comment preview panel for ${doc.uri.fsPath}`);
+      }
+    ),
+    vscode.commands.registerCommand(
       'mdComments.toggleCommentPreview',
       async (uriArg?: vscode.Uri) => {
+        const previewMode = vscode.workspace
+          .getConfiguration('mdComments')
+          .get<string>('previewMode', 'standalone');
+
         const editor = vscode.window.activeTextEditor;
         const targetUri = uriArg || editor?.document.uri;
         if (!targetUri) {
           vscode.window.showWarningMessage('Open a Markdown (.md) file first');
           return;
         }
+
+        if (previewMode === 'builtin') {
+          await vscode.commands.executeCommand('markdown.showPreviewToSide', targetUri);
+          return;
+        }
+
         if (CommentPreviewPanel.isOpenForUri(targetUri)) {
           CommentPreviewPanel.closeForUri(targetUri);
         } else {

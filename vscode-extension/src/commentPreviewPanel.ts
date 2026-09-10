@@ -118,6 +118,9 @@ export class CommentPreviewPanel {
     const cssUri = this.panel.webview.asWebviewUri(
       vscode.Uri.joinPath(this.extensionUri, 'media', 'preview.css')
     );
+    const mdCssUri = this.panel.webview.asWebviewUri(
+      vscode.Uri.joinPath(this.extensionUri, 'media', 'vscode-markdown.css')
+    );
     const anchorsScriptUri = this.panel.webview.asWebviewUri(
       vscode.Uri.joinPath(this.extensionUri, 'media', 'inlineAnchors.js')
     );
@@ -138,6 +141,16 @@ export class CommentPreviewPanel {
     );
     const mdPath = this.mdUri.fsPath;
 
+    const themeKind = vscode.window.activeColorTheme.kind;
+    const themeClass =
+      themeKind === vscode.ColorThemeKind.Light
+        ? 'vscode-light'
+        : themeKind === vscode.ColorThemeKind.HighContrastLight
+          ? 'vscode-high-contrast vscode-high-contrast-light'
+          : themeKind === vscode.ColorThemeKind.HighContrast
+            ? 'vscode-high-contrast vscode-high-contrast-dark'
+            : 'vscode-dark';
+
     this.panel.webview.html = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -145,9 +158,10 @@ export class CommentPreviewPanel {
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src data: https://avatars.githubusercontent.com; style-src ${this.panel.webview.cspSource} 'unsafe-inline'; script-src 'nonce-${nonce}';">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="${cssUri}">
-  <style>body { margin: 0; padding: 0; } .md-comments-document { padding: 1rem 2rem 2rem; }</style>
+  <link rel="stylesheet" href="${mdCssUri}">
+  <style>body { margin: 0; padding: 0; }</style>
 </head>
-<body data-md-webview="true" data-md-md-path="${escapeHtml(mdPath)}">
+<body class="${themeClass}" data-md-webview="true" data-md-md-path="${escapeHtml(mdPath)}">
   ${bodyHtml}
   <script nonce="${nonce}" src="${anchorsScriptUri}"></script>
   <script nonce="${nonce}" src="${sidebarScriptUri}"></script>

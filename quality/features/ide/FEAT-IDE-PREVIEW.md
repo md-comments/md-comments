@@ -11,7 +11,11 @@ dependsOn:
   - 'FEAT-AUTH-IDE'
 implementedIn:
   - 'vscode-extension/src/markdownItPlugin.ts'
+  - 'vscode-extension/src/markdownRender.ts'
+  - 'vscode-extension/src/commentPreviewPanel.ts'
+  - 'vscode-extension/media/vscode-markdown.css'
 verifiedIn:
+  - 'tests/vscode-markdown-plugin.test.ts'
   - 'tests/vscodeStorage.test.ts'
   - 'tests/e2e/vscode-extension-smoke.spec.ts'
   - 'tests/e2e/vscode-comment-preview.spec.ts'
@@ -31,12 +35,15 @@ minCoverage: 100
 
 ## Overview
 
-Hooks into the IDE's Markdown-it rendering pipeline to inject inline comment counters and reply previews directly inside the IDE Markdown Preview webview.
+Hooks into the IDE's Markdown rendering pipeline to provide rich GitHub/VS Code typography styling, syntax highlighting, and an in-situ comments drawer toggled via the floating MD FAB widget.
 
 ## User Journey (Gherkin Scenarios)
 
 - Given a Markdown preview pane open in the IDE
-- When the markdown-it plugin parses the document tokens
-- Then anchored comments are injected as interactive HTML widgets
-- When a user clicks a comment widget in the preview
-- Then the comments edit panel or thread drawer activates
+- When the markdown engine parses the document tokens
+- Then typography styles matching the active VS Code theme and syntax highlighting are applied
+- And anchored comments are injected alongside an interactive floating MD FAB toggle
+- When a user clicks the MD FAB widget in the preview
+- Then the comments sidebar drawer slides open smoothly
+- When a user adds, replies to, or reacts to comments
+- Then comment cards and thread updates persist and refresh live

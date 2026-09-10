@@ -6,11 +6,30 @@ import { collectGitHubLogins, warmGitHubDisplayNames } from './githubDisplayName
 import { extendMarkdownIt } from './markdownItPlugin';
 import { readComments } from './commentStore';
 
+import hljs from 'highlight.js';
+
 let engine: InstanceType<typeof MarkdownIt> | null = null;
 
 export function getMarkdownEngine(): InstanceType<typeof MarkdownIt> {
   if (!engine) {
-    engine = new MarkdownIt({ html: true, linkify: true, typographer: true });
+    engine = new MarkdownIt({
+      html: true,
+      linkify: true,
+      typographer: true,
+      highlight: (str: string, lang: string): string => {
+        if (lang && hljs.getLanguage(lang)) {
+          try {
+            return `<pre><code class="hljs language-${engine?.utils.escapeHtml(lang) || lang}">${
+              hljs.highlight(str, { language: lang, ignoreIllegals: true }).value
+            }</code></pre>`;
+          } catch {
+            /* fall through to default escaped block */
+          }
+        }
+        const escaped = engine ? engine.utils.escapeHtml(str) : str;
+        return `<pre><code class="hljs">${escaped}</code></pre>`;
+      },
+    });
     extendMarkdownIt(engine);
   }
   return engine;

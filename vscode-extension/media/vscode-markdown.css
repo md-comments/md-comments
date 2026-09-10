@@ -1,0 +1,378 @@
+/* VS Code & GitHub-Flavored Markdown Typography and Element Styles */
+
+body {
+  font-family: var(
+    --vscode-markdown-font-family,
+    var(
+      --vscode-font-family,
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe WPC',
+      'Segoe UI',
+      system-ui,
+      'Ubuntu',
+      'Droid Sans',
+      sans-serif
+    )
+  );
+  font-size: var(--vscode-markdown-font-size, var(--vscode-font-size, 14px));
+  line-height: var(--vscode-markdown-line-height, 1.6);
+  color: var(--vscode-editor-foreground, #cccccc);
+  background-color: var(--vscode-editor-background, #1e1e1e);
+  word-wrap: break-word;
+}
+
+.md-comments-document {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1.5rem 2.5rem 3rem;
+  box-sizing: border-box;
+}
+
+/* Headings */
+.md-comments-document h1,
+.md-comments-document h2,
+.md-comments-document h3,
+.md-comments-document h4,
+.md-comments-document h5,
+.md-comments-document h6 {
+  font-weight: 600;
+  line-height: 1.25;
+  margin-top: 1.5em;
+  margin-bottom: 0.75em;
+  color: var(--vscode-editor-foreground, #ffffff);
+}
+
+.md-comments-document h1:first-child {
+  margin-top: 0.5em;
+}
+
+.md-comments-document h1 {
+  font-size: 2em;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--vscode-widget-border, rgba(128, 128, 128, 0.3));
+}
+
+.md-comments-document h2 {
+  font-size: 1.5em;
+  padding-bottom: 0.25em;
+  border-bottom: 1px solid var(--vscode-widget-border, rgba(128, 128, 128, 0.25));
+}
+
+.md-comments-document h3 {
+  font-size: 1.25em;
+}
+
+.md-comments-document h4 {
+  font-size: 1em;
+}
+
+.md-comments-document h5 {
+  font-size: 0.875em;
+}
+
+.md-comments-document h6 {
+  font-size: 0.85em;
+  color: var(--vscode-descriptionForeground, #8c9bab);
+}
+
+/* Paragraphs & Text */
+.md-comments-document p {
+  margin-top: 0;
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.md-comments-document strong {
+  font-weight: 600;
+  color: var(--vscode-editor-foreground, #ffffff);
+}
+
+.md-comments-document em {
+  font-style: italic;
+}
+
+/* Links */
+.md-comments-document a {
+  color: var(--vscode-textLink-foreground, #3794ff);
+  text-decoration: none;
+}
+
+.md-comments-document a:hover {
+  text-decoration: underline;
+  color: var(--vscode-textLink-activeForeground, #3794ff);
+}
+
+/* Lists */
+.md-comments-document ul,
+.md-comments-document ol {
+  margin-top: 0;
+  margin-bottom: 16px;
+  padding-left: 2em;
+}
+
+.md-comments-document li {
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+  line-height: 1.6;
+}
+
+.md-comments-document li > p {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.md-comments-document ul.task-list {
+  list-style: none;
+  padding-left: 0.5em;
+}
+
+.md-comments-document .task-list-item input[type='checkbox'] {
+  margin: 0 0.5em 0.2em -1.3em;
+  vertical-align: middle;
+}
+
+/* Blockquotes */
+.md-comments-document blockquote {
+  margin: 0 0 16px 0;
+  padding: 0.5em 1em;
+  color: var(--vscode-descriptionForeground, #8c9bab);
+  background: var(--vscode-textBlockQuote-background, rgba(128, 128, 128, 0.08));
+  border-left: 4px solid var(--vscode-textBlockQuote-border, #007acc);
+  border-radius: 0 4px 4px 0;
+}
+
+.md-comments-document blockquote > :first-child {
+  margin-top: 0;
+}
+
+.md-comments-document blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+/* Horizontal Rule */
+.md-comments-document hr {
+  height: 2px;
+  padding: 0;
+  margin: 24px 0;
+  background-color: var(--vscode-widget-border, rgba(128, 128, 128, 0.25));
+  border: 0;
+}
+
+/* Tables */
+.md-comments-document table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  margin-top: 0;
+  margin-bottom: 16px;
+  display: table;
+  overflow: auto;
+  border-radius: 4px;
+}
+
+.md-comments-document table th,
+.md-comments-document table td {
+  padding: 8px 14px;
+  border: 1px solid var(--vscode-widget-border, rgba(128, 128, 128, 0.3));
+  text-align: left;
+  vertical-align: top;
+}
+
+.md-comments-document table th {
+  font-weight: 600;
+  background-color: var(--vscode-editorWidget-background, rgba(128, 128, 128, 0.12));
+  color: var(--vscode-editor-foreground, #ffffff);
+}
+
+.md-comments-document table tr:nth-child(2n) {
+  background-color: rgba(128, 128, 128, 0.04);
+}
+
+.md-comments-document table tr:hover {
+  background-color: rgba(128, 128, 128, 0.08);
+}
+
+/* Code & Syntax Highlighting */
+.md-comments-document code {
+  font-family: var(
+    --vscode-editor-font-family,
+    'SF Mono',
+    Monaco,
+    Menlo,
+    Consolas,
+    'Ubuntu Mono',
+    monospace
+  );
+  font-size: 0.88em;
+  padding: 0.2em 0.4em;
+  margin: 0;
+  background-color: var(--vscode-textCodeBlock-background, rgba(128, 128, 128, 0.16));
+  border-radius: 4px;
+  color: var(--vscode-editor-foreground, #e0e0e0);
+}
+
+.md-comments-document pre {
+  font-family: var(
+    --vscode-editor-font-family,
+    'SF Mono',
+    Monaco,
+    Menlo,
+    Consolas,
+    'Ubuntu Mono',
+    monospace
+  );
+  font-size: 0.88em;
+  line-height: 1.45;
+  padding: 14px 16px;
+  overflow: auto;
+  background-color: var(--vscode-textCodeBlock-background, rgba(128, 128, 128, 0.15));
+  border: 1px solid var(--vscode-widget-border, rgba(128, 128, 128, 0.25));
+  border-radius: 6px;
+  margin: 0 0 16px;
+}
+
+.md-comments-document pre code {
+  padding: 0;
+  margin: 0;
+  font-size: 100%;
+  background: transparent;
+  border: 0;
+  white-space: pre;
+  word-break: normal;
+  display: block;
+  color: inherit;
+}
+
+/* Highlight.js syntax coloring aligned with VS Code themes */
+
+/* Dark Theme Syntax Colors */
+body.vscode-dark .hljs,
+body:not(.vscode-light) .hljs {
+  color: #d4d4d4;
+}
+
+body.vscode-dark .hljs-keyword,
+body.vscode-dark .hljs-selector-tag,
+body.vscode-dark .hljs-built_in,
+body:not(.vscode-light) .hljs-keyword,
+body:not(.vscode-light) .hljs-selector-tag,
+body:not(.vscode-light) .hljs-built_in {
+  color: #569cd6;
+  font-weight: 500;
+}
+
+body.vscode-dark .hljs-string,
+body.vscode-dark .hljs-title,
+body.vscode-dark .hljs-section,
+body.vscode-dark .hljs-attribute,
+body.vscode-dark .hljs-literal,
+body.vscode-dark .hljs-template-tag,
+body.vscode-dark .hljs-template-variable,
+body.vscode-dark .hljs-type,
+body.vscode-dark .hljs-addition,
+body:not(.vscode-light) .hljs-string,
+body:not(.vscode-light) .hljs-title,
+body:not(.vscode-light) .hljs-section,
+body:not(.vscode-light) .hljs-attribute,
+body:not(.vscode-light) .hljs-literal,
+body:not(.vscode-light) .hljs-template-tag,
+body:not(.vscode-light) .hljs-template-variable,
+body:not(.vscode-light) .hljs-type,
+body:not(.vscode-light) .hljs-addition {
+  color: #ce9178;
+}
+
+body.vscode-dark .hljs-comment,
+body.vscode-dark .hljs-quote,
+body.vscode-dark .hljs-deletion,
+body.vscode-dark .hljs-meta,
+body:not(.vscode-light) .hljs-comment,
+body:not(.vscode-light) .hljs-quote,
+body:not(.vscode-light) .hljs-deletion,
+body:not(.vscode-light) .hljs-meta {
+  color: #6a9955;
+  font-style: italic;
+}
+
+body.vscode-dark .hljs-number,
+body.vscode-dark .hljs-regexp,
+body.vscode-dark .hljs-link,
+body:not(.vscode-light) .hljs-number,
+body:not(.vscode-light) .hljs-regexp,
+body:not(.vscode-light) .hljs-link {
+  color: #b5cea8;
+}
+
+body.vscode-dark .hljs-function,
+body.vscode-dark .hljs-title.function_,
+body.vscode-dark .hljs-title.class_,
+body:not(.vscode-light) .hljs-function,
+body:not(.vscode-light) .hljs-title.function_,
+body:not(.vscode-light) .hljs-title.class_ {
+  color: #dcdcaa;
+}
+
+body.vscode-dark .hljs-variable,
+body.vscode-dark .hljs-params,
+body:not(.vscode-light) .hljs-variable,
+body:not(.vscode-light) .hljs-params {
+  color: #9cdcfe;
+}
+
+/* Light Theme Syntax Colors */
+body.vscode-light .hljs {
+  color: #24292e;
+}
+
+body.vscode-light .hljs-keyword,
+body.vscode-light .hljs-selector-tag,
+body.vscode-light .hljs-built_in {
+  color: #d73a49;
+  font-weight: 500;
+}
+
+body.vscode-light .hljs-string,
+body.vscode-light .hljs-title,
+body.vscode-light .hljs-section,
+body.vscode-light .hljs-attribute,
+body.vscode-light .hljs-literal,
+body.vscode-light .hljs-template-tag,
+body.vscode-light .hljs-template-variable,
+body.vscode-light .hljs-type,
+body.vscode-light .hljs-addition {
+  color: #032f62;
+}
+
+body.vscode-light .hljs-comment,
+body.vscode-light .hljs-quote,
+body.vscode-light .hljs-deletion,
+body.vscode-light .hljs-meta {
+  color: #6a737d;
+  font-style: italic;
+}
+
+body.vscode-light .hljs-number,
+body.vscode-light .hljs-regexp,
+body.vscode-light .hljs-link {
+  color: #005cc5;
+}
+
+body.vscode-light .hljs-function,
+body.vscode-light .hljs-title.function_,
+body.vscode-light .hljs-title.class_ {
+  color: #6f42c1;
+}
+
+body.vscode-light .hljs-variable,
+body.vscode-light .hljs-params {
+  color: #e36209;
+}
+
+/* Images */
+.md-comments-document img {
+  max-width: 100%;
+  box-sizing: content-box;
+  border-style: none;
+  border-radius: 4px;
+}

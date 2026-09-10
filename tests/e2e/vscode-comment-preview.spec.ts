@@ -73,4 +73,34 @@ test.describe('VS Code Extension Comment Preview E2E', () => {
     const firstPText = await paragraphs.first().innerText();
     expect(firstPText).toContain('Welcome to the documentation guide.');
   });
+
+  test('verifies high-fidelity VS Code markdown styling, theme class, and MD FAB in preview', async ({
+    vscode,
+  }) => {
+    const { openCommentPreview, getCommentPreviewFrame } = vscode;
+
+    await openCommentPreview();
+
+    const previewFrame = getCommentPreviewFrame();
+
+    // Verify vscode-markdown.css is linked in the webview head
+    const mdCssLink = previewFrame.locator('link[href*="vscode-markdown.css"]');
+    await expect(mdCssLink).toHaveCount(1);
+
+    // Verify theme class is applied on the body (vscode-dark or vscode-light)
+    const body = previewFrame.locator('body');
+    await expect(body).toHaveClass(/vscode-(dark|light|high-contrast)/);
+
+    // Verify MD Comments FAB is present and toggles the comments sidebar
+    const fab = previewFrame.locator('#md-comments-panel-fab');
+    await expect(fab).toBeVisible({ timeout: 10000 });
+
+    const layout = previewFrame.locator('#md-comments-layout');
+    await expect(layout).toBeVisible();
+
+    // Click FAB to toggle sidebar
+    await fab.dispatchEvent('click');
+    await expect(fab).toHaveAttribute('aria-expanded', 'true');
+    await expect(layout).toHaveClass(/md-comments-sidebar-open/);
+  });
 });

@@ -44,14 +44,14 @@ test.describe('VS Code Extension CodeLens E2E', () => {
     });
     await expect(inlineCard).toBeVisible({ timeout: 10000 });
 
-    // 3. Switch focus back to the markdown editor tab and lines
+    // 3. Refresh preview and switch focus back to markdown editor
+    await vscode.runCommand('Markdown Comments: Refresh Preview');
     const editorTab = page.locator('.tab', { hasText: 'test-guide.md' }).first();
     await editorTab.click();
     const editor = page.locator('.editor-instance .monaco-editor, .monaco-editor').first();
     if (await editor.isVisible()) {
       await editor.click();
     }
-    await vscode.runCommand('Markdown Comments: Refresh Preview');
 
     // 4. Verify CodeLens is rendered in Monaco editor
     const codeLens = page
