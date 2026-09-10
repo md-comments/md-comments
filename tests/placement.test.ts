@@ -274,4 +274,41 @@ describe('unplacedOrOrphan', () => {
     expect(result).toHaveLength(1);
     expect(result[0].comment.id).toBe('o1');
   });
+
+  it('places inline comment on a frontmatter field selection without marking it as orphaned', async () => {
+    const { parseMarkdownAnchors } = await import('../shared/anchor');
+    const md = `---
+title: "Document Title with Key Concept"
+author: Alice
+---
+
+Body prose here.`;
+
+    const parsedBlocks = parseMarkdownAnchors(md);
+    expect(parsedBlocks[0].heading_context).toBe('Frontmatter');
+    expect(parsedBlocks[0].anchor_text).toBe('title Document Title with Key Concept');
+
+    const comment = {
+      id: 'c-fm-1',
+      author: 'bob',
+      anchor_text: 'Key Concept',
+      anchor_hash: parsedBlocks[0].anchor_hash,
+      paragraph_index: 0,
+      heading_context: 'Frontmatter',
+      body: 'Comment on frontmatter title selection',
+      created_at: new Date().toISOString(),
+      orphaned: false,
+      resolved: false,
+      reactions: [],
+      replies: [],
+    };
+
+    const placements = placeInlineComments(parsedBlocks, [comment]);
+    expect(placements).toHaveLength(1);
+    expect(placements[0].placed).toBe(true);
+    expect(placements[0].paragraphIndex).toBe(0);
+
+    const isOrphan = isOrphanedPlacement(parsedBlocks, placements[0]);
+    expect(isOrphan).toBe(false);
+  });
 });

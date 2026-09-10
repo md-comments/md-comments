@@ -120,6 +120,72 @@ Paragraph under sub header.
     expect(anchors.some((a) => a.anchor_text === 'Bullet item one')).toBe(true);
     expect(anchors.some((a) => a.anchor_text === 'Blockquote insight statement')).toBe(true);
   });
+
+  it('parses YAML frontmatter into distinct key-value anchor blocks', () => {
+    const md = `---
+page_id: '12345'
+title: "Document Title"
+author: Jane Doe
+description: First line of description
+  second line continuation
+tags:
+  - general
+  - release
+---
+
+# Introduction
+
+First prose paragraph.`;
+
+    const anchors = parseMarkdownAnchors(md);
+    // 5 frontmatter fields + 1 heading + 1 prose = 7 blocks
+    expect(anchors).toHaveLength(7);
+
+    // Frontmatter blocks
+    expect(anchors[0].anchor_text).toBe('page_id 12345');
+    expect(anchors[0].heading_context).toBe('Frontmatter');
+    expect(anchors[0].paragraph_index).toBe(0);
+
+    expect(anchors[1].anchor_text).toBe('title Document Title');
+    expect(anchors[1].heading_context).toBe('Frontmatter');
+    expect(anchors[1].paragraph_index).toBe(1);
+
+    expect(anchors[2].anchor_text).toBe('author Jane Doe');
+    expect(anchors[2].heading_context).toBe('Frontmatter');
+    expect(anchors[2].paragraph_index).toBe(2);
+
+    expect(anchors[3].anchor_text).toBe(
+      'description First line of description second line continuation'
+    );
+    expect(anchors[3].heading_context).toBe('Frontmatter');
+    expect(anchors[3].paragraph_index).toBe(3);
+
+    expect(anchors[4].anchor_text).toBe('tags general release');
+    expect(anchors[4].heading_context).toBe('Frontmatter');
+    expect(anchors[4].paragraph_index).toBe(4);
+
+    // Body blocks continuing sequentially
+    expect(anchors[5].anchor_text).toBe('Introduction');
+    expect(anchors[5].heading_context).toBe('Introduction');
+    expect(anchors[5].paragraph_index).toBe(5);
+
+    expect(anchors[6].anchor_text).toBe('First prose paragraph.');
+    expect(anchors[6].heading_context).toBe('Introduction');
+    expect(anchors[6].paragraph_index).toBe(6);
+  });
+
+  it('does not treat middle horizontal rules as frontmatter', () => {
+    const md = `Paragraph before hr.
+
+---
+
+Paragraph after hr.`;
+
+    const anchors = parseMarkdownAnchors(md);
+    expect(anchors).toHaveLength(2);
+    expect(anchors[0].anchor_text).toBe('Paragraph before hr.');
+    expect(anchors[1].anchor_text).toBe('Paragraph after hr.');
+  });
 });
 
 describe('findOccurrenceIndex', () => {

@@ -111,7 +111,84 @@ export function parseMarkdownAnchors(markdown: string): AnchorBlock[] {
     buffer.push(line);
   };
 
-  for (let i = 0; i < lines.length; i++) {
+  let startLine = 0;
+  if (lines.length > 0 && /^---\s*$/.test(lines[0])) {
+    let closingIdx = -1;
+    for (let i = 1; i < lines.length; i++) {
+      if (/^(---\s*|\.\.\.\s*)$/.test(lines[i])) {
+        closingIdx = i;
+        break;
+      }
+    }
+
+    if (closingIdx > 0) {
+      interface FmEntry {
+        key: string;
+        value: string;
+        line: number;
+      }
+      const entries: FmEntry[] = [];
+      let current: FmEntry | null = null;
+
+      for (let i = 1; i < closingIdx; i++) {
+        const line = lines[i];
+        const trimmed = line.trim();
+        if (!trimmed || trimmed.startsWith('#')) {
+          continue;
+        }
+
+        const keyMatch = line.match(/^([A-Za-z0-9_.-]+)\s*:\s*(.*)$/);
+        if (keyMatch) {
+          if (current) {
+            entries.push(current);
+          }
+          current = { key: keyMatch[1], value: keyMatch[2].trim(), line: i };
+        } else if (current) {
+          const listMatch = line.match(/^\s*[-*]\s+(.*)$/);
+          if (listMatch) {
+            current.value += (current.value ? ' ' : '') + listMatch[1].trim();
+          } else if (/^\s+/.test(line)) {
+            current.value += (current.value ? ' ' : '') + trimmed;
+          } else {
+            entries.push(current);
+            current = { key: '', value: trimmed, line: i };
+          }
+        } else {
+          current = { key: '', value: trimmed, line: i };
+        }
+      }
+      if (current) {
+        entries.push(current);
+      }
+
+      for (const entry of entries) {
+        let val = entry.value;
+        if (
+          (val.startsWith("'") && val.endsWith("'")) ||
+          (val.startsWith('"') && val.endsWith('"'))
+        ) {
+          val = val.slice(1, -1);
+        }
+        const rawText = entry.key ? `${entry.key} ${val}` : val;
+        const anchor_text = normalizeAnchorText(rawText);
+        if (!anchor_text) {
+          continue;
+        }
+        blocks.push({
+          paragraph_index: paragraphIndex,
+          heading_context: 'Frontmatter',
+          anchor_hash: fnv1aHash(anchor_text),
+          anchor_text,
+          line_number: entry.line,
+        });
+        paragraphIndex++;
+      }
+
+      startLine = closingIdx + 1;
+    }
+  }
+
+  for (let i = startLine; i < lines.length; i++) {
     const line = lines[i];
     const fence = line.trimStart().startsWith('```');
     if (fence) {

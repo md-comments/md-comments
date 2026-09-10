@@ -574,6 +574,125 @@ let renderCtx: RenderContext | null = null;
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export function extendMarkdownIt(md: any): any {
+  if (md.block && md.block.ruler) {
+    md.block.ruler.before(
+      'table',
+      'front_matter',
+      (state: any, startLine: number, endLine: number, silent: boolean) => {
+        if (startLine !== 0) {
+          return false;
+        }
+        const start = state.bMarks[startLine] + state.tShift[startLine];
+        const max = state.eMarks[startLine];
+        if (state.src.slice(start, max).trim() !== '---') {
+          return false;
+        }
+
+        let nextLine = startLine + 1;
+        let found = false;
+        for (; nextLine < endLine; nextLine++) {
+          const s = state.bMarks[nextLine] + state.tShift[nextLine];
+          const m = state.eMarks[nextLine];
+          const line = state.src.slice(s, m).trim();
+          if (line === '---' || line === '...') {
+            found = true;
+            break;
+          }
+        }
+        if (!found) {
+          return false;
+        }
+        if (silent) {
+          return true;
+        }
+
+        state.line = nextLine + 1;
+        const token = state.push('front_matter', '', 0);
+        token.lines = [startLine, nextLine];
+        token.content = state.src.slice(state.bMarks[startLine + 1], state.eMarks[nextLine - 1]);
+        return true;
+      }
+    );
+
+    md.renderer.rules.front_matter = (tokens: any, idx: number) => {
+      const token = tokens[idx];
+      const content = token.content || '';
+      const fmBlocks = renderCtx
+        ? renderCtx.blocks.filter((b) => b.heading_context === 'Frontmatter')
+        : [];
+      let placements: PlacementResult[] = [];
+      if (renderCtx && renderCtx.comments && renderCtx.comments.inline_comments) {
+        placements = placeInlineComments(renderCtx.blocks, renderCtx.comments.inline_comments);
+      }
+
+      interface FmEntry {
+        key: string;
+        value: string;
+        line: number;
+      }
+      const entries: FmEntry[] = [];
+      let current: FmEntry | null = null;
+      const fmLines = content.split(/\r?\n/);
+      for (let i = 0; i < fmLines.length; i++) {
+        const line = fmLines[i];
+        const trimmed = line.trim();
+        if (!trimmed || trimmed.startsWith('#')) {
+          continue;
+        }
+        const keyMatch = line.match(/^([A-Za-z0-9_.-]+)\s*:\s*(.*)$/);
+        if (keyMatch) {
+          if (current) {
+            entries.push(current);
+          }
+          current = { key: keyMatch[1], value: keyMatch[2].trim(), line: i + 1 };
+        } else if (current) {
+          const listMatch = line.match(/^\s*[-*]\s+(.*)$/);
+          if (listMatch) {
+            current.value += (current.value ? ' ' : '') + listMatch[1].trim();
+          } else if (/^\s+/.test(line)) {
+            current.value += (current.value ? ' ' : '') + trimmed;
+          } else {
+            entries.push(current);
+            current = { key: '', value: trimmed, line: i + 1 };
+          }
+        } else {
+          current = { key: '', value: trimmed, line: i + 1 };
+        }
+      }
+      if (current) {
+        entries.push(current);
+      }
+
+      let rowsHtml = '';
+      for (let i = 0; i < entries.length; i++) {
+        const entry = entries[i];
+        let val = entry.value;
+        if (
+          (val.startsWith("'") && val.endsWith("'")) ||
+          (val.startsWith('"') && val.endsWith('"'))
+        ) {
+          val = val.slice(1, -1);
+        }
+        const block = fmBlocks[i];
+        const pIdx = block ? String(block.paragraph_index) : '';
+        const hash = block ? block.anchor_hash : '';
+        const aText = block
+          ? block.anchor_text
+          : normalizeAnchorText(entry.key ? `${entry.key} ${val}` : val);
+        const hasComments = block
+          ? placements.some(
+              (p) => p.placed && p.paragraphIndex === block.paragraph_index && !p.comment.resolved
+            )
+          : false;
+        const markedClass = hasComments ? ' md-comments-paragraph-marked' : '';
+
+        rowsHtml += `<tr class="md-comments-paragraph${markedClass}" data-md-paragraph-index="${escapeHtml(pIdx)}" data-md-anchor-hash="${escapeHtml(hash)}" data-md-heading="Frontmatter" data-md-anchor-text="${escapeHtml(aText)}"><td class="md-comments-fm-key" style="font-weight:600; padding:4px 12px; vertical-align:top; border:1px solid var(--vscode-widget-border, #30363d);">${escapeHtml(entry.key)}</td><td class="md-comments-fm-val" style="padding:4px 12px; vertical-align:top; border:1px solid var(--vscode-widget-border, #30363d);">${escapeHtml(val)}</td></tr>`;
+      }
+
+      return `<div class="md-comments-frontmatter" style="margin-bottom:16px; overflow-x:auto;"><table class="md-comments-frontmatter-table" style="border-collapse:collapse; width:100%; border:1px solid var(--vscode-widget-border, #30363d); font-size:13px;"><tbody>${rowsHtml}</tbody></table></div>`;
+    };
+  }
+
   const defaultParagraphOpen =
     md.renderer.rules.paragraph_open ||
     function (tokens: any, idx: any, options: any, env: any, self: any) {

@@ -5009,7 +5009,7 @@ function showSelectionButton(
       paragraph_index: paragraphIndex,
       anchor_hash: hash,
       anchor_text: anchorText,
-      heading_context: findHeadingContext(paragraphEl),
+      heading_context: block?.heading_context || findHeadingContext(paragraphEl),
       anchor_occurrence: occurrenceIndex,
     });
 

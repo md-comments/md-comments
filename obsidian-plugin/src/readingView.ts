@@ -122,9 +122,10 @@ export function registerReadingViewProcessor(
     const file = app.vault.getAbstractFileByPath(context.sourcePath);
     if (!file || !(file instanceof TFile)) return;
 
-    // We only process paragraphs
     const paragraphs =
-      element.tagName === 'P' ? [element] : Array.from(element.querySelectorAll('p'));
+      element.tagName === 'P' || element.tagName === 'TR'
+        ? [element]
+        : Array.from(element.querySelectorAll<HTMLElement>('p, tr'));
     if (paragraphs.length === 0) return;
 
     const blocks = await getAnchorBlocks(file);
@@ -190,7 +191,7 @@ export function registerReadingViewProcessor(
       p.appendChild(btnSpan);
 
       // Add context menu listener for commenting on selection
-      p.addEventListener('contextmenu', (e) => {
+      p.addEventListener('contextmenu', (e: MouseEvent) => {
         const selection = window.getSelection();
         const selectedText = (selection?.toString() || '').trim();
         const isSelectionInP =

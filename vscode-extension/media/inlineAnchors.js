@@ -11,9 +11,13 @@
     if (el) {
       return el;
     }
-    el = document.querySelector('td' + sel + ', li' + sel);
+    el = document.querySelector('td' + sel + ', li' + sel + ', tr' + sel);
     if (el) {
       return el;
+    }
+    const all = document.querySelectorAll(sel);
+    if (all.length > 0) {
+      return all[0];
     }
     const paragraphs = document.querySelectorAll('p[data-md-paragraph-index]');
     for (let i = 0; i < paragraphs.length; i++) {
