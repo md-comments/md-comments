@@ -423,12 +423,158 @@
     });
   }
 
+  function bindPageComposer() {
+    const composer = document.querySelector('.md-comments-page-composer');
+    if (!composer || composer.getAttribute('data-md-page-composer-bound') === 'true') {
+      return;
+    }
+    composer.setAttribute('data-md-page-composer-bound', 'true');
+
+    const textarea = composer.querySelector('.page-textarea');
+    const submitBtn = composer.querySelector('.submit-page-btn');
+
+    function doSubmit() {
+      if (!textarea) return;
+      const body = textarea.value.trim();
+      if (!body) return;
+
+      if (submitBtn) {
+        submitBtn.classList.add('loading');
+        submitBtn.disabled = true;
+      }
+      textarea.disabled = true;
+
+      document.dispatchEvent(
+        new CustomEvent('md-comments:submit-page', {
+          detail: { body: body },
+        })
+      );
+    }
+
+    if (submitBtn) {
+      submitBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        doSubmit();
+      });
+    }
+
+    if (textarea) {
+      textarea.addEventListener('keydown', function (e) {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+          e.preventDefault();
+          e.stopPropagation();
+          doSubmit();
+        }
+      });
+    }
+  }
+
+  function bindCardReplyComposers() {
+    document.querySelectorAll('.md-comments-card').forEach(function (card) {
+      const rootId = card.getAttribute('data-md-comment-id');
+      const type = card.getAttribute('data-md-type') || 'inline';
+      const composer = card.querySelector('.md-comments-reply-composer');
+      if (!composer || composer.getAttribute('data-md-reply-composer-bound') === 'true') {
+        return;
+      }
+      composer.setAttribute('data-md-reply-composer-bound', 'true');
+
+      const replyInput = composer.querySelector('.reply-input');
+      const replyWrapper = composer.querySelector('.reply-composer-wrapper');
+      const textarea = composer.querySelector('.fallback-reply-textarea');
+      const cancelBtn = composer.querySelector('.fallback-cancel-btn');
+      const submitBtn = composer.querySelector('.fallback-submit-btn');
+
+      function openComposer() {
+        if (replyInput) replyInput.style.display = 'none';
+        if (replyWrapper) replyWrapper.style.display = 'block';
+        if (textarea) {
+          textarea.focus();
+        }
+      }
+
+      function closeComposer() {
+        if (textarea) textarea.value = '';
+        if (replyWrapper) replyWrapper.style.display = 'none';
+        if (replyInput) replyInput.style.display = 'block';
+      }
+
+      function doSubmitReply() {
+        if (!textarea) return;
+        const body = textarea.value.trim();
+        if (!body) return;
+
+        if (submitBtn) {
+          submitBtn.classList.add('loading');
+          submitBtn.disabled = true;
+        }
+
+        if (window.mdCommentsPrepareReplyNav) {
+          window.mdCommentsPrepareReplyNav(rootId, type === 'page' ? 'page' : 'inline');
+        }
+        if (window.mdCommentsMarkReplySubmitted) {
+          window.mdCommentsMarkReplySubmitted();
+        }
+
+        document.dispatchEvent(
+          new CustomEvent('md-comments:submit-reply', {
+            detail: { rootId: rootId, type: type, body: body },
+          })
+        );
+      }
+
+      if (replyInput) {
+        replyInput.addEventListener('focus', openComposer);
+        replyInput.addEventListener('click', openComposer);
+      }
+
+      if (cancelBtn) {
+        cancelBtn.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          closeComposer();
+        });
+      }
+
+      if (submitBtn) {
+        submitBtn.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          doSubmitReply();
+        });
+      }
+
+      if (textarea) {
+        textarea.addEventListener('keydown', function (e) {
+          if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+            e.preventDefault();
+            e.stopPropagation();
+            doSubmitReply();
+          }
+        });
+      }
+
+      const replyIconBtn = card.querySelector('[data-md-action="reply"]');
+      if (replyIconBtn && replyIconBtn.getAttribute('data-md-reply-icon-bound') !== 'true') {
+        replyIconBtn.setAttribute('data-md-reply-icon-bound', 'true');
+        replyIconBtn.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          openComposer();
+        });
+      }
+    });
+  }
+
   function init() {
     initTabs();
     applyCollapsedState();
     bindRepliesToggle();
     consumeReplyNav();
     revealEditButtons();
+    bindPageComposer();
+    bindCardReplyComposers();
   }
 
   if (document.readyState === 'loading') {

@@ -13,9 +13,13 @@ implementedIn:
   - 'vscode-extension/src/markdownItPlugin.ts'
   - 'vscode-extension/src/markdownRender.ts'
   - 'vscode-extension/src/commentPreviewPanel.ts'
+  - 'vscode-extension/media/preview.css'
+  - 'vscode-extension/media/previewActions.js'
+  - 'vscode-extension/media/preview-webview.js'
   - 'vscode-extension/media/vscode-markdown.css'
 verifiedIn:
   - 'tests/vscode-markdown-plugin.test.ts'
+  - 'tests/vscode-document-comments.test.ts'
   - 'tests/vscodeStorage.test.ts'
   - 'tests/e2e/vscode-extension-smoke.spec.ts'
   - 'tests/e2e/vscode-comment-preview.spec.ts'

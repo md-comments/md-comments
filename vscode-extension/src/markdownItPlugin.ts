@@ -320,6 +320,21 @@ function renderCard(
             'md-comments-icon-btn-danger'
           )}`;
   const repliesBlock = hasReplies ? renderRepliesBlock(id, type, replies, !resolved) : '';
+  const replyComposer = !resolved
+    ? `<div class="reply-composer md-comments-reply-composer" data-md-comment-id="${escapeHtml(id)}" data-md-type="${type}">
+        <input type="text" placeholder="Reply..." class="reply-input md-comments-reply-input" aria-label="Reply to comment">
+        <div class="reply-composer-wrapper md-comments-reply-wrapper" style="display: none;">
+          <div class="fallback-reply-composer">
+            <textarea class="fallback-reply-textarea md-comments-reply-textarea" placeholder="Write a reply..." rows="3" aria-label="Write a reply"></textarea>
+            <div class="composer-actions md-comments-composer-actions">
+              <button type="button" class="btn btn-secondary fallback-cancel-btn md-comments-btn-secondary" data-md-action="cancel-reply">Cancel</button>
+              <button type="button" class="btn btn-primary fallback-submit-btn md-comments-btn-primary" data-md-action="submit-reply" data-md-id="${escapeHtml(id)}" data-md-type="${type}">Send</button>
+            </div>
+          </div>
+        </div>
+      </div>`
+    : '';
+
   return `<div class="md-comments-card${hasReplies ? ' md-comments-card-has-replies' : ''}" data-md-comment-id="${escapeHtml(id)}" data-md-type="${type}" data-md-stored-author="${escapeHtml(author)}"${inlineAttrs}>
     <div class="md-comments-thread-row md-comments-thread-root">
       <div class="md-comments-avatar-wrap">${renderAvatar(author)}</div>
@@ -331,6 +346,7 @@ function renderCard(
       </div>
     </div>
     ${repliesBlock}
+    ${replyComposer}
   </div>`;
 }
 
@@ -356,15 +372,80 @@ function renderSidebarThread(
   return `<article class="md-comments-sidebar-thread">${quote}${cardHtml}</article>`;
 }
 
-function panelEmpty(message: string): string {
-  return `<p class="md-comments-sidebar-empty">${escapeHtml(message)}</p>`;
+export function renderPageComposer(): string {
+  return `<div class="page-composer md-comments-page-composer" id="page-composer">
+    <textarea placeholder="Write a comment on this document..." class="page-textarea md-comments-page-textarea" rows="3" aria-label="Write a comment on this document"></textarea>
+    <div class="composer-actions md-comments-composer-actions">
+      <button type="button" class="btn btn-primary submit-page-btn md-comments-btn-primary" data-md-action="submit-page">Send</button>
+    </div>
+  </div>`;
+}
+
+export function renderLoadingSkeleton(tabType: 'inline' | 'page'): string {
+  const subtitle =
+    tabType === 'inline'
+      ? 'Fetching line annotations from repository'
+      : 'Fetching document discussions from repository';
+
+  return `
+    <div class="panel-loading-container" role="status" aria-live="polite">
+      <div class="panel-loading-banner">
+        <div class="md-comments-spinner"></div>
+        <div class="panel-loading-text">
+          <span class="panel-loading-title">Loading comments...</span>
+          <span class="panel-loading-subtext">${escapeHtml(subtitle)}</span>
+        </div>
+      </div>
+      <div class="comment-skeleton-list">
+        <div class="comment-skeleton-card">
+          <div class="skeleton-header">
+            <div class="skeleton-avatar skeleton-shimmer"></div>
+            <div class="skeleton-meta">
+              <div class="skeleton-line skeleton-author skeleton-shimmer"></div>
+              <div class="skeleton-line skeleton-time skeleton-shimmer"></div>
+            </div>
+          </div>
+          ${tabType === 'inline' ? '<div class="skeleton-quote skeleton-shimmer"></div>' : ''}
+          <div class="skeleton-body">
+            <div class="skeleton-line skeleton-text-full skeleton-shimmer"></div>
+            <div class="skeleton-line skeleton-text-partial skeleton-shimmer"></div>
+          </div>
+        </div>
+        <div class="comment-skeleton-card">
+          <div class="skeleton-header">
+            <div class="skeleton-avatar skeleton-shimmer"></div>
+            <div class="skeleton-meta">
+              <div class="skeleton-line skeleton-author skeleton-shimmer"></div>
+              <div class="skeleton-line skeleton-time skeleton-shimmer"></div>
+            </div>
+          </div>
+          ${tabType === 'inline' ? '<div class="skeleton-quote skeleton-shimmer"></div>' : ''}
+          <div class="skeleton-body">
+            <div class="skeleton-line skeleton-text-full skeleton-shimmer"></div>
+            <div class="skeleton-line skeleton-text-partial skeleton-shimmer" style="width: 45%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+export function renderLoadError(errorMessage: string): string {
+  return `
+    <div class="panel-error-container" role="alert">
+      <div class="panel-error-icon">⚠️</div>
+      <div class="panel-error-title">Failed to load comments</div>
+      <div class="panel-error-msg">${escapeHtml(errorMessage || 'Could not connect to GitHub to retrieve comments.')}</div>
+      <button class="btn btn-primary md-comments-btn-primary retry-load-btn" type="button" data-md-action="refresh">Retry</button>
+    </div>
+  `;
 }
 
 function buildSidebarHtml(ctx: RenderContext): string {
   const allInline = ctx.comments.inline_comments || [];
   const allPage = ctx.comments.page_comments || [];
 
-  const inlineHtml = allInline.length
+  const inlineThreadsList = allInline.length
     ? allInline
         .map((c) => {
           const placement = ctx.placements.find((p) => p.comment.id === c.id);
@@ -387,9 +468,11 @@ function buildSidebarHtml(ctx: RenderContext): string {
           );
         })
         .join('')
-    : panelEmpty('No inline comments.');
+    : `<div class="empty-state md-comments-empty-state">No inline comments yet. Hover over paragraphs to add feedback.</div>`;
 
-  const pageHtml = allPage.length
+  const inlineHtml = `<div class="threads-list md-comments-threads-list" id="inline-threads">${inlineThreadsList}</div>`;
+
+  const pageThreadsList = allPage.length
     ? allPage
         .map((c) =>
           renderSidebarThread(
@@ -409,19 +492,24 @@ function buildSidebarHtml(ctx: RenderContext): string {
           )
         )
         .join('')
-    : panelEmpty('No page comments. Use “Add a comment” below.');
+    : `<div class="empty-state md-comments-empty-state">No page discussion comments yet. Use the composer below to start.</div>`;
+
+  const pageHtml = `
+    <div class="threads-list md-comments-threads-list" id="page-threads">${pageThreadsList}</div>
+    ${renderPageComposer()}
+  `;
 
   const defaultTab = 'inline';
 
   const tab = (id: string, label: string, count: number) =>
-    `<button type="button" class="md-comments-tab${id === defaultTab ? ' md-comments-tab-active' : ''}" role="tab" data-tab="${id}" aria-selected="${id === defaultTab ? 'true' : 'false'}">${escapeHtml(label)} <span class="md-comments-tab-count">${count}</span></button>`;
+    `<button type="button" class="md-comments-tab tab-btn${id === defaultTab ? ' md-comments-tab-active active' : ''}" role="tab" data-tab="${id}" aria-selected="${id === defaultTab ? 'true' : 'false'}"><span>${escapeHtml(label)}</span> <span class="md-comments-tab-count ${id}-tab-count">${count}</span></button>`;
 
   const panel = (id: string, html: string) => {
     const active = id === defaultTab;
-    return `<div class="md-comments-tab-panel${active ? ' md-comments-tab-panel-active' : ''}" data-panel="${id}" role="tabpanel"${active ? '' : ' hidden'}>${html}</div>`;
+    return `<div class="md-comments-tab-panel tab-content${active ? ' md-comments-tab-panel-active active' : ''}" id="tab-${id}" data-panel="${id}" role="tabpanel"${active ? '' : ' hidden'}>${html}</div>`;
   };
 
-  return `<nav class="md-comments-tabs" role="tablist">
+  return `<nav class="md-comments-tabs tab-header" role="tablist">
       ${tab('inline', 'Inline', allInline.length)}
       ${tab('page', 'Document', allPage.length)}
     </nav>
@@ -488,11 +576,6 @@ function renderDocumentLayout(
       </header>
       ${authBanner}
       <div class="md-comments-sidebar-body">${sidebarBody}</div>
-      <footer class="md-comments-sidebar-footer">
-        <button type="button" class="md-comments-sidebar-add" data-md-action="addPage">
-          <span class="md-comments-icon-comment" aria-hidden="true"></span> Add a comment
-        </button>
-      </footer>
     </aside>
     ${footer}
   </div>`;

@@ -170,7 +170,11 @@
   }
 
   function scan() {
-    document.querySelectorAll('.md-comments-editor-input').forEach(bindTextarea);
+    document
+      .querySelectorAll(
+        '.md-comments-editor-input, .page-textarea, .fallback-reply-textarea, .md-comments-page-textarea, .md-comments-reply-textarea'
+      )
+      .forEach(bindTextarea);
   }
 
   if (document.readyState === 'loading') {
