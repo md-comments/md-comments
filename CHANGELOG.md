@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.2] - 2026-09-09
+
+### Added
+
+- **VS Code Extension UI & Preview Parity**:
+  - Elevated markdown preview fidelity with theme-aware typography, GFM table rendering, and `highlight.js` syntax highlighting for fenced code blocks.
+  - Added `mdComments.previewMode` configuration setting supporting standalone and builtin modes.
+  - Added floating Markdown FAB toggle and brought Document Comments tree view and card replies into visual and functional parity with the browser extension.
+
+### Fixed
+
+- **YAML Frontmatter Comment Anchoring**: Parse YAML frontmatter key-values into distinct anchor blocks matching rendered metadata table rows across preview and extension environments.
+- **Icon and Styling Alignment**: Harmonized preview FAB and extension icons with the browser extension design.
+- **Starlight Compatibility**: Preserved Astro Starlight dependency alignment across demo packages.
+
 ## [1.3.1] - 2026-09-08
 
 ### Added
