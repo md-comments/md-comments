@@ -20,6 +20,8 @@ test.describe('VS Code Native Markdown Preview Integration E2E', () => {
     // 3. Verify floating action button (FAB) contributed by markdown.previewScripts
     const fab = previewFrame.locator('#md-comments-panel-fab');
     await expect(fab).toBeVisible({ timeout: 10000 });
+    const fabSvg = fab.locator('svg.md-comments-fab-icon');
+    await expect(fabSvg).toHaveAttribute('viewBox', '0 0 512 512');
 
     // 4. Verify comments sidebar layout container
     const layout = previewFrame.locator('#md-comments-layout');

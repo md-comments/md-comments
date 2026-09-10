@@ -245,4 +245,20 @@ describe('findBlockByIndex and findBlockByHash', () => {
     expect(findBlockByHash(blocks, 'hash-1')?.anchor_text).toBe('second block');
     expect(findBlockByHash(blocks, 'missing-hash')).toBeUndefined();
   });
+
+  it('handles frontmatter with bare initial lines and empty normalized values', () => {
+    const md = `---
+# comment line
+bare_value_without_key
+second_bare_line
+
+<tag>
+title: Real Title
+---
+Content here`;
+    const anchors = parseMarkdownAnchors(md);
+    expect(anchors.length).toBeGreaterThanOrEqual(2);
+    expect(anchors[0].heading_context).toBe('Frontmatter');
+    expect(anchors[0].anchor_text).toBe('barevaluewithout_key');
+  });
 });

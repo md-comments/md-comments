@@ -81,6 +81,11 @@ const ICON_REANCHOR =
   '<svg class="md-comments-icon-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
 const ICON_REFRESH =
   '<svg class="md-comments-icon-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.5-5.5M20 12a8 8 0 0 1-13.5 5.5M16 6.5V10h-3.5M8 17.5V14H11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+export const ICON_FAB =
+  '<svg class="md-comments-fab-icon" viewBox="0 0 512 512" width="28" height="28" aria-hidden="true">' +
+  '<path fill="#24292f" stroke="#ffffff" stroke-width="20" stroke-linejoin="round" d="M 136 64 L 376 64 C 424 64 456 96 456 144 L 456 304 C 456 352 424 384 376 384 L 216 384 C 184 384 150 404 126 428 C 118 436 104 430 104 418 L 104 384 C 72 380 56 352 56 304 L 56 144 C 56 96 88 64 136 64 Z"/>' +
+  '<path fill="#ffffff" d="M 132 168 L 164 168 L 192 232 L 220 168 L 252 168 L 252 280 L 226 280 L 226 212 L 201 268 L 183 268 L 158 212 L 158 280 L 132 280 Z M 276 168 L 324 168 C 358 168 380 188 380 224 C 380 260 358 280 324 280 L 276 280 Z M 302 192 L 302 256 L 322 256 C 342 256 352 246 352 224 C 352 202 342 192 322 192 Z"/>' +
+  '</svg>';
 
 function actionIconBtn(
   action: string,
@@ -470,13 +475,7 @@ function renderDocumentLayout(
       <div class="md-comments-document">${docHtml}</div>
     </div>
     <button type="button" class="md-comments-fab" id="md-comments-panel-fab" title="Show comments" aria-label="Show comments" aria-expanded="false">
-      <svg class="md-comments-fab-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path d="M6 4.5h11.5a1.5 1.5 0 0 1 1.5 1.5v7a1.5 1.5 0 0 1-1.5 1.5H9.5L6.5 17.5V6a1.5 1.5 0 0 1 1.5-1.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-        <path d="M6.5 17.5 4.5 20.5 6.5 19.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M8.5 8h7.5" stroke="currentColor" stroke-width="1.35" stroke-linecap="round"/>
-        <path d="M8.5 10.5h7.5" stroke="currentColor" stroke-width="1.35" stroke-linecap="round"/>
-        <path d="M8.5 13h4.5" stroke="currentColor" stroke-width="1.35" stroke-linecap="round"/>
-      </svg>
+      ${ICON_FAB}
     </button>
     <aside id="md-comments-sidebar" class="md-comments-sidebar" aria-label="Comments">
       <div class="md-comments-sidebar-resizer" id="md-comments-sidebar-resizer" role="separator" aria-orientation="vertical" aria-label="Resize comments panel" title="Drag to resize"></div>
