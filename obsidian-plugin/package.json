@@ -1,6 +1,6 @@
 {
   "name": "obsidian-md-comments",
-  "version": "1.3.2",
+  "version": "1.4.0",
   "description": "AI-orchestrated docs & human-orchestrated comments on rendered views powered by custom git refs backend for Obsidian",
   "main": "main.js",
   "scripts": {

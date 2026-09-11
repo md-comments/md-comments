@@ -391,12 +391,26 @@ test.describe('GitHub Extension: Hermetic Playwright E2E Lifecycle', () => {
       await testPage.reload({ waitUntil: 'load' });
       await expect(testPage.locator('.markdown-body')).toBeVisible();
 
-      // Wait for extension FAB and open drawer
-      const fab = testPage.locator('#md-comments-fab-toggle');
-      await expect(fab).toBeVisible({ timeout: 15000 });
-      await fab.click();
-
+      // Ensure sidebar is open (either auto-opened from persistent state or open via FAB)
       const drawer = testPage.locator('.md-comments-drawer, #md-comments-sidebar');
+      const fab = testPage.locator('#md-comments-fab-toggle');
+      await expect
+        .poll(
+          async () => {
+            const isOpen = await testPage.evaluate(() => {
+              const el = document.getElementById('md-comments-sidebar');
+              return el?.style.transform === 'translateX(0px)';
+            });
+            if (isOpen) return true;
+            if (await fab.isVisible()) {
+              await fab.click();
+              return true;
+            }
+            return false;
+          },
+          { timeout: 15000, intervals: [200, 500] }
+        )
+        .toBe(true);
       await expect(drawer).toBeVisible({ timeout: 5000 });
 
       // Switch to Page Comments tab

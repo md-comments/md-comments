@@ -1,6 +1,6 @@
 {
   "name": "@md-comments/shared",
-  "version": "1.3.2",
+  "version": "1.4.0",
   "private": true,
   "license": "MIT",
   "main": "./dist/index.js",

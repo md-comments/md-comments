@@ -76,6 +76,9 @@ test.describe('Cross-Interface Visual & UX Parity Suite (GitHub, VS Code, Demo S
         .first();
       await expect(refreshBtn).toBeVisible({ timeout: 5000 });
 
+      // Wait for drawer slide-in animation (250ms transition) to settle before bounding box measurements
+      await page.waitForTimeout(300);
+
       const btnBox = await refreshBtn.boundingBox();
       const svg = refreshBtn.locator('svg').first();
       await expect(svg).toBeVisible();

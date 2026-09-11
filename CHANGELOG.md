@@ -7,11 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-09-10
+
 ### Breaking Changes
 
 - **Canonical Comment Storage (No Backward Compatibility)**: Removed commit-hash versioning from comment filenames (`doc.<commit_sha>.comments.yml`). All comments are now stored in a single canonical file per document (`doc.comments.yml`).
 - **Self-Healing Shard Migration & Deletion**: Reading comments automatically aggregates all historical hashed shards (`doc.<sha>.comments.yml`) into the canonical file and permanently deletes the old shards from `refs/md-comments/data`. Older extension/plugin versions that expect commit-hashed filenames will no longer see comments once migrated.
 - **Comment-Level Commit Provenance**: Git commit SHAs are now recorded directly inside comment records (`commit_sha`) rather than embedded in the storage path.
+
+### Added
+
+- **Automatic & Manual Comment Refresh**:
+  - Added `CommentPollManager` and `getLatestRefSha` in shared core for efficient change detection.
+  - Added manual refresh button and adaptive polling to Chrome and Safari browser extensions.
+  - Added sibling comments file watcher and document focus synchronization to VS Code extension.
+  - Added refresh buttons, vault comment file watcher, and command palette trigger to Obsidian plugin.
+  - Added drawer refresh button, adaptive polling, and draft preservation to Starlight documentation plugin.
+- **Unified Design Tokens & Cross-Surface Parity**:
+  - Standardized canonical design tokens across GitHub DOM, VS Code, and demo sites.
+  - Added automated cross-surface component visual tests and triage scripts.
+- **Production Build Log Filtering**:
+  - Suppressed debug and info logs on release builds across VS Code, Chrome, Safari, and Obsidian, retaining critical error logs.
+- **Deterministic Release Automation**:
+  - Autonomous production release workflow and deterministic multi-manifest version bumping.
+
+### Fixed
+
+- **Refresh Button Icon Centering**:
+  - Standardized button hit targets to square flex containers and prevented icon drift from inline flow/padding across all interfaces.
 
 ## [1.3.2] - 2026-09-09
 
