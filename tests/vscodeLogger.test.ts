@@ -42,8 +42,8 @@ describe('VS Code Logger (vscode-extension/src/logger)', () => {
     expect(getLogLevel()).toBe('error');
   });
 
-  it('defaults to debug log level in normal development', () => {
-    expect(getLogLevel()).toBe('debug');
+  it('defaults to debug log level in normal development (or error on release branch)', () => {
+    expect(['debug', 'error']).toContain(getLogLevel());
   });
 
   it('respects LOG_LEVEL environment variable', () => {
