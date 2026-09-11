@@ -155,7 +155,10 @@ export class CommentsSidebarView extends ItemView {
       });
       refreshBtn.innerHTML = ICON_REFRESH;
       refreshBtn.addEventListener('click', () => {
-        void this.refresh();
+        refreshBtn.classList.add('is-refreshing');
+        this.refresh().finally(() => {
+          refreshBtn.classList.remove('is-refreshing');
+        });
       });
 
       // Render Tabs

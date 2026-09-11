@@ -186,16 +186,23 @@ html.md-comments-panel-open .right-sidebar {
   line-height: 1;
   color: var(--text-secondary);
   cursor: pointer;
-  padding: 4px 6px;
+  width: 28px;
+  height: 28px;
+  padding: 0;
   border-radius: 4px;
-  transition: color 0.15s;
-  display: flex;
+  transition:
+    color 0.15s,
+    background 0.15s;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
+  flex-shrink: 0;
 }
 
 .md-comments-drawer-close:hover {
   color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .md-comments-drawer-refresh {
@@ -203,16 +210,29 @@ html.md-comments-panel-open .right-sidebar {
   border: none;
   color: var(--text-secondary);
   cursor: pointer;
-  padding: 4px 6px;
+  width: 28px;
+  height: 28px;
+  padding: 0;
   border-radius: 4px;
-  transition: color 0.15s;
+  transition:
+    color 0.15s,
+    background 0.15s;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  line-height: 1;
 }
 
 .md-comments-drawer-refresh:hover {
   color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.md-comments-drawer-refresh svg {
+  display: block;
+  margin: 0;
 }
 
 .md-comments-drawer-refresh.is-refreshing svg {

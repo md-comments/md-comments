@@ -181,11 +181,25 @@ body.md-comments-resizing {
   font-size: 1.25rem;
   line-height: 1;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  flex-shrink: 0;
 }
 
 .md-comments-sidebar-icon-btn:hover {
   background: rgba(255, 255, 255, 0.08);
   color: var(--gc-text);
+}
+
+.md-comments-sidebar-icon-btn.is-refreshing svg {
+  animation: md-comments-spinner 0.8s linear infinite;
+}
+
+.md-comments-sidebar-icon-btn svg {
+  display: block;
+  margin: 0;
 }
 
 .md-comments-sidebar-body {

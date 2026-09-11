@@ -508,6 +508,11 @@
     }
 
     if (action === 'refresh') {
+      const refreshBtn = target.closest('button');
+      if (refreshBtn) {
+        refreshBtn.classList.add('is-refreshing');
+        setTimeout(() => refreshBtn.classList.remove('is-refreshing'), 1000);
+      }
       postAction({ action: 'refresh' });
       return;
     }

@@ -1365,7 +1365,7 @@
             <span>Markdown Comments</span>
           </div>
           <div class="md-comments-header-actions">
-            <button class="md-comments-drawer-refresh" type="button" aria-label="Refresh comments" title="Refresh comments" style="background:none;border:none;color:var(--text-secondary,#8b949e);cursor:pointer;padding:4px;display:inline-flex;align-items:center;justify-content:center;border-radius:4px;">${ICON_REFRESH}</button>
+            <button class="md-comments-drawer-refresh" type="button" aria-label="Refresh comments" title="Refresh comments">${ICON_REFRESH}</button>
             <div class="md-comments-user-badge"></div>
             <button class="md-comments-drawer-close" aria-label="Close">&times;</button>
           </div>

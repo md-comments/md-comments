@@ -70,6 +70,35 @@ test.describe('Cross-Interface Visual & UX Parity Suite (GitHub, VS Code, Demo S
       }
     });
 
+    await test.step('3b. Verify Refresh button geometry and icon centering', async () => {
+      const refreshBtn = page
+        .locator('.md-comments-drawer-refresh, .refresh-btn, #md-comments-sidebar-refresh')
+        .first();
+      await expect(refreshBtn).toBeVisible({ timeout: 5000 });
+
+      const btnBox = await refreshBtn.boundingBox();
+      const svg = refreshBtn.locator('svg').first();
+      await expect(svg).toBeVisible();
+      const svgBox = await svg.boundingBox();
+
+      expect(btnBox).not.toBeNull();
+      expect(svgBox).not.toBeNull();
+      if (btnBox && svgBox) {
+        // Assert square proportions (tolerance 2px)
+        expect(Math.abs(btnBox.width - btnBox.height)).toBeLessThanOrEqual(2);
+
+        // Assert horizontal centering within wrapping rectangle (tolerance 1.5px)
+        const leftGap = svgBox.x - btnBox.x;
+        const rightGap = btnBox.x + btnBox.width - (svgBox.x + svgBox.width);
+        expect(Math.abs(leftGap - rightGap)).toBeLessThanOrEqual(1.5);
+
+        // Assert vertical centering within wrapping rectangle (tolerance 1.5px)
+        const topGap = svgBox.y - btnBox.y;
+        const bottomGap = btnBox.y + btnBox.height - (svgBox.y + svgBox.height);
+        expect(Math.abs(topGap - bottomGap)).toBeLessThanOrEqual(1.5);
+      }
+    });
+
     await test.step('4. Verify Comment Card structure, author avatar, and header alignment', async () => {
       const card = page.locator('.md-comments-card, .comment-card').first();
       await expect(card).toBeVisible({ timeout: 5000 });
