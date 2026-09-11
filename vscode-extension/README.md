@@ -15,7 +15,7 @@ All comments, replies, and reactions are stored directly on GitHub in dedicated 
 - **Inline Highlights on Rendered Prose**: Leave comments on specific text selections or paragraphs directly in the preview.
 - **AI-Friendly Repository Docs**: Markdown files remain 100% free of inline HTML comment tags, keeping LLM prompts clean.
 - **Custom Git Refs Backend**: Comments auto-save live to GitHub (`refs/md-comments/data`) with zero commits or branch overhead.
-- **Git Commit-Hashed Storage**: Stores comment files with 7-character commit short SHAs (`doc.<commit_sha>.comments.yml`) and aggregates historical page comments across file rollbacks.
+- **Canonical Document Comments Storage**: Stores comments in a single canonical file per document (`doc.comments.yml`) on `refs/md-comments/data`. Comment records record the commit SHA internally for provenance while surviving repo-wide commit rotations without path churn.
 - **Fuzzy Anchoring Cascade**: Comments are robustly anchored using a cascade matching strategy:
   1. **Paragraph Hash**: Exact match of the normalized FNV-1a hash of the text.
   2. **Fuzzy Text Match**: Selection-based substring search to identify the text even if slightly edited.

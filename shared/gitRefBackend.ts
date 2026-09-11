@@ -18,12 +18,8 @@ export function stripMarkdownOrCommentsExtension(filePath: string): string {
   return clean.replace(/\.md$/i, '');
 }
 
-export function commentsFilePathForMarkdown(filePath: string, commitHash?: string): string {
+export function commentsFilePathForMarkdown(filePath: string, _commitHash?: string): string {
   const cleanPath = stripMarkdownOrCommentsExtension(filePath);
-  if (commitHash && commitHash.trim() && commitHash.trim() !== '0000000') {
-    const hash = commitHash.trim().slice(0, 7).toLowerCase();
-    return `${cleanPath}.${hash}.comments.yml`;
-  }
   return `${cleanPath}.comments.yml`;
 }
 
@@ -184,41 +180,112 @@ export class GitHubOrphanRefBackend implements CommentBackend {
     return null;
   }
 
+  private async fetchRefTreeBlobs(
+    owner: string,
+    repo: string
+  ): Promise<Array<{ path: string; sha: string }> | null> {
+    try {
+      // First try querying tree by ref name directly
+      const treeUrl = `https://api.github.com/repos/${owner}/${repo}/git/trees/${encodeURIComponent(ORPHAN_REF_NAME)}?recursive=1`;
+      let res = await this.fetchApi(treeUrl);
+      if (!res.ok) {
+        // Fallback: resolve commit sha from ref
+        const refUrl = `https://api.github.com/repos/${owner}/${repo}/git/refs/md-comments/data`;
+        const refRes = await this.fetchApi(refUrl);
+        if (!refRes.ok) return null;
+        const refData = (await refRes.json()) as { object?: { sha?: string } };
+        const commitSha = refData?.object?.sha;
+        if (!commitSha) return null;
+
+        const commitTreeUrl = `https://api.github.com/repos/${owner}/${repo}/git/trees/${commitSha}?recursive=1`;
+        res = await this.fetchApi(commitTreeUrl);
+        if (!res.ok) return null;
+      }
+
+      const data = (await res.json()) as {
+        tree?: Array<{ path: string; sha: string; type?: string }>;
+      };
+      if (Array.isArray(data?.tree)) {
+        return data.tree.filter((item) => !item.type || item.type === 'blob');
+      }
+    } catch {
+      /* ignore */
+    }
+    return null;
+  }
+
   /**
    * Reads all comments for a file from the orphan ref refs/md-comments/data.
-   * Enforces commit-hashed comment files. Migrates and immediately deletes legacy un-hashed files.
+   * Consolidates historical commit-hashed shards (doc.<sha>.comments.yml) into the
+   * canonical path (doc.comments.yml) and permanently deletes the shards atomically.
    */
   async read(key: CommentStorageKey): Promise<CommentsFile> {
-    const targetPath = commentsFilePathForMarkdown(key.filePath, key.commitHash);
+    const canonicalPath = commentsFilePathForMarkdown(key.filePath);
     const cleanPath = stripMarkdownOrCommentsExtension(key.filePath);
-    const legacyPath = `${cleanPath}.comments.yml`;
 
     let accumulated: CommentsFile = { page_comments: [], inline_comments: [] };
 
-    // 1. Fetch target comments file
-    const targetComments = await this.fetchPathContent(key.owner, key.repo, targetPath);
-    if (targetComments) {
-      accumulated = mergeCommentsFiles(accumulated, targetComments);
-    }
+    // 1. Fetch ref tree to discover canonical file and any historical shards
+    const treeBlobs = await this.fetchRefTreeBlobs(key.owner, key.repo);
 
-    // 2. Fetch legacy un-hashed comments file if present; migrate & DELETE immediately!
-    if (targetPath !== legacyPath) {
-      const legacyComments = await this.fetchPathContent(key.owner, key.repo, legacyPath);
-      if (legacyComments) {
-        if (!targetComments) {
-          accumulated = mergeCommentsFiles(accumulated, legacyComments);
-          await this.write(key, accumulated);
+    if (treeBlobs && treeBlobs.length > 0) {
+      const shardRegex = /\.[a-f0-9]{7,40}\.comments\.(?:ya?ml)$/i;
+
+      const shardPaths: string[] = [];
+      let canonicalFound = false;
+
+      for (const blob of treeBlobs) {
+        const decodedPath = decodeURIComponent(blob.path);
+        if (blob.path === canonicalPath || decodedPath === canonicalPath) {
+          canonicalFound = true;
+        } else if (
+          (shardRegex.test(blob.path) &&
+            stripMarkdownOrCommentsExtension(blob.path) === cleanPath) ||
+          (shardRegex.test(decodedPath) &&
+            stripMarkdownOrCommentsExtension(decodedPath) === cleanPath)
+        ) {
+          shardPaths.push(blob.path);
         }
-        await this.deleteFileFromRef(key.owner, key.repo, legacyPath);
+      }
+
+      if (shardPaths.length > 0) {
+        // Collect comments from all shards
+        for (const shardPath of shardPaths) {
+          const shardComments = await this.fetchPathContent(key.owner, key.repo, shardPath);
+          if (shardComments) {
+            accumulated = mergeCommentsFiles(accumulated, shardComments);
+          }
+        }
+        // Also merge existing canonical comments if present
+        if (canonicalFound) {
+          const canonicalComments = await this.fetchPathContent(key.owner, key.repo, canonicalPath);
+          if (canonicalComments) {
+            accumulated = mergeCommentsFiles(accumulated, canonicalComments);
+          }
+        }
+
+        // Self-healing migration: write merged comments to canonicalPath and delete all shards atomically
+        await this.write(key, accumulated, null, undefined, shardPaths);
+        return accumulated;
+      }
+
+      if (canonicalFound) {
+        const canonicalComments = await this.fetchPathContent(key.owner, key.repo, canonicalPath);
+        if (canonicalComments) {
+          accumulated = mergeCommentsFiles(accumulated, canonicalComments);
+        }
+        return accumulated;
+      }
+    } else {
+      // Direct fetch fallback if tree was empty or unavailable
+      const targetComments = await this.fetchPathContent(key.owner, key.repo, canonicalPath);
+      if (targetComments) {
+        accumulated = mergeCommentsFiles(accumulated, targetComments);
+        return accumulated;
       }
     }
 
-    // If comments were loaded, return the merged set
-    if (accumulated.page_comments.length > 0 || accumulated.inline_comments.length > 0) {
-      return accumulated;
-    }
-
-    // 4. Rename trace fallback via GitHub Commits API
+    // 2. Rename trace fallback via GitHub Commits API
     const traceResult = await this.traceAndMigrateRename(key);
     if (traceResult) {
       return mergeCommentsFiles(accumulated, traceResult);
@@ -342,9 +409,10 @@ export class GitHubOrphanRefBackend implements CommentBackend {
     key: CommentStorageKey,
     data: CommentsFile,
     previousData?: CommentsFile | null,
-    deletedIds?: Set<string>
+    deletedIds?: Set<string>,
+    shardsToDelete: string[] = []
   ): Promise<void> {
-    const commentsPath = commentsFilePathForMarkdown(key.filePath, key.commitHash);
+    const commentsPath = commentsFilePathForMarkdown(key.filePath);
     const maxRetries = 5;
     let currentData = data;
 
@@ -382,7 +450,7 @@ export class GitHubOrphanRefBackend implements CommentBackend {
 
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
-        const result = await this.tryWriteCommit(key, commentsPath, currentData);
+        const result = await this.tryWriteCommit(key, commentsPath, currentData, shardsToDelete);
         if (result.success) {
           if (result.createdSha) {
             await this.dispatchNotifications(
@@ -445,7 +513,8 @@ export class GitHubOrphanRefBackend implements CommentBackend {
   private async tryWriteCommit(
     key: CommentStorageKey,
     commentsPath: string,
-    newData: CommentsFile
+    newData: CommentsFile,
+    shardsToDelete: string[] = []
   ): Promise<{ success: boolean; createdSha?: string }> {
     const refUrl = `https://api.github.com/repos/${key.owner}/${key.repo}/git/refs/md-comments/data`;
     const refRes = await this.fetchApi(refUrl);
@@ -460,8 +529,17 @@ export class GitHubOrphanRefBackend implements CommentBackend {
 
     // Create tree directly with inline content blob and base_tree
     const treeUrl = `https://api.github.com/repos/${key.owner}/${key.repo}/git/trees`;
+    const treeEntries: Array<Record<string, unknown>> = [
+      { path: commentsPath, mode: '100644', type: 'blob', content: yamlString },
+    ];
+    for (const shard of shardsToDelete) {
+      if (shard !== commentsPath) {
+        treeEntries.push({ path: shard, mode: '100644', type: 'blob', sha: null });
+      }
+    }
+
     const treeBody: Record<string, unknown> = {
-      tree: [{ path: commentsPath, mode: '100644', type: 'blob', content: yamlString }],
+      tree: treeEntries,
     };
     if (currentCommitSha) {
       treeBody.base_tree = currentCommitSha;
@@ -481,7 +559,10 @@ export class GitHubOrphanRefBackend implements CommentBackend {
     // Create commit
     const commitUrl = `https://api.github.com/repos/${key.owner}/${key.repo}/git/commits`;
     const commitBody: Record<string, unknown> = {
-      message: `Update comments for ${key.filePath}`,
+      message:
+        shardsToDelete.length > 0
+          ? `Consolidate comments and migrate shards for ${key.filePath}`
+          : `Update comments for ${key.filePath}`,
       tree: treeData.sha,
     };
     if (currentCommitSha) {

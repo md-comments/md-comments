@@ -25,27 +25,27 @@ describe('GitHubOrphanRefBackend', () => {
   });
 
   describe('commentsFilePathForMarkdown', () => {
-    it('converts .md extensions to clean .comments.yml path if commitHash is unprovided or 0000000', () => {
+    it('converts .md extensions to canonical .comments.yml path if commitHash is unprovided or 0000000', () => {
       expect(commentsFilePathForMarkdown('README.md')).toBe('README.comments.yml');
       expect(commentsFilePathForMarkdown('docs/intro.md')).toBe('docs/intro.comments.yml');
       expect(commentsFilePathForMarkdown('README.md', '0000000')).toBe('README.comments.yml');
     });
 
-    it('formats path with 7-character short commit SHA when commitHash is provided', () => {
+    it('always returns canonical path ignoring any provided commitHash', () => {
       expect(commentsFilePathForMarkdown('README.md', 'a1b2c3d4e5f6789')).toBe(
-        'README.a1b2c3d.comments.yml'
+        'README.comments.yml'
       );
       expect(commentsFilePathForMarkdown('docs/intro.md', '7f8e9d0')).toBe(
-        'docs/intro.7f8e9d0.comments.yml'
+        'docs/intro.comments.yml'
       );
     });
 
-    it('updates existing .comments.yml paths with commit hash', () => {
+    it('strips legacy commit hash from existing hashed paths to yield canonical path', () => {
       expect(commentsFilePathForMarkdown('docs/intro.comments.yml')).toBe(
         'docs/intro.comments.yml'
       );
-      expect(commentsFilePathForMarkdown('docs/intro.comments.yml', 'a1b2c3d')).toBe(
-        'docs/intro.a1b2c3d.comments.yml'
+      expect(commentsFilePathForMarkdown('docs/intro.a1b2c3d.comments.yml')).toBe(
+        'docs/intro.comments.yml'
       );
     });
   });
@@ -354,9 +354,22 @@ describe('GitHubOrphanRefBackend', () => {
       const yamlStr = yaml.dump(mockComments);
       const base64Content = Buffer.from(yamlStr).toString('base64');
 
-      fetchMock.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ content: base64Content, encoding: 'base64' }),
+      fetchMock.mockImplementation(async (url: string) => {
+        if (url.includes('/git/trees')) {
+          return {
+            ok: true,
+            json: async () => ({
+              tree: [{ path: 'README.comments.yml', mode: '100644', type: 'blob' }],
+            }),
+          };
+        }
+        if (url.includes('README.comments.yml')) {
+          return {
+            ok: true,
+            json: async () => ({ content: base64Content, encoding: 'base64' }),
+          };
+        }
+        return { ok: false, status: 404 };
       });
 
       const result = await backend.read({
@@ -389,51 +402,47 @@ describe('GitHubOrphanRefBackend', () => {
     });
 
     it('retries write on 422 CAS conflict and succeeds on second attempt', async () => {
-      // Attempt 1:
-      // GET ref -> ok
-      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ object: { sha: 'c1' } }) });
-      // POST tree -> ok
-      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ sha: 't2' }) });
-      // POST commit -> ok
-      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ sha: 'c2' }) });
-      // PATCH ref -> 422 conflict!
-      fetchMock.mockResolvedValueOnce({ ok: false, status: 422 });
-
-      // Retry read attempt:
-      // GET content targetPath (which is also legacyPath since no commitHash provided) -> 404
-      fetchMock.mockResolvedValueOnce({ ok: false, status: 404 });
-      // GET commits for rename trace -> 404
-      fetchMock.mockResolvedValueOnce({ ok: false, status: 404 });
-
-      // Attempt 2:
-      // GET ref -> ok
-      fetchMock.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ object: { sha: 'c2-new' } }),
+      let patchAttempt = 0;
+      fetchMock.mockImplementation(async (url: string, opts?: any) => {
+        const method = (opts?.method || 'GET').toUpperCase();
+        if (url.includes('/git/refs/md-comments/data')) {
+          if (method === 'PATCH') {
+            patchAttempt++;
+            if (patchAttempt === 1) {
+              return { ok: false, status: 422 };
+            }
+            return { ok: true, json: async () => ({ object: { sha: 'c3' } }) };
+          }
+          return { ok: true, json: async () => ({ object: { sha: 'c1' } }) };
+        }
+        if (url.includes('/git/trees')) {
+          if (method === 'GET') {
+            return { ok: false, status: 404 };
+          }
+          return { ok: true, json: async () => ({ sha: 't2' }) };
+        }
+        if (url.includes('/git/commits')) {
+          return { ok: true, json: async () => ({ sha: 'c2' }) };
+        }
+        return { ok: false, status: 404 };
       });
-      // POST tree -> ok
-      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ sha: 't3' }) });
-      // POST commit -> ok
-      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ sha: 'c3' }) });
-      // PATCH ref -> 200 OK
-      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ object: { sha: 'c3' } }) });
 
       await backend.write(
         { owner: 'owner', repo: 'repo', filePath: 'docs/test.md' },
         { inline_comments: [], page_comments: [] }
       );
 
-      expect(fetchMock.mock.calls.length).toBe(10);
+      expect(patchAttempt).toBe(2);
     });
 
-    it('merges comments from commit-hashed file and legacy un-hashed file on read and deletes legacy file', async () => {
-      const legacyComments: CommentsFile = {
+    it('merges comments from historical commit-hashed shards into canonical file on read and deletes shards', async () => {
+      const shardComments: CommentsFile = {
         inline_comments: [],
         page_comments: [
           {
-            id: 'p-legacy',
+            id: 'p-shard',
             author: 'bob',
-            body: 'Comment from legacy base file',
+            body: 'Comment from shard file',
             created_at: '2026-08-25T12:00:00Z',
             resolved: false,
             reactions: [],
@@ -442,31 +451,39 @@ describe('GitHubOrphanRefBackend', () => {
         ],
       };
 
-      const base64Legacy = Buffer.from(yaml.dump(legacyComments)).toString('base64');
+      const base64Shard = Buffer.from(yaml.dump(shardComments)).toString('base64');
 
-      // 1. Fetch target commit-hashed file (docs/test.a1b2c3d.comments.yml) -> 404 (not yet migrated)
-      fetchMock.mockResolvedValueOnce({
-        ok: false,
-        status: 404,
+      let treePayload: any = null;
+      fetchMock.mockImplementation(async (url: string, opts?: any) => {
+        const method = (opts?.method || 'GET').toUpperCase();
+        if (url.includes('/git/trees')) {
+          if (method === 'GET') {
+            return {
+              ok: true,
+              json: async () => ({
+                tree: [{ path: 'docs/test.a1b2c3d.comments.yml', mode: '100644', type: 'blob' }],
+              }),
+            };
+          }
+          if (method === 'POST') {
+            treePayload = JSON.parse(opts.body);
+            return { ok: true, json: async () => ({ sha: 'new-tree-sha' }) };
+          }
+        }
+        if (url.includes('docs/test.a1b2c3d.comments.yml')) {
+          return { ok: true, json: async () => ({ content: base64Shard, encoding: 'base64' }) };
+        }
+        if (url.includes('/git/refs/md-comments/data')) {
+          if (method === 'PATCH') {
+            return { ok: true, json: async () => ({ object: { sha: 'c2' } }) };
+          }
+          return { ok: true, json: async () => ({ object: { sha: 'c1' } }) };
+        }
+        if (url.includes('/git/commits')) {
+          return { ok: true, json: async () => ({ sha: 'c2' }) };
+        }
+        return { ok: false, status: 404 };
       });
-      // 2. Fetch legacy file (docs/test.comments.yml) -> 200 (found)
-      fetchMock.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ content: base64Legacy, encoding: 'base64' }),
-      });
-
-      // Mocks for write call during migration:
-      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ object: { sha: 'c1' } }) });
-      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ sha: 't1' }) });
-      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ sha: 'c2' }) });
-      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ object: { sha: 'c2' } }) });
-
-      // Mocks for deleteFileFromRef call during cleanup:
-      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ object: { sha: 'c2' } }) });
-      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ tree: { sha: 't2' } }) });
-      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ sha: 't3' }) });
-      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ sha: 'c3' }) });
-      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ object: { sha: 'c3' } }) });
 
       const result = await backend.read({
         owner: 'test-owner',
@@ -476,17 +493,26 @@ describe('GitHubOrphanRefBackend', () => {
       });
 
       expect(result.page_comments.length).toBe(1);
-      expect(result.page_comments[0].id).toBe('p-legacy');
+      expect(result.page_comments[0].id).toBe('p-shard');
+      expect(treePayload).not.toBeNull();
+      const canonicalEntry = treePayload.tree.find((e: any) => e.path === 'docs/test.comments.yml');
+      expect(canonicalEntry).toBeDefined();
+      expect(canonicalEntry.content).toContain('p-shard');
+      const deletedEntry = treePayload.tree.find(
+        (e: any) => e.path === 'docs/test.a1b2c3d.comments.yml'
+      );
+      expect(deletedEntry).toBeDefined();
+      expect(deletedEntry.sha).toBeNull();
     });
 
-    it('deletes legacy comments file without resurrecting comments when targetComments already exists', async () => {
-      const commitComments: CommentsFile = {
+    it('consolidates multiple historical shards and deletes shards', async () => {
+      const canonicalComments: CommentsFile = {
         inline_comments: [],
         page_comments: [
           {
-            id: 'p-commit',
+            id: 'p-active',
             author: 'alice',
-            body: 'Active commit comment',
+            body: 'Active comment',
             created_at: '2026-09-01T10:00:00Z',
             resolved: false,
             reactions: [],
@@ -494,13 +520,13 @@ describe('GitHubOrphanRefBackend', () => {
           },
         ],
       };
-      const legacyComments: CommentsFile = {
+      const shardComments: CommentsFile = {
         inline_comments: [],
         page_comments: [
           {
-            id: 'p-deleted-in-commit',
+            id: 'p-shard',
             author: 'bob',
-            body: 'Old deleted comment in legacy',
+            body: 'Comment in shard',
             created_at: '2026-08-25T10:00:00Z',
             resolved: false,
             reactions: [],
@@ -509,26 +535,46 @@ describe('GitHubOrphanRefBackend', () => {
         ],
       };
 
-      const base64Commit = Buffer.from(yaml.dump(commitComments)).toString('base64');
-      const base64Legacy = Buffer.from(yaml.dump(legacyComments)).toString('base64');
+      const base64Canonical = Buffer.from(yaml.dump(canonicalComments)).toString('base64');
+      const base64Shard = Buffer.from(yaml.dump(shardComments)).toString('base64');
 
-      // 1. Fetch target commit-hashed file -> 200 (found)
-      fetchMock.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ content: base64Commit, encoding: 'base64' }),
+      let treePayload: any = null;
+      fetchMock.mockImplementation(async (url: string, opts?: any) => {
+        const method = (opts?.method || 'GET').toUpperCase();
+        if (url.includes('/git/trees')) {
+          if (method === 'GET') {
+            return {
+              ok: true,
+              json: async () => ({
+                tree: [
+                  { path: 'docs/test.comments.yml', mode: '100644', type: 'blob' },
+                  { path: 'docs/test.7f8e9d0.comments.yml', mode: '100644', type: 'blob' },
+                ],
+              }),
+            };
+          }
+          if (method === 'POST') {
+            treePayload = JSON.parse(opts.body);
+            return { ok: true, json: async () => ({ sha: 'tree-sha-2' }) };
+          }
+        }
+        if (url.includes('docs/test.comments.yml')) {
+          return { ok: true, json: async () => ({ content: base64Canonical, encoding: 'base64' }) };
+        }
+        if (url.includes('docs/test.7f8e9d0.comments.yml')) {
+          return { ok: true, json: async () => ({ content: base64Shard, encoding: 'base64' }) };
+        }
+        if (url.includes('/git/refs/md-comments/data')) {
+          if (method === 'PATCH') {
+            return { ok: true, json: async () => ({ object: { sha: 'c2' } }) };
+          }
+          return { ok: true, json: async () => ({ object: { sha: 'c1' } }) };
+        }
+        if (url.includes('/git/commits')) {
+          return { ok: true, json: async () => ({ sha: 'c2' }) };
+        }
+        return { ok: false, status: 404 };
       });
-      // 2. Fetch legacy file -> 200 (found)
-      fetchMock.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ content: base64Legacy, encoding: 'base64' }),
-      });
-
-      // Mocks for deleteFileFromRef call during cleanup of legacy file:
-      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ object: { sha: 'c2' } }) });
-      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ tree: { sha: 't2' } }) });
-      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ sha: 't3' }) });
-      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ sha: 'c3' }) });
-      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ object: { sha: 'c3' } }) });
 
       const result = await backend.read({
         owner: 'test-owner',
@@ -537,9 +583,14 @@ describe('GitHubOrphanRefBackend', () => {
         commitHash: 'a1b2c3d4e5f',
       });
 
-      // Crucial: Must only have the active comment, NOT the deleted comment from legacy!
-      expect(result.page_comments.length).toBe(1);
-      expect(result.page_comments[0].id).toBe('p-commit');
+      expect(result.page_comments.length).toBe(2);
+      expect(result.page_comments.map((p) => p.id)).toContain('p-active');
+      expect(result.page_comments.map((p) => p.id)).toContain('p-shard');
+      expect(treePayload).not.toBeNull();
+      const deletedEntry = treePayload.tree.find(
+        (e: any) => e.path === 'docs/test.7f8e9d0.comments.yml'
+      );
+      expect(deletedEntry.sha).toBeNull();
     });
 
     it('preserves deletions during CAS write retries without resurrecting deleted comments', async () => {
@@ -692,7 +743,10 @@ describe('GitHubOrphanRefBackend', () => {
           return { ok: true, json: async () => ({ object: { sha: 'final-sha' } }) };
         }
         // When read(key) is invoked on retry, remote still contains all comments and replies!
-        if (url.includes('docs/test.a1b2c3d.comments.yml')) {
+        if (
+          url.includes('docs/test.comments.yml') ||
+          url.includes('docs/test.a1b2c3d.comments.yml')
+        ) {
           fetchMock.mock.calls.push(['refetch-remote']);
           return {
             ok: true,
@@ -731,7 +785,9 @@ describe('GitHubOrphanRefBackend', () => {
     });
 
     it('properly encodes paths with spaces when fetching comments', async () => {
-      fetchMock.mockResolvedValueOnce({ ok: false, status: 404 });
+      fetchMock.mockImplementation(async (_url: string) => {
+        return { ok: false, status: 404 };
+      });
 
       await backend.read({
         owner: 'test-owner',
@@ -739,8 +795,8 @@ describe('GitHubOrphanRefBackend', () => {
         filePath: 'docs/ADR T9 Context Engine.md',
       });
 
-      const firstCallUrl = fetchMock.mock.calls[0][0];
-      expect(firstCallUrl).toContain('docs/ADR%20T9%20Context%20Engine.comments.yml');
+      const contentsCall = fetchMock.mock.calls.find((c) => String(c[0]).includes('/contents/'));
+      expect(contentsCall?.[0]).toContain('docs/ADR%20T9%20Context%20Engine.comments.yml');
     });
 
     it('falls back to double-encoded path when fetching comments with spaces in name', async () => {
@@ -1364,6 +1420,9 @@ page_comments: []
               return { ok: true, json: async () => ({ sha: 'sha-blob' }) };
             }
             if (url.includes('/git/trees')) {
+              if (method === 'GET') {
+                return { ok: false, status: 404 };
+              }
               stepAttempt++;
               // If failing on tree creation during deleteFileFromRef (attempt 2 of tree creation)
               if (failingStep === 'tree' && stepAttempt >= 2) {

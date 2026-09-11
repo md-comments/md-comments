@@ -282,7 +282,37 @@ export class LocalMockServer {
         tree: bodyJson?.tree || [],
       };
       this.trees.set(treeSha, treeObj);
+      for (const item of bodyJson?.tree || []) {
+        if (item.sha === null) {
+          this.files.delete(item.path);
+        } else if (item.content !== undefined) {
+          this.files.set(item.path, {
+            path: item.path,
+            content: item.content,
+            sha: this.generateSha('blob'),
+          });
+        }
+      }
       return sendJson(201, treeObj);
+    }
+
+    // 4b. GET /repos/:owner/:repo/git/trees/:tree_sha
+    const getTreeMatch = pathname.match(/^\/repos\/[^/]+\/[^/]+\/git\/trees\/(.+)$/);
+    if (getTreeMatch && method === 'GET') {
+      const treeParam = decodeURIComponent(getTreeMatch[1]);
+      const treeEntries = Array.from(this.files.values()).map((f) => ({
+        path: f.path,
+        mode: '100644',
+        type: 'blob',
+        sha: f.sha || this.generateSha('blob'),
+        size: Buffer.byteLength(f.content, 'utf8'),
+      }));
+      return sendJson(200, {
+        sha: treeParam,
+        url: `${this.url}${pathname}`,
+        tree: treeEntries,
+        truncated: false,
+      });
     }
 
     // 5. POST /repos/:owner/:repo/git/commits

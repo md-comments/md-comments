@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Breaking Changes
+
+- **Canonical Comment Storage (No Backward Compatibility)**: Removed commit-hash versioning from comment filenames (`doc.<commit_sha>.comments.yml`). All comments are now stored in a single canonical file per document (`doc.comments.yml`).
+- **Self-Healing Shard Migration & Deletion**: Reading comments automatically aggregates all historical hashed shards (`doc.<sha>.comments.yml`) into the canonical file and permanently deletes the old shards from `refs/md-comments/data`. Older extension/plugin versions that expect commit-hashed filenames will no longer see comments once migrated.
+- **Comment-Level Commit Provenance**: Git commit SHAs are now recorded directly inside comment records (`commit_sha`) rather than embedded in the storage path.
+
 ## [1.3.2] - 2026-09-09
 
 ### Added

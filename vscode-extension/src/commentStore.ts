@@ -103,6 +103,7 @@ function normalizePageComment(raw: PageComment): PageComment {
     body: raw.body,
     created_at: raw.created_at,
     updated_at: raw.updated_at,
+    commit_sha: raw.commit_sha,
     resolved: !!raw.resolved,
     resolved_at: raw.resolved_at,
     reactions: raw.reactions ?? [],
@@ -121,6 +122,7 @@ function normalizeInlineComment(raw: InlineComment): InlineComment {
     body: raw.body,
     created_at: raw.created_at,
     updated_at: raw.updated_at,
+    commit_sha: raw.commit_sha,
     orphaned: !!raw.orphaned,
     orphaned_at: raw.orphaned_at,
     resolved: !!raw.resolved,
@@ -152,6 +154,7 @@ export async function addInlineComment(
   }
 ): Promise<{ comment: InlineComment; savedPath: string }> {
   const data = await readComments(mdUri);
+  const key = await resolveStorageKeyForUri(mdUri);
   const comment: InlineComment = {
     id: newId('c'),
     author: await getAuthor(),
@@ -161,6 +164,7 @@ export async function addInlineComment(
     heading_context: fields.heading_context,
     body: fields.body,
     created_at: new Date().toISOString(),
+    commit_sha: key?.commitHash,
     orphaned: false,
     resolved: false,
     reactions: [],
@@ -176,11 +180,13 @@ export async function addPageComment(
   body: string
 ): Promise<{ comment: PageComment; savedPath: string }> {
   const data = await readComments(mdUri);
+  const key = await resolveStorageKeyForUri(mdUri);
   const comment: PageComment = {
     id: newId('c'),
     author: await getAuthor(),
     body,
     created_at: new Date().toISOString(),
+    commit_sha: key?.commitHash,
     resolved: false,
     reactions: [],
     replies: [],

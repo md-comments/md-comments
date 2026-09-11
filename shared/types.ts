@@ -18,6 +18,7 @@ export interface PageComment {
   body: string;
   created_at: string;
   updated_at?: string;
+  commit_sha?: string;
   resolved: boolean;
   resolved_at?: string;
   reactions: Reaction[];
@@ -35,6 +36,7 @@ export interface InlineComment {
   body: string;
   created_at: string;
   updated_at?: string;
+  commit_sha?: string;
   orphaned: boolean;
   orphaned_at?: string;
   resolved: boolean;

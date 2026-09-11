@@ -4501,6 +4501,12 @@ async function saveNewInlineComment(
   occurrence?: number
 ) {
   const author = await getDisplayAuthor();
+  const meta = parseGitHubUrl(window.location.href);
+  const commitSha =
+    meta && meta.type === 'blob'
+      ? (await resolveBlobCommitHash(meta.owner, meta.repo, meta.branch)) || undefined
+      : undefined;
+
   const newComment: InlineComment = {
     id: `c-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`,
     author,
@@ -4511,6 +4517,7 @@ async function saveNewInlineComment(
     anchor_occurrence: occurrence,
     body,
     created_at: new Date().toISOString(),
+    commit_sha: commitSha,
     orphaned: false,
     resolved: false,
     reactions: [],
@@ -4540,11 +4547,18 @@ async function saveNewInlineComment(
 
 async function saveNewPageComment(body: string) {
   const author = await getDisplayAuthor();
+  const meta = parseGitHubUrl(window.location.href);
+  const commitSha =
+    meta && meta.type === 'blob'
+      ? (await resolveBlobCommitHash(meta.owner, meta.repo, meta.branch)) || undefined
+      : undefined;
+
   const newComment: PageComment = {
     id: `c-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`,
     author,
     body,
     created_at: new Date().toISOString(),
+    commit_sha: commitSha,
     resolved: false,
     reactions: [],
     replies: [],
