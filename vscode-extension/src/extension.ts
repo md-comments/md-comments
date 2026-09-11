@@ -11,6 +11,8 @@ import { scanOrphansForMarkdown } from './orphan';
 import { MarkdownCommentsCodeLensProvider } from './codeLensProvider';
 import { initializeAuth, signIn, signOut, getOAuthToken } from './githubAuth';
 import { initializeLogger, logDebug, logInfo, logError } from './logger';
+import { globalOptimisticStore } from './optimisticStore';
+import { resolveStorageKeyForUri } from './repoManager';
 
 function mdUriFromMessage(msg: CommentActionMessage): vscode.Uri {
   const md = msg.md?.trim();
@@ -47,9 +49,26 @@ async function updateStatusBar(): Promise<void> {
   statusBarItem.show();
 }
 
-async function refreshPreview(): Promise<void> {
-  logDebug('refreshPreview triggered');
+async function refreshPreview(forceRemote = false): Promise<void> {
+  logDebug(`refreshPreview triggered, forceRemote=${forceRemote}`);
   globalCodeLensProvider?.refresh();
+  const editor = vscode.window.activeTextEditor;
+  if (
+    forceRemote &&
+    editor?.document &&
+    (editor.document.languageId === 'markdown' || editor.document.uri.path.endsWith('.md'))
+  ) {
+    try {
+      const key = await resolveStorageKeyForUri(editor.document.uri);
+      if (key) {
+        globalOptimisticStore.invalidate(key);
+      }
+      void readComments(editor.document.uri, true);
+      CommentPreviewPanel.refreshForUri(editor.document.uri, true);
+    } catch (err) {
+      logError('refreshPreview invalidating/reading remote failed', err);
+    }
+  }
   try {
     await warmAuthorCache();
   } catch (err) {
@@ -288,7 +307,7 @@ export function activate(context: vscode.ExtensionContext): {
         }
       }
     ),
-    vscode.commands.registerCommand('mdComments.refreshPreview', refreshPreview),
+    vscode.commands.registerCommand('mdComments.refreshPreview', () => refreshPreview(true)),
     vscode.commands.registerCommand('mdComments.scanOrphans', async () => {
       const editor = vscode.window.activeTextEditor;
       logInfo('Command mdComments.scanOrphans invoked');
@@ -317,7 +336,44 @@ export function activate(context: vscode.ExtensionContext): {
       }
       CommentPreviewPanel.refreshForUri(doc.uri);
       await refreshPreview();
+    }),
+    vscode.window.onDidChangeWindowState(async (windowState) => {
+      if (windowState.focused) {
+        logDebug('VS Code window focused, checking comments refresh');
+        const editor = vscode.window.activeTextEditor;
+        if (
+          editor?.document &&
+          (editor.document.languageId === 'markdown' || editor.document.uri.path.endsWith('.md'))
+        ) {
+          CommentPreviewPanel.refreshForUri(editor.document.uri, false);
+          await refreshPreview(false);
+        }
+      }
     })
+  );
+
+  const commentsWatcher = vscode.workspace.createFileSystemWatcher('**/*.comments.y*ml');
+  const handleCommentsFileChange = async (commentsUri: vscode.Uri) => {
+    logDebug('Comments file changed externally:', commentsUri.toString());
+    const mdPath = commentsUri.path.replace(/\.comments\.ya?ml$/i, '.md');
+    const mdUri = commentsUri.with({ path: mdPath });
+    try {
+      const key = await resolveStorageKeyForUri(mdUri);
+      if (key) {
+        globalOptimisticStore.invalidate(key);
+      }
+    } catch {
+      // ignore
+    }
+    CommentPreviewPanel.refreshForUri(mdUri, true);
+    await refreshPreview(true);
+  };
+
+  context.subscriptions.push(
+    commentsWatcher,
+    commentsWatcher.onDidChange(handleCommentsFileChange),
+    commentsWatcher.onDidCreate(handleCommentsFileChange),
+    commentsWatcher.onDidDelete(handleCommentsFileChange)
   );
 
   return { extendMarkdownIt };

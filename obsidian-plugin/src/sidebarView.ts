@@ -27,6 +27,8 @@ const ICON_EDIT =
   '<svg class="md-comments-icon-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 18.5h2.5L17 9l-2.5-2.5L5 16v2.5zM15.5 5.5L18.5 8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const ICON_COMMENT_ADD =
   '<svg class="md-comments-icon-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+const ICON_REFRESH =
+  '<svg class="md-comments-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>';
 const displayNameCache = new Map<string, string>();
 const pendingFetches = new Set<string>();
 
@@ -57,15 +59,44 @@ export class CommentsSidebarView extends ItemView {
   }
 
   async onOpen(): Promise<void> {
+    this.addAction('refresh-cw', 'Refresh comments', () => {
+      void this.refresh();
+    });
+
     this.registerEvent(this.app.workspace.on('active-leaf-change', () => this.refresh()));
     this.registerEvent(
       this.app.vault.on('modify', (file) => {
         const activeFile = this.app.workspace.getActiveFile();
-        if (activeFile && file.path === activeFile.path) {
+        if (!activeFile) return;
+        if (
+          file.path === activeFile.path ||
+          file.path.endsWith('.comments.yml') ||
+          file.path.endsWith('.comments.yaml')
+        ) {
           this.refresh();
         }
       })
     );
+    this.registerEvent(
+      this.app.vault.on('create', (file) => {
+        if (file.path.endsWith('.comments.yml') || file.path.endsWith('.comments.yaml')) {
+          this.refresh();
+        }
+      })
+    );
+    this.registerEvent(
+      this.app.vault.on('delete', (file) => {
+        if (file.path.endsWith('.comments.yml') || file.path.endsWith('.comments.yaml')) {
+          this.refresh();
+        }
+      })
+    );
+
+    const onWindowFocus = () => {
+      void this.refresh();
+    };
+    window.addEventListener('focus', onWindowFocus);
+    this.register(() => window.removeEventListener('focus', onWindowFocus));
 
     this.contentEl.empty();
     this.contentEl.addClass('md-comments-sidebar-container');
@@ -117,6 +148,15 @@ export class CommentsSidebarView extends ItemView {
       // Render Header
       const header = this.contentEl.createDiv({ cls: 'md-comments-sidebar-header' });
       header.createEl('h3', { text: 'Comments', cls: 'md-comments-sidebar-title' });
+      const headerActions = header.createDiv({ cls: 'md-comments-sidebar-header-actions' });
+      const refreshBtn = headerActions.createEl('button', {
+        cls: 'md-comments-sidebar-icon-btn',
+        attr: { 'aria-label': 'Refresh comments', title: 'Refresh comments', type: 'button' },
+      });
+      refreshBtn.innerHTML = ICON_REFRESH;
+      refreshBtn.addEventListener('click', () => {
+        void this.refresh();
+      });
 
       // Render Tabs
       const tabsNav = this.contentEl.createEl('nav', { cls: 'md-comments-tabs' });

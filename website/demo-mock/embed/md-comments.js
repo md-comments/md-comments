@@ -18,6 +18,7 @@
   const ICON_RESOLVE = `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 12.5l3.5 3.5L18 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
   const ICON_REOPEN = `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.5-5.5M20 12a8 8 0 0 1-13.5 5.5M16 6.5V10h-3.5M8 17.5V14H11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
   const ICON_REACT = `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.5"/><path d="M9.25 10.25h.01M14.75 10.25h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9.25 14.25c.85 1.15 2 1.75 2.75 1.75s1.9-.6 2.75-1.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`;
+  const ICON_REFRESH = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="refresh-icon"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>`;
 
   const displayNameCache = new Map();
   const pendingFetches = new Set();
@@ -1364,6 +1365,7 @@
             <span>Markdown Comments</span>
           </div>
           <div class="md-comments-header-actions">
+            <button class="md-comments-drawer-refresh" type="button" aria-label="Refresh comments" title="Refresh comments" style="background:none;border:none;color:var(--text-secondary,#8b949e);cursor:pointer;padding:4px;display:inline-flex;align-items:center;justify-content:center;border-radius:4px;">${ICON_REFRESH}</button>
             <div class="md-comments-user-badge"></div>
             <button class="md-comments-drawer-close" aria-label="Close">&times;</button>
           </div>
@@ -1403,6 +1405,18 @@
       document.body.appendChild(this.drawerEl);
 
       this.drawerEl.querySelector('.md-comments-drawer-close').onclick = () => this.closeDrawer();
+
+      const refreshBtn = this.drawerEl.querySelector('.md-comments-drawer-refresh');
+      if (refreshBtn) {
+        refreshBtn.onclick = async () => {
+          refreshBtn.classList.add('is-refreshing');
+          try {
+            await this.init();
+          } finally {
+            refreshBtn.classList.remove('is-refreshing');
+          }
+        };
+      }
 
       // Tab switching
       this.drawerEl.querySelectorAll('.md-comments-tab-btn').forEach((btn) => {

@@ -20,6 +20,7 @@ import type {
   AnchorBlock,
 } from '../../shared/types';
 import { GitHubOrphanRefBackend } from '../../shared/gitRefBackend';
+import { CommentPollManager } from '../../shared/commentSync';
 import {
   getStoredToken,
   saveOAuthTokens,
@@ -53,6 +54,7 @@ const ICON_DELETE = `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><pa
 const ICON_RESOLVE = `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 12.5l3.5 3.5L18 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 const ICON_REOPEN = `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.5-5.5M20 12a8 8 0 0 1-13.5 5.5M16 6.5V10h-3.5M8 17.5V14H11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 const ICON_REACT = `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.5"/><path d="M9.25 10.25h.01M14.75 10.25h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9.25 14.25c.85 1.15 2 1.75 2.75 1.75s1.9-.6 2.75-1.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`;
+const ICON_REFRESH = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="refresh-icon"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>`;
 
 // Global references to injected elements for cleanup
 let activeIndicators: HTMLElement[] = [];
@@ -1010,6 +1012,60 @@ async function loadDocumentComments(meta: ParsedUrl & { type: 'blob' }) {
         openSidebar('inline');
       }
     });
+  }
+}
+
+let lastKnownRefSha: string | null = null;
+let commentsPollManager: CommentPollManager | null = null;
+
+async function refreshDocumentComments(force = false): Promise<void> {
+  const meta = parseGitHubUrl(window.location.href);
+  if (
+    !meta ||
+    meta.type !== 'blob' ||
+    !meta.filePath ||
+    !meta.filePath.toLowerCase().endsWith('.md')
+  ) {
+    return;
+  }
+
+  // Preserve drafts in active inputs before re-rendering
+  if (activeSidebarHost) {
+    const pageTextarea = activeSidebarHost.querySelector('.page-textarea') as HTMLTextAreaElement;
+    if (pageTextarea && pageTextarea.value.trim()) {
+      saveDraft(getDraftKey('page'), pageTextarea.value);
+    }
+  }
+
+  if (!force && lastKnownRefSha) {
+    try {
+      const currentSha = await gitRefBackend.getLatestRefSha(meta.owner, meta.repo);
+      if (currentSha && currentSha === lastKnownRefSha) {
+        return; // Remote ref unchanged, nothing new to load
+      }
+      if (currentSha) {
+        lastKnownRefSha = currentSha;
+      }
+    } catch {
+      // ignore check failure
+    }
+  }
+
+  const refreshBtn = activeSidebarHost?.querySelector('.refresh-btn');
+  refreshBtn?.classList.add('is-refreshing');
+
+  try {
+    await loadDocumentComments(meta as ParsedUrl & { type: 'blob' });
+    if (!lastKnownRefSha) {
+      gitRefBackend
+        .getLatestRefSha(meta.owner, meta.repo)
+        .then((sha) => {
+          if (sha) lastKnownRefSha = sha;
+        })
+        .catch(() => {});
+    }
+  } finally {
+    refreshBtn?.classList.remove('is-refreshing');
   }
 }
 
@@ -2013,7 +2069,10 @@ function injectSidebar() {
       <div class="title-section">
         <h3>Markdown Comments</h3>
       </div>
-      ${isEmbedded ? '' : '<button class="close-btn">&times;</button>'}
+      <div class="sidebar-header-actions">
+        <button class="md-comments-header-btn refresh-btn" type="button" title="Refresh comments" aria-label="Refresh comments">${ICON_REFRESH}</button>
+        ${isEmbedded ? '' : '<button class="close-btn">&times;</button>'}
+      </div>
     </div>
 
     <div class="unauthorized-container" style="display: none; flex-direction: column; flex: 1; padding: 16px;"></div>
@@ -2049,6 +2108,10 @@ function injectSidebar() {
   `;
 
   // Register events
+  activeSidebarHost.querySelector('.refresh-btn')?.addEventListener('click', async () => {
+    await refreshDocumentComments(true);
+  });
+
   if (!isEmbedded) {
     activeSidebarHost.querySelector('.close-btn')?.addEventListener('click', closeSidebar);
   }
@@ -2138,6 +2201,22 @@ function openSidebar(tab: 'inline' | 'page' = 'inline', highlightCommentId?: str
 
   renderSidebarComments();
 
+  // Confluence pattern: refresh on open
+  void refreshDocumentComments(false);
+
+  // Start background adaptive poller while sidebar is open
+  if (!commentsPollManager) {
+    commentsPollManager = new CommentPollManager(
+      async () => {
+        if (isSidebarOpen()) {
+          await refreshDocumentComments(false);
+        }
+      },
+      { intervalMs: 30000, minIntervalMs: 10000 }
+    );
+  }
+  commentsPollManager.start();
+
   if (highlightCommentId) {
     setTimeout(() => {
       const commentEl = activeSidebarHost?.querySelector(
@@ -2161,6 +2240,11 @@ function closeSidebar() {
   if (fab) fab.style.display = 'flex';
   activeSidebarHost.style.transform = 'translateX(100%)';
   document.body.classList.remove('md-comments-push-active');
+
+  // Stop polling when sidebar is closed
+  if (commentsPollManager) {
+    commentsPollManager.stop();
+  }
 }
 
 function renderInstallationValidatingCard(owner?: string, repo?: string): string {

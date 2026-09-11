@@ -98,6 +98,19 @@ export default class MarkdownCommentsPlugin extends Plugin {
     });
 
     this.addCommand({
+      id: 'refresh-comments',
+      name: 'Refresh comments',
+      callback: () => {
+        const leaves = this.app.workspace.getLeavesOfType(VIEW_TYPE_COMMENTS);
+        for (const leaf of leaves) {
+          if (leaf.view instanceof CommentsSidebarView) {
+            void leaf.view.refresh();
+          }
+        }
+      },
+    });
+
+    this.addCommand({
       id: 'add-inline-comment',
       name: 'Add Comment to Selection',
       editorCallback: async (editor, view) => {

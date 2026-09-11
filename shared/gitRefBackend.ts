@@ -215,6 +215,26 @@ export class GitHubOrphanRefBackend implements CommentBackend {
   }
 
   /**
+   * Retrieves the latest commit SHA for the orphan comments ref refs/md-comments/data.
+   * Returns null if the ref does not exist or fails to fetch.
+   */
+  async getLatestRefSha(owner: string, repo: string): Promise<string | null> {
+    try {
+      const refUrl = `https://api.github.com/repos/${owner}/${repo}/git/refs/md-comments/data`;
+      const res = await this.fetchApi(refUrl);
+      if (!res.ok) return null;
+      const refData = (await res.json()) as
+        { object?: { sha?: string } } | Array<{ object?: { sha?: string } }>;
+      if (Array.isArray(refData)) {
+        return refData[0]?.object?.sha ?? null;
+      }
+      return refData?.object?.sha ?? null;
+    } catch {
+      return null;
+    }
+  }
+
+  /**
    * Reads all comments for a file from the orphan ref refs/md-comments/data.
    * Consolidates historical commit-hashed shards (doc.<sha>.comments.yml) into the
    * canonical path (doc.comments.yml) and permanently deletes the shards atomically.

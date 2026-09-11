@@ -1,5 +1,6 @@
 import {
   GitHubOrphanRefBackend,
+  CommentPollManager,
   type CommentsFile,
   type InlineComment,
   type PageComment,
@@ -21,6 +22,7 @@ const ICON_DELETE = `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><pa
 const ICON_RESOLVE = `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 12.5l3.5 3.5L18 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 const ICON_REOPEN = `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.5-5.5M20 12a8 8 0 0 1-13.5 5.5M16 6.5V10h-3.5M8 17.5V14H11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 const ICON_REACT = `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.5"/><path d="M9.25 10.25h.01M14.75 10.25h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9.25 14.25c.85 1.15 2 1.75 2.75 1.75s1.9-.6 2.75-1.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`;
+const ICON_REFRESH = `<svg class="refresh-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>`;
 
 const displayNameCache = new Map<string, string>();
 const pendingFetches = new Set<string>();
@@ -119,6 +121,8 @@ export class CommentsOverlay {
   private editingCommentId: string | null = null;
   private editingReplyId: string | null = null;
   private activeTooltipEl: HTMLElement | null = null;
+  private pollManager: CommentPollManager | null = null;
+  private lastKnownRefSha: string | null = null;
 
   private pendingSelection: {
     text: string;
@@ -221,6 +225,7 @@ export class CommentsOverlay {
           <span>Markdown Comments</span>
         </div>
         <div class="md-comments-header-actions">
+          <button class="md-comments-drawer-refresh" type="button" aria-label="Refresh comments" title="Refresh comments">${ICON_REFRESH}</button>
           <div class="md-comments-auth-user"></div>
           <button class="md-comments-drawer-close" aria-label="Close">&times;</button>
         </div>
@@ -259,6 +264,16 @@ export class CommentsOverlay {
 
     const closeBtn = this.drawerEl.querySelector('.md-comments-drawer-close');
     closeBtn?.addEventListener('click', () => this.closeDrawer());
+
+    const refreshBtn = this.drawerEl.querySelector('.md-comments-drawer-refresh');
+    refreshBtn?.addEventListener('click', async () => {
+      refreshBtn.classList.add('is-refreshing');
+      try {
+        await this.loadComments(true);
+      } finally {
+        refreshBtn.classList.remove('is-refreshing');
+      }
+    });
 
     // Tab switching
     this.drawerEl.querySelectorAll('.md-comments-tab-btn').forEach((btn) => {
@@ -433,10 +448,27 @@ export class CommentsOverlay {
     }
   }
 
-  private async loadComments(): Promise<void> {
+  private async loadComments(force = false): Promise<void> {
     if (!this.options.repo) return;
     const [owner, repo] = this.options.repo.split('/');
     if (!owner || !repo) return;
+
+    if (!force && this.lastKnownRefSha) {
+      try {
+        const currentSha = await this.backend.getLatestRefSha(owner, repo);
+        if (currentSha && currentSha === this.lastKnownRefSha) {
+          return;
+        }
+        if (currentSha) {
+          this.lastKnownRefSha = currentSha;
+        }
+      } catch {
+        // ignore check failure
+      }
+    }
+
+    const pageInput = this.drawerEl?.querySelector<HTMLTextAreaElement>('.page-textarea');
+    const pageDraft = pageInput?.value;
 
     this.isLoadingComments = true;
     this.lastLoadCommentsError = null;
@@ -451,6 +483,14 @@ export class CommentsOverlay {
         filePath,
       });
       this.lastLoadCommentsError = null;
+      if (!this.lastKnownRefSha) {
+        this.backend
+          .getLatestRefSha(owner, repo)
+          .then((sha) => {
+            if (sha) this.lastKnownRefSha = sha;
+          })
+          .catch(() => {});
+      }
     } catch (err) {
       this.lastLoadCommentsError = err instanceof Error ? err.message : String(err);
       this.comments = { inline_comments: [], page_comments: [] };
@@ -461,6 +501,11 @@ export class CommentsOverlay {
     this.renderInlineHighlights();
     this.updateFABCount();
     this.renderDrawerContent();
+
+    if (pageDraft) {
+      const newPageInput = this.drawerEl?.querySelector<HTMLTextAreaElement>('.page-textarea');
+      if (newPageInput) newPageInput.value = pageDraft;
+    }
   }
 
   private updateFABCount(): void {
@@ -539,6 +584,20 @@ export class CommentsOverlay {
     if (this.fabEl) this.fabEl.style.display = 'none';
     this.drawerEl.classList.add('md-comments-drawer-open');
     this.renderDrawerContent();
+
+    void this.loadComments(false);
+
+    if (!this.pollManager) {
+      this.pollManager = new CommentPollManager(
+        async () => {
+          if (this.drawerEl?.classList.contains('md-comments-drawer-open')) {
+            await this.loadComments(false);
+          }
+        },
+        { intervalMs: 30000, minIntervalMs: 10000 }
+      );
+    }
+    this.pollManager.start();
   }
 
   public closeDrawer(): void {
@@ -552,6 +611,10 @@ export class CommentsOverlay {
     this.drawerEl.classList.remove('md-comments-drawer-open');
     this.pendingSelection = null;
     this.hideCommentTooltip();
+
+    if (this.pollManager) {
+      this.pollManager.stop();
+    }
   }
 
   private openComposerForSelection(): void {

@@ -9,3 +9,4 @@ export * from './gitRefBackend.js';
 export * from './localFileBackend.js';
 export * from './telemetry.js';
 export * from './theme-adapters.js';
+export * from './commentSync.js';

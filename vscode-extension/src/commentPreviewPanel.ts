@@ -76,8 +76,9 @@ export class CommentPreviewPanel {
     this.panel.webview.onDidReceiveMessage(
       async (msg: CommentActionMessage) => {
         logDebug('CommentPreviewPanel webview message received:', msg);
+        const isManualRefresh = msg.action === 'refresh';
         await executeCommentAction(this.mdUri, msg);
-        await this.refresh(false); // optimistic UI refresh
+        await this.refresh(isManualRefresh);
         try {
           await vscode.commands.executeCommand('mdComments.refreshPreview');
         } catch (err) {
@@ -92,6 +93,25 @@ export class CommentPreviewPanel {
       undefined,
       this.disposables
     );
+
+    this.panel.onDidChangeViewState(
+      (e) => {
+        if (e.webviewPanel.visible) {
+          logDebug(`CommentPreviewPanel became visible for ${this.mdUri.toString()}`);
+          void this.refresh(false);
+        }
+      },
+      null,
+      this.disposables
+    );
+
+    const pollInterval = setInterval(() => {
+      if (this.panel.visible) {
+        logDebug(`CommentPreviewPanel background poll for ${this.mdUri.toString()}`);
+        void this.refresh(false);
+      }
+    }, 30000);
+    this.disposables.push(new vscode.Disposable(() => clearInterval(pollInterval)));
 
     this.panel.onDidDispose(
       () => {
