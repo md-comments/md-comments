@@ -1,0 +1,402 @@
+/**
+ * Markdown Comments — Shared Canonical Component Styles
+ * Enforces 100% visual and structural parity across GitHub, VS Code, and Demo sites.
+ */
+
+/* ==========================================================================
+   1. Floating Action Button (FAB)
+   ========================================================================== */
+.mdc-fab-toggle {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: var(--mdc-fab-size, 44px);
+  height: var(--mdc-fab-size, 44px);
+  border-radius: var(--mdc-radius-full, 9999px);
+  background: var(--mdc-color-accent, #6366f1);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: var(--mdc-shadow-fab);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 99999;
+  transition:
+    transform var(--mdc-transition-fast),
+    background var(--mdc-transition-fast),
+    box-shadow var(--mdc-transition-fast);
+  user-select: none;
+  outline: none;
+}
+
+.mdc-fab-toggle:hover {
+  background: var(--mdc-color-accent-hover, #4f46e5);
+  transform: scale(1.06);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.32);
+}
+
+.mdc-fab-toggle:active {
+  transform: scale(0.96);
+}
+
+.mdc-fab-toggle svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+}
+
+.mdc-fab-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: var(--mdc-radius-full, 9999px);
+  background: var(--mdc-color-danger, #f85149);
+  color: #ffffff;
+  font-family: var(--mdc-font-family);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  border: 2px solid var(--mdc-color-bg, #0d1117);
+}
+
+/* ==========================================================================
+   2. Comments Drawer / Sidebar Container
+   ========================================================================== */
+.mdc-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: var(--mdc-drawer-width, 340px);
+  background: var(--mdc-color-surface, rgba(22, 27, 34, 0.92));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-left: 1px solid var(--mdc-color-border, #30363d);
+  color: var(--mdc-color-text-primary, #c9d1d9);
+  font-family: var(--mdc-font-family);
+  font-size: var(--mdc-font-base, 14px);
+  display: flex;
+  flex-direction: column;
+  z-index: 99998;
+  box-shadow: var(--mdc-shadow-lg);
+  transform: translateX(100%);
+  transition: transform var(--mdc-transition-drawer);
+  box-sizing: border-box;
+}
+
+.mdc-drawer.mdc-drawer-open {
+  transform: translateX(0);
+}
+
+.mdc-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--mdc-space-3, 12px) var(--mdc-space-4, 16px);
+  border-bottom: 1px solid var(--mdc-color-border, #30363d);
+}
+
+.mdc-drawer-title {
+  font-size: var(--mdc-font-md, 16px);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: var(--mdc-space-2, 8px);
+}
+
+.mdc-drawer-close {
+  background: transparent;
+  border: none;
+  color: var(--mdc-color-text-secondary, #8b949e);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--mdc-radius-sm, 4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mdc-drawer-close:hover {
+  background: var(--mdc-color-card-hover);
+  color: var(--mdc-color-text-primary);
+}
+
+/* Tabs & Filter Header */
+.mdc-tabs {
+  display: flex;
+  padding: var(--mdc-space-2, 8px) var(--mdc-space-4, 16px);
+  gap: var(--mdc-space-2, 8px);
+  border-bottom: 1px solid var(--mdc-color-border-subtle, #21262d);
+}
+
+.mdc-tab-btn {
+  background: transparent;
+  border: none;
+  padding: 6px 12px;
+  font-size: var(--mdc-font-xs, 12px);
+  font-weight: 600;
+  color: var(--mdc-color-text-secondary, #8b949e);
+  border-radius: var(--mdc-radius-md, 6px);
+  cursor: pointer;
+  transition:
+    background var(--mdc-transition-fast),
+    color var(--mdc-transition-fast);
+}
+
+.mdc-tab-btn:hover {
+  background: var(--mdc-color-card);
+  color: var(--mdc-color-text-primary);
+}
+
+.mdc-tab-btn.active {
+  background: var(--mdc-color-accent-subtle);
+  color: var(--mdc-color-accent);
+}
+
+/* ==========================================================================
+   3. Comment Cards
+   ========================================================================== */
+.mdc-comment-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--mdc-space-3, 12px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--mdc-space-3, 12px);
+}
+
+.mdc-comment-card {
+  background: var(--mdc-color-card, rgba(13, 17, 23, 0.75));
+  border: 1px solid var(--mdc-color-border, #30363d);
+  border-radius: var(--mdc-radius-lg, 8px);
+  padding: var(--mdc-space-3, 12px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--mdc-space-2, 8px);
+  transition:
+    border-color var(--mdc-transition-fast),
+    box-shadow var(--mdc-transition-fast);
+}
+
+.mdc-comment-card:hover {
+  border-color: var(--mdc-color-accent);
+  box-shadow: var(--mdc-shadow-sm);
+}
+
+.mdc-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mdc-author-info {
+  display: flex;
+  align-items: center;
+  gap: var(--mdc-space-2, 8px);
+}
+
+.mdc-avatar {
+  width: var(--mdc-avatar-size, 32px);
+  height: var(--mdc-avatar-size, 32px);
+  border-radius: var(--mdc-radius-full, 9999px);
+  border: 1px solid var(--mdc-color-border, #30363d);
+  object-fit: cover;
+}
+
+.mdc-author-name {
+  font-weight: 600;
+  font-size: var(--mdc-font-sm, 13px);
+  color: var(--mdc-color-text-primary);
+}
+
+.mdc-comment-time {
+  font-size: var(--mdc-font-xs, 12px);
+  color: var(--mdc-color-text-muted);
+}
+
+.mdc-comment-body {
+  font-size: var(--mdc-font-sm, 13px);
+  line-height: 1.5;
+  color: var(--mdc-color-text-primary);
+  word-break: break-word;
+}
+
+/* ==========================================================================
+   4. Markdown Composer & Formatting Toolbar
+   ========================================================================== */
+.mdc-composer {
+  border: 1px solid var(--mdc-color-border, #30363d);
+  border-radius: var(--mdc-radius-lg, 8px);
+  background: var(--mdc-color-card);
+  overflow: hidden;
+  margin: var(--mdc-space-2, 8px) 0;
+}
+
+.mdc-composer-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 8px;
+  background: var(--mdc-color-surface);
+  border-bottom: 1px solid var(--mdc-color-border);
+}
+
+.mdc-toolbar-btn {
+  width: var(--mdc-toolbar-btn-size, 28px);
+  height: var(--mdc-toolbar-btn-size, 28px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: var(--mdc-radius-sm, 4px);
+  color: var(--mdc-color-text-secondary);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.mdc-toolbar-btn:hover {
+  background: var(--mdc-color-card-hover);
+  color: var(--mdc-color-text-primary);
+}
+
+.mdc-composer-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--mdc-space-3, 12px);
+  background: transparent;
+  border: none;
+  resize: vertical;
+  min-height: 72px;
+  font-family: var(--mdc-font-family);
+  font-size: var(--mdc-font-sm, 13px);
+  color: var(--mdc-color-text-primary);
+  outline: none;
+}
+
+.mdc-composer-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--mdc-space-2, 8px);
+  padding: var(--mdc-space-2, 8px) var(--mdc-space-3, 12px);
+  border-top: 1px solid var(--mdc-color-border-subtle);
+}
+
+.mdc-btn-primary {
+  background: var(--mdc-color-accent, #6366f1);
+  color: #ffffff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: var(--mdc-radius-md, 6px);
+  font-size: var(--mdc-font-xs, 12px);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--mdc-transition-fast);
+}
+
+.mdc-btn-primary:hover {
+  background: var(--mdc-color-accent-hover, #4f46e5);
+}
+
+.mdc-btn-secondary {
+  background: transparent;
+  color: var(--mdc-color-text-secondary);
+  border: 1px solid var(--mdc-color-border);
+  padding: 6px 14px;
+  border-radius: var(--mdc-radius-md, 6px);
+  font-size: var(--mdc-font-xs, 12px);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.mdc-btn-secondary:hover {
+  background: var(--mdc-color-card-hover);
+  color: var(--mdc-color-text-primary);
+}
+
+/* ==========================================================================
+   5. Reaction Bar & Chips
+   ========================================================================== */
+.mdc-reaction-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.mdc-reaction-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  height: 24px;
+  border-radius: var(--mdc-radius-full, 9999px);
+  background: var(--mdc-color-card);
+  border: 1px solid var(--mdc-color-border);
+  font-size: 12px;
+  color: var(--mdc-color-text-secondary);
+  cursor: pointer;
+  transition: all var(--mdc-transition-fast);
+  user-select: none;
+}
+
+.mdc-reaction-chip:hover {
+  border-color: var(--mdc-color-accent);
+  color: var(--mdc-color-text-primary);
+}
+
+.mdc-reaction-chip.active {
+  background: var(--mdc-color-accent-subtle);
+  border-color: var(--mdc-color-accent);
+  color: var(--mdc-color-accent);
+}
+
+/* ==========================================================================
+   6. Prose Highlighting & Selection Popover
+   ========================================================================== */
+.mdc-anchor-highlight {
+  background-color: var(--mdc-color-anchor-highlight, rgba(234, 179, 8, 0.28));
+  border-bottom: 2px solid var(--mdc-color-warning, #d29922);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background-color var(--mdc-transition-fast);
+}
+
+.mdc-anchor-highlight.pulse {
+  animation: mdc-pulse-highlight 1.5s ease;
+}
+
+@keyframes mdc-pulse-highlight {
+  0% {
+    background-color: var(--mdc-color-anchor-pulse);
+  }
+  100% {
+    background-color: var(--mdc-color-anchor-highlight);
+  }
+}
+
+.mdc-selection-bubble {
+  position: absolute;
+  z-index: 99990;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: var(--mdc-radius-md, 6px);
+  background: var(--mdc-color-surface);
+  border: 1px solid var(--mdc-color-border);
+  box-shadow: var(--mdc-shadow-popover);
+  color: var(--mdc-color-text-primary);
+  font-size: var(--mdc-font-xs, 12px);
+  cursor: pointer;
+  transform: translateY(-100%) translateY(-8px);
+}

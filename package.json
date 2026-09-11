@@ -42,6 +42,7 @@
     "test:e2e:ext:mock": "playwright test tests/e2e/github-extension-hermetic.spec.ts --project=chromium-headless",
     "test:e2e:ext:live": "playwright test tests/e2e/github-extension-live.spec.ts --project=chromium-headless",
     "test:e2e:vscode": "playwright test --project=vscode-electron",
+    "test:visual": "playwright test tests/e2e/visual/ --project=chromium-headless",
     "test:e2e:report": "playwright show-report",
     "coverage:consolidate": "node scripts/consolidate-coverage.mjs",
     "test:report": "node scripts/generate-allure-report.mjs",

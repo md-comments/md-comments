@@ -21,14 +21,39 @@
 }
 
 :root {
-  --gc-accent: #0c66e4;
-  --gc-accent-hover: #0055cc;
-  --gc-surface: var(--vscode-editorWidget-background, #22272b);
-  --gc-surface-raised: var(--vscode-sideBar-background, #1d2125);
-  --gc-border: var(--vscode-panel-border, #3d474d);
-  --gc-text: var(--vscode-editor-foreground, #b6c2cf);
-  --gc-text-muted: var(--vscode-descriptionForeground, #8c9bab);
-  --gc-highlight: rgba(12, 102, 228, 0.35);
+  /* Canonical Design System Tokens */
+  --mdc-font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --mdc-space-1: 4px;
+  --mdc-space-2: 8px;
+  --mdc-space-3: 12px;
+  --mdc-space-4: 16px;
+  --mdc-radius-sm: 4px;
+  --mdc-radius-md: 6px;
+  --mdc-radius-lg: 8px;
+  --mdc-radius-full: 9999px;
+  --mdc-drawer-width: 340px;
+  --mdc-fab-size: 44px;
+
+  /* Theme Tokens mapped to VS Code workbench variables */
+  --mdc-color-accent: var(--vscode-button-background, #6366f1);
+  --mdc-color-accent-hover: var(--vscode-button-hoverBackground, #4f46e5);
+  --mdc-color-card: var(--vscode-editorWidget-background, #22272b);
+  --mdc-color-surface: var(--vscode-sideBar-background, #1d2125);
+  --mdc-color-border: var(--vscode-panel-border, #3d474d);
+  --mdc-color-text-primary: var(--vscode-editor-foreground, #b6c2cf);
+  --mdc-color-text-secondary: var(--vscode-descriptionForeground, #8c9bab);
+  --mdc-color-anchor-highlight: rgba(99, 102, 241, 0.35);
+
+  /* Legacy Bridge Variables */
+  --gc-accent: var(--mdc-color-accent);
+  --gc-accent-hover: var(--mdc-color-accent-hover);
+  --gc-surface: var(--mdc-color-card);
+  --gc-surface-raised: var(--mdc-color-surface);
+  --gc-border: var(--mdc-color-border);
+  --gc-text: var(--mdc-color-text-primary);
+  --gc-text-muted: var(--mdc-color-text-secondary);
+  --gc-highlight: var(--mdc-color-anchor-highlight);
 }
 
 /* Layout: document + comments sidebar */

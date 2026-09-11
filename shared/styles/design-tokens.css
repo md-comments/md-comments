@@ -1,0 +1,128 @@
+/**
+ * Markdown Comments — Shared Design System Tokens
+ * Canonical specification for 100% visual and UX parity across:
+ * - GitHub Browser Extension (Chrome, Safari)
+ * - VS Code Extension (Markdown Preview & Webview)
+ * - Demo Sites & Embeds (Astro, Starlight, Plain HTML)
+ */
+
+:root {
+  /* Typography */
+  --mdc-font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --mdc-font-family-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
+    monospace;
+  --mdc-font-xs: 0.75rem; /* 12px */
+  --mdc-font-sm: 0.8125rem; /* 13px */
+  --mdc-font-base: 0.875rem; /* 14px */
+  --mdc-font-md: 1rem; /* 16px */
+  --mdc-font-lg: 1.125rem; /* 18px */
+
+  /* Spacing Scale */
+  --mdc-space-1: 4px;
+  --mdc-space-2: 8px;
+  --mdc-space-3: 12px;
+  --mdc-space-4: 16px;
+  --mdc-space-5: 20px;
+  --mdc-space-6: 24px;
+  --mdc-space-8: 32px;
+
+  /* Border Radii */
+  --mdc-radius-sm: 4px;
+  --mdc-radius-md: 6px;
+  --mdc-radius-lg: 8px;
+  --mdc-radius-xl: 12px;
+  --mdc-radius-full: 9999px;
+
+  /* Elevations & Shadows */
+  --mdc-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --mdc-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --mdc-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --mdc-shadow-fab: 0 4px 14px rgba(0, 0, 0, 0.28);
+  --mdc-shadow-popover: 0 8px 24px rgba(0, 0, 0, 0.22);
+
+  /* Component Dimensions */
+  --mdc-drawer-width: 340px;
+  --mdc-fab-size: 44px;
+  --mdc-avatar-size: 32px;
+  --mdc-toolbar-btn-size: 28px;
+
+  /* Transitions */
+  --mdc-transition-fast: 0.15s ease;
+  --mdc-transition-base: 0.2s ease;
+  --mdc-transition-drawer: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   Dark Theme (Default)
+   ========================================================================== */
+:root,
+[data-theme='dark'],
+.md-comments-scope[data-md-theme='dark'],
+html[data-color-mode='dark'] .md-comments-scope,
+body[data-color-mode='dark'] .md-comments-scope {
+  --mdc-color-bg: #0d1117;
+  --mdc-color-surface: rgba(22, 27, 34, 0.88);
+  --mdc-color-card: rgba(13, 17, 23, 0.75);
+  --mdc-color-card-hover: rgba(22, 27, 34, 0.95);
+  --mdc-color-border: #30363d;
+  --mdc-color-border-subtle: #21262d;
+  --mdc-color-text-primary: #c9d1d9;
+  --mdc-color-text-secondary: #8b949e;
+  --mdc-color-text-muted: #6e7681;
+  --mdc-color-accent: #6366f1;
+  --mdc-color-accent-hover: #4f46e5;
+  --mdc-color-accent-subtle: rgba(99, 102, 241, 0.15);
+  --mdc-color-success: #3fb950;
+  --mdc-color-warning: #d29922;
+  --mdc-color-danger: #f85149;
+  --mdc-color-anchor-highlight: rgba(234, 179, 8, 0.28);
+  --mdc-color-anchor-pulse: rgba(234, 179, 8, 0.55);
+}
+
+/* ==========================================================================
+   Light Theme
+   ========================================================================== */
+[data-theme='light'],
+.md-comments-scope[data-md-theme='light'],
+html[data-color-mode='light'] .md-comments-scope,
+body[data-color-mode='light'] .md-comments-scope {
+  --mdc-color-bg: #ffffff;
+  --mdc-color-surface: rgba(255, 255, 255, 0.94);
+  --mdc-color-card: rgba(246, 248, 250, 0.88);
+  --mdc-color-card-hover: rgba(255, 255, 255, 1);
+  --mdc-color-border: #d0d7de;
+  --mdc-color-border-subtle: #eaeef2;
+  --mdc-color-text-primary: #24292f;
+  --mdc-color-text-secondary: #57606a;
+  --mdc-color-text-muted: #8c959f;
+  --mdc-color-accent: #4f46e5;
+  --mdc-color-accent-hover: #4338ca;
+  --mdc-color-accent-subtle: rgba(79, 70, 229, 0.12);
+  --mdc-color-success: #1a7f37;
+  --mdc-color-warning: #9a6700;
+  --mdc-color-danger: #cf222e;
+  --mdc-color-anchor-highlight: rgba(250, 204, 21, 0.35);
+  --mdc-color-anchor-pulse: rgba(250, 204, 21, 0.65);
+}
+
+/* ==========================================================================
+   VS Code Adaptive Theme Scope
+   Maps --mdc-* to VS Code workbench variables while preserving hierarchy
+   ========================================================================== */
+.md-comments-vscode-theme {
+  --mdc-color-bg: var(--vscode-editor-background, #1e1e1e);
+  --mdc-color-surface: var(--vscode-sideBar-background, #252526);
+  --mdc-color-card: var(--vscode-editorWidget-background, #2d2d2d);
+  --mdc-color-card-hover: var(--vscode-list-hoverBackground, #2a2d2e);
+  --mdc-color-border: var(--vscode-panel-border, #3c3c3c);
+  --mdc-color-border-subtle: var(--vscode-widget-border, #3c3c3c);
+  --mdc-color-text-primary: var(--vscode-editor-foreground, #cccccc);
+  --mdc-color-text-secondary: var(--vscode-descriptionForeground, #858585);
+  --mdc-color-text-muted: var(--vscode-disabledForeground, #6e7681);
+  --mdc-color-accent: var(--vscode-button-background, #6366f1);
+  --mdc-color-accent-hover: var(--vscode-button-hoverBackground, #4f46e5);
+  --mdc-color-accent-subtle: rgba(99, 102, 241, 0.18);
+  --mdc-color-anchor-highlight: rgba(234, 179, 8, 0.32);
+}

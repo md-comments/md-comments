@@ -505,6 +505,64 @@ describe('GitHubOrphanRefBackend', () => {
       expect(deletedEntry.sha).toBeNull();
     });
 
+    it('merges comments from URL-encoded historical commit-hashed shards into canonical file on read', async () => {
+      const shardComments: CommentsFile = {
+        inline_comments: [],
+        page_comments: [
+          {
+            id: 'p-encoded-shard',
+            author: 'bob',
+            body: 'Comment from encoded shard file',
+            created_at: '2026-08-25T12:00:00Z',
+            resolved: false,
+            reactions: [],
+            replies: [],
+          },
+        ],
+      };
+
+      const base64Shard = Buffer.from(yaml.dump(shardComments)).toString('base64');
+
+      fetchMock.mockImplementation(async (url: string, opts?: any) => {
+        const method = (opts?.method || 'GET').toUpperCase();
+        if (url.includes('/git/trees')) {
+          if (method === 'GET') {
+            return {
+              ok: true,
+              json: async () => ({
+                tree: [{ path: 'docs%2Ftest.a1b2c3d.comments.yml', mode: '100644', type: 'blob' }],
+              }),
+            };
+          }
+          if (method === 'POST') {
+            return { ok: true, json: async () => ({ sha: 'new-tree-sha' }) };
+          }
+        }
+        if (url.includes('test.a1b2c3d.comments.yml')) {
+          return { ok: true, json: async () => ({ content: base64Shard, encoding: 'base64' }) };
+        }
+        if (url.includes('/git/refs/md-comments/data')) {
+          if (method === 'PATCH') {
+            return { ok: true, json: async () => ({ object: { sha: 'c2' } }) };
+          }
+          return { ok: true, json: async () => ({ object: { sha: 'c1' } }) };
+        }
+        if (url.includes('/git/commits')) {
+          return { ok: true, json: async () => ({ sha: 'c2' }) };
+        }
+        return { ok: false, status: 404 };
+      });
+
+      const result = await backend.read({
+        owner: 'test-owner',
+        repo: 'test-repo',
+        filePath: 'docs/test.md',
+      });
+
+      expect(result.page_comments.length).toBe(1);
+      expect(result.page_comments[0].id).toBe('p-encoded-shard');
+    });
+
     it('consolidates multiple historical shards and deletes shards', async () => {
       const canonicalComments: CommentsFile = {
         inline_comments: [],

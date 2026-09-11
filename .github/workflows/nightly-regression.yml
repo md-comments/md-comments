@@ -86,6 +86,13 @@ jobs:
           RUN_LIVE_GITHUB_E2E: ${{ secrets.TEST_GITHUB_TOKEN != '' && 'true' || 'false' }}
         run: pnpm test:e2e
 
+      - name: Run Cross-Interface Visual 100% Parity Suite
+        run: pnpm test:visual
+
+      - name: Generate Visual Drift Triage on Failure
+        if: failure()
+        run: node scripts/triage-visual-drift.mjs
+
       - name: Post-Test Cleanup Test Repository
         if: always()
         env:
