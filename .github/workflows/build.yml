@@ -21,6 +21,8 @@ jobs:
     name: Build and Verify
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
+    env:
+      RELEASE_BUILD: ${{ startsWith(github.ref, 'refs/heads/release/') || inputs.environment == 'Staging' || inputs.environment == 'Production' }}
     outputs:
       version: ${{ steps.get_version.outputs.version }}
     steps:

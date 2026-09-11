@@ -3,8 +3,11 @@ const esbuild = require('esbuild');
 const fs = require('fs');
 const path = require('path');
 
+const { isReleaseBranch } = require('../scripts/detect-build-env');
+
 const args = process.argv.slice(2);
 const prod = args.includes('production');
+const isRelease = prod || isReleaseBranch();
 const targetArg = args.find((a) => a.startsWith('--target='));
 const target = targetArg ? targetArg.split('=')[1] : 'all';
 
@@ -62,6 +65,12 @@ async function buildTarget(outdir, manifestSource, isWatch) {
     target: 'es2022',
     sourcemap: prod ? false : 'inline',
     treeShaking: true,
+    minifySyntax: isRelease,
+    pure: isRelease ? ['console.log', 'console.info', 'console.debug', 'console.warn'] : [],
+    define: {
+      'process.env.LOG_LEVEL': JSON.stringify(isRelease ? 'error' : 'debug'),
+      __RELEASE_BUILD__: JSON.stringify(isRelease),
+    },
     plugins: [copyPlugin],
     logLevel: 'info',
   });

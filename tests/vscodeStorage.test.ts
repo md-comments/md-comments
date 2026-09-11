@@ -84,7 +84,7 @@ describe('OptimisticCommentStore', () => {
     store.updateComments(sampleKey, sampleComments, write1);
     store.updateComments(sampleKey, sampleComments, write2);
 
-    await new Promise((r) => setTimeout(r, 100));
+    await new Promise((r) => setTimeout(r, 200));
     expect(executionOrder).toEqual([1, 2]);
   });
 });

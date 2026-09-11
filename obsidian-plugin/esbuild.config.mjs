@@ -11,6 +11,7 @@ if you want to view the source, please visit the github repository of this plugi
 `;
 
 const prod = (process.argv[2] === 'production');
+const isRelease = prod || process.env.RELEASE_BUILD === 'true' || process.env.RELEASE_BUILD === '1';
 
 let outdir = "./";
 const outdirArgIdx = process.argv.findIndex(arg => arg === '--outdir' || arg.startsWith('--outdir='));
@@ -69,6 +70,8 @@ const context = await esbuild.context({
 	logLevel: "info",
 	sourcemap: prod ? false : 'inline',
 	treeShaking: true,
+	minifySyntax: isRelease,
+	pure: isRelease ? ['console.log', 'console.info', 'console.debug', 'console.warn'] : [],
 	outfile: path.join(outdir, 'main.js'),
 	plugins: [copyPlugin],
 });

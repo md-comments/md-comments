@@ -139,6 +139,24 @@
             "❓"
           ],
           "description": "Emoji options for reactions"
+        },
+        "mdComments.logLevel": {
+          "type": "string",
+          "enum": [
+            "debug",
+            "info",
+            "warn",
+            "error",
+            "silent"
+          ],
+          "enumDescriptions": [
+            "Full verbose debugging information.",
+            "Informational messages, warnings, and errors.",
+            "Warnings and errors only.",
+            "Critical errors and exceptions only (default in release builds).",
+            "Completely disable extension output channel logging."
+          ],
+          "description": "Log verbosity level. Defaults to 'error' on release builds and 'debug' during development."
         }
       }
     }
