@@ -240,7 +240,16 @@
         card.addEventListener('mouseleave', function () {
           clearActive();
         });
-        card.addEventListener('click', function () {
+        card.addEventListener('click', function (e) {
+          if (
+            e.target &&
+            e.target.closest &&
+            e.target.closest(
+              'button, [data-md-action], input, textarea, a, .md-comments-reaction-pill, .md-comments-btn-icon, .md-comments-action-btn, .md-comments-reply-composer, .md-comments-panel-composer, .md-comments-popover, .md-comments-emoji-popover'
+            )
+          ) {
+            return;
+          }
           scrollToAnchor(commentId);
         });
       });
