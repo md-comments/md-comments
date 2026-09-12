@@ -448,6 +448,7 @@
         }, 4000);
       }
       textarea.value = '';
+      textarea.blur();
 
       document.dispatchEvent(
         new CustomEvent('md-comments:submit-page', {

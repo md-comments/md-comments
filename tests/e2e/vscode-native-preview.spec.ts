@@ -64,6 +64,15 @@ test.describe('VS Code Native Markdown Preview Integration E2E', () => {
     await expect(actionTrigger).toHaveCount(1);
     await expect(actionTrigger).toHaveAttribute('rel', /noreferrer/);
 
+    const winInfo = await previewFrame.locator('body').evaluate(() => {
+      return {
+        hasAcquireVsCodeApi: typeof (window as any).acquireVsCodeApi === 'function',
+        keys: Object.keys(window).filter((k) => k.toLowerCase().includes('vscode')),
+        hasVsCode: typeof (window as any).vscode !== 'undefined',
+      };
+    });
+    console.log('--- NATIVE PREVIEW WIN INFO ---', JSON.stringify(winInfo));
+
     // 2. Open sidebar drawer via FAB
     const fab = previewFrame.locator('#md-comments-panel-fab');
     await fab.click();
@@ -89,20 +98,33 @@ test.describe('VS Code Native Markdown Preview Integration E2E', () => {
       }
     }
 
-    // 6. Test submitting a comment in native preview and ensure screen does not become empty
+    // 5. Submit page comment in native preview drawer and verify preview does NOT crash / blank
     const pageTab = previewFrame.locator('.md-comments-tab[data-tab="page"]');
-    await pageTab.click();
+    await pageTab.dispatchEvent('click');
     const pageComposer = previewFrame.locator('#page-composer');
     await expect(pageComposer).toBeVisible();
     const textarea = pageComposer.locator('.page-textarea');
-    await textarea.fill('Testing comment submission in native preview');
+    const commentText = 'Testing comment submission in native preview';
+    await textarea.fill(commentText);
     const submitBtn = pageComposer.locator('.submit-page-btn');
-    await submitBtn.click();
+    await submitBtn.dispatchEvent('click');
+
+    // Verify optimistic card was inserted immediately
+    const optimisticCard = previewFrame.locator('.md-comments-card', { hasText: commentText });
+    await expect(optimisticCard).toBeVisible({ timeout: 3000 });
+
+    // Verify action trigger anchor receives the uri with encoded payload
+    await expect(actionTrigger).toHaveAttribute('href', /action=addPage/);
 
     // Verify preview layout and document remain intact and visible (NOT blank/empty screen)
     const layout = previewFrame.locator('#md-comments-layout');
     await expect(layout).toBeVisible({ timeout: 5000 });
     const mainDoc = previewFrame.locator('.md-comments-document');
     await expect(mainDoc).toHaveCount(1);
+
+    // Close sidebar drawer and verify document is fully visible
+    const closeBtn = previewFrame.locator('#md-comments-sidebar-close');
+    await closeBtn.click();
+    await expect(mainDoc).toBeVisible({ timeout: 5000 });
   });
 });

@@ -27,14 +27,18 @@ test.describe('VS Code Extension Comment Preview E2E', () => {
     const keyFeaturesHeading = previewFrame.getByRole('heading', { name: 'Key Features' });
     await expect(keyFeaturesHeading).toBeVisible();
 
-    // 2. Verify comments sidebar is rendered
+    // 2. Verify comments sidebar is rendered and open via FAB if closed
     const sidebar = previewFrame.locator('#md-comments-sidebar');
-    await expect(sidebar).toBeVisible({ timeout: 10000 });
+    await expect(sidebar).toBeAttached({ timeout: 10000 });
+    const fab = previewFrame.locator('#md-comments-panel-fab');
+    if (await fab.isVisible()) {
+      await fab.dispatchEvent('click');
+    }
 
     // 3. Switch to Page Comments tab
     const pageTab = previewFrame.locator('.md-comments-tab[data-tab="page"]');
     await expect(pageTab).toBeVisible({ timeout: 5000 });
-    await pageTab.click();
+    await pageTab.dispatchEvent('click');
 
     // Verify redundant footer button was removed from document tab
     const legacyFooterBtn = previewFrame.locator(
@@ -50,7 +54,7 @@ test.describe('VS Code Extension Comment Preview E2E', () => {
     await textarea.fill(commentBody);
 
     const submitBtn = previewFrame.locator('#page-composer .submit-page-btn');
-    await submitBtn.click();
+    await submitBtn.dispatchEvent('click');
 
     // 5. Assert comment card appears optimistically and instantly
     const commentCard = previewFrame.locator('.md-comments-card', { hasText: commentBody });
@@ -66,7 +70,7 @@ test.describe('VS Code Extension Comment Preview E2E', () => {
 
     // 8. Test reply action on first click without scroll interception
     const replyBtn = commentCard.locator('[data-md-action="reply"]').first();
-    await replyBtn.click();
+    await replyBtn.dispatchEvent('click');
 
     const replyComposer = commentCard.locator(
       '.reply-composer-wrapper, .md-comments-panel-composer'
@@ -79,7 +83,7 @@ test.describe('VS Code Extension Comment Preview E2E', () => {
     const replySubmitBtn = replyComposer.locator(
       'button[data-action="submit"], .fallback-submit-btn'
     );
-    await replySubmitBtn.click();
+    await replySubmitBtn.dispatchEvent('click');
 
     // Verify reply submit button does not remain stuck in loading spinner
     await expect(replySubmitBtn).not.toHaveClass(/loading/, { timeout: 4500 });

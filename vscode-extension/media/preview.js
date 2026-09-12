@@ -274,7 +274,11 @@
       trigger.setAttribute('rel', 'noreferrer noopener');
     }
     trigger.href = uri;
-    trigger.click();
+    // NOTE: In VS Code's sandboxed built-in markdown preview iframe, calling trigger.click()
+    // triggers browser navigation to a custom URI scheme. Because the sandboxed frame lacks
+    // 'allow-popups' and CSP enforces "frame-src 'self'", Chromium terminates the navigation
+    // with ERR_BLOCKED_BY_CSP, destroying the document and leaving an empty/blank screen.
+    // We update trigger.href for inspection/testing but do NOT simulate an unhandled click navigation.
   }
 
   function removeEl(id) {

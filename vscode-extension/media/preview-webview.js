@@ -928,7 +928,12 @@
         curSidebarBody.contains(activeEl);
 
       if (newSidebarBody && curSidebarBody && !isTyping) {
+        const curTabEl = curSidebarBody.querySelector('.md-comments-tab.md-comments-tab-active');
+        const activeTabId = curTabEl ? curTabEl.getAttribute('data-tab') : null;
         curSidebarBody.innerHTML = newSidebarBody.innerHTML;
+        if (activeTabId && window.mdCommentsActivateTab) {
+          window.mdCommentsActivateTab(activeTabId);
+        }
       }
 
       // 2. Update thread count attribute & FAB badge
