@@ -437,8 +437,17 @@
       if (submitBtn) {
         submitBtn.classList.add('loading');
         submitBtn.disabled = true;
+        setTimeout(function () {
+          if (submitBtn) {
+            submitBtn.classList.remove('loading');
+            submitBtn.disabled = false;
+          }
+          if (textarea) {
+            textarea.disabled = false;
+          }
+        }, 4000);
       }
-      textarea.disabled = true;
+      textarea.value = '';
 
       document.dispatchEvent(
         new CustomEvent('md-comments:submit-page', {
@@ -504,6 +513,12 @@
         if (submitBtn) {
           submitBtn.classList.add('loading');
           submitBtn.disabled = true;
+          setTimeout(function () {
+            if (submitBtn) {
+              submitBtn.classList.remove('loading');
+              submitBtn.disabled = false;
+            }
+          }, 4000);
         }
 
         if (window.mdCommentsPrepareReplyNav) {
@@ -518,6 +533,7 @@
             detail: { rootId: rootId, type: type, body: body },
           })
         );
+        closeComposer();
       }
 
       if (replyInput) {

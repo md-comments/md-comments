@@ -50,14 +50,14 @@ describe('VS Code Native Preview Actions & Dialog Consistency', () => {
     expect(previewJs).toContain('md-comments-panel-composer');
   });
 
-  it('verifies preview.js dispatches actions via safe URI bridge without page navigation', () => {
-    expect(previewJs).toContain('md-comments-uri-bridge');
+  it('verifies preview.js dispatches actions via safe URI action trigger without page navigation', () => {
+    expect(previewJs).toContain('md-comments-action-trigger');
     expect(previewJs).toContain('getUriScheme');
     expect(previewJs).toContain('toBase64Url');
-    expect(previewJs).toContain('bridge.src = uri');
+    expect(previewJs).toContain('trigger.href = uri');
   });
 
-  it('verifies markdownItPlugin renders data-md-uri-scheme and hidden iframe bridge in footer', () => {
+  it('verifies markdownItPlugin renders data-md-uri-scheme and hidden action trigger in footer', () => {
     const md = getMarkdownEngine();
     const readmePath = path.resolve(__dirname, '../README.md');
     const markdown = fs.readFileSync(readmePath, 'utf8');
@@ -66,6 +66,6 @@ describe('VS Code Native Preview Actions & Dialog Consistency', () => {
     });
 
     expect(output).toContain('data-md-uri-scheme="vscode"');
-    expect(output).toContain('id="md-comments-uri-bridge"');
+    expect(output).toContain('id="md-comments-action-trigger"');
   });
 });

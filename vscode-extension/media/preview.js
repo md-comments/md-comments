@@ -111,15 +111,17 @@
 
     const uri = scheme + '://md-comments.md-preview-comments/?' + query.toString();
 
-    let bridge = document.getElementById('md-comments-uri-bridge');
-    if (!bridge) {
-      bridge = document.createElement('iframe');
-      bridge.id = 'md-comments-uri-bridge';
-      bridge.style.display = 'none';
-      bridge.setAttribute('aria-hidden', 'true');
-      document.body.appendChild(bridge);
+    let trigger = document.getElementById('md-comments-action-trigger');
+    if (!trigger) {
+      trigger = document.createElement('a');
+      trigger.id = 'md-comments-action-trigger';
+      trigger.style.display = 'none';
+      trigger.setAttribute('aria-hidden', 'true');
+      trigger.setAttribute('rel', 'noreferrer');
+      document.body.appendChild(trigger);
     }
-    bridge.src = uri;
+    trigger.href = uri;
+    trigger.click();
   }
 
   function removeEl(id) {
@@ -600,6 +602,10 @@
       if (body) {
         target.classList.add('loading');
         target.disabled = true;
+        setTimeout(function () {
+          target.classList.remove('loading');
+          target.disabled = false;
+        }, 4000);
         postAction({ action: 'addPage', body: body });
       }
       return;
@@ -619,6 +625,10 @@
       if (body && rootId) {
         target.classList.add('loading');
         target.disabled = true;
+        setTimeout(function () {
+          target.classList.remove('loading');
+          target.disabled = false;
+        }, 4000);
         if (window.mdCommentsPrepareReplyNav) {
           window.mdCommentsPrepareReplyNav(rootId, type === 'page' ? 'page' : 'inline');
         }

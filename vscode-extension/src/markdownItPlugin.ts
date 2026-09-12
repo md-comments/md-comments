@@ -955,7 +955,7 @@ export function extendMarkdownIt(md: any): any {
       uriScheme = 'vscode';
     }
     const footer = `<div class="md-comments-footer" data-md-md-path="${escapeHtml(renderCtx.mdPath)}" data-md-md-encoded="${mdEncoded}" data-code="${escapeHtml(anchorsPayload)}" data-md-reaction-emojis="${getReactionEmojisJson()}" data-md-mention-users="${mentionUsers}" data-md-display-names="${displayNames}" data-md-current-author="${currentAuthorAttr}" data-md-uri-scheme="${escapeHtml(uriScheme)}"></div>
-      <iframe id="md-comments-uri-bridge" style="display:none;width:0;height:0;border:0;" aria-hidden="true"></iframe>`;
+      <a id="md-comments-action-trigger" style="display:none;" rel="noreferrer" aria-hidden="true"></a>`;
 
     const comments = renderCtx.comments;
     const logins = collectGitHubLogins(comments);
