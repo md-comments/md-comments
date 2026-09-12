@@ -327,8 +327,8 @@ function renderCard(
           <div class="fallback-reply-composer">
             <textarea class="fallback-reply-textarea md-comments-reply-textarea" placeholder="Write a reply..." rows="3" aria-label="Write a reply"></textarea>
             <div class="composer-actions md-comments-composer-actions">
-              <button type="button" class="btn btn-secondary fallback-cancel-btn md-comments-btn-secondary" data-md-action="cancel-reply">Cancel</button>
-              <button type="button" class="btn btn-primary fallback-submit-btn md-comments-btn-primary" data-md-action="submit-reply" data-md-id="${escapeHtml(id)}" data-md-type="${type}">Send</button>
+              <button type="button" class="btn btn-secondary fallback-cancel-btn md-comments-btn-secondary" data-md-action="cancel-reply" data-action="cancel">Cancel</button>
+              <button type="button" class="btn btn-primary fallback-submit-btn md-comments-btn-primary" data-md-action="submit-reply" data-action="submit" data-md-id="${escapeHtml(id)}" data-md-type="${type}">Send</button>
             </div>
           </div>
         </div>
@@ -576,6 +576,11 @@ function renderDocumentLayout(
       </header>
       ${authBanner}
       <div class="md-comments-sidebar-body">${sidebarBody}</div>
+      <footer class="md-comments-sidebar-footer" style="display: none;">
+        <button type="button" class="md-comments-sidebar-add" data-md-action="addPage">
+          <span class="md-comments-icon-comment" aria-hidden="true"></span> Add a comment
+        </button>
+      </footer>
     </aside>
     ${footer}
   </div>`;

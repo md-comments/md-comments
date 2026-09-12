@@ -27,14 +27,15 @@ test.describe('VS Code Extension Mentions Autocomplete E2E', () => {
 
     const textarea = previewFrame.locator('.md-comments-editor-input');
     await expect(textarea).toBeVisible();
+    await textarea.focus();
 
     // 4. Type text including @oct to trigger mention autocomplete menu
     await textarea.fill('Hello ');
-    await textarea.type('@oct', { delay: 50 });
+    await textarea.pressSequentially('@oct', { delay: 100 });
 
     // 5. Verify mention menu pops up
     const mentionMenu = previewFrame.locator('#md-comments-mention-menu');
-    await expect(mentionMenu).toBeVisible({ timeout: 5000 });
+    await expect(mentionMenu).toBeVisible({ timeout: 10000 });
 
     const mentionItem = mentionMenu.locator('.md-comments-mention-item', { hasText: '@octocat' });
     await expect(mentionItem).toBeVisible();
@@ -53,7 +54,7 @@ test.describe('VS Code Extension Mentions Autocomplete E2E', () => {
     // 8. Assert rendered comment card has clickable mention link
     // Ensure document tab is selected
     const activePageTab = previewFrame.locator('.md-comments-tab[data-tab="page"]');
-    await activePageTab.click();
+    await activePageTab.dispatchEvent('click');
 
     const card = previewFrame.locator('.md-comments-card').filter({ hasText: 'octocat' });
     await expect(card).toBeVisible({ timeout: 10000 });

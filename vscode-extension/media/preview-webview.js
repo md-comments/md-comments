@@ -279,7 +279,10 @@
 
     const panelId = isPage ? 'md-comments-sidebar-page' : 'md-comments-sidebar-inline';
     const panelEl =
-      document.getElementById(panelId) || document.querySelector('.md-comments-tab-panel-active');
+      document.getElementById(panelId) ||
+      document.getElementById(isPage ? 'tab-page' : 'tab-inline') ||
+      document.querySelector(isPage ? '[data-panel="page"]' : '[data-panel="inline"]') ||
+      document.querySelector('.md-comments-tab-panel-active');
     if (!panelEl) {
       return;
     }
@@ -518,15 +521,7 @@
     }
 
     if (action === 'addPage') {
-      if (window.mdCommentsActivateTab) {
-        window.mdCommentsActivateTab('page');
-      }
-      const pageTa = document.querySelector('.page-textarea');
-      if (pageTa) {
-        pageTa.focus();
-      } else {
-        showSidebarNewCommentComposer(null, true);
-      }
+      showSidebarNewCommentComposer(null, true);
       return;
     }
     if (action === 'edit') {

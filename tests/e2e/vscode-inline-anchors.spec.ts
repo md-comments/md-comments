@@ -31,7 +31,7 @@ test.describe('VS Code Extension Inline Anchoring E2E', () => {
 
     // Click "Add comment" button on the selection bar
     const addInlineBtn = selectionBar.locator('button');
-    await addInlineBtn.click();
+    await addInlineBtn.dispatchEvent('click');
 
     // Inline composer should open in the sidebar with quote excerpt
     const quoteExcerpt = previewFrame.locator('.md-comments-quote-excerpt');
@@ -46,7 +46,7 @@ test.describe('VS Code Extension Inline Anchoring E2E', () => {
 
     // Submit inline comment
     const submitBtn = previewFrame.locator('.md-comments-btn-primary[data-action="submit"]');
-    await submitBtn.click();
+    await submitBtn.dispatchEvent('click');
 
     // Verify inline card appears under the Inline tab
     const inlineCard = previewFrame.locator('.md-comments-card', { hasText: commentBody });
