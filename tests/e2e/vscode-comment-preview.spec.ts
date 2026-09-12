@@ -34,26 +34,55 @@ test.describe('VS Code Extension Comment Preview E2E', () => {
     // 3. Switch to Page Comments tab
     const pageTab = previewFrame.locator('.md-comments-tab[data-tab="page"]');
     await expect(pageTab).toBeVisible({ timeout: 5000 });
-    await pageTab.dispatchEvent('click');
+    await pageTab.click();
 
-    // 4. Trigger comment composer
-    const addCommentBtn = previewFrame.locator('[data-md-action="addPage"]');
-    await expect(addCommentBtn).toBeVisible({ timeout: 5000 });
-    await addCommentBtn.dispatchEvent('click');
+    // Verify redundant footer button was removed from document tab
+    const legacyFooterBtn = previewFrame.locator(
+      '.md-comments-sidebar-footer [data-md-action="addPage"]'
+    );
+    await expect(legacyFooterBtn).toHaveCount(0);
 
-    // 5. Fill and submit comment
-    const textarea = previewFrame.locator('.md-comments-editor-input');
+    // 4. Fill and submit comment using dedicated Page Composer
+    const textarea = previewFrame.locator('#page-composer .page-textarea');
     await expect(textarea).toBeVisible({ timeout: 5000 });
 
     const commentBody = 'E2E verified comment via Playwright Electron runner';
     await textarea.fill(commentBody);
 
-    const submitBtn = previewFrame.locator('.md-comments-btn-primary[data-action="submit"]');
-    await submitBtn.dispatchEvent('click');
+    const submitBtn = previewFrame.locator('#page-composer .submit-page-btn');
+    await submitBtn.click();
 
-    // 6. Assert comment card appears in sidebar
+    // 5. Assert comment card appears optimistically and instantly
     const commentCard = previewFrame.locator('.md-comments-card', { hasText: commentBody });
-    await expect(commentCard).toBeVisible({ timeout: 10000 });
+    await expect(commentCard).toBeVisible({ timeout: 2000 });
+
+    // 6. Assert pointer cursor on comment card
+    const cardCursor = await commentCard.evaluate((el) => window.getComputedStyle(el).cursor);
+    expect(cardCursor).toBe('pointer');
+
+    // 7. Verify no disruptive notification toast is shown in workbench
+    const notifications = page.locator('.monaco-notification-toast, .notifications-toasts');
+    await expect(notifications).toHaveCount(0);
+
+    // 8. Test reply action on first click without scroll interception
+    const replyBtn = commentCard.locator('[data-md-action="reply"]').first();
+    await replyBtn.click();
+
+    const replyComposer = commentCard.locator(
+      '.reply-composer-wrapper, .md-comments-panel-composer'
+    );
+    await expect(replyComposer).toBeVisible({ timeout: 3000 });
+
+    const replyTextarea = replyComposer.locator('textarea');
+    await replyTextarea.fill('Instant reply test');
+
+    const replySubmitBtn = replyComposer.locator(
+      'button[data-action="submit"], .fallback-submit-btn'
+    );
+    await replySubmitBtn.click();
+
+    // Verify reply submit button does not remain stuck in loading spinner
+    await expect(replySubmitBtn).not.toHaveClass(/loading/, { timeout: 4500 });
   });
 
   test('verifies inline paragraph comment anchors in rendered webview', async ({ vscode }) => {

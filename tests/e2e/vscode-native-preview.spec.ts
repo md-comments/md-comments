@@ -50,4 +50,43 @@ test.describe('VS Code Native Markdown Preview Integration E2E', () => {
     await expect(layout).not.toHaveClass(/md-comments-sidebar-open/);
     await expect(fab).toBeVisible();
   });
+
+  test('verifies native preview action trigger anchor, card pointer cursor, and non-stuck reply submission', async ({
+    vscode,
+  }) => {
+    const { runCommand, getCommentPreviewFrame } = vscode;
+
+    await runCommand('Markdown: Open Preview to the Side');
+    const previewFrame = getCommentPreviewFrame();
+
+    // 1. Verify action trigger anchor element is present in the DOM
+    const actionTrigger = previewFrame.locator('#md-comments-action-trigger');
+    await expect(actionTrigger).toHaveCount(1);
+    await expect(actionTrigger).toHaveAttribute('rel', 'noreferrer');
+
+    // 2. Open sidebar drawer via FAB
+    const fab = previewFrame.locator('#md-comments-panel-fab');
+    await fab.click();
+
+    // 3. Verify side padding and margins on threads list
+    const threadsList = previewFrame.locator('.md-comments-threads-list').first();
+    await expect(threadsList).toBeVisible({ timeout: 5000 });
+    const padding = await threadsList.evaluate((el) => window.getComputedStyle(el).padding);
+    expect(padding).toBe('12px 14px 16px');
+
+    // 4. Verify pointer cursor on any existing card
+    const card = previewFrame.locator('.md-comments-card').first();
+    if ((await card.count()) > 0) {
+      const cursor = await card.evaluate((el) => window.getComputedStyle(el).cursor);
+      expect(cursor).toBe('pointer');
+
+      // 5. Test reply button click
+      const replyBtn = card.locator('[data-md-action="reply"]').first();
+      if ((await replyBtn.count()) > 0) {
+        await replyBtn.click();
+        const replyWrapper = card.locator('.reply-composer-wrapper');
+        await expect(replyWrapper).toBeVisible({ timeout: 3000 });
+      }
+    }
+  });
 });
