@@ -13,6 +13,7 @@ implementedIn:
   - 'shared/styles/components.css'
 verifiedIn:
   - 'tests/design-tokens.test.ts'
+  - 'tests/badge-styling-parity.test.ts'
   - 'tests/e2e/visual/cross-surface-component-diff.spec.ts'
 invariants:
   - 'INV-VISUAL-PARITY'
@@ -24,10 +25,10 @@ minCoverage: 100
 
 ## Overview
 
-Ensures 100% visual and UX parity across the GitHub extension, VS Code extension, and Demo/Starlight sites. Canonical tokens and components standardize FAB geometry, comments drawer, comment cards, reaction bars, and composer toolbars.
+Ensures 100% visual and UX parity across the GitHub extension, VS Code extension, Obsidian plugin, and Demo/Starlight sites. Canonical tokens and components standardize FAB geometry and count badges, comments drawer, comment cards, reaction bars, composer toolbars, and status badges (`Orphaned` amber warning, `Resolved` green success, and tab counts).
 
 ## User Journey (Gherkin Scenarios)
 
-- Given a Markdown document opened on GitHub, VS Code preview, or Demo site
-- When the comments drawer is toggled open
-- Then the FAB, drawer width, comment cards, and reaction chips display matching visual geometry, typography, and contrast across all interfaces
+- Given a Markdown document opened on GitHub, VS Code preview, Obsidian, or Demo site
+- When comments with orphaned or resolved states are displayed
+- Then the badges render with identical pill geometry (10px radius), 9px font size, amber (#d29922) / green (#3fb950) color schemes, and FAB/tab counter indicators across all interfaces

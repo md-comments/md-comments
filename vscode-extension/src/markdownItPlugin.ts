@@ -261,7 +261,7 @@ function renderReply(
   </div>`;
 }
 
-function renderCard(
+export function renderCard(
   id: string,
   author: string,
   created_at: string,
@@ -276,8 +276,12 @@ function renderCard(
   reanchor?: boolean
 ): string {
   const badges = [
-    orphaned ? '<span class="md-comments-badge md-comments-badge-orphan">orphaned</span>' : '',
-    resolved ? '<span class="md-comments-badge md-comments-badge-resolved">resolved</span>' : '',
+    orphaned
+      ? '<span class="md-comments-badge orphan md-comments-badge-orphan">Orphaned</span>'
+      : '',
+    resolved
+      ? '<span class="md-comments-badge resolved md-comments-badge-resolved">Resolved</span>'
+      : '',
   ]
     .filter(Boolean)
     .join(' ');
@@ -289,7 +293,9 @@ function renderCard(
         }`
       : '';
   const pageLabel =
-    type === 'page' ? '<span class="md-comments-type-label">Page comment</span>' : '';
+    type === 'page'
+      ? '<span class="md-comments-badge md-comments-type-label">Page comment</span>'
+      : '';
   const threadStateBtn = !resolved
     ? actionIconBtn('resolve', 'Resolve thread', ICON_RESOLVE, { id, type, kind: 'root' })
     : actionIconBtn('unresolve', 'Reopen thread', ICON_REOPEN, { id, type, kind: 'root' });
@@ -536,7 +542,7 @@ function getDefaultSidebarWidth(): number {
   return Math.min(600, Math.max(260, n));
 }
 
-function renderDocumentLayout(
+export function renderDocumentLayout(
   docHtml: string,
   ctx: RenderContext,
   saveHint: string,
@@ -566,6 +572,8 @@ function renderDocumentLayout(
     </div>
     <button type="button" class="md-comments-fab" id="md-comments-panel-fab" title="Show comments" aria-label="Show comments" aria-expanded="false">
       ${ICON_FAB}
+      <span class="badge-count" style="display: ${threadCount > 0 ? 'inline-block' : 'none'};">${threadCount}</span>
+      <span class="badge-loading" style="display: none;"><span class="md-comments-spinner-sm"></span></span>
     </button>
     <aside id="md-comments-sidebar" class="md-comments-sidebar" aria-label="Comments">
       <div class="md-comments-sidebar-resizer" id="md-comments-sidebar-resizer" role="separator" aria-orientation="vertical" aria-label="Resize comments panel" title="Drag to resize"></div>

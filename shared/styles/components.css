@@ -428,3 +428,56 @@
   cursor: pointer;
   transform: translateY(-100%) translateY(-8px);
 }
+
+/* ==========================================================================
+   7. Status & Counter Badges
+   ========================================================================== */
+.mdc-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--mdc-badge-font-size, 9px);
+  font-weight: 600;
+  line-height: 1.2;
+  padding: 1px 5px;
+  border-radius: var(--mdc-badge-radius, 10px);
+  box-sizing: border-box;
+}
+
+.mdc-badge--orphan {
+  background-color: rgba(210, 153, 34, 0.15);
+  color: var(--mdc-color-warning, #d29922);
+  border: 1px solid rgba(210, 153, 34, 0.3);
+}
+
+.mdc-badge--resolved {
+  background-color: rgba(63, 185, 80, 0.15);
+  color: var(--mdc-color-success, #3fb950);
+  border: 1px solid rgba(63, 185, 80, 0.3);
+}
+
+.mdc-badge--type {
+  background-color: var(--mdc-color-accent-subtle, rgba(99, 102, 241, 0.15));
+  color: var(--mdc-color-accent, #6366f1);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+}
+
+.mdc-tab-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: var(--mdc-badge-radius, 10px);
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(110, 118, 129, 0.4);
+  color: var(--mdc-color-text-primary, #c9d1d9);
+  margin-left: 6px;
+}
+
+.mdc-tab-active .mdc-tab-count {
+  background: rgba(56, 139, 253, 0.3);
+  color: var(--mdc-color-accent, #58a6ff);
+}

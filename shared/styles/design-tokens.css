@@ -123,6 +123,12 @@ body[data-color-mode='light'] .md-comments-scope {
   --mdc-color-text-muted: var(--vscode-disabledForeground, #6e7681);
   --mdc-color-accent: var(--vscode-button-background, #6366f1);
   --mdc-color-accent-hover: var(--vscode-button-hoverBackground, #4f46e5);
-  --mdc-color-accent-subtle: rgba(99, 102, 241, 0.18);
+  --mdc-color-success: #3fb950;
+  --mdc-color-warning: #d29922;
+  --mdc-color-danger: #f85149;
   --mdc-color-anchor-highlight: rgba(234, 179, 8, 0.32);
+
+  /* Badge Geometry */
+  --mdc-badge-radius: 10px;
+  --mdc-badge-font-size: 9px;
 }

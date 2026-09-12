@@ -359,9 +359,16 @@ export class CommentsSidebarView extends ItemView {
     quote = '',
     isOrphan = false
   ): string {
-    const badge = isOrphan
-      ? '<span class="md-comments-badge md-comments-badge-orphan">orphaned</span>'
-      : '';
+    const badges = [
+      isOrphan
+        ? '<span class="md-comments-badge orphan md-comments-badge-orphan">Orphaned</span>'
+        : '',
+      comment.resolved
+        ? '<span class="md-comments-badge resolved md-comments-badge-resolved">Resolved</span>'
+        : '',
+    ]
+      .filter(Boolean)
+      .join(' ');
     const quoteHtml = quote
       ? `<blockquote class="md-comments-quote"><div class="md-comments-quote-text">${quote}</div></blockquote>`
       : '';
@@ -426,7 +433,7 @@ export class CommentsSidebarView extends ItemView {
               <div class="md-comments-meta">
                 <span class="md-comments-author" title="@${escapeHtml(comment.author)}">${this.resolveDisplayName(comment.author)}</span>
                 <span class="md-comments-time">${this.formatTime(comment.created_at)}</span>
-                ${badge}
+                ${badges}
               </div>
               ${bodyContent}
               ${showBody ? this.renderReactions(comment.reactions, comment.id, comment.id, type, 'root') : ''}

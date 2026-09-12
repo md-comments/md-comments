@@ -220,14 +220,24 @@
 }
 
 .md-comments-tab-count {
-  display: inline-block;
-  min-width: 1rem;
-  margin-left: 0.15rem;
-  padding: 0 0.25rem;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.08);
-  font-size: 0.6rem;
-  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  margin-left: 6px;
+  padding: 0 6px;
+  border-radius: 10px;
+  background: rgba(110, 118, 129, 0.4);
+  color: var(--gc-text);
+  font-size: 11px;
+  font-weight: 600;
+  box-sizing: border-box;
+}
+
+.md-comments-tab-active .md-comments-tab-count {
+  background: rgba(99, 102, 241, 0.25);
+  color: var(--gc-accent);
 }
 
 .md-comments-tab-panels {
@@ -354,17 +364,26 @@
 }
 
 .md-comments-badge {
-  font-size: 0.6rem;
-  padding: 0.05rem 0.3rem;
-  border-radius: 3px;
-  text-transform: uppercase;
+  font-size: 9px;
+  padding: 1px 5px;
+  border-radius: 10px;
   font-weight: 600;
+  line-height: 1.2;
+  display: inline-block;
 }
 
+.md-comments-badge.orphan,
 .md-comments-badge-orphan {
-  background: rgba(224, 137, 57, 0.15);
-  color: #ff9d42;
-  border: 1px solid rgba(224, 137, 57, 0.3);
+  background-color: rgba(210, 153, 34, 0.15);
+  color: #d29922;
+  border: 1px solid rgba(210, 153, 34, 0.3);
+}
+
+.md-comments-badge.resolved,
+.md-comments-badge-resolved {
+  background-color: rgba(63, 185, 80, 0.15);
+  color: #3fb950;
+  border: 1px solid rgba(63, 185, 80, 0.3);
 }
 
 .md-comments-body {
