@@ -55,6 +55,7 @@ const ICON_RESOLVE = `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><p
 const ICON_REOPEN = `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.5-5.5M20 12a8 8 0 0 1-13.5 5.5M16 6.5V10h-3.5M8 17.5V14H11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 const ICON_REACT = `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.5"/><path d="M9.25 10.25h.01M14.75 10.25h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9.25 14.25c.85 1.15 2 1.75 2.75 1.75s1.9-.6 2.75-1.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`;
 const ICON_REFRESH = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="refresh-icon"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>`;
+const ICON_CLOSE = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="close-icon"><path d="M18 6L6 18M6 6l12 12"/></svg>`;
 
 // Global references to injected elements for cleanup
 let activeIndicators: HTMLElement[] = [];
@@ -2137,7 +2138,7 @@ function injectSidebar() {
       </div>
       <div class="sidebar-header-actions">
         <button class="md-comments-header-btn refresh-btn" type="button" title="Refresh comments" aria-label="Refresh comments">${ICON_REFRESH}</button>
-        ${isEmbedded ? '' : '<button class="close-btn">&times;</button>'}
+        ${isEmbedded ? '' : `<button class="md-comments-header-btn close-btn" type="button" title="Close" aria-label="Close">${ICON_CLOSE}</button>`}
       </div>
       <div class="sidebar-refresh-progress-line" id="sidebar-refresh-progress-line" style="display: none;"></div>
     </div>

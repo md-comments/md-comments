@@ -230,6 +230,7 @@ html.md-comments-panel-open .right-sidebar {
   background: rgba(255, 255, 255, 0.08);
 }
 
+.md-comments-drawer-close svg,
 .md-comments-drawer-refresh svg {
   display: block;
   margin: 0;

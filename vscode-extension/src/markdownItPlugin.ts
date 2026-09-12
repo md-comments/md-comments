@@ -81,6 +81,8 @@ const ICON_REANCHOR =
   '<svg class="md-comments-icon-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
 const ICON_REFRESH =
   '<svg class="md-comments-icon-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.5-5.5M20 12a8 8 0 0 1-13.5 5.5M16 6.5V10h-3.5M8 17.5V14H11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const ICON_CLOSE =
+  '<svg class="md-comments-icon-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 export const ICON_FAB =
   '<svg class="md-comments-fab-icon" viewBox="0 0 512 512" width="28" height="28" aria-hidden="true">' +
   '<path fill="#24292f" stroke="#ffffff" stroke-width="20" stroke-linejoin="round" d="M 136 64 L 376 64 C 424 64 456 96 456 144 L 456 304 C 456 352 424 384 376 384 L 216 384 C 184 384 150 404 126 428 C 118 436 104 430 104 418 L 104 384 C 72 380 56 352 56 304 L 56 144 C 56 96 88 64 136 64 Z"/>' +
@@ -571,7 +573,7 @@ function renderDocumentLayout(
          <h2 class="md-comments-sidebar-title">Comments</h2>
          <div class="md-comments-sidebar-header-actions">
            <button type="button" class="md-comments-sidebar-icon-btn" id="md-comments-sidebar-refresh" data-md-action="refresh" title="Refresh comments" aria-label="Refresh comments">${ICON_REFRESH}</button>
-           <button type="button" class="md-comments-sidebar-icon-btn" id="md-comments-sidebar-close" title="Close comments" aria-label="Close comments">×</button>
+           <button type="button" class="md-comments-sidebar-icon-btn" id="md-comments-sidebar-close" title="Close comments" aria-label="Close comments">${ICON_CLOSE}</button>
          </div>
       </header>
       ${authBanner}

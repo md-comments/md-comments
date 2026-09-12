@@ -121,32 +121,6 @@ html[data-color-mode='light'] .md-comments-scope {
   border: 1px solid rgba(139, 148, 158, 0.3);
 }
 
-.md-comments-scope .close-btn {
-  background: transparent;
-  border: none;
-  color: var(--text-secondary);
-  font-size: 24px;
-  cursor: pointer;
-  width: 28px;
-  height: 28px;
-  padding: 0;
-  line-height: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  box-sizing: border-box;
-  flex-shrink: 0;
-  transition:
-    color 0.15s ease,
-    background 0.15s ease;
-}
-
-.md-comments-scope .close-btn:hover {
-  color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.08);
-}
-
 .sidebar-header-actions {
   display: flex;
   align-items: center;
@@ -154,6 +128,7 @@ html[data-color-mode='light'] .md-comments-scope {
 }
 
 .md-comments-scope .refresh-btn,
+.md-comments-scope .close-btn,
 .md-comments-scope .md-comments-header-btn {
   background: transparent;
   border: none;
@@ -175,12 +150,14 @@ html[data-color-mode='light'] .md-comments-scope {
 }
 
 .md-comments-scope .refresh-btn:hover,
+.md-comments-scope .close-btn:hover,
 .md-comments-scope .md-comments-header-btn:hover {
   color: var(--text-primary);
   background: rgba(255, 255, 255, 0.08);
 }
 
 .md-comments-scope .refresh-btn svg,
+.md-comments-scope .close-btn svg,
 .md-comments-scope .md-comments-header-btn svg {
   display: block;
   margin: 0;

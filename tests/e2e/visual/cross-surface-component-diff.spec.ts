@@ -99,6 +99,22 @@ test.describe('Cross-Interface Visual & UX Parity Suite (GitHub, VS Code, Demo S
         const topGap = svgBox.y - btnBox.y;
         const bottomGap = btnBox.y + btnBox.height - (svgBox.y + svgBox.height);
         expect(Math.abs(topGap - bottomGap)).toBeLessThanOrEqual(1.5);
+
+        // Verify close button alignment with refresh button
+        const closeBtn = page
+          .locator('.md-comments-drawer-close, .close-btn, #md-comments-sidebar-close')
+          .first();
+        if (await closeBtn.isVisible()) {
+          const closeBox = await closeBtn.boundingBox();
+          const closeSvg = closeBtn.locator('svg').first();
+          if (closeBox && (await closeSvg.count()) > 0) {
+            const closeSvgBox = await closeSvg.boundingBox();
+            if (closeSvgBox) {
+              expect(Math.abs(btnBox.y - closeBox.y)).toBeLessThanOrEqual(1.5);
+              expect(Math.abs(svgBox.y - closeSvgBox.y)).toBeLessThanOrEqual(1.5);
+            }
+          }
+        }
       }
     });
 

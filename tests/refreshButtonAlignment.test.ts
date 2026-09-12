@@ -114,4 +114,29 @@ describe('Refresh Button Centering & Geometry Across All Interfaces', () => {
     expect(css).toMatch(/\.mdc-drawer-refresh\s+svg\s*\{[^}]*display:\s*block;/);
     expect(css).toMatch(/\.mdc-drawer-refresh\.is-refreshing\s+svg/);
   });
+
+  it('verifies Chrome extension aligns .refresh-btn and .close-btn with matching 28px square geometry and SVG centering', () => {
+    const css = readCss('../chrome-extension/src/sidebar.css');
+    const contentTs = fs.readFileSync(
+      path.resolve(__dirname, '../chrome-extension/src/content.ts'),
+      'utf8'
+    );
+
+    // Assert both .refresh-btn and .close-btn are styled with 28px square flex-center
+    expect(css).toMatch(/\.close-btn[^{]*\{[^}]*display:\s*inline-flex;/);
+    expect(css).toMatch(/\.close-btn[^{]*\{[^}]*align-items:\s*center;/);
+    expect(css).toMatch(/\.close-btn[^{]*\{[^}]*justify-content:\s*center;/);
+    expect(css).toMatch(/\.close-btn[^{]*\{[^}]*width:\s*28px;/);
+    expect(css).toMatch(/\.close-btn[^{]*\{[^}]*height:\s*28px;/);
+    expect(css).toMatch(/\.close-btn[^{]*\{[^}]*padding:\s*0;/);
+
+    // Assert SVG reset for .close-btn svg
+    expect(css).toMatch(/\.close-btn\s+svg[^}]*display:\s*block;/);
+    expect(css).toMatch(/\.close-btn\s+svg[^}]*margin:\s*0;/);
+
+    // Assert content.ts uses ICON_CLOSE SVG instead of text entity &times;
+    expect(contentTs).toContain('const ICON_CLOSE =');
+    expect(contentTs).toContain('<button class="md-comments-header-btn close-btn"');
+    expect(contentTs).not.toContain('<button class="close-btn">&times;</button>');
+  });
 });
