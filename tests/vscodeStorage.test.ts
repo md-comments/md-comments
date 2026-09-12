@@ -63,7 +63,9 @@ describe('OptimisticCommentStore', () => {
     expect(writeExecuted).toBe(false);
 
     // Wait for background queue execution
-    await new Promise((r) => setTimeout(r, 100));
+    for (let i = 0; i < 25 && !writeExecuted; i++) {
+      await new Promise((r) => setTimeout(r, 20));
+    }
     expect(writeExecuted).toBe(true);
     expect(writeRemote).toHaveBeenCalledTimes(1);
   });

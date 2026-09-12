@@ -952,8 +952,15 @@ export function extendMarkdownIt(md: any): any {
       JSON.stringify(displayNamesMapForLogins(collectGitHubLogins(renderCtx.comments)))
     );
     const currentAuthorAttr = escapeHtml(currentAuthor);
-    const footer = `<div class="md-comments-footer" data-md-md-path="${escapeHtml(renderCtx.mdPath)}" data-md-md-encoded="${mdEncoded}" data-code="${escapeHtml(anchorsPayload)}" data-md-reaction-emojis="${getReactionEmojisJson()}" data-md-mention-users="${mentionUsers}" data-md-display-names="${displayNames}" data-md-current-author="${currentAuthorAttr}"></div>
-      <a id="md-comments-messenger" href="#" style="display:none" aria-hidden="true"></a>`;
+    let uriScheme = 'vscode';
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      uriScheme = (vscode as any).env?.uriScheme || 'vscode';
+    } catch {
+      uriScheme = 'vscode';
+    }
+    const footer = `<div class="md-comments-footer" data-md-md-path="${escapeHtml(renderCtx.mdPath)}" data-md-md-encoded="${mdEncoded}" data-code="${escapeHtml(anchorsPayload)}" data-md-reaction-emojis="${getReactionEmojisJson()}" data-md-mention-users="${mentionUsers}" data-md-display-names="${displayNames}" data-md-current-author="${currentAuthorAttr}" data-md-uri-scheme="${escapeHtml(uriScheme)}"></div>
+      <iframe id="md-comments-uri-bridge" style="display:none;width:0;height:0;border:0;" aria-hidden="true"></iframe>`;
 
     const comments = renderCtx.comments;
     const logins = collectGitHubLogins(comments);

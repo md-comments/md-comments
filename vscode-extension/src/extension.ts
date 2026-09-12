@@ -125,6 +125,7 @@ async function handleUri(uri: vscode.Uri): Promise<void> {
     targetId: params.get('targetId') ?? undefined,
     kind: params.get('kind') ?? undefined,
     emoji: params.get('emoji') ? `b64:${params.get('emoji')}` : undefined,
+    occurrence: params.get('occurrence') ?? undefined,
   };
   await handlePreviewAction(msg);
 }

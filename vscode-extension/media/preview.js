@@ -1,21 +1,51 @@
 (function () {
-  const COMMAND = 'mdComments.handlePreviewAction';
-  let mdPath = '';
+  let mdPath = document.body.getAttribute('data-md-md-path') || '';
   let reanchorCommentId = null;
   let anchorBlocks = null;
   let selectionTimer = null;
   let pendingAnchor = null;
-  let pendingRect = null;
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
 
   function getMdPath() {
     const footer = document.querySelector('.md-comments-footer');
     if (footer) {
-      const fromFooter = footer.getAttribute('data-md-md-path') || '';
-      if (fromFooter) {
-        mdPath = fromFooter;
+      const p = footer.getAttribute('data-md-md-path') || '';
+      if (p) {
+        mdPath = p;
       }
     }
-    return mdPath;
+    return mdPath || document.body.getAttribute('data-md-md-path') || '';
+  }
+
+  function getUriScheme() {
+    const footer = document.querySelector('.md-comments-footer');
+    return (footer && footer.getAttribute('data-md-uri-scheme')) || 'vscode';
+  }
+
+  function toBase64Url(str) {
+    if (!str) return '';
+    try {
+      const bytes = new TextEncoder().encode(str);
+      let binary = '';
+      for (let i = 0; i < bytes.length; i++) {
+        binary += String.fromCharCode(bytes[i]);
+      }
+      return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    } catch {
+      return btoa(unescape(encodeURIComponent(str)))
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=+$/, '');
+    }
   }
 
   function loadAnchorBlocks() {
@@ -38,35 +68,58 @@
     }
   }
 
-  function packPayload(obj) {
-    const json = JSON.stringify(obj);
-    const bytes = new TextEncoder().encode(json);
-    let binary = '';
-    for (let i = 0; i < bytes.length; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
-    return btoa(binary);
-  }
-
-  function sendAction(payload) {
+  function postAction(payload) {
     const md = getMdPath();
     if (!md) {
-      console.error('[md-comments] Cannot save: missing markdown path in preview footer');
+      console.error('[md-comments] missing md path');
       return;
     }
-    const message = Object.assign({ md: md }, payload);
-    const packed = packPayload(message);
-    const href = 'command:' + COMMAND + '?' + encodeURIComponent(JSON.stringify([packed]));
-    let messenger = document.getElementById('md-comments-messenger');
-    if (!messenger) {
-      messenger = document.createElement('a');
-      messenger.id = 'md-comments-messenger';
-      messenger.style.display = 'none';
-      messenger.setAttribute('aria-hidden', 'true');
-      document.body.appendChild(messenger);
+
+    if (typeof acquireVsCodeApi === 'function' && !window.__mdCommentsVsCodeApi) {
+      try {
+        window.__mdCommentsVsCodeApi = acquireVsCodeApi();
+      } catch {
+        // May already be acquired
+      }
     }
-    messenger.setAttribute('href', href);
-    messenger.click();
+    if (
+      window.__mdCommentsVsCodeApi &&
+      typeof window.__mdCommentsVsCodeApi.postMessage === 'function'
+    ) {
+      window.__mdCommentsVsCodeApi.postMessage(Object.assign({ md: md }, payload));
+      return;
+    }
+
+    const scheme = getUriScheme();
+    const query = new URLSearchParams();
+    query.set('action', payload.action || '');
+    query.set('md', md);
+    if (payload.body) query.set('body', toBase64Url(payload.body));
+    if (payload.text) query.set('text', toBase64Url(payload.text));
+    if (payload.heading) query.set('heading', toBase64Url(payload.heading));
+    if (payload.emoji) query.set('emoji', toBase64Url(payload.emoji));
+    if (payload.hash) query.set('hash', payload.hash);
+    if (payload.index !== undefined && payload.index !== null)
+      query.set('index', String(payload.index));
+    if (payload.occurrence !== undefined && payload.occurrence !== null)
+      query.set('occurrence', String(payload.occurrence));
+    if (payload.rootId) query.set('rootId', payload.rootId);
+    if (payload.type) query.set('type', payload.type);
+    if (payload.id) query.set('id', payload.id);
+    if (payload.targetId) query.set('targetId', payload.targetId);
+    if (payload.kind) query.set('kind', payload.kind);
+
+    const uri = scheme + '://md-comments.md-preview-comments/?' + query.toString();
+
+    let bridge = document.getElementById('md-comments-uri-bridge');
+    if (!bridge) {
+      bridge = document.createElement('iframe');
+      bridge.id = 'md-comments-uri-bridge';
+      bridge.style.display = 'none';
+      bridge.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(bridge);
+    }
+    bridge.src = uri;
   }
 
   function removeEl(id) {
@@ -76,10 +129,78 @@
     }
   }
 
+  function clearPendingAnchorHighlight() {
+    document
+      .querySelectorAll('.md-comments-text-anchor.pending, [data-md-pending="true"]')
+      .forEach(function (node) {
+        const parent = node.parentNode;
+        if (parent) {
+          while (node.firstChild) {
+            parent.insertBefore(node.firstChild, node);
+          }
+          parent.removeChild(node);
+          parent.normalize();
+        }
+      });
+  }
+
+  function applyPendingAnchorHighlight(anchor) {
+    clearPendingAnchorHighlight();
+    if (!anchor || !anchor.text || !anchor.text.trim()) return;
+
+    const searchText = anchor.text.replace(/\s+/g, ' ').trim();
+    let targetP = null;
+
+    if (anchor.index !== undefined) {
+      targetP = document.querySelector('[data-md-paragraph-index="' + anchor.index + '"]');
+      if (!targetP) {
+        const paragraphs = document.querySelectorAll(BLOCK_SELECTOR);
+        targetP = paragraphs[Number(anchor.index)] || null;
+      }
+    }
+
+    if (!targetP) return;
+
+    const walker = document.createTreeWalker(targetP, NodeFilter.SHOW_TEXT, null);
+    let textNode = null;
+    while ((textNode = walker.nextNode())) {
+      const parent = textNode.parentNode;
+      if (
+        parent &&
+        (parent.classList.contains('md-comments-text-anchor') ||
+          parent.classList.contains('md-comments-para-actions'))
+      ) {
+        continue;
+      }
+      const val = textNode.nodeValue || '';
+      const idx = val.indexOf(searchText);
+      if (idx !== -1) {
+        const before = val.slice(0, idx);
+        const matchText = val.slice(idx, idx + searchText.length);
+        const after = val.slice(idx + searchText.length);
+
+        const span = document.createElement('span');
+        span.className = 'md-comments-text-anchor pending';
+        span.setAttribute('data-md-pending', 'true');
+        span.textContent = matchText;
+
+        const frag = document.createDocumentFragment();
+        if (before) frag.appendChild(document.createTextNode(before));
+        frag.appendChild(span);
+        if (after) frag.appendChild(document.createTextNode(after));
+
+        parent.replaceChild(frag, textNode);
+        break;
+      }
+    }
+  }
+
   function removeOverlays() {
+    clearPendingAnchorHighlight();
     removeEl('md-comments-selection-bar');
     removeEl('md-comments-composer');
     removeEl('md-comments-emoji-popover');
+    removeEl('md-comments-backdrop');
   }
 
   function showSelectionBar(rect) {
@@ -89,90 +210,177 @@
     bar.className = 'md-comments-selection-bar';
     bar.innerHTML =
       '<button type="button" class="md-comments-selection-btn" data-bar-action="comment">' +
-      '<span class="md-comments-icon-comment" aria-hidden="true"></span> Comment</button>' +
-      '<button type="button" class="md-comments-selection-btn md-comments-selection-more" data-bar-action="more" title="More">⋯</button>';
+      '<span class="md-comments-icon-comment" aria-hidden="true"></span> Comment</button>';
     document.body.appendChild(bar);
-    const top = rect.top + window.scrollY - bar.offsetHeight - 10;
-    const left = rect.left + window.scrollX + rect.width / 2 - bar.offsetWidth / 2;
-    bar.style.top = Math.max(8, top) + 'px';
-    bar.style.left = Math.max(8, left) + 'px';
-
+    bar.style.top = Math.max(8, rect.top + window.scrollY - bar.offsetHeight - 10) + 'px';
+    bar.style.left =
+      Math.max(8, rect.left + window.scrollX + rect.width / 2 - bar.offsetWidth / 2) + 'px';
     bar.querySelector('[data-bar-action="comment"]').addEventListener('click', function (e) {
       e.preventDefault();
-      e.stopPropagation();
       removeEl('md-comments-selection-bar');
-      if (pendingAnchor && pendingRect) {
-        showInlineComposer(pendingRect, pendingAnchor, 'inline');
-      }
-    });
-    bar.querySelector('[data-bar-action="more"]').addEventListener('click', function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      removeEl('md-comments-selection-bar');
-      if (pendingAnchor && pendingRect) {
-        showInlineComposer(pendingRect, pendingAnchor, 'inline');
+      if (pendingAnchor) {
+        applyPendingAnchorHighlight(pendingAnchor);
+        showSidebarNewCommentComposer(pendingAnchor, false);
       }
     });
   }
 
-  function showInlineComposer(rect, anchor, mode, options) {
-    options = options || {};
-    removeOverlays();
-    const submitLabel = options.submitLabel || 'Add comment';
-    const onSubmit = options.onSubmit;
+  function removePanelComposers() {
+    document.querySelectorAll('.md-comments-panel-composer').forEach(function (el) {
+      el.remove();
+    });
+  }
 
-    const box = document.createElement('div');
-    box.id = 'md-comments-composer';
-    box.className = 'md-comments-composer md-comments-composer-inline';
-    box.innerHTML =
-      '<div class="md-comments-composer-layout">' +
-      '<div class="md-comments-composer-main">' +
+  function showInlineCardReplyComposer(target, id, type) {
+    removePanelComposers();
+    const rootEl = target.closest('.md-comments-card');
+    if (!rootEl) {
+      return;
+    }
+
+    const composer = document.createElement('div');
+    composer.className = 'md-comments-panel-composer';
+    composer.innerHTML =
       '<div class="md-comments-editor-shell">' +
-      '<div class="md-comments-editor-toolbar" aria-hidden="true">' +
-      '<span class="md-comments-tb">Tt</span><span class="md-comments-tb">B</span><span class="md-comments-tb">≡</span><span class="md-comments-tb">@</span>' +
-      '</div>' +
-      '<textarea class="md-comments-editor-input" rows="4" placeholder="Add a comment… Use @username to mention someone on GitHub."></textarea>' +
+      '<textarea class="md-comments-editor-input" rows="3" placeholder="Write a reply… Use @username to mention."></textarea>' +
       '</div>' +
       '<div class="md-comments-composer-footer">' +
-      '<button type="button" class="md-comments-btn-primary" data-action="submit">' +
-      submitLabel +
-      '</button>' +
+      '<button type="button" class="md-comments-btn-primary" data-action="submit">Add comment</button>' +
       '<button type="button" class="md-comments-btn-text" data-action="cancel">Cancel</button>' +
-      '</div></div></div>';
+      '</div>';
 
-    document.body.appendChild(box);
-
-    if (mode === 'modal') {
-      box.classList.add('md-comments-composer-modal');
-      const backdrop = document.createElement('div');
-      backdrop.className = 'md-comments-backdrop';
-      backdrop.id = 'md-comments-backdrop';
-      document.body.appendChild(backdrop);
-      backdrop.addEventListener('click', removeOverlays);
-    } else {
-      const top = Math.min(
-        rect.bottom + window.scrollY + 12,
-        window.scrollY + window.innerHeight - 280
-      );
-      const left = Math.min(
-        Math.max(8, rect.left + window.scrollX - 40),
-        window.scrollX + window.innerWidth - 420
-      );
-      box.style.top = top + 'px';
-      box.style.left = left + 'px';
+    rootEl.appendChild(composer);
+    const textarea = composer.querySelector('textarea');
+    if (textarea) {
+      textarea.focus();
     }
 
-    const textarea = box.querySelector('textarea');
-    if (options.initialBody) {
-      textarea.value = options.initialBody;
-    }
-    textarea.focus();
+    composer.querySelector('[data-action="cancel"]').addEventListener('click', function () {
+      composer.remove();
+    });
+    composer.querySelector('[data-action="submit"]').addEventListener('click', function () {
+      const body = textarea ? textarea.value.trim() : '';
+      if (!body) {
+        return;
+      }
+      if (window.mdCommentsMarkReplySubmitted) {
+        window.mdCommentsMarkReplySubmitted();
+      }
+      postAction({ action: 'reply', rootId: id, type: type, body: body });
+      composer.remove();
+    });
+  }
 
-    function finishSubmit(body) {
-      if (onSubmit) {
-        onSubmit(body);
+  function showInlineCardEditComposer(target, id, rootId, type, kind, initialBody) {
+    removePanelComposers();
+    const itemEl = target.closest('.md-comments-reply, .md-comments-card');
+    if (!itemEl) {
+      return;
+    }
+
+    const bodyEl = itemEl.querySelector('.md-comments-body');
+    if (bodyEl) {
+      bodyEl.style.display = 'none';
+    }
+
+    const composer = document.createElement('div');
+    composer.className = 'md-comments-panel-composer';
+    composer.innerHTML =
+      '<div class="md-comments-editor-shell">' +
+      '<textarea class="md-comments-editor-input" rows="3"></textarea>' +
+      '</div>' +
+      '<div class="md-comments-composer-footer">' +
+      '<button type="button" class="md-comments-btn-primary" data-action="submit">Save</button>' +
+      '<button type="button" class="md-comments-btn-text" data-action="cancel">Cancel</button>' +
+      '</div>';
+
+    itemEl.appendChild(composer);
+    const textarea = composer.querySelector('textarea');
+    if (textarea) {
+      textarea.value = initialBody;
+      textarea.focus();
+    }
+
+    function cleanup() {
+      composer.remove();
+      if (bodyEl) {
+        bodyEl.style.display = '';
+      }
+    }
+
+    composer.querySelector('[data-action="cancel"]').addEventListener('click', cleanup);
+    composer.querySelector('[data-action="submit"]').addEventListener('click', function () {
+      const body = textarea ? textarea.value.trim() : '';
+      if (!body) {
+        return;
+      }
+      postAction({
+        action: 'edit',
+        id: id,
+        rootId: rootId,
+        type: type,
+        kind: kind,
+        body: body,
+      });
+      cleanup();
+    });
+  }
+
+  function showSidebarNewCommentComposer(anchor, isPage) {
+    removeOverlays();
+    removePanelComposers();
+    document.dispatchEvent(
+      new CustomEvent('md-comments:open-sidebar', { detail: { commentId: null } })
+    );
+
+    if (window.mdCommentsActivateTab) {
+      window.mdCommentsActivateTab(isPage ? 'page' : 'inline');
+    }
+
+    const panelId = isPage ? 'md-comments-sidebar-page' : 'md-comments-sidebar-inline';
+    const panelEl =
+      document.getElementById(panelId) ||
+      document.getElementById(isPage ? 'tab-page' : 'tab-inline') ||
+      document.querySelector(isPage ? '[data-panel="page"]' : '[data-panel="inline"]') ||
+      document.querySelector('.md-comments-tab-panel-active');
+    if (!panelEl) {
+      return;
+    }
+
+    const composer = document.createElement('div');
+    composer.className = 'md-comments-panel-composer md-comments-new-comment-composer';
+    const quoteHtml =
+      anchor && anchor.text
+        ? '<div class="md-comments-quote-excerpt">"' + escapeHtml(anchor.text) + '"</div>'
+        : '';
+    composer.innerHTML =
+      quoteHtml +
+      '<div class="md-comments-editor-shell">' +
+      '<textarea class="md-comments-editor-input" rows="3" placeholder="Add a comment… Use @username to mention."></textarea>' +
+      '</div>' +
+      '<div class="md-comments-composer-footer">' +
+      '<button type="button" class="md-comments-btn-primary" data-action="submit">Add comment</button>' +
+      '<button type="button" class="md-comments-btn-text" data-action="cancel">Cancel</button>' +
+      '</div>';
+
+    panelEl.prepend(composer);
+    const textarea = composer.querySelector('textarea');
+    if (textarea) {
+      textarea.focus();
+    }
+
+    composer.querySelector('[data-action="cancel"]').addEventListener('click', function () {
+      composer.remove();
+    });
+    composer.querySelector('[data-action="submit"]').addEventListener('click', function () {
+      const body = textarea ? textarea.value.trim() : '';
+      if (!body) {
+        return;
+      }
+      if (isPage) {
+        postAction({ action: 'addPage', body: body });
       } else if (anchor) {
-        sendAction({
+        postAction({
           action: 'add',
           body: body,
           index: String(anchor.index),
@@ -182,55 +390,8 @@
           occurrence: anchor.occurrence !== undefined ? String(anchor.occurrence) : undefined,
         });
       }
-      removeOverlays();
-      window.getSelection()?.removeAllRanges();
-    }
-
-    box.querySelector('[data-action="cancel"]').addEventListener('click', function (e) {
-      e.preventDefault();
-      if (window.mdCommentsClearReplyNav) {
-        window.mdCommentsClearReplyNav();
-      }
-      removeOverlays();
+      composer.remove();
     });
-    box.querySelector('[data-action="submit"]').addEventListener('click', function (e) {
-      e.preventDefault();
-      const body = textarea.value.trim();
-      if (!body) {
-        return;
-      }
-      finishSubmit(body);
-    });
-  }
-
-  function showPromptComposer(title, submitLabel, onSubmit, extraOptions) {
-    const opts = extraOptions || {};
-    opts.title = title;
-    opts.submitLabel = submitLabel;
-    opts.onSubmit = onSubmit;
-    showInlineComposer(
-      { top: 0, left: 0, bottom: 0, right: 0, width: 0, height: 0 },
-      null,
-      'modal',
-      opts
-    );
-  }
-
-  function openEmojiPicker(target) {
-    const rootId = target.getAttribute('data-md-root-id') || target.getAttribute('data-md-id');
-    const targetId = target.getAttribute('data-md-target-id') || rootId;
-    const picker = window.mdCommentsShowEmojiPicker;
-    if (!picker) {
-      return;
-    }
-    picker(
-      rootId,
-      target.getAttribute('data-md-type') || 'inline',
-      target.getAttribute('data-md-kind') || 'root',
-      targetId,
-      target.getBoundingClientRect(),
-      sendAction
-    );
   }
 
   const BLOCK_SELECTOR = 'p, h1, h2, h3, h4, h5, h6, li, tr, blockquote, details, summary';
@@ -239,12 +400,7 @@
     if (!node) {
       return null;
     }
-    const el =
-      node.nodeType === Node.TEXT_NODE
-        ? node.parentElement
-        : node.nodeType === Node.ELEMENT_NODE
-          ? node
-          : null;
+    const el = node.nodeType === Node.TEXT_NODE ? node.parentElement : node;
     if (!el) {
       return null;
     }
@@ -256,7 +412,7 @@
     if (tr) {
       return tr;
     }
-    return el.closest(BLOCK_SELECTOR) || null;
+    return el?.closest?.(BLOCK_SELECTOR) || null;
   }
 
   function getSelectedText(range) {
@@ -321,14 +477,12 @@
   function getAnchorFromParagraph(p) {
     const idxAttr = p.getAttribute('data-md-paragraph-index');
     const hashAttr = p.getAttribute('data-md-anchor-hash');
-    const textAttr = p.getAttribute('data-md-anchor-text');
-    const headingAttr = p.getAttribute('data-md-heading');
     if (idxAttr !== null && hashAttr) {
       return {
         index: idxAttr,
         hash: hashAttr,
-        text: textAttr || p.textContent || '',
-        heading: headingAttr || '',
+        text: p.getAttribute('data-md-anchor-text') || p.textContent || '',
+        heading: p.getAttribute('data-md-heading') || '',
       };
     }
     const blocks = loadAnchorBlocks();
@@ -372,17 +526,12 @@
   }
 
   function handleTextSelection() {
-    if (reanchorCommentId) {
-      return;
-    }
-    if (document.getElementById('md-comments-composer')) {
+    if (reanchorCommentId || document.getElementById('md-comments-composer')) {
       return;
     }
     const sel = window.getSelection();
     if (!sel || sel.isCollapsed || sel.rangeCount === 0) {
       removeEl('md-comments-selection-bar');
-      pendingAnchor = null;
-      pendingRect = null;
       return;
     }
     const range = sel.getRangeAt(0);
@@ -395,7 +544,6 @@
       return;
     }
     pendingAnchor = getAnchorFromSelection(range, p);
-    pendingRect = rect;
     showSelectionBar(rect);
   }
 
@@ -414,13 +562,13 @@
 
   document.addEventListener('md-comments:submit-page', function (e) {
     if (e.detail && e.detail.body) {
-      sendAction({ action: 'addPage', body: e.detail.body });
+      postAction({ action: 'addPage', body: e.detail.body });
     }
   });
 
   document.addEventListener('md-comments:submit-reply', function (e) {
     if (e.detail && e.detail.body) {
-      sendAction({
+      postAction({
         action: 'reply',
         rootId: e.detail.rootId,
         type: e.detail.type || 'inline',
@@ -434,9 +582,9 @@
     if (!target) {
       return;
     }
-    const action = target.getAttribute('data-md-action');
     e.preventDefault();
     e.stopPropagation();
+    const action = target.getAttribute('data-md-action');
 
     if (action === 'toggle-replies') {
       if (window.mdCommentsToggleReplies) {
@@ -452,7 +600,7 @@
       if (body) {
         target.classList.add('loading');
         target.disabled = true;
-        sendAction({ action: 'addPage', body: body });
+        postAction({ action: 'addPage', body: body });
       }
       return;
     }
@@ -477,7 +625,7 @@
         if (window.mdCommentsMarkReplySubmitted) {
           window.mdCommentsMarkReplySubmitted();
         }
-        sendAction({ action: 'reply', rootId: rootId, type: type, body: body });
+        postAction({ action: 'reply', rootId: rootId, type: type, body: body });
       }
       return;
     }
@@ -495,18 +643,18 @@
       return;
     }
 
+    if (action === 'refresh') {
+      const refreshBtn = target.closest('button');
+      if (refreshBtn) {
+        refreshBtn.classList.add('is-refreshing');
+        setTimeout(() => refreshBtn.classList.remove('is-refreshing'), 1000);
+      }
+      postAction({ action: 'refresh' });
+      return;
+    }
+
     if (action === 'addPage') {
-      if (window.mdCommentsActivateTab) {
-        window.mdCommentsActivateTab('page');
-      }
-      const pageTa = document.querySelector('.page-textarea');
-      if (pageTa) {
-        pageTa.focus();
-      } else {
-        showPromptComposer('Page comment', 'Add comment', function (body) {
-          sendAction({ action: 'addPage', body: body });
-        });
-      }
+      showSidebarNewCommentComposer(null, true);
       return;
     }
 
@@ -518,21 +666,7 @@
       const initialBody = window.mdCommentsExtractEditBody
         ? window.mdCommentsExtractEditBody(target)
         : '';
-      showPromptComposer(
-        'Edit comment',
-        'Save',
-        function (body) {
-          sendAction({
-            action: 'edit',
-            id: id,
-            rootId: rootId,
-            type: type,
-            kind: kind,
-            body: body,
-          });
-        },
-        { initialBody: initialBody }
-      );
+      showInlineCardEditComposer(target, id, rootId, type, kind, initialBody);
       return;
     }
 
@@ -543,17 +677,12 @@
       if (window.mdCommentsPrepareReplyNav && tab) {
         window.mdCommentsPrepareReplyNav(id, tab);
       }
-      showPromptComposer('Reply', 'Add comment', function (body) {
-        if (window.mdCommentsMarkReplySubmitted) {
-          window.mdCommentsMarkReplySubmitted();
-        }
-        sendAction({ action: 'reply', rootId: id, type: type, body: body });
-      });
+      showInlineCardReplyComposer(target, id, type);
       return;
     }
 
     if (action === 'resolve') {
-      sendAction({
+      postAction({
         action: 'resolve',
         id: target.getAttribute('data-md-id'),
         type: target.getAttribute('data-md-type') || 'inline',
@@ -562,7 +691,7 @@
     }
 
     if (action === 'unresolve') {
-      sendAction({
+      postAction({
         action: 'unresolve',
         id: target.getAttribute('data-md-id'),
         type: target.getAttribute('data-md-type') || 'inline',
@@ -571,17 +700,12 @@
     }
 
     if (action === 'delete') {
-      const kind = target.getAttribute('data-md-kind') || 'root';
-      const label = kind === 'reply' ? 'reply' : 'comment';
-      if (!window.confirm('Delete this ' + label + ' permanently? This cannot be undone.')) {
-        return;
-      }
-      sendAction({
+      postAction({
         action: 'delete',
         id: target.getAttribute('data-md-id'),
         rootId: target.getAttribute('data-md-root-id') || target.getAttribute('data-md-id'),
         type: target.getAttribute('data-md-type') || 'inline',
-        kind: kind,
+        kind: target.getAttribute('data-md-kind') || 'root',
       });
       return;
     }
@@ -589,25 +713,33 @@
     if (action === 'comment-paragraph') {
       const idx = target.getAttribute('data-md-id');
       const p =
-        target.closest('p[data-md-paragraph-index]') ||
-        (idx ? document.querySelector('p[data-md-paragraph-index="' + idx + '"]') : null);
+        target.closest('[data-md-paragraph-index]') ||
+        (idx ? document.querySelector('[data-md-paragraph-index="' + idx + '"]') : null);
       if (p) {
         const anchor = getAnchorFromParagraph(p);
-        showInlineComposer(target.getBoundingClientRect(), anchor, 'inline');
-        document.dispatchEvent(
-          new CustomEvent('md-comments:open-sidebar', { detail: { commentId: null } })
-        );
+        showSidebarNewCommentComposer(anchor, false);
       }
       return;
     }
 
     if (action === 'react-picker') {
-      openEmojiPicker(target);
+      const rootId = target.getAttribute('data-md-root-id') || target.getAttribute('data-md-id');
+      const targetId = target.getAttribute('data-md-target-id') || rootId;
+      if (window.mdCommentsShowEmojiPicker) {
+        window.mdCommentsShowEmojiPicker(
+          rootId,
+          target.getAttribute('data-md-type') || 'inline',
+          target.getAttribute('data-md-kind') || 'root',
+          targetId,
+          target.getBoundingClientRect(),
+          postAction
+        );
+      }
       return;
     }
 
     if (action === 'react') {
-      sendAction({
+      postAction({
         action: 'react',
         targetId: target.getAttribute('data-md-target'),
         rootId: target.getAttribute('data-md-root'),
@@ -637,7 +769,7 @@
       }
       e.preventDefault();
       const anchor = getAnchorFromParagraph(p);
-      sendAction({
+      postAction({
         action: 'reanchor',
         id: reanchorCommentId,
         index: anchor.index,
@@ -661,6 +793,7 @@
 
   document.addEventListener('click', function (e) {
     if (
+      e.target.closest('.md-comments-panel-composer') ||
       e.target.closest('#md-comments-composer') ||
       e.target.closest('#md-comments-selection-bar') ||
       e.target.closest('[data-md-action]')
