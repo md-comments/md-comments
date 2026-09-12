@@ -30,9 +30,10 @@ test.describe('VS Code Native Markdown Preview Integration E2E', () => {
     // 5. Click FAB to open the sidebar drawer
     await fab.dispatchEvent('click');
 
-    // 6. Verify layout gets md-comments-sidebar-open class and fab aria-expanded is true
+    // 6. Verify layout gets md-comments-sidebar-open class, fab aria-expanded is true, and FAB is hidden
     await expect(layout).toHaveClass(/md-comments-sidebar-open/, { timeout: 5000 });
     await expect(fab).toHaveAttribute('aria-expanded', 'true');
+    await expect(fab).toBeHidden();
 
     // 7. Verify comments sidebar drawer is visible
     const sidebar = previewFrame.locator('#md-comments-sidebar');
@@ -42,5 +43,11 @@ test.describe('VS Code Native Markdown Preview Integration E2E', () => {
     const saveHint = previewFrame.locator('.md-comments-save-hint');
     await expect(saveHint).toBeVisible();
     await expect(saveHint).toContainText('Saving comments');
+
+    // 9. Close sidebar and verify FAB becomes visible again
+    const closeBtn = previewFrame.locator('#md-comments-sidebar-close');
+    await closeBtn.dispatchEvent('click');
+    await expect(layout).not.toHaveClass(/md-comments-sidebar-open/);
+    await expect(fab).toBeVisible();
   });
 });

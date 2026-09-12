@@ -60,6 +60,7 @@
       fab.setAttribute('aria-expanded', open ? 'true' : 'false');
       fab.setAttribute('title', open ? 'Hide comments' : 'Show comments');
       fab.setAttribute('aria-label', open ? 'Hide comments' : 'Show comments');
+      fab.style.display = open ? 'none' : '';
     }
     layout.classList.toggle('md-comments-sidebar-open', open);
   }

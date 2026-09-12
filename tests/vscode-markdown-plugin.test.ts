@@ -74,4 +74,22 @@ describe('VS Code Markdown Preview FAB and Icon Parity', () => {
     expect(css).toContain('body.vscode-dark');
     expect(css).toContain('body.vscode-light');
   });
+
+  it('verifies preview.css and previewSidebar.js hide the FAB when comments panel is open', () => {
+    const cssPath = path.resolve(__dirname, '../vscode-extension/media/preview.css');
+    expect(fs.existsSync(cssPath)).toBe(true);
+    const css = fs.readFileSync(cssPath, 'utf8');
+
+    // Confirm that when sidebar is open, FAB is hidden
+    const openFabMatch = css.match(
+      /\.md-comments-layout\.md-comments-sidebar-open\s+\.md-comments-fab\s*\{([^}]+)\}/
+    );
+    expect(openFabMatch).not.toBeNull();
+    expect(openFabMatch![1]).toMatch(/display:\s*none/);
+
+    const jsPath = path.resolve(__dirname, '../vscode-extension/media/previewSidebar.js');
+    expect(fs.existsSync(jsPath)).toBe(true);
+    const js = fs.readFileSync(jsPath, 'utf8');
+    expect(js).toContain("fab.style.display = open ? 'none' : ''");
+  });
 });

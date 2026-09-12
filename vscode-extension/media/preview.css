@@ -451,7 +451,7 @@ body.md-comments-resizing {
 }
 
 .md-comments-layout.md-comments-sidebar-open .md-comments-fab {
-  right: calc(var(--gc-sidebar-width) + 1.5rem);
+  display: none !important;
 }
 
 .md-comments-fab:hover {

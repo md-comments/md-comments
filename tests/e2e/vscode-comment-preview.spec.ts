@@ -102,5 +102,6 @@ test.describe('VS Code Extension Comment Preview E2E', () => {
     await fab.dispatchEvent('click');
     await expect(fab).toHaveAttribute('aria-expanded', 'true');
     await expect(layout).toHaveClass(/md-comments-sidebar-open/);
+    await expect(fab).toBeHidden();
   });
 });
