@@ -14,6 +14,7 @@ import {
 } from './commentStore';
 import { globalOptimisticStore } from './optimisticStore';
 import { resolveStorageKeyForUri } from './repoManager';
+import { logDebug } from './logger';
 import type { CommentRootType } from '../../shared/types';
 
 /** Plain text from command bridge, or legacy base64url from URI handler. */
@@ -51,7 +52,7 @@ export type CommentActionMessage = {
 
 function savedToast(savedPath: string, label: string): void {
   const name = path.basename(savedPath);
-  vscode.window.showInformationMessage(`Markdown Comments: ${label} (saved to ${name})`);
+  logDebug(`Markdown Comments: ${label} (saved to ${name})`);
 }
 
 export async function executeCommentAction(
@@ -170,7 +171,7 @@ export async function executeCommentAction(
       } catch {
         // ignore if native preview is not active
       }
-      vscode.window.showInformationMessage('Markdown Comments: Comments refreshed');
+      logDebug('Markdown Comments: Comments refreshed');
       break;
     }
     default:
