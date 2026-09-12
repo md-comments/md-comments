@@ -80,6 +80,7 @@ html[data-color-mode='light'] .md-comments-scope {
 }
 
 .sidebar-header {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -516,6 +517,37 @@ html[data-color-mode='light'] .md-comments-scope {
 
 .md-comments-submitting-line.fade-out {
   opacity: 0;
+}
+
+/* Sidebar Refresh Progress Line */
+.sidebar-refresh-progress-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: rgba(88, 166, 255, 0.15);
+  overflow: hidden;
+  z-index: 10;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.sidebar-refresh-progress-line.active {
+  opacity: 1;
+}
+
+.sidebar-refresh-progress-line.active::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 45%;
+  background: var(--accent-color, #58a6ff);
+  animation: md-comments-progress-line 1.2s infinite ease-in-out;
+  border-radius: 2px;
 }
 
 /* Comment Cards */

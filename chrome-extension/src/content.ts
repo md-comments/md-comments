@@ -902,11 +902,20 @@ async function handlePageLoad() {
   }
 }
 
-async function loadDocumentComments(meta: ParsedUrl & { type: 'blob' }) {
-  isLoadingComments = true;
-  lastLoadCommentsError = null;
-  injectFABButton(0, true);
-  renderSidebarComments();
+async function loadDocumentComments(
+  meta: ParsedUrl & { type: 'blob' },
+  options?: { isBackgroundRefresh?: boolean }
+) {
+  const isBackgroundRefresh = !!options?.isBackgroundRefresh;
+
+  if (!isBackgroundRefresh) {
+    isLoadingComments = true;
+    lastLoadCommentsError = null;
+    injectFABButton(0, true);
+    renderSidebarComments();
+  }
+
+  let commentsChanged = true;
 
   try {
     const commitHash = await resolveBlobCommitHash(meta.owner, meta.repo, meta.branch);
@@ -926,12 +935,24 @@ async function loadDocumentComments(meta: ParsedUrl & { type: 'blob' }) {
       commitHash,
     };
 
-    if (currentToken) {
+    const needsAppCheck =
+      currentToken &&
+      (!appInstallationStatus.checked ||
+        currentMetadata?.owner !== meta.owner ||
+        currentMetadata?.repo !== meta.repo);
+
+    if (currentToken && needsAppCheck) {
       if (!githubApi) {
         githubApi = new GitHubApi(currentToken);
       }
-      isCheckingAppInstallation = true;
-      renderSidebarComments();
+      if (
+        !isBackgroundRefresh &&
+        loadedComments.inline_comments.length === 0 &&
+        loadedComments.page_comments.length === 0
+      ) {
+        isCheckingAppInstallation = true;
+        renderSidebarComments();
+      }
       try {
         const status = await githubApi.checkAppInstallation(meta.owner, meta.repo);
         appInstallationStatus = {
@@ -947,23 +968,29 @@ async function loadDocumentComments(meta: ParsedUrl & { type: 'blob' }) {
       } finally {
         isCheckingAppInstallation = false;
       }
-    } else {
+    } else if (!currentToken) {
       appInstallationStatus = { checked: false, installed: true, repoAccess: true };
       isCheckingAppInstallation = false;
     }
 
     try {
       const fetched = await gitRefBackend.read(key);
+      const prevCommentsJson = JSON.stringify(loadedComments);
       loadedComments = mergeLocalComments(loadedComments, fetched);
       warmDisplayNames(loadedComments);
       lastLoadCommentsError = null;
+      if (isBackgroundRefresh && prevCommentsJson === JSON.stringify(loadedComments)) {
+        commentsChanged = false;
+      }
     } catch (err) {
       console.warn('[md-comments] Error reading comments from GitHubOrphanRefBackend:', err);
       lastLoadCommentsError = err instanceof Error ? err.message : String(err);
-      loadedComments = mergeLocalComments(loadedComments, {
-        page_comments: [],
-        inline_comments: [],
-      });
+      if (!isBackgroundRefresh) {
+        loadedComments = mergeLocalComments(loadedComments, {
+          page_comments: [],
+          inline_comments: [],
+        });
+      }
     }
 
     try {
@@ -990,7 +1017,9 @@ async function loadDocumentComments(meta: ParsedUrl & { type: 'blob' }) {
       console.warn('[md-comments] Failed to fetch raw file anchors:', err);
     }
   } finally {
-    isLoadingComments = false;
+    if (!isBackgroundRefresh) {
+      isLoadingComments = false;
+    }
   }
 
   const totalCount = loadedComments.inline_comments.length + loadedComments.page_comments.length;
@@ -1001,22 +1030,55 @@ async function loadDocumentComments(meta: ParsedUrl & { type: 'blob' }) {
   if (markdownBody) {
     renderDOMIndicatorsForFile(markdownBody, meta.filePath, parsedAnchors, loadedComments);
   }
-  renderSidebarComments();
 
-  if (wasOpenBeforePageChange && lastDocPath === meta.filePath) {
-    openSidebar('inline');
-    wasOpenBeforePageChange = false;
-  } else {
-    chrome.storage.local.get({ sidebarOpenState: false }, (items) => {
-      if (items.sidebarOpenState && totalCount > 0 && !isSidebarOpen()) {
-        openSidebar('inline');
-      }
-    });
+  if (!isBackgroundRefresh || commentsChanged) {
+    const inlineList = activeSidebarHost?.querySelector('#inline-threads') as HTMLElement | null;
+    const pageList = activeSidebarHost?.querySelector('#page-threads') as HTMLElement | null;
+    const prevInlineScrollTop = inlineList ? inlineList.scrollTop : 0;
+    const prevPageScrollTop = pageList ? pageList.scrollTop : 0;
+
+    renderSidebarComments();
+
+    if (inlineList) inlineList.scrollTop = prevInlineScrollTop;
+    if (pageList) pageList.scrollTop = prevPageScrollTop;
+  }
+
+  if (!isBackgroundRefresh) {
+    if (wasOpenBeforePageChange && lastDocPath === meta.filePath) {
+      openSidebar('inline');
+      wasOpenBeforePageChange = false;
+    } else {
+      chrome.storage.local.get({ sidebarOpenState: false }, (items) => {
+        if (items.sidebarOpenState && totalCount > 0 && !isSidebarOpen()) {
+          openSidebar('inline');
+        }
+      });
+    }
   }
 }
 
 let lastKnownRefSha: string | null = null;
 let commentsPollManager: CommentPollManager | null = null;
+
+function setRefreshingProgress(active: boolean) {
+  if (!activeSidebarHost) return;
+  const line = activeSidebarHost.querySelector(
+    '#sidebar-refresh-progress-line'
+  ) as HTMLElement | null;
+  if (!line) return;
+  if (active) {
+    line.style.display = 'block';
+    void line.offsetWidth;
+    line.classList.add('active');
+  } else {
+    line.classList.remove('active');
+    setTimeout(() => {
+      if (!line.classList.contains('active')) {
+        line.style.display = 'none';
+      }
+    }, 200);
+  }
+}
 
 async function refreshDocumentComments(force = false): Promise<void> {
   const meta = parseGitHubUrl(window.location.href);
@@ -1037,25 +1099,28 @@ async function refreshDocumentComments(force = false): Promise<void> {
     }
   }
 
-  if (!force && lastKnownRefSha) {
-    try {
-      const currentSha = await gitRefBackend.getLatestRefSha(meta.owner, meta.repo);
-      if (currentSha && currentSha === lastKnownRefSha) {
-        return; // Remote ref unchanged, nothing new to load
-      }
-      if (currentSha) {
-        lastKnownRefSha = currentSha;
-      }
-    } catch {
-      // ignore check failure
-    }
-  }
-
   const refreshBtn = activeSidebarHost?.querySelector('.refresh-btn');
   refreshBtn?.classList.add('is-refreshing');
+  setRefreshingProgress(true);
 
   try {
-    await loadDocumentComments(meta as ParsedUrl & { type: 'blob' });
+    if (!force && lastKnownRefSha) {
+      try {
+        const currentSha = await gitRefBackend.getLatestRefSha(meta.owner, meta.repo);
+        if (currentSha && currentSha === lastKnownRefSha) {
+          return; // Remote ref unchanged, nothing new to load
+        }
+        if (currentSha) {
+          lastKnownRefSha = currentSha;
+        }
+      } catch {
+        // ignore check failure
+      }
+    }
+
+    await loadDocumentComments(meta as ParsedUrl & { type: 'blob' }, {
+      isBackgroundRefresh: true,
+    });
     if (!lastKnownRefSha) {
       gitRefBackend
         .getLatestRefSha(meta.owner, meta.repo)
@@ -1066,6 +1131,7 @@ async function refreshDocumentComments(force = false): Promise<void> {
     }
   } finally {
     refreshBtn?.classList.remove('is-refreshing');
+    setRefreshingProgress(false);
   }
 }
 
@@ -2073,6 +2139,7 @@ function injectSidebar() {
         <button class="md-comments-header-btn refresh-btn" type="button" title="Refresh comments" aria-label="Refresh comments">${ICON_REFRESH}</button>
         ${isEmbedded ? '' : '<button class="close-btn">&times;</button>'}
       </div>
+      <div class="sidebar-refresh-progress-line" id="sidebar-refresh-progress-line" style="display: none;"></div>
     </div>
 
     <div class="unauthorized-container" style="display: none; flex-direction: column; flex: 1; padding: 16px;"></div>
@@ -2715,7 +2782,9 @@ function renderSidebarComments() {
     const oauthPromptHtml = renderOAuthPrompt(ownerName);
 
     if (currentToken) {
-      if (isCheckingAppInstallation) {
+      const hasExistingComments =
+        loadedComments.inline_comments.length > 0 || loadedComments.page_comments.length > 0;
+      if (isCheckingAppInstallation && !hasExistingComments) {
         if (unauthContainer) {
           unauthContainer.style.display = 'flex';
           unauthContainer.innerHTML = renderInstallationValidatingCard(
@@ -5239,3 +5308,11 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
 document.addEventListener('mouseup', handleTextSelection);
 document.addEventListener('keyup', handleTextSelection);
 window.addEventListener('scroll', hideSelectionButton);
+
+export {
+  setRefreshingProgress,
+  loadDocumentComments,
+  refreshDocumentComments,
+  injectSidebar,
+  renderSidebarComments,
+};

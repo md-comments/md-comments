@@ -428,5 +428,21 @@ test.describe('GitHub Extension: Hermetic Playwright E2E Lifecycle', () => {
       const hasZeroHashBody = interceptedPostBodies.some((b) => b && b.includes('0000000'));
       expect(hasZeroHashBody).toBe(false);
     });
+
+    await test.step('9. Verify silent refresh via refresh button activates progress line without UI churn', async () => {
+      const refreshBtn = testPage.locator('#md-comments-sidebar .refresh-btn');
+      await expect(refreshBtn).toBeVisible();
+
+      // Click refresh button
+      await refreshBtn.click();
+
+      // Invariant: .installation-loading-card must NEVER be rendered on refresh
+      const validatingCard = testPage.locator('.installation-loading-card');
+      await expect(validatingCard).toHaveCount(0);
+
+      // Verify progress line element exists and is anchored
+      const progressLine = testPage.locator('#sidebar-refresh-progress-line');
+      await expect(progressLine).toHaveCount(1);
+    });
   });
 });

@@ -161,4 +161,79 @@ test.describe('Safari WebExtension & WebKit Lifecycle', () => {
     const docContent = fs.readFileSync(docPath, 'utf8');
     expect(docContent).toContain('**Step 4: Grant GitHub Permissions**');
   });
+
+  test('FEAT-EXT-SAFARI-SILENT-REFRESH: Verifies WebKit sidebar includes progress line and supports silent refresh styling', async ({
+    page,
+  }) => {
+    allure.epic('Safari Extension');
+    allure.feature('FEAT-EXT-SAFARI-SILENT-REFRESH');
+    allure.story('WebKit Progress Line Rendering and Silent Refresh State');
+
+    const htmlContent = fs.readFileSync(FIXTURE_HTML_PATH, 'utf8');
+
+    await page.route(
+      'https://github.com/md-comments/md-test/blob/main/README.md',
+      async (route) => {
+        await route.fulfill({
+          status: 200,
+          contentType: 'text/html; charset=utf-8',
+          body: htmlContent,
+        });
+      }
+    );
+
+    await page.goto('https://github.com/md-comments/md-test/blob/main/README.md');
+    await page.waitForLoadState('domcontentloaded');
+
+    const cssContent = fs.readFileSync(path.join(SAFARI_DIST_DIR, 'sidebar.css'), 'utf8');
+    await page.addStyleTag({ content: cssContent });
+
+    // Inject sidebar DOM structure
+    await page.evaluate(() => {
+      const sidebar = document.createElement('div');
+      sidebar.id = 'md-comments-sidebar';
+      sidebar.className = 'sidebar-container md-comments-scope';
+      sidebar.innerHTML = `
+        <div class="sidebar-header">
+          <div class="title-section"><h3>Markdown Comments</h3></div>
+          <div class="sidebar-header-actions">
+            <button class="md-comments-header-btn refresh-btn">R</button>
+          </div>
+          <div class="sidebar-refresh-progress-line" id="sidebar-refresh-progress-line" style="display: none;"></div>
+        </div>
+        <div class="unauthorized-container" style="display: none;"></div>
+        <div class="tab-header" style="display: flex;">
+          <button class="tab-btn active" data-tab="inline">Inline</button>
+        </div>
+        <div class="tab-content" id="tab-inline" style="display: flex;">
+          <div class="threads-list" id="inline-threads">
+            <div class="md-comments-card" data-comment-id="c1">Existing comment</div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(sidebar);
+    });
+
+    const progressLine = page.locator('#sidebar-refresh-progress-line');
+    await expect(progressLine).toHaveCount(1);
+    await expect(progressLine).toBeHidden();
+
+    // Activate progress line
+    await page.evaluate(() => {
+      const line = document.querySelector('#sidebar-refresh-progress-line') as HTMLElement;
+      line.style.display = 'block';
+      line.classList.add('active');
+    });
+
+    await expect(progressLine).toBeVisible();
+
+    // Verify computed height is 2px
+    const height = await progressLine.evaluate((el) => window.getComputedStyle(el).height);
+    expect(height).toBe('2px');
+
+    // Verify existing comments remain visible during active progress line (silent refresh)
+    const commentCard = page.locator('.md-comments-card');
+    await expect(commentCard).toBeVisible();
+    await expect(page.locator('.installation-loading-card')).toHaveCount(0);
+  });
 });
