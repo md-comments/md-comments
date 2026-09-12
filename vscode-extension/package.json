@@ -48,7 +48,10 @@
       {
         "command": "mdComments.openCommentPreview",
         "title": "Markdown Comments: Open Comment Preview",
-        "icon": "$(comment-discussion)"
+        "icon": {
+          "light": "./media/icons/comment-preview-light.svg",
+          "dark": "./media/icons/comment-preview-dark.svg"
+        }
       },
       {
         "command": "mdComments.openStandaloneCommentPreview",
@@ -77,7 +80,10 @@
       {
         "command": "mdComments.toggleCommentPreview",
         "title": "Markdown Comments: Toggle Comment Preview",
-        "icon": "$(comment-discussion)"
+        "icon": {
+          "light": "./media/icons/comment-preview-light.svg",
+          "dark": "./media/icons/comment-preview-dark.svg"
+        }
       }
     ],
     "menus": {
