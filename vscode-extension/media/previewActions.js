@@ -577,12 +577,23 @@
     bindCardReplyComposers();
   }
 
+  let initTimer = null;
+  function scheduleInit() {
+    if (initTimer) {
+      clearTimeout(initTimer);
+    }
+    initTimer = setTimeout(function () {
+      initTimer = null;
+      init();
+    }, 50);
+  }
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {
     init();
   }
 
-  const observer = new MutationObserver(init);
+  const observer = new MutationObserver(scheduleInit);
   observer.observe(document.body, { childList: true, subtree: true });
 })();

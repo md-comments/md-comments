@@ -2,7 +2,16 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Run Extension",
+      "name": "Run Extension (VS Code)",
+      "type": "extensionHost",
+      "request": "launch",
+      "runtimeExecutable": "/Applications/Visual Studio Code.app/Contents/MacOS/Code",
+      "args": ["--extensionDevelopmentPath=${workspaceFolder}/vscode-extension"],
+      "outFiles": ["${workspaceFolder}/vscode-extension/dist/**/*.js"],
+      "preLaunchTask": "pnpm: watch"
+    },
+    {
+      "name": "Run Extension (Current IDE)",
       "type": "extensionHost",
       "request": "launch",
       "runtimeExecutable": "${execPath}",
