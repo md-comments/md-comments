@@ -24,7 +24,7 @@ import fs from 'fs';
 import path from 'path';
 
 describe('VS Code Table and Complex Element Anchoring', () => {
-  const problemMdPath = path.resolve(__dirname, '../.temp/problem-with-orphan.md');
+  const problemMdPath = path.resolve(__dirname, 'fixtures/problem-with-orphan.md');
   const markdown = fs.readFileSync(problemMdPath, 'utf8');
   const blocks = parseMarkdownAnchors(markdown);
 
