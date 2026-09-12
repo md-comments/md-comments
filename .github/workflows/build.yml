@@ -77,6 +77,10 @@ jobs:
               echo "WARNING: FOSSA revision is not available yet (sync delay). Passing build."
               exit 0
             fi
+            if echo "$output" | grep -q "A push-only API key was used"; then
+              echo "WARNING: FOSSA push-only API key used. Analysis uploaded successfully; skipping issue details test."
+              exit 0
+            fi
             exit 1
           fi
           echo "$output"
