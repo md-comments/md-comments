@@ -347,7 +347,6 @@ export function activate(context: vscode.ExtensionContext): {
           (editor.document.languageId === 'markdown' || editor.document.uri.path.endsWith('.md'))
         ) {
           CommentPreviewPanel.refreshForUri(editor.document.uri, false);
-          await refreshPreview(false);
         }
       }
     })
