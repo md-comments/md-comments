@@ -331,10 +331,6 @@
       panel.classList.toggle('md-comments-tab-panel-active', active);
       panel.hidden = !active;
     });
-    const footer = document.querySelector('.md-comments-sidebar-footer');
-    if (footer) {
-      footer.style.display = tabId === 'page' ? '' : 'none';
-    }
   }
 
   function initTabs() {

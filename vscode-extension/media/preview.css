@@ -411,32 +411,6 @@ body.md-comments-resizing {
   overflow: hidden;
 }
 
-.md-comments-sidebar-footer {
-  flex-shrink: 0;
-  padding: 0.75rem 1rem;
-  border-top: 1px solid var(--gc-border);
-}
-
-.md-comments-sidebar-add {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  width: 100%;
-  padding: 0.55rem 0.75rem;
-  border: 1px dashed var(--gc-border);
-  border-radius: 6px;
-  background: transparent;
-  color: var(--gc-text-muted);
-  font-size: 0.875rem;
-  cursor: pointer;
-}
-
-.md-comments-sidebar-add:hover {
-  border-color: var(--gc-accent);
-  color: var(--gc-accent);
-}
-
 /* Floating toggle — bottom-right */
 .md-comments-fab {
   position: fixed;

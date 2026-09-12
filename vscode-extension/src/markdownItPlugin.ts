@@ -586,11 +586,6 @@ export function renderDocumentLayout(
       </header>
       ${authBanner}
       <div class="md-comments-sidebar-body">${sidebarBody}</div>
-      <footer class="md-comments-sidebar-footer" style="display: none;">
-        <button type="button" class="md-comments-sidebar-add" data-md-action="addPage">
-          <span class="md-comments-icon-comment" aria-hidden="true"></span> Add a comment
-        </button>
-      </footer>
     </aside>
     ${footer}
   </div>`;
