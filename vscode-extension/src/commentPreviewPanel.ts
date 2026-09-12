@@ -50,6 +50,9 @@ export class CommentPreviewPanel {
   private readonly extensionUri: vscode.Uri;
   private readonly mdUri: vscode.Uri;
   private readonly disposables: vscode.Disposable[] = [];
+  private isHtmlInitialized = false;
+  private lastMarkdownContent = '';
+  private lastBodyHtml = '';
 
   private constructor(
     extensionUri: vscode.Uri,
@@ -133,7 +136,26 @@ export class CommentPreviewPanel {
       `CommentPreviewPanel.refresh invoked for ${this.mdUri.toString()}, forceRemote=${forceRemote}`
     );
     const doc = await vscode.workspace.openTextDocument(this.mdUri);
-    const bodyHtml = await renderMarkdownWithComments(doc.getText(), this.mdUri, forceRemote);
+    const markdownContent = doc.getText();
+    const bodyHtml = await renderMarkdownWithComments(markdownContent, this.mdUri, forceRemote);
+
+    if (this.isHtmlInitialized && this.lastMarkdownContent === markdownContent) {
+      if (this.lastBodyHtml !== bodyHtml) {
+        this.lastBodyHtml = bodyHtml;
+        logDebug(
+          `CommentPreviewPanel sending in-place comments update for ${this.mdUri.toString()}`
+        );
+        void this.panel.webview.postMessage({
+          type: 'updateComments',
+          bodyHtml: bodyHtml,
+        });
+      }
+      return;
+    }
+
+    this.lastMarkdownContent = markdownContent;
+    this.lastBodyHtml = bodyHtml;
+    this.isHtmlInitialized = true;
     const nonce = String(Date.now());
     const cssUri = this.panel.webview.asWebviewUri(
       vscode.Uri.joinPath(this.extensionUri, 'media', 'preview.css')
