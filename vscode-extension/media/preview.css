@@ -587,9 +587,7 @@ body.md-comments-resizing {
   box-shadow: 0 0 4px rgba(255, 215, 0, 0.5);
 }
 
-p.md-comments-paragraph-marked,
-td.md-comments-paragraph-marked,
-li.md-comments-paragraph-marked {
+.md-comments-paragraph-marked {
   border-bottom: 2px solid #e2b203;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
@@ -597,12 +595,8 @@ li.md-comments-paragraph-marked {
   transition: background 0.12s ease;
 }
 
-p.md-comments-paragraph-marked:hover,
-p.md-comments-paragraph-marked.md-comments-text-active,
-td.md-comments-paragraph-marked:hover,
-td.md-comments-paragraph-marked.md-comments-text-active,
-li.md-comments-paragraph-marked:hover,
-li.md-comments-paragraph-marked.md-comments-text-active {
+.md-comments-paragraph-marked:hover,
+.md-comments-paragraph-marked.md-comments-text-active {
   background: rgba(56, 139, 253, 0.35);
 }
 
@@ -612,6 +606,7 @@ li.md-comments-paragraph-marked.md-comments-text-active {
   padding: 0.35rem 0.5rem 0.5rem;
   font-size: 0.875rem;
   border-radius: 6px;
+  cursor: pointer;
   transition:
     background 0.12s ease,
     outline 0.12s ease;
@@ -619,6 +614,28 @@ li.md-comments-paragraph-marked.md-comments-text-active {
 
 .md-comments-card[data-md-type='inline'] {
   margin-left: 0.25rem;
+  cursor: pointer;
+}
+
+.md-comments-card .md-comments-body,
+.md-comments-card input,
+.md-comments-card textarea,
+.md-comments-card .md-comments-reply-composer {
+  cursor: auto;
+}
+
+.md-comments-card input,
+.md-comments-card textarea {
+  cursor: text;
+}
+
+.md-comments-card button,
+.md-comments-card a,
+.md-comments-card [role='button'],
+.md-comments-card .md-comments-reaction-pill,
+.md-comments-card .md-comments-btn-icon,
+.md-comments-card .md-comments-action-btn {
+  cursor: pointer !important;
 }
 
 .md-comments-card.md-comments-card-active {
