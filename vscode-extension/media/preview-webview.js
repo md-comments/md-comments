@@ -913,72 +913,76 @@
   });
 
   function applyCommentsUpdate(bodyHtml) {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(bodyHtml, 'text/html');
+    try {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(bodyHtml, 'text/html');
 
-    // 1. Update sidebar body if not currently typing in a composer
-    const newSidebarBody = doc.querySelector('.md-comments-sidebar-body');
-    const curSidebarBody = document.querySelector('.md-comments-sidebar-body');
-    const activeEl = document.activeElement;
-    const isTyping =
-      activeEl &&
-      (activeEl.tagName === 'TEXTAREA' || activeEl.tagName === 'INPUT') &&
-      curSidebarBody &&
-      curSidebarBody.contains(activeEl);
+      // 1. Update sidebar body if not currently typing in a composer
+      const newSidebarBody = doc.querySelector('.md-comments-sidebar-body');
+      const curSidebarBody = document.querySelector('.md-comments-sidebar-body');
+      const activeEl = document.activeElement;
+      const isTyping =
+        activeEl &&
+        (activeEl.tagName === 'TEXTAREA' || activeEl.tagName === 'INPUT') &&
+        curSidebarBody &&
+        curSidebarBody.contains(activeEl);
 
-    if (newSidebarBody && curSidebarBody && !isTyping) {
-      curSidebarBody.innerHTML = newSidebarBody.innerHTML;
-    }
-
-    // 2. Update thread count attribute & FAB badge
-    const newLayout = doc.querySelector('#md-comments-layout');
-    const curLayout = document.querySelector('#md-comments-layout');
-    if (newLayout && curLayout) {
-      const newCount = newLayout.getAttribute('data-md-thread-count') || '0';
-      curLayout.setAttribute('data-md-thread-count', newCount);
-      const fabBadge = document.querySelector('#md-comments-panel-fab .badge-count');
-      if (fabBadge) {
-        fabBadge.textContent = newCount;
-        const count = parseInt(newCount, 10);
-        fabBadge.style.display = count > 0 ? 'inline-block' : 'none';
+      if (newSidebarBody && curSidebarBody && !isTyping) {
+        curSidebarBody.innerHTML = newSidebarBody.innerHTML;
       }
-    }
 
-    // 3. Update tabs counts
-    ['inline', 'page'].forEach(function (tab) {
-      const newTabCount = doc.querySelector('.' + tab + '-tab-count');
-      const curTabCount = document.querySelector('.' + tab + '-tab-count');
-      if (newTabCount && curTabCount) {
-        curTabCount.textContent = newTabCount.textContent;
+      // 2. Update thread count attribute & FAB badge
+      const newLayout = doc.querySelector('#md-comments-layout');
+      const curLayout = document.querySelector('#md-comments-layout');
+      if (newLayout && curLayout) {
+        const newCount = newLayout.getAttribute('data-md-thread-count') || '0';
+        curLayout.setAttribute('data-md-thread-count', newCount);
+        const fabBadge = document.querySelector('#md-comments-panel-fab .badge-count');
+        if (fabBadge) {
+          fabBadge.textContent = newCount;
+          const count = parseInt(newCount, 10);
+          fabBadge.style.display = count > 0 ? 'inline-block' : 'none';
+        }
       }
-    });
 
-    // 4. Update footer data attributes
-    const newFooter = doc.querySelector('.md-comments-footer');
-    const curFooter = document.querySelector('.md-comments-footer');
-    if (newFooter && curFooter) {
-      Array.from(newFooter.attributes).forEach(function (attr) {
-        curFooter.setAttribute(attr.name, attr.value);
+      // 3. Update tabs counts
+      ['inline', 'page'].forEach(function (tab) {
+        const newTabCount = doc.querySelector('.' + tab + '-tab-count');
+        const curTabCount = document.querySelector('.' + tab + '-tab-count');
+        if (newTabCount && curTabCount) {
+          curTabCount.textContent = newTabCount.textContent;
+        }
       });
-      anchorBlocks = null;
-    }
 
-    // 5. Update marked paragraphs in document without touching text nodes
-    const markedIndexes = new Set();
-    doc.querySelectorAll('.md-comments-paragraph-marked').forEach(function (el) {
-      const idx = el.getAttribute('data-md-paragraph-index');
-      if (idx !== null) {
-        markedIndexes.add(idx);
+      // 4. Update footer data attributes
+      const newFooter = doc.querySelector('.md-comments-footer');
+      const curFooter = document.querySelector('.md-comments-footer');
+      if (newFooter && curFooter) {
+        Array.from(newFooter.attributes).forEach(function (attr) {
+          curFooter.setAttribute(attr.name, attr.value);
+        });
+        anchorBlocks = null;
       }
-    });
 
-    document
-      .querySelectorAll('.md-comments-document [data-md-paragraph-index]')
-      .forEach(function (p) {
-        const idx = p.getAttribute('data-md-paragraph-index');
-        const shouldBeMarked = idx !== null && markedIndexes.has(idx);
-        p.classList.toggle('md-comments-paragraph-marked', shouldBeMarked);
+      // 5. Update marked paragraphs in document without touching text nodes
+      const markedIndexes = new Set();
+      doc.querySelectorAll('.md-comments-paragraph-marked').forEach(function (el) {
+        const idx = el.getAttribute('data-md-paragraph-index');
+        if (idx !== null) {
+          markedIndexes.add(idx);
+        }
       });
+
+      document
+        .querySelectorAll('.md-comments-document [data-md-paragraph-index]')
+        .forEach(function (p) {
+          const idx = p.getAttribute('data-md-paragraph-index');
+          const shouldBeMarked = idx !== null && markedIndexes.has(idx);
+          p.classList.toggle('md-comments-paragraph-marked', shouldBeMarked);
+        });
+    } catch (err) {
+      console.error('[md-comments] failed to apply in-place comments update:', err);
+    }
   }
 
   window.addEventListener('message', function (event) {

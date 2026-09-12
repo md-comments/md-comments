@@ -68,6 +68,155 @@
     }
   }
 
+  function getCurrentAuthor() {
+    const footer = document.querySelector('.md-comments-footer');
+    return (footer && footer.getAttribute('data-md-current-author')) || 'You';
+  }
+
+  function getAuthorInitials(name) {
+    const parts = (name || '').trim().split(/\s+/).filter(Boolean);
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[1][0]).toUpperCase();
+    }
+    return (name.slice(0, 2) || '?').toUpperCase();
+  }
+
+  function insertOptimisticCard(author, body, anchor, isPage) {
+    const targetList = document.getElementById(isPage ? 'page-threads' : 'inline-threads');
+    if (!targetList) return;
+
+    const empty = targetList.querySelector('.md-comments-empty-state, .empty-state');
+    if (empty) empty.remove();
+
+    const tempId = 'optimistic-' + Date.now();
+    const initials = escapeHtml(getAuthorInitials(author));
+    const quoteHtml =
+      !isPage && anchor && anchor.text
+        ? '<blockquote class="md-comments-quote" data-md-quote="true">' +
+          (anchor.heading
+            ? '<div class="md-comments-quote-heading">' + escapeHtml(anchor.heading) + '</div>'
+            : '') +
+          '<div class="md-comments-quote-text">' +
+          escapeHtml(anchor.text) +
+          '</div></blockquote>'
+        : '';
+
+    const article = document.createElement('article');
+    article.className = 'md-comments-sidebar-thread md-comments-thread-optimistic';
+    article.setAttribute('data-md-comment-id', tempId);
+
+    article.innerHTML =
+      quoteHtml +
+      '<div class="md-comments-card md-comments-card-optimistic" data-md-comment-id="' +
+      tempId +
+      '" data-md-type="' +
+      (isPage ? 'page' : 'inline') +
+      '">' +
+      '<div class="md-comments-thread-row md-comments-thread-root">' +
+      '<div class="md-comments-avatar-wrap">' +
+      '<div class="md-comments-avatar md-comments-avatar-fallback-only" aria-hidden="true">' +
+      '<span class="md-comments-avatar-fallback">' +
+      initials +
+      '</span>' +
+      '</div>' +
+      '</div>' +
+      '<div class="md-comments-thread-content">' +
+      '<div class="md-comments-meta">' +
+      (isPage ? '<span class="md-comments-badge md-comments-type-label">Page comment</span>' : '') +
+      '<span class="md-comments-author">' +
+      escapeHtml(author) +
+      '</span>' +
+      '<span class="md-comments-time">Just now</span>' +
+      '<span class="md-comments-badge" style="opacity:0.7; font-style:italic;">Saving…</span>' +
+      '</div>' +
+      '<div class="md-comments-body">' +
+      escapeHtml(body) +
+      '</div>' +
+      '</div>' +
+      '</div>' +
+      '</div>';
+
+    targetList.prepend(article);
+
+    const countEl = document.querySelector(isPage ? '.page-tab-count' : '.inline-tab-count');
+    if (countEl) {
+      const current = parseInt(countEl.textContent || '0', 10);
+      countEl.textContent = String(current + 1);
+    }
+
+    const fabBadge = document.querySelector('#md-comments-panel-fab .badge-count');
+    const layout = document.getElementById('md-comments-layout');
+    if (layout) {
+      const current = parseInt(layout.getAttribute('data-md-thread-count') || '0', 10);
+      layout.setAttribute('data-md-thread-count', String(current + 1));
+      if (fabBadge) {
+        fabBadge.textContent = String(current + 1);
+        fabBadge.style.display = 'inline-block';
+      }
+    }
+
+    if (!isPage && anchor && anchor.index !== undefined) {
+      const targetP = document.querySelector('[data-md-paragraph-index="' + anchor.index + '"]');
+      if (targetP) {
+        targetP.classList.add('md-comments-paragraph-marked');
+      }
+    }
+  }
+
+  function insertOptimisticReply(cardEl, rootId, body, _type) {
+    if (!cardEl) return;
+    let block = cardEl.querySelector('.md-comments-replies-block');
+    let list = cardEl.querySelector('.md-comments-replies-list');
+    if (!block || !list) {
+      block = document.createElement('div');
+      block.className = 'md-comments-replies-block';
+      block.setAttribute('data-md-root-id', rootId);
+      block.setAttribute('data-md-reply-count', '1');
+      list = document.createElement('div');
+      list.className = 'md-comments-replies-list';
+      list.setAttribute('data-md-replies-panel', 'true');
+      block.appendChild(list);
+      const comp = cardEl.querySelector(
+        '.reply-composer, .md-comments-reply-composer, .md-comments-panel-composer'
+      );
+      if (comp) {
+        cardEl.insertBefore(block, comp);
+      } else {
+        cardEl.appendChild(block);
+      }
+      cardEl.classList.add('md-comments-card-has-replies');
+    }
+
+    const author = getCurrentAuthor();
+    const initials = escapeHtml(getAuthorInitials(author));
+    const replyEl = document.createElement('div');
+    replyEl.className = 'md-comments-reply md-comments-reply-optimistic';
+    replyEl.innerHTML =
+      '<div class="md-comments-thread-row">' +
+      '<div class="md-comments-avatar md-comments-avatar-fallback-only" aria-hidden="true">' +
+      '<span class="md-comments-avatar-fallback">' +
+      initials +
+      '</span>' +
+      '</div>' +
+      '<div class="md-comments-thread-content">' +
+      '<div class="md-comments-meta">' +
+      '<span class="md-comments-author">' +
+      escapeHtml(author) +
+      '</span>' +
+      '<span class="md-comments-time">Just now</span>' +
+      '<span class="md-comments-badge" style="opacity:0.7; font-style:italic;">Saving…</span>' +
+      '</div>' +
+      '<div class="md-comments-body">' +
+      escapeHtml(body) +
+      '</div>' +
+      '</div>' +
+      '</div>';
+    list.appendChild(replyEl);
+
+    const currentCount = parseInt(block.getAttribute('data-md-reply-count') || '0', 10);
+    block.setAttribute('data-md-reply-count', String(currentCount + 1));
+  }
+
   function postAction(payload) {
     const md = getMdPath();
     if (!md) {
@@ -117,8 +266,12 @@
       trigger.id = 'md-comments-action-trigger';
       trigger.style.display = 'none';
       trigger.setAttribute('aria-hidden', 'true');
-      trigger.setAttribute('rel', 'noreferrer');
+      trigger.setAttribute('rel', 'noreferrer noopener');
+      trigger.setAttribute('target', '_blank');
       document.body.appendChild(trigger);
+    } else {
+      trigger.setAttribute('target', '_blank');
+      trigger.setAttribute('rel', 'noreferrer noopener');
     }
     trigger.href = uri;
     trigger.click();
@@ -265,6 +418,7 @@
       if (!body) {
         return;
       }
+      insertOptimisticReply(rootEl, id, body, type);
       if (window.mdCommentsMarkReplySubmitted) {
         window.mdCommentsMarkReplySubmitted();
       }
@@ -380,8 +534,10 @@
         return;
       }
       if (isPage) {
+        insertOptimisticCard(getCurrentAuthor(), body, null, true);
         postAction({ action: 'addPage', body: body });
       } else if (anchor) {
+        insertOptimisticCard(getCurrentAuthor(), body, anchor, false);
         postAction({
           action: 'add',
           body: body,
@@ -564,12 +720,19 @@
 
   document.addEventListener('md-comments:submit-page', function (e) {
     if (e.detail && e.detail.body) {
+      insertOptimisticCard(getCurrentAuthor(), e.detail.body, null, true);
       postAction({ action: 'addPage', body: e.detail.body });
     }
   });
 
   document.addEventListener('md-comments:submit-reply', function (e) {
     if (e.detail && e.detail.body) {
+      const card = document.querySelector(
+        '.md-comments-card[data-md-comment-id="' + e.detail.rootId + '"]'
+      );
+      if (card) {
+        insertOptimisticReply(card, e.detail.rootId, e.detail.body, e.detail.type || 'inline');
+      }
       postAction({
         action: 'reply',
         rootId: e.detail.rootId,
@@ -602,6 +765,8 @@
       if (body) {
         target.classList.add('loading');
         target.disabled = true;
+        insertOptimisticCard(getCurrentAuthor(), body, null, true);
+        if (ta) ta.value = '';
         setTimeout(function () {
           target.classList.remove('loading');
           target.disabled = false;
@@ -625,6 +790,13 @@
       if (body && rootId) {
         target.classList.add('loading');
         target.disabled = true;
+        if (card) {
+          insertOptimisticReply(card, rootId, body, type);
+        }
+        if (ta) ta.value = '';
+        if (wrapper) wrapper.style.display = 'none';
+        const replyInput = card && card.querySelector('.reply-input');
+        if (replyInput) replyInput.style.display = 'block';
         setTimeout(function () {
           target.classList.remove('loading');
           target.disabled = false;
@@ -692,6 +864,17 @@
     }
 
     if (action === 'resolve') {
+      const card = target.closest('.md-comments-card');
+      if (card) {
+        card.classList.add('md-comments-card-resolved');
+        const meta = card.querySelector('.md-comments-meta');
+        if (meta && !meta.querySelector('.md-comments-badge-resolved')) {
+          const badge = document.createElement('span');
+          badge.className = 'md-comments-badge resolved md-comments-badge-resolved';
+          badge.textContent = 'Resolved';
+          meta.appendChild(badge);
+        }
+      }
       postAction({
         action: 'resolve',
         id: target.getAttribute('data-md-id'),
@@ -701,6 +884,12 @@
     }
 
     if (action === 'unresolve') {
+      const card = target.closest('.md-comments-card');
+      if (card) {
+        card.classList.remove('md-comments-card-resolved');
+        const badge = card.querySelector('.md-comments-badge-resolved');
+        if (badge) badge.remove();
+      }
       postAction({
         action: 'unresolve',
         id: target.getAttribute('data-md-id'),

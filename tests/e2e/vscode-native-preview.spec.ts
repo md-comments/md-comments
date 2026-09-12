@@ -62,7 +62,7 @@ test.describe('VS Code Native Markdown Preview Integration E2E', () => {
     // 1. Verify action trigger anchor element is present in the DOM
     const actionTrigger = previewFrame.locator('#md-comments-action-trigger');
     await expect(actionTrigger).toHaveCount(1);
-    await expect(actionTrigger).toHaveAttribute('rel', 'noreferrer');
+    await expect(actionTrigger).toHaveAttribute('rel', /noreferrer/);
 
     // 2. Open sidebar drawer via FAB
     const fab = previewFrame.locator('#md-comments-panel-fab');
@@ -88,5 +88,21 @@ test.describe('VS Code Native Markdown Preview Integration E2E', () => {
         await expect(replyWrapper).toBeVisible({ timeout: 3000 });
       }
     }
+
+    // 6. Test submitting a comment in native preview and ensure screen does not become empty
+    const pageTab = previewFrame.locator('.md-comments-tab[data-tab="page"]');
+    await pageTab.click();
+    const pageComposer = previewFrame.locator('#page-composer');
+    await expect(pageComposer).toBeVisible();
+    const textarea = pageComposer.locator('.page-textarea');
+    await textarea.fill('Testing comment submission in native preview');
+    const submitBtn = pageComposer.locator('.submit-page-btn');
+    await submitBtn.click();
+
+    // Verify preview layout and document remain intact and visible (NOT blank/empty screen)
+    const layout = previewFrame.locator('#md-comments-layout');
+    await expect(layout).toBeVisible({ timeout: 5000 });
+    const mainDoc = previewFrame.locator('.md-comments-document');
+    await expect(mainDoc).toHaveCount(1);
   });
 });
