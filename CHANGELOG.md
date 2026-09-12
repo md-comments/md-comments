@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.2] - 2026-09-11
+
+### Added
+
+- **Editor Title Panel Toggle**: Aligned panel toggle icon in VS Code editor title bar with FAB logo.
+- **Cross-Interface Badge Styling**: Standardized status badge designs across interfaces to GitHub extension specification.
+
+### Fixed
+
+- **VS Code Webview Blank Screen on Action**: Prevent preview webview from blanking or flickering on comment actions.
+- **VS Code Table Anchoring & Orphan State**: Correctly resolve table row comment anchoring and prevent false orphan highlighting.
+- **VS Code Sidebar & FAB Coordination**: Automatically hide FAB button when comments panel is open, restore sidebar footer `addPage` button, and resolve tab page/inline panel composer switching.
+- **Icon Alignment & Differentiation**: Differentiated thread resolve/reopen action icons from header refresh, and unified refresh and close header action icon geometry.
+- **Silent Refresh Progress Indicator**: Implemented smooth non-intrusive progress line during background comment refresh in GitHub and Safari extensions.
+
 ## [1.4.1] - 2026-09-10
 
 ### Fixed

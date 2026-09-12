@@ -147,7 +147,7 @@ onTurboLoad@https://github.com/dist/content.js:450:12`;
   describe('TelemetryKillSwitch & OtelTelemetryClient (INV-TELEMETRY-KILLSWITCH)', () => {
     it('should limit breadcrumbs to maximum of 10 items (FIFO)', () => {
       const client = new OtelTelemetryClient({
-        serviceVersion: '1.4.1',
+        serviceVersion: '1.4.2',
         clientInterface: 'chrome-extension',
       });
 
@@ -168,7 +168,7 @@ onTurboLoad@https://github.com/dist/content.js:450:12`;
       };
 
       const client = new OtelTelemetryClient({
-        serviceVersion: '1.4.1',
+        serviceVersion: '1.4.2',
         clientInterface: 'chrome-extension',
         transport: mockTransport,
       });
@@ -191,7 +191,7 @@ onTurboLoad@https://github.com/dist/content.js:450:12`;
       };
 
       const client = new OtelTelemetryClient({
-        serviceVersion: '1.4.1',
+        serviceVersion: '1.4.2',
         clientInterface: 'chrome-extension',
         transport: mockTransport,
       });
@@ -281,7 +281,7 @@ onTurboLoad@https://github.com/dist/content.js:450:12`;
 
     it('handles enabledByDefault: false and breadcrumb metadata', async () => {
       const client = new OtelTelemetryClient({
-        serviceVersion: '1.4.1',
+        serviceVersion: '1.4.2',
         clientInterface: 'chrome-extension',
         enabledByDefault: false,
       });
@@ -307,7 +307,7 @@ onTurboLoad@https://github.com/dist/content.js:450:12`;
       };
 
       const client = new OtelTelemetryClient({
-        serviceVersion: '1.4.1',
+        serviceVersion: '1.4.2',
         clientInterface: 'chrome-extension',
         transport: mockTransport,
       });
@@ -336,7 +336,7 @@ onTurboLoad@https://github.com/dist/content.js:450:12`;
         transport.send([
           {
             serviceName: 'md-comments',
-            serviceVersion: '1.4.1',
+            serviceVersion: '1.4.2',
             clientInterface: 'chrome-extension',
             timestamp: Date.now(),
             severity: 'ERROR',
