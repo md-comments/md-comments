@@ -119,6 +119,7 @@ function normalizeInlineComment(raw: InlineComment): InlineComment {
     anchor_hash: raw.anchor_hash,
     paragraph_index: raw.paragraph_index,
     heading_context: raw.heading_context,
+    anchor_occurrence: raw.anchor_occurrence,
     body: raw.body,
     created_at: raw.created_at,
     updated_at: raw.updated_at,
@@ -151,6 +152,7 @@ export async function addInlineComment(
     anchor_hash: string;
     paragraph_index: number;
     heading_context: string;
+    anchor_occurrence?: number;
   }
 ): Promise<{ comment: InlineComment; savedPath: string }> {
   const data = await readComments(mdUri);
@@ -162,6 +164,7 @@ export async function addInlineComment(
     anchor_hash: fields.anchor_hash,
     paragraph_index: fields.paragraph_index,
     heading_context: fields.heading_context,
+    anchor_occurrence: fields.anchor_occurrence,
     body: fields.body,
     created_at: new Date().toISOString(),
     commit_sha: key?.commitHash,

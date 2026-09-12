@@ -11,8 +11,10 @@ dependsOn:
   - 'FEAT-ANCH-HASH'
 implementedIn:
   - 'shared/anchor.ts'
+  - 'vscode-extension/src/markdownItPlugin.ts'
 verifiedIn:
   - 'tests/e2e/anchoring.spec.ts'
+  - 'tests/vscode-table-anchoring.test.ts'
 invariants: []
 minCoverage: 100
 ---

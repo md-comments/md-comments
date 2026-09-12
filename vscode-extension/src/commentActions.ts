@@ -40,6 +40,7 @@ export type CommentActionMessage = {
   heading?: string;
   hash?: string;
   index?: string;
+  occurrence?: string;
   rootId?: string;
   type?: string;
   id?: string;
@@ -63,12 +64,15 @@ export async function executeCommentAction(
       if (!body.trim()) {
         throw new Error('Comment must include text');
       }
+      const occurrence =
+        msg.occurrence !== undefined && msg.occurrence !== '' ? Number(msg.occurrence) : undefined;
       const { savedPath } = await addInlineComment(mdUri, {
         body,
         anchor_text: resolveText(msg.text),
         anchor_hash: msg.hash ?? '',
         paragraph_index: Number(msg.index ?? '0'),
         heading_context: resolveText(msg.heading),
+        anchor_occurrence: occurrence,
       });
       savedToast(savedPath, 'inline comment added');
       break;

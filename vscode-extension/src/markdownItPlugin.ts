@@ -14,7 +14,7 @@ import {
 } from './githubDisplayNames';
 import { parseMarkdownAnchors, fnv1aHash, normalizeAnchorText } from '../../shared/anchor';
 import { placeInlineComments, isOrphanedPlacement, fuzzyMatch } from '../../shared/placement';
-import type { CommentsFile, PlacementResult } from '../../shared/types';
+import type { CommentsFile, PlacementResult, AnchorBlock } from '../../shared/types';
 import { escapeHtml } from '../../shared/html';
 import { formatCommentBodyWithMentions } from '../../shared/mentions';
 import { readComments } from './commentStore';
@@ -782,6 +782,24 @@ export function extendMarkdownIt(md: any): any {
     };
   }
 
+  function attachBlockAttributes(token: any, block: AnchorBlock, ctx: RenderContext): void {
+    token.attrJoin('class', 'md-comments-paragraph');
+    token.attrSet('data-md-paragraph-index', String(block.paragraph_index));
+    token.attrSet('data-md-anchor-hash', block.anchor_hash);
+    token.attrSet('data-md-heading', block.heading_context);
+    token.attrSet('data-md-anchor-text', block.anchor_text);
+
+    if (ctx.comments && ctx.comments.inline_comments) {
+      const placements = placeInlineComments(ctx.blocks, ctx.comments.inline_comments);
+      const hasInlineComments = placements.some(
+        (p) => p.placed && p.paragraphIndex === block.paragraph_index && !p.comment.resolved
+      );
+      if (hasInlineComments) {
+        token.attrJoin('class', 'md-comments-paragraph-marked');
+      }
+    }
+  }
+
   const defaultParagraphOpen =
     md.renderer.rules.paragraph_open ||
     function (tokens: any, idx: any, options: any, env: any, self: any) {
@@ -806,28 +824,70 @@ export function extendMarkdownIt(md: any): any {
           block = renderCtx.blocks.find((b) => fuzzyMatch(text, b.anchor_text));
         }
         if (block) {
-          token.attrJoin('class', 'md-comments-paragraph');
-          token.attrSet('data-md-paragraph-index', String(block.paragraph_index));
-          token.attrSet('data-md-anchor-hash', block.anchor_hash);
-          token.attrSet('data-md-heading', block.heading_context);
-          token.attrSet('data-md-anchor-text', block.anchor_text);
-
-          if (renderCtx.comments && renderCtx.comments.inline_comments) {
-            const placements = placeInlineComments(
-              renderCtx.blocks,
-              renderCtx.comments.inline_comments
-            );
-            const hasInlineComments = placements.some(
-              (p) => p.placed && p.paragraphIndex === block.paragraph_index && !p.comment.resolved
-            );
-            if (hasInlineComments) {
-              token.attrJoin('class', 'md-comments-paragraph-marked');
-            }
-          }
+          attachBlockAttributes(token, block, renderCtx);
         }
       }
     }
     return defaultParagraphOpen(tokens, idx, options, env, self);
+  };
+
+  const defaultHeadingOpen =
+    md.renderer.rules.heading_open ||
+    function (tokens: any, idx: any, options: any, env: any, self: any) {
+      return self.renderToken(tokens, idx, options);
+    };
+
+  md.renderer.rules.heading_open = (
+    tokens: any,
+    idx: number,
+    options: any,
+    env: any,
+    self: any
+  ) => {
+    if (renderCtx) {
+      const token = tokens[idx];
+      const nextToken = tokens[idx + 1];
+      if (nextToken && nextToken.type === 'inline' && nextToken.content) {
+        const text = normalizeAnchorText(nextToken.content);
+        const hash = fnv1aHash(text);
+        let block = renderCtx.blocks.find((b) => b.anchor_hash === hash);
+        if (!block) {
+          block = renderCtx.blocks.find((b) => fuzzyMatch(text, b.anchor_text));
+        }
+        if (block) {
+          attachBlockAttributes(token, block, renderCtx);
+        }
+      }
+    }
+    return defaultHeadingOpen(tokens, idx, options, env, self);
+  };
+
+  const defaultTrOpen =
+    md.renderer.rules.tr_open ||
+    function (tokens: any, idx: any, options: any, env: any, self: any) {
+      return self.renderToken(tokens, idx, options);
+    };
+
+  md.renderer.rules.tr_open = (tokens: any, idx: number, options: any, env: any, self: any) => {
+    if (renderCtx) {
+      const token = tokens[idx];
+      const cells: string[] = [];
+      for (let j = idx + 1; j < tokens.length && tokens[j].type !== 'tr_close'; j++) {
+        if (tokens[j].type === 'inline' && tokens[j].content) {
+          cells.push(tokens[j].content);
+        }
+      }
+      const text = normalizeAnchorText(cells.join(' '));
+      const hash = fnv1aHash(text);
+      let block = renderCtx.blocks.find((b) => b.anchor_hash === hash);
+      if (!block) {
+        block = renderCtx.blocks.find((b) => fuzzyMatch(text, b.anchor_text));
+      }
+      if (block) {
+        attachBlockAttributes(token, block, renderCtx);
+      }
+    }
+    return defaultTrOpen(tokens, idx, options, env, self);
   };
 
   const defaultParagraphClose =

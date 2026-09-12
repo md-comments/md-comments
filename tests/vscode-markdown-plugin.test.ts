@@ -3,11 +3,15 @@ import { describe, it, expect, vi } from 'vitest';
 vi.mock('vscode', () => ({
   workspace: {
     getConfiguration: vi.fn().mockReturnValue({
-      get: vi.fn(),
+      get: vi.fn((key: string, defaultVal: unknown) => defaultVal),
+    }),
+    getWorkspaceFolder: vi.fn().mockReturnValue({
+      uri: { fsPath: process.cwd(), toString: () => process.cwd() },
     }),
   },
   Uri: {
     file: (path: string) => ({ fsPath: path, toString: () => path }),
+    parse: (uri: string) => ({ fsPath: uri, toString: () => uri }),
   },
 }));
 
@@ -91,5 +95,18 @@ describe('VS Code Markdown Preview FAB and Icon Parity', () => {
     expect(fs.existsSync(jsPath)).toBe(true);
     const js = fs.readFileSync(jsPath, 'utf8');
     expect(js).toContain("fab.style.display = open ? 'none' : ''");
+  });
+
+  it('tags tr elements and headings with data-md-paragraph-index and data-md-anchor-hash', () => {
+    const md = getMarkdownEngine();
+    const readmePath = path.resolve(__dirname, '../README.md');
+    const markdown = fs.readFileSync(readmePath, 'utf8');
+    const output = md.render(markdown, {
+      currentDocument: { fsPath: readmePath, toString: () => readmePath },
+    });
+
+    expect(output).toContain('<h1 class="md-comments-paragraph" data-md-paragraph-index="0"');
+    expect(output).toContain('<tr class="md-comments-paragraph" data-md-paragraph-index="');
+    expect(output).toContain('data-md-anchor-hash="');
   });
 });

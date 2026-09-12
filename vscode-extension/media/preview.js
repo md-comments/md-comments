@@ -179,6 +179,7 @@
           hash: anchor.hash,
           text: anchor.text,
           heading: anchor.heading,
+          occurrence: anchor.occurrence !== undefined ? String(anchor.occurrence) : undefined,
         });
       }
       removeOverlays();
@@ -232,7 +233,7 @@
     );
   }
 
-  const BLOCK_SELECTOR = 'p, h1, h2, h3, h4, h5, h6, li, tr, td, th, blockquote, details, summary';
+  const BLOCK_SELECTOR = 'p, h1, h2, h3, h4, h5, h6, li, tr, blockquote, details, summary';
 
   function findParagraphFromNode(node) {
     if (!node) {
@@ -244,11 +245,52 @@
         : node.nodeType === Node.ELEMENT_NODE
           ? node
           : null;
-    return el?.closest?.(BLOCK_SELECTOR) || null;
+    if (!el) {
+      return null;
+    }
+    const tagged = el.closest('[data-md-paragraph-index]');
+    if (tagged) {
+      return tagged;
+    }
+    const tr = el.closest('tr');
+    if (tr) {
+      return tr;
+    }
+    return el.closest(BLOCK_SELECTOR) || null;
   }
 
   function getSelectedText(range) {
     return (range.toString() || '').replace(/\s+/g, ' ').trim();
+  }
+
+  function findOccurrenceIndex(fullText, searchText, charOffset) {
+    if (!fullText || !searchText) return 0;
+    const escaped = searchText.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
+    const pattern = escaped.replace(/\s+/g, '\\s+');
+    let regex;
+    try {
+      // eslint-disable-next-line security/detect-non-literal-regexp
+      regex = new RegExp(pattern, 'gi');
+    } catch {
+      return 0;
+    }
+    const matchIndices = [];
+    let match;
+    while ((match = regex.exec(fullText)) !== null) {
+      matchIndices.push(match.index);
+      if (match.index === regex.lastIndex) regex.lastIndex++;
+    }
+    if (matchIndices.length <= 1) return 0;
+    let closestIdx = 0;
+    let minDiff = Infinity;
+    for (let i = 0; i < matchIndices.length; i++) {
+      const diff = Math.abs(matchIndices[i] - charOffset);
+      if (diff < minDiff) {
+        minDiff = diff;
+        closestIdx = i;
+      }
+    }
+    return closestIdx;
   }
 
   function getAnchorFromSelection(range, p) {
@@ -257,11 +299,22 @@
     if (!selected) {
       return base;
     }
+    let charOffset = 0;
+    try {
+      const preRange = document.createRange();
+      preRange.selectNodeContents(p);
+      preRange.setEnd(range.startContainer, range.startOffset);
+      charOffset = preRange.toString().length;
+    } catch {
+      charOffset = 0;
+    }
+    const occurrence = findOccurrenceIndex(p.textContent || '', selected, charOffset);
     return {
       index: base.index,
       hash: base.hash,
       text: selected,
       heading: base.heading,
+      occurrence: occurrence,
     };
   }
 
@@ -279,9 +332,29 @@
       };
     }
     const blocks = loadAnchorBlocks();
+    const text = (p.textContent || '').replace(/\s+/g, ' ').trim();
+    if (Array.isArray(blocks) && blocks.length > 0) {
+      const lowerText = text.toLowerCase();
+      const matchedBlock = blocks.find(function (b) {
+        const bText = (b.anchor_text || '').toLowerCase();
+        return (
+          bText === lowerText ||
+          bText.includes(lowerText) ||
+          (lowerText.length >= 12 && lowerText.includes(bText))
+        );
+      });
+      if (matchedBlock) {
+        return {
+          index: String(matchedBlock.paragraph_index),
+          hash: matchedBlock.anchor_hash,
+          text: matchedBlock.anchor_text,
+          heading: matchedBlock.heading_context || '',
+        };
+      }
+    }
     const paragraphs = document.querySelectorAll(BLOCK_SELECTOR);
     const domIndex = Array.prototype.indexOf.call(paragraphs, p);
-    const block = blocks[domIndex];
+    const block = blocks ? blocks[domIndex] : null;
     if (block) {
       return {
         index: String(block.paragraph_index),
@@ -290,7 +363,6 @@
         heading: block.heading_context || '',
       };
     }
-    const text = (p.textContent || '').replace(/\s+/g, ' ').trim();
     return {
       index: String(domIndex >= 0 ? domIndex : 0),
       hash: '',

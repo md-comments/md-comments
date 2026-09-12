@@ -79,6 +79,9 @@ export function isOrphanedPlacement(blocks: AnchorBlock[], placement: PlacementR
   if (!block) {
     return true;
   }
+  if (!placement.comment.anchor_hash) {
+    return !fuzzyMatch(placement.comment.anchor_text, block.anchor_text);
+  }
   return block.anchor_hash !== placement.comment.anchor_hash;
 }
 
