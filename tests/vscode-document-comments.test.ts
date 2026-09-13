@@ -67,6 +67,7 @@ describe('VS Code Document Comments View Parity with GitHub Extension', () => {
     const readmePath = path.resolve(__dirname, '../README.md');
     const output = md.render(markdown, {
       currentDocument: { fsPath: readmePath, toString: () => readmePath },
+      isLoading: false,
     });
 
     // Verify tabs
@@ -86,6 +87,112 @@ describe('VS Code Document Comments View Parity with GitHub Extension', () => {
     expect(output).toContain('class="page-composer md-comments-page-composer"');
     expect(output).toContain('class="page-textarea md-comments-page-textarea"');
     expect(output).toContain('submit-page-btn');
+  });
+
+  it('renders shimmer loading skeleton and FAB loading state when opening panel for the first time while comments are loading', () => {
+    const md = getMarkdownEngine();
+    const markdown = '# Sample Document\n\nThis is paragraph content.';
+    const readmePath = path.resolve(__dirname, '../README.md');
+    const output = md.render(markdown, {
+      currentDocument: { fsPath: readmePath, toString: () => readmePath },
+      isLoading: true,
+    });
+
+    // Verify loading skeletons are rendered for both tabs
+    expect(output).toContain('panel-loading-container');
+    expect(output).toContain('md-comments-spinner');
+    expect(output).toContain('Loading comments...');
+    expect(output).toContain('Fetching line annotations from repository');
+    expect(output).toContain('Fetching document discussions from repository');
+
+    // Verify empty state is NOT shown while loading
+    expect(output).not.toContain('No page discussion comments yet.');
+    expect(output).not.toContain('No inline comments yet.');
+
+    // Verify FAB widget shows loading state
+    expect(output).toContain('class="md-comments-fab is-loading"');
+    expect(output).toContain('class="badge-loading" style="display: inline-flex;"');
+    expect(output).toContain('aria-busy="true"');
+  });
+
+  it('consistently keeps newest comments at the top and never puts them last', () => {
+    const md = getMarkdownEngine();
+    const markdown = '# Sample Document\n\nThis is paragraph content.';
+    const readmePath = path.resolve(__dirname, '../README.md');
+
+    const olderDate = '2026-09-01T10:00:00.000Z';
+    const newerDate = '2026-09-12T12:00:00.000Z';
+
+    const output = md.render(markdown, {
+      currentDocument: { fsPath: readmePath, toString: () => readmePath },
+      isLoading: false,
+      comments: {
+        page_comments: [
+          {
+            id: 'page-older',
+            author: 'alice',
+            body: 'First older comment',
+            created_at: olderDate,
+            resolved: false,
+            reactions: [],
+            replies: [],
+          },
+          {
+            id: 'page-newer',
+            author: 'bob',
+            body: 'Second newer comment',
+            created_at: newerDate,
+            resolved: false,
+            reactions: [],
+            replies: [],
+          },
+        ],
+        inline_comments: [
+          {
+            id: 'inline-older',
+            author: 'alice',
+            body: 'Older inline feedback',
+            created_at: olderDate,
+            anchor_text: 'Sample Document',
+            anchor_hash: '123',
+            paragraph_index: 0,
+            heading_context: '',
+            orphaned: false,
+            resolved: false,
+            reactions: [],
+            replies: [],
+          },
+          {
+            id: 'inline-newer',
+            author: 'bob',
+            body: 'Newer inline feedback',
+            created_at: newerDate,
+            anchor_text: 'Sample Document',
+            anchor_hash: '123',
+            paragraph_index: 0,
+            heading_context: '',
+            orphaned: false,
+            resolved: false,
+            reactions: [],
+            replies: [],
+          },
+        ],
+      },
+    });
+
+    // In page threads, newer comment must appear before older comment
+    const pageNewerIdx = output.indexOf('Second newer comment');
+    const pageOlderIdx = output.indexOf('First older comment');
+    expect(pageNewerIdx).toBeGreaterThan(-1);
+    expect(pageOlderIdx).toBeGreaterThan(-1);
+    expect(pageNewerIdx).toBeLessThan(pageOlderIdx);
+
+    // In inline threads, newer comment must appear before older comment
+    const inlineNewerIdx = output.indexOf('Newer inline feedback');
+    const inlineOlderIdx = output.indexOf('Older inline feedback');
+    expect(inlineNewerIdx).toBeGreaterThan(-1);
+    expect(inlineOlderIdx).toBeGreaterThan(-1);
+    expect(inlineNewerIdx).toBeLessThan(inlineOlderIdx);
   });
 
   it('verifies preview.css contains full parity styles for page composer, reply composer, shimmer skeleton, and spinners', () => {

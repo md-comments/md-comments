@@ -15,6 +15,64 @@
     }
   }
 
+  function getMdPath() {
+    const footer = document.querySelector('.md-comments-footer');
+    return (
+      (footer && footer.getAttribute('data-md-md-path')) ||
+      document.body.getAttribute('data-md-md-path') ||
+      ''
+    );
+  }
+
+  function getUriScheme() {
+    const footer = document.querySelector('.md-comments-footer');
+    return (footer && footer.getAttribute('data-md-uri-scheme')) || 'vscode';
+  }
+
+  function toBase64Url(str) {
+    if (!str) return '';
+    try {
+      const bytes = new TextEncoder().encode(str);
+      let binary = '';
+      for (let i = 0; i < bytes.length; i++) {
+        binary += String.fromCharCode(bytes[i]);
+      }
+      return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    } catch {
+      return btoa(unescape(encodeURIComponent(str)))
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=+$/, '');
+    }
+  }
+
+  function buildActionUri(payload) {
+    const md = getMdPath();
+    if (!md) return '';
+    const scheme = getUriScheme();
+    const query = new URLSearchParams();
+    query.set('action', payload.action || '');
+    query.set('md', md);
+    if (payload.body) query.set('body', toBase64Url(payload.body));
+    if (payload.text) query.set('text', toBase64Url(payload.text));
+    if (payload.heading) query.set('heading', toBase64Url(payload.heading));
+    if (payload.emoji) query.set('emoji', toBase64Url(payload.emoji));
+    if (payload.hash) query.set('hash', payload.hash);
+    if (payload.index !== undefined && payload.index !== null)
+      query.set('index', String(payload.index));
+    if (payload.occurrence !== undefined && payload.occurrence !== null)
+      query.set('occurrence', String(payload.occurrence));
+    if (payload.rootId) query.set('rootId', payload.rootId);
+    if (payload.type) query.set('type', payload.type);
+    if (payload.id) query.set('id', payload.id);
+    if (payload.targetId) query.set('targetId', payload.targetId);
+    if (payload.kind) query.set('kind', payload.kind);
+    if (payload.confirmed) query.set('confirmed', 'true');
+    query.set('_t', String(Date.now()));
+    return scheme + '://md-comments.md-preview-comments/?' + query.toString();
+  }
+  window.mdCommentsBuildActionUri = buildActionUri;
+
   function removeEl(id) {
     const el = document.getElementById(id);
     if (el) {
@@ -46,13 +104,12 @@
     pop.innerHTML = '<div class="md-comments-emoji-row"></div>';
     const row = pop.querySelector('.md-comments-emoji-row');
     getReactionEmojis().forEach(function (emoji) {
-      const btn = document.createElement('button');
-      btn.type = 'button';
+      const btn = document.createElement('a');
+      btn.setAttribute('role', 'button');
+      btn.href = '#';
       btn.className = 'md-comments-emoji-btn';
       btn.textContent = emoji;
-      btn.addEventListener('click', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
+      btn.addEventListener('click', function () {
         if (typeof window.mdCommentsToggleReactionOptimistic === 'function') {
           window.mdCommentsToggleReactionOptimistic(
             targetId || rootId,
@@ -62,14 +119,18 @@
             emoji
           );
         }
-        onPick({
+        const payload = {
           action: 'react',
           targetId: targetId || rootId,
           rootId: rootId,
           type: type,
           kind: kind || 'root',
           emoji: emoji,
-        });
+        };
+        btn.href = buildActionUri(payload);
+        if (typeof onPick === 'function') {
+          onPick(payload);
+        }
         closeEmojiPopover();
       });
       row.appendChild(btn);
@@ -344,18 +405,20 @@
 
   function initTabs() {
     const tabs = document.querySelector('.md-comments-tabs');
-    if (!tabs || tabs.getAttribute('data-md-tabs-bound') === 'true') {
+    if (!tabs) {
       return;
     }
-    tabs.setAttribute('data-md-tabs-bound', 'true');
-    tabs.addEventListener('click', function (e) {
-      const btn = e.target.closest('.md-comments-tab');
-      if (!btn) {
-        return;
-      }
-      e.preventDefault();
-      activateTab(btn.getAttribute('data-tab') || 'inline');
-    });
+    if (tabs.getAttribute('data-md-tabs-bound') !== 'true') {
+      tabs.setAttribute('data-md-tabs-bound', 'true');
+      tabs.addEventListener('click', function (e) {
+        const btn = e.target.closest('.md-comments-tab');
+        if (!btn) {
+          return;
+        }
+        e.preventDefault();
+        activateTab(btn.getAttribute('data-tab') || 'inline');
+      });
+    }
     const pending = peekReplyNav();
     if (pending && pending.afterReply && pending.tab) {
       activateTab(pending.tab);
@@ -459,17 +522,40 @@
       textarea.value = '';
       textarea.blur();
 
-      document.dispatchEvent(
-        new CustomEvent('md-comments:submit-page', {
-          detail: { body: body },
-        })
-      );
+      let commentId;
+      if (typeof window.mdCommentsInsertOptimisticCard === 'function') {
+        commentId = window.mdCommentsInsertOptimisticCard(null, body, null, true);
+      } else {
+        document.dispatchEvent(
+          new CustomEvent('md-comments:submit-page', {
+            detail: { body: body },
+          })
+        );
+      }
+
+      if (submitBtn) {
+        submitBtn.href = buildActionUri({
+          action: 'addPage',
+          body: body,
+          id: commentId,
+        });
+      }
+
+      setTimeout(function () {
+        if (textarea) {
+          textarea.value = '';
+          textarea.blur();
+        }
+      }, 50);
     }
 
     if (submitBtn) {
       submitBtn.addEventListener('click', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
+        if (!textarea || !textarea.value.trim()) {
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
         doSubmit();
       });
     }
@@ -479,7 +565,10 @@
         if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
           e.preventDefault();
           e.stopPropagation();
-          doSubmit();
+          if (submitBtn && textarea.value.trim()) {
+            doSubmit();
+            submitBtn.click();
+          }
         }
       });
     }
@@ -510,7 +599,10 @@
       }
 
       function closeComposer() {
-        if (textarea) textarea.value = '';
+        if (textarea) {
+          textarea.value = '';
+          textarea.blur();
+        }
         if (replyWrapper) replyWrapper.style.display = 'none';
         if (replyInput) replyInput.style.display = 'block';
       }
@@ -538,12 +630,30 @@
           window.mdCommentsMarkReplySubmitted();
         }
 
-        document.dispatchEvent(
-          new CustomEvent('md-comments:submit-reply', {
-            detail: { rootId: rootId, type: type, body: body },
-          })
-        );
-        closeComposer();
+        let replyId;
+        if (typeof window.mdCommentsInsertOptimisticReply === 'function') {
+          replyId = window.mdCommentsInsertOptimisticReply(card, rootId, body, type);
+        } else {
+          document.dispatchEvent(
+            new CustomEvent('md-comments:submit-reply', {
+              detail: { rootId: rootId, type: type, body: body },
+            })
+          );
+        }
+
+        if (submitBtn) {
+          submitBtn.href = buildActionUri({
+            action: 'reply',
+            rootId: rootId,
+            type: type,
+            body: body,
+            id: replyId,
+          });
+        }
+
+        setTimeout(function () {
+          closeComposer();
+        }, 50);
       }
 
       if (replyInput) {
@@ -561,8 +671,11 @@
 
       if (submitBtn) {
         submitBtn.addEventListener('click', function (e) {
-          e.preventDefault();
-          e.stopPropagation();
+          if (!textarea || !textarea.value.trim()) {
+            e.preventDefault();
+            e.stopPropagation();
+            return;
+          }
           doSubmitReply();
         });
       }
@@ -572,7 +685,10 @@
           if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
             e.preventDefault();
             e.stopPropagation();
-            doSubmitReply();
+            if (submitBtn && textarea.value.trim()) {
+              doSubmitReply();
+              submitBtn.click();
+            }
           }
         });
       }

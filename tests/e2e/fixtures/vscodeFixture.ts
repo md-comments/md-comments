@@ -31,19 +31,26 @@ export const test = base.extend<{ vscode: VSCodeTestContext }>({
     const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'vscode-e2e-'));
     const userDataDir = path.join(tempDir, 'user-data');
     const extensionsDir = path.join(tempDir, 'extensions');
-    const workspaceDir = path.join(tempDir, 'workspace');
-    await fs.mkdir(workspaceDir, { recursive: true });
+
+    const customWorkspaceDir = process.env.TEST_WORKSPACE_DIR;
+    const isCustomWorkspace = !!customWorkspaceDir;
+    const workspaceDir = isCustomWorkspace ? customWorkspaceDir : path.join(tempDir, 'workspace');
+    if (!isCustomWorkspace) {
+      await fs.mkdir(workspaceDir, { recursive: true });
+    }
 
     const userSettingsDir = path.join(userDataDir, 'User');
     await fs.mkdir(userSettingsDir, { recursive: true });
 
-    // Pre-populate confirmedExtensions in globalStorage state.vscdb to prevent confirmation dialogs
+    // Pre-populate confirmedExtensions in profile state.vscdb and globalStorage state.vscdb to prevent confirmation dialogs
+    const profileDbPath = path.join(userSettingsDir, 'state.vscdb');
     const globalStorageDir = path.join(userSettingsDir, 'globalStorage');
     await fs.mkdir(globalStorageDir, { recursive: true });
     const globalDbPath = path.join(globalStorageDir, 'state.vscdb');
     const confirmedVal = JSON.stringify(['md-comments.md-preview-comments']).replace(/'/g, "''");
     const sql = `CREATE TABLE IF NOT EXISTS ItemTable (key TEXT UNIQUE ON CONFLICT REPLACE, value BLOB); INSERT OR REPLACE INTO ItemTable (key, value) VALUES ('extensionUrlHandler.confirmedExtensions', '${confirmedVal}');`;
     try {
+      execFileSync('sqlite3', [profileDbPath, sql], { stdio: 'ignore' });
       execFileSync('sqlite3', [globalDbPath, sql], { stdio: 'ignore' });
     } catch {
       // sqlite3 fallback
@@ -61,6 +68,7 @@ export const test = base.extend<{ vscode: VSCodeTestContext }>({
 
     const settingsPayload = JSON.stringify(
       {
+        'window.dialogStyle': 'custom',
         'editor.codeLens': true,
         'diffEditor.codeLens': true,
         'markdown.editor.codeLens.enabled': true,
@@ -75,40 +83,70 @@ export const test = base.extend<{ vscode: VSCodeTestContext }>({
     );
     await fs.writeFile(path.join(userSettingsDir, 'settings.json'), settingsPayload, 'utf8');
 
-    const workspaceSettingsDir = path.join(workspaceDir, '.vscode');
-    await fs.mkdir(workspaceSettingsDir, { recursive: true });
-    await fs.writeFile(path.join(workspaceSettingsDir, 'settings.json'), settingsPayload, 'utf8');
+    if (!isCustomWorkspace) {
+      const workspaceSettingsDir = path.join(workspaceDir, '.vscode');
+      await fs.mkdir(workspaceSettingsDir, { recursive: true });
+      await fs.writeFile(path.join(workspaceSettingsDir, 'settings.json'), settingsPayload, 'utf8');
+    }
 
-    const testDocPath = path.join(workspaceDir, 'test-guide.md');
-    const sampleMarkdown = [
-      '# Guide to Documentation',
-      '',
-      'Welcome to the documentation guide. This is an introductory paragraph.',
-      '',
-      '## Key Features',
-      '',
-      'Markdown comments allow inline threads and page comments directly on rendered views.',
-      '',
-    ].join('\n');
-    await fs.writeFile(testDocPath, sampleMarkdown, 'utf8');
+    const testDocPath = process.env.TEST_DOC_PATH
+      ? path.resolve(workspaceDir, process.env.TEST_DOC_PATH)
+      : path.join(workspaceDir, isCustomWorkspace ? 'README.md' : 'test-guide.md');
 
-    try {
-      execSync('git init -b main', { cwd: workspaceDir, stdio: 'ignore' });
-      execSync('git config user.name "Test User"', { cwd: workspaceDir, stdio: 'ignore' });
-      execSync('git config user.email "test@example.com"', { cwd: workspaceDir, stdio: 'ignore' });
-      execSync('git remote add origin https://github.com/md-comments/test-docs.git', {
-        cwd: workspaceDir,
-        stdio: 'ignore',
-      });
-      execSync('git add . && git commit -m "initial"', { cwd: workspaceDir, stdio: 'ignore' });
-    } catch {
-      // Git initialization optional
+    if (!isCustomWorkspace) {
+      const sampleMarkdown = [
+        '# Guide to Documentation',
+        '',
+        'Welcome to the documentation guide. This is an introductory paragraph.',
+        '',
+        '## Key Features',
+        '',
+        'Markdown comments allow inline threads and page comments directly on rendered views.',
+        '',
+      ].join('\n');
+      await fs.writeFile(testDocPath, sampleMarkdown, 'utf8');
+
+      try {
+        execSync('git init -b main', { cwd: workspaceDir, stdio: 'ignore' });
+        execSync('git config user.name "Test User"', { cwd: workspaceDir, stdio: 'ignore' });
+        execSync('git config user.email "test@example.com"', {
+          cwd: workspaceDir,
+          stdio: 'ignore',
+        });
+        execSync('git remote add origin https://github.com/md-comments/test-docs.git', {
+          cwd: workspaceDir,
+          stdio: 'ignore',
+        });
+        execSync('git add . && git commit -m "initial"', { cwd: workspaceDir, stdio: 'ignore' });
+      } catch {
+        // Git initialization optional
+      }
+    }
+
+    let ghToken = process.env.GITHUB_TOKEN || process.env.GH_TOKEN;
+    if (!ghToken) {
+      try {
+        ghToken = execFileSync('gh', ['auth', 'token'], {
+          encoding: 'utf8',
+          timeout: 3000,
+          env: {
+            ...process.env,
+            PATH: ['/opt/homebrew/bin', '/usr/local/bin', process.env.PATH || ''].join(':'),
+          },
+        }).trim();
+      } catch {
+        /* ignore */
+      }
     }
 
     const vscodeExecutablePath = await downloadAndUnzipVSCode('stable');
 
     const electronApp = await electron.launch({
       executablePath: vscodeExecutablePath,
+      env: {
+        ...process.env,
+        ...(ghToken ? { GITHUB_TOKEN: ghToken, GH_TOKEN: ghToken } : {}),
+      },
       args: [
         '--disable-gpu',
         '--disable-updates',
@@ -135,7 +173,8 @@ export const test = base.extend<{ vscode: VSCodeTestContext }>({
 
     // Helper to wait until extension is activated via status bar indicator
     const waitForExtensionActivation = async () => {
-      const editorTab = page.getByRole('tab', { name: 'test-guide.md' });
+      const docBase = path.basename(testDocPath);
+      const editorTab = page.getByRole('tab', { name: docBase });
       if (await editorTab.isVisible()) {
         await editorTab.click();
       }

@@ -231,7 +231,7 @@ body.md-comments-resizing {
   border-bottom: 2px solid transparent;
   background: transparent;
   color: var(--gc-text-muted);
-  font-size: 0.72rem;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
@@ -443,14 +443,14 @@ body.md-comments-resizing {
 }
 
 .md-comments-quote-heading {
-  font-size: 0.7rem;
+  font-size: 11px;
   font-weight: 600;
   color: var(--gc-text-muted);
   margin-bottom: 0.2rem;
 }
 
 .md-comments-quote-text {
-  font-size: 0.8rem;
+  font-size: 12px;
   color: var(--gc-text);
   line-height: 1.4;
   display: -webkit-box;
@@ -652,7 +652,7 @@ body.md-comments-resizing {
 .md-comments-card {
   margin: 0;
   padding: 12px;
-  font-size: 0.875rem;
+  font-size: 13px;
   border: 1px solid var(--gc-border, rgba(110, 118, 129, 0.25));
   border-radius: 6px;
   background-color: var(--card-bg, rgba(255, 255, 255, 0.03));
@@ -694,6 +694,56 @@ body.md-comments-resizing {
 .md-comments-card.md-comments-card-active {
   background: rgba(56, 139, 253, 0.18);
   outline: 1px solid rgba(56, 139, 253, 0.55);
+}
+
+/* Optimistic card and reply progress underline */
+.md-comments-card.md-comments-card-optimistic,
+.md-comments-reply.md-comments-reply-optimistic {
+  position: relative !important;
+  overflow: hidden;
+}
+
+.md-comments-card.md-comments-card-optimistic::after,
+.md-comments-reply.md-comments-reply-optimistic::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--vscode-progressBar-background, var(--vscode-focusBorder, #007acc)) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: md-comments-progress-slide 1.5s infinite linear;
+  opacity: 0.9;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+@keyframes md-comments-progress-slide {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.md-comments-card.md-comments-card-optimistic.md-comments-optimistic-synced::after,
+.md-comments-reply.md-comments-reply-optimistic.md-comments-optimistic-synced::after {
+  opacity: 0 !important;
+  transition: opacity 0.5s ease;
+}
+
+.md-comments-card.md-comments-card-optimistic.md-comments-optimistic-failed::after,
+.md-comments-reply.md-comments-reply-optimistic.md-comments-optimistic-failed::after {
+  background: var(--vscode-errorForeground, #f48771) !important;
+  animation: none !important;
+  opacity: 1 !important;
 }
 
 .md-comments-thread-row {
@@ -780,12 +830,16 @@ body.md-comments-resizing {
 }
 
 .md-comments-author {
+  font-size: 13px;
   font-weight: 600;
+  line-height: 1.3;
   color: var(--gc-text);
 }
 
 .md-comments-author-link {
+  font-size: 13px;
   font-weight: 600;
+  line-height: 1.3;
   color: var(--gc-accent);
   text-decoration: none;
 }
@@ -845,13 +899,16 @@ body.md-comments-resizing {
 }
 
 .md-comments-time {
+  font-size: 11px;
+  line-height: 1.2;
   color: var(--gc-text-muted);
-  font-size: 0.8rem;
 }
 
 .md-comments-body {
+  font-size: 13px;
+  line-height: 1.45;
   color: var(--gc-text);
-  line-height: 1.5;
+  word-break: break-word;
   white-space: pre-wrap;
   margin-bottom: 0.35rem;
 }
@@ -992,7 +1049,7 @@ body.md-comments-resizing {
   border-radius: 4px;
   background: transparent;
   color: var(--gc-text-muted);
-  font-size: 0.8125rem;
+  font-size: 12px;
   font-weight: 500;
   cursor: pointer;
 }
@@ -1054,6 +1111,10 @@ body.md-comments-resizing {
   color: var(--gc-text);
   font-size: 0.8rem;
   cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  user-select: none;
 }
 
 .md-comments-reaction-chip:hover {
@@ -1259,6 +1320,25 @@ body.md-comments-resizing {
   background: rgba(255, 255, 255, 0.1);
 }
 
+/* Card & Reply Deleting Animation */
+.md-comments-card-deleting {
+  opacity: 0 !important;
+  max-height: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  transform: scale(0.96) !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+  transition:
+    opacity 0.2s ease-out,
+    max-height 0.25s ease-out,
+    margin 0.25s ease-out,
+    padding 0.25s ease-out,
+    transform 0.2s ease-out !important;
+}
+
 /* Re-anchor mode */
 p.md-comments-paragraph {
   position: relative;
@@ -1347,6 +1427,8 @@ body[data-md-reanchor-mode] p:hover {
   justify-content: center;
   line-height: 1.4;
   font-family: inherit;
+  text-decoration: none;
+  user-select: none;
 }
 
 .btn-primary,

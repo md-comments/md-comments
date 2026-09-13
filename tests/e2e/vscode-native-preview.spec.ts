@@ -56,6 +56,7 @@ test.describe('VS Code Native Markdown Preview Integration E2E', () => {
   }) => {
     const { runCommand, getCommentPreviewFrame } = vscode;
 
+    vscode.page.on('console', (msg) => console.log('VSCODE PAGE CONSOLE:', msg.type(), msg.text()));
     await runCommand('Markdown: Open Preview to the Side');
     const previewFrame = getCommentPreviewFrame();
 
@@ -107,11 +108,6 @@ test.describe('VS Code Native Markdown Preview Integration E2E', () => {
     // Verify action trigger anchor receives the uri with encoded payload
     await expect(actionTrigger).toHaveAttribute('href', /action=addPage/);
 
-    const lastAction = await previewFrame
-      .locator('body')
-      .evaluate(() => (window as any).__mdCommentsLastAction);
-    console.log('LAST ACTION IN PREVIEW:', JSON.stringify(lastAction, null, 2));
-
     await vscode.page.waitForTimeout(4000);
 
     // Verify preview re-renders with the persisted card
@@ -120,8 +116,6 @@ test.describe('VS Code Native Markdown Preview Integration E2E', () => {
       { hasText: commentText }
     );
     await expect(cardWithComment).toBeVisible({ timeout: 10000 });
-    const cardHtml = await cardWithComment.evaluate((el) => el.outerHTML);
-    console.log('CARD HTML AFTER SUBMIT:', cardHtml);
 
     // Test clicking reaction picker or emoji button on the card
     const reactPickerBtn = cardWithComment.locator('[data-md-action="react-picker"]');
@@ -133,10 +127,6 @@ test.describe('VS Code Native Markdown Preview Integration E2E', () => {
     await firstEmoji.click();
     // Verify popover closes after reaction pick
     await expect(emojiPopover).toBeHidden({ timeout: 3000 });
-    const reactAction = await previewFrame
-      .locator('body')
-      .evaluate(() => (window as any).__mdCommentsLastAction);
-    console.log('REACTION ACTION IN PREVIEW:', JSON.stringify(reactAction, null, 2));
     // Verify reaction chip is added optimistically and visible
     const reactionChip = cardWithComment.locator('.md-comments-reaction-chip').first();
     await expect(reactionChip).toBeVisible({ timeout: 5000 });
@@ -152,10 +142,6 @@ test.describe('VS Code Native Markdown Preview Integration E2E', () => {
       '.md-comments-panel-composer button[data-action="submit"]'
     );
     await saveBtn.click();
-    const editAction = await previewFrame
-      .locator('body')
-      .evaluate(() => (window as any).__mdCommentsLastAction);
-    console.log('EDIT ACTION IN PREVIEW:', JSON.stringify(editAction, null, 2));
     const editedCard = previewFrame.locator('.md-comments-card', {
       hasText: 'Edited comment text in native preview',
     });
@@ -177,6 +163,24 @@ test.describe('VS Code Native Markdown Preview Integration E2E', () => {
     await expect(layout).toBeVisible({ timeout: 5000 });
     const mainDoc = previewFrame.locator('.md-comments-document');
     await expect(mainDoc).toHaveCount(1);
+
+    // 7. Test deleting the comment and confirming native VS Code modal
+    const deleteBtn = reloadedCard.locator('[data-md-action="delete"]').first();
+    await expect(deleteBtn).toBeVisible({ timeout: 5000 });
+    await deleteBtn.click();
+
+    // Verify native VS Code confirmation dialog pops up
+    const dialog = vscode.page.locator('.monaco-dialog-box');
+    await expect(dialog).toBeVisible({ timeout: 5000 });
+    await expect(dialog).toContainText('Delete this');
+    const confirmDeleteBtn = dialog.locator('a.monaco-button, button.monaco-button', {
+      hasText: 'Delete',
+    });
+    await expect(confirmDeleteBtn).toBeVisible();
+    await confirmDeleteBtn.click();
+
+    // Verify card is deleted and removed from view
+    await expect(reloadedCard).toBeHidden({ timeout: 5000 });
 
     // Close sidebar drawer and verify document is fully visible
     const closeBtn = previewFrame.locator('#md-comments-sidebar-close');

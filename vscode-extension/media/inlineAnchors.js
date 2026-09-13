@@ -345,6 +345,49 @@
     scheduleWire();
   }
 
+  function unwrapAnchor(commentId) {
+    if (!commentId) return;
+    document
+      .querySelectorAll('.md-comments-text-anchor[data-md-comment-id="' + commentId + '"]')
+      .forEach(function (span) {
+        const parent = span.parentNode;
+        const container = span.closest('[data-md-paragraph-index]');
+        if (parent) {
+          while (span.firstChild) {
+            parent.insertBefore(span.firstChild, span);
+          }
+          span.remove();
+          parent.normalize();
+        }
+        if (container) {
+          const remaining = container.querySelectorAll('.md-comments-text-anchor');
+          if (remaining.length === 0) {
+            container.classList.remove('md-comments-paragraph-marked');
+            container.removeAttribute('data-md-comment-id');
+          }
+        }
+      });
+    document
+      .querySelectorAll('.md-comments-paragraph-marked[data-md-comment-id~="' + commentId + '"]')
+      .forEach(function (container) {
+        const ids = (container.getAttribute('data-md-comment-id') || '')
+          .split(/\s+/)
+          .filter(Boolean);
+        const nextIds = ids.filter(function (id) {
+          return id !== commentId;
+        });
+        if (nextIds.length > 0) {
+          container.setAttribute('data-md-comment-id', nextIds.join(' '));
+        } else {
+          container.removeAttribute('data-md-comment-id');
+          container.classList.remove('md-comments-paragraph-marked');
+        }
+      });
+  }
+
+  window.mdCommentsUnwrapAnchor = unwrapAnchor;
+  window.mdCommentsScheduleWire = scheduleWire;
+
   const observer = new MutationObserver(scheduleWire);
   observer.observe(document.body, { childList: true, subtree: true });
 })();

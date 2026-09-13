@@ -13,7 +13,7 @@ import { executeCommentAction, type CommentActionMessage } from './commentAction
 import { parsePreviewCommandArg } from './previewCommand';
 import { scanOrphansForMarkdown } from './orphan';
 import { MarkdownCommentsCodeLensProvider } from './codeLensProvider';
-import { initializeAuth, signIn, signOut, getOAuthToken } from './githubAuth';
+import { initializeAuth, signIn, signOut, getOAuthToken, onDidChangeAuthState } from './githubAuth';
 import { initializeLogger, logDebug, logInfo, logError } from './logger';
 import { globalOptimisticStore } from './optimisticStore';
 import { resolveStorageKeyForUri } from './repoManager';
@@ -53,7 +53,7 @@ async function updateStatusBar(): Promise<void> {
   statusBarItem.show();
 }
 
-async function refreshPreview(forceRemote = false): Promise<void> {
+async function refreshPreview(forceRemote = false, targetUri?: vscode.Uri): Promise<void> {
   logDebug(`refreshPreview triggered, forceRemote=${forceRemote}`);
   globalCodeLensProvider?.refresh();
   const editor = vscode.window.activeTextEditor;
@@ -68,11 +68,11 @@ async function refreshPreview(forceRemote = false): Promise<void> {
         globalOptimisticStore.invalidate(key);
       }
       void readComments(editor.document.uri, true);
-      CommentPreviewPanel.refreshForUri(editor.document.uri, true);
     } catch (err) {
       logError('refreshPreview invalidating/reading remote failed', err);
     }
   }
+  CommentPreviewPanel.refreshAll(forceRemote);
   try {
     await warmAuthorCache();
   } catch (err) {
@@ -84,29 +84,60 @@ async function refreshPreview(forceRemote = false): Promise<void> {
     logError('refreshPreview updateStatusBar failed', err);
   }
   try {
-    await vscode.commands.executeCommand('markdown.preview.refresh');
+    if (targetUri) {
+      try {
+        await vscode.commands.executeCommand('markdown.preview.refresh', targetUri);
+      } catch {
+        await vscode.commands.executeCommand('markdown.preview.refresh');
+      }
+    } else {
+      await vscode.commands.executeCommand('markdown.preview.refresh');
+    }
   } catch (err) {
     logDebug('refreshPreview markdown.preview.refresh failed or preview not open', err);
   }
 }
 
+let previewActionQueue: Promise<void> = Promise.resolve();
+
 async function handlePreviewAction(raw: unknown): Promise<void> {
-  const msg = parsePreviewCommandArg(raw);
-  logInfo(
-    `handlePreviewAction action=${msg.action}, id=${msg.id}, targetId=${msg.targetId}, body=${msg.body?.slice(0, 30)}`
-  );
-  const mdUri = mdUriFromMessage(msg);
-  await executeCommentAction(mdUri, msg);
-  try {
-    const comments = await readComments(mdUri);
-    const logins = collectGitHubLogins(comments);
-    await warmGitHubDisplayNames(logins);
-    await warmGitHubAvatars(collectAvatarLogins(comments));
-  } catch (err) {
-    logError('handlePreviewAction warming avatars/names failed', err);
-  }
-  CommentPreviewPanel.refreshForUri(mdUri);
-  await refreshPreview();
+  previewActionQueue = previewActionQueue
+    .then(async () => {
+      const msg = parsePreviewCommandArg(raw);
+      logInfo(
+        `handlePreviewAction action=${msg.action}, id=${msg.id}, targetId=${msg.targetId}, body=${msg.body?.slice(0, 30)}`
+      );
+      const mdUri = mdUriFromMessage(msg);
+      const executed = await executeCommentAction(mdUri, msg);
+      if (!executed) {
+        logInfo(`handlePreviewAction cancelled or skipped for action: ${msg.action}`);
+        return;
+      }
+      if (msg.action !== 'delete') {
+        void (async () => {
+          try {
+            const comments = await readComments(mdUri);
+            const logins = collectGitHubLogins(comments);
+            await warmGitHubDisplayNames(logins);
+            await warmGitHubAvatars(collectAvatarLogins(comments));
+          } catch (err) {
+            logError('handlePreviewAction warming avatars/names failed', err);
+          }
+        })();
+      }
+      CommentPreviewPanel.refreshForUri(mdUri);
+      globalCodeLensProvider?.refresh();
+      void updateStatusBar();
+      if (msg.action === 'refresh') {
+        await refreshPreview(true, mdUri);
+      } else if (msg.action === 'delete') {
+        await refreshPreview(false, mdUri);
+      }
+    })
+    .catch((err) => {
+      logError('handlePreviewAction failed in queue', err);
+    });
+  return previewActionQueue;
 }
 
 async function handleUri(uri: vscode.Uri): Promise<void> {
@@ -132,6 +163,7 @@ async function handleUri(uri: vscode.Uri): Promise<void> {
     kind: params.get('kind') ?? undefined,
     emoji: params.get('emoji') ? `b64:${params.get('emoji')}` : undefined,
     occurrence: params.get('occurrence') ?? undefined,
+    confirmed: params.get('confirmed') === 'true' ? true : undefined,
   };
   await handlePreviewAction(msg);
 }
@@ -140,7 +172,25 @@ function trustExtensionUriHandler(context: vscode.ExtensionContext): void {
   try {
     const candidateDbs: string[] = [];
     if (context.globalStorageUri?.fsPath) {
-      candidateDbs.push(path.join(path.dirname(context.globalStorageUri.fsPath), 'state.vscdb'));
+      const globalStorageDir = path.dirname(context.globalStorageUri.fsPath);
+      candidateDbs.push(path.join(globalStorageDir, 'state.vscdb'));
+      const userDir = path.dirname(globalStorageDir);
+      candidateDbs.push(path.join(userDir, 'state.vscdb'));
+      const profilesDir = path.join(userDir, 'profiles');
+      // eslint-disable-next-line security/detect-non-literal-fs-filename
+      if (fs.existsSync(profilesDir)) {
+        try {
+          // eslint-disable-next-line security/detect-non-literal-fs-filename
+          const entries = fs.readdirSync(profilesDir, { withFileTypes: true });
+          for (const entry of entries) {
+            if (entry.isDirectory()) {
+              candidateDbs.push(path.join(profilesDir, entry.name, 'state.vscdb'));
+            }
+          }
+        } catch {
+          // Ignore profile scan failures
+        }
+      }
     }
     const home = os.homedir();
     candidateDbs.push(path.join(home, '.vscode-shared', 'sharedStorage', 'state.vscdb'));
@@ -241,13 +291,32 @@ export function activate(context: vscode.ExtensionContext): {
 
   context.subscriptions.push(
     statusBarItem,
+    onDidChangeAuthState((hasToken) => {
+      logInfo(`onDidChangeAuthState received: hasToken=${hasToken}`);
+      void updateStatusBar();
+      void refreshPreview();
+    }),
+    vscode.authentication.onDidChangeSessions((e) => {
+      if (e.provider.id === 'github') {
+        logInfo('vscode.authentication.onDidChangeSessions for github');
+        void updateStatusBar();
+        void refreshPreview();
+      }
+    }),
+    context.secrets.onDidChange((e) => {
+      if (e.key === 'github_oauth_token') {
+        logInfo('context.secrets.onDidChange for github_oauth_token');
+        void updateStatusBar();
+        void refreshPreview();
+      }
+    }),
     vscode.languages.registerCodeLensProvider({ language: 'markdown' }, globalCodeLensProvider),
     vscode.workspace.onDidOpenTextDocument((doc) => {
       if (doc.languageId === 'markdown') {
         logDebug('onDidOpenTextDocument:', doc.uri.toString());
         void warmAuthorCache();
         void updateStatusBar();
-        void readComments(doc.uri, true).then((comments) => {
+        void readComments(doc.uri, false).then((comments) => {
           logDebug(
             `Pre-warmed comments onDidOpenTextDocument, count: inline=${comments.inline_comments.length}, page=${comments.page_comments.length}`
           );
@@ -257,7 +326,7 @@ export function activate(context: vscode.ExtensionContext): {
     vscode.window.onDidChangeActiveTextEditor((editor) => {
       if (editor?.document.languageId === 'markdown' || editor?.document.uri.path.endsWith('.md')) {
         logDebug('onDidChangeActiveTextEditor:', editor.document.uri.toString());
-        void readComments(editor.document.uri, true).then((comments) => {
+        void readComments(editor.document.uri, false).then((comments) => {
           logDebug(
             `Pre-warmed comments onDidChangeActiveTextEditor, count: inline=${comments.inline_comments.length}, page=${comments.page_comments.length}`
           );

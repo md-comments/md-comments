@@ -1,10 +1,11 @@
 import * as vscode from 'vscode';
 import MarkdownIt from 'markdown-it';
-import { getAuthor } from './author';
+import { getAuthor, getAuthorDisplayName } from './author';
 import { collectAvatarLogins, warmGitHubAvatars } from './githubAvatars';
 import { collectGitHubLogins, warmGitHubDisplayNames } from './githubDisplayNames';
 import { extendMarkdownIt } from './markdownItPlugin';
 import { readComments } from './commentStore';
+import { getOAuthToken } from './githubAuth';
 
 import hljs from 'highlight.js';
 
@@ -40,19 +41,38 @@ export async function renderMarkdownWithComments(
   documentUri: vscode.Uri,
   forceRefresh = false
 ): Promise<string> {
+  let commentsLoaded = false;
   try {
     const comments = await readComments(documentUri, forceRefresh);
+    commentsLoaded = true;
     const logins = collectGitHubLogins(comments);
     await warmGitHubDisplayNames(logins);
     await warmGitHubAvatars(collectAvatarLogins(comments));
   } catch {
     /* comments file optional */
   }
+  try {
+    await getOAuthToken();
+  } catch {
+    /* auth optional */
+  }
   const currentAuthor = await getAuthor();
+  const currentAuthorName = await getAuthorDisplayName();
   const md = getMarkdownEngine();
   return md.render(markdown, {
     currentDocument: documentUri,
     currentAuthor,
+    currentAuthorName,
     mdCommentsWebview: true,
+    isLoading: !commentsLoaded,
+  });
+}
+
+export function renderMarkdownInitialLoading(markdown: string, documentUri: vscode.Uri): string {
+  const md = getMarkdownEngine();
+  return md.render(markdown, {
+    currentDocument: documentUri,
+    mdCommentsWebview: true,
+    isLoading: true,
   });
 }

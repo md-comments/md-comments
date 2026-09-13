@@ -74,10 +74,15 @@ export async function writeComments(
   }
 
   const normalized = normalizeCommentsFile(data);
-  globalOptimisticStore.updateComments(key, normalized, () => {
-    logDebug(`writeComments triggering remote write for key:`, key);
-    return gitRefBackend.write(key, normalized, previousData, deletedIds);
-  });
+  globalOptimisticStore.updateComments(
+    key,
+    normalized,
+    () => {
+      logDebug(`writeComments triggering remote write for key:`, key);
+      return gitRefBackend.write(key, normalized, previousData, deletedIds);
+    },
+    deletedIds
+  );
   return `${key.owner}/${key.repo}/${key.filePath}`;
 }
 
@@ -147,6 +152,7 @@ function normalizeCommentsFile(parsed: Partial<CommentsFile>): CommentsFile {
 export async function addInlineComment(
   mdUri: vscode.Uri,
   fields: {
+    id?: string;
     body: string;
     anchor_text: string;
     anchor_hash: string;
@@ -158,7 +164,7 @@ export async function addInlineComment(
   const data = await readComments(mdUri);
   const key = await resolveStorageKeyForUri(mdUri);
   const comment: InlineComment = {
-    id: newId('c'),
+    id: fields.id || newId('c'),
     author: await getAuthor(),
     anchor_text: fields.anchor_text,
     anchor_hash: fields.anchor_hash,
@@ -173,19 +179,20 @@ export async function addInlineComment(
     reactions: [],
     replies: [],
   };
-  data.inline_comments.push(comment);
+  data.inline_comments.unshift(comment);
   const savedPath = await writeComments(mdUri, data);
   return { comment, savedPath };
 }
 
 export async function addPageComment(
   mdUri: vscode.Uri,
-  body: string
+  body: string,
+  id?: string
 ): Promise<{ comment: PageComment; savedPath: string }> {
   const data = await readComments(mdUri);
   const key = await resolveStorageKeyForUri(mdUri);
   const comment: PageComment = {
-    id: newId('c'),
+    id: id || newId('c'),
     author: await getAuthor(),
     body,
     created_at: new Date().toISOString(),
@@ -194,7 +201,7 @@ export async function addPageComment(
     reactions: [],
     replies: [],
   };
-  data.page_comments.push(comment);
+  data.page_comments.unshift(comment);
   const savedPath = await writeComments(mdUri, data);
   return { comment, savedPath };
 }
@@ -203,7 +210,8 @@ export async function addReply(
   mdUri: vscode.Uri,
   rootId: string,
   type: CommentRootType,
-  body: string
+  body: string,
+  id?: string
 ): Promise<string> {
   const data = await readComments(mdUri);
   const root =
@@ -214,7 +222,7 @@ export async function addReply(
     throw new Error(`Comment ${rootId} not found`);
   }
   root.replies.push({
-    id: newId(`${rootId}-r`),
+    id: id || newId(`${rootId}-r`),
     author: await getAuthor(),
     body,
     created_at: new Date().toISOString(),
@@ -226,40 +234,63 @@ export async function addReply(
 export async function deleteComment(
   mdUri: vscode.Uri,
   id: string,
-  type: CommentRootType,
-  kind: 'root' | 'reply',
+  type?: CommentRootType,
+  kind?: 'root' | 'reply',
   rootId?: string
 ): Promise<string> {
   const data = await readComments(mdUri);
   const previousData = JSON.parse(JSON.stringify(data)) as CommentsFile;
-  if (kind === 'reply') {
-    const roots = type === 'page' ? data.page_comments : data.inline_comments;
-    const root = roots.find((c) => c.id === rootId);
-    if (!root) {
-      throw new Error(`Comment ${rootId ?? ''} not found`);
+  const deletedIds = new Set<string>([id]);
+
+  // 1. If explicitly requested as reply or rootId provided, try deleting as reply first
+  if (kind === 'reply' || rootId) {
+    const allRoots = [...data.inline_comments, ...data.page_comments];
+    const targetRoots = rootId ? allRoots.filter((c) => c.id === rootId) : allRoots;
+    for (const root of targetRoots) {
+      const idx = root.replies.findIndex((r) => r.id === id);
+      if (idx >= 0) {
+        root.replies.splice(idx, 1);
+        return writeComments(mdUri, data, previousData, deletedIds);
+      }
     }
-    const idx = root.replies.findIndex((r) => r.id === id);
-    if (idx < 0) {
-      throw new Error(`Reply ${id} not found`);
-    }
-    root.replies.splice(idx, 1);
-    return writeComments(mdUri, data, previousData, new Set([id]));
   }
 
-  if (type === 'page') {
-    const idx = data.page_comments.findIndex((c) => c.id === id);
-    if (idx < 0) {
-      throw new Error(`Comment ${id} not found`);
+  // 2. Try deleting from page_comments
+  const pageIdx = data.page_comments.findIndex((c) => c.id === id);
+  if (pageIdx >= 0) {
+    const [deleted] = data.page_comments.splice(pageIdx, 1);
+    if (deleted?.replies) {
+      for (const r of deleted.replies) {
+        deletedIds.add(r.id);
+      }
     }
-    data.page_comments.splice(idx, 1);
-  } else {
-    const idx = data.inline_comments.findIndex((c) => c.id === id);
-    if (idx < 0) {
-      throw new Error(`Comment ${id} not found`);
-    }
-    data.inline_comments.splice(idx, 1);
+    return writeComments(mdUri, data, previousData, deletedIds);
   }
-  return writeComments(mdUri, data, previousData, new Set([id]));
+
+  // 3. Try deleting from inline_comments
+  const inlineIdx = data.inline_comments.findIndex((c) => c.id === id);
+  if (inlineIdx >= 0) {
+    const [deleted] = data.inline_comments.splice(inlineIdx, 1);
+    if (deleted?.replies) {
+      for (const r of deleted.replies) {
+        deletedIds.add(r.id);
+      }
+    }
+    return writeComments(mdUri, data, previousData, deletedIds);
+  }
+
+  // 4. Fallback: Search all replies in both collections if id was a reply without rootId
+  for (const root of [...data.inline_comments, ...data.page_comments]) {
+    const replyIdx = root.replies.findIndex((r) => r.id === id);
+    if (replyIdx >= 0) {
+      root.replies.splice(replyIdx, 1);
+      return writeComments(mdUri, data, previousData, deletedIds);
+    }
+  }
+
+  // 5. If not found in data, ensure tombstone is registered and return gracefully (idempotent delete)
+  logDebug(`deleteComment: ID ${id} not found in comments data; recording tombstone idempotently.`);
+  return writeComments(mdUri, data, previousData, deletedIds);
 }
 
 export async function editComment(
@@ -314,11 +345,18 @@ export async function resolveComment(
   id: string,
   type: CommentRootType
 ): Promise<string> {
+  const targetId = id.trim();
   const data = await readComments(mdUri);
-  const root =
+  let root =
     type === 'page'
-      ? data.page_comments.find((c) => c.id === id)
-      : data.inline_comments.find((c) => c.id === id);
+      ? data.page_comments.find((c) => c.id.trim() === targetId)
+      : data.inline_comments.find((c) => c.id.trim() === targetId);
+  if (!root) {
+    root =
+      type === 'page'
+        ? data.inline_comments.find((c) => c.id.trim() === targetId)
+        : data.page_comments.find((c) => c.id.trim() === targetId);
+  }
   if (!root) {
     throw new Error(`Comment ${id} not found`);
   }
@@ -332,11 +370,18 @@ export async function unresolveComment(
   id: string,
   type: CommentRootType
 ): Promise<string> {
+  const targetId = id.trim();
   const data = await readComments(mdUri);
-  const root =
+  let root =
     type === 'page'
-      ? data.page_comments.find((c) => c.id === id)
-      : data.inline_comments.find((c) => c.id === id);
+      ? data.page_comments.find((c) => c.id.trim() === targetId)
+      : data.inline_comments.find((c) => c.id.trim() === targetId);
+  if (!root) {
+    root =
+      type === 'page'
+        ? data.inline_comments.find((c) => c.id.trim() === targetId)
+        : data.page_comments.find((c) => c.id.trim() === targetId);
+  }
   if (!root) {
     throw new Error(`Comment ${id} not found`);
   }

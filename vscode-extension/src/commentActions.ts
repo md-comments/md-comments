@@ -48,6 +48,7 @@ export type CommentActionMessage = {
   targetId?: string;
   kind?: string;
   emoji?: string;
+  confirmed?: boolean | string;
 };
 
 function savedToast(savedPath: string, label: string): void {
@@ -58,7 +59,7 @@ function savedToast(savedPath: string, label: string): void {
 export async function executeCommentAction(
   mdUri: vscode.Uri,
   msg: CommentActionMessage
-): Promise<void> {
+): Promise<boolean> {
   switch (msg.action) {
     case 'add': {
       const body = resolveText(msg.body);
@@ -68,6 +69,7 @@ export async function executeCommentAction(
       const occurrence =
         msg.occurrence !== undefined && msg.occurrence !== '' ? Number(msg.occurrence) : undefined;
       const { savedPath } = await addInlineComment(mdUri, {
+        id: msg.id,
         body,
         anchor_text: resolveText(msg.text),
         anchor_hash: msg.hash ?? '',
@@ -76,16 +78,16 @@ export async function executeCommentAction(
         anchor_occurrence: occurrence,
       });
       savedToast(savedPath, 'inline comment added');
-      break;
+      return true;
     }
     case 'addPage': {
       const body = resolveText(msg.body);
       if (!body.trim()) {
         throw new Error('Comment must include text');
       }
-      const { savedPath } = await addPageComment(mdUri, body);
+      const { savedPath } = await addPageComment(mdUri, body, msg.id);
       savedToast(savedPath, 'page comment added');
-      break;
+      return true;
     }
     case 'reply': {
       const type = (msg.type === 'page' ? 'page' : 'inline') as CommentRootType;
@@ -93,9 +95,9 @@ export async function executeCommentAction(
       if (!body.trim()) {
         throw new Error('Reply must include text');
       }
-      const savedPath = await addReply(mdUri, msg.rootId ?? '', type, body);
+      const savedPath = await addReply(mdUri, msg.rootId ?? '', type, body, msg.id);
       savedToast(savedPath, 'reply added');
-      break;
+      return true;
     }
     case 'edit': {
       const type = (msg.type === 'page' ? 'page' : 'inline') as CommentRootType;
@@ -106,7 +108,7 @@ export async function executeCommentAction(
       }
       const savedPath = await editComment(mdUri, msg.id ?? '', type, kind, msg.rootId, body);
       savedToast(savedPath, kind === 'reply' ? 'reply updated' : 'comment updated');
-      break;
+      return true;
     }
     case 'react': {
       const type = (msg.type === 'page' ? 'page' : 'inline') as CommentRootType;
@@ -119,19 +121,19 @@ export async function executeCommentAction(
         type,
         resolveText(msg.emoji)
       );
-      break;
+      return true;
     }
     case 'resolve': {
       const type = (msg.type === 'page' ? 'page' : 'inline') as CommentRootType;
       const savedPath = await resolveComment(mdUri, msg.id ?? '', type);
       savedToast(savedPath, 'comment resolved');
-      break;
+      return true;
     }
     case 'unresolve': {
       const type = (msg.type === 'page' ? 'page' : 'inline') as CommentRootType;
       const savedPath = await unresolveComment(mdUri, msg.id ?? '', type);
       savedToast(savedPath, 'comment reopened');
-      break;
+      return true;
     }
     case 'delete': {
       const type = (msg.type === 'page' ? 'page' : 'inline') as CommentRootType;
@@ -144,11 +146,11 @@ export async function executeCommentAction(
         'Cancel'
       );
       if (choice !== 'Delete') {
-        return;
+        return false;
       }
       const savedPath = await deleteComment(mdUri, msg.id ?? '', type, kind, msg.rootId);
       savedToast(savedPath, `${label} deleted`);
-      break;
+      return true;
     }
     case 'reanchor': {
       const savedPath = await reanchorComment(mdUri, msg.id ?? '', {
@@ -158,7 +160,7 @@ export async function executeCommentAction(
         heading_context: resolveText(msg.heading),
       });
       savedToast(savedPath, 'comment re-anchored');
-      break;
+      return true;
     }
     case 'refresh': {
       const key = await resolveStorageKeyForUri(mdUri);
@@ -172,7 +174,7 @@ export async function executeCommentAction(
         // ignore if native preview is not active
       }
       logDebug('Markdown Comments: Comments refreshed');
-      break;
+      return true;
     }
     default:
       throw new Error(`Unknown action: ${msg.action}`);

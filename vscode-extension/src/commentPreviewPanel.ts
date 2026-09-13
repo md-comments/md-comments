@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { executeCommentAction, type CommentActionMessage } from './commentActions';
-import { renderMarkdownWithComments } from './markdownRender';
+import { renderMarkdownWithComments, renderMarkdownInitialLoading } from './markdownRender';
 import { escapeHtml } from '../../shared/html';
 import { logDebug, logError } from './logger';
 
@@ -28,6 +28,12 @@ export class CommentPreviewPanel {
     CommentPreviewPanel.panels.get(uri.toString())?.refresh(forceRemote);
   }
 
+  static refreshAll(forceRemote = false): void {
+    for (const panelObj of CommentPreviewPanel.panels.values()) {
+      void panelObj.refresh(forceRemote);
+    }
+  }
+
   static isOpenForUri(uri: vscode.Uri): boolean {
     return CommentPreviewPanel.panels.has(uri.toString());
   }
@@ -53,6 +59,7 @@ export class CommentPreviewPanel {
   private isHtmlInitialized = false;
   private lastMarkdownContent = '';
   private lastBodyHtml = '';
+  private actionQueue: Promise<void> = Promise.resolve();
 
   private constructor(
     extensionUri: vscode.Uri,
@@ -77,21 +84,33 @@ export class CommentPreviewPanel {
     CommentPreviewPanel.panels.set(this.mdUri.toString(), this);
 
     this.panel.webview.onDidReceiveMessage(
-      async (msg: CommentActionMessage) => {
+      (msg: CommentActionMessage) => {
         logDebug('CommentPreviewPanel webview message received:', msg);
-        const isManualRefresh = msg.action === 'refresh';
-        await executeCommentAction(this.mdUri, msg);
-        await this.refresh(isManualRefresh);
-        try {
-          await vscode.commands.executeCommand('mdComments.refreshPreview');
-        } catch (err) {
-          logError('Failed to execute mdComments.refreshPreview:', err);
-        }
-        try {
-          await vscode.commands.executeCommand('markdown.preview.refresh');
-        } catch {
-          // ignore if native preview is not active
-        }
+        this.actionQueue = this.actionQueue
+          .then(async () => {
+            const isManualRefresh = msg.action === 'refresh';
+            const executed = await executeCommentAction(this.mdUri, msg);
+            if (!executed) {
+              logDebug('CommentPreviewPanel action cancelled or skipped:', msg.action);
+              return;
+            }
+            await this.refresh(isManualRefresh);
+            if (isManualRefresh) {
+              try {
+                await vscode.commands.executeCommand('mdComments.refreshPreview');
+              } catch (err) {
+                logError('Failed to execute mdComments.refreshPreview:', err);
+              }
+            }
+            try {
+              await vscode.commands.executeCommand('markdown.preview.refresh');
+            } catch {
+              // ignore if native preview is not active
+            }
+          })
+          .catch((err) => {
+            logError('Failed processing webview action in queue:', err);
+          });
       },
       undefined,
       this.disposables
@@ -128,6 +147,15 @@ export class CommentPreviewPanel {
       this.disposables
     );
 
+    // Render immediate initial document with loading skeleton so comments panel is not blank or empty
+    try {
+      const initialMd = document.getText();
+      const initialHtml = renderMarkdownInitialLoading(initialMd, this.mdUri);
+      this.setHtml(initialHtml, initialMd);
+    } catch (err) {
+      logDebug('CommentPreviewPanel initial loading render fallback:', err);
+    }
+
     void this.refresh(true); // Fetch remote comments on initial panel open
   }
 
@@ -153,6 +181,10 @@ export class CommentPreviewPanel {
       return;
     }
 
+    this.setHtml(bodyHtml, markdownContent);
+  }
+
+  private setHtml(bodyHtml: string, markdownContent: string): void {
     this.lastMarkdownContent = markdownContent;
     this.lastBodyHtml = bodyHtml;
     this.isHtmlInitialized = true;

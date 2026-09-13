@@ -1,7 +1,15 @@
 /* eslint-disable security/detect-non-literal-fs-filename */
 import * as fs from 'fs';
 import * as vscode from 'vscode';
-import { extractMentionLogins, getCachedAuthor, githubProfileUrl, isGitHubLogin } from './author';
+import {
+  extractMentionLogins,
+  getCachedAuthor,
+  getCachedAuthorDisplayName,
+  setCachedAuthorDisplayName,
+  githubProfileUrl,
+  githubAvatarUrl,
+  isGitHubLogin,
+} from './author';
 import { collectAvatarLogins, getAvatarDataUrl, warmGitHubAvatars } from './githubAvatars';
 import {
   authorDisplayLabel,
@@ -10,6 +18,7 @@ import {
   displayNamesMapForLogins,
   resolveAuthorLogin,
   schedulePreviewRefreshAfterDisplayNames,
+  setGitHubDisplayName,
   warmGitHubDisplayNames,
 } from './githubDisplayNames';
 import { parseMarkdownAnchors, fnv1aHash, normalizeAnchorText } from '../../shared/anchor';
@@ -89,12 +98,27 @@ export const ICON_FAB =
   '<path fill="#ffffff" d="M 132 168 L 164 168 L 192 232 L 220 168 L 252 168 L 252 280 L 226 280 L 226 212 L 201 268 L 183 268 L 158 212 L 158 280 L 132 280 Z M 276 168 L 324 168 C 358 168 380 188 380 224 C 380 260 358 280 324 280 L 276 280 Z M 302 192 L 302 256 L 322 256 C 342 256 352 246 352 224 C 352 202 342 192 322 192 Z"/>' +
   '</svg>';
 
+function buildActionUri(action: string, attrs: Record<string, string>): string {
+  if (!renderCtx?.mdPath) return '';
+  const scheme = 'vscode';
+  const query = new URLSearchParams();
+  query.set('action', action);
+  query.set('md', renderCtx.mdPath);
+  if (attrs.id) query.set('id', attrs.id);
+  if (attrs['root-id']) query.set('rootId', attrs['root-id']);
+  if (attrs.type) query.set('type', attrs.type);
+  if (attrs.kind) query.set('kind', attrs.kind);
+  query.set('_t', String(Date.now()));
+  return `${scheme}://md-comments.md-preview-comments/?${query.toString()}`;
+}
+
 function actionIconBtn(
   action: string,
   title: string,
   icon: string,
   attrs: Record<string, string>,
-  extraClass = ''
+  extraClass = '',
+  customHref?: string
 ): string {
   const dataAttrs = Object.entries(attrs)
     .map(([k, v]) => {
@@ -102,6 +126,14 @@ function actionIconBtn(
       return ` ${attr}="${escapeHtml(v)}"`;
     })
     .join('');
+  const href =
+    customHref ||
+    (action === 'delete' || action === 'resolve' || action === 'unresolve'
+      ? buildActionUri(action, attrs)
+      : undefined);
+  if (href) {
+    return `<a role="button" class="md-comments-icon-btn${extraClass ? ` ${extraClass}` : ''}" data-md-action="${escapeHtml(action)}" title="${escapeHtml(title)}" aria-label="${escapeHtml(title)}" href="${escapeHtml(href)}"${dataAttrs}>${icon}</a>`;
+  }
   return `<button type="button" class="md-comments-icon-btn${extraClass ? ` ${extraClass}` : ''}" data-md-action="${escapeHtml(action)}" title="${escapeHtml(title)}" aria-label="${escapeHtml(title)}"${dataAttrs}>${icon}</button>`;
 }
 
@@ -112,7 +144,7 @@ function renderAuthorLink(author: string): string {
     const href = githubProfileUrl(login);
     const title = label !== login ? `@${login}` : '';
     const titleAttr = title ? ` title="${escapeHtml(title)}"` : '';
-    return `<a href="${escapeHtml(href)}" class="md-comments-author-link"${titleAttr} target="_blank" rel="noopener noreferrer">${escapeHtml(label)}</a>`;
+    return `<a href="${escapeHtml(href)}" class="md-comments-author-link" data-md-author-login="${escapeHtml(login)}"${titleAttr} target="_blank" rel="noopener noreferrer">${escapeHtml(label)}</a>`;
   }
   return `<span class="md-comments-author">${escapeHtml(label)}</span>`;
 }
@@ -160,9 +192,11 @@ function renderAvatar(author: string, large = false): string {
   const login = resolveAuthorLogin(author);
   const px = large ? 64 : 48;
   const dataUrl = login ? getAvatarDataUrl(login, px) : undefined;
-  if (dataUrl) {
-    return `<div class="md-comments-avatar md-comments-avatar-loaded${sizeClass}" aria-hidden="true">
-      <img class="md-comments-avatar-img" src="${escapeHtml(dataUrl)}" alt="" decoding="async" />
+  const src = dataUrl || (login && isGitHubLogin(login) ? githubAvatarUrl(login, px) : undefined);
+  if (src) {
+    const loadedClass = dataUrl ? ' md-comments-avatar-loaded' : '';
+    return `<div class="md-comments-avatar${loadedClass}${sizeClass}" aria-hidden="true">
+      <img class="md-comments-avatar-img" src="${escapeHtml(src)}" alt="" decoding="async" />
       <span class="md-comments-avatar-fallback">${escapeHtml(initials)}</span>
     </div>`;
   }
@@ -214,7 +248,7 @@ function renderReactions(
   const chips = reactions
     .map(
       (r) =>
-        `<button type="button" class="md-comments-reaction-chip" data-md-action="react" data-md-target="${escapeHtml(targetId)}" data-md-root="${escapeHtml(rootId)}" data-md-type="${type}" data-md-kind="${kind}" data-md-emoji="${escapeHtml(r.emoji)}">${escapeHtml(r.emoji)} ${r.users.length}</button>`
+        `<a role="button" class="md-comments-reaction-chip" data-md-action="react" data-md-target="${escapeHtml(targetId)}" data-md-root="${escapeHtml(rootId)}" data-md-type="${type}" data-md-kind="${kind}" data-md-emoji="${escapeHtml(r.emoji)}" href="#">${escapeHtml(r.emoji)} ${r.users.length}</a>`
     )
     .join('');
   return `<div class="md-comments-reactions">${chips}</div>`;
@@ -336,7 +370,7 @@ export function renderCard(
             <textarea class="fallback-reply-textarea md-comments-reply-textarea" placeholder="Write a reply..." rows="3" aria-label="Write a reply"></textarea>
             <div class="composer-actions md-comments-composer-actions">
               <button type="button" class="btn btn-secondary fallback-cancel-btn md-comments-btn-secondary" data-md-action="cancel-reply" data-action="cancel">Cancel</button>
-              <button type="button" class="btn btn-primary fallback-submit-btn md-comments-btn-primary" data-md-action="submit-reply" data-action="submit" data-md-id="${escapeHtml(id)}" data-md-type="${type}">Send</button>
+              <a role="button" class="btn btn-primary fallback-submit-btn md-comments-btn-primary" data-md-action="submit-reply" data-action="submit" data-md-id="${escapeHtml(id)}" data-md-type="${type}" href="#">Send</a>
             </div>
           </div>
         </div>
@@ -363,6 +397,20 @@ interface RenderContext {
   placements: PlacementResult[];
   comments: CommentsFile;
   mdPath: string;
+  isLoading?: boolean;
+}
+
+export function sortCommentsNewestFirst<T extends { created_at?: string; id?: string }>(
+  comments: T[]
+): T[] {
+  return [...comments].sort((a, b) => {
+    const timeA = a.created_at ? new Date(a.created_at).getTime() : 0;
+    const timeB = b.created_at ? new Date(b.created_at).getTime() : 0;
+    if (timeA !== timeB) {
+      return timeB - timeA;
+    }
+    return (b.id || '').localeCompare(a.id || '');
+  });
 }
 
 function renderQuoteExcerpt(anchorText: string, heading?: string): string {
@@ -384,7 +432,7 @@ export function renderPageComposer(): string {
   return `<div class="page-composer md-comments-page-composer" id="page-composer">
     <textarea placeholder="Write a comment on this document..." class="page-textarea md-comments-page-textarea" rows="3" aria-label="Write a comment on this document"></textarea>
     <div class="composer-actions md-comments-composer-actions">
-      <button type="button" class="btn btn-primary submit-page-btn md-comments-btn-primary" data-md-action="submit-page">Send</button>
+      <a role="button" class="btn btn-primary submit-page-btn md-comments-btn-primary" data-md-action="submit-page" href="#">Send</a>
     </div>
   </div>`;
 }
@@ -450,8 +498,35 @@ export function renderLoadError(errorMessage: string): string {
 }
 
 function buildSidebarHtml(ctx: RenderContext): string {
-  const allInline = ctx.comments.inline_comments || [];
-  const allPage = ctx.comments.page_comments || [];
+  if (ctx.isLoading) {
+    const inlineHtml = `<div class="threads-list md-comments-threads-list" id="inline-threads">${renderLoadingSkeleton('inline')}</div>`;
+    const pageHtml = `
+      <div class="threads-list md-comments-threads-list" id="page-threads">${renderLoadingSkeleton('page')}</div>
+      ${renderPageComposer()}
+    `;
+
+    const defaultTab = 'inline';
+
+    const tab = (id: string, label: string) =>
+      `<button type="button" class="md-comments-tab tab-btn${id === defaultTab ? ' md-comments-tab-active active' : ''}" role="tab" data-tab="${id}" aria-selected="${id === defaultTab ? 'true' : 'false'}"><span>${escapeHtml(label)}</span> <span class="md-comments-tab-count ${id}-tab-count" style="display:none;">0</span></button>`;
+
+    const panel = (id: string, html: string) => {
+      const active = id === defaultTab;
+      return `<div class="md-comments-tab-panel tab-content${active ? ' md-comments-tab-panel-active active' : ''}" id="tab-${id}" data-panel="${id}" role="tabpanel"${active ? '' : ' hidden'}>${html}</div>`;
+    };
+
+    return `<nav class="md-comments-tabs tab-header" role="tablist">
+        ${tab('inline', 'Inline')}
+        ${tab('page', 'Document')}
+      </nav>
+      <div class="md-comments-tab-panels">
+        ${panel('inline', inlineHtml)}
+        ${panel('page', pageHtml)}
+      </div>`;
+  }
+
+  const allInline = sortCommentsNewestFirst(ctx.comments.inline_comments || []);
+  const allPage = sortCommentsNewestFirst(ctx.comments.page_comments || []);
 
   const inlineThreadsList = allInline.length
     ? allInline
@@ -548,12 +623,14 @@ export function renderDocumentLayout(
   saveHint: string,
   footer: string
 ): string {
-  const threadCount =
-    ctx.comments.page_comments.filter((c) => !c.resolved).length +
-    ctx.placements.filter(
-      (p) => !p.comment.resolved && p.placed && !isOrphanedPlacement(ctx.blocks, p)
-    ).length;
-  const defaultOpen = threadCount > 0 ? 'true' : 'false';
+  const isLoading = !!ctx.isLoading;
+  const threadCount = isLoading
+    ? 0
+    : ctx.comments.page_comments.filter((c) => !c.resolved).length +
+      ctx.placements.filter(
+        (p) => !p.comment.resolved && p.placed && !isOrphanedPlacement(ctx.blocks, p)
+      ).length;
+  const defaultOpen = isLoading || threadCount > 0 ? 'true' : 'false';
   const sidebarBody = buildSidebarHtml(ctx);
   const sidebarWidth = getDefaultSidebarWidth();
 
@@ -564,16 +641,19 @@ export function renderDocumentLayout(
         <a href="command:mdComments.signIn" style="color: var(--vscode-textLink-foreground); font-weight: bold; margin-left: 6px; text-decoration: underline;">Sign In to GitHub</a>
       </div>`;
 
+  const fabLoadingClass = isLoading ? ' is-loading' : '';
+  const fabTitle = isLoading ? 'Markdown Comments (Loading comments...)' : 'Show comments';
+
   return `<div id="md-comments-layout" class="md-comments-layout" data-md-default-open="${defaultOpen}" data-md-thread-count="${threadCount}" style="--gc-sidebar-width: ${sidebarWidth}px">
     <div class="md-comments-main">
       ${authBanner}
       ${saveHint}
       <div class="md-comments-document">${docHtml}</div>
     </div>
-    <button type="button" class="md-comments-fab" id="md-comments-panel-fab" title="Show comments" aria-label="Show comments" aria-expanded="false">
+    <button type="button" class="md-comments-fab${fabLoadingClass}" id="md-comments-panel-fab" title="${fabTitle}" aria-label="${fabTitle}" aria-expanded="false"${isLoading ? ' aria-busy="true"' : ''}>
       ${ICON_FAB}
-      <span class="badge-count" style="display: ${threadCount > 0 ? 'inline-block' : 'none'};">${threadCount}</span>
-      <span class="badge-loading" style="display: none;"><span class="md-comments-spinner-sm"></span></span>
+      <span class="badge-count" style="display: ${!isLoading && threadCount > 0 ? 'inline-block' : 'none'};">${threadCount}</span>
+      <span class="badge-loading" style="display: ${isLoading ? 'inline-flex' : 'none'};"><span class="md-comments-spinner-sm"></span></span>
     </button>
     <aside id="md-comments-sidebar" class="md-comments-sidebar" aria-label="Comments">
       <div class="md-comments-sidebar-resizer" id="md-comments-sidebar-resizer" role="separator" aria-orientation="vertical" aria-label="Resize comments panel" title="Drag to resize"></div>
@@ -618,7 +698,7 @@ function getMdUri(env: Record<string, unknown>): vscode.Uri | undefined {
   return vscode.Uri.parse(String(raw));
 }
 
-function loadContext(uri: vscode.Uri): RenderContext | null {
+function loadContext(uri: vscode.Uri, envRecord?: Record<string, unknown>): RenderContext | null {
   try {
     logDebug(`loadContext invoked for URI: ${uri.toString()}`);
     const mdPath = uri.fsPath || uri.path;
@@ -626,25 +706,43 @@ function loadContext(uri: vscode.Uri): RenderContext | null {
     const blocks = parseMarkdownAnchors(markdown);
 
     let comments: CommentsFile = { page_comments: [], inline_comments: [] };
-    const key = resolveStorageKeyForUriSync(uri);
-    logDebug(`loadContext resolved storage key:`, key);
-    if (key) {
-      const cached = globalOptimisticStore.getCached(key);
-      if (cached) {
-        logDebug(`loadContext cache hit. Loaded inline count: ${cached.inline_comments.length}`);
-        comments = cached;
-      } else {
-        logDebug(`loadContext cache cold. Launching async readComments for: ${uri.toString()}`);
-        void readComments(uri).then((fetched) => {
-          logDebug(
-            `loadContext async readComments returned. inline count: ${fetched.inline_comments.length}`
-          );
-        });
-      }
+    let isLoading = false;
+
+    if (envRecord && typeof envRecord.isLoading === 'boolean') {
+      isLoading = envRecord.isLoading;
+    }
+
+    if (envRecord && envRecord.comments && typeof envRecord.comments === 'object') {
+      comments = envRecord.comments as CommentsFile;
     } else {
-      logDebug(
-        `loadContext storage key is null for URI: ${uri.toString()}. Remote features will be unavailable.`
-      );
+      const key = resolveStorageKeyForUriSync(uri);
+      logDebug(`loadContext resolved storage key:`, key);
+      if (key) {
+        const cached = globalOptimisticStore.getCached(key);
+        if (cached) {
+          logDebug(`loadContext cache hit. Loaded inline count: ${cached.inline_comments.length}`);
+          comments = cached;
+        } else {
+          if (envRecord?.isLoading !== false) {
+            isLoading = true;
+          }
+          logDebug(`loadContext cache cold. Launching async readComments for: ${uri.toString()}`);
+          void readComments(uri).then((fetched) => {
+            logDebug(
+              `loadContext async readComments returned. inline count: ${fetched.inline_comments.length}`
+            );
+            try {
+              void vscode.commands.executeCommand('markdown.preview.refresh');
+            } catch {
+              /* ignore */
+            }
+          });
+        }
+      } else {
+        logDebug(
+          `loadContext storage key is null for URI: ${uri.toString()}. Remote features will be unavailable.`
+        );
+      }
     }
 
     const placements = placeInlineComments(blocks, comments.inline_comments);
@@ -653,6 +751,7 @@ function loadContext(uri: vscode.Uri): RenderContext | null {
       placements,
       comments,
       mdPath,
+      isLoading,
     };
   } catch (err) {
     console.error('[md-comments] failed to load comment context for', uri.toString(), err);
@@ -794,11 +893,15 @@ export function extendMarkdownIt(md: any): any {
 
     if (ctx.comments && ctx.comments.inline_comments) {
       const placements = placeInlineComments(ctx.blocks, ctx.comments.inline_comments);
-      const hasInlineComments = placements.some(
+      const activePlacements = placements.filter(
         (p) => p.placed && p.paragraphIndex === block.paragraph_index && !p.comment.resolved
       );
-      if (hasInlineComments) {
+      const fullBlockPlacements = activePlacements.filter(
+        (p) => normalizeAnchorText(p.comment.anchor_text) === normalizeAnchorText(block.anchor_text)
+      );
+      if (fullBlockPlacements.length > 0) {
         token.attrJoin('class', 'md-comments-paragraph-marked');
+        token.attrSet('data-md-comment-id', fullBlockPlacements.map((p) => p.comment.id).join(' '));
       }
     }
   }
@@ -917,8 +1020,19 @@ export function extendMarkdownIt(md: any): any {
     const fromEnv =
       typeof envRecord.currentAuthor === 'string' ? envRecord.currentAuthor.trim() : '';
     const currentAuthor = fromEnv || getCachedAuthor()?.trim() || '';
+    const fromEnvName =
+      typeof envRecord.currentAuthorName === 'string' ? envRecord.currentAuthorName.trim() : '';
+    const currentAuthorName =
+      fromEnvName ||
+      getCachedAuthorDisplayName() ||
+      (currentAuthor ? authorDisplayLabel(currentAuthor) : '') ||
+      currentAuthor;
     renderCurrentAuthor = currentAuthor || undefined;
-    renderCtx = uri ? loadContext(uri) : null;
+    if (currentAuthor && currentAuthorName && currentAuthorName !== currentAuthor) {
+      setGitHubDisplayName(currentAuthor, currentAuthorName);
+      setCachedAuthorDisplayName(currentAuthorName);
+    }
+    renderCtx = uri ? loadContext(uri, envRecord) : null;
 
     const html = defaultRender(tokens, options, env);
 
@@ -943,10 +1057,19 @@ export function extendMarkdownIt(md: any): any {
     const anchorsPayload = Buffer.from(JSON.stringify(renderCtx.blocks), 'utf8').toString('base64');
     const mentionLogins = collectMentionCandidates(renderCtx.comments);
     const mentionUsers = escapeHtml(JSON.stringify(mentionLogins));
-    const displayNames = escapeHtml(
-      JSON.stringify(displayNamesMapForLogins(collectGitHubLogins(renderCtx.comments)))
-    );
+
+    const comments = renderCtx.comments;
+    const logins = collectGitHubLogins(comments);
+    if (currentAuthor && isGitHubLogin(currentAuthor) && !logins.includes(currentAuthor)) {
+      logins.push(currentAuthor);
+    }
+    const namesMap = displayNamesMapForLogins(logins);
+    if (currentAuthor && currentAuthorName && currentAuthorName !== currentAuthor) {
+      namesMap[currentAuthor] = currentAuthorName;
+    }
+    const displayNames = escapeHtml(JSON.stringify(namesMap));
     const currentAuthorAttr = escapeHtml(currentAuthor);
+    const currentAuthorNameAttr = escapeHtml(currentAuthorName);
     let uriScheme = 'vscode';
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -954,11 +1077,9 @@ export function extendMarkdownIt(md: any): any {
     } catch {
       uriScheme = 'vscode';
     }
-    const footer = `<div class="md-comments-footer" data-md-md-path="${escapeHtml(renderCtx.mdPath)}" data-md-md-encoded="${mdEncoded}" data-code="${escapeHtml(anchorsPayload)}" data-md-reaction-emojis="${getReactionEmojisJson()}" data-md-mention-users="${mentionUsers}" data-md-display-names="${displayNames}" data-md-current-author="${currentAuthorAttr}" data-md-uri-scheme="${escapeHtml(uriScheme)}"></div>
-      <a id="md-comments-action-trigger" style="display:none;" rel="noreferrer noopener" target="_blank" aria-hidden="true"></a>`;
+    const footer = `<div class="md-comments-footer" data-md-md-path="${escapeHtml(renderCtx.mdPath)}" data-md-md-encoded="${mdEncoded}" data-code="${escapeHtml(anchorsPayload)}" data-md-reaction-emojis="${getReactionEmojisJson()}" data-md-mention-users="${mentionUsers}" data-md-display-names="${displayNames}" data-md-current-author="${currentAuthorAttr}" data-md-current-author-name="${currentAuthorNameAttr}" data-md-uri-scheme="${escapeHtml(uriScheme)}"></div>
+      <a id="md-comments-action-trigger" style="position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;opacity:0;pointer-events:none;" rel="noreferrer noopener" aria-hidden="true"></a>`;
 
-    const comments = renderCtx.comments;
-    const logins = collectGitHubLogins(comments);
     void warmGitHubDisplayNames(logins)
       .then((namesLoaded) =>
         warmGitHubAvatars(collectAvatarLogins(comments)).then(
