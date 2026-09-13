@@ -1,15 +1,50 @@
+import { execFileSync } from 'child_process';
 import * as vscode from 'vscode';
 import { logDebug, logInfo, logError } from './logger';
 
 const CLIENT_ID = 'Iv23li9t461keXDcVS0T';
 const SECRET_KEY = 'github_oauth_token';
+const GLOBAL_STATE_HAS_TOKEN_KEY = 'github_has_token';
 
 let secretStorage: vscode.SecretStorage | undefined;
+let globalStateStorage: vscode.Memento | undefined;
 let cachedTokenState = false;
+
+type AuthStateChangeListener = (hasToken: boolean) => void;
+const authStateChangeListeners = new Set<AuthStateChangeListener>();
+
+export function onDidChangeAuthState(listener: AuthStateChangeListener): vscode.Disposable {
+  authStateChangeListeners.add(listener);
+  return {
+    dispose: () => authStateChangeListeners.delete(listener),
+  };
+}
+
+function updateCachedTokenState(hasToken: boolean): void {
+  const changed = cachedTokenState !== hasToken;
+  cachedTokenState = hasToken;
+  if (globalStateStorage) {
+    void globalStateStorage.update(GLOBAL_STATE_HAS_TOKEN_KEY, hasToken);
+  }
+  if (changed) {
+    logInfo(`Authentication state changed: hasToken=${hasToken}`);
+    for (const listener of authStateChangeListeners) {
+      try {
+        listener(hasToken);
+      } catch (err) {
+        logError('Error in onDidChangeAuthState listener', err);
+      }
+    }
+  }
+}
 
 export function initializeAuth(context: vscode.ExtensionContext): void {
   logDebug('initializeAuth called');
   secretStorage = context.secrets;
+  globalStateStorage = context.globalState;
+  const persisted = context.globalState.get<boolean>(GLOBAL_STATE_HAS_TOKEN_KEY, false);
+  cachedTokenState = persisted;
+  logDebug(`initializeAuth restored token state from globalState: ${persisted}`);
 }
 
 export function hasTokenSync(): boolean {
@@ -53,7 +88,36 @@ export async function getOAuthToken(): Promise<string | null> {
     }
   }
 
-  cachedTokenState = !!token;
+  // 3. Try environment variables (CI, automated runs, E2E)
+  if (!token && (process.env.GITHUB_TOKEN || process.env.GH_TOKEN)) {
+    const envToken = (process.env.GITHUB_TOKEN || process.env.GH_TOKEN || '').trim();
+    if (envToken) {
+      logDebug('getOAuthToken found token in environment variable');
+      token = envToken;
+    }
+  }
+
+  // 4. Fallback to gh CLI token
+  if (!token) {
+    try {
+      const ghToken = execFileSync('gh', ['auth', 'token'], {
+        encoding: 'utf8',
+        timeout: 3000,
+        env: {
+          ...process.env,
+          PATH: ['/opt/homebrew/bin', '/usr/local/bin', process.env.PATH || ''].join(':'),
+        },
+      }).trim();
+      if (ghToken) {
+        logDebug('getOAuthToken retrieved token from gh CLI');
+        token = ghToken;
+      }
+    } catch {
+      /* ignore gh CLI failure */
+    }
+  }
+
+  updateCachedTokenState(!!token);
   return token;
 }
 
@@ -130,7 +194,7 @@ export async function pollForAccessToken(
             await secretStorage.store(SECRET_KEY, data.access_token);
             logDebug('pollForAccessToken: saved token to secret storage');
           }
-          cachedTokenState = true;
+          updateCachedTokenState(true);
           return data.access_token;
         }
 
@@ -171,7 +235,7 @@ export async function signIn(): Promise<string | null> {
     if (session?.accessToken) {
       logInfo(`signIn native success: user=${session.account.label}`);
       vscode.window.showInformationMessage(`Signed in to GitHub as ${session.account.label}`);
-      cachedTokenState = true;
+      updateCachedTokenState(true);
       return session.accessToken;
     }
   } catch (err) {
@@ -206,7 +270,7 @@ export async function signIn(): Promise<string | null> {
       if (token) {
         logInfo('signIn device flow completed successfully');
         vscode.window.showInformationMessage('Successfully signed in to GitHub!');
-        cachedTokenState = true;
+        updateCachedTokenState(true);
         return token;
       }
     }
@@ -224,7 +288,7 @@ export async function signIn(): Promise<string | null> {
  */
 export async function signOut(): Promise<void> {
   logInfo('signOut command executed');
-  cachedTokenState = false;
+  updateCachedTokenState(false);
   if (secretStorage) {
     await secretStorage.delete(SECRET_KEY);
     logDebug('signOut deleted stored token');
