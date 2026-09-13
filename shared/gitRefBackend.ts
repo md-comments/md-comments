@@ -185,22 +185,12 @@ export class GitHubOrphanRefBackend implements CommentBackend {
     repo: string
   ): Promise<Array<{ path: string; sha: string }> | null> {
     try {
-      // First try querying tree by ref name directly
-      const treeUrl = `https://api.github.com/repos/${owner}/${repo}/git/trees/${encodeURIComponent(ORPHAN_REF_NAME)}?recursive=1`;
-      let res = await this.fetchApi(treeUrl);
-      if (!res.ok) {
-        // Fallback: resolve commit sha from ref
-        const refUrl = `https://api.github.com/repos/${owner}/${repo}/git/refs/md-comments/data`;
-        const refRes = await this.fetchApi(refUrl);
-        if (!refRes.ok) return null;
-        const refData = (await refRes.json()) as { object?: { sha?: string } };
-        const commitSha = refData?.object?.sha;
-        if (!commitSha) return null;
+      const commitSha = await this.getLatestRefSha(owner, repo);
+      if (!commitSha) return null;
 
-        const commitTreeUrl = `https://api.github.com/repos/${owner}/${repo}/git/trees/${commitSha}?recursive=1`;
-        res = await this.fetchApi(commitTreeUrl);
-        if (!res.ok) return null;
-      }
+      const commitTreeUrl = `https://api.github.com/repos/${owner}/${repo}/git/trees/${commitSha}?recursive=1`;
+      const res = await this.fetchApi(commitTreeUrl);
+      if (!res.ok) return null;
 
       const data = (await res.json()) as {
         tree?: Array<{ path: string; sha: string; type?: string }>;
@@ -540,9 +530,21 @@ export class GitHubOrphanRefBackend implements CommentBackend {
     const refRes = await this.fetchApi(refUrl);
 
     let currentCommitSha: string | null = null;
+    let baseTreeSha: string | null = null;
     if (refRes.ok) {
       const refData = (await refRes.json()) as { object: { sha: string } };
       currentCommitSha = refData.object.sha;
+      try {
+        const commitRes = await this.fetchApi(
+          `https://api.github.com/repos/${key.owner}/${key.repo}/git/commits/${currentCommitSha}`
+        );
+        if (commitRes.ok) {
+          const commitData = (await commitRes.json()) as { tree?: { sha: string }; sha?: string };
+          baseTreeSha = commitData.tree?.sha ?? null;
+        }
+      } catch {
+        /* ignore */
+      }
     }
 
     const yamlString = yaml.dump(newData, { indent: 2, lineWidth: -1 });
@@ -561,8 +563,8 @@ export class GitHubOrphanRefBackend implements CommentBackend {
     const treeBody: Record<string, unknown> = {
       tree: treeEntries,
     };
-    if (currentCommitSha) {
-      treeBody.base_tree = currentCommitSha;
+    if (baseTreeSha) {
+      treeBody.base_tree = baseTreeSha;
     }
     const treeRes = await this.fetchApi(treeUrl, {
       method: 'POST',

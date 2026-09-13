@@ -885,22 +885,27 @@ describe('GitHubOrphanRefBackend', () => {
         ok: true,
         json: async () => ({ object: { sha: 'parent-sha' } }),
       });
-      // 2. POST tree -> ok
+      // 2. GET commit -> ok
+      fetchMock.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ sha: 'parent-sha', tree: { sha: 'parent-tree-sha' } }),
+      });
+      // 3. POST tree -> ok
       fetchMock.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ sha: 'tree-sha-1' }),
       });
-      // 3. POST commit -> ok
+      // 4. POST commit -> ok
       fetchMock.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ sha: 'new-commit-sha' }),
       });
-      // 4. PATCH ref -> ok
+      // 5. PATCH ref -> ok
       fetchMock.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ object: { sha: 'new-commit-sha' } }),
       });
-      // 5. POST commit comment -> ok
+      // 6. POST commit comment -> ok
       fetchMock.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ id: 456 }),
@@ -931,13 +936,13 @@ describe('GitHubOrphanRefBackend', () => {
         commentsWithMention
       );
 
-      // Verify 5 calls made (4 for git write + 1 for commit comment notification)
-      expect(fetchMock).toHaveBeenCalledTimes(5);
-      const lastCallUrl = fetchMock.mock.calls[4][0];
+      // Verify 6 calls made (5 for git write + 1 for commit comment notification)
+      expect(fetchMock).toHaveBeenCalledTimes(6);
+      const lastCallUrl = fetchMock.mock.calls[5][0];
       expect(lastCallUrl).toBe(
         'https://api.github.com/repos/my-org/my-repo/commits/new-commit-sha/comments'
       );
-      const lastCallBody = JSON.parse(fetchMock.mock.calls[4][1].body);
+      const lastCallBody = JSON.parse(fetchMock.mock.calls[5][1].body);
       expect(lastCallBody.body).toContain('💬 **@alice** mentioned you');
       expect(lastCallBody.body).toContain('Hey @octocat can you review this?');
       expect(lastCallBody.body).toContain(
