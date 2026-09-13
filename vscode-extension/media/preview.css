@@ -1060,6 +1060,11 @@ body.md-comments-resizing {
   border-color: var(--gc-accent);
 }
 
+.md-comments-reaction-chip.md-comments-reaction-active {
+  border-color: var(--gc-accent, #388bfd);
+  background: var(--gc-accent-subtle, rgba(56, 139, 253, 0.15));
+}
+
 /* Selection toolbar (Floating bar) */
 .md-comments-selection-bar {
   position: absolute;

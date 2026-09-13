@@ -34,6 +34,7 @@
   "contributes": {
     "markdown.markdownItPlugins": true,
     "markdown.previewScripts": [
+      "./media/earlyHook.js",
       "./media/inlineAnchors.js",
       "./media/previewSidebar.js",
       "./media/previewActions.js",
@@ -44,6 +45,9 @@
     "markdown.previewStyles": [
       "./media/preview.css"
     ],
+    "configurationDefaults": {
+      "markdown.preview.openMarkdownLinks": "inEditor"
+    },
     "commands": [
       {
         "command": "mdComments.openCommentPreview",

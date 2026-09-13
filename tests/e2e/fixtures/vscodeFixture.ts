@@ -10,7 +10,7 @@ import { downloadAndUnzipVSCode } from '@vscode/test-electron';
 import path from 'node:path';
 import os from 'node:os';
 import fs from 'node:fs/promises';
-import { execSync } from 'node:child_process';
+import { execSync, execFileSync } from 'node:child_process';
 
 export interface VSCodeTestContext {
   electronApp: ElectronApplication;
@@ -36,11 +36,36 @@ export const test = base.extend<{ vscode: VSCodeTestContext }>({
 
     const userSettingsDir = path.join(userDataDir, 'User');
     await fs.mkdir(userSettingsDir, { recursive: true });
+
+    // Pre-populate confirmedExtensions in globalStorage state.vscdb to prevent confirmation dialogs
+    const globalStorageDir = path.join(userSettingsDir, 'globalStorage');
+    await fs.mkdir(globalStorageDir, { recursive: true });
+    const globalDbPath = path.join(globalStorageDir, 'state.vscdb');
+    const confirmedVal = JSON.stringify(['md-comments.md-preview-comments']).replace(/'/g, "''");
+    const sql = `CREATE TABLE IF NOT EXISTS ItemTable (key TEXT UNIQUE ON CONFLICT REPLACE, value BLOB); INSERT OR REPLACE INTO ItemTable (key, value) VALUES ('extensionUrlHandler.confirmedExtensions', '${confirmedVal}');`;
+    try {
+      execFileSync('sqlite3', [globalDbPath, sql], { stdio: 'ignore' });
+    } catch {
+      // sqlite3 fallback
+    }
+
+    // Also populate ~/.vscode-shared/sharedStorage/state.vscdb
+    try {
+      const sharedStorageDir = path.join(os.homedir(), '.vscode-shared', 'sharedStorage');
+      await fs.mkdir(sharedStorageDir, { recursive: true });
+      const sharedDbPath = path.join(sharedStorageDir, 'state.vscdb');
+      execFileSync('sqlite3', [sharedDbPath, sql], { stdio: 'ignore' });
+    } catch {
+      // ignore
+    }
+
     const settingsPayload = JSON.stringify(
       {
         'editor.codeLens': true,
         'diffEditor.codeLens': true,
         'markdown.editor.codeLens.enabled': true,
+        'markdown.preview.openMarkdownLinks': 'inEditor',
+        'extensions.confirmedUriHandlerExtensionIds': ['md-comments.md-preview-comments'],
         '[markdown]': {
           'editor.codeLens': true,
         },

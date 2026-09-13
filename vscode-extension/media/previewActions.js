@@ -53,6 +53,15 @@
       btn.addEventListener('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
+        if (typeof window.mdCommentsToggleReactionOptimistic === 'function') {
+          window.mdCommentsToggleReactionOptimistic(
+            targetId || rootId,
+            rootId,
+            type,
+            kind || 'root',
+            emoji
+          );
+        }
         onPick({
           action: 'react',
           targetId: targetId || rootId,

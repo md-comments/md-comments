@@ -205,6 +205,62 @@
     block.setAttribute('data-md-reply-count', String(currentCount + 1));
   }
 
+  function toggleReactionOptimistic(targetId, rootId, type, kind, emoji) {
+    if (!emoji) return;
+    const targetEl =
+      document.querySelector('[data-md-comment-id="' + targetId + '"]') ||
+      document.querySelector('.md-comments-card[data-md-comment-id="' + rootId + '"]');
+    if (!targetEl) return;
+
+    const contentEl = targetEl.querySelector('.md-comments-thread-content') || targetEl;
+    let reactionsDiv = targetEl.querySelector('.md-comments-reactions');
+    if (!reactionsDiv) {
+      reactionsDiv = document.createElement('div');
+      reactionsDiv.className = 'md-comments-reactions';
+      const actionsEl = targetEl.querySelector('.md-comments-actions');
+      if (actionsEl && actionsEl.parentNode) {
+        actionsEl.parentNode.insertBefore(reactionsDiv, actionsEl);
+      } else {
+        contentEl.appendChild(reactionsDiv);
+      }
+    }
+
+    const existingChip = reactionsDiv.querySelector(
+      '.md-comments-reaction-chip[data-md-emoji="' + emoji + '"]'
+    );
+    if (existingChip) {
+      const match = existingChip.textContent.trim().match(/\d+$/);
+      let count = match ? parseInt(match[0], 10) : 1;
+      if (existingChip.classList.contains('md-comments-reaction-active')) {
+        existingChip.classList.remove('md-comments-reaction-active');
+        count -= 1;
+        if (count <= 0) {
+          existingChip.remove();
+          if (!reactionsDiv.children.length) {
+            reactionsDiv.remove();
+          }
+          return;
+        }
+      } else {
+        existingChip.classList.add('md-comments-reaction-active');
+        count += 1;
+      }
+      existingChip.textContent = emoji + ' ' + count;
+    } else {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'md-comments-reaction-chip md-comments-reaction-active';
+      chip.setAttribute('data-md-action', 'react');
+      chip.setAttribute('data-md-target', targetId || rootId);
+      chip.setAttribute('data-md-root', rootId);
+      chip.setAttribute('data-md-type', type || 'inline');
+      chip.setAttribute('data-md-kind', kind || 'root');
+      chip.setAttribute('data-md-emoji', emoji);
+      chip.textContent = emoji + ' 1';
+      reactionsDiv.appendChild(chip);
+    }
+  }
+
   function removeEl(id) {
     const el = document.getElementById(id);
     if (el) {
@@ -397,6 +453,9 @@
       const body = textarea ? textarea.value.trim() : '';
       if (!body) {
         return;
+      }
+      if (bodyEl) {
+        bodyEl.textContent = body;
       }
       postAction({
         action: 'edit',
@@ -863,13 +922,19 @@
       return;
     }
     if (action === 'react') {
+      const targetId = target.getAttribute('data-md-target');
+      const rootId = target.getAttribute('data-md-root');
+      const type = target.getAttribute('data-md-type');
+      const kind = target.getAttribute('data-md-kind') || 'root';
+      const emoji = target.getAttribute('data-md-emoji') || '';
+      toggleReactionOptimistic(targetId, rootId, type, kind, emoji);
       postAction({
         action: 'react',
-        targetId: target.getAttribute('data-md-target'),
-        rootId: target.getAttribute('data-md-root'),
-        type: target.getAttribute('data-md-type'),
-        kind: target.getAttribute('data-md-kind') || 'root',
-        emoji: target.getAttribute('data-md-emoji') || '',
+        targetId: targetId,
+        rootId: rootId,
+        type: type,
+        kind: kind,
+        emoji: emoji,
       });
     }
     if (action === 'reanchor-start') {

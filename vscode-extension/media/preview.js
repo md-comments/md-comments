@@ -217,25 +217,109 @@
     block.setAttribute('data-md-reply-count', String(currentCount + 1));
   }
 
+  function toggleReactionOptimistic(targetId, rootId, type, kind, emoji) {
+    if (!emoji) return;
+    const targetEl =
+      document.querySelector('[data-md-comment-id="' + targetId + '"]') ||
+      document.querySelector('.md-comments-card[data-md-comment-id="' + rootId + '"]');
+    if (!targetEl) return;
+
+    const contentEl = targetEl.querySelector('.md-comments-thread-content') || targetEl;
+    let reactionsDiv = targetEl.querySelector('.md-comments-reactions');
+    if (!reactionsDiv) {
+      reactionsDiv = document.createElement('div');
+      reactionsDiv.className = 'md-comments-reactions';
+      const actionsEl = targetEl.querySelector('.md-comments-actions');
+      if (actionsEl && actionsEl.parentNode) {
+        actionsEl.parentNode.insertBefore(reactionsDiv, actionsEl);
+      } else {
+        contentEl.appendChild(reactionsDiv);
+      }
+    }
+
+    const existingChip = reactionsDiv.querySelector(
+      '.md-comments-reaction-chip[data-md-emoji="' + emoji + '"]'
+    );
+    if (existingChip) {
+      const match = existingChip.textContent.trim().match(/\d+$/);
+      let count = match ? parseInt(match[0], 10) : 1;
+      if (existingChip.classList.contains('md-comments-reaction-active')) {
+        existingChip.classList.remove('md-comments-reaction-active');
+        count -= 1;
+        if (count <= 0) {
+          existingChip.remove();
+          if (!reactionsDiv.children.length) {
+            reactionsDiv.remove();
+          }
+          return;
+        }
+      } else {
+        existingChip.classList.add('md-comments-reaction-active');
+        count += 1;
+      }
+      existingChip.textContent = emoji + ' ' + count;
+    } else {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'md-comments-reaction-chip md-comments-reaction-active';
+      chip.setAttribute('data-md-action', 'react');
+      chip.setAttribute('data-md-target', targetId || rootId);
+      chip.setAttribute('data-md-root', rootId);
+      chip.setAttribute('data-md-type', type || 'inline');
+      chip.setAttribute('data-md-kind', kind || 'root');
+      chip.setAttribute('data-md-emoji', emoji);
+      chip.textContent = emoji + ' 1';
+      reactionsDiv.appendChild(chip);
+    }
+  }
+
+  window.mdCommentsToggleReactionOptimistic = toggleReactionOptimistic;
+
+  function getCapturedPoster() {
+    if (window.__mdCommentsCapturedPoster) {
+      return window.__mdCommentsCapturedPoster;
+    }
+    const wrap = (obj, name) => {
+      if (!obj) return;
+      if (obj.poster && typeof obj.poster.postMessage === 'function') {
+        window.__mdCommentsCapturedPoster = obj.poster;
+        window.__mdCommentsCapturedPosterSource = name;
+        return;
+      }
+      if (typeof obj.setPoster === 'function') {
+        const orig = obj.setPoster.bind(obj);
+        obj.setPoster = function (p) {
+          window.__mdCommentsCapturedPoster = p;
+          window.__mdCommentsCapturedPosterSource = name;
+          return orig(p);
+        };
+      }
+    };
+    wrap(window.cspAlerter, 'cspAlerter');
+    wrap(window.styleLoadingMonitor, 'styleLoadingMonitor');
+    return window.__mdCommentsCapturedPoster || null;
+  }
+
+  function getPreviewSource() {
+    try {
+      const el = document.getElementById('vscode-markdown-preview-data');
+      if (el) {
+        const raw = el.getAttribute('data-settings');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && parsed.source) return parsed.source;
+        }
+      }
+    } catch (err) {
+      void err;
+    }
+    return null;
+  }
+
   function postAction(payload) {
     const md = getMdPath();
     if (!md) {
       console.error('[md-comments] missing md path');
-      return;
-    }
-
-    if (typeof acquireVsCodeApi === 'function' && !window.__mdCommentsVsCodeApi) {
-      try {
-        window.__mdCommentsVsCodeApi = acquireVsCodeApi();
-      } catch {
-        // May already be acquired
-      }
-    }
-    if (
-      window.__mdCommentsVsCodeApi &&
-      typeof window.__mdCommentsVsCodeApi.postMessage === 'function'
-    ) {
-      window.__mdCommentsVsCodeApi.postMessage(Object.assign({ md: md }, payload));
       return;
     }
 
@@ -269,16 +353,68 @@
       trigger.setAttribute('rel', 'noreferrer noopener');
       trigger.setAttribute('target', '_blank');
       document.body.appendChild(trigger);
-    } else {
-      trigger.setAttribute('target', '_blank');
-      trigger.setAttribute('rel', 'noreferrer noopener');
     }
     trigger.href = uri;
-    // NOTE: In VS Code's sandboxed built-in markdown preview iframe, calling trigger.click()
-    // triggers browser navigation to a custom URI scheme. Because the sandboxed frame lacks
-    // 'allow-popups' and CSP enforces "frame-src 'self'", Chromium terminates the navigation
-    // with ERR_BLOCKED_BY_CSP, destroying the document and leaving an empty/blank screen.
-    // We update trigger.href for inspection/testing but do NOT simulate an unhandled click navigation.
+
+    if (typeof acquireVsCodeApi === 'function' && !window.__mdCommentsVsCodeApi) {
+      try {
+        window.__mdCommentsVsCodeApi = acquireVsCodeApi();
+      } catch {
+        // May already be acquired
+      }
+    }
+
+    let posted = false;
+    const poster = getCapturedPoster();
+    const source = getPreviewSource();
+    window.__mdCommentsLastAction = {
+      uri: uri,
+      hasPoster: !!poster,
+      hasVsCodeApi: !!window.__mdCommentsVsCodeApi,
+      posterType: typeof (poster?.postMessage || window.__mdCommentsVsCodeApi?.postMessage),
+      source: source,
+    };
+
+    if (poster && typeof poster.postMessage === 'function') {
+      try {
+        poster.postMessage('openLink', { href: uri });
+        window.__mdCommentsLastAction.posted = true;
+        window.__mdCommentsLastAction.method = 'poster';
+        posted = true;
+      } catch (err) {
+        window.__mdCommentsLastAction.posterError = String(err);
+        console.warn('[md-comments] poster.postMessage failed', err);
+      }
+    }
+
+    if (
+      !posted &&
+      window.__mdCommentsVsCodeApi &&
+      typeof window.__mdCommentsVsCodeApi.postMessage === 'function'
+    ) {
+      try {
+        window.__mdCommentsVsCodeApi.postMessage({
+          type: 'openLink',
+          source: source,
+          href: uri,
+        });
+        window.__mdCommentsLastAction.posted = true;
+        window.__mdCommentsLastAction.method = 'vscodeApi';
+        posted = true;
+      } catch (err) {
+        window.__mdCommentsLastAction.apiError = String(err);
+      }
+    }
+
+    if (!posted) {
+      try {
+        trigger.click();
+        window.__mdCommentsLastAction.clicked = true;
+      } catch (err) {
+        window.__mdCommentsLastAction.clickError = String(err);
+        console.warn('[md-comments] trigger.click failed', err);
+      }
+    }
   }
 
   function removeEl(id) {
@@ -473,6 +609,9 @@
       const body = textarea ? textarea.value.trim() : '';
       if (!body) {
         return;
+      }
+      if (bodyEl) {
+        bodyEl.textContent = body;
       }
       postAction({
         action: 'edit',
@@ -942,13 +1081,19 @@
     }
 
     if (action === 'react') {
+      const targetId = target.getAttribute('data-md-target');
+      const rootId = target.getAttribute('data-md-root');
+      const type = target.getAttribute('data-md-type');
+      const kind = target.getAttribute('data-md-kind') || 'root';
+      const emoji = target.getAttribute('data-md-emoji') || '';
+      toggleReactionOptimistic(targetId, rootId, type, kind, emoji);
       postAction({
         action: 'react',
-        targetId: target.getAttribute('data-md-target'),
-        rootId: target.getAttribute('data-md-root'),
-        type: target.getAttribute('data-md-type'),
-        kind: target.getAttribute('data-md-kind') || 'root',
-        emoji: target.getAttribute('data-md-emoji') || '',
+        targetId: targetId,
+        rootId: rootId,
+        type: type,
+        kind: kind,
+        emoji: emoji,
       });
       return;
     }

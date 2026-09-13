@@ -64,15 +64,6 @@ test.describe('VS Code Native Markdown Preview Integration E2E', () => {
     await expect(actionTrigger).toHaveCount(1);
     await expect(actionTrigger).toHaveAttribute('rel', /noreferrer/);
 
-    const winInfo = await previewFrame.locator('body').evaluate(() => {
-      return {
-        hasAcquireVsCodeApi: typeof (window as any).acquireVsCodeApi === 'function',
-        keys: Object.keys(window).filter((k) => k.toLowerCase().includes('vscode')),
-        hasVsCode: typeof (window as any).vscode !== 'undefined',
-      };
-    });
-    console.log('--- NATIVE PREVIEW WIN INFO ---', JSON.stringify(winInfo));
-
     // 2. Open sidebar drawer via FAB
     const fab = previewFrame.locator('#md-comments-panel-fab');
     await fab.click();
@@ -115,6 +106,71 @@ test.describe('VS Code Native Markdown Preview Integration E2E', () => {
 
     // Verify action trigger anchor receives the uri with encoded payload
     await expect(actionTrigger).toHaveAttribute('href', /action=addPage/);
+
+    const lastAction = await previewFrame
+      .locator('body')
+      .evaluate(() => (window as any).__mdCommentsLastAction);
+    console.log('LAST ACTION IN PREVIEW:', JSON.stringify(lastAction, null, 2));
+
+    await vscode.page.waitForTimeout(4000);
+
+    // Verify preview re-renders with the persisted card
+    const cardWithComment = previewFrame.locator(
+      '.md-comments-card:not(.md-comments-card-optimistic)',
+      { hasText: commentText }
+    );
+    await expect(cardWithComment).toBeVisible({ timeout: 10000 });
+    const cardHtml = await cardWithComment.evaluate((el) => el.outerHTML);
+    console.log('CARD HTML AFTER SUBMIT:', cardHtml);
+
+    // Test clicking reaction picker or emoji button on the card
+    const reactPickerBtn = cardWithComment.locator('[data-md-action="react-picker"]');
+    await expect(reactPickerBtn).toBeVisible({ timeout: 5000 });
+    await reactPickerBtn.click();
+    const emojiPopover = previewFrame.locator('#md-comments-emoji-popover');
+    await expect(emojiPopover).toBeVisible({ timeout: 3000 });
+    const firstEmoji = emojiPopover.locator('.md-comments-emoji-btn').first();
+    await firstEmoji.click();
+    // Verify popover closes after reaction pick
+    await expect(emojiPopover).toBeHidden({ timeout: 3000 });
+    const reactAction = await previewFrame
+      .locator('body')
+      .evaluate(() => (window as any).__mdCommentsLastAction);
+    console.log('REACTION ACTION IN PREVIEW:', JSON.stringify(reactAction, null, 2));
+    // Verify reaction chip is added optimistically and visible
+    const reactionChip = cardWithComment.locator('.md-comments-reaction-chip').first();
+    await expect(reactionChip).toBeVisible({ timeout: 5000 });
+
+    // Test editing the comment and verifying immediate visual update
+    const editBtn = cardWithComment.locator('.md-comments-edit-btn');
+    await expect(editBtn).toBeVisible({ timeout: 5000 });
+    await editBtn.click();
+    const editInput = cardWithComment.locator('.md-comments-editor-input');
+    await expect(editInput).toBeVisible({ timeout: 3000 });
+    await editInput.fill('Edited comment text in native preview');
+    const saveBtn = cardWithComment.locator(
+      '.md-comments-panel-composer button[data-action="submit"]'
+    );
+    await saveBtn.click();
+    const editAction = await previewFrame
+      .locator('body')
+      .evaluate(() => (window as any).__mdCommentsLastAction);
+    console.log('EDIT ACTION IN PREVIEW:', JSON.stringify(editAction, null, 2));
+    const editedCard = previewFrame.locator('.md-comments-card', {
+      hasText: 'Edited comment text in native preview',
+    });
+    await expect(editedCard).toBeVisible({ timeout: 5000 });
+
+    // 6. Refresh preview and verify changes are persisted in storage across reload
+    await vscode.page.waitForTimeout(3000);
+    await runCommand('Markdown Comments: Refresh Preview');
+    await vscode.page.waitForTimeout(3000);
+    const reloadedCard = previewFrame.locator('.md-comments-card', {
+      hasText: 'Edited comment text in native preview',
+    });
+    await expect(reloadedCard).toBeVisible({ timeout: 10000 });
+    const persistedReaction = reloadedCard.locator('.md-comments-reaction-chip').first();
+    await expect(persistedReaction).toBeVisible({ timeout: 5000 });
 
     // Verify preview layout and document remain intact and visible (NOT blank/empty screen)
     const layout = previewFrame.locator('#md-comments-layout');
