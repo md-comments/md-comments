@@ -1,10 +1,21 @@
+/* global NodeJS */
 import { execFile } from 'child_process';
 import { promisify } from 'util';
 import * as vscode from 'vscode';
-import { extractMentionLogins, isGitHubLogin } from './author';
+import { extractMentionLogins, isGitHubLogin, getCachedAuthor } from '../../shared/author';
 import type { CommentsFile, Reaction } from '../../shared/types';
 
 const execFileAsync = promisify(execFile);
+
+function getExecEnv(): NodeJS.ProcessEnv {
+  const currentPath = process.env.PATH || '';
+  const extraPaths = ['/opt/homebrew/bin', '/usr/local/bin'];
+  const missing = extraPaths.filter((p) => !currentPath.includes(p));
+  return {
+    ...process.env,
+    PATH: missing.length ? `${missing.join(':')}:${currentPath}` : currentPath,
+  };
+}
 
 const CACHE_MS = 24 * 60 * 60 * 1000;
 const FETCH_CONCURRENCY = 4;
@@ -17,11 +28,27 @@ type CacheEntry = {
 
 const displayNameCache = new Map<string, CacheEntry>();
 
+let authorDisplayNameProvider: (() => string | undefined) | undefined;
+export function registerAuthorDisplayNameProvider(fn: () => string | undefined): void {
+  authorDisplayNameProvider = fn;
+}
+
 let refreshTimer: ReturnType<typeof setTimeout> | undefined;
 let refreshScheduled = false;
 
 export function clearGitHubDisplayNameCache(): void {
   displayNameCache.clear();
+}
+
+export function setGitHubDisplayName(login: string, name: string): void {
+  const key = login.trim().toLowerCase();
+  const val = name.trim();
+  if (key && val) {
+    displayNameCache.set(key, {
+      name: val,
+      expiresAt: Date.now() + CACHE_MS,
+    });
+  }
 }
 
 function cacheEntryValid(entry: CacheEntry | undefined): entry is CacheEntry {
@@ -69,15 +96,15 @@ export function collectGitHubLogins(comments: CommentsFile): string[] {
 
 /** Cached GitHub profile full name, if known. */
 export function getGitHubDisplayName(login: string): string | undefined {
-  const key = login.trim();
+  const key = login.trim().toLowerCase();
   if (!isGitHubLogin(key)) {
     return undefined;
   }
   const entry = displayNameCache.get(key);
-  if (!cacheEntryValid(entry) || !entry.name) {
-    return undefined;
+  if (cacheEntryValid(entry) && entry.name) {
+    return entry.name;
   }
-  return entry.name;
+  return undefined;
 }
 
 function authorMatchKeys(author: string): Set<string> {
@@ -133,6 +160,16 @@ export function resolveAuthorLogin(author: string): string | undefined {
 /** Label for UI: full name when cached, otherwise the stored author string. */
 export function authorDisplayLabel(author: string): string {
   const raw = author.trim();
+  if (!raw) {
+    return raw;
+  }
+  const currentAuthor = getCachedAuthor();
+  if (currentAuthor && authorsMatch(raw, currentAuthor)) {
+    const currentName = authorDisplayNameProvider ? authorDisplayNameProvider() : undefined;
+    if (currentName && currentName !== raw) {
+      return currentName;
+    }
+  }
   if (isGitHubLogin(raw)) {
     return getGitHubDisplayName(raw) ?? raw;
   }
@@ -159,7 +196,7 @@ export function displayNamesMapForLogins(logins: string[]): Record<string, strin
  */
 export async function warmGitHubDisplayNames(logins: string[]): Promise<number> {
   const needed = logins.filter(
-    (l) => isGitHubLogin(l) && !cacheEntryValid(displayNameCache.get(l))
+    (l) => isGitHubLogin(l) && !cacheEntryValid(displayNameCache.get(l.trim().toLowerCase()))
   );
   if (!needed.length) {
     return 0;
@@ -171,8 +208,13 @@ export async function warmGitHubDisplayNames(logins: string[]): Promise<number> 
     const results = await Promise.all(batch.map((login) => fetchDisplayName(login)));
     for (let j = 0; j < batch.length; j++) {
       const login = batch[j];
+      const loginKey = login.trim().toLowerCase();
       const name = results[j];
-      displayNameCache.set(login, {
+      const existing = displayNameCache.get(loginKey);
+      if (!name && existing && existing.name) {
+        continue;
+      }
+      displayNameCache.set(loginKey, {
         name: name ?? null,
         expiresAt: Date.now() + CACHE_MS,
       });
@@ -211,6 +253,7 @@ async function fetchNameViaGhCli(login: string): Promise<string | undefined> {
   try {
     const { stdout } = await execFileAsync('gh', ['api', `users/${login}`, '-q', '.name'], {
       timeout: 6000,
+      env: getExecEnv(),
     });
     const name = stdout.trim();
     return name || undefined;

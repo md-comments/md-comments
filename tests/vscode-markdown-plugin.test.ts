@@ -108,5 +108,20 @@ describe('VS Code Markdown Preview FAB and Icon Parity', () => {
     expect(output).toContain('<h1 class="md-comments-paragraph" data-md-paragraph-index="0"');
     expect(output).toContain('<tr class="md-comments-paragraph" data-md-paragraph-index="');
     expect(output).toContain('data-md-anchor-hash="');
+    expect(output).toContain('data-md-current-author-name=');
+  });
+
+  it('verifies typography alignment with GitHub standard across previews', () => {
+    const mdCssPath = path.resolve(__dirname, '../vscode-extension/media/vscode-markdown.css');
+    const mdCss = fs.readFileSync(mdCssPath, 'utf8');
+    expect(mdCss).toMatch(/font-size:\s*var\(--vscode-markdown-font-size,\s*16px\);/);
+
+    const previewCssPath = path.resolve(__dirname, '../vscode-extension/media/preview.css');
+    const previewCss = fs.readFileSync(previewCssPath, 'utf8');
+    expect(previewCss).toMatch(/\.md-comments-card\s*\{[^}]*font-size:\s*13px;/);
+    expect(previewCss).toMatch(/\.md-comments-author\s*\{[^}]*font-size:\s*13px;/);
+    expect(previewCss).toMatch(/\.md-comments-body\s*\{[^}]*font-size:\s*13px;/);
+    expect(previewCss).toMatch(/\.md-comments-time\s*\{[^}]*font-size:\s*11px;/);
+    expect(previewCss).toMatch(/\.md-comments-tab\s*\{[^}]*font-size:\s*13px;/);
   });
 });
