@@ -14,4 +14,6 @@ _site/
 .astro/
 node_modules/
 .vscode-test/
-
+website/assets/architecture/interactive/
+website/architecture/
+architecture-site/src/content/docs/

@@ -42,7 +42,9 @@
     "allure-results",
     "allure-report",
     "test-results",
-    "website/**/embed/**"
+    "website/**/embed/**",
+    "website/assets/architecture/interactive/**",
+    "website/architecture/**"
   ],
   "overrides": [
     {

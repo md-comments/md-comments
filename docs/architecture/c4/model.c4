@@ -1,0 +1,227 @@
+specification {
+  element person {
+    style {
+      shape person
+    }
+  }
+  element softwareSystem
+  element container
+  element component
+  element datastore {
+    style {
+      shape storage
+    }
+  }
+  element webview
+  element proxy
+
+  tag localFirst
+  tag gitNative
+  tag securitySensitive
+  tag crossBrowser
+  tag telemetry
+  tag optimisticUi
+  tag inPlaceDom
+}
+
+model {
+  author = person 'Document Author' {
+    description 'Software engineer writing, editing, and previewing markdown documentation'
+  }
+
+  reviewer = person 'Pull Request Reviewer' {
+    description 'Peer engineer or technical lead reviewing markdown documentation in PRs or local editors'
+  }
+
+  aiAgent = person 'AI Coding Agent' {
+    description 'Autonomous coding agent (Antigravity, Claude Code, Cursor) creating and resolving review comments'
+  }
+
+  githubApi = softwareSystem 'GitHub REST & GraphQL API' {
+    description 'External GitHub API providing Git Data API (trees, commits, refs), OAuth Device Flow, user profiles, and commit comments'
+  }
+
+  gitRemote = softwareSystem 'Git Remote Repository' {
+    description 'Upstream Git repository hosting project source branches and the orphan refs/md-comments/data branch'
+  }
+
+  otelBackend = softwareSystem 'OpenTelemetry Backend' {
+    description 'External telemetry ingestion endpoint receiving scrubbed, anonymous performance and diagnostic metrics'
+  }
+
+  browserRegistries = softwareSystem 'Browser Extension Registries' {
+    description 'Chrome Web Store, Microsoft Edge Add-ons, Mozilla Add-ons, and Apple App Store'
+  }
+
+  mdComments = softwareSystem 'Markdown Comments' {
+    #localFirst
+    #gitNative
+    description 'Multi-platform, local-first documentation review and commenting system storing comments outside source branches'
+
+    vscodeExt = container 'VS Code Extension Subsystem' {
+      #localFirst
+      #optimisticUi
+      description 'Desktop IDE extension hosting early hooks, auth resolution, optimistic state management, and preview integration'
+      technology 'TypeScript, VS Code Extension API'
+
+      authManager = component 'Authentication Manager' {
+        description 'Multi-tier token resolver (Session -> context.secrets -> globalState -> process.env -> gh CLI -> RFC 8628 Device Flow) with onDidChangeAuthState event emitter'
+        technology 'TypeScript'
+      }
+
+      authorResolver = component 'Author Resolver' {
+        description 'Git config identity extractor (user.name/user.email) and GitHub user profile resolver with LRU caching and display name formatting'
+        technology 'TypeScript'
+      }
+
+      optimisticStore = component 'Optimistic Mutation Store' {
+        #optimisticUi
+        description 'In-memory mutation store providing resilient sequential deletions, inline edits, and instant toggle reactions'
+        technology 'TypeScript'
+      }
+
+      commentStore = component 'Comment Store' {
+        description 'Workspace-level comment lifecycle and persistence coordinator syncing local state with refs/md-comments/data'
+        technology 'TypeScript'
+      }
+
+      commentActions = component 'Comment Action Handler' {
+        description 'Action dispatch handler executing comment additions, replies, edits, reactions, and deletions without disruptive toasts'
+        technology 'TypeScript'
+      }
+
+      commentPreviewPanel = component 'Comment Preview Panel' {
+        description 'Native markdown preview coordinator, webview communicator, and custom URI handler (vscode://...)'
+        technology 'TypeScript'
+      }
+
+      markdownItPlugin = component 'Markdown-It Plugin' {
+        description 'Markdown-It parser plugin injecting anchored comment badges, script bridges, and floating FAB drawer widgets into the preview pipeline'
+        technology 'TypeScript, markdown-it'
+      }
+    }
+
+    webviewPreview = container 'Webview Preview Runtime' {
+      #inPlaceDom
+      #optimisticUi
+      description 'In-situ markdown preview webview environment hosting interactive comment cards, inline badges, and sidebar drawer'
+      technology 'HTML5, CSS3, Vanilla JavaScript'
+
+      earlyHook = component 'Early Bootstrap Hook' {
+        description 'Synchronous pre-bootstrap hook (earlyHook.js) caching acquireVsCodeApi(), polyfilling poster, and queueing action dispatches prior to module execution'
+        technology 'Vanilla JavaScript'
+      }
+
+      inplaceDomUpdater = component 'In-Place DOM Patcher' {
+        #inPlaceDom
+        description 'In-place DOM patcher (preview-webview.js, preview.js) updating comment cards, badges, and threads without reloading document DOM'
+        technology 'Vanilla JavaScript'
+      }
+
+      confirmationModal = component 'In-Webview Confirmation Modal' {
+        description 'In-webview confirmation modal (showConfirmationModal) providing resilient deletion approval without disruptive native input boxes'
+        technology 'Vanilla JavaScript'
+      }
+
+      mutationGuard = component 'MutationObserver Guard' {
+        description 'Debounced MutationObserver with strict text content equality checks guarding badge counters against recursive 100% CPU loops'
+        technology 'Vanilla JavaScript'
+      }
+
+      inlineAnchors = component 'Inline Anchors & FAB' {
+        description 'Document text anchor highlighter, gutter indicators, and floating MD FAB drawer widget'
+        technology 'Vanilla JavaScript, CSS3'
+      }
+    }
+
+    chromeExt = container 'Chrome / Edge / Firefox Extension' {
+      #crossBrowser
+      #securitySensitive
+      description 'Cross-browser Manifest V3 extension injecting comment threads onto GitHub markdown previews and raw files'
+      technology 'TypeScript, Manifest V3, WebExtensions'
+    }
+
+    safariExt = container 'macOS Safari Extension' {
+      #crossBrowser
+      description 'Native macOS Safari Web Extension packaged with AppKit host application'
+      technology 'Swift, WebKit, Manifest V2/V3'
+    }
+
+    obsidianPlugin = container 'Obsidian Plugin' {
+      #localFirst
+      description 'Obsidian Vault plugin supporting reading view anchors, live preview gutters, and sidebar commenting'
+      technology 'TypeScript, Obsidian API'
+    }
+
+    starlightPlugin = container 'Astro / Starlight Plugin' {
+      description 'Documentation theme plugin and Astro integration providing an interactive slide-over comment drawer'
+      technology 'Astro, TypeScript, CSS3'
+    }
+
+    sharedEngine = container 'Shared Domain Engine' {
+      #localFirst
+      #gitNative
+      description 'Core domain engine with FNV-1a anchor hashing, fuzzy re-anchoring, Git Data API backend, and 3-way merge logic'
+      technology 'TypeScript'
+
+      anchorEngine = component 'FNV-1a Anchoring Engine' {
+        description 'FNV-1a hash anchoring algorithm with surrounding context window and normalized fuzzy search fallback cascade'
+        technology 'TypeScript'
+      }
+
+      gitRefBackend = component 'Git Ref Storage Backend' {
+        description 'Git Data API orphan ref backend with base tree SHA resolution (GET /git/commits/:sha -> tree.sha), 3-way merge, and commit comment notifications'
+        technology 'TypeScript'
+      }
+
+      localFileBackend = component 'Local File Backend' {
+        description 'Local sidecar YAML storage backend for non-git workspaces and offline evaluation'
+        technology 'TypeScript'
+      }
+    }
+
+    telemetryProxy = container 'Telemetry Proxy' {
+      #telemetry
+      #securitySensitive
+      description 'Zero-secret OpenTelemetry proxy scrubbing customer content, file paths, and author identities'
+      technology 'TypeScript, Cloudflare Workers / Node.js'
+    }
+
+    gitRefStorage = datastore 'Git Ref Data Store' {
+      #gitNative
+      #localFirst
+      description 'Orphan git ref (refs/md-comments/data) storing versioned YAML comments completely outside source branches'
+      technology 'Git Ref, YAML'
+    }
+  }
+
+  // User & Agent Interactions
+  author -> mdComments.vscodeExt 'Edits markdown and previews comments in VS Code'
+  author -> mdComments.webviewPreview 'Interacts with preview drawer and comment threads'
+  reviewer -> mdComments.chromeExt 'Reviews PR markdown files on GitHub'
+  reviewer -> mdComments.vscodeExt 'Reviews local documentation in VS Code'
+  aiAgent -> mdComments.vscodeExt 'Reads and leaves anchored comments via agentic workflows'
+
+  // Internal Subsystem Communications
+  mdComments.vscodeExt.markdownItPlugin -> mdComments.webviewPreview 'Injects earlyHook.js, preview.css, and preview DOM elements'
+  mdComments.webviewPreview.earlyHook -> mdComments.vscodeExt.commentActions 'Dispatches actions (add, reply, edit, delete, react) via postMessage'
+  mdComments.vscodeExt.commentActions -> mdComments.vscodeExt.optimisticStore 'Stages mutations optimistically in memory'
+  mdComments.vscodeExt.optimisticStore -> mdComments.webviewPreview.inplaceDomUpdater 'Pushes state diff to patch preview DOM in-place'
+  mdComments.vscodeExt.authManager -> mdComments.vscodeExt.authorResolver 'Provides authenticated GitHub client'
+  mdComments.vscodeExt.authManager -> githubApi 'Authenticates via OAuth Device Flow (RFC 8628)'
+  mdComments.vscodeExt.authorResolver -> githubApi 'Resolves user profiles and avatars'
+  mdComments.vscodeExt.commentStore -> mdComments.sharedEngine.gitRefBackend 'Synchronizes threads with Git backend'
+  mdComments.vscodeExt.commentStore -> mdComments.sharedEngine.localFileBackend 'Persists threads to local YAML when offline'
+  mdComments.vscodeExt.commentPreviewPanel -> mdComments.webviewPreview 'Hosts webview and sends initial comment payload'
+
+  // Shared Engine & External Integrations
+  mdComments.sharedEngine.gitRefBackend -> githubApi 'Fetches commit parent, base tree SHA, and creates trees/commits'
+  mdComments.sharedEngine.gitRefBackend -> mdComments.gitRefStorage 'Reads and writes refs/md-comments/data'
+  mdComments.gitRefStorage -> gitRemote 'Pushed and fetched from git remote'
+  mdComments.chromeExt -> githubApi 'Interacts with GitHub Git Data API via Device Flow'
+  mdComments.chromeExt -> mdComments.sharedEngine 'Uses anchor matching and YAML serialization'
+  mdComments.obsidianPlugin -> mdComments.sharedEngine 'Uses anchor matching and local storage'
+  mdComments.starlightPlugin -> mdComments.sharedEngine 'Uses anchor matching and client drawer'
+  mdComments.vscodeExt -> mdComments.telemetryProxy 'Transmits scrubbed, anonymous telemetry payloads'
+  mdComments.telemetryProxy -> otelBackend 'Forwards sanitized telemetry spans'
+}

@@ -1,0 +1,67 @@
+vars: {
+  d2-config: {
+    layout-engine: elk
+  }
+}
+
+title: "DFD Level 0: System Context - Markdown Comments" {
+  near: top-center
+  shape: text
+  style.font-size: 24
+  style.bold: true
+}
+
+# External Entities
+author: "Document Author" {
+  shape: person
+  style.fill: "#e0e7ff"
+  style.stroke: "#6366f1"
+}
+
+reviewer: "Pull Request Reviewer" {
+  shape: person
+  style.fill: "#e0e7ff"
+  style.stroke: "#6366f1"
+}
+
+github: "GitHub REST & GraphQL API" {
+  shape: cloud
+  style.fill: "#f3f4f6"
+  style.stroke: "#374151"
+}
+
+git_remote: "Git Remote Host\n(refs/md-comments/data)" {
+  shape: cylinder
+  style.fill: "#fef3c7"
+  style.stroke: "#d97706"
+}
+
+otel: "OpenTelemetry Collector" {
+  shape: cloud
+  style.fill: "#dcfce7"
+  style.stroke: "#16a34a"
+}
+
+# Central Process
+system: "Markdown Comments Core Processing Engine\n(VS Code / Chrome / Safari / Obsidian / Starlight)" {
+  shape: oval
+  style.fill: "#6366f1"
+  style.stroke: "#4338ca"
+  style.font-color: "#ffffff"
+  style.bold: true
+}
+
+# Data Flows
+author -> system: "1. Select markdown text & draft comments"
+system -> author: "2. Render in-situ badges, cards & FAB drawer"
+
+reviewer -> system: "3. Post review replies & reactions"
+system -> reviewer: "4. Display anchored comment threads"
+
+system -> github: "5. OAuth Device Flow auth & query tree SHAs"
+github -> system: "6. Auth tokens, user profiles & commit metadata"
+
+system -> git_remote: "7. Push versioned YAML to refs/md-comments/data"
+git_remote -> system: "8. Pull remote comment threads"
+
+system -> otel: "9. Anonymized, PII-scrubbed telemetry spans"

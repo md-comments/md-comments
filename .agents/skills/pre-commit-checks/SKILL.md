@@ -86,8 +86,16 @@ Run the following checks from the root directory:
 
 9. **Test Enhancement & Knowledge Graph Co-Evolution Check**:
    - **Test Evolution**: Verify that every modified source file is accompanied by new or updated tests under `tests/`. Commits modifying features, bug fixes, or logic without test enhancements are prohibited.
-   - **Knowledge Graph Sync**: If any feature, flow, or invariant was added or altered, verify that `shared/knowledge-graph/` is updated. Run `pnpm test tests/knowledgeGraph.test.ts` to confirm graph integrity.
+   - **Knowledge Graph Sync**: If any feature, flow, or invariant was added or altered, verify that `shared/knowledge-graph/` is updated. Run `pnpm test tests/qualityGraph.test.ts` to confirm graph integrity.
    - **100% Coverage Gate**: Run `pnpm test:coverage` to confirm that 100% test coverage thresholds are preserved.
+
+10. **Architecture Documentation Verification**:
+
+    ```bash
+    pnpm verify:arch
+    ```
+
+    _Verifies that LikeC4 architecture models, D2 diagrams with the ELK layout engine, monorepo package parity, preview runtime components, and invariants remain synchronized with code changes._
 
 ## Execution Workflow
 

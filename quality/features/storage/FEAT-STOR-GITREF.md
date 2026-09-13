@@ -15,6 +15,7 @@ verifiedIn:
   - 'tests/gitRefBackend.test.ts'
 invariants:
   - 'INV-FAST-FORWARD-RETRY'
+  - 'INV-BASE-TREE-SHA'
 minCoverage: 100
 ---
 

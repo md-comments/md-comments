@@ -15,6 +15,7 @@ verifiedIn:
   - 'tests/vscode-github-auth-persistence.test.ts'
 invariants:
   - 'INV-OAUTH-ONLY'
+  - 'INV-AUTH-PERSISTENCE'
 minCoverage: 100
 ---
 

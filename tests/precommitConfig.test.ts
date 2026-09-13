@@ -17,8 +17,10 @@ describe('Pre-Commit & CI Configuration Invariants', () => {
     const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
 
     expect(pkg.scripts['verify:packaging']).toBe('node scripts/verify-packaging-compat.js');
+    expect(pkg.scripts['verify:arch']).toBe('node scripts/verify-architecture-docs.mjs');
     expect(pkg.scripts.prepare).toContain('core.hooksPath .githooks');
     expect(pkg.scripts.check).toContain('pnpm verify:packaging');
+    expect(pkg.scripts.check).toContain('pnpm verify:arch');
   });
 
   it('verifies .eslintrc.json ignorePatterns covers all report and generated directories', () => {
@@ -34,6 +36,7 @@ describe('Pre-Commit & CI Configuration Invariants', () => {
       'allure-results',
       'allure-report',
       'website/**/embed/**',
+      'website/assets/architecture/interactive/**',
     ];
 
     for (const pattern of requiredPatterns) {
@@ -67,6 +70,7 @@ describe('Pre-Commit & CI Configuration Invariants', () => {
 
     const content = fs.readFileSync(hookPath, 'utf8');
     expect(content).toContain('verify-packaging-compat.js');
+    expect(content).toContain('verify:arch');
     expect(content).toContain('pnpm format:check');
     expect(content).toContain('pnpm lint');
     expect(content).toContain('pnpm typecheck');

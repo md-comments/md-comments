@@ -1,0 +1,419 @@
+<!DOCTYPE html><html lang="en" dir="ltr" data-theme="dark" data-has-toc data-has-sidebar class="astro-uvjsjalx"> <head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Invariants & ADR Catalog | Markdown Comments Architecture</title><link rel="canonical"/><link rel="shortcut icon" href="/architecture/favicon.svg" type="image/svg+xml"/><meta name="generator" content="Astro v5.18.2"/><meta name="generator" content="Starlight v0.32.6"/><meta property="og:title" content="Invariants &#38; ADR Catalog"/><meta property="og:type" content="article"/><meta property="og:url"/><meta property="og:locale" content="en"/><meta property="og:description" content="Formal architectural invariants and Architectural Decision Records governing system safety."/><meta property="og:site_name" content="Markdown Comments Architecture"/><meta name="twitter:card" content="summary_large_image"/><meta name="description" content="Formal architectural invariants and Architectural Decision Records governing system safety."/><script>
+	window.StarlightThemeProvider = (() => {
+		const storedTheme =
+			typeof localStorage !== 'undefined' && localStorage.getItem('starlight-theme');
+		const theme =
+			storedTheme ||
+			(window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+		document.documentElement.dataset.theme = theme === 'light' ? 'light' : 'dark';
+		return {
+			updatePickers(theme = storedTheme || 'auto') {
+				document.querySelectorAll('starlight-theme-select').forEach((picker) => {
+					const select = picker.querySelector('select');
+					if (select) select.value = theme;
+					/** @type {HTMLTemplateElement | null} */
+					const tmpl = document.querySelector(`#theme-icons`);
+					const newIcon = tmpl && tmpl.content.querySelector('.' + theme);
+					if (newIcon) {
+						const oldIcon = picker.querySelector('svg.label-icon');
+						if (oldIcon) {
+							oldIcon.replaceChildren(...newIcon.cloneNode(true).childNodes);
+						}
+					}
+				});
+			},
+		};
+	})();
+</script><template id="theme-icons"><svg aria-hidden="true" class="light astro-sa3d62b7" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M5 12a1 1 0 0 0-1-1H3a1 1 0 0 0 0 2h1a1 1 0 0 0 1-1Zm.64 5-.71.71a1 1 0 0 0 0 1.41 1 1 0 0 0 1.41 0l.71-.71A1 1 0 0 0 5.64 17ZM12 5a1 1 0 0 0 1-1V3a1 1 0 0 0-2 0v1a1 1 0 0 0 1 1Zm5.66 2.34a1 1 0 0 0 .7-.29l.71-.71a1 1 0 1 0-1.41-1.41l-.66.71a1 1 0 0 0 0 1.41 1 1 0 0 0 .66.29Zm-12-.29a1 1 0 0 0 1.41 0 1 1 0 0 0 0-1.41l-.71-.71a1.004 1.004 0 1 0-1.43 1.41l.73.71ZM21 11h-1a1 1 0 0 0 0 2h1a1 1 0 0 0 0-2Zm-2.64 6A1 1 0 0 0 17 18.36l.71.71a1 1 0 0 0 1.41 0 1 1 0 0 0 0-1.41l-.76-.66ZM12 6.5a5.5 5.5 0 1 0 5.5 5.5A5.51 5.51 0 0 0 12 6.5Zm0 9a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Zm0 3.5a1 1 0 0 0-1 1v1a1 1 0 0 0 2 0v-1a1 1 0 0 0-1-1Z"/></svg> <svg aria-hidden="true" class="dark astro-sa3d62b7" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M21.64 13a1 1 0 0 0-1.05-.14 8.049 8.049 0 0 1-3.37.73 8.15 8.15 0 0 1-8.14-8.1 8.59 8.59 0 0 1 .25-2A1 1 0 0 0 8 2.36a10.14 10.14 0 1 0 14 11.69 1 1 0 0 0-.36-1.05Zm-9.5 6.69A8.14 8.14 0 0 1 7.08 5.22v.27a10.15 10.15 0 0 0 10.14 10.14 9.784 9.784 0 0 0 2.1-.22 8.11 8.11 0 0 1-7.18 4.32v-.04Z"/></svg> <svg aria-hidden="true" class="auto astro-sa3d62b7" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M21 14h-1V7a3 3 0 0 0-3-3H7a3 3 0 0 0-3 3v7H3a1 1 0 0 0-1 1v2a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-2a1 1 0 0 0-1-1ZM6 7a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v7H6V7Zm14 10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-1h16v1Z"/></svg> </template><link rel="stylesheet" href="/architecture/_astro/print.BJ0teN4y.css" media="print"><link rel="stylesheet" href="/architecture/_astro/index.DhkuLxYb.css"><script type="module" src="/architecture/_astro/page.B1D-nYk3.js"></script></head> <body class="astro-uvjsjalx"> <a href="#_top" class="astro-4g72sn7y">Skip to content</a>  <div class="page sl-flex astro-uvnk3mvk"> <header class="header astro-uvnk3mvk"><div class="header sl-flex astro-3ef6ksr2"> <div class="sl-flex astro-3ef6ksr2"> <a href="/architecture/" class="site-title sl-flex astro-224bqhuy">  <span class="astro-224bqhuy" translate="no"> Markdown Comments Architecture </span> </a>  </div> <div class="sl-flex header-right-actions astro-3ef6ksr2"> <site-search class="astro-3ef6ksr2 astro-emndsiww" data-translations="{&#34;placeholder&#34;:&#34;Search&#34;}"> <button data-open-modal disabled aria-label="Search" aria-keyshortcuts="Control+K" class="astro-emndsiww"> <svg aria-hidden="true" class="astro-emndsiww astro-sa3d62b7" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M21.71 20.29 18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a.999.999 0 0 0 1.42 0 1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z"/></svg>  <span class="sl-hidden md:sl-block astro-emndsiww" aria-hidden="true">Search</span> <kbd class="sl-hidden md:sl-flex astro-emndsiww" style="display: none;"> <kbd class="astro-emndsiww">Ctrl</kbd><kbd class="astro-emndsiww">K</kbd> </kbd> </button> <dialog style="padding:0" aria-label="Search" class="astro-emndsiww"> <div class="dialog-frame sl-flex astro-emndsiww">  <button data-close-modal class="sl-flex md:sl-hidden astro-emndsiww"> Cancel </button> <div class="search-container astro-emndsiww"> <div id="starlight__search" class="astro-emndsiww"></div> </div> </div> </dialog> </site-search>  <script>
+	(() => {
+		const openBtn = document.querySelector('button[data-open-modal]');
+		const shortcut = openBtn?.querySelector('kbd');
+		if (!openBtn || !(shortcut instanceof HTMLElement)) return;
+		const platformKey = shortcut.querySelector('kbd');
+		if (platformKey && /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)) {
+			platformKey.textContent = '⌘';
+			openBtn.setAttribute('aria-keyshortcuts', 'Meta+K');
+		}
+		shortcut.style.display = '';
+	})();
+</script> <script type="module" src="/architecture/_astro/Search.astro_astro_type_script_index_0_lang.DX8jrZgA.js"></script>   <div class="sl-flex social-theme-group astro-3ef6ksr2"> <a href="/assets/architecture/interactive/index.html" target="_blank" rel="noopener" class="likec4-header-btn astro-3ef6ksr2" title="Open full-screen interactive LikeC4 viewer"> <span class="astro-3ef6ksr2">Interactive LikeC4 &nearr;</span> </a> <a href="https://github.com/md-comments/md-comments" rel="me" class="sl-flex astro-ebgukgsv"><span class="sr-only astro-ebgukgsv">GitHub</span><svg aria-hidden="true" class="astro-ebgukgsv astro-sa3d62b7" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M12 .3a12 12 0 0 0-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.08 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 0 1 1.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .31.2.69.82.57A12 12 0 0 0 12 .3Z"/></svg> </a> <starlight-theme-select>  <label style="--sl-select-width: 6.25em" class="astro-o3b4a3nv"> <span class="sr-only astro-o3b4a3nv">Select theme</span> <svg aria-hidden="true" class="icon label-icon astro-o3b4a3nv astro-sa3d62b7" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M21 14h-1V7a3 3 0 0 0-3-3H7a3 3 0 0 0-3 3v7H3a1 1 0 0 0-1 1v2a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-2a1 1 0 0 0-1-1ZM6 7a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v7H6V7Zm14 10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-1h16v1Z"/></svg>  <select value="auto" autocomplete="off" class="astro-o3b4a3nv"> <option value="dark" class="astro-o3b4a3nv">Dark</option><option value="light" class="astro-o3b4a3nv">Light</option><option value="auto" selected class="astro-o3b4a3nv">Auto</option> </select> <svg aria-hidden="true" class="icon caret astro-o3b4a3nv astro-sa3d62b7" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M17 9.17a1 1 0 0 0-1.41 0L12 12.71 8.46 9.17a1 1 0 1 0-1.41 1.42l4.24 4.24a1.002 1.002 0 0 0 1.42 0L17 10.59a1.002 1.002 0 0 0 0-1.42Z"/></svg>  </label>  </starlight-theme-select>  <script>
+	StarlightThemeProvider.updatePickers();
+</script> <script type="module">const r="starlight-theme",o=e=>e==="auto"||e==="dark"||e==="light"?e:"auto",c=()=>o(typeof localStorage<"u"&&localStorage.getItem(r));function n(e){typeof localStorage<"u"&&localStorage.setItem(r,e==="light"||e==="dark"?e:"")}const l=()=>matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";function t(e){StarlightThemeProvider.updatePickers(e),document.documentElement.dataset.theme=e==="auto"?l():e,n(e)}matchMedia("(prefers-color-scheme: light)").addEventListener("change",()=>{c()==="auto"&&t("auto")});class s extends HTMLElement{constructor(){super(),t(c()),this.querySelector("select")?.addEventListener("change",a=>{a.currentTarget instanceof HTMLSelectElement&&t(o(a.currentTarget.value))})}}customElements.define("starlight-theme-select",s);</script> </div> </div> </div>  <script>
+  (function () {
+    function initDiagramZoom() {
+      if (document.getElementById('sl-zoom-modal')) return;
+
+      const modal = document.createElement('div');
+      modal.id = 'sl-zoom-modal';
+      modal.className = 'sl-diagram-zoom-modal';
+      modal.setAttribute('aria-hidden', 'true');
+      modal.innerHTML = `
+        <button id="sl-zoom-close" class="sl-diagram-close-btn" aria-label="Close">&times;</button>
+        <div id="sl-zoom-viewport" class="sl-diagram-zoom-viewport">
+          <img id="sl-zoom-img" src="" alt="Zoomed Diagram" />
+        </div>
+        <div class="sl-diagram-zoom-controls">
+          <button id="sl-zoom-out" class="sl-diagram-zoom-btn" title="Zoom Out">&minus;</button>
+          <span id="sl-zoom-level" class="sl-diagram-zoom-text">100%</span>
+          <button id="sl-zoom-in" class="sl-diagram-zoom-btn" title="Zoom In">&plus;</button>
+          <button id="sl-zoom-reset" class="sl-diagram-zoom-btn" title="Reset Zoom">&#x21bb;</button>
+        </div>
+      `;
+      document.body.appendChild(modal);
+
+      const viewport = modal.querySelector('#sl-zoom-viewport');
+      const img = modal.querySelector('#sl-zoom-img');
+      const levelText = modal.querySelector('#sl-zoom-level');
+      const closeBtn = modal.querySelector('#sl-zoom-close');
+      const zoomInBtn = modal.querySelector('#sl-zoom-in');
+      const zoomOutBtn = modal.querySelector('#sl-zoom-out');
+      const resetBtn = modal.querySelector('#sl-zoom-reset');
+
+      let currentScale = 1;
+      let posX = 0;
+      let posY = 0;
+      let isDragging = false;
+      let startX = 0;
+      let startY = 0;
+
+      function updateTransform() {
+        if (!img) return;
+        img.style.transform = `translate(${posX}px, ${posY}px) scale(${currentScale})`;
+        if (levelText) levelText.textContent = `${Math.round(currentScale * 100)}%`;
+      }
+
+      function resetZoom() {
+        currentScale = 1;
+        posX = 0;
+        posY = 0;
+        updateTransform();
+      }
+
+      function openModal(src) {
+        if (!modal || !img || !src) return;
+        img.src = src;
+        resetZoom();
+        modal.classList.add('active');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeModal() {
+        if (!modal) return;
+        modal.classList.remove('active');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+
+      closeBtn.addEventListener('click', closeModal);
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal || e.target === viewport) closeModal();
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
+      });
+
+      zoomInBtn.addEventListener('click', () => {
+        currentScale = Math.min(currentScale * 1.3, 6);
+        updateTransform();
+      });
+
+      zoomOutBtn.addEventListener('click', () => {
+        currentScale = Math.max(currentScale / 1.3, 0.4);
+        updateTransform();
+      });
+
+      resetBtn.addEventListener('click', resetZoom);
+
+      viewport.addEventListener(
+        'wheel',
+        (e) => {
+          e.preventDefault();
+          const delta = e.deltaY < 0 ? 1.15 : 0.87;
+          currentScale = Math.max(0.4, Math.min(6, currentScale * delta));
+          updateTransform();
+        },
+        { passive: false }
+      );
+
+      viewport.addEventListener('mousedown', (e) => {
+        if (e.button !== 0) return;
+        isDragging = true;
+        startX = e.clientX - posX;
+        startY = e.clientY - posY;
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        posX = e.clientX - startX;
+        posY = e.clientY - startY;
+        updateTransform();
+      });
+
+      window.addEventListener('mouseup', () => {
+        isDragging = false;
+      });
+
+      function bindImages() {
+        const images = document.querySelectorAll('.sl-markdown-content img, .sl-diagram-clickable');
+        images.forEach((el) => {
+          if (el.id === 'sl-zoom-img') return;
+          // Do not enlarge images that are inside links, or are badges/shields
+          if (
+            el.closest('a') ||
+            el.src.includes('shields.io') ||
+            el.src.includes('badge') ||
+            (el.alt && el.alt.toLowerCase().includes('badge'))
+          ) {
+            return;
+          }
+          el.classList.add('sl-diagram-clickable');
+          el.setAttribute('title', 'Click to zoom and pan diagram');
+          el.onclick = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            openModal(el.src);
+          };
+        });
+      }
+
+      bindImages();
+      document.addEventListener('astro:page-load', bindImages);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initDiagramZoom);
+    } else {
+      initDiagramZoom();
+    }
+  })();
+</script></header> <nav class="sidebar print:hidden astro-uvnk3mvk" aria-label="Main"> <starlight-menu-button class="print:hidden astro-qcf52x2y"> <button aria-expanded="false" aria-label="Menu" aria-controls="starlight__sidebar" class="sl-flex md:sl-hidden astro-qcf52x2y"> <svg aria-hidden="true" class="astro-qcf52x2y astro-sa3d62b7" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M3 8h18a1 1 0 1 0 0-2H3a1 1 0 0 0 0 2Zm18 8H3a1 1 0 0 0 0 2h18a1 1 0 0 0 0-2Zm0-5H3a1 1 0 0 0 0 2h18a1 1 0 0 0 0-2Z"/></svg>  </button> </starlight-menu-button> <script type="module">class s extends HTMLElement{constructor(){super(),this.btn=this.querySelector("button"),this.btn.addEventListener("click",()=>this.toggleExpanded());const t=this.closest("nav");t&&t.addEventListener("keyup",e=>this.closeOnEscape(e))}setExpanded(t){this.setAttribute("aria-expanded",String(t)),document.body.toggleAttribute("data-mobile-menu-expanded",t)}toggleExpanded(){this.setExpanded(this.getAttribute("aria-expanded")!=="true")}closeOnEscape(t){t.code==="Escape"&&(this.setExpanded(!1),this.btn.focus())}}customElements.define("starlight-menu-button",s);</script>   <div id="starlight__sidebar" class="sidebar-pane astro-uvnk3mvk"> <div class="sidebar-content sl-flex astro-uvnk3mvk"> <sl-sidebar-state-persist data-hash="0aaon8i" class="astro-zhbgktlr"> <script aria-hidden="true">
+		(() => {
+			try {
+				if (!matchMedia('(min-width: 50em)').matches) return;
+				/** @type {HTMLElement | null} */
+				const target = document.querySelector('sl-sidebar-state-persist');
+				const state = JSON.parse(sessionStorage.getItem('sl-sidebar-state') || '0');
+				if (!target || !state || target.dataset.hash !== state.hash) return;
+				window._starlightScrollRestore = state.scroll;
+				customElements.define(
+					'sl-sidebar-restore',
+					class SidebarRestore extends HTMLElement {
+						connectedCallback() {
+							try {
+								const idx = parseInt(this.dataset.index || '');
+								const details = this.closest('details');
+								if (details && typeof state.open[idx] === 'boolean') details.open = state.open[idx];
+							} catch {}
+						}
+					}
+				);
+			} catch {}
+		})();
+	</script>  <ul class="top-level astro-xhresm6k"> <li class="astro-xhresm6k"> <details open class="astro-xhresm6k"> <sl-sidebar-restore data-index="0"></sl-sidebar-restore> <summary class="astro-xhresm6k"> <div class="group-label astro-xhresm6k"> <span class="large astro-xhresm6k">Overview</span>  </div> <svg aria-hidden="true" class="caret astro-xhresm6k astro-sa3d62b7" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg>  </summary> <ul class="astro-xhresm6k"> <li class="astro-xhresm6k"> <a href="/architecture/" aria-current="false" class="astro-xhresm6k"> <span class="astro-xhresm6k">Architecture Overview</span>  </a> </li> </ul>  </details> </li><li class="astro-xhresm6k"> <details open class="astro-xhresm6k"> <sl-sidebar-restore data-index="1"></sl-sidebar-restore> <summary class="astro-xhresm6k"> <div class="group-label astro-xhresm6k"> <span class="large astro-xhresm6k">Interactive Model Explorer</span>  </div> <svg aria-hidden="true" class="caret astro-xhresm6k astro-sa3d62b7" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg>  </summary> <ul class="astro-xhresm6k"> <li class="astro-xhresm6k"> <a href="/architecture/assets/architecture/interactive/index" aria-current="false" class="astro-xhresm6k" target="_blank" rel="noopener"> <span class="astro-xhresm6k">Interactive LikeC4 ↗</span>  </a> </li> </ul>  </details> </li><li class="astro-xhresm6k"> <details open class="astro-xhresm6k"> <sl-sidebar-restore data-index="2"></sl-sidebar-restore> <summary class="astro-xhresm6k"> <div class="group-label astro-xhresm6k"> <span class="large astro-xhresm6k">C4 Architecture (Vector)</span>  </div> <svg aria-hidden="true" class="caret astro-xhresm6k astro-sa3d62b7" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg>  </summary> <ul class="astro-xhresm6k"> <li class="astro-xhresm6k"> <a href="/architecture/architecture/c4-architecture/" aria-current="false" class="astro-xhresm6k"> <span class="astro-xhresm6k">C4 Architecture Specifications</span>  </a> </li> </ul>  </details> </li><li class="astro-xhresm6k"> <details open class="astro-xhresm6k"> <sl-sidebar-restore data-index="3"></sl-sidebar-restore> <summary class="astro-xhresm6k"> <div class="group-label astro-xhresm6k"> <span class="large astro-xhresm6k">Data Flow Diagrams (D2 + ELK)</span>  </div> <svg aria-hidden="true" class="caret astro-xhresm6k astro-sa3d62b7" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg>  </summary> <ul class="astro-xhresm6k"> <li class="astro-xhresm6k"> <a href="/architecture/architecture/data-flow-diagrams/" aria-current="false" class="astro-xhresm6k"> <span class="astro-xhresm6k">Data Flow Specifications</span>  </a> </li> </ul>  </details> </li><li class="astro-xhresm6k"> <details open class="astro-xhresm6k"> <sl-sidebar-restore data-index="4"></sl-sidebar-restore> <summary class="astro-xhresm6k"> <div class="group-label astro-xhresm6k"> <span class="large astro-xhresm6k">Component Topology</span>  </div> <svg aria-hidden="true" class="caret astro-xhresm6k astro-sa3d62b7" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg>  </summary> <ul class="astro-xhresm6k"> <li class="astro-xhresm6k"> <a href="/architecture/architecture/components-integration/" aria-current="false" class="astro-xhresm6k"> <span class="astro-xhresm6k">Components Integration</span>  </a> </li><li class="astro-xhresm6k"> <a href="/architecture/architecture/sequence-diagrams/" aria-current="false" class="astro-xhresm6k"> <span class="astro-xhresm6k">Sequence Diagrams</span>  </a> </li> </ul>  </details> </li><li class="astro-xhresm6k"> <details open class="astro-xhresm6k"> <sl-sidebar-restore data-index="5"></sl-sidebar-restore> <summary class="astro-xhresm6k"> <div class="group-label astro-xhresm6k"> <span class="large astro-xhresm6k">Invariants &amp; ADRs</span>  </div> <svg aria-hidden="true" class="caret astro-xhresm6k astro-sa3d62b7" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg>  </summary> <ul class="astro-xhresm6k"> <li class="astro-xhresm6k"> <a href="/architecture/architecture/invariants-and-adrs/" aria-current="page" class="astro-xhresm6k"> <span class="astro-xhresm6k">Invariants &amp; ADR Catalog</span>  </a> </li> </ul>  </details> </li><li class="astro-xhresm6k"> <details open class="astro-xhresm6k"> <sl-sidebar-restore data-index="6"></sl-sidebar-restore> <summary class="astro-xhresm6k"> <div class="group-label astro-xhresm6k"> <span class="large astro-xhresm6k">Developer Guides</span>  </div> <svg aria-hidden="true" class="caret astro-xhresm6k astro-sa3d62b7" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg>  </summary> <ul class="astro-xhresm6k"> <li class="astro-xhresm6k"> <a href="/architecture/guides/agentic-ai-workflows/" aria-current="false" class="astro-xhresm6k"> <span class="astro-xhresm6k">Agentic AI Workflows</span>  </a> </li><li class="astro-xhresm6k"> <a href="/architecture/guides/safari-extension-guide/" aria-current="false" class="astro-xhresm6k"> <span class="astro-xhresm6k">Safari Extension Guide</span>  </a> </li><li class="astro-xhresm6k"> <a href="/architecture/guides/starlight-plugin/" aria-current="false" class="astro-xhresm6k"> <span class="astro-xhresm6k">Starlight Plugin Guide</span>  </a> </li> </ul>  </details> </li> </ul>   <script aria-hidden="true">
+		(() => {
+			const scroller = document.getElementById('starlight__sidebar');
+			if (!window._starlightScrollRestore || !scroller) return;
+			scroller.scrollTop = window._starlightScrollRestore;
+			delete window._starlightScrollRestore;
+		})();
+	</script> </sl-sidebar-state-persist>  <div class="md:sl-hidden"> <div class="mobile-preferences sl-flex astro-5fpo2re2"> <div class="sl-flex social-icons astro-5fpo2re2"> <a href="https://github.com/md-comments/md-comments" rel="me" class="sl-flex astro-ebgukgsv"><span class="sr-only astro-ebgukgsv">GitHub</span><svg aria-hidden="true" class="astro-ebgukgsv astro-sa3d62b7" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M12 .3a12 12 0 0 0-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.08 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 0 1 1.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .31.2.69.82.57A12 12 0 0 0 12 .3Z"/></svg> </a> </div> <starlight-theme-select>  <label style="--sl-select-width: 6.25em" class="astro-o3b4a3nv"> <span class="sr-only astro-o3b4a3nv">Select theme</span> <svg aria-hidden="true" class="icon label-icon astro-o3b4a3nv astro-sa3d62b7" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M21 14h-1V7a3 3 0 0 0-3-3H7a3 3 0 0 0-3 3v7H3a1 1 0 0 0-1 1v2a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-2a1 1 0 0 0-1-1ZM6 7a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v7H6V7Zm14 10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-1h16v1Z"/></svg>  <select value="auto" autocomplete="off" class="astro-o3b4a3nv"> <option value="dark" class="astro-o3b4a3nv">Dark</option><option value="light" class="astro-o3b4a3nv">Light</option><option value="auto" selected class="astro-o3b4a3nv">Auto</option> </select> <svg aria-hidden="true" class="icon caret astro-o3b4a3nv astro-sa3d62b7" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M17 9.17a1 1 0 0 0-1.41 0L12 12.71 8.46 9.17a1 1 0 1 0-1.41 1.42l4.24 4.24a1.002 1.002 0 0 0 1.42 0L17 10.59a1.002 1.002 0 0 0 0-1.42Z"/></svg>  </label>  </starlight-theme-select>  <script>
+	StarlightThemeProvider.updatePickers();
+</script>  <script type="module">class s extends HTMLElement{constructor(){super();const e=this.querySelector("select");e&&(e.addEventListener("change",t=>{t.currentTarget instanceof HTMLSelectElement&&(window.location.pathname=t.currentTarget.value)}),window.addEventListener("pageshow",t=>{if(!t.persisted)return;const n=e.querySelector("option[selected]")?.index;n!==e.selectedIndex&&(e.selectedIndex=n??0)}))}}customElements.define("starlight-lang-select",s);</script> </div>  </div> </div> </div> </nav> <div class="main-frame astro-uvnk3mvk">  <script type="module">const a=document.getElementById("starlight__sidebar"),n=a?.querySelector("sl-sidebar-state-persist"),o="sl-sidebar-state",i=()=>{let t=[];const e=n?.dataset.hash||"";try{const s=sessionStorage.getItem(o),r=JSON.parse(s||"{}");Array.isArray(r.open)&&r.hash===e&&(t=r.open)}catch{}return{hash:e,open:t,scroll:a?.scrollTop||0}},c=t=>{try{sessionStorage.setItem(o,JSON.stringify(t))}catch{}},d=()=>c(i()),l=(t,e)=>{const s=i();s.open[e]=t,c(s)};n?.addEventListener("click",t=>{if(!(t.target instanceof Element))return;const e=t.target.closest("summary")?.closest("details");if(!e)return;const s=e.querySelector("sl-sidebar-restore"),r=parseInt(s?.dataset.index||"");isNaN(r)||l(!e.open,r)});addEventListener("visibilitychange",()=>{document.visibilityState==="hidden"&&d()});addEventListener("pageHide",d);</script> <div class="lg:sl-flex astro-vws3shzl"> <aside class="right-sidebar-container print:hidden astro-vws3shzl"> <div class="right-sidebar astro-vws3shzl"> <script type="module" src="/architecture/_astro/MobileTableOfContents.astro_astro_type_script_index_0_lang.C181hMzK.js"></script><script type="module" src="/architecture/_astro/TableOfContents.astro_astro_type_script_index_0_lang.CKWWgpjV.js"></script><div class="lg:sl-hidden astro-r5jn23w3"><mobile-starlight-toc data-min-h="2" data-max-h="3" class="astro-zcjdldat"><nav aria-labelledby="starlight__on-this-page--mobile" class="astro-zcjdldat"><details id="starlight__mobile-toc" class="astro-zcjdldat"><summary id="starlight__on-this-page--mobile" class="sl-flex astro-zcjdldat"><div class="toggle sl-flex astro-zcjdldat">On this page<svg aria-hidden="true" class="caret astro-zcjdldat astro-sa3d62b7" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </div><span class="display-current astro-zcjdldat"></span></summary><div class="dropdown astro-zcjdldat"><ul class="isMobile astro-fiwyypmo" style="--depth: 0;"> <li class="astro-fiwyypmo" style="--depth: 0;"> <a href="#_top" class="astro-fiwyypmo" style="--depth: 0;"> <span class="astro-fiwyypmo" style="--depth: 0;">Overview</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 0;"> <a href="#part-i-the-14-system-invariants" class="astro-fiwyypmo" style="--depth: 0;"> <span class="astro-fiwyypmo" style="--depth: 0;">Part I: The 14 System Invariants</span> </a> <ul class="isMobile astro-fiwyypmo" style="--depth: 1;"> <li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#invariant-details" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">Invariant Details</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#1-inv-oauth-only-no-pats" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">1. INV-OAUTH-ONLY (No PATs)</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#2-inv-fast-forward-retry" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">2. INV-FAST-FORWARD-RETRY</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#3-inv-zero-client-secrets" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">3. INV-ZERO-CLIENT-SECRETS</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#4-inv-zero-customer-data" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">4. INV-ZERO-CUSTOMER-DATA</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#5-inv-telemetry-killswitch" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">5. INV-TELEMETRY-KILLSWITCH</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#6-inv-visual-parity" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">6. INV-VISUAL-PARITY</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#7-inv-xss-sanitized" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">7. INV-XSS-SANITIZED</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#8-inv-quota-defense" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">8. INV-QUOTA-DEFENSE</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#9-inv-in-place-preview" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">9. INV-IN-PLACE-PREVIEW</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#10-inv-mutation-guard" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">10. INV-MUTATION-GUARD</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#11-inv-base-tree-sha" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">11. INV-BASE-TREE-SHA</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#12-inv-auth-persistence" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">12. INV-AUTH-PERSISTENCE</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#13-inv-modal-confirmation" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">13. INV-MODAL-CONFIRMATION</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#14-inv-silent-bg-refresh" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">14. INV-SILENT-BG-REFRESH</span> </a>  </li> </ul>  </li><li class="astro-fiwyypmo" style="--depth: 0;"> <a href="#part-ii-architectural-decision-records-adrs" class="astro-fiwyypmo" style="--depth: 0;"> <span class="astro-fiwyypmo" style="--depth: 0;">Part II: Architectural Decision Records (ADRs)</span> </a> <ul class="isMobile astro-fiwyypmo" style="--depth: 1;"> <li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#adr-001-orphan-git-reference-refsmd-commentsdata-for-comment-storage" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">ADR-001: Orphan Git Reference (refs/md-comments/data) for Comment Storage</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#adr-002-fnv-1a-hash-anchoring-with-context-aware-fuzzy-fallback" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">ADR-002: FNV-1a Hash Anchoring with Context-Aware Fuzzy Fallback</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#adr-003-zero-pat-rfc-8628-oauth-device-flow-architecture" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">ADR-003: Zero-PAT RFC 8628 OAuth Device Flow Architecture</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#adr-004-in-place-dom-surgery--synchronous-early-hooking-in-webview-preview" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">ADR-004: In-Place DOM Surgery &amp; Synchronous Early Hooking in Webview Preview</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#adr-005-zero-secret-telemetry-proxy-architecture" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">ADR-005: Zero-Secret Telemetry Proxy Architecture</span> </a>  </li> </ul>  </li> </ul> </div></details></nav></mobile-starlight-toc></div><div class="right-sidebar-panel sl-hidden lg:sl-block astro-r5jn23w3"><div class="sl-container astro-r5jn23w3"><starlight-toc data-min-h="2" data-max-h="3"><nav aria-labelledby="starlight__on-this-page"><h2 id="starlight__on-this-page">On this page</h2><ul class="astro-fiwyypmo" style="--depth: 0;"> <li class="astro-fiwyypmo" style="--depth: 0;"> <a href="#_top" class="astro-fiwyypmo" style="--depth: 0;"> <span class="astro-fiwyypmo" style="--depth: 0;">Overview</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 0;"> <a href="#part-i-the-14-system-invariants" class="astro-fiwyypmo" style="--depth: 0;"> <span class="astro-fiwyypmo" style="--depth: 0;">Part I: The 14 System Invariants</span> </a> <ul class="astro-fiwyypmo" style="--depth: 1;"> <li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#invariant-details" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">Invariant Details</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#1-inv-oauth-only-no-pats" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">1. INV-OAUTH-ONLY (No PATs)</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#2-inv-fast-forward-retry" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">2. INV-FAST-FORWARD-RETRY</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#3-inv-zero-client-secrets" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">3. INV-ZERO-CLIENT-SECRETS</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#4-inv-zero-customer-data" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">4. INV-ZERO-CUSTOMER-DATA</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#5-inv-telemetry-killswitch" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">5. INV-TELEMETRY-KILLSWITCH</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#6-inv-visual-parity" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">6. INV-VISUAL-PARITY</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#7-inv-xss-sanitized" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">7. INV-XSS-SANITIZED</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#8-inv-quota-defense" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">8. INV-QUOTA-DEFENSE</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#9-inv-in-place-preview" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">9. INV-IN-PLACE-PREVIEW</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#10-inv-mutation-guard" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">10. INV-MUTATION-GUARD</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#11-inv-base-tree-sha" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">11. INV-BASE-TREE-SHA</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#12-inv-auth-persistence" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">12. INV-AUTH-PERSISTENCE</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#13-inv-modal-confirmation" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">13. INV-MODAL-CONFIRMATION</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#14-inv-silent-bg-refresh" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">14. INV-SILENT-BG-REFRESH</span> </a>  </li> </ul>  </li><li class="astro-fiwyypmo" style="--depth: 0;"> <a href="#part-ii-architectural-decision-records-adrs" class="astro-fiwyypmo" style="--depth: 0;"> <span class="astro-fiwyypmo" style="--depth: 0;">Part II: Architectural Decision Records (ADRs)</span> </a> <ul class="astro-fiwyypmo" style="--depth: 1;"> <li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#adr-001-orphan-git-reference-refsmd-commentsdata-for-comment-storage" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">ADR-001: Orphan Git Reference (refs/md-comments/data) for Comment Storage</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#adr-002-fnv-1a-hash-anchoring-with-context-aware-fuzzy-fallback" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">ADR-002: FNV-1a Hash Anchoring with Context-Aware Fuzzy Fallback</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#adr-003-zero-pat-rfc-8628-oauth-device-flow-architecture" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">ADR-003: Zero-PAT RFC 8628 OAuth Device Flow Architecture</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#adr-004-in-place-dom-surgery--synchronous-early-hooking-in-webview-preview" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">ADR-004: In-Place DOM Surgery &amp; Synchronous Early Hooking in Webview Preview</span> </a>  </li><li class="astro-fiwyypmo" style="--depth: 1;"> <a href="#adr-005-zero-secret-telemetry-proxy-architecture" class="astro-fiwyypmo" style="--depth: 1;"> <span class="astro-fiwyypmo" style="--depth: 1;">ADR-005: Zero-Secret Telemetry Proxy Architecture</span> </a>  </li> </ul>  </li> </ul> </nav></starlight-toc></div></div> </div> </aside> <div class="main-pane astro-vws3shzl">  <main data-pagefind-body class="astro-uvjsjalx" lang="en" dir="ltr">    <div class="content-panel astro-ywu7tsqr"> <div class="sl-container astro-ywu7tsqr"> <h1 id="_top" class="astro-hz3umynk">Invariants &amp; ADR Catalog</h1>  </div> </div>  <div class="content-panel astro-ywu7tsqr"> <div class="sl-container astro-ywu7tsqr"> <div class="sl-markdown-content"> <p><a href="https://chromewebstore.google.com/detail/markdown-comments/mjlhdjonjfcedkbpajkfeidfebefhkpp"><img src="https://img.shields.io/badge/markdown--comments-active-6366f1?style=flat-square&#x26;logo=github&#x26;logoColor=white" alt="Markdown Comments"></a></p>
+<p>This document formalizes the <strong>14 Core System Invariants</strong> and key <strong>Architectural Decision Records (ADRs)</strong> governing the Markdown Comments codebase.</p>
+<hr>
+<h2 id="part-i-the-14-system-invariants">Part I: The 14 System Invariants</h2>
+<p>System invariants are non-negotiable correctness rules enforced across all monorepo packages. They are cataloged under <a href="../../quality/invariants/"><code dir="auto">quality/invariants/</code></a> and validated in CI.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th align="left">Invariant ID</th><th align="left">Title</th><th align="left">Scope</th><th align="left">Enforcement Mechanism</th></tr></thead><tbody><tr><td align="left"><strong><code dir="auto">INV-OAUTH-ONLY</code></strong></td><td align="left">OAuth Only Authentication</td><td align="left">Chrome, Safari, IDE</td><td align="left">Static analysis, ESLint AST rules, integration tests</td></tr><tr><td align="left"><strong><code dir="auto">INV-FAST-FORWARD-RETRY</code></strong></td><td align="left">Fast-Forward Concurrent Push Retry</td><td align="left">Shared, Storage</td><td align="left">Unit tests asserting exponential backoff on 409 Conflict</td></tr><tr><td align="left"><strong><code dir="auto">INV-ZERO-CLIENT-SECRETS</code></strong></td><td align="left">Zero Client Secrets</td><td align="left">All client bundles</td><td align="left">AST bundle scanning, pre-commit secret leak tests</td></tr><tr><td align="left"><strong><code dir="auto">INV-ZERO-CUSTOMER-DATA</code></strong></td><td align="left">Zero Customer Data in Telemetry</td><td align="left">Telemetry, Shared</td><td align="left">Schema verification and automated payload PII scrub tests</td></tr><tr><td align="left"><strong><code dir="auto">INV-TELEMETRY-KILLSWITCH</code></strong></td><td align="left">Immediate Telemetry Killswitch</td><td align="left">Telemetry</td><td align="left">Tests asserting zero network dispatch when disabled</td></tr><tr><td align="left"><strong><code dir="auto">INV-VISUAL-PARITY</code></strong></td><td align="left">Cross-Platform Visual Parity</td><td align="left">VS Code, Browser, Obsidian, Starlight</td><td align="left">Playwright visual regression tests and design token assertions</td></tr><tr><td align="left"><strong><code dir="auto">INV-XSS-SANITIZED</code></strong></td><td align="left">Strict Markdown/HTML Sanitization</td><td align="left">Preview Webview, WebExtensions</td><td align="left">DOMPurify / sanitizeHtml AST assertions</td></tr><tr><td align="left"><strong><code dir="auto">INV-QUOTA-DEFENSE</code></strong></td><td align="left">GitHub API Rate Limit Defense</td><td align="left">Shared Git API</td><td align="left">Conditional ETag caching and Tree SHA reuse tests</td></tr><tr><td align="left"><strong><code dir="auto">INV-IN-PLACE-PREVIEW</code></strong></td><td align="left">In-Place Preview DOM Mutation</td><td align="left">VS Code Webview Preview</td><td align="left">Playwright E2E asserting zero document DOM refresh</td></tr><tr><td align="left"><strong><code dir="auto">INV-MUTATION-GUARD</code></strong></td><td align="left">MutationObserver Equality Guard</td><td align="left">VS Code Preview Scripts</td><td align="left"><code dir="auto">tests/vscode-preview-infinite-loop.test.ts</code></td></tr><tr><td align="left"><strong><code dir="auto">INV-BASE-TREE-SHA</code></strong></td><td align="left">Base Tree SHA Resolution</td><td align="left">Shared Git Ref Backend</td><td align="left"><code dir="auto">tests/gitRefBackend.test.ts</code> checking <code dir="auto">tree.sha</code> usage</td></tr><tr><td align="left"><strong><code dir="auto">INV-AUTH-PERSISTENCE</code></strong></td><td align="left">Multi-Tier Auth &#x26; GlobalState Persistence</td><td align="left">VS Code Auth Manager</td><td align="left"><code dir="auto">tests/vscode-github-auth-persistence.test.ts</code></td></tr><tr><td align="left"><strong><code dir="auto">INV-MODAL-CONFIRMATION</code></strong></td><td align="left">In-Preview Modal Deletion Confirmation</td><td align="left">VS Code Webview DOM</td><td align="left"><code dir="auto">tests/e2e/vscode-real-repo-sequential-delete.spec.ts</code></td></tr><tr><td align="left"><strong><code dir="auto">INV-SILENT-BG-REFRESH</code></strong></td><td align="left">Silent Background Synchronization</td><td align="left">Background Polling</td><td align="left"><code dir="auto">tests/refreshBackgroundSync.test.ts</code></td></tr></tbody></table>
+<hr>
+<h3 id="invariant-details">Invariant Details</h3>
+<h3 id="1-inv-oauth-only-no-pats">1. <code dir="auto">INV-OAUTH-ONLY</code> (No PATs)</h3>
+<p>Browser extensions and IDE integrations must never prompt for, store, or persist raw GitHub Personal Access Tokens (PATs). All authentication must flow through OAuth Device Authorization (RFC 8628) or IDE native session providers (<code dir="auto">vscode.authentication.getSession</code>).</p>
+<h3 id="2-inv-fast-forward-retry">2. <code dir="auto">INV-FAST-FORWARD-RETRY</code></h3>
+<p>Concurrent writes to <code dir="auto">refs/md-comments/data</code> must never overwrite remote changes forcefully. When a push conflict (<code dir="auto">409 Conflict</code>) occurs, the engine performs a three-way merge against the latest remote commit using jittered exponential backoff.</p>
+<h3 id="3-inv-zero-client-secrets">3. <code dir="auto">INV-ZERO-CLIENT-SECRETS</code></h3>
+<p>Client-side packages (<code dir="auto">vscode-extension</code>, <code dir="auto">chrome-extension</code>, <code dir="auto">obsidian-plugin</code>, <code dir="auto">starlight-plugin</code>) must never bundle client secrets or privileged credentials. Telemetry and OAuth endpoints utilize public client IDs or the dedicated proxy in <code dir="auto">infrastructure/</code>.</p>
+<h3 id="4-inv-zero-customer-data">4. <code dir="auto">INV-ZERO-CUSTOMER-DATA</code></h3>
+<p>Telemetry payloads must never contain raw Markdown document contents, comment text, author names, email addresses, or repository file paths. Only anonymized action counts, latency timings, and sanitized error categories are permitted.</p>
+<h3 id="5-inv-telemetry-killswitch">5. <code dir="auto">INV-TELEMETRY-KILLSWITCH</code></h3>
+<p>When <code dir="auto">telemetry.enabled</code> is false or the global environment killswitch is tripped, all telemetry collection and network dispatches must immediately cease without delay or caching.</p>
+<h3 id="6-inv-visual-parity">6. <code dir="auto">INV-VISUAL-PARITY</code></h3>
+<p>The visual presentation of comment cards, badges, gutter markers, and sidebar drawers must maintain 100% typographic and aesthetic parity across VS Code, Chrome, Obsidian, and Starlight.</p>
+<h3 id="7-inv-xss-sanitized">7. <code dir="auto">INV-XSS-SANITIZED</code></h3>
+<p>Rendered comment Markdown and user inputs must pass through strict DOM sanitization before being inserted into any webview or browser DOM tree, preventing script execution and HTML attribute injection.</p>
+<h3 id="8-inv-quota-defense">8. <code dir="auto">INV-QUOTA-DEFENSE</code></h3>
+<p>All interactions with GitHub REST APIs must utilize conditional requests (<code dir="auto">If-None-Match</code> with ETags) and reuse cached tree SHAs to prevent consuming GitHub API hourly rate limits.</p>
+<h3 id="9-inv-in-place-preview">9. <code dir="auto">INV-IN-PLACE-PREVIEW</code></h3>
+<p>Native preview comments, replies, edits, reactions, and deletions must update in-place in the preview DOM without reloading the markdown document DOM. Full document refreshes cause blank screen flashes, scroll position jumps, and tab resets.</p>
+<h3 id="10-inv-mutation-guard">10. <code dir="auto">INV-MUTATION-GUARD</code></h3>
+<p>DOM badge counter listeners and MutationObservers must verify that <code dir="auto">element.textContent !== newContent</code> prior to mutating DOM nodes. Unconditional assignments cause recursive MutationObserver loops that saturate CPU cores at 100%.</p>
+<h3 id="11-inv-base-tree-sha">11. <code dir="auto">INV-BASE-TREE-SHA</code></h3>
+<p>When constructing new Git trees via GitHub Git Data API (<code dir="auto">POST /git/trees</code>), the <code dir="auto">base_tree</code> parameter must be the 40-character SHA of a Git <strong>Tree</strong> object (<code dir="auto">commitData.tree.sha</code>), retrieved via <code dir="auto">GET /git/commits/:sha</code>. Supplying a Commit object SHA triggers an unrecoverable <code dir="auto">422 Unprocessable Entity</code> error.</p>
+<h3 id="12-inv-auth-persistence">12. <code dir="auto">INV-AUTH-PERSISTENCE</code></h3>
+<p>VS Code authentication state must persist across window reloads and restarts via <code dir="auto">context.globalState</code>. State modifications must fire reactive <code dir="auto">onDidChangeAuthState</code> events to update webview indicators and action permissions.</p>
+<h3 id="13-inv-modal-confirmation">13. <code dir="auto">INV-MODAL-CONFIRMATION</code></h3>
+<p>Destructive user actions within native preview webviews (e.g., deleting threads or replies) must display an accessible in-preview modal confirmation dialog. Native OS modal prompts block the thread and cause event propagation bugs.</p>
+<h3 id="14-inv-silent-bg-refresh">14. <code dir="auto">INV-SILENT-BG-REFRESH</code></h3>
+<p>Background comment refresh loops and polling routines must execute silently. Extensions must never display toast notifications, steal window focus, or interrupt active typing during routine background syncs.</p>
+<hr>
+<h2 id="part-ii-architectural-decision-records-adrs">Part II: Architectural Decision Records (ADRs)</h2>
+<h3 id="adr-001-orphan-git-reference-refsmd-commentsdata-for-comment-storage">ADR-001: Orphan Git Reference (<code dir="auto">refs/md-comments/data</code>) for Comment Storage</h3>
+<ul>
+<li><strong>Status</strong>: Accepted</li>
+<li><strong>Context</strong>: Storing comments directly inside Markdown files pollutes documents with proprietary HTML tags or anchor markers. Storing comments in an external cloud database introduces single points of failure, privacy risks, and vendor lock-in.</li>
+<li><strong>Decision</strong>: Persist comments outside source branches using an orphan Git reference named <code dir="auto">refs/md-comments/data</code>. Comments are stored as YAML documents keyed by document path and thread ID.</li>
+<li><strong>Consequences</strong>:
+<ul>
+<li><em>Positive</em>: Source Markdown remains 100% clean. Comment history is versioned, distributed, and decentralized via existing Git workflows.</li>
+<li><em>Negative</em>: Requires implementing Git Data API serialization and three-way merging for concurrent push resolution.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="adr-002-fnv-1a-hash-anchoring-with-context-aware-fuzzy-fallback">ADR-002: FNV-1a Hash Anchoring with Context-Aware Fuzzy Fallback</h3>
+<ul>
+<li><strong>Status</strong>: Accepted</li>
+<li><strong>Context</strong>: Line numbers alone are unstable anchors because document edits shift lines up and down.</li>
+<li><strong>Decision</strong>: Compute a deterministic 32-bit FNV-1a hash of normalized selected text along with a 3-line leading and trailing context window. When document modifications occur, apply a cascading fuzzy search (Exact Hash $\to$ Normalized Whitespace $\to$ Contextual Levenshtein Search).</li>
+<li><strong>Consequences</strong>:
+<ul>
+<li><em>Positive</em>: High resilience against minor upstream document changes without losing comment attachments.</li>
+<li><em>Negative</em>: Substantial document rewrites require explicit author re-anchoring.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="adr-003-zero-pat-rfc-8628-oauth-device-flow-architecture">ADR-003: Zero-PAT RFC 8628 OAuth Device Flow Architecture</h3>
+<ul>
+<li><strong>Status</strong>: Accepted</li>
+<li><strong>Context</strong>: Traditional browser extensions frequently require users to generate and paste GitHub Personal Access Tokens (PATs), which pose severe security risks and poor user experience.</li>
+<li><strong>Decision</strong>: Adopt RFC 8628 OAuth Device Authorization Flow (<code dir="auto">INV-OAUTH-ONLY</code>). Users authorize via standard GitHub one-time code prompts. Tokens are stored securely in browser storage or IDE secrets without exposing secrets to client bundles.</li>
+<li><strong>Consequences</strong>:
+<ul>
+<li><em>Positive</em>: Zero friction for users, zero leaked PATs, aligned with modern GitHub security recommendations.</li>
+<li><em>Negative</em>: Requires polling GitHub token endpoint during the authorization handshake.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="adr-004-in-place-dom-surgery--synchronous-early-hooking-in-webview-preview">ADR-004: In-Place DOM Surgery &#x26; Synchronous Early Hooking in Webview Preview</h3>
+<ul>
+<li><strong>Status</strong>: Accepted</li>
+<li><strong>Context</strong>: In VS Code native Markdown preview, updating comments by re-rendering the document causes white screen flickering, loses scroll position, resets video/iframe state, and drops user focus. Furthermore, extension scripts executing after document load cannot intercept early events.</li>
+<li><strong>Decision</strong>: Implement a synchronous bootstrap hook (<code dir="auto">earlyHook.js</code>) that immediately caches <code dir="auto">acquireVsCodeApi()</code> and polyfills <code dir="auto">window.poster</code>. Update preview comments using targeted in-place DOM patching (<code dir="auto">preview-webview.js</code>) guarded by MutationObserver equality checks (<code dir="auto">INV-IN-PLACE-PREVIEW</code>, <code dir="auto">INV-MUTATION-GUARD</code>).</li>
+<li><strong>Consequences</strong>:
+<ul>
+<li><em>Positive</em>: Instantaneous optimistic UI reactions, zero scroll jump, zero blank screen flicker, zero infinite loop CPU pegging.</li>
+<li><em>Negative</em>: Requires maintaining precise DOM element selectors and in-situ modal markup.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="adr-005-zero-secret-telemetry-proxy-architecture">ADR-005: Zero-Secret Telemetry Proxy Architecture</h3>
+<ul>
+<li><strong>Status</strong>: Accepted</li>
+<li><strong>Context</strong>: Collecting diagnostic and performance telemetry must never leak customer intellectual property or expose private cloud credentials.</li>
+<li><strong>Decision</strong>: Deploy a stateless proxy (<code dir="auto">infrastructure/</code>) that scrubs all PII, document text, and file paths (<code dir="auto">INV-ZERO-CUSTOMER-DATA</code>), authenticating against OpenTelemetry ingestion backends using server-side secrets while clients operate without embedded secrets (<code dir="auto">INV-ZERO-CLIENT-SECRETS</code>).</li>
+<li><strong>Consequences</strong>:
+<ul>
+<li><em>Positive</em>: Guarantees client privacy and prevents credential extraction from client distribution bundles.</li>
+<li><em>Negative</em>: Incurs a minor network hop for telemetry transport.</li>
+</ul>
+</li>
+</ul> </div> <footer class="sl-flex astro-5kf6xury"> <div class="meta sl-flex astro-5kf6xury">   </div> <div class="pagination-links print:hidden astro-u7qrv3oo" dir="ltr"> <a href="/architecture/architecture/sequence-diagrams/" rel="prev" class="astro-u7qrv3oo"> <svg aria-hidden="true" class="astro-u7qrv3oo astro-sa3d62b7" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.5rem;"><path d="M17 11H9.41l3.3-3.29a1.004 1.004 0 1 0-1.42-1.42l-5 5a1 1 0 0 0-.21.33 1 1 0 0 0 0 .76 1 1 0 0 0 .21.33l5 5a1.002 1.002 0 0 0 1.639-.325 1 1 0 0 0-.219-1.095L9.41 13H17a1 1 0 0 0 0-2Z"/></svg>  <span class="astro-u7qrv3oo"> Previous <br class="astro-u7qrv3oo"> <span class="link-title astro-u7qrv3oo">Sequence Diagrams</span> </span> </a> <a href="/architecture/guides/agentic-ai-workflows/" rel="next" class="astro-u7qrv3oo"> <svg aria-hidden="true" class="astro-u7qrv3oo astro-sa3d62b7" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.5rem;"><path d="M17.92 11.62a1.001 1.001 0 0 0-.21-.33l-5-5a1.003 1.003 0 1 0-1.42 1.42l3.3 3.29H7a1 1 0 0 0 0 2h7.59l-3.3 3.29a1.002 1.002 0 0 0 .325 1.639 1 1 0 0 0 1.095-.219l5-5a1 1 0 0 0 .21-.33 1 1 0 0 0 0-.76Z"/></svg>  <span class="astro-u7qrv3oo"> Next <br class="astro-u7qrv3oo"> <span class="link-title astro-u7qrv3oo">Agentic AI Workflows</span> </span> </a> </div>   </footer>  </div> </div>   </main> </div> </div>  </div> </div>  </body></html>

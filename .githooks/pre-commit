@@ -3,19 +3,22 @@ set -e
 
 echo "==> Running proactive pre-commit gates..."
 
-echo "1/5 Verifying extension packaging compatibility..."
+echo "1/6 Verifying extension packaging compatibility..."
 node scripts/verify-packaging-compat.js
 
-echo "2/5 Checking code formatting..."
+echo "2/6 Verifying architecture documentation & models..."
+pnpm verify:arch
+
+echo "3/6 Checking code formatting..."
 pnpm format:check
 
-echo "3/5 Running zero-warning lint..."
+echo "4/6 Running zero-warning lint..."
 pnpm lint
 
-echo "4/5 Checking static types..."
+echo "5/6 Checking static types..."
 pnpm typecheck
 
-echo "5/5 Running unit test suite..."
+echo "6/6 Running unit test suite..."
 pnpm test
 
 echo "==> All pre-commit gates passed cleanly!"

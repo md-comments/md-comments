@@ -5,6 +5,7 @@ packages:
   - 'chrome-extension'
   - 'starlight-plugin'
   - 'demo-astro'
+  - 'architecture-site'
 
 allowBuilds:
   "@vscode/vsce-sign": true

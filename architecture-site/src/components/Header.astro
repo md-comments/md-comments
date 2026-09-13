@@ -1,0 +1,206 @@
+---
+import type { Props } from '@astrojs/starlight/props';
+import SiteTitle from '@astrojs/starlight/components/SiteTitle.astro';
+import Search from '@astrojs/starlight/components/Search.astro';
+import SocialIcons from '@astrojs/starlight/components/SocialIcons.astro';
+import ThemeSelect from '@astrojs/starlight/components/ThemeSelect.astro';
+---
+
+<div class="header sl-flex">
+  <div class="sl-flex">
+    <SiteTitle {...Astro.props} />
+  </div>
+  <div class="sl-flex header-right-actions">
+    <Search {...Astro.props} />
+    <div class="sl-flex social-theme-group">
+      <a
+        href="/assets/architecture/interactive/index.html"
+        target="_blank"
+        rel="noopener"
+        class="likec4-header-btn"
+        title="Open full-screen interactive LikeC4 viewer"
+      >
+        <span>Interactive LikeC4 &nearr;</span>
+      </a>
+      <SocialIcons {...Astro.props} />
+      <ThemeSelect {...Astro.props} />
+    </div>
+  </div>
+</div>
+
+<style>
+  .header {
+    gap: var(--sl-nav-gap);
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+  }
+
+  .header-right-actions {
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .social-theme-group {
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 50rem) {
+    .likec4-header-btn {
+      display: none;
+    }
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    function initDiagramZoom() {
+      if (document.getElementById('sl-zoom-modal')) return;
+
+      const modal = document.createElement('div');
+      modal.id = 'sl-zoom-modal';
+      modal.className = 'sl-diagram-zoom-modal';
+      modal.setAttribute('aria-hidden', 'true');
+      modal.innerHTML = `
+        <button id="sl-zoom-close" class="sl-diagram-close-btn" aria-label="Close">&times;</button>
+        <div id="sl-zoom-viewport" class="sl-diagram-zoom-viewport">
+          <img id="sl-zoom-img" src="" alt="Zoomed Diagram" />
+        </div>
+        <div class="sl-diagram-zoom-controls">
+          <button id="sl-zoom-out" class="sl-diagram-zoom-btn" title="Zoom Out">&minus;</button>
+          <span id="sl-zoom-level" class="sl-diagram-zoom-text">100%</span>
+          <button id="sl-zoom-in" class="sl-diagram-zoom-btn" title="Zoom In">&plus;</button>
+          <button id="sl-zoom-reset" class="sl-diagram-zoom-btn" title="Reset Zoom">&#x21bb;</button>
+        </div>
+      `;
+      document.body.appendChild(modal);
+
+      const viewport = modal.querySelector('#sl-zoom-viewport');
+      const img = modal.querySelector('#sl-zoom-img');
+      const levelText = modal.querySelector('#sl-zoom-level');
+      const closeBtn = modal.querySelector('#sl-zoom-close');
+      const zoomInBtn = modal.querySelector('#sl-zoom-in');
+      const zoomOutBtn = modal.querySelector('#sl-zoom-out');
+      const resetBtn = modal.querySelector('#sl-zoom-reset');
+
+      let currentScale = 1;
+      let posX = 0;
+      let posY = 0;
+      let isDragging = false;
+      let startX = 0;
+      let startY = 0;
+
+      function updateTransform() {
+        if (!img) return;
+        img.style.transform = `translate(${posX}px, ${posY}px) scale(${currentScale})`;
+        if (levelText) levelText.textContent = `${Math.round(currentScale * 100)}%`;
+      }
+
+      function resetZoom() {
+        currentScale = 1;
+        posX = 0;
+        posY = 0;
+        updateTransform();
+      }
+
+      function openModal(src) {
+        if (!modal || !img || !src) return;
+        img.src = src;
+        resetZoom();
+        modal.classList.add('active');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeModal() {
+        if (!modal) return;
+        modal.classList.remove('active');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+
+      closeBtn.addEventListener('click', closeModal);
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal || e.target === viewport) closeModal();
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
+      });
+
+      zoomInBtn.addEventListener('click', () => {
+        currentScale = Math.min(currentScale * 1.3, 6);
+        updateTransform();
+      });
+
+      zoomOutBtn.addEventListener('click', () => {
+        currentScale = Math.max(currentScale / 1.3, 0.4);
+        updateTransform();
+      });
+
+      resetBtn.addEventListener('click', resetZoom);
+
+      viewport.addEventListener(
+        'wheel',
+        (e) => {
+          e.preventDefault();
+          const delta = e.deltaY < 0 ? 1.15 : 0.87;
+          currentScale = Math.max(0.4, Math.min(6, currentScale * delta));
+          updateTransform();
+        },
+        { passive: false }
+      );
+
+      viewport.addEventListener('mousedown', (e) => {
+        if (e.button !== 0) return;
+        isDragging = true;
+        startX = e.clientX - posX;
+        startY = e.clientY - posY;
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        posX = e.clientX - startX;
+        posY = e.clientY - startY;
+        updateTransform();
+      });
+
+      window.addEventListener('mouseup', () => {
+        isDragging = false;
+      });
+
+      function bindImages() {
+        const images = document.querySelectorAll('.sl-markdown-content img, .sl-diagram-clickable');
+        images.forEach((el) => {
+          if (el.id === 'sl-zoom-img') return;
+          // Do not enlarge images that are inside links, or are badges/shields
+          if (
+            el.closest('a') ||
+            el.src.includes('shields.io') ||
+            el.src.includes('badge') ||
+            (el.alt && el.alt.toLowerCase().includes('badge'))
+          ) {
+            return;
+          }
+          el.classList.add('sl-diagram-clickable');
+          el.setAttribute('title', 'Click to zoom and pan diagram');
+          el.onclick = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            openModal(el.src);
+          };
+        });
+      }
+
+      bindImages();
+      document.addEventListener('astro:page-load', bindImages);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initDiagramZoom);
+    } else {
+      initDiagramZoom();
+    }
+  })();
+</script>

@@ -1,0 +1,94 @@
+vars: {
+  d2-config: {
+    layout-engine: elk
+  }
+}
+
+title: "Component Integration & Multi-Package Communication Topology" {
+  near: top-center
+  shape: text
+  style.font-size: 24
+  style.bold: true
+}
+
+# Subsystem Containers
+vscode_host: "VS Code Extension Host\n(vscode-extension/src)" {
+  style.fill: "#eff6ff"
+  style.stroke: "#3b82f6"
+
+  auth_svc: "Auth Manager & Fallback Chain"
+  actions_svc: "Action Handler & Dispatcher"
+  optimistic_svc: "Optimistic Mutation Store"
+  comment_store_svc: "Comment Storage Coordinator"
+  panel_svc: "Comment Preview Panel"
+}
+
+preview_webview: "Webview Preview Environment\n(vscode-extension/media)" {
+  style.fill: "#f5f3ff"
+  style.stroke: "#8b5cf6"
+
+  early_hook: "earlyHook.js (Synchronous Cache & Poster)"
+  dom_patcher: "In-Place DOM Patcher (preview-webview.js)"
+  modal_dialog: "In-Webview Confirmation Modal"
+  mutation_obs: "MutationObserver Loop Guard"
+  fab_toggle: "Floating MD FAB Drawer"
+}
+
+shared_pkg: "Shared Engine Domain\n(@md-comments/shared)" {
+  style.fill: "#ecfdf5"
+  style.stroke: "#10b981"
+
+  anchor_core: "FNV-1a Anchoring & Fuzzy Cascade"
+  git_core: "Git Data API & Base Tree SHA Pipeline"
+  yaml_core: "YAML Serializer & 3-Way Merge"
+  local_core: "Sidecar File Storage"
+}
+
+browser_ext: "Browser Extensions\n(Chrome, Safari, Edge, Firefox)" {
+  style.fill: "#fffbeb"
+  style.stroke: "#f59e0b"
+
+  bg_worker: "Background Service Worker"
+  content_script: "GitHub DOM Overlay Injector"
+  device_auth: "RFC 8628 Device Flow Client"
+}
+
+doc_plugins: "Knowledge Base & Theme Plugins\n(Obsidian & Starlight)" {
+  style.fill: "#fdf2f8"
+  style.stroke: "#ec4899"
+
+  obsidian_vault: "Obsidian Gutter & Reading View"
+  starlight_astro: "Starlight Slide-Over Client Drawer"
+}
+
+cloud_infra: "Cloud & Remote Services" {
+  style.fill: "#f8fafc"
+  style.stroke: "#64748b"
+
+  github_remote: "GitHub Git Data API & Remote Refs"
+  telemetry_proxy: "Zero-Secret Telemetry Proxy"
+  otel_endpoint: "OpenTelemetry Collector"
+}
+
+# Inter-Component Connections & IPC
+preview_webview.early_hook -> vscode_host.actions_svc: "1. postMessage: add / reply / delete / react / resolve"
+vscode_host.actions_svc -> vscode_host.optimistic_svc: "2. Synchronous optimistic mutation"
+vscode_host.optimistic_svc -> preview_webview.dom_patcher: "3. postMessage: in-place state delta"
+preview_webview.dom_patcher -> preview_webview.mutation_obs: "4. Updates DOM elements (equality guarded)"
+preview_webview.dom_patcher -> preview_webview.modal_dialog: "5. Invokes delete confirmation modal"
+
+vscode_host.panel_svc -> preview_webview.fab_toggle: "6. Injects scripts & floating widget"
+vscode_host.comment_store_svc -> shared_pkg.git_core: "7. Async background sync to Git"
+vscode_host.comment_store_svc -> shared_pkg.local_core: "8. Offline sidecar write"
+
+browser_ext.content_script -> browser_ext.bg_worker: "9. Chrome runtime message"
+browser_ext.bg_worker -> shared_pkg.anchor_core: "10. Resolves text anchors"
+browser_ext.bg_worker -> shared_pkg.git_core: "11. Queries & updates refs/md-comments/data"
+browser_ext.device_auth -> cloud_infra.github_remote: "12. RFC 8628 OAuth exchange"
+
+doc_plugins.obsidian_vault -> shared_pkg.anchor_core: "13. Matches vault text lines"
+doc_plugins.starlight_astro -> shared_pkg.anchor_core: "14. Client-side anchor binding"
+
+shared_pkg.git_core -> cloud_infra.github_remote: "15. GET commits/:sha -> tree.sha -> POST trees -> PATCH refs"
+vscode_host.actions_svc -> cloud_infra.telemetry_proxy: "16. Transmits sanitized telemetry events"
+cloud_infra.telemetry_proxy -> cloud_infra.otel_endpoint: "17. Relays OTLP spans"

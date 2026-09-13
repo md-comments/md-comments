@@ -1,0 +1,127 @@
+vars: {
+  d2-config: {
+    layout-engine: elk
+  }
+}
+
+title: "DFD Level 1: Subsystems Data Flow - Markdown Comments" {
+  near: top-center
+  shape: text
+  style.font-size: 24
+  style.bold: true
+}
+
+# External Entities
+user: "Document Author / Reviewer" {
+  shape: person
+  style.fill: "#e0e7ff"
+  style.stroke: "#6366f1"
+}
+
+github_api: "GitHub REST & GraphQL API" {
+  shape: cloud
+  style.fill: "#f3f4f6"
+  style.stroke: "#374151"
+}
+
+git_remote: "Git Remote Server" {
+  shape: cylinder
+  style.fill: "#fef3c7"
+  style.stroke: "#d97706"
+}
+
+otel_collector: "OpenTelemetry Collector" {
+  shape: cloud
+  style.fill: "#dcfce7"
+  style.stroke: "#16a34a"
+}
+
+# Data Stores
+d1_optimistic: "D1: In-Memory Optimistic Store\n(Tombstones, Staged Mutations)" {
+  shape: stored_data
+  style.fill: "#e0f2fe"
+  style.stroke: "#0284c7"
+}
+
+d2_workspace: "D2: Local & Workspace Storage\n(Cached Threads, Auth Flags)" {
+  shape: stored_data
+  style.fill: "#f0fdf4"
+  style.stroke: "#16a34a"
+}
+
+d3_gitref: "D3: Git Ref Object Store\n(refs/md-comments/data)" {
+  shape: stored_data
+  style.fill: "#fef3c7"
+  style.stroke: "#d97706"
+}
+
+# Core Processes (P1 to P6)
+p1_anchor: "P1: Text Selection &\nAnchor Generation\n(FNV-1a Hash + Context Window)" {
+  shape: circle
+  style.fill: "#6366f1"
+  style.stroke: "#4338ca"
+  style.font-color: "#ffffff"
+}
+
+p2_lifecycle: "P2: Comment & Thread\nLifecycle Manager\n(Draft, Reply, Modal Delete)" {
+  shape: circle
+  style.fill: "#6366f1"
+  style.stroke: "#4338ca"
+  style.font-color: "#ffffff"
+}
+
+p3_inplace_sync: "P3: Optimistic Cache &\nIn-Place DOM Sync\n(earlyHook.js, Mutation Guard)" {
+  shape: circle
+  style.fill: "#6366f1"
+  style.stroke: "#4338ca"
+  style.font-color: "#ffffff"
+}
+
+p4_storage_pipeline: "P4: Git Ref Serialization\n& Tree SHA Pipeline\n(Base Tree SHA, 3-Way Merge)" {
+  shape: circle
+  style.fill: "#6366f1"
+  style.stroke: "#4338ca"
+  style.font-color: "#ffffff"
+}
+
+p5_identity: "P5: Multi-Tier Identity &\nDevice Flow Auth\n(RFC 8628, Session Cache)" {
+  shape: circle
+  style.fill: "#6366f1"
+  style.stroke: "#4338ca"
+  style.font-color: "#ffffff"
+}
+
+p6_telemetry: "P6: Telemetry Sanitization\n& Proxy Ingestion\n(PII Scrubber, Killswitch)" {
+  shape: circle
+  style.fill: "#6366f1"
+  style.stroke: "#4338ca"
+  style.font-color: "#ffffff"
+}
+
+# Data Flows
+user -> p1_anchor: "1. Select document text"
+p1_anchor -> p2_lifecycle: "2. Anchor metadata & FNV-1a hash"
+
+user -> p2_lifecycle: "3. Submit comment / reply / reaction"
+user -> p2_lifecycle: "4. Confirm deletion in webview modal"
+
+p2_lifecycle -> d1_optimistic: "5. Write optimistic mutation / tombstone"
+d1_optimistic -> p3_inplace_sync: "6. Stream staged state updates"
+
+p3_inplace_sync -> user: "7. Patch DOM in-place (no reload, guard counters)"
+
+d1_optimistic -> p4_storage_pipeline: "8. Drain staged mutations for persistence"
+p4_storage_pipeline -> github_api: "9. Query base tree SHA & commit objects"
+github_api -> p4_storage_pipeline: "10. Tree SHAs & commit responses"
+
+p4_storage_pipeline -> d3_gitref: "11. Update refs/md-comments/data"
+d3_gitref -> git_remote: "12. Push Git ref with fast-forward retry"
+
+user -> p5_identity: "13. Authenticate with GitHub"
+p5_identity -> github_api: "14. RFC 8628 Device Authorization"
+github_api -> p5_identity: "15. Access token & user profile"
+p5_identity -> d2_workspace: "16. Persist auth flag in globalState"
+p5_identity -> p4_storage_pipeline: "17. Provide authenticated client"
+
+p2_lifecycle -> p6_telemetry: "18. Raw user action event"
+p6_telemetry -> otel_collector: "19. Sanitized, zero-secret telemetry spans"

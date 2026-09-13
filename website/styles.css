@@ -157,6 +157,7 @@ h6 {
   height: 72px;
 }
 
+.logo,
 .logo-link {
   display: flex;
   align-items: center;
@@ -164,11 +165,15 @@ h6 {
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 1.25rem;
+  color: var(--text-primary);
+  text-decoration: none;
 }
 
 .logo-icon {
   width: 32px;
   height: 32px;
+  flex-shrink: 0;
+  display: block;
 }
 
 .nav {

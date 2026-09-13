@@ -1,0 +1,190 @@
+/* Custom styling for architecture documentation */
+
+:root {
+  --sl-color-accent: #6366f1;
+  --sl-color-accent-high: #818cf8;
+}
+
+/* Header LikeC4 Button */
+.likec4-header-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.15));
+  border: 1px solid rgba(99, 102, 241, 0.4);
+  color: var(--sl-color-accent-high);
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.likec4-header-btn:hover {
+  background: var(--sl-color-accent);
+  color: #ffffff;
+  border-color: var(--sl-color-accent);
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
+}
+
+.header-right-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.social-theme-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Clickable Diagrams */
+.sl-diagram-clickable {
+  cursor: zoom-in;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--sl-color-gray-5);
+  background: var(--sl-color-gray-6);
+  padding: 8px;
+  display: block;
+  max-width: 100%;
+}
+
+.sl-diagram-clickable:hover {
+  transform: scale(1.008);
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.25);
+  border-color: var(--sl-color-accent);
+}
+
+/* Badges and linked images behave strictly as links without diagram styling */
+.sl-markdown-content a img {
+  cursor: pointer !important;
+  box-shadow: none !important;
+  border: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+  display: inline-block !important;
+}
+
+/* Zoom Lightbox Modal */
+.sl-diagram-zoom-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100000;
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease-out;
+}
+
+.sl-diagram-zoom-modal.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sl-diagram-zoom-viewport {
+  width: 92vw;
+  height: 86vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  cursor: grab;
+}
+
+.sl-diagram-zoom-viewport:active {
+  cursor: grabbing;
+}
+
+.sl-diagram-zoom-viewport img {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+  transition: transform 0.05s linear;
+  transform-origin: center center;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.sl-diagram-zoom-controls {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(30, 41, 59, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 6px 16px;
+  border-radius: 9999px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  z-index: 100002;
+}
+
+.sl-diagram-zoom-btn {
+  background: transparent;
+  border: none;
+  color: #f8fafc;
+  font-size: 1.25rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  cursor: pointer;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease;
+}
+
+.sl-diagram-zoom-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.sl-diagram-zoom-text {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  font-weight: 600;
+  min-width: 48px;
+  text-align: center;
+  font-family: var(--sl-font-mono, monospace);
+}
+
+.sl-diagram-close-btn {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  background: rgba(30, 41, 59, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  font-size: 1.6rem;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 100002;
+  transition: all 0.15s ease;
+}
+
+.sl-diagram-close-btn:hover {
+  background: var(--sl-color-accent);
+  color: #fff;
+  transform: scale(1.08);
+}

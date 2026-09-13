@@ -1,0 +1,100 @@
+vars: {
+  d2-config: {
+    layout-engine: elk
+  }
+}
+
+title: "DFD Level 2: Git Ref Storage & Base Tree SHA Pipeline" {
+  near: top-center
+  shape: text
+  style.font-size: 24
+  style.bold: true
+}
+
+# Source Entity & Stores
+caller: "Comment Store /\nOptimistic Store" {
+  shape: package
+  style.fill: "#e0e7ff"
+  style.stroke: "#6366f1"
+}
+
+github_git_api: "GitHub Git Data API\n(/git/* endpoints)" {
+  shape: cloud
+  style.fill: "#f3f4f6"
+  style.stroke: "#374151"
+}
+
+git_ref_target: "Data Store:\nrefs/md-comments/data" {
+  shape: cylinder
+  style.fill: "#fef3c7"
+  style.stroke: "#d97706"
+}
+
+# Detailed Pipeline Processes
+p4_1_serialize: "P4.1: YAML Serializer\n& Tombstone Filter" {
+  shape: circle
+  style.fill: "#6366f1"
+  style.stroke: "#4338ca"
+  style.font-color: "#ffffff"
+}
+
+p4_2_ref_lookup: "P4.2: Ref Head Resolver\n(GET /git/refs/heads/...)" {
+  shape: circle
+  style.fill: "#6366f1"
+  style.stroke: "#4338ca"
+  style.font-color: "#ffffff"
+}
+
+p4_3_tree_sha: "P4.3: Base Tree SHA Resolver\n(GET /git/commits/:sha)" {
+  shape: circle
+  style.fill: "#6366f1"
+  style.stroke: "#4338ca"
+  style.font-color: "#ffffff"
+}
+
+p4_4_blob_tree: "P4.4: Git Tree Builder\n(POST /git/trees base_tree)" {
+  shape: circle
+  style.fill: "#6366f1"
+  style.stroke: "#4338ca"
+  style.font-color: "#ffffff"
+}
+
+p4_5_commit_create: "P4.5: Commit Object Creator\n(POST /git/commits)" {
+  shape: circle
+  style.fill: "#6366f1"
+  style.stroke: "#4338ca"
+  style.font-color: "#ffffff"
+}
+
+p4_6_ref_update: "P4.6: Ref Head Updater &\nFast-Forward Retry Guard\n(PATCH /git/refs/...)" {
+  shape: circle
+  style.fill: "#6366f1"
+  style.stroke: "#4338ca"
+  style.font-color: "#ffffff"
+}
+
+# Pipeline Sequence
+caller -> p4_1_serialize: "1. Raw Comment Thread / Tombstone"
+p4_1_serialize -> p4_4_blob_tree: "2. Formatted YAML content"
+
+caller -> p4_2_ref_lookup: "3. Target repo & branch ref request"
+p4_2_ref_lookup -> github_git_api: "4. GET /git/ref/heads/refs/md-comments/data"
+github_git_api -> p4_2_ref_lookup: "5. Parent Commit SHA (or 404 for orphan init)"
+
+p4_2_ref_lookup -> p4_3_tree_sha: "6. Parent Commit SHA"
+p4_3_tree_sha -> github_git_api: "7. GET /git/commits/:parent_sha (INV-BASE-TREE-SHA)"
+github_git_api -> p4_3_tree_sha: "8. Return commitData.tree.sha"
+
+p4_3_tree_sha -> p4_4_blob_tree: "9. Supplies base_tree: commitData.tree.sha"
+p4_4_blob_tree -> github_git_api: "10. POST /git/trees { base_tree, tree: [blobs] }"
+github_git_api -> p4_4_blob_tree: "11. Created Tree SHA"
+
+p4_4_blob_tree -> p4_5_commit_create: "12. Tree SHA + Parent Commit SHA"
+p4_5_commit_create -> github_git_api: "13. POST /git/commits { tree, parents, message }"
+github_git_api -> p4_5_commit_create: "14. Created Commit SHA"
+
+p4_5_commit_create -> p4_6_ref_update: "15. New Commit SHA"
+p4_6_ref_update -> github_git_api: "16. PATCH /git/refs/heads/... { sha, force: false }"
+github_git_api -> p4_6_ref_update: "17. OK (or 409 Conflict -> Retry with 3-Way Merge)"
+
+p4_6_ref_update -> git_ref_target: "18. Updated ref pointing to latest commit"

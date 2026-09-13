@@ -44,6 +44,9 @@ verifiedIn:
   - 'tests/e2e/vscode-real-repo-sequential-delete.spec.ts'
 invariants:
   - 'INV-XSS-SANITIZED'
+  - 'INV-IN-PLACE-PREVIEW'
+  - 'INV-MUTATION-GUARD'
+  - 'INV-MODAL-CONFIRMATION'
 minCoverage: 100
 ---
 

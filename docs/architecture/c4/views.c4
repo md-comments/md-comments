@@ -1,0 +1,59 @@
+views {
+  view systemContext of mdComments {
+    title 'System Context - Markdown Comments'
+    description 'High-level system context diagram illustrating users, external systems, and Markdown Comments'
+    include *
+  }
+
+  view containers of mdComments {
+    title 'Container Diagram - Markdown Comments'
+    description 'Container architecture across VS Code extension, webview preview, browser extensions, Obsidian, Starlight, shared engine, and telemetry proxy'
+    include *
+  }
+
+  view vscodeInternals of mdComments.vscodeExt {
+    title 'VS Code Extension Internals'
+    description 'Components of the desktop VS Code extension subsystem including auth, author resolution, optimistic store, and action dispatchers'
+    include *
+    include mdComments.webviewPreview
+    include mdComments.sharedEngine
+    include githubApi
+  }
+
+  view previewInternals of mdComments.webviewPreview {
+    title 'Webview Preview Runtime Internals'
+    description 'In-situ markdown preview webview runtime components: early bootstrap hook, in-place DOM patcher, confirmation modal, and mutation guard'
+    include *
+    include mdComments.vscodeExt
+  }
+
+  view browserInternals of mdComments.chromeExt {
+    title 'Cross-Browser Extension Architecture'
+    description 'Manifest V3 cross-browser extension subsystem with zero-PAT OAuth Device Flow'
+    include *
+    include mdComments.sharedEngine
+    include githubApi
+  }
+
+  view sharedInternals of mdComments.sharedEngine {
+    title 'Shared Domain Engine Internals'
+    description 'Shared anchoring algorithms, Git Data API backend with base tree SHA resolution, and local file backend'
+    include *
+    include mdComments.gitRefStorage
+    include githubApi
+  }
+
+  view starlightInternals of mdComments.starlightPlugin {
+    title 'Astro / Starlight Plugin Architecture'
+    description 'Astro documentation theme plugin and client-side interactive comment drawer'
+    include *
+    include mdComments.sharedEngine
+  }
+
+  view obsidianInternals of mdComments.obsidianPlugin {
+    title 'Obsidian Plugin Architecture'
+    description 'Obsidian desktop and mobile plugin integrating with markdown vault reading and editing views'
+    include *
+    include mdComments.sharedEngine
+  }
+}

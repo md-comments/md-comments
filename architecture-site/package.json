@@ -1,0 +1,20 @@
+{
+  "name": "md-comments-architecture-site",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "typecheck": "astro check",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/starlight": "^0.32.6",
+    "astro": "^5.1.0",
+    "typescript": "^5.5.4"
+  }
+}
