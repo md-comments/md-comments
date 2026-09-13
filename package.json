@@ -54,7 +54,8 @@
     "deps:outdated": "pnpm outdated",
     "version:bump": "node scripts/bump-version.mjs",
     "check": "pnpm audit --prod --audit-level high && pnpm verify:packaging && pnpm lint && pnpm format:check && pnpm typecheck && pnpm build && pnpm test:coverage",
-    "test:regression": "pnpm check && pnpm test:e2e"
+    "test:regression": "pnpm check && pnpm test:e2e",
+    "test:regression:all": "pnpm check && pnpm test:e2e && pnpm test:e2e:vscode"
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",

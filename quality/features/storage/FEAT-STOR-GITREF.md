@@ -12,6 +12,7 @@ implementedIn:
   - 'shared/gitRefBackend.ts'
 verifiedIn:
   - 'tests/e2e/storage.spec.ts'
+  - 'tests/gitRefBackend.test.ts'
 invariants:
   - 'INV-FAST-FORWARD-RETRY'
 minCoverage: 100
@@ -21,10 +22,11 @@ minCoverage: 100
 
 ## Overview
 
-Stores comments in an orphan Git reference refs/md-comments/data encoded as YAML files.
+Stores comments in an orphan Git reference `refs/md-comments/data` encoded as YAML files, resolving base commit tree SHAs to prevent writing corrupt orphan commit trees.
 
 ## User Journey (Gherkin Scenarios)
 
 - Given a comment update
 - When written to Git storage
-- Then Git tree, blob, and commit objects are created and ref updated
+- Then base commit tree SHA is resolved from GitHub Git Data API
+- And Git tree, blob, and commit objects are created and ref updated with retry on race conditions

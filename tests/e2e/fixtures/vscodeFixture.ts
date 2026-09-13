@@ -113,7 +113,9 @@ export const test = base.extend<{ vscode: VSCodeTestContext }>({
           cwd: workspaceDir,
           stdio: 'ignore',
         });
-        execSync('git remote add origin https://github.com/md-comments/test-docs.git', {
+        const testRepoOwner = process.env.TEST_REPO_OWNER || 'md-comments';
+        const testRepoName = process.env.TEST_REPO_NAME || 'md-comments-test';
+        execSync(`git remote add origin https://github.com/${testRepoOwner}/${testRepoName}.git`, {
           cwd: workspaceDir,
           stdio: 'ignore',
         });

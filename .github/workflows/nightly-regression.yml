@@ -149,8 +149,28 @@ jobs:
           restore-keys: |
             vscode-electron-${{ runner.os }}-
 
+      - name: Pre-Flight Clean Test Repository
+        env:
+          TEST_GITHUB_TOKEN: ${{ secrets.TEST_GITHUB_TOKEN }}
+          TEST_REPO_OWNER: 'md-comments'
+          TEST_REPO_NAME: 'md-comments-test'
+        run: npx tsx scripts/test-repo-cleanup.ts
+
       - name: Run VS Code Electron Tests (xvfb)
+        env:
+          TEST_GITHUB_TOKEN: ${{ secrets.TEST_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TEST_GITHUB_TOKEN }}
+          TEST_REPO_OWNER: 'md-comments'
+          TEST_REPO_NAME: 'md-comments-test'
         run: xvfb-run -a pnpm test:e2e:vscode
+
+      - name: Post-Test Cleanup Test Repository
+        if: always()
+        env:
+          TEST_GITHUB_TOKEN: ${{ secrets.TEST_GITHUB_TOKEN }}
+          TEST_REPO_OWNER: 'md-comments'
+          TEST_REPO_NAME: 'md-comments-test'
+        run: npx tsx scripts/test-repo-cleanup.ts
 
       - name: Upload VS Code Test Traces & Results
         if: always()

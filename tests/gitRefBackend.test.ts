@@ -1527,6 +1527,109 @@ page_comments: []
           expect(result.inline_comments).toHaveLength(1);
         }
       });
+
+      it('reads canonical comments directly when canonicalFound is true and no shards exist', async () => {
+        const canonicalComments = {
+          inline_comments: [
+            {
+              id: 'c-direct',
+              file: 'docs/direct.md',
+              line: 10,
+              text: 'Direct comment',
+              anchor: { hash: 'h1' },
+              author: 'alice',
+              created_at: '2026-08-25T12:00:00Z',
+              resolved: false,
+              reactions: [],
+              replies: [],
+            },
+          ],
+          page_comments: [],
+        };
+        const base64Canonical = Buffer.from(yaml.dump(canonicalComments)).toString('base64');
+
+        fetchMock.mockImplementation(async (url: string) => {
+          if (url.includes('/git/refs/md-comments/data')) {
+            return { ok: true, json: async () => ({ object: { sha: 'sha-commit-1' } }) };
+          }
+          if (url.includes('/git/trees/sha-commit-1')) {
+            return {
+              ok: true,
+              json: async () => ({
+                tree: [{ path: 'docs/direct.comments.yml', sha: 'b1', type: 'blob' }],
+              }),
+            };
+          }
+          if (url.includes('/contents/docs/direct.comments.yml')) {
+            return {
+              ok: true,
+              json: async () => ({ content: base64Canonical, encoding: 'base64' }),
+            };
+          }
+          return { ok: false, status: 404, text: async () => '' };
+        });
+
+        const result = await backend.read({
+          owner: 'my-org',
+          repo: 'my-repo',
+          filePath: 'docs/direct.md',
+        });
+        expect(result.inline_comments).toHaveLength(1);
+        expect(result.inline_comments[0].id).toBe('c-direct');
+      });
+
+      it('gracefully handles fetchPathContent exception returning null', async () => {
+        fetchMock.mockImplementation(async (url: string) => {
+          if (url.includes('/contents/')) {
+            throw new Error('Network failure');
+          }
+          if (url.includes('/git/refs/md-comments/data')) {
+            return { ok: false, status: 404, text: async () => '' };
+          }
+          return { ok: false, status: 404, text: async () => '' };
+        });
+
+        const result = await backend.read({
+          owner: 'my-org',
+          repo: 'my-repo',
+          filePath: 'docs/unreachable.md',
+        });
+        expect(result.inline_comments).toHaveLength(0);
+        expect(result.page_comments).toHaveLength(0);
+      });
+
+      it('handles network error when resolving base tree sha during write', async () => {
+        let treeBody: any = null;
+        fetchMock.mockImplementation(async (url: string, opts?: any) => {
+          const method = (opts?.method || 'GET').toUpperCase();
+          if (url.includes('/git/refs/md-comments/data')) {
+            if (method === 'PATCH') {
+              return { ok: true, json: async () => ({ object: { sha: 'sha-c2' } }) };
+            }
+            return { ok: true, json: async () => ({ object: { sha: 'sha-c1' } }) };
+          }
+          if (url.includes('/git/commits/sha-c1')) {
+            throw new Error('Timeout resolving commit');
+          }
+          if (url.includes('/git/trees')) {
+            if (method === 'POST') {
+              treeBody = JSON.parse(opts.body);
+              return { ok: true, json: async () => ({ sha: 'new-tree-sha' }) };
+            }
+          }
+          if (url.includes('/git/commits') && method === 'POST') {
+            return { ok: true, json: async () => ({ sha: 'sha-c2' }) };
+          }
+          return { ok: false, status: 404, text: async () => '' };
+        });
+
+        await backend.write(
+          { owner: 'org', repo: 'repo', filePath: 'docs/test.md' },
+          { inline_comments: [], page_comments: [] }
+        );
+        expect(treeBody).toBeDefined();
+        expect(treeBody.base_tree).toBeUndefined();
+      });
     });
   });
 });
