@@ -60,3 +60,14 @@ Because GitHub's `contents: write` API permission is repository-wide, organizati
 2. **Exclude the App from Bypass Lists:** Do not grant bypass rights to Markdown Comments tokens or GitHub Apps.
 3. **Isolate Custom Ref Namespace:** Because `refs/md-comments/data` is outside `refs/heads/**`, the commenting system retains read and write capabilities exclusively for comment data, while source branches remain protected from unauthorized direct modifications.
 4. **Scope App Installations:** Install GitHub Apps only on specific, selected repositories rather than organization-wide.
+
+## Web Client Token Storage & Security Boundaries
+
+In purely static web deployments (such as the Starlight documentation plugin and drop-in HTML embeds), client-side JavaScript operates within the browser origin without access to native operating system credential vaults. By contrast, the VS Code extension persists credentials securely in VS Code `SecretStorage`, and the browser extension uses isolated `chrome.storage.local`.
+
+### Web Client Security Controls & Recommendations
+
+1. **Ephemeral Session Storage**: Web clients support tab-isolated `sessionStorage` in addition to persistent `localStorage`. Using ephemeral session storage restricts token lifetime strictly to the active browser tab session.
+2. **Least-Privilege Scopes**: Web clients default to requesting `public_repo` scope instead of full `repo` access.
+3. **Enterprise Architecture (HttpOnly Cookies)**: For organizations requiring zero client-side credential exposure on published documentation sites, site operators should deploy a first-party OAuth proxy or GitHub App backend that maintains an encrypted, `SameSite=Strict`, `HttpOnly` session cookie rather than returning tokens to client script.
+4. **Content Security Policy (CSP)**: Host documentation sites should enforce strict Content Security Policy directives (`script-src`, `connect-src`) to mitigate third-party widget and script injection risks.

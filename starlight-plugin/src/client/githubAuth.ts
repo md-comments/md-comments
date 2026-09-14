@@ -26,28 +26,39 @@ export interface GitHubViewer {
   avatar_url: string;
 }
 
+export type TokenStorageType = 'session' | 'local';
+
 export function getStoredToken(): string | null {
-  if (typeof window === 'undefined' || !window.localStorage) return null;
+  if (typeof window === 'undefined') return null;
   try {
-    return localStorage.getItem(STORAGE_KEY);
+    const sessionToken = window.sessionStorage?.getItem(STORAGE_KEY);
+    if (sessionToken) return sessionToken;
+    return window.localStorage?.getItem(STORAGE_KEY) ?? null;
   } catch {
     return null;
   }
 }
 
-export function saveOAuthToken(token: string): void {
-  if (typeof window === 'undefined' || !window.localStorage) return;
+export function saveOAuthToken(token: string, storageType: TokenStorageType = 'local'): void {
+  if (typeof window === 'undefined') return;
+  const trimmed = token.trim();
   try {
-    localStorage.setItem(STORAGE_KEY, token.trim());
+    if (storageType === 'session') {
+      window.sessionStorage?.setItem(STORAGE_KEY, trimmed);
+      window.localStorage?.removeItem(STORAGE_KEY);
+    } else {
+      window.localStorage?.setItem(STORAGE_KEY, trimmed);
+    }
   } catch {
     /* ignore */
   }
 }
 
 export function clearOAuthToken(): void {
-  if (typeof window === 'undefined' || !window.localStorage) return;
+  if (typeof window === 'undefined') return;
   try {
-    localStorage.removeItem(STORAGE_KEY);
+    window.localStorage?.removeItem(STORAGE_KEY);
+    window.sessionStorage?.removeItem(STORAGE_KEY);
   } catch {
     /* ignore */
   }

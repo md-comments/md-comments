@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { starlightMdComments } from '../starlight-plugin/src/starlight';
 import { astroMdComments } from '../starlight-plugin/src/astro';
 import { scanArticleAnchors } from '../starlight-plugin/src/client/domAnchors';
@@ -582,5 +582,72 @@ describe('CommentsOverlay FAB and Drawer', () => {
     expect(
       p1.classList.contains('md-comments-paragraph-marked') || p1['data-md-comment-id']
     ).toBeTruthy();
+  });
+});
+
+describe('Web Client Token Storage Lifecycle (SEC-04)', () => {
+  const mockLocalStorage: Record<string, string> = {};
+  const mockSessionStorage: Record<string, string> = {};
+
+  beforeEach(() => {
+    for (const key of Object.keys(mockLocalStorage)) delete mockLocalStorage[key];
+    for (const key of Object.keys(mockSessionStorage)) delete mockSessionStorage[key];
+
+    const storageMocks = {
+      localStorage: {
+        getItem: vi.fn((k: string) => mockLocalStorage[k] ?? null),
+        setItem: vi.fn((k: string, v: string) => {
+          mockLocalStorage[k] = v;
+        }),
+        removeItem: vi.fn((k: string) => {
+          delete mockLocalStorage[k];
+        }),
+      },
+      sessionStorage: {
+        getItem: vi.fn((k: string) => mockSessionStorage[k] ?? null),
+        setItem: vi.fn((k: string, v: string) => {
+          mockSessionStorage[k] = v;
+        }),
+        removeItem: vi.fn((k: string) => {
+          delete mockSessionStorage[k];
+        }),
+      },
+    };
+
+    vi.stubGlobal('localStorage', storageMocks.localStorage);
+    vi.stubGlobal('sessionStorage', storageMocks.sessionStorage);
+    vi.stubGlobal('window', {
+      ...storageMocks,
+      location: { origin: 'http://localhost:3000', pathname: '/' },
+    });
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it('supports saving and retrieving token from localStorage', async () => {
+    const { saveOAuthToken, getStoredToken } =
+      await import('../starlight-plugin/src/client/githubAuth');
+    saveOAuthToken('gho_test_local_token', 'local');
+    expect(getStoredToken()).toBe('gho_test_local_token');
+  });
+
+  it('supports saving and retrieving token from sessionStorage with session priority', async () => {
+    const { saveOAuthToken, getStoredToken } =
+      await import('../starlight-plugin/src/client/githubAuth');
+    saveOAuthToken('gho_test_session_token', 'session');
+    expect(getStoredToken()).toBe('gho_test_session_token');
+    // Ensure localStorage copy is purged when session token is active
+    expect(mockLocalStorage['md_comments_oauth_token']).toBeUndefined();
+  });
+
+  it('clears token from both storage backends simultaneously', async () => {
+    const { saveOAuthToken, clearOAuthToken, getStoredToken } =
+      await import('../starlight-plugin/src/client/githubAuth');
+    saveOAuthToken('gho_test_token');
+    expect(getStoredToken()).toBe('gho_test_token');
+    clearOAuthToken();
+    expect(getStoredToken()).toBeNull();
   });
 });
