@@ -6,6 +6,7 @@ import {
   mergeCommentsFiles,
   decodeBase64,
   ORPHAN_REF_NAME,
+  validateRepoIdentifier,
 } from '../shared/gitRefBackend';
 import type { CommentsFile } from '../shared/types';
 
@@ -1659,6 +1660,47 @@ custom_type: !!js/function "function() { return 42; }"
         });
 
         expect(result).toEqual({ inline_comments: [], page_comments: [] });
+      });
+
+      it('validates repository owner and name against path traversal before API interpolation (SEC-09)', async () => {
+        // Direct validator checks
+        expect(() => validateRepoIdentifier('..', 'owner')).toThrow(/Invalid repository owner/);
+        expect(() => validateRepoIdentifier('.', 'repo')).toThrow(/Invalid repository repo/);
+        expect(() => validateRepoIdentifier('../malicious', 'owner')).toThrow(
+          /Invalid repository owner/
+        );
+        expect(() => validateRepoIdentifier('org/repo', 'owner')).toThrow(
+          /Invalid repository owner/
+        );
+        expect(() => validateRepoIdentifier('org\\repo', 'owner')).toThrow(
+          /Invalid repository owner/
+        );
+        expect(() => validateRepoIdentifier('bad owner', 'owner')).toThrow(
+          /Invalid repository owner/
+        );
+        expect(() => validateRepoIdentifier('', 'repo')).toThrow(/Invalid repository repo/);
+
+        // Valid repository identifiers pass
+        expect(() => validateRepoIdentifier('valid-org', 'owner')).not.toThrow();
+        expect(() => validateRepoIdentifier('valid_repo.v1', 'repo')).not.toThrow();
+
+        // Backend methods block execution without dispatching network calls
+        const badKey = {
+          owner: '../traversal',
+          repo: 'legit-repo',
+          filePath: 'README.md',
+        };
+
+        await expect(backend.read(badKey)).rejects.toThrow(/Invalid repository owner/);
+        await expect(
+          backend.write(badKey, { inline_comments: [], page_comments: [] })
+        ).rejects.toThrow(/Invalid repository owner/);
+        await expect(backend.getLatestRefSha('valid-owner', '..')).rejects.toThrow(
+          /Invalid repository repo/
+        );
+
+        // No network calls should have been made
+        expect(fetchMock).not.toHaveBeenCalled();
       });
     });
   });

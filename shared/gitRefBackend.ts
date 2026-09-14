@@ -115,6 +115,26 @@ export function mergeCommentsFiles(
   };
 }
 
+const REPO_IDENTIFIER_REGEX = /^[\w.-]+$/;
+
+export function validateRepoIdentifier(
+  value: unknown,
+  fieldName = 'identifier'
+): asserts value is string {
+  if (
+    typeof value !== 'string' ||
+    value.length === 0 ||
+    value.length > 100 ||
+    value === '.' ||
+    value === '..' ||
+    !REPO_IDENTIFIER_REGEX.test(value)
+  ) {
+    throw new Error(
+      `Invalid repository ${fieldName}: "${String(value)}". Expected alphanumeric, hyphen, underscore, or period, and cannot be "." or "..".`
+    );
+  }
+}
+
 export class GitHubOrphanRefBackend implements CommentBackend {
   constructor(private getToken: () => Promise<string | null> | string | null) {}
 
@@ -143,6 +163,8 @@ export class GitHubOrphanRefBackend implements CommentBackend {
     repo: string,
     path: string
   ): Promise<CommentsFile | null> {
+    validateRepoIdentifier(owner, 'owner');
+    validateRepoIdentifier(repo, 'repo');
     const encodedPath = path
       .split('/')
       .map((segment) => encodeURIComponent(segment))
@@ -185,6 +207,8 @@ export class GitHubOrphanRefBackend implements CommentBackend {
     owner: string,
     repo: string
   ): Promise<Array<{ path: string; sha: string }> | null> {
+    validateRepoIdentifier(owner, 'owner');
+    validateRepoIdentifier(repo, 'repo');
     try {
       const commitSha = await this.getLatestRefSha(owner, repo);
       if (!commitSha) return null;
@@ -210,6 +234,8 @@ export class GitHubOrphanRefBackend implements CommentBackend {
    * Returns null if the ref does not exist or fails to fetch.
    */
   async getLatestRefSha(owner: string, repo: string): Promise<string | null> {
+    validateRepoIdentifier(owner, 'owner');
+    validateRepoIdentifier(repo, 'repo');
     try {
       const refUrl = `https://api.github.com/repos/${owner}/${repo}/git/refs/md-comments/data`;
       const res = await this.fetchApi(refUrl);
@@ -231,6 +257,8 @@ export class GitHubOrphanRefBackend implements CommentBackend {
    * canonical path (doc.comments.yml) and permanently deletes the shards atomically.
    */
   async read(key: CommentStorageKey): Promise<CommentsFile> {
+    validateRepoIdentifier(key.owner, 'owner');
+    validateRepoIdentifier(key.repo, 'repo');
     const canonicalPath = commentsFilePathForMarkdown(key.filePath);
     const cleanPath = stripMarkdownOrCommentsExtension(key.filePath);
 
@@ -309,6 +337,8 @@ export class GitHubOrphanRefBackend implements CommentBackend {
    * Checks GitHub commit history for renamed file events and migrates comments from the old path if found.
    */
   private async traceAndMigrateRename(key: CommentStorageKey): Promise<CommentsFile | null> {
+    validateRepoIdentifier(key.owner, 'owner');
+    validateRepoIdentifier(key.repo, 'repo');
     try {
       const commitsUrl = `https://api.github.com/repos/${key.owner}/${key.repo}/commits?path=${encodeURIComponent(key.filePath)}&per_page=5`;
       const res = await this.fetchApi(commitsUrl);
@@ -368,6 +398,8 @@ export class GitHubOrphanRefBackend implements CommentBackend {
     repo: string,
     pathToDelete: string
   ): Promise<void> {
+    validateRepoIdentifier(owner, 'owner');
+    validateRepoIdentifier(repo, 'repo');
     try {
       const refUrl = `https://api.github.com/repos/${owner}/${repo}/git/refs/md-comments/data`;
       const refRes = await this.fetchApi(refUrl);
@@ -424,6 +456,8 @@ export class GitHubOrphanRefBackend implements CommentBackend {
     deletedIds?: Set<string>,
     shardsToDelete: string[] = []
   ): Promise<void> {
+    validateRepoIdentifier(key.owner, 'owner');
+    validateRepoIdentifier(key.repo, 'repo');
     const commentsPath = commentsFilePathForMarkdown(key.filePath);
     const maxRetries = 5;
     let currentData = data;
