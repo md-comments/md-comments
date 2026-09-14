@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.3] - 2026-09-13
+
+### Added
+
+- **VS Code Optimistic Preview Rendering**: Immediate in-place visual updates for creating, replying, editing, and reacting to comments without waiting for background persistence.
+- **Preview Deletion Resilience & Modal Confirmation**: Enhanced confirmation dialogues and resilient error handling for comment and reply deletion.
+- **VS Code Author Display Names & Typography Alignment**: Resolved author names and synchronized preview typography and card margins with GitHub extension styling.
+- **Living Architecture Subsite & Models**: Added LikeC4 architecture models, interactive D2 viewer, and automated documentation subsite verification.
+- **End-to-End Test Coverage**: Added comprehensive test suites for native preview actions, optimistic UI state, and cross-surface styling.
+
+### Fixed
+
+- **VS Code Preview Freeze & Mutation Loop**: Eliminated DOM mutation observer loops that caused preview freezing during fast updates.
+- **VS Code Preview Blanking & Navigation**: Prevented preview navigation to blank screens or resetting the active tab when saving comments.
+- **Action Button Hit Targets & Card Navigation**: Fixed card click propagation so button actions (resolve, edit, delete, react) are not intercepted by navigation handlers.
+- **Silent Background Refresh**: Made preview background refresh completely silent and invisible, updating comment badges and threads in-place without DOM reloads.
+- **Persistent Authentication**: Reliably persist authentication state across sessions and support environment-based GitHub tokens.
+- **Git Data Ref Base Tree SHA**: Correctly resolve base tree SHA when committing to orphan data refs in GitHub custom git refs storage.
+- **Toast Notification Noise**: Removed disruptive toast notifications on standard comment interactions.
+
 ## [1.4.2] - 2026-09-11
 
 ### Added
