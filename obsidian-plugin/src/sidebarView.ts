@@ -431,7 +431,7 @@ export class CommentsSidebarView extends ItemView {
             ${this.renderAvatar(comment.author)}
             <div class="md-comments-thread-content">
               <div class="md-comments-meta">
-                <span class="md-comments-author" title="@${escapeHtml(comment.author)}">${this.resolveDisplayName(comment.author)}</span>
+                <span class="md-comments-author" title="@${escapeHtml(comment.author)}">${escapeHtml(this.resolveDisplayName(comment.author))}</span>
                 <span class="md-comments-time">${this.formatTime(comment.created_at)}</span>
                 ${badges}
               </div>
@@ -462,7 +462,7 @@ export class CommentsSidebarView extends ItemView {
           ${this.renderAvatar(reply.author)}
           <div class="md-comments-thread-content">
             <div class="md-comments-meta">
-              <span class="md-comments-author" title="@${escapeHtml(reply.author)}">${this.resolveDisplayName(reply.author)}</span>
+              <span class="md-comments-author" title="@${escapeHtml(reply.author)}">${escapeHtml(this.resolveDisplayName(reply.author))}</span>
               <span class="md-comments-time">${this.formatTime(reply.created_at)}</span>
             </div>
             ${bodyContent}
@@ -483,7 +483,7 @@ export class CommentsSidebarView extends ItemView {
     return `
       <details class="md-comments-resolved-collapse">
         <summary class="md-comments-resolved-summary">
-          <span class="md-comments-resolved-summary-author" title="@${escapeHtml(comment.author)}">${this.resolveDisplayName(comment.author)}</span>
+          <span class="md-comments-resolved-summary-author" title="@${escapeHtml(comment.author)}">${escapeHtml(this.resolveDisplayName(comment.author))}</span>
           <span class="md-comments-resolved-summary-time">${this.formatTime(comment.created_at)}</span>
           <span class="md-comments-resolved-summary-excerpt">${escapeHtml(comment.body.slice(0, 45))}${comment.body.length > 45 ? '...' : ''}</span>
         </summary>

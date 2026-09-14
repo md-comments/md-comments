@@ -46,4 +46,33 @@ describe('Obsidian Sidebar Stored XSS Prevention (SEC-02)', () => {
     expect(rendered).toContain('&lt;script&gt;alert(&quot;pwned&quot;)&lt;&#x2F;script&gt;');
     expect(rendered).not.toContain('<script>');
   });
+
+  it('safely escapes unescaped author display names in thread, reply, and resolved summary (SEC-03)', () => {
+    const maliciousAuthor = '<img src=x onerror=alert("display_name_xss")>';
+    const comment: any = {
+      id: 'c3',
+      author: maliciousAuthor,
+      created_at: new Date().toISOString(),
+      body: 'Testing author XSS',
+      resolved: false,
+      replies: [
+        {
+          id: 'r1',
+          author: '<svg onload=alert(2)>',
+          created_at: new Date().toISOString(),
+          body: 'Testing reply author XSS',
+        },
+      ],
+    };
+
+    const threadHtml = (view as any).renderThread(comment, 'inline', '');
+    expect(threadHtml).toContain('&lt;img src=x onerror=alert(&quot;display_name_xss&quot;)&gt;');
+    expect(threadHtml).not.toContain('<img src=x onerror=alert("display_name_xss")>');
+    expect(threadHtml).toContain('&lt;svg onload=alert(2)&gt;');
+    expect(threadHtml).not.toContain('<svg onload=alert(2)>');
+
+    const resolvedHtml = (view as any).renderResolvedCollapse(comment, 'inline', '');
+    expect(resolvedHtml).toContain('&lt;img src=x onerror=alert(&quot;display_name_xss&quot;)&gt;');
+    expect(resolvedHtml).not.toContain('<img src=x onerror=alert("display_name_xss")>');
+  });
 });
