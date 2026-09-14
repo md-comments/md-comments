@@ -29,7 +29,7 @@ test.describe('OpenTelemetry Exception Observability & E2E Egress', () => {
     expect(fs.existsSync(manifestPath)).toBe(true);
 
     const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
-    expect(manifest.host_permissions).toContain('https://*.workers.dev/*');
+    expect(manifest.host_permissions).toContain('https://*.md-comments.workers.dev/*');
 
     // Assert zero vendor secrets or API keys are baked into compiled bundles
     const contentJs = fs.readFileSync(path.join(CHROME_DIST_DIR, 'content.js'), 'utf8');
