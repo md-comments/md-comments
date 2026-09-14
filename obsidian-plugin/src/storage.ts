@@ -96,7 +96,7 @@ export class CommentStore {
       if (!abstractFile || !(abstractFile instanceof TFile)) return null;
       try {
         const data = await this.app.vault.read(abstractFile);
-        const parsed = yaml.load(data) as Partial<CommentsFile>;
+        const parsed = yaml.load(data, { schema: yaml.JSON_SCHEMA }) as Partial<CommentsFile>;
         return normalizeCommentsFile(parsed ?? {});
       } catch (err) {
         console.error('[md-comments] failed to read comments file', err);

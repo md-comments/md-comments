@@ -653,7 +653,9 @@ async function fetchCommentsFile(
   const commentsPath = filePath.replace(/\.md$/i, '.comments.yml');
   try {
     const yamlContent = await fetchFileContent(owner, repo, branch, commentsPath, token);
-    const parsed = yaml.load(yamlContent) as Partial<CommentsFile>;
+    const parsed = yaml.load(yamlContent, {
+      schema: yaml.JSON_SCHEMA,
+    }) as Partial<CommentsFile>;
     return {
       page_comments: parsed?.page_comments || [],
       inline_comments: parsed?.inline_comments || [],

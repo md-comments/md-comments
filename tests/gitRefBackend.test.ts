@@ -1630,6 +1630,36 @@ page_comments: []
         expect(treeBody).toBeDefined();
         expect(treeBody.base_tree).toBeUndefined();
       });
+
+      it('safely parses collaborator comments under JSON_SCHEMA and isolates untrusted types (SEC-06)', async () => {
+        const dangerousYaml = `
+inline_comments:
+  - id: c1
+    author: alice
+    created_at: 2026-09-14T00:00:00Z
+    body: Safe body text
+custom_type: !!js/function "function() { return 42; }"
+`;
+        const base64Content = Buffer.from(dangerousYaml).toString('base64');
+
+        fetchMock.mockImplementation(async (url: string) => {
+          if (url.includes('/contents/')) {
+            return {
+              ok: true,
+              json: async () => ({ content: base64Content, encoding: 'base64' }),
+            };
+          }
+          return { ok: false, status: 404, text: async () => '' };
+        });
+
+        const result = await backend.read({
+          owner: 'my-org',
+          repo: 'my-repo',
+          filePath: 'docs/guide.md',
+        });
+
+        expect(result).toEqual({ inline_comments: [], page_comments: [] });
+      });
     });
   });
 });

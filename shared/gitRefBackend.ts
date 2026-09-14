@@ -167,7 +167,8 @@ export class GitHubOrphanRefBackend implements CommentBackend {
         const data = (await res.json()) as { content?: string; encoding?: string };
         if (data.content) {
           const rawText = data.encoding === 'base64' ? decodeBase64(data.content) : data.content;
-          const parsed = (yaml.load(rawText) as Partial<CommentsFile>) || {};
+          const parsed =
+            (yaml.load(rawText, { schema: yaml.JSON_SCHEMA }) as Partial<CommentsFile>) || {};
           return {
             inline_comments: parsed.inline_comments || [],
             page_comments: parsed.page_comments || [],
@@ -338,7 +339,8 @@ export class GitHubOrphanRefBackend implements CommentBackend {
             if (oldData.content) {
               const rawText =
                 oldData.encoding === 'base64' ? decodeBase64(oldData.content) : oldData.content;
-              const parsed = (yaml.load(rawText) as Partial<CommentsFile>) || {};
+              const parsed =
+                (yaml.load(rawText, { schema: yaml.JSON_SCHEMA }) as Partial<CommentsFile>) || {};
               const commentsFile: CommentsFile = {
                 inline_comments: parsed.inline_comments || [],
                 page_comments: parsed.page_comments || [],
