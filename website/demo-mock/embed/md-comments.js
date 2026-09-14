@@ -535,17 +535,11 @@
         );
       }
 
-      // Hosted Vercel / CORS proxy endpoints
-      candidates.push(
-        {
-          codeUrl: 'https://md-comments-oauth.vercel.app/api/device/code',
-          pollUrl: 'https://md-comments-oauth.vercel.app/api/device/token',
-        },
-        {
-          codeUrl: 'https://proxy.cors.sh/https://github.com/login/device/code',
-          pollUrl: 'https://proxy.cors.sh/https://github.com/login/oauth/access_token',
-        }
-      );
+      // Hosted first-party Vercel OAuth proxy endpoint
+      candidates.push({
+        codeUrl: 'https://md-comments-oauth.vercel.app/api/device/code',
+        pollUrl: 'https://md-comments-oauth.vercel.app/api/device/token',
+      });
 
       let deviceData = null;
       let pollUrl = '';

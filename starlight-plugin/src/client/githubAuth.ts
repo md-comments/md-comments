@@ -131,39 +131,7 @@ export async function requestDeviceCode(
     }
   }
 
-  // 3. Fallback: Hosted CORS proxy for static / published sites
-  const proxyCandidates = [
-    {
-      codeUrl: 'https://proxy.cors.sh/https://github.com/login/device/code',
-      pollUrl: 'https://proxy.cors.sh/https://github.com/login/oauth/access_token',
-    },
-  ];
-
-  for (const proxy of proxyCandidates) {
-    try {
-      const res = await fetch(proxy.codeUrl, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          client_id: clientId,
-          scope: 'public_repo repo',
-        }),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (data && data.device_code) {
-          return { data, pollUrl: proxy.pollUrl };
-        }
-      }
-    } catch {
-      // Continue to next candidate
-    }
-  }
-
-  // 4. Fallback: Direct GitHub Device Code request
+  // 3. Fallback: Direct GitHub Device Code request (when CORS is not restricted or first-party proxy is used)
   try {
     const res = await fetch('https://github.com/login/device/code', {
       method: 'POST',

@@ -177,7 +177,7 @@ describe('GitHub Device Flow Authentication', () => {
     vi.restoreAllMocks();
   });
 
-  it('requests device code from GitHub endpoint or CORS proxy', async () => {
+  it('requests device code from GitHub endpoint or first-party proxy, never third-party relay', async () => {
     const mockResponse = {
       device_code: 'dev_12345',
       user_code: 'ABCD-1234',
@@ -186,8 +186,10 @@ describe('GitHub Device Flow Authentication', () => {
       interval: 5,
     };
 
+    const requestedUrls: string[] = [];
     global.fetch = vi.fn().mockImplementation(async (url: string) => {
-      if (url.includes('proxy.cors.sh') || url.includes('device/code')) {
+      requestedUrls.push(url);
+      if (url.includes('device/code')) {
         return {
           ok: true,
           json: async () => mockResponse,
@@ -200,6 +202,7 @@ describe('GitHub Device Flow Authentication', () => {
     expect(data.user_code).toBe('ABCD-1234');
     expect(data.verification_uri).toBe('https://github.com/login/device');
     expect(pollUrl).toContain('access_token');
+    expect(requestedUrls.every((u) => !u.includes('proxy.cors.sh'))).toBe(true);
   });
 
   it('throws a clean error without mentioning PAT when network fails', async () => {
