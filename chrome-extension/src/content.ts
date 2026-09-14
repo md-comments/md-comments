@@ -1421,7 +1421,7 @@ async function renderCustomMarkdownSourceView(
     );
   } catch (err) {
     console.error('Failed to load markdown content:', err);
-    customView.innerHTML = `<div class="inline-error">Failed to load file contents: ${err}</div>`;
+    customView.innerHTML = `<div class="inline-error">Failed to load file contents: ${escapeHtml(String(err))}</div>`;
     return;
   }
 
@@ -2721,7 +2721,7 @@ function attachOAuthEvents(container: HTMLElement) {
                           data.error_description || data.error
                         );
                         if (statusEl) {
-                          statusEl.innerHTML = `<span style="color: var(--warn-color); font-size: 11px;">Error: ${data.error_description || data.error}</span>`;
+                          statusEl.innerHTML = `<span style="color: var(--warn-color); font-size: 11px;">Error: ${escapeHtml(String(data.error_description || data.error))}</span>`;
                         }
                         oauthBtn.disabled = false;
                         oauthBtn.style.display = 'block';
@@ -2750,7 +2750,7 @@ function attachOAuthEvents(container: HTMLElement) {
             const err = response?.error || 'Failed to start device flow authorization.';
             console.error('[md-comments] START_DEVICE_FLOW failed:', err);
             if (statusEl) {
-              statusEl.innerHTML = `<span style="color: var(--warn-color); font-size: 11px;">Error: ${err}</span>`;
+              statusEl.innerHTML = `<span style="color: var(--warn-color); font-size: 11px;">Error: ${escapeHtml(String(err))}</span>`;
             }
             oauthBtn.disabled = false;
           }
@@ -4178,7 +4178,7 @@ async function renderTabContent() {
         const prInfo = await githubApi.getPullRequestInfo(meta.owner, meta.repo, pullNum);
         prInfoHeadBranch = prInfo.headBranch;
       } catch (err) {
-        filesPane.innerHTML = `<div class="tab-error-state">Failed to load PR branch info: ${err}</div>`;
+        filesPane.innerHTML = `<div class="tab-error-state">Failed to load PR branch info: ${escapeHtml(String(err))}</div>`;
         return;
       }
     }
@@ -4192,7 +4192,7 @@ async function renderTabContent() {
     const prInfo = await githubApi.getPullRequestInfo(meta.owner, meta.repo, pullNum);
     changedFiles = prInfo.changedFiles;
   } catch (err) {
-    filesPane.innerHTML = `<div class="tab-error-state">Failed to fetch Pull Request files: ${err}</div>`;
+    filesPane.innerHTML = `<div class="tab-error-state">Failed to fetch Pull Request files: ${escapeHtml(String(err))}</div>`;
     return;
   }
 
@@ -4361,7 +4361,7 @@ async function loadAndRenderFileInTab(
       currentToken
     );
   } catch (err) {
-    markdownBody.innerHTML = `<div class="inline-error" style="color: var(--warn-color); font-family: var(--font-family);">Failed to load file contents: ${err}</div>`;
+    markdownBody.innerHTML = `<div class="inline-error" style="color: var(--warn-color); font-family: var(--font-family);">Failed to load file contents: ${escapeHtml(String(err))}</div>`;
     return;
   }
 
