@@ -135,7 +135,7 @@ for (const relPath of d2Files) {
   }
 }
 
-// 5. Validate the 14 Invariants in catalog and documentation
+// 5. Validate the 17 Invariants in catalog and documentation
 const requiredInvariants = [
   'INV-OAUTH-ONLY',
   'INV-FAST-FORWARD-RETRY',
@@ -151,6 +151,9 @@ const requiredInvariants = [
   'INV-AUTH-PERSISTENCE',
   'INV-MODAL-CONFIRMATION',
   'INV-SILENT-BG-REFRESH',
+  'INV-NO-THIRD-PARTY-AUTH-PROXY',
+  'INV-SAFE-DESERIALIZATION',
+  'INV-INPUT-VALIDATION-REPO',
 ];
 
 const invariantsDocPath = path.join(rootDir, 'docs/architecture/invariants-and-adrs.md');

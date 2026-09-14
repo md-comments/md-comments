@@ -10,22 +10,25 @@ This document formalizes the **14 Core System Invariants** and key **Architectur
 
 System invariants are non-negotiable correctness rules enforced across all monorepo packages. They are cataloged under [`quality/invariants/`](../../quality/invariants/) and validated in CI.
 
-| Invariant ID                   | Title                                     | Scope                                 | Enforcement Mechanism                                          |
-| :----------------------------- | :---------------------------------------- | :------------------------------------ | :------------------------------------------------------------- |
-| **`INV-OAUTH-ONLY`**           | OAuth Only Authentication                 | Chrome, Safari, IDE                   | Static analysis, ESLint AST rules, integration tests           |
-| **`INV-FAST-FORWARD-RETRY`**   | Fast-Forward Concurrent Push Retry        | Shared, Storage                       | Unit tests asserting exponential backoff on 409 Conflict       |
-| **`INV-ZERO-CLIENT-SECRETS`**  | Zero Client Secrets                       | All client bundles                    | AST bundle scanning, pre-commit secret leak tests              |
-| **`INV-ZERO-CUSTOMER-DATA`**   | Zero Customer Data in Telemetry           | Telemetry, Shared                     | Schema verification and automated payload PII scrub tests      |
-| **`INV-TELEMETRY-KILLSWITCH`** | Immediate Telemetry Killswitch            | Telemetry                             | Tests asserting zero network dispatch when disabled            |
-| **`INV-VISUAL-PARITY`**        | Cross-Platform Visual Parity              | VS Code, Browser, Obsidian, Starlight | Playwright visual regression tests and design token assertions |
-| **`INV-XSS-SANITIZED`**        | Strict Markdown/HTML Sanitization         | Preview Webview, WebExtensions        | DOMPurify / sanitizeHtml AST assertions                        |
-| **`INV-QUOTA-DEFENSE`**        | GitHub API Rate Limit Defense             | Shared Git API                        | Conditional ETag caching and Tree SHA reuse tests              |
-| **`INV-IN-PLACE-PREVIEW`**     | In-Place Preview DOM Mutation             | VS Code Webview Preview               | Playwright E2E asserting zero document DOM refresh             |
-| **`INV-MUTATION-GUARD`**       | MutationObserver Equality Guard           | VS Code Preview Scripts               | `tests/vscode-preview-infinite-loop.test.ts`                   |
-| **`INV-BASE-TREE-SHA`**        | Base Tree SHA Resolution                  | Shared Git Ref Backend                | `tests/gitRefBackend.test.ts` checking `tree.sha` usage        |
-| **`INV-AUTH-PERSISTENCE`**     | Multi-Tier Auth & GlobalState Persistence | VS Code Auth Manager                  | `tests/vscode-github-auth-persistence.test.ts`                 |
-| **`INV-MODAL-CONFIRMATION`**   | In-Preview Modal Deletion Confirmation    | VS Code Webview DOM                   | `tests/e2e/vscode-real-repo-sequential-delete.spec.ts`         |
-| **`INV-SILENT-BG-REFRESH`**    | Silent Background Synchronization         | Background Polling                    | `tests/refreshBackgroundSync.test.ts`                          |
+| Invariant ID                        | Title                                        | Scope                                 | Enforcement Mechanism                                          |
+| :---------------------------------- | :------------------------------------------- | :------------------------------------ | :------------------------------------------------------------- |
+| **`INV-OAUTH-ONLY`**                | OAuth Only Authentication                    | Chrome, Safari, IDE                   | Static analysis, ESLint AST rules, integration tests           |
+| **`INV-FAST-FORWARD-RETRY`**        | Fast-Forward Concurrent Push Retry           | Shared, Storage                       | Unit tests asserting exponential backoff on 409 Conflict       |
+| **`INV-ZERO-CLIENT-SECRETS`**       | Zero Client Secrets                          | All client bundles                    | AST bundle scanning, pre-commit secret leak tests              |
+| **`INV-ZERO-CUSTOMER-DATA`**        | Zero Customer Data in Telemetry              | Telemetry, Shared                     | Schema verification and automated payload PII scrub tests      |
+| **`INV-TELEMETRY-KILLSWITCH`**      | Immediate Telemetry Killswitch               | Telemetry                             | Tests asserting zero network dispatch when disabled            |
+| **`INV-VISUAL-PARITY`**             | Cross-Platform Visual Parity                 | VS Code, Browser, Obsidian, Starlight | Playwright visual regression tests and design token assertions |
+| **`INV-XSS-SANITIZED`**             | Strict Markdown/HTML Sanitization            | Preview Webview, WebExtensions        | DOMPurify / sanitizeHtml AST assertions                        |
+| **`INV-QUOTA-DEFENSE`**             | GitHub API Rate Limit Defense                | Shared Git API                        | Conditional ETag caching and Tree SHA reuse tests              |
+| **`INV-IN-PLACE-PREVIEW`**          | In-Place Preview DOM Mutation                | VS Code Webview Preview               | Playwright E2E asserting zero document DOM refresh             |
+| **`INV-MUTATION-GUARD`**            | MutationObserver Equality Guard              | VS Code Preview Scripts               | `tests/vscode-preview-infinite-loop.test.ts`                   |
+| **`INV-BASE-TREE-SHA`**             | Base Tree SHA Resolution                     | Shared Git Ref Backend                | `tests/gitRefBackend.test.ts` checking `tree.sha` usage        |
+| **`INV-AUTH-PERSISTENCE`**          | Multi-Tier Auth & GlobalState Persistence    | VS Code Auth Manager                  | `tests/vscode-github-auth-persistence.test.ts`                 |
+| **`INV-MODAL-CONFIRMATION`**        | In-Preview Modal Deletion Confirmation       | VS Code Webview DOM                   | `tests/e2e/vscode-real-repo-sequential-delete.spec.ts`         |
+| **`INV-SILENT-BG-REFRESH`**         | Silent Background Synchronization            | Background Polling                    | `tests/refreshBackgroundSync.test.ts`                          |
+| **`INV-NO-THIRD-PARTY-AUTH-PROXY`** | No Third-Party OAuth Proxy Relays            | All auth clients, Starlight           | Vitest endpoint assertions, elimination of proxy.cors.sh       |
+| **`INV-SAFE-DESERIALIZATION`**      | Strict JSON Schema on YAML Parsing           | Storage, Shared, Obsidian, Chrome     | `yaml.JSON_SCHEMA` enforcement across all `yaml.load` calls    |
+| **`INV-INPUT-VALIDATION-REPO`**     | Repository Identifier Path Traversal Defense | Shared Git Ref Backend                | `/^[\w.-]+$/` validation on owner and repo in GitHub API calls |
 
 ---
 
@@ -86,6 +89,18 @@ Destructive user actions within native preview webviews (e.g., deleting threads 
 ### 14. `INV-SILENT-BG-REFRESH`
 
 Background comment refresh loops and polling routines must execute silently. Extensions must never display toast notifications, steal window focus, or interrupt active typing during routine background syncs.
+
+### 15. `INV-NO-THIRD-PARTY-AUTH-PROXY`
+
+OAuth Device Flow authorization codes, tokens, and credentials must never transit through untrusted third-party CORS proxies (e.g., `proxy.cors.sh`). All network traffic must connect directly to official GitHub OAuth endpoints (`https://github.com/login/*`) or dedicated first-party proxy middlewares with origin verification.
+
+### 16. `INV-SAFE-DESERIALIZATION`
+
+Comment storage formats use YAML on custom git refs. To eliminate arbitrary object instantiation, code execution, or prototype pollution vulnerabilities, all YAML parser invocations (`yaml.load`) across the monorepo must explicitly specify `{ schema: yaml.JSON_SCHEMA }`.
+
+### 17. `INV-INPUT-VALIDATION-REPO`
+
+All methods accepting repository owner and repository name identifiers must validate them against path traversal sequences (`..`, `/`, `\`) and invalid characters before interpolating them into GitHub API URL paths. Identifiers must conform to `/^[\w.-]+$/` and reject directory navigation tokens.
 
 ---
 

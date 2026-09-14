@@ -97,6 +97,13 @@ Run the following checks from the root directory:
 
     _Verifies that LikeC4 architecture models, D2 diagrams with the ELK layout engine, monorepo package parity, preview runtime components, and invariants remain synchronized with code changes._
 
+11. **OWASP Top 10 & Security Invariant Verification**:
+    - **A01: Broken Access Control**: Verify least-privilege OAuth scopes (default to `public_repo`, configurable per user need).
+    - **A02: Cryptographic Failures & Sensitive Data**: Ensure zero client secrets or tokens are checked into version control (`INV-ZERO-CLIENT-SECRETS`), and token storage follows documented security boundaries.
+    - **A03: Injection & Path Traversal**: Validate all repository identifiers (`owner`, `repo`) against path traversal (`INV-INPUT-VALIDATION-REPO`) and sanitize all rendered DOM content (`INV-XSS-SANITIZED`).
+    - **A07: Identification & Auth Failures**: Prohibit untrusted third-party authentication relays (`INV-NO-THIRD-PARTY-AUTH-PROXY`); restrict dev server proxies to local origins and strict payload schemas.
+    - **A08: Software & Data Integrity Failures**: Enforce safe deserialization schemas (`yaml.JSON_SCHEMA`) on all external document parsers (`INV-SAFE-DESERIALIZATION`).
+
 ## Execution Workflow
 
 1. **Pre-Commit Assessment**: Before finalizing any commit or calling a commit helper (e.g., `caveman-commit`), run the commands listed above.
