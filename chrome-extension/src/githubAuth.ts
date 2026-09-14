@@ -148,7 +148,9 @@ export interface DeviceCodeResponse {
 /**
  * Initiates the GitHub OAuth Device Flow.
  */
-export async function requestDeviceCode(): Promise<DeviceCodeResponse> {
+export async function requestDeviceCode(
+  scope: string = 'public_repo'
+): Promise<DeviceCodeResponse> {
   const res = await fetch('https://github.com/login/device/code', {
     method: 'POST',
     headers: {
@@ -157,7 +159,7 @@ export async function requestDeviceCode(): Promise<DeviceCodeResponse> {
     },
     body: JSON.stringify({
       client_id: CLIENT_ID,
-      scope: 'public_repo repo',
+      scope,
     }),
   });
 

@@ -129,6 +129,19 @@
           "default": "standalone",
           "description": "Preferred preview mode for viewing Markdown comments"
         },
+        "mdComments.oauthScope": {
+          "type": "string",
+          "enum": [
+            "public_repo",
+            "repo"
+          ],
+          "enumDescriptions": [
+            "Least privilege: grants access to public repositories only (recommended).",
+            "Grants access to both public and private repositories."
+          ],
+          "default": "public_repo",
+          "description": "OAuth scope requested when signing in to GitHub"
+        },
         "mdComments.sidebarWidth": {
           "type": "number",
           "default": 340,

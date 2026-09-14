@@ -61,8 +61,9 @@ export async function getOAuthToken(): Promise<string | null> {
 
   // 1. Try VS Code native GitHub authentication session
   try {
-    logDebug('getOAuthToken checking VS Code native auth session');
-    const session = await vscode.authentication.getSession('github', ['repo'], {
+    const scope = getConfiguredOAuthScope();
+    logDebug(`getOAuthToken checking VS Code native auth session with scope: ${scope}`);
+    const session = await vscode.authentication.getSession('github', [scope], {
       createIfNone: false,
       silent: true,
     });
@@ -129,8 +130,18 @@ export interface DeviceCodeResponse {
   interval: number;
 }
 
-export async function requestDeviceCode(): Promise<DeviceCodeResponse> {
-  logDebug('requestDeviceCode initiating OAuth device flow');
+export function getConfiguredOAuthScope(): string {
+  try {
+    const config = vscode.workspace.getConfiguration('mdComments');
+    return config.get<string>('oauthScope', 'public_repo') || 'public_repo';
+  } catch {
+    return 'public_repo';
+  }
+}
+
+export async function requestDeviceCode(scope?: string): Promise<DeviceCodeResponse> {
+  const effectiveScope = scope || getConfiguredOAuthScope();
+  logDebug(`requestDeviceCode initiating OAuth device flow with scope: ${effectiveScope}`);
   const res = await fetch('https://github.com/login/device/code', {
     method: 'POST',
     headers: {
@@ -139,7 +150,7 @@ export async function requestDeviceCode(): Promise<DeviceCodeResponse> {
     },
     body: JSON.stringify({
       client_id: CLIENT_ID,
-      scope: 'public_repo repo',
+      scope: effectiveScope,
     }),
   });
 

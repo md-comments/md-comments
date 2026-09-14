@@ -554,7 +554,7 @@
             },
             body: JSON.stringify({
               client_id: clientId,
-              scope: 'repo read:user',
+              scope: this.oauthScope || 'public_repo read:user',
             }),
           });
           if (res.ok) {

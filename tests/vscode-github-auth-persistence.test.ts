@@ -181,4 +181,19 @@ describe('VS Code GitHub Auth Persistence and Startup Synchronization', () => {
     expect(html).toContain('Not Logged In to GitHub');
     expect(html).toContain('md-comments-auth-banner');
   });
+
+  it('requests least-privilege public_repo scope by default (SEC-05)', async () => {
+    let queriedScopes: string[] = [];
+    const vscode = await import('vscode');
+    (vscode.authentication.getSession as any).mockImplementation(
+      async (_provider: string, scopes: string[]) => {
+        queriedScopes = scopes;
+        return { accessToken: 'token_123', account: { label: 'user' } };
+      }
+    );
+
+    const token = await getOAuthToken();
+    expect(token).toBe('token_123');
+    expect(queriedScopes).toEqual(['public_repo']);
+  });
 });

@@ -327,4 +327,35 @@ describe('chrome-extension/githubApi checkAppInstallation', () => {
       globalThis.fetch = originalFetch;
     }
   });
+
+  it('requests least-privilege public_repo scope by default (SEC-05)', async () => {
+    const { requestDeviceCode } = await import('../chrome-extension/src/githubAuth');
+    const originalFetch = globalThis.fetch;
+    let requestedPayload: any = null;
+
+    globalThis.fetch = vi.fn(async (url: string, init?: any) => {
+      if (url.includes('device/code')) {
+        requestedPayload = JSON.parse(init.body);
+        return {
+          ok: true,
+          json: async () => ({
+            device_code: 'dev_123',
+            user_code: 'USER_123',
+            verification_uri: 'https://github.com/login/device',
+          }),
+        };
+      }
+      return { ok: false, status: 404 };
+    }) as any;
+
+    try {
+      await requestDeviceCode();
+      expect(requestedPayload.scope).toBe('public_repo');
+
+      await requestDeviceCode('public_repo repo');
+      expect(requestedPayload.scope).toBe('public_repo repo');
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
+  });
 });
