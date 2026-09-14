@@ -651,3 +651,162 @@ describe('Web Client Token Storage Lifecycle (SEC-04)', () => {
     expect(getStoredToken()).toBeNull();
   });
 });
+
+describe('Dev Server Auth Proxy Middleware', () => {
+  function createMockHttp(options: {
+    url: string;
+    method?: string;
+    origin?: string;
+    host?: string;
+    body?: unknown;
+  }) {
+    let statusCode = 200;
+    const headers: Record<string, string> = {};
+    let responseData = '';
+
+    const req: any = {
+      url: options.url,
+      method: options.method || 'POST',
+      headers: {
+        ...(options.origin ? { origin: options.origin } : {}),
+        ...(options.host ? { host: options.host } : {}),
+      },
+      body: options.body,
+      async *[Symbol.asyncIterator]() {
+        if (typeof options.body === 'string') {
+          yield Buffer.from(options.body);
+        }
+      },
+    };
+
+    const res: any = {
+      setHeader(name: string, value: string) {
+        headers[name.toLowerCase()] = value;
+      },
+      writeHead(code: number, extraHeaders?: Record<string, string>) {
+        statusCode = code;
+        if (extraHeaders) {
+          for (const [k, v] of Object.entries(extraHeaders)) {
+            headers[k.toLowerCase()] = v;
+          }
+        }
+      },
+      end(data?: string) {
+        if (data) responseData = data;
+      },
+    };
+
+    return {
+      req,
+      res,
+      getStatus: () => statusCode,
+      getHeader: (name: string) => headers[name.toLowerCase()],
+      getBody: () => (responseData ? JSON.parse(responseData) : null),
+    };
+  }
+
+  it('rejects disallowed origins with 403 Forbidden', async () => {
+    const { createAuthMiddleware } = await import('../starlight-plugin/src/server/authProxy');
+    const middleware = createAuthMiddleware();
+    const http = createMockHttp({
+      url: '/api/md-comments/auth/device-code',
+      origin: 'https://evil-attacker.com',
+      body: { client_id: 'test_client' },
+    });
+
+    let nextCalled = false;
+    await middleware(http.req, http.res, () => {
+      nextCalled = true;
+    });
+
+    expect(nextCalled).toBe(false);
+    expect(http.getStatus()).toBe(403);
+    expect(http.getBody().error).toMatch(/Forbidden: origin not allowed/);
+    expect(http.getHeader('access-control-allow-origin')).toBeUndefined();
+  });
+
+  it('allows localhost origin and reflects origin without wildcard', async () => {
+    const { createAuthMiddleware } = await import('../starlight-plugin/src/server/authProxy');
+    const middleware = createAuthMiddleware();
+
+    global.fetch = vi.fn().mockResolvedValue({
+      status: 200,
+      json: async () => ({ device_code: 'dev_123' }),
+    } as any);
+
+    const http = createMockHttp({
+      url: '/api/md-comments/auth/device-code',
+      origin: 'http://localhost:4321',
+      body: { client_id: 'test_client', scope: 'public_repo' },
+    });
+
+    await middleware(http.req, http.res, () => {});
+
+    expect(http.getStatus()).toBe(200);
+    expect(http.getHeader('access-control-allow-origin')).toBe('http://localhost:4321');
+    expect(http.getHeader('access-control-allow-origin')).not.toBe('*');
+    expect(http.getHeader('vary')).toBe('Origin');
+  });
+
+  it('rejects unexpected properties in device-code request payload', async () => {
+    const { createAuthMiddleware } = await import('../starlight-plugin/src/server/authProxy');
+    const middleware = createAuthMiddleware();
+
+    const http = createMockHttp({
+      url: '/api/md-comments/auth/device-code',
+      origin: 'http://localhost:3000',
+      body: { client_id: 'test_client', extra_injected_param: 'bad_value' },
+    });
+
+    await middleware(http.req, http.res, () => {});
+
+    expect(http.getStatus()).toBe(400);
+    expect(http.getBody().error).toContain('Unexpected parameter: extra_injected_param');
+  });
+
+  it('rejects missing or invalid parameters in access-token request', async () => {
+    const { createAuthMiddleware } = await import('../starlight-plugin/src/server/authProxy');
+    const middleware = createAuthMiddleware();
+
+    // Missing grant_type
+    const http = createMockHttp({
+      url: '/api/md-comments/auth/access-token',
+      origin: 'http://localhost:3000',
+      body: { client_id: 'test_client', device_code: 'dev_123' },
+    });
+
+    await middleware(http.req, http.res, () => {});
+
+    expect(http.getStatus()).toBe(400);
+    expect(http.getBody().error).toContain('Missing or invalid grant_type');
+  });
+
+  it('forwards sanitized device-code payload to GitHub', async () => {
+    const { createAuthMiddleware } = await import('../starlight-plugin/src/server/authProxy');
+    const middleware = createAuthMiddleware();
+
+    let capturedFetchBody: string | undefined;
+    global.fetch = vi.fn().mockImplementation(async (_url: string, init: any) => {
+      capturedFetchBody = init?.body;
+      return {
+        status: 200,
+        json: async () => ({ device_code: 'dev_abc' }),
+      } as any;
+    });
+
+    const http = createMockHttp({
+      url: '/api/md-comments/auth/device-code',
+      origin: 'http://127.0.0.1:4321',
+      body: { client_id: 'safe_client_id', scope: 'public_repo' },
+    });
+
+    await middleware(http.req, http.res, () => {});
+
+    expect(http.getStatus()).toBe(200);
+    expect(capturedFetchBody).toBeDefined();
+    expect(JSON.parse(capturedFetchBody!)).toEqual({
+      client_id: 'safe_client_id',
+      scope: 'public_repo',
+    });
+  });
+});
