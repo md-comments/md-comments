@@ -5,6 +5,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@md-comments/shared': path.resolve(__dirname, 'shared/index.ts'),
+      obsidian: path.resolve(__dirname, 'tests/mocks/obsidian.ts'),
     },
   },
   test: {

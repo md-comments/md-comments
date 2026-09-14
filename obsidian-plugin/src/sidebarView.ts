@@ -370,7 +370,7 @@ export class CommentsSidebarView extends ItemView {
       .filter(Boolean)
       .join(' ');
     const quoteHtml = quote
-      ? `<blockquote class="md-comments-quote"><div class="md-comments-quote-text">${quote}</div></blockquote>`
+      ? `<blockquote class="md-comments-quote"><div class="md-comments-quote-text">${escapeHtml(quote)}</div></blockquote>`
       : '';
     const resolvedActions = this.renderActions(
       comment.id,
@@ -485,7 +485,7 @@ export class CommentsSidebarView extends ItemView {
         <summary class="md-comments-resolved-summary">
           <span class="md-comments-resolved-summary-author" title="@${escapeHtml(comment.author)}">${this.resolveDisplayName(comment.author)}</span>
           <span class="md-comments-resolved-summary-time">${this.formatTime(comment.created_at)}</span>
-          <span class="md-comments-resolved-summary-excerpt">${comment.body.slice(0, 45)}${comment.body.length > 45 ? '...' : ''}</span>
+          <span class="md-comments-resolved-summary-excerpt">${escapeHtml(comment.body.slice(0, 45))}${comment.body.length > 45 ? '...' : ''}</span>
         </summary>
         <div class="md-comments-resolved-body">
           ${threadHtml}
