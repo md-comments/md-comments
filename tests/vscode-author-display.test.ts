@@ -52,12 +52,18 @@ import {
   authorDisplayLabel,
   clearGitHubDisplayNameCache,
 } from '../vscode-extension/src/githubDisplayNames';
-import { getAuthor, getAuthorDisplayName } from '../vscode-extension/src/author';
+import {
+  getAuthor,
+  getAuthorDisplayName,
+  setCachedAuthorDisplayName,
+  clearAuthorCache,
+} from '../vscode-extension/src/author';
 import { getMarkdownEngine } from '../vscode-extension/src/markdownRender';
 
 describe('VS Code Author Display Name and Typography', () => {
   beforeEach(() => {
     clearGitHubDisplayNameCache();
+    clearAuthorCache();
   });
 
   it('correctly sets and retrieves GitHub display names in cache', () => {
@@ -77,8 +83,8 @@ describe('VS Code Author Display Name and Typography', () => {
 
     const displayName = await getAuthorDisplayName();
     expect(displayName).toBeDefined();
-    // On this development machine, git config user.name is 'Marat Strelets'
-    expect(displayName).toBe('Marat Strelets');
+    expect(typeof displayName).toBe('string');
+    expect(displayName.length).toBeGreaterThan(0);
   });
 
   it('handles case-insensitive display name lookups', () => {
@@ -92,9 +98,10 @@ describe('VS Code Author Display Name and Typography', () => {
     const author = await getAuthor();
     expect(author).toBeDefined();
 
+    setCachedAuthorDisplayName('Test Display Name');
     clearGitHubDisplayNameCache();
-    // authorDisplayLabel for current user should resolve to real name via registered provider
-    expect(authorDisplayLabel(author)).toBe('Marat Strelets');
+    // authorDisplayLabel for current user should resolve to display name via registered provider
+    expect(authorDisplayLabel(author)).toBe('Test Display Name');
   });
 
   it('emits data-md-current-author and data-md-current-author-name in markdown preview footer', () => {
