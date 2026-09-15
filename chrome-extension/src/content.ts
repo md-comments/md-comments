@@ -2247,6 +2247,15 @@ function injectSidebar() {
     });
   }
 
+  activeSidebarHost.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    if (!target.closest('.emoji-picker-container')) {
+      activeSidebarHost?.querySelectorAll('.emoji-popover').forEach((p) => {
+        (p as HTMLElement).style.display = 'none';
+      });
+    }
+  });
+
   if (!isEmbedded) {
     document.body.appendChild(activeSidebarHost);
   }
@@ -3057,6 +3066,18 @@ function renderCommentCard(comment: InlineComment | PageComment, type: 'inline' 
 
   const repliesHtml = comment.replies
     .map((r) => {
+      const replyReactionsHtml =
+        r.reactions && r.reactions.length > 0
+          ? `<div class="reactions-row reply-reactions-row">
+              ${r.reactions
+                .map(
+                  (reaction) =>
+                    `<button class="reaction-chip reply-reaction-chip" data-id="${r.id}" data-root-id="${comment.id}" data-type="${type}" data-kind="reply" data-emoji="${escapeHtml(reaction.emoji)}">${escapeHtml(reaction.emoji)} <span>${reaction.users.length}</span></button>`
+                )
+                .join('')}
+            </div>`
+          : '';
+
       return `
       <div class="reply-item" id="reply-${r.id}" data-reply-id="${r.id}">
         ${renderAvatar(r.author, 24, r.author)}
@@ -3069,7 +3090,18 @@ function renderCommentCard(comment: InlineComment | PageComment, type: 'inline' 
             ${
               isWritable
                 ? `
-              <div class="reply-actions" style="display: flex; gap: 4px;">
+              <div class="reply-actions" style="display: flex; gap: 4px; align-items: center;">
+                <div class="emoji-picker-container">
+                  <button class="icon-action-btn emoji-picker-btn reply-emoji-btn" title="Add Reaction">${ICON_REACT}</button>
+                  <div class="emoji-popover" style="display: none;">
+                    ${['👍', '👀', '❤️', '🎉', '❓']
+                      .map(
+                        (e) =>
+                          `<button class="emoji-opt-btn" data-id="${r.id}" data-root-id="${comment.id}" data-type="${type}" data-kind="reply" data-emoji="${e}">${e}</button>`
+                      )
+                      .join('')}
+                  </div>
+                </div>
                 <button class="icon-action-btn edit-reply-btn" title="Edit Reply">${ICON_EDIT}</button>
                 <button class="icon-action-btn delete-reply-btn" title="Delete Reply">${ICON_DELETE}</button>
               </div>
@@ -3078,6 +3110,7 @@ function renderCommentCard(comment: InlineComment | PageComment, type: 'inline' 
             }
           </div>
           <div class="reply-body" data-raw-body="${escapeHtml(r.body)}">${renderCommentBody(r.body)}</div>
+          ${replyReactionsHtml}
         </div>
         ${pendingSubmissionIds.has(r.id) ? `<div class="md-comments-submitting-line" id="submitting-line-${r.id}"></div>` : ''}
       </div>
@@ -3153,24 +3186,44 @@ function renderCommentCard(comment: InlineComment | PageComment, type: 'inline' 
   `;
 }
 
-async function toggleEmojiReaction(commentId: string, type: 'inline' | 'page', emoji: string) {
+async function toggleEmojiReaction(
+  targetId: string,
+  type: 'inline' | 'page',
+  emoji: string,
+  kind: 'root' | 'reply' = 'root',
+  rootId?: string
+) {
   const author = await getDisplayAuthor();
   const updated = { ...loadedComments };
   const targetList = type === 'inline' ? updated.inline_comments : updated.page_comments;
-  const comment = targetList.find((c) => c.id === commentId);
-  if (!comment) return;
 
-  if (!comment.reactions) comment.reactions = [];
-  const existing = comment.reactions.find((r) => r.emoji === emoji);
+  let targetItem: { reactions?: Array<{ emoji: string; users: string[] }> } | undefined;
+
+  if (kind === 'reply') {
+    let parent = rootId ? targetList.find((c) => c.id === rootId) : undefined;
+    if (!parent) {
+      parent = targetList.find((c) => c.replies && c.replies.some((r) => r.id === targetId));
+    }
+    if (parent && parent.replies) {
+      targetItem = parent.replies.find((r) => r.id === targetId);
+    }
+  } else {
+    targetItem = targetList.find((c) => c.id === targetId);
+  }
+
+  if (!targetItem) return;
+
+  if (!targetItem.reactions) targetItem.reactions = [];
+  const existing = targetItem.reactions.find((r) => r.emoji === emoji);
   if (existing) {
     if (existing.users.includes(author)) {
       existing.users = existing.users.filter((u) => u !== author);
     } else {
       existing.users.push(author);
     }
-    comment.reactions = comment.reactions.filter((r) => r.users.length > 0);
+    targetItem.reactions = targetItem.reactions.filter((r) => r.users.length > 0);
   } else {
-    comment.reactions.push({ emoji, users: [author] });
+    targetItem.reactions.push({ emoji, users: [author] });
   }
 
   await commitCommentFileChanges(updated, 'toggle reaction');
@@ -3270,23 +3323,32 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
   container.querySelectorAll('.md-comments-card, .comment-card').forEach((card) => {
     const commentId = card.getAttribute('data-id') || '';
 
-    const emojiPickerBtn = card.querySelector('.emoji-picker-btn');
-    const emojiPopover = card.querySelector('.emoji-popover') as HTMLElement | null;
-    if (emojiPickerBtn && emojiPopover) {
-      emojiPickerBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isHidden = emojiPopover.style.display === 'none';
-        emojiPopover.style.display = isHidden ? 'flex' : 'none';
-      });
-    }
+    card.querySelectorAll('.emoji-picker-container').forEach((pickerContainer) => {
+      const emojiPickerBtn = pickerContainer.querySelector('.emoji-picker-btn');
+      const emojiPopover = pickerContainer.querySelector('.emoji-popover') as HTMLElement | null;
+      if (emojiPickerBtn && emojiPopover) {
+        emojiPickerBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const isHidden = emojiPopover.style.display === 'none';
+          card.querySelectorAll('.emoji-popover').forEach((p) => {
+            if (p !== emojiPopover) (p as HTMLElement).style.display = 'none';
+          });
+          emojiPopover.style.display = isHidden ? 'flex' : 'none';
+        });
+      }
+    });
 
     card.querySelectorAll('.emoji-opt-btn').forEach((btn) => {
       btn.addEventListener('click', async (e) => {
         e.stopPropagation();
         const emoji = btn.getAttribute('data-emoji');
+        const targetId = btn.getAttribute('data-id') || commentId;
+        const kind = (btn.getAttribute('data-kind') as 'root' | 'reply') || 'root';
+        const rootId = btn.getAttribute('data-root-id') || commentId;
+        const popover = btn.closest('.emoji-popover') as HTMLElement | null;
+        if (popover) popover.style.display = 'none';
         if (emoji) {
-          if (emojiPopover) emojiPopover.style.display = 'none';
-          await toggleEmojiReaction(commentId, type, emoji);
+          await toggleEmojiReaction(targetId, type, emoji, kind, rootId);
         }
       });
     });
@@ -3295,8 +3357,11 @@ function attachCommentCardEvents(container: HTMLElement, type: 'inline' | 'page'
       btn.addEventListener('click', async (e) => {
         e.stopPropagation();
         const emoji = btn.getAttribute('data-emoji');
+        const targetId = btn.getAttribute('data-id') || commentId;
+        const kind = (btn.getAttribute('data-kind') as 'root' | 'reply') || 'root';
+        const rootId = btn.getAttribute('data-root-id') || commentId;
         if (emoji) {
-          await toggleEmojiReaction(commentId, type, emoji);
+          await toggleEmojiReaction(targetId, type, emoji, kind, rootId);
         }
       });
     });

@@ -17,6 +17,7 @@ import { initializeAuth, signIn, signOut, getOAuthToken, onDidChangeAuthState } 
 import { initializeLogger, logDebug, logInfo, logError } from './logger';
 import { globalOptimisticStore } from './optimisticStore';
 import { resolveStorageKeyForUri } from './repoManager';
+import { CommentPollManager } from '../../shared/commentSync';
 
 function mdUriFromMessage(msg: CommentActionMessage): vscode.Uri {
   const md = msg.md?.trim();
@@ -54,24 +55,47 @@ async function updateStatusBar(): Promise<void> {
 }
 
 async function refreshPreview(forceRemote = false, targetUri?: vscode.Uri): Promise<void> {
-  logDebug(`refreshPreview triggered, forceRemote=${forceRemote}`);
+  logDebug(
+    `refreshPreview triggered, forceRemote=${forceRemote}, targetUri=${targetUri?.toString()}`
+  );
   globalCodeLensProvider?.refresh();
+
+  const urisToRefresh: vscode.Uri[] = [];
+  if (targetUri) {
+    urisToRefresh.push(targetUri);
+  }
   const editor = vscode.window.activeTextEditor;
   if (
-    forceRemote &&
     editor?.document &&
     (editor.document.languageId === 'markdown' || editor.document.uri.path.endsWith('.md'))
   ) {
-    try {
-      const key = await resolveStorageKeyForUri(editor.document.uri);
-      if (key) {
-        globalOptimisticStore.invalidate(key);
-      }
-      void readComments(editor.document.uri, true);
-    } catch (err) {
-      logError('refreshPreview invalidating/reading remote failed', err);
+    if (!urisToRefresh.some((u) => u.toString() === editor.document.uri.toString())) {
+      urisToRefresh.push(editor.document.uri);
     }
   }
+  for (const doc of vscode.workspace.textDocuments) {
+    if (doc.languageId === 'markdown' || doc.uri.path.endsWith('.md')) {
+      if (!urisToRefresh.some((u) => u.toString() === doc.uri.toString())) {
+        urisToRefresh.push(doc.uri);
+      }
+    }
+  }
+
+  if (forceRemote) {
+    for (const uri of urisToRefresh) {
+      try {
+        const key = await resolveStorageKeyForUri(uri);
+        if (key) {
+          globalOptimisticStore.invalidate(key);
+          globalOptimisticStore.clearTombstones(key);
+        }
+        await readComments(uri, true);
+      } catch (err) {
+        logError(`refreshPreview invalidating/reading remote failed for ${uri.toString()}`, err);
+      }
+    }
+  }
+
   CommentPreviewPanel.refreshAll(forceRemote);
   try {
     await warmAuthorCache();
@@ -130,7 +154,7 @@ async function handlePreviewAction(raw: unknown): Promise<void> {
       void updateStatusBar();
       if (msg.action === 'refresh') {
         await refreshPreview(true, mdUri);
-      } else if (msg.action === 'delete') {
+      } else {
         await refreshPreview(false, mdUri);
       }
     })
@@ -289,7 +313,44 @@ export function activate(context: vscode.ExtensionContext): {
 
   globalCodeLensProvider = new MarkdownCommentsCodeLensProvider();
 
+  const commentPollManager = new CommentPollManager(
+    async () => {
+      logDebug('CommentPollManager running background poll check');
+      const docs = vscode.workspace.textDocuments.filter(
+        (d) => d.languageId === 'markdown' || d.uri.path.endsWith('.md')
+      );
+      if (docs.length === 0) return;
+      let hasUpdates = false;
+      for (const doc of docs) {
+        try {
+          const key = await resolveStorageKeyForUri(doc.uri);
+          if (!key) continue;
+          await readComments(doc.uri, true);
+          hasUpdates = true;
+        } catch {
+          // ignore background poll error
+        }
+      }
+      if (hasUpdates) {
+        await refreshPreview(false);
+      }
+    },
+    { intervalMs: 25000, minIntervalMs: 10000 }
+  );
+  commentPollManager.start();
+
   context.subscriptions.push(
+    {
+      dispose: () => {
+        commentPollManager.stop();
+      },
+    },
+    vscode.window.onDidChangeWindowState((e) => {
+      if (e.focused) {
+        logDebug('Window focused: checking comments sync');
+        void commentPollManager.checkNow(false);
+      }
+    }),
     statusBarItem,
     onDidChangeAuthState((hasToken) => {
       logInfo(`onDidChangeAuthState received: hasToken=${hasToken}`);

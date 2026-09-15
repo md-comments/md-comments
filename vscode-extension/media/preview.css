@@ -1111,19 +1111,24 @@ body.md-comments-resizing {
   color: var(--gc-text);
   font-size: 0.8rem;
   cursor: pointer;
-  text-decoration: none;
+  text-decoration: none !important;
   display: inline-flex;
   align-items: center;
   user-select: none;
+  outline: none;
 }
 
-.md-comments-reaction-chip:hover {
+.md-comments-reaction-chip:hover,
+.md-comments-reaction-chip:focus,
+.md-comments-reaction-chip:active {
   border-color: var(--gc-accent);
+  text-decoration: none !important;
 }
 
 .md-comments-reaction-chip.md-comments-reaction-active {
   border-color: var(--gc-accent, #388bfd);
   background: var(--gc-accent-subtle, rgba(56, 139, 253, 0.15));
+  text-decoration: none !important;
 }
 
 /* Selection toolbar (Floating bar) */
@@ -1314,10 +1319,19 @@ body.md-comments-resizing {
   background: transparent;
   font-size: 1.15rem;
   cursor: pointer;
+  text-decoration: none !important;
+  outline: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }
 
-.md-comments-emoji-btn:hover {
+.md-comments-emoji-btn:hover,
+.md-comments-emoji-btn:focus,
+.md-comments-emoji-btn:active {
   background: rgba(255, 255, 255, 0.1);
+  text-decoration: none !important;
 }
 
 /* Card & Reply Deleting Animation */

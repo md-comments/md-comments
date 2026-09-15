@@ -516,16 +516,31 @@
       );
     if (!targetEl) return;
 
-    const contentEl = targetEl.querySelector('.md-comments-thread-content') || targetEl;
-    let reactionsDiv = targetEl.querySelector('.md-comments-reactions');
+    const contentEl =
+      kind === 'root'
+        ? targetEl.querySelector('.md-comments-thread-root .md-comments-thread-content') ||
+          targetEl.querySelector(
+            ':scope > .md-comments-thread-row > .md-comments-thread-content'
+          ) ||
+          targetEl.querySelector('.md-comments-thread-content') ||
+          targetEl
+        : targetEl.querySelector('.md-comments-thread-content') || targetEl;
+
+    let reactionsDiv = contentEl.querySelector
+      ? contentEl.querySelector('.md-comments-reactions')
+      : targetEl.querySelector('.md-comments-reactions');
     if (!reactionsDiv) {
       reactionsDiv = document.createElement('div');
       reactionsDiv.className = 'md-comments-reactions';
-      const actionsEl = targetEl.querySelector('.md-comments-actions');
+      const actionsEl = contentEl.querySelector
+        ? contentEl.querySelector('.md-comments-actions')
+        : targetEl.querySelector('.md-comments-actions');
       if (actionsEl && actionsEl.parentNode) {
         actionsEl.parentNode.insertBefore(reactionsDiv, actionsEl);
-      } else {
+      } else if (contentEl && contentEl.appendChild) {
         contentEl.appendChild(reactionsDiv);
+      } else {
+        targetEl.appendChild(reactionsDiv);
       }
     }
 
@@ -1449,13 +1464,12 @@
         '.md-comments-card[data-md-comment-id="' + e.detail.rootId + '"]'
       );
       let replyId = e.detail.id;
-      if (card) {
+      if (!replyId && card) {
         replyId = insertOptimisticReply(
           card,
           e.detail.rootId,
           e.detail.body,
-          e.detail.type || 'inline',
-          e.detail.id
+          e.detail.type || 'inline'
         );
       }
       postAction({
@@ -1490,12 +1504,11 @@
         kind: delKind,
       };
       const uri = buildActionUri(payload);
-      if (anchor) {
-        anchor.href = uri;
-        return;
-      }
       e.preventDefault();
       e.stopPropagation();
+      if (anchor) {
+        anchor.href = uri;
+      }
       postAction(payload);
       return;
     }
@@ -1520,18 +1533,27 @@
       }, 4000);
       const payload = { action: 'addPage', body: body, id: commentId };
       const uri = buildActionUri(payload);
-      if (anchor) {
-        anchor.href = uri;
-        return;
-      }
       e.preventDefault();
       e.stopPropagation();
+      if (anchor) {
+        anchor.href = uri;
+      }
       postAction(payload);
       return;
     }
 
     if (action === 'submit-reply') {
       const card = target.closest('.md-comments-card');
+      const composer = target.closest('.reply-composer, .md-comments-reply-composer');
+      if (composer && composer.getAttribute('data-submitting') === 'true') {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+      if (composer) {
+        composer.setAttribute('data-submitting', 'true');
+      }
+
       const rootId =
         target.getAttribute('data-md-id') || (card && card.getAttribute('data-md-comment-id'));
       const type =
@@ -1542,6 +1564,7 @@
       const ta = wrapper && wrapper.querySelector('.fallback-reply-textarea');
       const body = ta ? ta.value.trim() : '';
       if (!body || !rootId) {
+        if (composer) composer.removeAttribute('data-submitting');
         e.preventDefault();
         e.stopPropagation();
         return;
@@ -1569,13 +1592,15 @@
       }
       const payload = { action: 'reply', rootId: rootId, type: type, body: body, id: replyId };
       const uri = buildActionUri(payload);
-      if (anchor) {
-        anchor.href = uri;
-        return;
-      }
       e.preventDefault();
       e.stopPropagation();
+      if (anchor) {
+        anchor.href = uri;
+      }
       postAction({ action: 'reply', rootId: rootId, type: type, body: body, id: replyId });
+      setTimeout(function () {
+        if (composer) composer.removeAttribute('data-submitting');
+      }, 1500);
       return;
     }
 
@@ -1690,12 +1715,11 @@
         type: cardType,
       };
       const uri = buildActionUri(payload);
-      if (anchor) {
-        anchor.href = uri;
-        return;
-      }
       e.preventDefault();
       e.stopPropagation();
+      if (anchor) {
+        anchor.href = uri;
+      }
       postAction(payload);
       return;
     }
@@ -1755,12 +1779,11 @@
         type: cardType,
       };
       const uri = buildActionUri(payload);
-      if (anchor) {
-        anchor.href = uri;
-        return;
-      }
       e.preventDefault();
       e.stopPropagation();
+      if (anchor) {
+        anchor.href = uri;
+      }
       postAction(payload);
       return;
     }
@@ -1809,12 +1832,11 @@
         emoji: emoji,
       };
       const uri = buildActionUri(payload);
-      if (anchor) {
-        anchor.href = uri;
-        return;
-      }
       e.preventDefault();
       e.stopPropagation();
+      if (anchor) {
+        anchor.href = uri;
+      }
       postAction(payload);
     }
 
@@ -1934,6 +1956,7 @@
     syncDisplayNamesAndAvatars();
   }
   window.mdCommentsBuildActionUri = buildActionUri;
+  window.mdCommentsPostAction = postAction;
   window.mdCommentsInsertOptimisticReply = insertOptimisticReply;
   window.mdCommentsInsertOptimisticCard = insertOptimisticCard;
 

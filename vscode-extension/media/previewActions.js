@@ -104,9 +104,8 @@
     pop.innerHTML = '<div class="md-comments-emoji-row"></div>';
     const row = pop.querySelector('.md-comments-emoji-row');
     getReactionEmojis().forEach(function (emoji) {
-      const btn = document.createElement('a');
-      btn.setAttribute('role', 'button');
-      btn.href = '#';
+      const btn = document.createElement('button');
+      btn.type = 'button';
       btn.className = 'md-comments-emoji-btn';
       btn.textContent = emoji;
       btn.addEventListener('click', function () {
@@ -612,6 +611,9 @@
         const body = textarea.value.trim();
         if (!body) return;
 
+        if (composer.getAttribute('data-submitting') === 'true') return;
+        composer.setAttribute('data-submitting', 'true');
+
         if (submitBtn) {
           submitBtn.classList.add('loading');
           submitBtn.disabled = true;
@@ -633,10 +635,20 @@
         let replyId;
         if (typeof window.mdCommentsInsertOptimisticReply === 'function') {
           replyId = window.mdCommentsInsertOptimisticReply(card, rootId, body, type);
+        }
+
+        if (typeof window.mdCommentsPostAction === 'function') {
+          window.mdCommentsPostAction({
+            action: 'reply',
+            rootId: rootId,
+            type: type,
+            body: body,
+            id: replyId,
+          });
         } else {
           document.dispatchEvent(
             new CustomEvent('md-comments:submit-reply', {
-              detail: { rootId: rootId, type: type, body: body },
+              detail: { rootId: rootId, type: type, body: body, id: replyId },
             })
           );
         }
@@ -651,9 +663,10 @@
           });
         }
 
+        closeComposer();
         setTimeout(function () {
-          closeComposer();
-        }, 50);
+          composer.removeAttribute('data-submitting');
+        }, 1500);
       }
 
       if (replyInput) {
@@ -671,9 +684,10 @@
 
       if (submitBtn) {
         submitBtn.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          e.stopImmediatePropagation();
           if (!textarea || !textarea.value.trim()) {
-            e.preventDefault();
-            e.stopPropagation();
             return;
           }
           doSubmitReply();
@@ -685,9 +699,9 @@
           if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
             e.preventDefault();
             e.stopPropagation();
+            e.stopImmediatePropagation();
             if (submitBtn && textarea.value.trim()) {
               doSubmitReply();
-              submitBtn.click();
             }
           }
         });

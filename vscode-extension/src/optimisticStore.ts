@@ -45,6 +45,13 @@ export class OptimisticCommentStore {
   }
 
   /**
+   * Clears active tombstones for a storage key upon forced manual refresh.
+   */
+  clearTombstones(key: CommentStorageKey): void {
+    this.tombstones.delete(keyToString(key));
+  }
+
+  /**
    * Checks whether a remote write is currently in-flight for this key.
    */
   isWriting(key: CommentStorageKey): boolean {

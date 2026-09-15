@@ -66,7 +66,20 @@ export function mergeCommentsFiles(
         if (!isDeleted(r.id)) replyMap.set(r.id, r);
       }
       for (const r of c.replies || []) {
-        if (!isDeleted(r.id)) replyMap.set(r.id, r);
+        if (!isDeleted(r.id)) {
+          const isDuplicate = Array.from(replyMap.values()).some(
+            (existingR) =>
+              existingR.id !== r.id &&
+              existingR.author === r.author &&
+              existingR.body.trim() === r.body.trim() &&
+              Math.abs(
+                new Date(existingR.created_at).getTime() - new Date(r.created_at).getTime()
+              ) < 5000
+          );
+          if (!isDuplicate) {
+            replyMap.set(r.id, r);
+          }
+        }
       }
       inlineMap.set(c.id, {
         ...existing,
@@ -99,7 +112,20 @@ export function mergeCommentsFiles(
         if (!isDeleted(r.id)) replyMap.set(r.id, r);
       }
       for (const r of c.replies || []) {
-        if (!isDeleted(r.id)) replyMap.set(r.id, r);
+        if (!isDeleted(r.id)) {
+          const isDuplicate = Array.from(replyMap.values()).some(
+            (existingR) =>
+              existingR.id !== r.id &&
+              existingR.author === r.author &&
+              existingR.body.trim() === r.body.trim() &&
+              Math.abs(
+                new Date(existingR.created_at).getTime() - new Date(r.created_at).getTime()
+              ) < 5000
+          );
+          if (!isDuplicate) {
+            replyMap.set(r.id, r);
+          }
+        }
       }
       pageMap.set(c.id, {
         ...existing,
@@ -139,6 +165,12 @@ export class GitHubOrphanRefBackend implements CommentBackend {
   constructor(private getToken: () => Promise<string | null> | string | null) {}
 
   private async fetchApi(url: string, options: RequestInit = {}): Promise<Response> {
+    const baseUrl =
+      (typeof process !== 'undefined' && process.env?.GITHUB_API_BASE_URL) ||
+      'https://api.github.com';
+    if (baseUrl !== 'https://api.github.com' && url.startsWith('https://api.github.com')) {
+      url = url.replace('https://api.github.com', baseUrl);
+    }
     const token = await this.getToken();
     const headers: Record<string, string> = {
       Accept: 'application/vnd.github.v3+json',

@@ -26,7 +26,11 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium-headless',
-      testIgnore: [/.*safari-extension\.spec\.ts/, /.*vscode-.*\.spec\.ts/],
+      testIgnore: [
+        /.*safari-extension\.spec\.ts/,
+        /.*vscode-.*\.spec\.ts/,
+        /.*dual-interface.*\.spec\.ts/,
+      ],
       use: {
         ...devices['Desktop Chrome'],
         channel: 'chromium',
@@ -41,8 +45,12 @@ export default defineConfig({
     },
     {
       name: 'vscode-electron',
-      testMatch: /.*vscode-.*\.spec\.ts/,
-      timeout: 60000,
+      testMatch: [/.*vscode-.*\.spec\.ts/, /.*dual-interface.*\.spec\.ts/],
+      timeout: 120000,
+      use: {
+        ...devices['Desktop Chrome'],
+        channel: 'chromium',
+      },
     },
   ],
 });

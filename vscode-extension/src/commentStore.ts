@@ -221,9 +221,21 @@ export async function addReply(
   if (!root) {
     throw new Error(`Comment ${rootId} not found`);
   }
+  const author = await getAuthor();
+  const existingIdx = root.replies.findIndex(
+    (r) =>
+      (id && r.id === id) ||
+      (r.author === author &&
+        r.body.trim() === body.trim() &&
+        Math.abs(Date.now() - new Date(r.created_at).getTime()) < 5000)
+  );
+  if (existingIdx >= 0) {
+    logDebug('addReply: duplicate reply detected, skipping redundant append');
+    return writeComments(mdUri, data);
+  }
   root.replies.push({
     id: id || newId(`${rootId}-r`),
-    author: await getAuthor(),
+    author,
     body,
     created_at: new Date().toISOString(),
     reactions: [],

@@ -32,6 +32,7 @@ export const test = base.extend<ExtensionFixtures>({
 
     // 3. Launch Chromium in modern headless mode with extension loaded
     const context = await chromium.launchPersistentContext(tempUserDataDir, {
+      channel: 'chromium',
       headless: true,
       args: [
         '--headless=new',

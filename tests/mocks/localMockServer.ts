@@ -330,6 +330,31 @@ export class LocalMockServer {
       return sendJson(201, commitObj);
     }
 
+    // 5-get. GET /repos/:owner/:repo/git/commits/:sha
+    const commitGetMatch = pathname.match(/^\/repos\/[^/]+\/[^/]+\/git\/commits\/([a-f0-9]+)$/i);
+    if (commitGetMatch && method === 'GET') {
+      const commitSha = commitGetMatch[1];
+      const existing = this.commits.get(commitSha);
+      if (existing) {
+        return sendJson(200, existing);
+      }
+      const mockCommit = {
+        sha: commitSha,
+        url: `${this.url}${pathname}`,
+        message: 'Mock commit',
+        tree: { sha: this.generateSha('tree') },
+        parents: [],
+      };
+      this.commits.set(commitSha, mockCommit);
+      return sendJson(200, mockCommit);
+    }
+
+    // 5-list. GET /repos/:owner/:repo/commits
+    const commitsListMatch = pathname.match(/^\/repos\/[^/]+\/[^/]+\/commits$/);
+    if (commitsListMatch && method === 'GET') {
+      return sendJson(200, []);
+    }
+
     // 5b. Commit comments: /repos/:owner/:repo/commits/:sha/comments
     const commitCommentsMatch = pathname.match(
       /^\/repos\/[^/]+\/[^/]+\/commits\/([^/]+)\/comments$/

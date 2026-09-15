@@ -449,16 +449,31 @@
       );
     if (!targetEl) return;
 
-    const contentEl = targetEl.querySelector('.md-comments-thread-content') || targetEl;
-    let reactionsDiv = targetEl.querySelector('.md-comments-reactions');
+    const contentEl =
+      kind === 'root'
+        ? targetEl.querySelector('.md-comments-thread-root .md-comments-thread-content') ||
+          targetEl.querySelector(
+            ':scope > .md-comments-thread-row > .md-comments-thread-content'
+          ) ||
+          targetEl.querySelector('.md-comments-thread-content') ||
+          targetEl
+        : targetEl.querySelector('.md-comments-thread-content') || targetEl;
+
+    let reactionsDiv = contentEl.querySelector
+      ? contentEl.querySelector('.md-comments-reactions')
+      : targetEl.querySelector('.md-comments-reactions');
     if (!reactionsDiv) {
       reactionsDiv = document.createElement('div');
       reactionsDiv.className = 'md-comments-reactions';
-      const actionsEl = targetEl.querySelector('.md-comments-actions');
+      const actionsEl = contentEl.querySelector
+        ? contentEl.querySelector('.md-comments-actions')
+        : targetEl.querySelector('.md-comments-actions');
       if (actionsEl && actionsEl.parentNode) {
         actionsEl.parentNode.insertBefore(reactionsDiv, actionsEl);
-      } else {
+      } else if (contentEl && contentEl.appendChild) {
         contentEl.appendChild(reactionsDiv);
+      } else {
+        targetEl.appendChild(reactionsDiv);
       }
     }
 

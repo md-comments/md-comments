@@ -238,6 +238,69 @@ describe('GitHubOrphanRefBackend', () => {
       expect(merged.page_comments[0].body).toBe('Page comment edited locally');
     });
 
+    it('deduplicates replies with different IDs if same author, trimmed body, and timestamps within 5 seconds', () => {
+      const now = Date.now();
+      const local: CommentsFile = {
+        inline_comments: [
+          {
+            id: 'c1',
+            author: 'alice',
+            anchor_text: 'hello',
+            anchor_hash: 'h1',
+            paragraph_index: 0,
+            heading_context: '',
+            body: 'Inline comment',
+            created_at: new Date(now - 10000).toISOString(),
+            orphaned: false,
+            resolved: false,
+            reactions: [],
+            replies: [
+              {
+                id: 'reply-local-id',
+                author: 'bob',
+                body: 'Duplicate reply text',
+                created_at: new Date(now).toISOString(),
+                reactions: [],
+              },
+            ],
+          },
+        ],
+        page_comments: [],
+      };
+
+      const remote: CommentsFile = {
+        inline_comments: [
+          {
+            id: 'c1',
+            author: 'alice',
+            anchor_text: 'hello',
+            anchor_hash: 'h1',
+            paragraph_index: 0,
+            heading_context: '',
+            body: 'Inline comment',
+            created_at: new Date(now - 10000).toISOString(),
+            orphaned: false,
+            resolved: false,
+            reactions: [],
+            replies: [
+              {
+                id: 'reply-remote-id',
+                author: 'bob',
+                body: 'Duplicate reply text  ',
+                created_at: new Date(now + 1000).toISOString(),
+                reactions: [],
+              },
+            ],
+          },
+        ],
+        page_comments: [],
+      };
+
+      const merged = mergeCommentsFiles(local, remote);
+      expect(merged.inline_comments[0].replies).toHaveLength(1);
+      expect(merged.inline_comments[0].replies[0].body.trim()).toBe('Duplicate reply text');
+    });
+
     it('omits comments and replies specified in deletedIds', () => {
       const local: CommentsFile = {
         inline_comments: [
