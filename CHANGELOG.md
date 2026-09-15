@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.4] - 2026-09-15
+
+### Added
+
+- **Security Invariants & Architecture Validation**: Registered security invariants (`INV-NO-THIRD-PARTY-AUTH-PROXY`, `INV-SAFE-DESERIALIZATION`, `INV-INPUT-VALIDATION-REPO`), updated pre-commit checks, and synchronized quality graph.
+- **Configurable Least-Privilege OAuth Scopes**: Supported granular OAuth scopes (`public_repo` default vs `repo`) in VS Code extension with clear permission guidance.
+
+### Fixed
+
+- **Cross-Surface Comment Synchronization & Deduplication**: Resolved optimistic sync races and deduplicated replies across surfaces based on author, timestamp window, and content.
+- **Client DOM Sanitization & XSS Hardening**: Escaped error messages, author display names, excerpt bodies, and anchor quotes in Chrome extension and Obsidian views.
+- **Repository Identifier Path Traversal Defense**: Validated repository owner and name parameters against path traversal in GitHub API URL interpolation.
+- **Extension Manifest Host Permissions**: Narrowed Chrome and Safari extension host permissions to dedicated telemetry endpoints.
+- **Dev Auth Proxy CORS & Schema Hardening**: Restricted dev auth proxy origins and strictly validated forwarded OAuth payloads.
+- **Safe YAML Deserialization**: Enforced safe JSON schema on YAML parsing across the monorepo.
+- **Third-Party OAuth Relay Removal**: Removed fallback to third-party `proxy.cors.sh` service to uphold zero third-party data transit invariant.
+
 ## [1.4.3] - 2026-09-13
 
 ### Added

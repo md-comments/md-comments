@@ -301,6 +301,59 @@ describe('GitHubOrphanRefBackend', () => {
       expect(merged.inline_comments[0].replies[0].body.trim()).toBe('Duplicate reply text');
     });
 
+    it('deduplicates page comment replies with different IDs if same author, trimmed body, and timestamps within 5 seconds', () => {
+      const now = Date.now();
+      const local: CommentsFile = {
+        inline_comments: [],
+        page_comments: [
+          {
+            id: 'p1',
+            author: 'alice',
+            body: 'Page comment',
+            created_at: new Date(now - 10000).toISOString(),
+            resolved: false,
+            reactions: [],
+            replies: [
+              {
+                id: 'reply-local-id',
+                author: 'bob',
+                body: 'Duplicate reply text',
+                created_at: new Date(now).toISOString(),
+                reactions: [],
+              },
+            ],
+          },
+        ],
+      };
+
+      const remote: CommentsFile = {
+        inline_comments: [],
+        page_comments: [
+          {
+            id: 'p1',
+            author: 'alice',
+            body: 'Page comment',
+            created_at: new Date(now - 10000).toISOString(),
+            resolved: false,
+            reactions: [],
+            replies: [
+              {
+                id: 'reply-remote-id',
+                author: 'bob',
+                body: 'Duplicate reply text  ',
+                created_at: new Date(now + 1000).toISOString(),
+                reactions: [],
+              },
+            ],
+          },
+        ],
+      };
+
+      const merged = mergeCommentsFiles(local, remote);
+      expect(merged.page_comments[0].replies).toHaveLength(1);
+      expect(merged.page_comments[0].replies[0].body.trim()).toBe('Duplicate reply text');
+    });
+
     it('omits comments and replies specified in deletedIds', () => {
       const local: CommentsFile = {
         inline_comments: [
@@ -398,6 +451,36 @@ describe('GitHubOrphanRefBackend', () => {
       });
 
       expect(result).toEqual({ page_comments: [], inline_comments: [] });
+    });
+
+    it('rewrites github api base url when GITHUB_API_BASE_URL is set', async () => {
+      const origEnv = process.env.GITHUB_API_BASE_URL;
+      try {
+        process.env.GITHUB_API_BASE_URL = 'https://mock-github.example.com';
+        fetchMock.mockResolvedValueOnce({
+          ok: false,
+          status: 404,
+        });
+        fetchMock.mockResolvedValueOnce({
+          ok: false,
+          status: 404,
+        });
+
+        await backend.read({
+          owner: 'test-owner',
+          repo: 'test-repo',
+          filePath: 'docs/test.md',
+        });
+
+        expect(fetchMock).toHaveBeenCalled();
+        expect(fetchMock.mock.calls[0][0]).toContain('https://mock-github.example.com');
+      } finally {
+        if (origEnv !== undefined) {
+          process.env.GITHUB_API_BASE_URL = origEnv;
+        } else {
+          delete process.env.GITHUB_API_BASE_URL;
+        }
+      }
     });
 
     it('reads and decodes YAML content with multi-byte UTF-8 emojis from base64', async () => {
