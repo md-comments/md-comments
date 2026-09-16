@@ -13,12 +13,12 @@
   "author": "mstrelex",
   "license": "MIT",
   "dependencies": {
-    "js-yaml": "^5.3.0"
+    "js-yaml": "^5.4.2"
   },
   "devDependencies": {
     "@types/chrome": "^0.2.9",
     "@types/js-yaml": "^4.0.9",
-    "@types/node": "^26.4.1",
+    "@types/node": "^26.5.1",
     "esbuild": "^0.20.1",
     "tslib": "^2.6.2",
     "typescript": "^5.3.3"

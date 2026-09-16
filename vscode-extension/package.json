@@ -192,14 +192,14 @@
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",
-    "@types/node": "^26.4.1",
-    "@types/vscode": "^1.85.0",
+    "@types/node": "^26.5.1",
+    "@types/vscode": "^1.137.0",
     "@vscode/vsce": "^3.2.1",
     "typescript": "^5.5.0"
   },
   "dependencies": {
     "highlight.js": "^11.12.0",
-    "js-yaml": "^5.3.0",
-    "markdown-it": "^15.0.0"
+    "js-yaml": "^5.4.2",
+    "markdown-it": "^15.0.2"
   }
 }
