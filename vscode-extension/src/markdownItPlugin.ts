@@ -118,7 +118,8 @@ function actionIconBtn(
   icon: string,
   attrs: Record<string, string>,
   extraClass = '',
-  customHref?: string
+  customHref?: string,
+  style?: string
 ): string {
   const dataAttrs = Object.entries(attrs)
     .map(([k, v]) => {
@@ -126,15 +127,16 @@ function actionIconBtn(
       return ` ${attr}="${escapeHtml(v)}"`;
     })
     .join('');
+  const styleAttr = style ? ` style="${escapeHtml(style)}"` : '';
   const href =
     customHref ||
     (action === 'delete' || action === 'resolve' || action === 'unresolve'
       ? buildActionUri(action, attrs)
       : undefined);
   if (href) {
-    return `<a role="button" class="md-comments-icon-btn${extraClass ? ` ${extraClass}` : ''}" data-md-action="${escapeHtml(action)}" title="${escapeHtml(title)}" aria-label="${escapeHtml(title)}" href="${escapeHtml(href)}"${dataAttrs}>${icon}</a>`;
+    return `<a role="button" class="md-comments-icon-btn${extraClass ? ` ${extraClass}` : ''}" data-md-action="${escapeHtml(action)}" title="${escapeHtml(title)}" aria-label="${escapeHtml(title)}" href="${escapeHtml(href)}"${dataAttrs}${styleAttr}>${icon}</a>`;
   }
-  return `<button type="button" class="md-comments-icon-btn${extraClass ? ` ${extraClass}` : ''}" data-md-action="${escapeHtml(action)}" title="${escapeHtml(title)}" aria-label="${escapeHtml(title)}"${dataAttrs}>${icon}</button>`;
+  return `<button type="button" class="md-comments-icon-btn${extraClass ? ` ${extraClass}` : ''}" data-md-action="${escapeHtml(action)}" title="${escapeHtml(title)}" aria-label="${escapeHtml(title)}"${dataAttrs}${styleAttr}>${icon}</button>`;
 }
 
 function renderAuthorLink(author: string): string {
@@ -337,23 +339,34 @@ export function renderCard(
   const reanchorBtn = reanchor
     ? actionIconBtn('reanchor-start', 'Re-anchor', ICON_REANCHOR, { id })
     : '';
-  const resolvedActions = resolved
-    ? `${editBtn}${threadStateBtn}${actionIconBtn(
-        'delete',
-        'Delete comment',
-        ICON_DELETE,
-        { id, type, kind: 'root' },
-        'md-comments-icon-btn-danger'
-      )}`
-    : `${editBtn}${reanchorBtn}${hasReplies ? '' : actionIconBtn('reply', 'Reply', ICON_REPLY, { id, type, kind: 'root' })}
+  const replyStyle = resolved || hasReplies ? 'display: none;' : '';
+  const reactStyle = resolved ? 'display: none;' : '';
+  const composerStyle = resolved ? ' style="display: none;"' : '';
+  const resolvedActions = `${editBtn}${reanchorBtn}${actionIconBtn(
+    'reply',
+    'Reply',
+    ICON_REPLY,
+    { id, type, kind: 'root' },
+    '',
+    undefined,
+    replyStyle
+  )}
           ${threadStateBtn}
-          ${actionIconBtn('react-picker', 'Add reaction', ICON_REACT, {
-            id,
-            'target-id': id,
-            'root-id': id,
-            type,
-            kind: 'root',
-          })}
+          ${actionIconBtn(
+            'react-picker',
+            'Add reaction',
+            ICON_REACT,
+            {
+              id,
+              'target-id': id,
+              'root-id': id,
+              type,
+              kind: 'root',
+            },
+            '',
+            undefined,
+            reactStyle
+          )}
           ${actionIconBtn(
             'delete',
             'Delete comment',
@@ -362,8 +375,7 @@ export function renderCard(
             'md-comments-icon-btn-danger'
           )}`;
   const repliesBlock = hasReplies ? renderRepliesBlock(id, type, replies, !resolved) : '';
-  const replyComposer = !resolved
-    ? `<div class="reply-composer md-comments-reply-composer" data-md-comment-id="${escapeHtml(id)}" data-md-type="${type}">
+  const replyComposer = `<div class="reply-composer md-comments-reply-composer" data-md-comment-id="${escapeHtml(id)}" data-md-type="${type}"${composerStyle}>
         <input type="text" placeholder="Reply..." class="reply-input md-comments-reply-input" aria-label="Reply to comment">
         <div class="reply-composer-wrapper md-comments-reply-wrapper" style="display: none;">
           <div class="fallback-reply-composer">
@@ -374,8 +386,7 @@ export function renderCard(
             </div>
           </div>
         </div>
-      </div>`
-    : '';
+      </div>`;
 
   return `<div class="md-comments-card${hasReplies ? ' md-comments-card-has-replies' : ''}" data-md-comment-id="${escapeHtml(id)}" data-md-type="${type}" data-md-stored-author="${escapeHtml(author)}"${inlineAttrs}>
     <div class="md-comments-thread-row md-comments-thread-root">
@@ -400,18 +411,20 @@ interface RenderContext {
   isLoading?: boolean;
 }
 
-export function sortCommentsNewestFirst<T extends { created_at?: string; id?: string }>(
+export function sortCommentsChronological<T extends { created_at?: string; id?: string }>(
   comments: T[]
 ): T[] {
   return [...comments].sort((a, b) => {
     const timeA = a.created_at ? new Date(a.created_at).getTime() : 0;
     const timeB = b.created_at ? new Date(b.created_at).getTime() : 0;
     if (timeA !== timeB) {
-      return timeB - timeA;
+      return timeA - timeB;
     }
-    return (b.id || '').localeCompare(a.id || '');
+    return (a.id || '').localeCompare(b.id || '');
   });
 }
+
+export const sortCommentsNewestFirst = sortCommentsChronological;
 
 function renderQuoteExcerpt(anchorText: string, heading?: string): string {
   const headingHtml = heading
@@ -422,10 +435,13 @@ function renderQuoteExcerpt(anchorText: string, heading?: string): string {
 
 function renderSidebarThread(
   cardHtml: string,
-  options?: { quote?: string; heading?: string }
+  options?: { id?: string; quote?: string; heading?: string }
 ): string {
   const quote = options?.quote ? renderQuoteExcerpt(options.quote, options.heading) : '';
-  return `<article class="md-comments-sidebar-thread">${quote}${cardHtml}</article>`;
+  const idAttr = options?.id
+    ? ` id="md-comments-thread-${escapeHtml(options.id)}" data-md-comment-id="${escapeHtml(options.id)}"`
+    : '';
+  return `<article class="md-comments-sidebar-thread"${idAttr}>${quote}${cardHtml}</article>`;
 }
 
 export function renderPageComposer(): string {
@@ -525,8 +541,8 @@ function buildSidebarHtml(ctx: RenderContext): string {
       </div>`;
   }
 
-  const allInline = sortCommentsNewestFirst(ctx.comments.inline_comments || []);
-  const allPage = sortCommentsNewestFirst(ctx.comments.page_comments || []);
+  const allInline = sortCommentsChronological(ctx.comments.inline_comments || []);
+  const allPage = sortCommentsChronological(ctx.comments.page_comments || []);
 
   const inlineThreadsList = allInline.length
     ? allInline
@@ -547,7 +563,7 @@ function buildSidebarHtml(ctx: RenderContext): string {
               c.resolved,
               c.updated_at
             ),
-            { quote: c.anchor_text, heading: c.heading_context || undefined }
+            { id: c.id, quote: c.anchor_text, heading: c.heading_context || undefined }
           );
         })
         .join('')
@@ -571,7 +587,8 @@ function buildSidebarHtml(ctx: RenderContext): string {
               undefined,
               c.resolved,
               c.updated_at
-            )
+            ),
+            { id: c.id }
           )
         )
         .join('')

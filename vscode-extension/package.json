@@ -33,18 +33,6 @@
   "main": "./dist/vscode-extension/src/extension.js",
   "contributes": {
     "markdown.markdownItPlugins": true,
-    "markdown.previewScripts": [
-      "./media/earlyHook.js",
-      "./media/inlineAnchors.js",
-      "./media/previewSidebar.js",
-      "./media/previewActions.js",
-      "./media/mentionAutocomplete.js",
-      "./media/avatarFallback.js",
-      "./media/preview.js"
-    ],
-    "markdown.previewStyles": [
-      "./media/preview.css"
-    ],
     "configurationDefaults": {
       "markdown.preview.openMarkdownLinks": "inEditor"
     },
@@ -116,19 +104,6 @@
     "configuration": {
       "title": "Markdown Comments",
       "properties": {
-        "mdComments.previewMode": {
-          "type": "string",
-          "enum": [
-            "standalone",
-            "builtin"
-          ],
-          "enumDescriptions": [
-            "Uses high-fidelity Markdown preview matching VS Code styles with full commenting support.",
-            "Uses VS Code's native built-in Markdown preview with MD Comments FAB and drawer."
-          ],
-          "default": "standalone",
-          "description": "Preferred preview mode for viewing Markdown comments"
-        },
         "mdComments.oauthScope": {
           "type": "string",
           "enum": [

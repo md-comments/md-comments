@@ -166,6 +166,7 @@ export async function executeCommentAction(
       const key = await resolveStorageKeyForUri(mdUri);
       if (key) {
         globalOptimisticStore.invalidate(key);
+        globalOptimisticStore.clearTombstones(key);
       }
       await readComments(mdUri, true);
       try {

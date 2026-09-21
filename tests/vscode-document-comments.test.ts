@@ -115,7 +115,7 @@ describe('VS Code Document Comments View Parity with GitHub Extension', () => {
     expect(output).toContain('aria-busy="true"');
   });
 
-  it('consistently keeps newest comments at the top and never puts them last', () => {
+  it('consistently keeps comments in chronological order aligned with GitHub', () => {
     const md = getMarkdownEngine();
     const markdown = '# Sample Document\n\nThis is paragraph content.';
     const readmePath = path.resolve(__dirname, '../README.md');
@@ -180,19 +180,19 @@ describe('VS Code Document Comments View Parity with GitHub Extension', () => {
       },
     });
 
-    // In page threads, newer comment must appear before older comment
+    // In page threads, older comment appears first, followed chronologically by newer comment
     const pageNewerIdx = output.indexOf('Second newer comment');
     const pageOlderIdx = output.indexOf('First older comment');
     expect(pageNewerIdx).toBeGreaterThan(-1);
     expect(pageOlderIdx).toBeGreaterThan(-1);
-    expect(pageNewerIdx).toBeLessThan(pageOlderIdx);
+    expect(pageOlderIdx).toBeLessThan(pageNewerIdx);
 
-    // In inline threads, newer comment must appear before older comment
+    // In inline threads, older comment appears first, followed chronologically by newer comment
     const inlineNewerIdx = output.indexOf('Newer inline feedback');
     const inlineOlderIdx = output.indexOf('Older inline feedback');
     expect(inlineNewerIdx).toBeGreaterThan(-1);
     expect(inlineOlderIdx).toBeGreaterThan(-1);
-    expect(inlineNewerIdx).toBeLessThan(inlineOlderIdx);
+    expect(inlineOlderIdx).toBeLessThan(inlineNewerIdx);
   });
 
   it('verifies preview.css contains full parity styles for page composer, reply composer, shimmer skeleton, and spinners', () => {

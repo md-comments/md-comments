@@ -164,14 +164,13 @@ describe('VS Code Optimistic Comment Actions & Parity', () => {
     expect(targetPage?.replies[0].id).toBe(customReplyId);
   });
 
-  it('unshifts newly added comments to the top (index 0) of comments file data', async () => {
+  it('appends newly added comments in chronological order matching GitHub', async () => {
     const fakeUri = vscode.Uri.file('/fake/sorting-test.md');
 
     await addPageComment(fakeUri, 'First page comment', 'p1');
     await addPageComment(fakeUri, 'Second page comment', 'p2');
     const dataAfterPage = await readComments(fakeUri);
-    expect(dataAfterPage.page_comments[0].id).toBe('p2');
-    expect(dataAfterPage.page_comments[1].id).toBe('p1');
+    expect(dataAfterPage.page_comments.slice(-2).map((c) => c.id)).toEqual(['p1', 'p2']);
 
     await addInlineComment(fakeUri, {
       id: 'i1',
@@ -190,8 +189,7 @@ describe('VS Code Optimistic Comment Actions & Parity', () => {
       heading_context: 'Intro',
     });
     const dataAfterInline = await readComments(fakeUri);
-    expect(dataAfterInline.inline_comments[0].id).toBe('i2');
-    expect(dataAfterInline.inline_comments[1].id).toBe('i1');
+    expect(dataAfterInline.inline_comments.slice(-2).map((c) => c.id)).toEqual(['i1', 'i2']);
   });
 
   it('verifies insertOptimisticCard removes panel-loading-container in preview scripts', () => {

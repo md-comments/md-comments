@@ -179,7 +179,7 @@ export async function addInlineComment(
     reactions: [],
     replies: [],
   };
-  data.inline_comments.unshift(comment);
+  data.inline_comments.push(comment);
   const savedPath = await writeComments(mdUri, data);
   return { comment, savedPath };
 }
@@ -201,7 +201,7 @@ export async function addPageComment(
     reactions: [],
     replies: [],
   };
-  data.page_comments.unshift(comment);
+  data.page_comments.push(comment);
   const savedPath = await writeComments(mdUri, data);
   return { comment, savedPath };
 }

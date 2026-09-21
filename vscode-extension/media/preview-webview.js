@@ -237,6 +237,7 @@
 
     const article = document.createElement('article');
     article.className = 'md-comments-sidebar-thread md-comments-thread-optimistic';
+    article.id = 'md-comments-thread-' + commentId;
     article.setAttribute('data-md-comment-id', commentId);
 
     article.innerHTML =
@@ -278,7 +279,7 @@
       replyComposerHtml +
       '</div>';
 
-    targetList.prepend(article);
+    targetList.append(article);
 
     setTimeout(function () {
       const card = article.querySelector('.md-comments-card');
@@ -1293,6 +1294,7 @@
         if (replyBtn) replyBtn.style.display = '';
         const reactBtn = card.querySelector('[data-md-action="react-picker"]');
         if (reactBtn) reactBtn.style.display = '';
+        revealEditButtons(card);
       }
 
       target.setAttribute('data-md-action', 'resolve');
@@ -1607,12 +1609,60 @@
     });
   }
 
+  function authorsMatchClient(stored, current, displayNames) {
+    if (!stored || !current) {
+      return false;
+    }
+    const s = stored.trim().toLowerCase();
+    const c = current.trim().toLowerCase();
+    if (s === c) {
+      return true;
+    }
+    if (s.replace(/\./g, '') === c.replace(/\./g, '')) {
+      return true;
+    }
+    for (const login of Object.keys(displayNames)) {
+      const name = displayNames[login];
+      if (login.toLowerCase() === c && name && name.toLowerCase() === s) {
+        return true;
+      }
+      if (login.toLowerCase() === s && login.toLowerCase() === c) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function revealEditButtons(root) {
+    const footer = document.querySelector('.md-comments-footer');
+    const current = footer?.getAttribute('data-md-current-author')?.trim();
+    if (!current) {
+      return;
+    }
+    let displayNames = {};
+    try {
+      displayNames = JSON.parse(footer?.getAttribute('data-md-display-names') || '{}');
+    } catch {
+      displayNames = {};
+    }
+    const container = root || document;
+    container.querySelectorAll('.md-comments-edit-btn[hidden]').forEach(function (btn) {
+      const card = btn.closest('.md-comments-card, .md-comments-reply');
+      const stored = card?.getAttribute('data-md-stored-author')?.trim();
+      if (stored && authorsMatchClient(stored, current, displayNames)) {
+        btn.hidden = false;
+      }
+    });
+  }
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function () {
       syncDisplayNamesAndAvatars();
+      revealEditButtons();
     });
   } else {
     syncDisplayNamesAndAvatars();
+    revealEditButtons();
   }
 
   window.addEventListener('message', function (event) {
@@ -1622,6 +1672,7 @@
     }
     if (msg.type === 'updateComments' && msg.bodyHtml) {
       applyCommentsUpdate(msg.bodyHtml);
+      revealEditButtons();
     }
   });
 })();

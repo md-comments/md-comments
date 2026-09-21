@@ -484,19 +484,10 @@ export function activate(context: vscode.ExtensionContext): {
     vscode.commands.registerCommand(
       'mdComments.toggleCommentPreview',
       async (uriArg?: vscode.Uri) => {
-        const previewMode = vscode.workspace
-          .getConfiguration('mdComments')
-          .get<string>('previewMode', 'standalone');
-
         const editor = vscode.window.activeTextEditor;
         const targetUri = uriArg || editor?.document.uri;
         if (!targetUri) {
           vscode.window.showWarningMessage('Open a Markdown (.md) file first');
-          return;
-        }
-
-        if (previewMode === 'builtin') {
-          await vscode.commands.executeCommand('markdown.showPreviewToSide', targetUri);
           return;
         }
 
