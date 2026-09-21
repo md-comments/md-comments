@@ -7,7 +7,7 @@ export class ObsidianTelemetryAdapter {
   private constructor(endpointUrl?: string) {
     this.client = new OtelTelemetryClient({
       serviceName: 'md-comments',
-      serviceVersion: '1.4.4',
+      serviceVersion: '1.4.5',
       clientInterface: 'obsidian-plugin',
       browserPlatform: 'Obsidian Desktop',
       osFamily:

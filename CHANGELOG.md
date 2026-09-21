@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.5] - 2026-09-21
+
+### Added
+
+- **Nightly Regression Deduplication & Auto-Resolution**: Automatically deduplicate GitHub issues on nightly test failures by commenting on existing open issues, and auto-close resolved regression issues upon suite success.
+- **CI Auto-Merge Safety Gates**: Restricted Dependabot auto-merge to only merge after full CI workflow completion and passing status.
+
+### Fixed
+
+- **VS Code Webview API Acquisition Collision**: Retired legacy markdown preview scripts and standardized on `CommentPreviewPanel` to eliminate `acquireVsCodeApi()` collisions in VS Code markdown previews.
+- **Cross-Surface Comment Sorting**: Aligned storage and UI comment ordering with chronological GitHub comment flow.
+- **Anchor Hash Prioritization**: Prioritized exact anchor hash matching across preview surfaces to improve comment positioning accuracy.
+- **Dependency Compatibility Invariants**: Reverted `@types/vscode` and `@astrojs/starlight` incompatible bumps from Dependabot, and added them to Dependabot's ignore list.
+
 ## [1.4.4] - 2026-09-15
 
 ### Added
