@@ -11,7 +11,12 @@ import {
   normalizeAnchorText,
   findOccurrenceIndex,
 } from '../../shared/anchor';
-import { placeInlineComments, isOrphanedPlacement, fuzzyMatch } from '../../shared/placement';
+import {
+  placeInlineComments,
+  isOrphanedPlacement,
+  fuzzyMatch,
+  findBlockForElement,
+} from '../../shared/placement';
 import type {
   CommentsFile,
   InlineComment,
@@ -2088,10 +2093,19 @@ function applyPendingHighlight(
       if (block) {
         for (const el of domElements) {
           const text = normalizeAnchorText(el.innerText);
-          const hash = fnv1aHash(text);
-          if (hash === block.anchor_hash || fuzzyMatch(text, block.anchor_text)) {
+          const elHash = fnv1aHash(text);
+          if (elHash === block.anchor_hash) {
             targetEl = el;
             break;
+          }
+        }
+        if (!targetEl) {
+          for (const el of domElements) {
+            const text = normalizeAnchorText(el.innerText);
+            if (fuzzyMatch(text, block.anchor_text)) {
+              targetEl = el;
+              break;
+            }
           }
         }
       }
@@ -4521,9 +4535,7 @@ function renderDOMIndicatorsForFile(
     }
 
     // Match this DOM element to a parsed AnchorBlock
-    const block = fileAnchors.find(
-      (b) => b.anchor_hash === hash || fuzzyMatch(text, b.anchor_text)
-    );
+    const block = findBlockForElement(fileAnchors, hash, text);
     if (!block) return;
 
     const matchedPlacements = placements.filter((p) => {
@@ -5223,9 +5235,7 @@ function showSelectionButton(
     const anchorText = currentSel || selectedText || paragraphEl.innerText;
     const text = normalizeAnchorText(paragraphEl.innerText);
     const matchHash = fnv1aHash(text);
-    const block = fileAnchors.find(
-      (b) => b.anchor_hash === matchHash || fuzzyMatch(text, b.anchor_text)
-    );
+    const block = findBlockForElement(fileAnchors, matchHash, text);
     const hash = block ? block.anchor_hash : matchHash;
 
     let charOffset = 0;
@@ -5331,9 +5341,7 @@ function handleTextSelection() {
 
     const matchText = normalizeAnchorText(match.el.innerText);
     const matchHash = fnv1aHash(matchText);
-    const block = fileCtx.anchors.find(
-      (b) => b.anchor_hash === matchHash || fuzzyMatch(matchText, b.anchor_text)
-    );
+    const block = findBlockForElement(fileCtx.anchors, matchHash, matchText);
 
     const paragraphIndex = block ? block.paragraph_index : match.index;
 

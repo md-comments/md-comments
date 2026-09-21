@@ -22,7 +22,11 @@ import {
   warmGitHubDisplayNames,
 } from './githubDisplayNames';
 import { parseMarkdownAnchors, fnv1aHash, normalizeAnchorText } from '../../shared/anchor';
-import { placeInlineComments, isOrphanedPlacement, fuzzyMatch } from '../../shared/placement';
+import {
+  placeInlineComments,
+  isOrphanedPlacement,
+  findBlockForElement,
+} from '../../shared/placement';
 import type { CommentsFile, PlacementResult, AnchorBlock } from '../../shared/types';
 import { escapeHtml } from '../../shared/html';
 import { formatCommentBodyWithMentions } from '../../shared/mentions';
@@ -942,10 +946,7 @@ export function extendMarkdownIt(md: any): any {
       if (nextToken && nextToken.type === 'inline' && nextToken.content) {
         const text = normalizeAnchorText(nextToken.content);
         const hash = fnv1aHash(text);
-        let block = renderCtx.blocks.find((b) => b.anchor_hash === hash);
-        if (!block) {
-          block = renderCtx.blocks.find((b) => fuzzyMatch(text, b.anchor_text));
-        }
+        const block = findBlockForElement(renderCtx.blocks, hash, text);
         if (block) {
           attachBlockAttributes(token, block, renderCtx);
         }
@@ -973,10 +974,7 @@ export function extendMarkdownIt(md: any): any {
       if (nextToken && nextToken.type === 'inline' && nextToken.content) {
         const text = normalizeAnchorText(nextToken.content);
         const hash = fnv1aHash(text);
-        let block = renderCtx.blocks.find((b) => b.anchor_hash === hash);
-        if (!block) {
-          block = renderCtx.blocks.find((b) => fuzzyMatch(text, b.anchor_text));
-        }
+        const block = findBlockForElement(renderCtx.blocks, hash, text);
         if (block) {
           attachBlockAttributes(token, block, renderCtx);
         }
@@ -1002,10 +1000,7 @@ export function extendMarkdownIt(md: any): any {
       }
       const text = normalizeAnchorText(cells.join(' '));
       const hash = fnv1aHash(text);
-      let block = renderCtx.blocks.find((b) => b.anchor_hash === hash);
-      if (!block) {
-        block = renderCtx.blocks.find((b) => fuzzyMatch(text, b.anchor_text));
-      }
+      const block = findBlockForElement(renderCtx.blocks, hash, text);
       if (block) {
         attachBlockAttributes(token, block, renderCtx);
       }

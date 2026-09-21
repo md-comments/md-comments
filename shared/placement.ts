@@ -91,3 +91,20 @@ export function unplacedOrOrphan(
 ): PlacementResult[] {
   return placements.filter((p) => isOrphanedPlacement(blocks, p));
 }
+
+/**
+ * Resolves an AnchorBlock for a DOM element using two passes:
+ * 1. Exact hash match across all blocks
+ * 2. Fuzzy match fallback if hash does not match
+ */
+export function findBlockForElement(
+  blocks: AnchorBlock[],
+  hash: string,
+  text: string
+): AnchorBlock | undefined {
+  const exact = blocks.find((b) => b.anchor_hash === hash);
+  if (exact) {
+    return exact;
+  }
+  return blocks.find((b) => fuzzyMatch(text, b.anchor_text));
+}

@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { fuzzyMatch, placeInlineComments, isOrphanedPlacement } from '../shared/placement';
+import {
+  fuzzyMatch,
+  placeInlineComments,
+  isOrphanedPlacement,
+  findBlockForElement,
+} from '../shared/placement';
 import type { AnchorBlock, InlineComment } from '../shared/types';
 
 describe('fuzzyMatch', () => {
@@ -310,5 +315,54 @@ Body prose here.`;
 
     const isOrphan = isOrphanedPlacement(parsedBlocks, placements[0]);
     expect(isOrphan).toBe(false);
+  });
+});
+
+describe('findBlockForElement', () => {
+  const blocks: AnchorBlock[] = [
+    {
+      paragraph_index: 0,
+      heading_context: '',
+      anchor_hash: 'hash_para_0',
+      anchor_text: 'This introductory section covers software design and core principles.',
+    },
+    {
+      paragraph_index: 1,
+      heading_context: 'Core Principles',
+      anchor_hash: 'hash_heading_1',
+      anchor_text: 'Core Principles',
+    },
+    {
+      paragraph_index: 2,
+      heading_context: 'Core Principles',
+      anchor_hash: 'hash_para_2',
+      anchor_text: 'Details regarding architecture guidelines and workflow.',
+    },
+  ];
+
+  it('prioritizes exact hash match over earlier block containing text as substring', () => {
+    // Both block 0 and block 1 contain the words "core principles".
+    // Block 0 appears first in array order.
+    // An exact hash lookup for block 1 MUST resolve to block 1, not block 0.
+    const result = findBlockForElement(blocks, 'hash_heading_1', 'Core Principles');
+    expect(result).toBeDefined();
+    expect(result?.paragraph_index).toBe(1);
+    expect(result?.anchor_text).toBe('Core Principles');
+  });
+
+  it('falls back to fuzzy matching when hash does not match', () => {
+    // Hash does not match due to slight text edit, but text matches block 2
+    const result = findBlockForElement(
+      blocks,
+      'outdated_hash',
+      'Details regarding architecture guidelines and workflow.'
+    );
+    expect(result).toBeDefined();
+    expect(result?.paragraph_index).toBe(2);
+  });
+
+  it('returns undefined when neither hash nor fuzzy match succeeds', () => {
+    const result = findBlockForElement(blocks, 'unknown_hash', 'Completely unrelated text');
+    expect(result).toBeUndefined();
   });
 });

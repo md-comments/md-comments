@@ -1,22 +1,10 @@
 import { App, MarkdownPostProcessorContext, TFile, Menu } from 'obsidian';
 import { fnv1aHash, normalizeAnchorText } from '../../shared/anchor';
-import { placeInlineComments } from '../../shared/placement';
+import { placeInlineComments, findBlockForElement } from '../../shared/placement';
 import type { AnchorBlock, InlineComment, CommentsFile } from '../../shared/types';
 
 const ICON_PARAGRAPH_COMMENT =
   '<svg class="md-comments-icon-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 4.5h11.5a1.5 1.5 0 0 1 1.5 1.5v7a1.5 1.5 0 0 1-1.5 1.5H9.5L6.5 17.5V6a1.5 1.5 0 0 1 1.5-1.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8.5 8h7.5M8.5 10.5h7.5M8.5 13h4.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>';
-
-function fuzzyMatch(anchorText: string, blockText: string): boolean {
-  const a = normalizeAnchorText(anchorText).toLowerCase();
-  const b = normalizeAnchorText(blockText).toLowerCase();
-  if (!a || !b) {
-    return false;
-  }
-  if (a === b) {
-    return true;
-  }
-  return b.includes(a) || (a.length >= 12 && a.includes(b));
-}
 
 function highlightTextInElement(el: HTMLElement, searchText: string, commentId: string) {
   if (!searchText) return;
@@ -148,7 +136,7 @@ export function registerReadingViewProcessor(
       const pHash = fnv1aHash(pText);
 
       // Find matching anchor block
-      const block = blocks.find((b) => b.anchor_hash === pHash || fuzzyMatch(pText, b.anchor_text));
+      const block = findBlockForElement(blocks, pHash, pText);
       if (!block) continue;
 
       p.classList.add('md-comments-paragraph');
