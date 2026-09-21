@@ -237,7 +237,7 @@ jobs:
           name: ai-triage-packets
           path: artifacts/ai-triage/
 
-      - name: Create GitHub Issue with Embedded AI Diagnostic Packet
+      - name: Create or Update GitHub Issue with Embedded AI Diagnostic Packet
         uses: actions/github-script@v9
         with:
           script: |
@@ -256,10 +256,63 @@ jobs:
               issueBody += `Nightly regression suite failed. Inspect Actions run [${context.runId}](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}) for traces.\n`;
             }
 
-            await github.rest.issues.create({
+            const openIssues = await github.rest.issues.listForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              title: `🚨 Regression Failure: Behavioral Drift Detected (${new Date().toISOString().split('T')[0]})`,
-              body: issueBody,
-              labels: ['bug', 'automated-regression', 'ai-triage']
+              state: 'open',
+              labels: 'automated-regression'
             });
+
+            if (openIssues.data && openIssues.data.length > 0) {
+              const existingIssue = openIssues.data[0];
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existingIssue.number,
+                body: `### 🔁 Nightly Regression Failure Continued (${new Date().toISOString().split('T')[0]})\n\nActions run: [${context.runId}](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})\n\n${issueBody}`
+              });
+              console.log(`Deduplicated: Updated existing open regression issue #${existingIssue.number}`);
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `🚨 Regression Failure: Behavioral Drift Detected (${new Date().toISOString().split('T')[0]})`,
+                body: issueBody,
+                labels: ['bug', 'automated-regression', 'ai-triage']
+              });
+              console.log('Created new regression issue.');
+            }
+
+  auto-close-resolved-regression:
+    name: Auto-Close Resolved Regression Issues
+    if: success()
+    needs: [knowledge-graph-and-unit, headless-playwright-e2e, vscode-electron-e2e, coverage-and-reporting-gate]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close Open Automated Regression Issues
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const openIssues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'automated-regression'
+            });
+
+            for (const issue of openIssues.data) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                body: `✅ **Automated Regression Resolved**: Nightly regression suite passed on run [${context.runId}](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}). Closing issue automatically.`
+              });
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                state: 'closed',
+                state_reason: 'completed'
+              });
+              console.log(`Auto-closed resolved regression issue #${issue.number}`);
+            }

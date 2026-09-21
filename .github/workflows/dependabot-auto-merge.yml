@@ -38,14 +38,13 @@ jobs:
         with:
           github-token: '${{ secrets.GITHUB_TOKEN }}'
 
-      - name: Enable Auto-Merge
+      - name: Approve Dependabot PR
         if: >-
           github.event_name == 'pull_request' &&
           (steps.metadata.outputs.update-type != 'version-update:semver-major' || steps.metadata.outputs.dependency-group == 'actions')
         run: |
           PR_URL="${{ steps.pr_info.outputs.pr_url }}"
           gh pr review --approve "$PR_URL" || true
-          gh pr merge --auto --squash "$PR_URL" || true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
