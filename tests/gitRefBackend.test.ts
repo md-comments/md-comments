@@ -1848,6 +1848,12 @@ custom_type: !!js/function "function() { return 42; }"
         // No network calls should have been made
         expect(fetchMock).not.toHaveBeenCalled();
       });
+
+      it('returns null from fetchRefTreeBlobs when ref sha cannot be resolved', async () => {
+        vi.spyOn(backend, 'getLatestRefSha').mockResolvedValueOnce(null);
+        const result = await (backend as any).fetchRefTreeBlobs('valid-owner', 'valid-repo');
+        expect(result).toBeNull();
+      });
     });
   });
 });

@@ -211,8 +211,8 @@ test.describe('GitHub Extension: Live Repository Smoke & Regression', () => {
         await expect(submitBtn).toBeVisible();
         await submitBtn.click();
 
-        // Wait for async persistence to complete and composer UI to close
-        await expect(inlineComposer).not.toBeVisible({ timeout: 20000 });
+        // Inline composer UI closes immediately upon submission
+        await expect(inlineComposer).toBeHidden();
 
         const inlineCard = testPage
           .locator('#tab-inline .md-comments-card-body')

@@ -1898,11 +1898,12 @@ function showFallbackReplyComposer(
   replyWrapper: HTMLElement,
   onSubmit: (body: string) => Promise<void>,
   onCancel: () => void,
-  draftKey?: string
+  draftKey?: string,
+  placeholder: string = 'Write a reply...'
 ) {
   replyWrapper.innerHTML = `
     <div class="fallback-reply-composer" style="margin-top: 8px; display: flex; flex-direction: column; gap: 8px;">
-      <textarea class="fallback-reply-textarea" placeholder="Write a reply..." style="width: 100%; min-height: 80px; padding: 8px; border-radius: 6px; border: 1px solid var(--sidebar-border); background-color: var(--composer-bg); color: var(--text-primary); font-size: 13px; resize: vertical; outline: none; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; box-sizing: border-box;"></textarea>
+      <textarea class="fallback-reply-textarea" placeholder="${placeholder}" style="width: 100%; min-height: 80px; padding: 8px; border-radius: 6px; border: 1px solid var(--sidebar-border); background-color: var(--composer-bg); color: var(--text-primary); font-size: 13px; resize: vertical; outline: none; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; box-sizing: border-box;"></textarea>
       <div style="display: flex; gap: 8px; justify-content: flex-end;">
         <button class="fallback-cancel-btn btn btn-sm" style="padding: 4px 10px; border-radius: 6px; border: 1px solid var(--sidebar-border); background-color: transparent; color: var(--text-secondary); font-size: 12px; cursor: pointer;">Cancel</button>
         <button class="fallback-submit-btn btn btn-sm btn-primary" style="padding: 4px 14px; border-radius: 6px; border: none; background-color: var(--accent-color); color: #fff; font-size: 12px; font-weight: 500; cursor: pointer;">OK</button>
@@ -1951,7 +1952,6 @@ function showFallbackReplyComposer(
     if (!body) return;
 
     submitBtn.disabled = true;
-    submitBtn.classList.add('loading');
 
     // Optimistically clear textarea and draft immediately
     textarea.value = '';
@@ -1962,7 +1962,7 @@ function showFallbackReplyComposer(
     try {
       await onSubmit(body);
     } catch (e) {
-      alert('Failed to save reply: ' + e);
+      alert('Failed to save: ' + e);
       if (textarea) textarea.value = body;
       if (draftKey) {
         saveDraft(draftKey, body);
@@ -3876,6 +3876,7 @@ function openSidebarForNewInline(fields: {
     line,
     container,
     async (body) => {
+      resetInlineComposerUI();
       try {
         await saveNewInlineComment(
           body,
@@ -3885,8 +3886,11 @@ function openSidebarForNewInline(fields: {
           fields.heading_context,
           fields.anchor_occurrence
         );
-      } finally {
-        resetInlineComposerUI();
+      } catch (err) {
+        if (draftKey) {
+          saveDraft(draftKey, body);
+        }
+        console.error('[md-comments] Failed to save inline comment:', err);
       }
     },
     () => {
@@ -3898,6 +3902,7 @@ function openSidebarForNewInline(fields: {
     showFallbackReplyComposer(
       container,
       async (body) => {
+        resetInlineComposerUI();
         try {
           await saveNewInlineComment(
             body,
@@ -3907,14 +3912,18 @@ function openSidebarForNewInline(fields: {
             fields.heading_context,
             fields.anchor_occurrence
           );
-        } finally {
-          resetInlineComposerUI();
+        } catch (err) {
+          if (draftKey) {
+            saveDraft(draftKey, body);
+          }
+          console.error('[md-comments] Failed to save inline comment:', err);
         }
       },
       () => {
         resetInlineComposerUI();
       },
-      draftKey
+      draftKey,
+      'Write a comment...'
     );
   });
 }
@@ -4793,6 +4802,15 @@ async function commitCommentFileChanges(
       renderSidebarComments();
       alert('Authentication error (401). Please re-authorize in the sidebar to post comments.');
     } else {
+      loadedComments = previousComments;
+      if (meta.filePath) {
+        const existing = loadedFileContexts.get(meta.filePath);
+        loadedFileContexts.set(meta.filePath, {
+          anchors: existing?.anchors || parsedAnchors,
+          comments: previousComments,
+        });
+      }
+      renderSidebarComments();
       alert('Failed to save comment to GitHub: ' + errMsg);
     }
     throw err;
@@ -5549,4 +5567,10 @@ export {
   getActiveWritesCount,
   getLastKnownRefSha,
   setLastKnownRefSha,
+  openSidebarForNewInline,
+  showFallbackReplyComposer,
+  pendingSubmissionIds,
+  removeSubmittingProgress,
+  saveNewInlineComment,
+  draftsStore,
 };

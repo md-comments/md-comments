@@ -15,6 +15,7 @@ implementedIn:
   - 'chrome-extension/src/sidebar.css'
 verifiedIn:
   - 'tests/e2e/github-extension-hermetic.spec.ts'
+  - 'tests/chromeInlineSubmission.test.ts'
 invariants:
   - 'INV-FAST-FORWARD-RETRY'
 minCoverage: 100
@@ -24,14 +25,14 @@ minCoverage: 100
 
 ## Overview
 
-Improves the posting and editing user experience by optimistically displaying submitted and edited comments/replies immediately. Rather than disabling textboxes or rendering button spinners, input forms dismiss immediately while an animated progress line appears along the bottom of the submitting/edited card until all background Git/REST requests finish.
+Improves the posting and editing user experience by optimistically displaying submitted and edited comments/replies immediately. Rather than keeping the authoring UI open with button spinners, input forms and inline composers dismiss immediately upon submission while an animated progress line appears along the bottom of the submitting/edited card in the feed until all background Git/REST requests finish.
 
 ## User Journey (Gherkin Scenarios)
 
-- Given an open comment or reply composer in the sidebar
-- When the user submits a page comment, inline comment, or reply
-- Then the composer textarea clears immediately and remains responsive
-- And the comment immediately renders in the comment list with an active 2px progressing bar underneath
+- Given an open inline comment composer in the sidebar
+- When the user submits the inline comment
+- Then the inline authoring UI disappears immediately without displaying button loading spinners
+- And the comment immediately appears in the feed with an active 2px progressing underline underneath
 - When all background commit and notification REST calls complete
 - Then the progress line smoothly fades away and is removed from the card
 - Given an existing comment or reply card in the sidebar
