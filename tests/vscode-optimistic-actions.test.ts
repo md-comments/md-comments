@@ -38,6 +38,10 @@ vi.mock('../vscode-extension/src/author', () => ({
   authorsMatch: vi.fn((a: string, b: string) => a.toLowerCase() === b.toLowerCase()),
 }));
 
+vi.mock('../vscode-extension/src/githubAuth', () => ({
+  getOAuthToken: vi.fn().mockResolvedValue('mock-github-token'),
+}));
+
 import {
   addInlineComment,
   addPageComment,
