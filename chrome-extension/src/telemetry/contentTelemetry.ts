@@ -107,7 +107,7 @@ class ContentTelemetryManager {
 
     const record: TelemetryRecord = {
       serviceName: 'md-comments',
-      serviceVersion: '1.4.5',
+      serviceVersion: '1.4.6',
       clientInterface: this.clientInterface,
       timestamp: Date.now(),
       severity: 'ERROR',

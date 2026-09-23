@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.6] - 2026-09-22
+
+### Fixed
+
+- **Immediate Inline Composer Dismissal**: Dismissed inline comment composers and fallback forms immediately upon submission without displaying button loading spinners, while rendering an active animated progress underline on submitting cards and restoring drafts upon submission failure.
+- **Tombstone Sync & Stale Deletion Guard**: Prevented resurrection of deleted comments when remote polling fetches return stale data before background deletions finish.
+- **Whole-Paragraph Inline Anchoring**: Supported seamless selection and inline comment anchoring across entire paragraph elements in the GitHub content script preview.
+
 ## [1.4.5] - 2026-09-21
 
 ### Added

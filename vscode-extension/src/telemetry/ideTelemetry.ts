@@ -56,7 +56,7 @@ export class IdeTelemetryManager {
 
     this.client = new OtelTelemetryClient({
       serviceName: 'md-comments',
-      serviceVersion: '1.4.5',
+      serviceVersion: '1.4.6',
       clientInterface: 'vscode-extension',
       browserPlatform: this.ideName,
       osFamily:
