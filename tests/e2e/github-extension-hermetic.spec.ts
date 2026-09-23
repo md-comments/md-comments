@@ -255,6 +255,33 @@ test.describe('GitHub Extension: Hermetic Playwright E2E Lifecycle', () => {
         c.body.includes('@md-comments-test-mention')
       );
       expect(inlineNotif).toBeDefined();
+
+      // Assert full-paragraph inline comment on #p-1 is highlighted in DOM
+      const p1Highlight = testPage.locator('#p-1 .md-comments-highlight');
+      await expect(p1Highlight).toBeVisible();
+    });
+
+    await test.step('8. Assert whole-paragraph multi-click selection shows Comment button', async () => {
+      // Triple-click on #p-2 to select entire paragraph across block boundary
+      await testPage.click('#p-2', { clickCount: 3 });
+
+      // Assert Comment button is visible
+      const selBtn = testPage.locator('#md-comments-selection-button');
+      await expect(selBtn).toBeVisible({ timeout: 5000 });
+
+      // Click Comment button and verify composer opens with #p-2 text in preview
+      await selBtn.click();
+      const inlineComposer = testPage.locator('.new-inline-composer-wrapper');
+      await expect(inlineComposer).toBeVisible();
+
+      const preview = testPage.locator('.anchor-text-preview');
+      await expect(preview).toContainText('Second paragraph providing further details');
+
+      // Dismiss composer
+      const cancelBtn = testPage.locator('.fallback-cancel-btn');
+      if (await cancelBtn.isVisible()) {
+        await cancelBtn.click();
+      }
     });
 
     await test.step('9. Assert optimistic comment editing with progress line', async () => {

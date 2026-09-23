@@ -4545,10 +4545,18 @@ function renderDOMIndicatorsForFile(
 
     for (const placement of matchedPlacements) {
       const comment = placement.comment;
-      if (comment.anchor_text && comment.anchor_text !== text && !comment.resolved) {
+      if (comment.anchor_text && !comment.resolved) {
         highlightTextInElement(
           el,
           comment.anchor_text,
+          comment.id,
+          false,
+          comment.anchor_occurrence
+        );
+      } else if (!comment.anchor_text && !comment.resolved) {
+        highlightTextInElement(
+          el,
+          el.innerText.trim(),
           comment.id,
           false,
           comment.anchor_occurrence
@@ -5333,7 +5341,27 @@ function handleTextSelection() {
     }
 
     const paragraphs = findDomParagraphs(container);
-    const match = findParagraphForNode(range.commonAncestorContainer, paragraphs);
+    let match = findParagraphForNode(range.commonAncestorContainer, paragraphs);
+    if (!match) {
+      // When triple-clicking or selecting to paragraph boundary, endContainer spills into container or next sibling
+      let startNode: Node | null = range.startContainer;
+      if (startNode === container && range.startOffset < container.childNodes.length) {
+        startNode = container.childNodes[range.startOffset];
+      }
+      const startMatch = findParagraphForNode(startNode, paragraphs);
+      if (startMatch) {
+        const endMatch = findParagraphForNode(range.endContainer, paragraphs);
+        if (
+          !endMatch ||
+          endMatch.index === startMatch.index ||
+          (endMatch.index === startMatch.index + 1 && range.endOffset === 0) ||
+          range.endContainer === container
+        ) {
+          match = startMatch;
+        }
+      }
+    }
+
     if (!match) {
       hideSelectionButton();
       return;
@@ -5355,6 +5383,25 @@ function handleTextSelection() {
     );
   } catch (err) {
     hideSelectionButton();
+  }
+}
+
+function handleParagraphDblClick(e: MouseEvent) {
+  const target = e.target as HTMLElement | null;
+  if (!target || !isWritable) return;
+  const p = target.closest(
+    'p, li, h1, h2, h3, h4, h5, h6, blockquote, summary'
+  ) as HTMLElement | null;
+  if (!p || !p.closest('.markdown-body')) return;
+
+  const sel = window.getSelection();
+  // If user double-clicked on empty margin/padding/gutter where selection is collapsed or empty
+  if (!sel || sel.isCollapsed || sel.toString().trim().length === 0) {
+    const range = document.createRange();
+    range.selectNodeContents(p);
+    sel?.removeAllRanges();
+    sel?.addRange(range);
+    handleTextSelection();
   }
 }
 
@@ -5383,6 +5430,7 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
 
 document.addEventListener('mouseup', handleTextSelection);
 document.addEventListener('keyup', handleTextSelection);
+document.addEventListener('dblclick', handleParagraphDblClick);
 window.addEventListener('scroll', hideSelectionButton);
 
 export {
