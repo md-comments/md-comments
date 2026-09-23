@@ -68,6 +68,35 @@ let prInfoHeadBranch = '';
 const loadedFileContexts = new Map<string, { anchors: AnchorBlock[]; comments: CommentsFile }>();
 let loadedComments: CommentsFile = { page_comments: [], inline_comments: [] };
 const localCreatedIds = new Set<string>();
+const tombstonedCommentIds = new Set<string>();
+
+function addTombstones(idOrIds: string | string[] | Set<string>) {
+  if (typeof idOrIds === 'string') {
+    tombstonedCommentIds.add(idOrIds.trim());
+  } else {
+    for (const id of idOrIds) {
+      tombstonedCommentIds.add(id.trim());
+    }
+  }
+}
+
+function filterTombstones(comments: CommentsFile): CommentsFile {
+  if (tombstonedCommentIds.size === 0) return comments;
+  return {
+    inline_comments: (comments.inline_comments || [])
+      .filter((c) => !tombstonedCommentIds.has(c.id.trim()))
+      .map((c) => ({
+        ...c,
+        replies: (c.replies || []).filter((r) => !tombstonedCommentIds.has(r.id.trim())),
+      })),
+    page_comments: (comments.page_comments || [])
+      .filter((c) => !tombstonedCommentIds.has(c.id.trim()))
+      .map((c) => ({
+        ...c,
+        replies: (c.replies || []).filter((r) => !tombstonedCommentIds.has(r.id.trim())),
+      })),
+  };
+}
 let parsedAnchors: AnchorBlock[] = [];
 let useConventionalCommits = false;
 let commitPattern = '';
@@ -98,6 +127,7 @@ let appInstallationStatus: {
 let isCheckingAppInstallation = false;
 let isWaitingForAppInstallation = false;
 let isLoadingComments = false;
+let activeWritesCount = 0;
 let lastLoadCommentsError: string | null = null;
 let hasInstalledFocusListener = false;
 let isWritable = false;
@@ -916,6 +946,11 @@ async function loadDocumentComments(
 ) {
   const isBackgroundRefresh = !!options?.isBackgroundRefresh;
 
+  if (isBackgroundRefresh && activeWritesCount > 0) {
+    console.log('[md-comments] Skipping background refresh while write is in-flight');
+    return;
+  }
+
   if (!isBackgroundRefresh) {
     isLoadingComments = true;
     lastLoadCommentsError = null;
@@ -1129,6 +1164,15 @@ async function refreshDocumentComments(force = false): Promise<void> {
     await loadDocumentComments(meta as ParsedUrl & { type: 'blob' }, {
       isBackgroundRefresh: true,
     });
+    if (force && tombstonedCommentIds.size > 0) {
+      const remoteInlineIds = new Set(loadedComments.inline_comments.map((c) => c.id.trim()));
+      const remotePageIds = new Set(loadedComments.page_comments.map((c) => c.id.trim()));
+      for (const id of Array.from(tombstonedCommentIds)) {
+        if (!remoteInlineIds.has(id) && !remotePageIds.has(id)) {
+          tombstonedCommentIds.delete(id);
+        }
+      }
+    }
     if (!lastKnownRefSha) {
       gitRefBackend
         .getLatestRefSha(meta.owner, meta.repo)
@@ -1143,11 +1187,13 @@ async function refreshDocumentComments(force = false): Promise<void> {
   }
 }
 
-function mergeLocalComments(local: CommentsFile, fetched: CommentsFile): CommentsFile {
+function mergeLocalComments(local: CommentsFile, fetchedRaw: CommentsFile): CommentsFile {
+  const fetched = filterTombstones(fetchedRaw);
   const mergedInline = [...fetched.inline_comments];
   const mergedPage = [...fetched.page_comments];
 
   for (const localC of local.inline_comments) {
+    if (tombstonedCommentIds.has(localC.id.trim())) continue;
     if (localCreatedIds.has(localC.id)) {
       const exists = fetched.inline_comments.some((c) => c.id === localC.id);
       if (!exists) {
@@ -1157,6 +1203,7 @@ function mergeLocalComments(local: CommentsFile, fetched: CommentsFile): Comment
   }
 
   for (const localC of local.page_comments) {
+    if (tombstonedCommentIds.has(localC.id.trim())) continue;
     if (localCreatedIds.has(localC.id)) {
       const exists = fetched.page_comments.some((c) => c.id === localC.id);
       if (!exists) {
@@ -1169,6 +1216,7 @@ function mergeLocalComments(local: CommentsFile, fetched: CommentsFile): Comment
     const localC = local.inline_comments.find((c) => c.id === fetchedC.id);
     if (localC) {
       for (const localR of localC.replies) {
+        if (tombstonedCommentIds.has(localR.id.trim())) continue;
         if (localCreatedIds.has(localR.id)) {
           const exists = fetchedC.replies.some((r) => r.id === localR.id);
           if (!exists) {
@@ -1183,6 +1231,7 @@ function mergeLocalComments(local: CommentsFile, fetched: CommentsFile): Comment
     const localC = local.page_comments.find((c) => c.id === fetchedC.id);
     if (localC) {
       for (const localR of localC.replies) {
+        if (tombstonedCommentIds.has(localR.id.trim())) continue;
         if (localCreatedIds.has(localR.id)) {
           const exists = fetchedC.replies.some((r) => r.id === localR.id);
           if (!exists) {
@@ -4696,8 +4745,17 @@ async function commitCommentFileChanges(
   }
   renderSidebarComments();
 
+  activeWritesCount++;
   try {
     await gitRefBackend.write(key, updatedComments, previousComments, deletedIds);
+    try {
+      const latestSha = await gitRefBackend.getLatestRefSha(meta.owner, meta.repo);
+      if (latestSha) {
+        lastKnownRefSha = latestSha;
+      }
+    } catch {
+      // Best-effort sha sync
+    }
   } catch (err) {
     console.error('[md-comments] Error writing comment to GitHub orphan ref:', err);
     const errMsg = err instanceof Error ? err.message : String(err);
@@ -4711,6 +4769,14 @@ async function commitCommentFileChanges(
         githubApi = new GitHubApi(refreshedToken);
         try {
           await gitRefBackend.write(key, updatedComments, previousComments);
+          try {
+            const latestSha = await gitRefBackend.getLatestRefSha(meta.owner, meta.repo);
+            if (latestSha) {
+              lastKnownRefSha = latestSha;
+            }
+          } catch {
+            // Best-effort sha sync
+          }
           console.log('[md-comments] Comment write retry succeeded after silent token refresh!');
           return;
         } catch (retryErr) {
@@ -4730,6 +4796,8 @@ async function commitCommentFileChanges(
       alert('Failed to save comment to GitHub: ' + errMsg);
     }
     throw err;
+  } finally {
+    activeWritesCount--;
   }
 }
 
@@ -4885,11 +4953,30 @@ async function editComment(commentId: string, type: 'inline' | 'page', body: str
 async function deleteComment(commentId: string, _type: 'inline' | 'page') {
   localCreatedIds.delete(commentId);
   const targetId = commentId.trim();
+  const tombstoneSet = new Set<string>([targetId]);
+
+  const existingInline = loadedComments.inline_comments.find((c) => c.id.trim() === targetId);
+  if (existingInline?.replies) {
+    for (const r of existingInline.replies) {
+      tombstoneSet.add(r.id.trim());
+      localCreatedIds.delete(r.id);
+    }
+  }
+  const existingPage = loadedComments.page_comments.find((c) => c.id.trim() === targetId);
+  if (existingPage?.replies) {
+    for (const r of existingPage.replies) {
+      tombstoneSet.add(r.id.trim());
+      localCreatedIds.delete(r.id);
+    }
+  }
+
+  addTombstones(tombstoneSet);
+
   const updated = {
     inline_comments: loadedComments.inline_comments.filter((c) => c.id.trim() !== targetId),
     page_comments: loadedComments.page_comments.filter((c) => c.id.trim() !== targetId),
   };
-  await commitCommentFileChanges(updated, 'delete comment', new Set([targetId]));
+  await commitCommentFileChanges(updated, 'delete comment', tombstoneSet);
 }
 
 async function editReply(
@@ -4938,6 +5025,8 @@ async function deleteReply(commentId: string, replyId: string, _type: 'inline' |
   localCreatedIds.delete(replyId);
   const targetCommentId = commentId.trim();
   const targetReplyId = replyId.trim();
+
+  addTombstones(targetReplyId);
 
   const filterReplies = <T extends InlineComment | PageComment>(comments: Array<T>): Array<T> =>
     comments.map((c) => {
@@ -5433,10 +5522,31 @@ document.addEventListener('keyup', handleTextSelection);
 document.addEventListener('dblclick', handleParagraphDblClick);
 window.addEventListener('scroll', hideSelectionButton);
 
+function getActiveWritesCount(): number {
+  return activeWritesCount;
+}
+
+function getLastKnownRefSha(): string | null {
+  return lastKnownRefSha;
+}
+
+function setLastKnownRefSha(sha: string | null): void {
+  lastKnownRefSha = sha;
+}
+
 export {
   setRefreshingProgress,
   loadDocumentComments,
   refreshDocumentComments,
   injectSidebar,
   renderSidebarComments,
+  tombstonedCommentIds,
+  addTombstones,
+  filterTombstones,
+  mergeLocalComments,
+  deleteComment,
+  deleteReply,
+  getActiveWritesCount,
+  getLastKnownRefSha,
+  setLastKnownRefSha,
 };

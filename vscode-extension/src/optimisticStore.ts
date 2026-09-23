@@ -166,7 +166,7 @@ export class OptimisticCommentStore {
   updateComments(
     key: CommentStorageKey,
     data: CommentsFile,
-    writeRemote: () => Promise<void>,
+    writeRemote: () => Promise<unknown>,
     deletedIds?: Set<string>
   ): CommentsFile {
     const kStr = keyToString(key);

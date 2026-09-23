@@ -193,7 +193,8 @@ export class GitHubOrphanRefBackend implements CommentBackend {
   private async fetchPathContent(
     owner: string,
     repo: string,
-    path: string
+    path: string,
+    ref = ORPHAN_REF_NAME
   ): Promise<CommentsFile | null> {
     validateRepoIdentifier(owner, 'owner');
     validateRepoIdentifier(repo, 'repo');
@@ -201,7 +202,7 @@ export class GitHubOrphanRefBackend implements CommentBackend {
       .split('/')
       .map((segment) => encodeURIComponent(segment))
       .join('/');
-    const contentUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${encodedPath}?ref=${ORPHAN_REF_NAME}`;
+    const contentUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${encodedPath}?ref=${ref}`;
     try {
       let res = await this.fetchApi(contentUrl);
       if (!res.ok && path.includes(' ')) {
@@ -211,7 +212,7 @@ export class GitHubOrphanRefBackend implements CommentBackend {
           .map((seg) => encodeURIComponent(seg.replace(/ /g, '%20')))
           .join('/');
         const fallbackRes = await this.fetchApi(
-          `https://api.github.com/repos/${owner}/${repo}/contents/${doubleEncoded}?ref=${ORPHAN_REF_NAME}`
+          `https://api.github.com/repos/${owner}/${repo}/contents/${doubleEncoded}?ref=${ref}`
         );
         if (fallbackRes.ok) {
           res = fallbackRes;
@@ -237,12 +238,13 @@ export class GitHubOrphanRefBackend implements CommentBackend {
 
   private async fetchRefTreeBlobs(
     owner: string,
-    repo: string
+    repo: string,
+    explicitSha?: string
   ): Promise<Array<{ path: string; sha: string }> | null> {
     validateRepoIdentifier(owner, 'owner');
     validateRepoIdentifier(repo, 'repo');
     try {
-      const commitSha = await this.getLatestRefSha(owner, repo);
+      const commitSha = explicitSha || (await this.getLatestRefSha(owner, repo));
       if (!commitSha) return null;
 
       const commitTreeUrl = `https://api.github.com/repos/${owner}/${repo}/git/trees/${commitSha}?recursive=1`;
@@ -297,7 +299,10 @@ export class GitHubOrphanRefBackend implements CommentBackend {
     let accumulated: CommentsFile = { page_comments: [], inline_comments: [] };
 
     // 1. Fetch ref tree to discover canonical file and any historical shards
-    const treeBlobs = await this.fetchRefTreeBlobs(key.owner, key.repo);
+    const commitSha = await this.getLatestRefSha(key.owner, key.repo);
+    const treeBlobs = commitSha
+      ? await this.fetchRefTreeBlobs(key.owner, key.repo, commitSha)
+      : null;
 
     if (treeBlobs && treeBlobs.length > 0) {
       const shardRegex = /\.[a-f0-9]{7,40}\.comments\.(?:ya?ml)$/i;
@@ -322,14 +327,24 @@ export class GitHubOrphanRefBackend implements CommentBackend {
       if (shardPaths.length > 0) {
         // Collect comments from all shards
         for (const shardPath of shardPaths) {
-          const shardComments = await this.fetchPathContent(key.owner, key.repo, shardPath);
+          const shardComments = await this.fetchPathContent(
+            key.owner,
+            key.repo,
+            shardPath,
+            commitSha || undefined
+          );
           if (shardComments) {
             accumulated = mergeCommentsFiles(accumulated, shardComments);
           }
         }
         // Also merge existing canonical comments if present
         if (canonicalFound) {
-          const canonicalComments = await this.fetchPathContent(key.owner, key.repo, canonicalPath);
+          const canonicalComments = await this.fetchPathContent(
+            key.owner,
+            key.repo,
+            canonicalPath,
+            commitSha || undefined
+          );
           if (canonicalComments) {
             accumulated = mergeCommentsFiles(accumulated, canonicalComments);
           }
@@ -341,7 +356,12 @@ export class GitHubOrphanRefBackend implements CommentBackend {
       }
 
       if (canonicalFound) {
-        const canonicalComments = await this.fetchPathContent(key.owner, key.repo, canonicalPath);
+        const canonicalComments = await this.fetchPathContent(
+          key.owner,
+          key.repo,
+          canonicalPath,
+          commitSha || undefined
+        );
         if (canonicalComments) {
           accumulated = mergeCommentsFiles(accumulated, canonicalComments);
         }
@@ -349,7 +369,12 @@ export class GitHubOrphanRefBackend implements CommentBackend {
       }
     } else {
       // Direct fetch fallback if tree was empty or unavailable
-      const targetComments = await this.fetchPathContent(key.owner, key.repo, canonicalPath);
+      const targetComments = await this.fetchPathContent(
+        key.owner,
+        key.repo,
+        canonicalPath,
+        commitSha || undefined
+      );
       if (targetComments) {
         accumulated = mergeCommentsFiles(accumulated, targetComments);
         return accumulated;
@@ -557,6 +582,7 @@ export class GitHubOrphanRefBackend implements CommentBackend {
       }
       await new Promise((r) => setTimeout(r, 100 * attempt));
     }
+    throw new Error(`Failed to write comments to orphan ref after ${maxRetries} attempts.`);
   }
 
   private async dispatchNotifications(

@@ -77,9 +77,9 @@ export async function writeComments(
   globalOptimisticStore.updateComments(
     key,
     normalized,
-    () => {
+    async () => {
       logDebug(`writeComments triggering remote write for key:`, key);
-      return gitRefBackend.write(key, normalized, previousData, deletedIds);
+      await gitRefBackend.write(key, normalized, previousData, deletedIds);
     },
     deletedIds
   );
