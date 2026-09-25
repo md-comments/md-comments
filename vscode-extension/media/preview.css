@@ -1744,3 +1744,96 @@ button.loading::after,
   color: var(--gc-text-muted, #8b949e);
   margin-bottom: 4px;
 }
+
+/* Styled Speech Bubble Tooltip for Inline Highlights */
+.md-comments-tooltip {
+  position: absolute;
+  z-index: 999995;
+  max-width: 300px;
+  min-width: 180px;
+  background-color: var(--gc-surface-raised, #1d2125);
+  border: 1px solid var(--gc-border, #3d474d);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: var(--gc-text, #b6c2cf);
+  font-family: var(
+    --mdc-font-family,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif
+  );
+  font-size: 12px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(4px);
+  transition:
+    opacity 0.15s ease-out,
+    transform 0.15s ease-out;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.md-comments-tooltip.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.md-comments-tooltip::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
+
+.md-comments-tooltip.arrow-bottom::after {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px 6px 0 6px;
+  border-color: var(--gc-border, #3d474d) transparent transparent transparent;
+}
+
+.md-comments-tooltip.arrow-top::after {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 0 6px 6px 6px;
+  border-color: transparent transparent var(--gc-border, #3d474d) transparent;
+}
+
+.md-comments-tooltip .tooltip-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.md-comments-tooltip .tooltip-avatar {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.md-comments-tooltip .tooltip-author {
+  font-weight: 600;
+  color: var(--gc-text, #b6c2cf);
+}
+
+.md-comments-tooltip .tooltip-time {
+  font-size: 10px;
+  color: var(--gc-text-muted, #8c9bab);
+}
+
+.md-comments-tooltip .tooltip-body {
+  color: var(--gc-text, #b6c2cf);
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-break: break-word;
+}

@@ -56,12 +56,120 @@
       });
   }
 
+  let activeTooltipEl = null;
+
+  function hideCommentTooltip() {
+    if (activeTooltipEl) {
+      activeTooltipEl.remove();
+      activeTooltipEl = null;
+    }
+  }
+
+  function showCommentTooltip(targetEl, commentId) {
+    hideCommentTooltip();
+    if (!commentId || !targetEl) {
+      return;
+    }
+
+    const card = document.querySelector(
+      '.md-comments-card[data-md-comment-id="' + commentId + '"]'
+    );
+    if (!card) {
+      return;
+    }
+
+    const authorEl = card.querySelector('.md-comments-author, .author-name, .comment-author');
+    const author = authorEl
+      ? authorEl.textContent.trim()
+      : card.getAttribute('data-md-stored-author') || 'Unknown';
+    const avatarEl = card.querySelector('.md-comments-avatar, .comment-avatar');
+    const avatarSrc =
+      avatarEl && avatarEl.getAttribute('src')
+        ? avatarEl.getAttribute('src')
+        : 'https://avatars.githubusercontent.com/' + encodeURIComponent(author) + '?s=40';
+
+    const timeEl = card.querySelector('.md-comments-time, .comment-time');
+    const relativeTime = timeEl ? timeEl.textContent.trim() : '';
+    const concreteTime = timeEl ? timeEl.getAttribute('title') || '' : '';
+
+    const bodyEl = card.querySelector('.md-comments-body, .comment-body');
+    const body = bodyEl ? bodyEl.textContent.trim() : '';
+    const bodyText = body.length > 120 ? body.slice(0, 120) + '…' : body;
+
+    const tooltip = document.createElement('div');
+    tooltip.className = 'md-comments-tooltip arrow-bottom';
+    tooltip.setAttribute('role', 'tooltip');
+
+    const header = document.createElement('div');
+    header.className = 'tooltip-header';
+
+    const avatar = document.createElement('img');
+    avatar.className = 'tooltip-avatar';
+    avatar.src = avatarSrc;
+    avatar.alt = author;
+
+    const metaDiv = document.createElement('div');
+    const authorSpan = document.createElement('div');
+    authorSpan.className = 'tooltip-author';
+    authorSpan.textContent = author;
+
+    const timeSpan = document.createElement('div');
+    timeSpan.className = 'tooltip-time';
+    timeSpan.textContent = relativeTime;
+    if (concreteTime) {
+      timeSpan.setAttribute('title', concreteTime);
+    }
+
+    metaDiv.appendChild(authorSpan);
+    metaDiv.appendChild(timeSpan);
+    header.appendChild(avatar);
+    header.appendChild(metaDiv);
+
+    const bodyDiv = document.createElement('div');
+    bodyDiv.className = 'tooltip-body';
+    bodyDiv.textContent = bodyText;
+
+    tooltip.appendChild(header);
+    tooltip.appendChild(bodyDiv);
+
+    document.body.appendChild(tooltip);
+    activeTooltipEl = tooltip;
+
+    const rect = targetEl.getBoundingClientRect();
+    const tooltipRect = tooltip.getBoundingClientRect();
+
+    let top = rect.top + window.scrollY - tooltipRect.height - 8;
+    let left = rect.left + window.scrollX + rect.width / 2 - tooltipRect.width / 2;
+
+    if (top < window.scrollY + 8) {
+      top = rect.bottom + window.scrollY + 8;
+      tooltip.classList.remove('arrow-bottom');
+      tooltip.classList.add('arrow-top');
+    }
+
+    if (left < 8) {
+      left = 8;
+    }
+    if (left + tooltipRect.width > window.innerWidth - 8) {
+      left = window.innerWidth - tooltipRect.width - 8;
+    }
+
+    tooltip.style.top = top + 'px';
+    tooltip.style.left = left + 'px';
+
+    requestAnimationFrame(function () {
+      tooltip.classList.add('visible');
+    });
+  }
+
   function bindHover(el, commentId) {
     el.addEventListener('mouseenter', function () {
       activatePair(commentId);
+      showCommentTooltip(el, commentId);
     });
     el.addEventListener('mouseleave', function () {
       clearActive();
+      hideCommentTooltip();
     });
   }
 
@@ -73,6 +181,7 @@
     el.addEventListener('click', function (e) {
       e.preventDefault();
       e.stopPropagation();
+      hideCommentTooltip();
       document.dispatchEvent(
         new CustomEvent('md-comments:open-sidebar', { detail: { commentId: commentId } })
       );
@@ -99,13 +208,19 @@
     container.setAttribute('data-md-paragraph-bound', 'true');
     container.addEventListener('mouseenter', function () {
       activateParagraphComments(container);
+      const ids = (container.getAttribute('data-md-comment-id') || '').split(/\s+/).filter(Boolean);
+      if (ids[0]) {
+        showCommentTooltip(container, ids[0]);
+      }
     });
     container.addEventListener('mouseleave', function () {
       clearActive();
+      hideCommentTooltip();
     });
     container.addEventListener('click', function (e) {
       e.preventDefault();
       e.stopPropagation();
+      hideCommentTooltip();
       const ids = (container.getAttribute('data-md-comment-id') || '').split(/\s+/).filter(Boolean);
       document.dispatchEvent(
         new CustomEvent('md-comments:open-sidebar', { detail: { commentId: ids[0] || null } })
@@ -363,6 +478,7 @@
   }
 
   function unwrapAnchor(commentId) {
+    hideCommentTooltip();
     if (!commentId) return;
     document
       .querySelectorAll('.md-comments-text-anchor[data-md-comment-id="' + commentId + '"]')
@@ -406,6 +522,19 @@
   window.mdCommentsScheduleWire = scheduleWire;
   window.mdCommentsWireCommentHighlight = wireCommentHighlight;
   window.mdCommentsFindNeedleRange = findNeedleRange;
+  window.mdCommentsShowTooltip = showCommentTooltip;
+  window.mdCommentsHideTooltip = hideCommentTooltip;
+
+  if (typeof document !== 'undefined' && typeof document.addEventListener === 'function') {
+    document.addEventListener('click', function (e) {
+      if (activeTooltipEl && !activeTooltipEl.contains(e.target)) {
+        hideCommentTooltip();
+      }
+    });
+  }
+  if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
+    window.addEventListener('scroll', hideCommentTooltip, { passive: true });
+  }
 
   const observer = new MutationObserver(scheduleWire);
   observer.observe(document.body, { childList: true, subtree: true });
