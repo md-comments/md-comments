@@ -406,7 +406,7 @@ function applyReactionToggle(reactions: Reaction[], emoji: string, user: string)
   const copy = reactions.map((r) => ({ ...r, users: [...r.users] }));
   const existing = copy.find((r) => r.emoji === emoji);
   if (existing) {
-    const idx = existing.users.indexOf(user);
+    const idx = existing.users.findIndex((u) => authorsMatch(u, user));
     if (idx >= 0) {
       existing.users.splice(idx, 1);
     } else {

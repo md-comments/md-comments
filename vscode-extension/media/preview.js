@@ -577,8 +577,14 @@
     if (existingChip) {
       const match = existingChip.textContent.trim().match(/\d+$/);
       let count = match ? parseInt(match[0], 10) : 1;
-      if (existingChip.classList.contains('md-comments-reaction-active')) {
-        existingChip.classList.remove('md-comments-reaction-active');
+      const isMine =
+        existingChip.classList.contains('md-comments-reaction-active') ||
+        existingChip.classList.contains('active') ||
+        existingChip.getAttribute('data-md-is-mine') === 'true';
+
+      if (isMine) {
+        existingChip.classList.remove('md-comments-reaction-active', 'active');
+        existingChip.setAttribute('data-md-is-mine', 'false');
         count -= 1;
         if (count <= 0) {
           existingChip.remove();
@@ -588,20 +594,23 @@
           return;
         }
       } else {
-        existingChip.classList.add('md-comments-reaction-active');
+        existingChip.classList.add('md-comments-reaction-active', 'active');
+        existingChip.setAttribute('data-md-is-mine', 'true');
         count += 1;
       }
       existingChip.textContent = emoji + ' ' + count;
     } else {
-      const chip = document.createElement('button');
-      chip.type = 'button';
-      chip.className = 'md-comments-reaction-chip md-comments-reaction-active';
+      const chip = document.createElement('a');
+      chip.setAttribute('role', 'button');
+      chip.href = '#';
+      chip.className = 'md-comments-reaction-chip md-comments-reaction-active active';
       chip.setAttribute('data-md-action', 'react');
       chip.setAttribute('data-md-target', targetId || rootId);
       chip.setAttribute('data-md-root', rootId);
       chip.setAttribute('data-md-type', type || 'inline');
       chip.setAttribute('data-md-kind', kind || 'root');
       chip.setAttribute('data-md-emoji', emoji);
+      chip.setAttribute('data-md-is-mine', 'true');
       chip.textContent = emoji + ' 1';
       reactionsDiv.appendChild(chip);
     }

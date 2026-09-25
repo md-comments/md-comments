@@ -250,10 +250,13 @@ function renderReactions(
     return '';
   }
   const chips = reactions
-    .map(
-      (r) =>
-        `<a role="button" class="md-comments-reaction-chip" data-md-action="react" data-md-target="${escapeHtml(targetId)}" data-md-root="${escapeHtml(rootId)}" data-md-type="${type}" data-md-kind="${kind}" data-md-emoji="${escapeHtml(r.emoji)}" href="#">${escapeHtml(r.emoji)} ${r.users.length}</a>`
-    )
+    .map((r) => {
+      const isMine =
+        !!renderCurrentAuthor && r.users.some((u) => authorsMatch(u, renderCurrentAuthor!));
+      const activeClass = isMine ? ' md-comments-reaction-active active' : '';
+      const usersAttr = escapeHtml(JSON.stringify(r.users));
+      return `<a role="button" class="md-comments-reaction-chip${activeClass}" data-md-action="react" data-md-target="${escapeHtml(targetId)}" data-md-root="${escapeHtml(rootId)}" data-md-type="${type}" data-md-kind="${kind}" data-md-emoji="${escapeHtml(r.emoji)}" data-md-users="${usersAttr}" data-md-is-mine="${isMine}" href="#">${escapeHtml(r.emoji)} ${r.users.length}</a>`;
+    })
     .join('');
   return `<div class="md-comments-reactions">${chips}</div>`;
 }
