@@ -321,7 +321,9 @@
       (!isPage && anchor
         ? (anchor.paragraphIndex !== undefined
             ? ' data-md-paragraph-index="' + anchor.paragraphIndex + '"'
-            : '') +
+            : anchor.index !== undefined
+              ? ' data-md-paragraph-index="' + anchor.index + '"'
+              : '') +
           (anchor.text ? ' data-md-anchor-text="' + escapeHtml(anchor.text) + '"' : '') +
           (anchor.occurrence !== undefined
             ? ' data-md-anchor-occurrence="' + anchor.occurrence + '"'
@@ -359,7 +361,16 @@
       replyComposerHtml +
       '</div>';
 
-    targetList.prepend(article);
+    targetList.append(article);
+
+    if (!isPage) {
+      const card = article.querySelector('.md-comments-card');
+      if (card && typeof window.mdCommentsWireCommentHighlight === 'function') {
+        window.mdCommentsWireCommentHighlight(card);
+      } else if (typeof window.mdCommentsScheduleWire === 'function') {
+        window.mdCommentsScheduleWire();
+      }
+    }
 
     setTimeout(function () {
       const card = article.querySelector('.md-comments-card');
