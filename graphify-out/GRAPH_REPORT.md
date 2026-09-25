@@ -1,16 +1,16 @@
-# Graph Report - md-comments  (2026-09-22)
+# Graph Report - md-comments  (2026-09-24)
 
 ## Corpus Check
-- 442 files · ~1,333,690 words
+- 452 files · ~1,342,667 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 8440 nodes · 28136 edges · 394 communities (333 shown, 61 thin omitted)
-- Extraction: 79% EXTRACTED · 21% INFERRED · 0% AMBIGUOUS · INFERRED: 5772 edges (avg confidence: 0.64)
+- 8519 nodes · 28246 edges · 402 communities (340 shown, 62 thin omitted)
+- Extraction: 80% EXTRACTED · 20% INFERRED · 0% AMBIGUOUS · INFERRED: 5772 edges (avg confidence: 0.64)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `5d1fb2aa`
+- Built from commit: `14cf22e6`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -18,7 +18,7 @@
 - constructor
 - content.ts
 - validate.py
-- shared/types.ts
+- main.ts
 - CommentsOverlay
 - vscode-extension/package.json
 - obsidian-plugin/package.json
@@ -45,7 +45,7 @@
 - pagefind-ui.js
 - esbuild.js
 - Cross-Interface UI Consistency & 100% Visual Parity Plan
-- CommentsFile
+- shared/types.ts
 - compilerOptions
 - esbuild.config.mjs
 - avatarFallback.js
@@ -122,9 +122,9 @@
 - CommentsApp
 - devDependencies
 - Workflow: context-pack
-- repoManager.ts
+- dom.spec.ts
 - mdComments.sidebarWidth
-- j
+- constructor
 - architecture-site/src/components/Header.astro
 - mdComments.reactionEmojis
 - keywords
@@ -202,7 +202,7 @@
 - hooks-XtIdlWL4.js
 - ContentTelemetryManager
 - telemetry-proxy/package.json
-- get
+- add
 - Autonomous Execution Sequence
 - INV-FAST-FORWARD-RETRY.md
 - INV-OAUTH-ONLY.md
@@ -237,8 +237,8 @@
 - worker.ts
 - verify-packaging-compat.js
 - Part I: The 14 System Invariants
-- _l
-- l
+- Mz
+- i
 - architecture/README.md
 - scripts
 - Cloudflare Worker Telemetry Proxy Terraform IaC
@@ -273,60 +273,60 @@
 - build-safari-app.sh
 - package-dmg.sh
 - Mandatory Test Enhancement & Knowledge Graph Specification
-- W
+- i
 - size
 - ui-core.DS9ElEro.js
 - content/docs/architecture/c4-architecture.md
 - AIChat-VqYP1yar.js
 - Dw
 - __dispatch__
-- co
+- fn
 - allure-vitest
-- bn
-- page.B1D-nYk3.js
+- forEach
+- chrome-extension/src/githubAuth.ts
 - content/docs/architecture/data-flow-diagrams.md
 - pagefind-component-ui.js
 - a
 - INV-INPUT-VALIDATION-REPO.md
 - INV-NO-THIRD-PARTY-AUTH-PROXY.md
-- update
+- Dt
 - content/docs/architecture/components-integration.md
-- i
+- r
 - INV-SAFE-DESERIALIZATION.md
 - sortCommentsNewestFirst
 - includes
 - size
-- dl
+- slice
 - pagefind.js
-- render
+- Commit-by-Commit Execution Plan (1 Commit Per Change)
 - es-Di-8KFnK.js
 - Obsidian Plugin Guide
-- ec.8zarh.js
-- init
+- register
+- setupEventHandlers
 - emitMessagesChange
 - content/docs/architecture/sequence-diagrams.md
 - guides/starlight-plugin.md
 - mentionAutocomplete.js
 - pagefind-worker.js
 - pagefind-modular-ui.js
-- Uv
+- at
 - constructor
 - streamResponse
 - guides/safari-extension-guide.md
 - mentions.ts
 - properties
-- includes
-- Search.astro_astro_type_script_index_0_lang.DX8jrZgA.js
-- constructor
-- nl
+- get
+- da
+- start
+- VS Code Extension Quality & GitHub Extension Alignment Plan
 - 🔄 The AI-Human Documentation Loop
 - items
 - CommentsSidebarView
-- j
+- Current State vs. Proposed Architecture
 - sync-docs-to-astro.mjs
 - properties
 - Tk
-- connectedCallback
+- $p
 - jm
 - ia
 - hy
@@ -334,43 +334,49 @@
 - properties
 - architecture-site/tsconfig.json
 - config.ts
-- storage.ts
+- chromeInlineSubmission.test.ts
+- CommentStore
+- 1. Document Comment Badging (`pageLabel`)
 - docs
 - c
-- get
+- 3. Timestamp Formatting & Hover Tooltips (Across ALL Interfaces)
+- q
+- 4. Duplicate Phrase Occurrence Anchoring (QA-INLINE-3)
 - obsidian-plugin/manifest.json
 - E
 - C
-- qd
+- 5. Markdown-It List Item & Blockquote Open Rules (QA-INLINE-4)
+- 6. Instant Optimistic Underscoring & Timestamp Responsiveness
 - pagefind-highlight.js
+- 7. Mention Display Name '@' Removal
 - ze
 - template
 - split
-- CommentPollManager
-- yr
+- 8. Inline Reply Action Button Removal
+- 9. Reaction Toggle Count & State Parity
+- vscode-triple-click-selection.test.ts
+- ct
 - splitVariantProps
-- Xm
+- get
 - debugLog
 - process
-- has
+- ul
 - ProjectsOverview-irmF-b8X.js
-- e
+- r
 - hu
 - push
-- forEach
+- add
 - Part II: Architectural Decision Records (ADRs)
 - generate-architecture-assets.mjs
-- po
-- get
-- start
+- cs
+- dl
 - oQ
-- hv
+- fu
 - Fingerprinter
-- r
+- h
 - s
-- Ma
+- e
 - index-BpYslV1g.js
-- constructor
 - Pe
 - q
 - @typescript-eslint/parser
@@ -402,27 +408,27 @@
 ## Import Cycles
 - None detected.
 
-## Communities (394 total, 61 thin omitted)
+## Communities (402 total, 62 thin omitted)
 
 ### Community 0 - "constructor"
-Cohesion: 0.06
-Nodes (50): ae(), attachTimeline(), complete(), constructor(), definition(), dirty(), end(), finish() (+42 more)
+Cohesion: 0.04
+Nodes (98): addListeners(), attachDevTools(), attachTimeline(), bindToMotionValue(), cancel(), clear(), clearAnimation(), clearListeners() (+90 more)
 
 ### Community 1 - "content.ts"
-Cohesion: 0.04
-Nodes (122): activeIndicators, addTombstones(), appInstallationStatus, applyPendingHighlight(), attachCommentCardEvents(), attachInstallationPromptEvents(), attachOAuthEvents(), attachRetryEvents() (+114 more)
+Cohesion: 0.05
+Nodes (106): activeIndicators, addTombstones(), appInstallationStatus, attachCommentCardEvents(), attachInstallationPromptEvents(), attachOAuthEvents(), attachRetryEvents(), cachedSelectedClasses (+98 more)
 
 ### Community 2 - "validate.py"
 Cohesion: 0.07
 Nodes (45): benchmark_pair(), count_tokens(), main(), print_table(), main(), print_usage(), backup_dir_for(), build_compress_prompt() (+37 more)
 
-### Community 3 - "shared/types.ts"
-Cohesion: 0.14
-Nodes (28): createLivePreviewExtension(), highlightTextInElement(), registerReadingViewProcessor(), displayNameCache, pendingFetches, Markdown Comments Key Features, obsidian, computeAnchorId() (+20 more)
+### Community 3 - "main.ts"
+Cohesion: 0.15
+Nodes (32): applyPendingHighlight(), findDomParagraphs(), handleTextSelection(), hideSelectionButton(), highlightTextInElement(), renderDOMIndicatorsForFile(), showSelectionButton(), createLivePreviewExtension() (+24 more)
 
 ### Community 4 - "CommentsOverlay"
 Cohesion: 0.06
-Nodes (33): AstroIntegration, astroMdComments(), mountMdComments(), AuthModal, CommentsOverlay, displayNameCache, escapeHtml(), formatRelativeTime() (+25 more)
+Nodes (32): AstroIntegration, astroMdComments(), mountMdComments(), AuthModal, CommentsOverlay, displayNameCache, escapeHtml(), isGitHubLogin() (+24 more)
 
 ### Community 5 - "vscode-extension/package.json"
 Cohesion: 0.12
@@ -462,7 +468,7 @@ Nodes (31): activateTab(), activeTabKey(), applyCollapsedState(), authorsMatchCl
 
 ### Community 15 - "inlineAnchors.js"
 Cohesion: 0.20
-Nodes (21): activatePair(), activateParagraphComments(), bindCardHover(), bindClick(), bindHover(), bindParagraphMarked(), clearActive(), createDomRange() (+13 more)
+Nodes (23): activatePair(), activateParagraphComments(), bindCardHover(), bindClick(), bindHover(), bindParagraphMarked(), clearActive(), createDomRange() (+15 more)
 
 ### Community 16 - "ignorePatterns"
 Cohesion: 0.04
@@ -500,17 +506,13 @@ Nodes (32): actionIconBtn(), applyCommentsUpdate(), applyPendingAnchorHighlight(
 Cohesion: 0.04
 Nodes (57): scripts, build, build:arch-assets, build:arch-site, build:chrome, build:demo-astro, build:obsidian, build:pages (+49 more)
 
-### Community 25 - "GitHubApi"
-Cohesion: 0.15
-Nodes (3): GitHubApi, RepoMetadata, ViewerInfo
-
 ### Community 26 - "starlight-plugin/package.json"
 Cohesion: 0.07
 Nodes (28): dependencies, js-yaml, @md-comments/shared, description, devDependencies, @types/js-yaml, @types/node, typescript (+20 more)
 
 ### Community 27 - "pagefind-ui.js"
 Cohesion: 0.04
-Nodes (79): _a(), aa(), addEventListener(), Ae(), attributeChangedCallback(), ba(), bs(), Bt() (+71 more)
+Nodes (81): _a(), aa(), addEventListener(), Ae(), attributeChangedCallback(), ba(), bs(), Bt() (+73 more)
 
 ### Community 28 - "esbuild.js"
 Cohesion: 0.16
@@ -520,9 +522,9 @@ Nodes (14): args, buildTarget(), copyStaticFiles(), esbuild, fs, { isReleaseBran
 Cohesion: 0.08
 Nodes (24): 100% Coverage Preservation Strategy, 1. Floating Action Button (FAB) & Badge, 2. Comments Sidebar / Drawer, 3. Comment Card, 4. Markdown Composer & Formatting Toolbar, 5. Inline Highlighting & Selection Bubble UX, Component & UX Parity Specifications, Core Objectives (+16 more)
 
-### Community 30 - "CommentsFile"
-Cohesion: 0.07
-Nodes (25): CommentBackend, CommentStorageKey, PollManagerOptions, dispatchCommitCommentNotification(), DispatchParams, findNewlyMentionedEvents(), formatNotificationBody(), NotificationBodyParams (+17 more)
+### Community 30 - "shared/types.ts"
+Cohesion: 0.06
+Nodes (31): EMPTY, normalizeCommentsFile(), normalizeInlineComment(), normalizePageComment(), normalizeReply(), CommentBackend, CommentStorageKey, PollManagerOptions (+23 more)
 
 ### Community 31 - "compilerOptions"
 Cohesion: 0.13
@@ -566,7 +568,7 @@ Nodes (4): Boundaries, Honesty boundary, Ponytail Gain, Scoreboard
 
 ### Community 49 - "CommentsApp"
 Cohesion: 0.11
-Nodes (15): AuthModal, CommentsApp, decodeBase64Utf8(), escapeHtml(), fetchGitHubViewer(), formatRelativeTime(), getCartoonAvatar(), getCommentsPath() (+7 more)
+Nodes (16): AuthModal, CommentsApp, decodeBase64Utf8(), escapeHtml(), fetchGitHubViewer(), formatConcreteTime(), formatRelativeTime(), getCartoonAvatar() (+8 more)
 
 ### Community 50 - "caveman/SKILL.md"
 Cohesion: 0.17
@@ -609,8 +611,8 @@ Cohesion: 0.25
 Nodes (7): Contributors, Decision Making, Governance Model, Maintainers, Project Governance, Project Lead, Roles
 
 ### Community 68 - "Changelog"
-Cohesion: 0.05
-Nodes (43): [1.1.0] - 2026-08-09, [1.1.1] - 2026-08-09, [1.1.2] - 2026-08-17, [1.1.3] - 2026-08-23, [1.1.5] - 2026-08-27, [1.2.2] - 2026-09-02, [1.2.3] - 2026-09-03, [1.3.0] - 2026-09-06 (+35 more)
+Cohesion: 0.04
+Nodes (45): [1.1.0] - 2026-08-09, [1.1.1] - 2026-08-09, [1.1.2] - 2026-08-17, [1.1.3] - 2026-08-23, [1.1.5] - 2026-08-27, [1.2.2] - 2026-09-02, [1.2.3] - 2026-09-03, [1.3.0] - 2026-09-06 (+37 more)
 
 ### Community 70 - "vscodeFixture.ts"
 Cohesion: 0.07
@@ -641,8 +643,8 @@ Cohesion: 0.14
 Nodes (13): compilerOptions, declaration, esModuleInterop, forceConsistentCasingInFileNames, module, moduleResolution, outDir, rootDir (+5 more)
 
 ### Community 80 - "constructor"
-Cohesion: 0.07
-Nodes (41): addElement(), addImportedElement(), Av(), bs(), by(), constructor(), createDraft(), defineProperty() (+33 more)
+Cohesion: 0.05
+Nodes (52): addElement(), addImportedElement(), Av(), bs(), by(), children(), constructor(), create() (+44 more)
 
 ### Community 81 - "background.ts"
 Cohesion: 0.19
@@ -658,7 +660,7 @@ Nodes (9): 1. Configure in `astro.config.mjs`, 2. Standard Astro Sites (Non-Star
 
 ### Community 84 - "likec4-views.js"
 Cohesion: 0.00
-Nodes (445): oV(), a9(), ab(), Abe(), addDependent(), addEditVariable(), addVariantChild(), Ade() (+437 more)
+Nodes (433): a9(), ab(), addDependent(), addEditVariable(), addVariantChild(), Ade(), aee(), ag() (+425 more)
 
 ### Community 86 - "AppDelegate"
 Cohesion: 0.10
@@ -730,23 +732,23 @@ Nodes (7): fs, http, MIME_TYPES, path, PORT, server, WEBSITE_DIR
 
 ### Community 108 - "CommentsApp"
 Cohesion: 0.11
-Nodes (15): AuthModal, CommentsApp, decodeBase64Utf8(), escapeHtml(), fetchGitHubViewer(), formatRelativeTime(), getCartoonAvatar(), getCommentsPath() (+7 more)
+Nodes (16): AuthModal, CommentsApp, decodeBase64Utf8(), escapeHtml(), fetchGitHubViewer(), formatConcreteTime(), formatRelativeTime(), getCartoonAvatar() (+8 more)
 
 ### Community 109 - "devDependencies"
 Cohesion: 0.18
 Nodes (11): @types/vscode, devDependencies, @types/js-yaml, @types/node, @types/vscode, typescript, @vscode/vsce, @types/js-yaml (+3 more)
 
-### Community 111 - "repoManager.ts"
-Cohesion: 0.14
-Nodes (12): GitHubRepoInfo, parseGitHubPageUrl(), parseGitHubRemote(), handleTurboLoad(), commitHashCache, execFileAsync, getGitCommitHash(), getGitCommitHashSync() (+4 more)
+### Community 111 - "dom.spec.ts"
+Cohesion: 0.21
+Nodes (4): GitHubRepoInfo, parseGitHubPageUrl(), parseGitHubRemote(), handleTurboLoad()
 
 ### Community 112 - "mdComments.sidebarWidth"
 Cohesion: 0.22
 Nodes (9): properties, title, configuration, default, description, maximum, minimum, type (+1 more)
 
-### Community 113 - "j"
-Cohesion: 0.24
-Nodes (10): j(), ju(), Ku(), Ou(), Pu(), ss(), te(), _u() (+2 more)
+### Community 113 - "constructor"
+Cohesion: 0.05
+Nodes (69): actorBox(), addActors(), addCompound(), addStep(), after(), attachTimeline(), bye(), cj() (+61 more)
 
 ### Community 114 - "architecture-site/src/components/Header.astro"
 Cohesion: 0.24
@@ -806,7 +808,7 @@ Nodes (4): repository, directory, type, url
 
 ### Community 131 - "main-DxQ9nvZ6.js"
 Cohesion: 0.01
-Nodes (233): "node_modules/mark.js/dist/mark.js"(), ar(), cR(), dr(), fr(), ir(), Jk(), JM() (+225 more)
+Nodes (200): "node_modules/mark.js/dist/mark.js"(), cR(), ir(), Jk(), jr(), rI(), VT(), xr() (+192 more)
 
 ### Community 132 - "OtelTelemetryClient"
 Cohesion: 0.12
@@ -814,7 +816,7 @@ Nodes (5): ObsidianTelemetryAdapter, OtelTelemetryClient, TelemetryKillSwitch, B
 
 ### Community 133 - "internal-DE3OytvW.js"
 Cohesion: 0.01
-Nodes (97): al(), as(), aw(), Ay(), bd(), breadcrumbs(), ci(), commonAncestor() (+89 more)
+Nodes (100): al(), Ar(), as(), aw(), Ay(), Bb(), bd(), breadcrumbs() (+92 more)
 
 ### Community 135 - "Markdown Comments Test Fixture"
 Cohesion: 0.33
@@ -1029,24 +1031,24 @@ Cohesion: 0.50
 Nodes (3): Overview, Real-Time Sidebar Comment & Author Search, User Journey (Gherkin Scenarios)
 
 ### Community 190 - "hooks-XtIdlWL4.js"
-Cohesion: 0.02
-Nodes (136): Ag(), aI(), ak(), animation(), aP(), Av(), Ay(), bl() (+128 more)
+Cohesion: 0.01
+Nodes (159): addDependent(), addVariantChild(), Ag(), aI(), ak(), animation(), aP(), ar() (+151 more)
 
 ### Community 192 - "telemetry-proxy/package.json"
 Cohesion: 0.12
 Nodes (16): @cloudflare/workers-types, description, devDependencies, @cloudflare/workers-types, typescript, wrangler, typescript, main (+8 more)
 
-### Community 193 - "get"
-Cohesion: 0.05
-Nodes (55): ac(), add(), addRelation(), allIncoming(), allOutgoing(), Bu(), cc(), colorsForCompounds() (+47 more)
+### Community 193 - "add"
+Cohesion: 0.07
+Nodes (38): add(), addRelation(), allIncoming(), allOutgoing(), Bu(), ct(), defaultView(), dw() (+30 more)
 
 ### Community 194 - "Autonomous Execution Sequence"
 Cohesion: 0.12
 Nodes (15): Autonomous Execution Sequence, Autonomous Production Release Procedure, Release Invariants, Step 10: Monitor Deployments & Pages Sync, Step 11: Live Endpoint & Asset Verification, Step 12: Sync Local Main Branch, Step 1: Determine Target Version & Clean State, Step 2: Mandatory Full Regression Gate (+7 more)
 
 ### Community 211 - "commentStore.ts"
-Cohesion: 0.08
-Nodes (68): vscode, mockGlobalState, mockGlobalStore, mockSecrets, mockSecretStore, warmAuthorCache(), CommentActionMessage, executeCommentAction() (+60 more)
+Cohesion: 0.06
+Nodes (79): vscode, CommentPollManager, mockGlobalState, mockGlobalStore, mockSecrets, mockSecretStore, getAuthor(), warmAuthorCache() (+71 more)
 
 ### Community 212 - "client.ts"
 Cohesion: 0.24
@@ -1066,7 +1068,7 @@ Nodes (13): compilerOptions, lib, module, moduleResolution, noEmit, skipLibCheck
 
 ### Community 216 - "markdownItPlugin.ts"
 Cohesion: 0.06
-Nodes (89): renderAuthor(), renderAvatar(), renderCommentCard(), clearAuthorCache(), extractMentionLogins(), fallbackAuthor(), getCachedAuthor(), githubAvatarUrl() (+81 more)
+Nodes (86): collectCommentAuthors(), clearAuthorCache(), extractMentionLogins(), fallbackAuthor(), getCachedAuthor(), githubAvatarUrl(), githubProfileUrl(), isCacheValid() (+78 more)
 
 ### Community 217 - "Live Test Repository Playwright Automation on md-comments-test"
 Cohesion: 0.50
@@ -1160,13 +1162,13 @@ Nodes (6): fs, main(), parseMajorMinor(), path, verifyManifestsExist(), verifyVs
 Cohesion: 0.09
 Nodes (22): 10. `INV-MUTATION-GUARD`, 11. `INV-BASE-TREE-SHA`, 12. `INV-AUTH-PERSISTENCE`, 13. `INV-MODAL-CONFIRMATION`, 14. `INV-SILENT-BG-REFRESH`, 1. `INV-OAUTH-ONLY` (No PATs), 2. `INV-FAST-FORWARD-RETRY`, 3. `INV-ZERO-CLIENT-SECRETS` (+14 more)
 
-### Community 241 - "_l"
-Cohesion: 0.09
-Nodes (47): um(), Yi(), ea(), Fo(), la(), Lc(), ra(), ta() (+39 more)
-
-### Community 242 - "l"
+### Community 241 - "Mz"
 Cohesion: 0.06
-Nodes (116): Tn(), wn(), d(), l(), u(), wi(), Cv(), D() (+108 more)
+Nodes (53): aW(), Et(), Lt(), et(), title(), bZ(), cJ(), dQ() (+45 more)
+
+### Community 242 - "i"
+Cohesion: 0.06
+Nodes (129): bM(), l(), Cv(), D(), E(), ey(), Fp(), Fv() (+121 more)
 
 ### Community 243 - "architecture/README.md"
 Cohesion: 0.25
@@ -1233,24 +1235,24 @@ Cohesion: 0.50
 Nodes (3): FIXTURE_HTML_PATH, SAFARI_DIST_DIR, WEBSITE_DIR
 
 ### Community 261 - "push"
-Cohesion: 0.04
-Nodes (75): Ai(), ap(), applyPatches(), ba(), bc(), Bf(), Bg(), bi() (+67 more)
+Cohesion: 0.05
+Nodes (71): ac(), ap(), applyPatches(), ba(), bc(), Bf(), Bg(), cc() (+63 more)
 
 ### Community 284 - "Mandatory Test Enhancement & Knowledge Graph Specification"
 Cohesion: 0.50
 Nodes (4): 100% Coverage Preservation, In-Code Knowledge Graph Nodes, Mandatory Test Enhancement & Knowledge Graph Specification, New Tests to Create
 
-### Community 285 - "W"
-Cohesion: 0.21
-Nodes (12): ce(), cu(), $destroy(), du(), Ee(), Gr(), $on(), Ru() (+4 more)
+### Community 285 - "i"
+Cohesion: 0.07
+Nodes (33): lm(), ad(), cf(), cm(), dd(), fd(), fr(), i() (+25 more)
 
 ### Community 286 - "size"
 Cohesion: 0.12
 Nodes (42): addConstraint(), addEditVariable(), _addWithArtificialVariable(), allDummies(), _anyPivotableSymbol(), cells(), _chooseSubject(), coefficientFor() (+34 more)
 
 ### Community 287 - "ui-core.DS9ElEro.js"
-Cohesion: 0.09
-Nodes (27): b(), bu(), c(), d(), h(), Hu(), i(), Jr() (+19 more)
+Cohesion: 0.05
+Nodes (74): g, S(), v, w(), b(), bu(), c(), ce() (+66 more)
 
 ### Community 288 - "content/docs/architecture/c4-architecture.md"
 Cohesion: 0.12
@@ -1258,71 +1260,71 @@ Nodes (16): 1. Architectural Strategy & Design Principles, 2. Level 1: System Co
 
 ### Community 289 - "AIChat-VqYP1yar.js"
 Cohesion: 0.04
-Nodes (39): Ae(), approvalRequested(), Ce(), clientCreated(), dn(), Dt(), Ee(), emitEvent() (+31 more)
+Nodes (47): Ae(), approvalRequested(), bn(), Ce(), clientCreated(), deserialize(), dn(), Dt() (+39 more)
 
 ### Community 290 - "Dw"
 Cohesion: 0.50
 Nodes (4): ew(), pw(), Dw(), rae()
 
 ### Community 291 - "__dispatch__"
-Cohesion: 0.18
-Nodes (17): announce(), cacheOptions(), clear(), destroy(), __dispatch__(), __doLoad__(), hasAnnouncementCapability(), __load__() (+9 more)
+Cohesion: 0.26
+Nodes (13): announce(), cacheOptions(), __dispatch__(), __doLoad__(), hasAnnouncementCapability(), __load__(), __search__(), setTranslations() (+5 more)
 
-### Community 292 - "co"
-Cohesion: 0.11
-Nodes (55): bi(), bn(), bo(), ci(), cn(), co(), di(), dO() (+47 more)
+### Community 292 - "fn"
+Cohesion: 0.08
+Nodes (67): id, bi(), bn(), bo(), ci(), co(), di(), dO() (+59 more)
 
-### Community 294 - "bn"
-Cohesion: 0.20
-Nodes (12): bn(), cn(), deserialize(), getState(), on(), parse(), sn(), write() (+4 more)
+### Community 294 - "forEach"
+Cohesion: 0.09
+Nodes (57): d, cn(), L(), N(), on(), Z(), ae(), B() (+49 more)
 
-### Community 295 - "page.B1D-nYk3.js"
-Cohesion: 0.33
-Nodes (12): a(), c(), d, E(), g(), L(), m(), p() (+4 more)
+### Community 295 - "chrome-extension/src/githubAuth.ts"
+Cohesion: 0.23
+Nodes (16): getAuthToken(), getBranchFromDom(), initRepoAndMetadata(), clearOAuthToken(), DeviceCodeResponse, getStoredToken(), getStoredTokens(), getValidAuthToken() (+8 more)
 
 ### Community 296 - "content/docs/architecture/data-flow-diagrams.md"
 Cohesion: 0.17
 Nodes (11): 1. DFD Level 0: System Context, 2. DFD Level 1: Subsystems Data Flow, 3. DFD Level 2: Storage & Ref Pipeline, Critical Storage Invariants, DFD Level 0: System Context (D2 + ELK), DFD Level 1: Subsystem Data Flows P1-P6 (D2 + ELK), DFD Level 2: Git Ref & Base Tree SHA Pipeline (D2 + ELK), Process Specifications (+3 more)
 
 ### Community 297 - "pagefind-component-ui.js"
-Cohesion: 0.06
-Nodes (59): A(), activateCurrentSelection(), announceResults(), appendResults(), b(), buildTemplateData(), cleanup(), clearLoadingAnnouncement() (+51 more)
+Cohesion: 0.05
+Nodes (73): A(), add(), attributeChangedCallback(), b(), Be(), Ce(), checkForTemplates(), clear() (+65 more)
 
 ### Community 298 - "a"
 Cohesion: 0.05
-Nodes (268): a(), f(), p(), s(), ZD(), vD(), A(), Ace() (+260 more)
+Nodes (252): a(), f(), p(), s(), ZD(), vD(), A(), Ace() (+244 more)
 
-### Community 301 - "update"
-Cohesion: 0.10
-Nodes (28): bindToMotionValue(), bM(), createPanHandlers(), _error(), gM(), gn(), handleScroll(), hM() (+20 more)
+### Community 301 - "Dt"
+Cohesion: 0.05
+Nodes (60): br(), cn(), Dt(), gM(), gn(), KW(), NA(), QW() (+52 more)
 
 ### Community 302 - "content/docs/architecture/components-integration.md"
 Cohesion: 0.20
 Nodes (9): 1. Monorepo Package Topology, 2. VS Code Extension & Webview IPC Protocol, 3. Cross-Browser Communication Architecture, 4. Component Resilience & Defenses, Component Integration Topology (D2 + ELK), Extension Host $\to$ Webview, IPC Message Types, Package Catalog (+1 more)
 
-### Community 303 - "i"
-Cohesion: 0.08
-Nodes (76): JP(), KP(), Lb(), yv(), _a(), Ar(), ba(), C_() (+68 more)
+### Community 303 - "r"
+Cohesion: 0.06
+Nodes (86): JP(), KP(), wW(), yv(), _a(), bbox(), C_(), children() (+78 more)
 
 ### Community 306 - "includes"
 Cohesion: 0.06
-Nodes (40): Ab(), am(), Cb(), cu(), Db(), dd(), dirname(), elementsWhere() (+32 more)
+Nodes (34): Ab(), am(), Cb(), cu(), Db(), dirname(), edgesWithRelation(), elementsWhere() (+26 more)
 
 ### Community 307 - "size"
-Cohesion: 0.12
-Nodes (42): addConstraint(), _addWithArtificialVariable(), allDummies(), _anyPivotableSymbol(), cells(), _chooseSubject(), coefficientFor(), constant() (+34 more)
+Cohesion: 0.13
+Nodes (39): addConstraint(), _addWithArtificialVariable(), allDummies(), _anyPivotableSymbol(), cells(), _chooseSubject(), coefficientFor(), constant() (+31 more)
 
-### Community 308 - "dl"
-Cohesion: 0.02
-Nodes (155): hH(), aa(), Aae(), ac(), Ai(), al(), animation(), ao() (+147 more)
+### Community 308 - "slice"
+Cohesion: 0.03
+Nodes (137): hH(), aa(), ac(), ad(), al(), apply(), applyPatches(), ba() (+129 more)
 
 ### Community 309 - "pagefind.js"
 Cohesion: 0.12
 Nodes (38): constructor(), debouncedSearch(), decompress(), dequeueNextFetch(), destroy(), enterPlaygroundMode(), filters(), findIndex() (+30 more)
 
-### Community 310 - "render"
-Cohesion: 0.12
-Nodes (28): add(), clearAll(), close(), createOption(), dispatchFilterChange(), ensureId(), _handleClickOutside(), handleMenuKeydown() (+20 more)
+### Community 310 - "Commit-by-Commit Execution Plan (1 Commit Per Change)"
+Cohesion: 0.17
+Nodes (12): Commit 10: Speech Bubble Tooltip on Hovering Highlight (Issue #10), Commit 11: Final Quality Assurance, Pre-commit Checks & Knowledge Graph Sync, Commit 1: Remove Redundant "Page Comment" Indicator (Issue #1), Commit 2: Remove Leading '@' from Mention Display Names (Issue #7), Commit 3: Remove Redundant Reply Button in Inline Card Actions (Issue #8), Commit 4: Fix Triple-Click Paragraph Selection in Webview (Issue #2), Commit 5: Standardize Relative Timestamps & Concrete Tooltips Across All Interfaces (Issue #3), Commit 6: Support Duplicate Phrase Occurrence Anchoring (Issue #4) (+4 more)
 
 ### Community 311 - "es-Di-8KFnK.js"
 Cohesion: 0.12
@@ -1332,13 +1334,13 @@ Nodes (34): anyOf, image, ae(), b(), C(), ce(), d(), de() (+26 more)
 Cohesion: 0.12
 Nodes (14): App Icon PNG, App Icon SVG, Comments Example Note, Obsidian Plugin Guide, CommentComposerModal, DEFAULT_SETTINGS, MarkdownCommentsPlugin, MarkdownCommentsSettings (+6 more)
 
-### Community 313 - "ec.8zarh.js"
-Cohesion: 0.47
-Nodes (3): i(), l(), s()
+### Community 313 - "register"
+Cohesion: 0.11
+Nodes (24): i(), l(), s(), appendResults(), buildTemplateData(), getPlaceholder(), getResultRenderer(), on() (+16 more)
 
-### Community 314 - "init"
-Cohesion: 0.10
-Nodes (24): attributeChangedCallback(), Be(), checkForTemplates(), getSelectedText(), handleCheckboxChange(), handleFiltersUpdate(), hasStructureChanged(), init() (+16 more)
+### Community 314 - "setupEventHandlers"
+Cohesion: 0.15
+Nodes (23): activateCurrentSelection(), announceResults(), cleanup(), clearLoadingAnnouncement(), clearSelection(), closeDropdown(), disconnectedCallback(), findNeighborAnchor() (+15 more)
 
 ### Community 315 - "emitMessagesChange"
 Cohesion: 0.13
@@ -1364,13 +1366,13 @@ Nodes (31): constructor(), debouncedSearch(), decompress(), dequeueNextFetch(), 
 Cohesion: 0.14
 Nodes (28): add(), addTo(), append(), attrs(), class(), __clear__(), constructor(), __dispatch__() (+20 more)
 
-### Community 321 - "Uv"
-Cohesion: 0.10
-Nodes (23): ancestors(), ascendingSiblings(), children(), descendants(), descendingSiblings(), fb(), findElement(), findInstance() (+15 more)
+### Community 321 - "at"
+Cohesion: 0.09
+Nodes (26): ancestors(), ascendingSiblings(), at(), colors(), computeFrom(), descendingSiblings(), fb(), firstStep() (+18 more)
 
 ### Community 322 - "constructor"
-Cohesion: 0.22
-Nodes (23): actorBox(), addActors(), addCompound(), addStep(), collapseRect(), constraint(), constructor(), createSubflowAreas() (+15 more)
+Cohesion: 0.24
+Nodes (22): actorBox(), addActors(), addCompound(), addStep(), collapseRect(), constraint(), constructor(), createSubflowAreas() (+14 more)
 
 ### Community 323 - "streamResponse"
 Cohesion: 0.14
@@ -1381,28 +1383,28 @@ Cohesion: 0.25
 Nodes (7): 1. Quick Installation (macOS), 2. Enabling the Extension in Safari, 3. Building From Source (Developers), 4. Running Automated Tests, 5. Security Invariant (`INV-NO-PAT`), Build Commands, Prerequisites
 
 ### Community 325 - "mentions.ts"
-Cohesion: 0.27
-Nodes (9): attachMentionAutocomplete(), CacheEntry, clearCollaboratorCache(), collaboratorCache, CollaboratorUser, fetchCollaborators(), filterCollaborators(), getMentionQueryAtCursor() (+1 more)
+Cohesion: 0.22
+Nodes (10): attachMentionAutocomplete(), CacheEntry, clearCollaboratorCache(), collaboratorCache, CollaboratorUser, fetchCollaborators(), filterCollaborators(), formatCommentBodyWithMentions() (+2 more)
 
 ### Community 326 - "properties"
 Cohesion: 0.10
 Nodes (20): type, properties, default, type, anyOf, default, anyOf, anyOf (+12 more)
 
-### Community 327 - "includes"
+### Community 327 - "get"
 Cohesion: 0.03
-Nodes (153): xu(), age(), aLe(), an(), Aue(), B8(), b_e(), bf() (+145 more)
+Nodes (175): xu(), Abe(), add(), age(), Ai(), aLe(), an(), ave() (+167 more)
 
-### Community 328 - "Search.astro_astro_type_script_index_0_lang.DX8jrZgA.js"
-Cohesion: 0.28
-Nodes (7): g, S(), v, w(), fl(), Ir(), Lr()
+### Community 328 - "da"
+Cohesion: 0.20
+Nodes (11): Ai(), bi(), da(), ji(), ki(), mi(), qa(), ua() (+3 more)
 
-### Community 329 - "constructor"
+### Community 329 - "start"
 Cohesion: 0.03
-Nodes (148): actorBox(), addActors(), addCompound(), addListeners(), addStep(), addValue(), after(), attachDevTools() (+140 more)
+Nodes (119): addListeners(), addValue(), ao(), arcs(), attachDevTools(), Bbe(), bindToMotionValue(), bZ() (+111 more)
 
-### Community 330 - "nl"
-Cohesion: 0.40
-Nodes (5): cl(), ie(), nl(), oe(), se()
+### Community 330 - "VS Code Extension Quality & GitHub Extension Alignment Plan"
+Cohesion: 0.22
+Nodes (8): 1. New Tests to Create, 2. Existing Tests to Update (Prevent Behavioral Drift), 3. In-Code Knowledge Graph & Architectural Invariants, Identified Issues & Target Solutions, Mandatory Authentication Invariant (Zero PAT for GitHub Extension), Mandatory Test Enhancement & Knowledge Graph Specification, Overview & Objectives, VS Code Extension Quality & GitHub Extension Alignment Plan
 
 ### Community 331 - "🔄 The AI-Human Documentation Loop"
 Cohesion: 0.29
@@ -1412,9 +1414,9 @@ Nodes (6): 1. AI-Orchestrated Documentation, 2. Human-Orchestrated Comments on R
 Cohesion: 0.14
 Nodes (14): tag, additionalProperties, default, type, default, items, type, additionalProperties (+6 more)
 
-### Community 334 - "j"
-Cohesion: 0.09
-Nodes (28): ae(), at(), Bb(), colors(), computeFrom(), en(), gb(), groupColors() (+20 more)
+### Community 334 - "Current State vs. Proposed Architecture"
+Cohesion: 0.29
+Nodes (7): 10. Yellow Highlight Hover Tooltip, 2. Triple-Click Paragraph Detection (`handleTextSelection`), Current State, Current State, Current State vs. Proposed Architecture, Proposed Change, Proposed Change
 
 ### Community 335 - "sync-docs-to-astro.mjs"
 Cohesion: 0.14
@@ -1426,23 +1428,23 @@ Nodes (14): anyOf, default, type, type, type, badge, hidden, label (+6 more)
 
 ### Community 337 - "Tk"
 Cohesion: 0.02
-Nodes (118): rW(), az(), Yk(), Q(), _4(), a6(), a8(), aj() (+110 more)
+Nodes (125): rW(), az(), Yk(), Q(), _4(), a6(), a8(), aj() (+117 more)
 
-### Community 338 - "connectedCallback"
-Cohesion: 0.50
-Nodes (5): Ce(), connectedCallback(), getInstance(), hasInstance(), Qt()
+### Community 338 - "$p"
+Cohesion: 0.33
+Nodes (4): $p(), removeLeadSnapshot(), Xp(), Yp()
 
 ### Community 339 - "jm"
 Cohesion: 0.50
 Nodes (5): basename(), Em(), jm(), path(), stem()
 
 ### Community 340 - "ia"
-Cohesion: 0.11
-Nodes (19): op(), sp(), bv(), description(), ei(), gi(), ia(), ja() (+11 more)
+Cohesion: 0.12
+Nodes (18): op(), sp(), bv(), description(), ei(), gi(), ia(), ja() (+10 more)
 
 ### Community 341 - "hy"
-Cohesion: 0.10
-Nodes (25): lm(), _append(), cm(), copy(), data(), _doProcessBlock(), finalize(), freeze() (+17 more)
+Cohesion: 0.12
+Nodes (21): _append(), copy(), data(), _doProcessBlock(), finalize(), freeze(), gy(), Hm() (+13 more)
 
 ### Community 342 - "architecture-site/src/content/docs/index.md"
 Cohesion: 0.40
@@ -1456,17 +1458,33 @@ Nodes (12): default, items, type, additionalProperties, properties, type, action
 Cohesion: 0.40
 Nodes (4): compilerOptions, baseUrl, extends, astro/tsconfigs/strict
 
-### Community 347 - "storage.ts"
-Cohesion: 0.23
-Nodes (8): CommentStore, EMPTY, newId(), normalizeCommentsFile(), normalizeInlineComment(), normalizePageComment(), normalizeReply(), CommentRootType
+### Community 346 - "chromeInlineSubmission.test.ts"
+Cohesion: 0.40
+Nodes (3): MockEventListener, mockEventListeners, mockStorage
+
+### Community 347 - "CommentStore"
+Cohesion: 0.33
+Nodes (3): CommentStore, newId(), CommentRootType
+
+### Community 349 - "1. Document Comment Badging (`pageLabel`)"
+Cohesion: 0.67
+Nodes (3): 1. Document Comment Badging (`pageLabel`), Current State, Proposed Change
 
 ### Community 350 - "docs"
 Cohesion: 0.22
 Nodes (8): title, definitions, docs, additionalProperties, required, type, $ref, $schema
 
-### Community 353 - "get"
+### Community 352 - "3. Timestamp Formatting & Hover Tooltips (Across ALL Interfaces)"
+Cohesion: 0.67
+Nodes (3): 3. Timestamp Formatting & Hover Tooltips (Across ALL Interfaces), Current State, Proposed Change
+
+### Community 353 - "q"
 Cohesion: 0.02
-Nodes (231): add(), addElement(), addImportedElement(), allIncoming(), allOutgoing(), ancestors(), ape(), are() (+223 more)
+Nodes (166): addElement(), addImportedElement(), allIncoming(), allOutgoing(), ancestors(), ape(), are(), ascendingSiblings() (+158 more)
+
+### Community 354 - "4. Duplicate Phrase Occurrence Anchoring (QA-INLINE-3)"
+Cohesion: 0.67
+Nodes (3): 4. Duplicate Phrase Occurrence Anchoring (QA-INLINE-3), Current State, Proposed Change
 
 ### Community 355 - "obsidian-plugin/manifest.json"
 Cohesion: 0.25
@@ -1477,16 +1495,24 @@ Cohesion: 0.26
 Nodes (3): E(), toJSON(), wr()
 
 ### Community 357 - "C"
-Cohesion: 0.07
-Nodes (125): at(), De(), $e(), L(), Me(), N(), R(), Re() (+117 more)
+Cohesion: 0.06
+Nodes (118): De(), $e(), Ge(), Me(), Re(), g(), te(), z() (+110 more)
 
-### Community 359 - "qd"
-Cohesion: 0.09
-Nodes (32): id, Ps(), af(), bs(), cf(), dc(), Df(), ef() (+24 more)
+### Community 358 - "5. Markdown-It List Item & Blockquote Open Rules (QA-INLINE-4)"
+Cohesion: 0.67
+Nodes (3): 5. Markdown-It List Item & Blockquote Open Rules (QA-INLINE-4), Current State, Proposed Change
+
+### Community 359 - "6. Instant Optimistic Underscoring & Timestamp Responsiveness"
+Cohesion: 0.67
+Nodes (3): 6. Instant Optimistic Underscoring & Timestamp Responsiveness, Current State, Proposed Change
 
 ### Community 360 - "pagefind-highlight.js"
 Cohesion: 0.52
 Nodes (6): addHighlightStyles(), constructor(), createMarkInstance(), getHighlightParams(), highlight(), markText()
+
+### Community 361 - "7. Mention Display Name '@' Removal"
+Cohesion: 0.67
+Nodes (3): 7. Mention Display Name '@' Removal, Current State, Proposed Change
 
 ### Community 362 - "ze"
 Cohesion: 0.19
@@ -1497,20 +1523,28 @@ Cohesion: 0.33
 Nodes (6): doc, splash, template, default, enum, type
 
 ### Community 364 - "split"
-Cohesion: 0.03
-Nodes (91): _6(), addRelation(), afe(), arcs(), ave(), b3(), bc(), bde() (+83 more)
+Cohesion: 0.05
+Nodes (53): _6(), addRelation(), afe(), b3(), Br(), cne(), commonAncestor(), Dge() (+45 more)
 
-### Community 368 - "yr"
-Cohesion: 0.20
-Nodes (11): Ar(), hi(), jh(), jr(), kr(), Lr(), qf(), sc() (+3 more)
+### Community 365 - "8. Inline Reply Action Button Removal"
+Cohesion: 0.67
+Nodes (3): 8. Inline Reply Action Button Removal, Current State, Proposed Change
+
+### Community 366 - "9. Reaction Toggle Count & State Parity"
+Cohesion: 0.67
+Nodes (3): 9. Reaction Toggle Count & State Parity, Current State, Proposed Change
+
+### Community 368 - "ct"
+Cohesion: 0.04
+Nodes (86): Ar(), Bd(), Bw(), cae(), cf(), copy(), Cr(), ct() (+78 more)
 
 ### Community 370 - "splitVariantProps"
-Cohesion: 0.08
-Nodes (28): splitVariantProps(), bw(), create(), cw(), dw(), edgesWithRelation(), equals(), fw() (+20 more)
+Cohesion: 0.14
+Nodes (16): splitVariantProps(), bw(), cw(), fw(), gw(), mw(), rw(), sw() (+8 more)
 
-### Community 372 - "Xm"
+### Community 372 - "get"
 Cohesion: 0.08
-Nodes (33): addDependent(), addValue(), bk(), clear(), clearListeners(), Da(), destroy(), ds() (+25 more)
+Nodes (37): addValue(), Bg(), bk(), cA(), Da(), dj(), Fg(), get() (+29 more)
 
 ### Community 373 - "debugLog"
 Cohesion: 0.24
@@ -1520,29 +1554,29 @@ Nodes (11): createEventPayload(), debugLog(), dispatchCustomEvent(), dispatchCus
 Cohesion: 0.18
 Nodes (11): getCompletedToolCalls(), getResult(), handleMessagesSnapshotEvent(), He(), prepareAssistantMessage(), process(), replay(), reset() (+3 more)
 
-### Community 377 - "has"
-Cohesion: 0.03
-Nodes (113): aW(), bW(), Et(), rM(), wW(), xW(), Ca(), vm() (+105 more)
+### Community 377 - "ul"
+Cohesion: 0.05
+Nodes (95): bW(), um(), xW(), Ca(), Fo(), la(), Lc(), ra() (+87 more)
 
 ### Community 378 - "ProjectsOverview-irmF-b8X.js"
-Cohesion: 0.04
-Nodes (98): bt(), Dt(), Gt(), H(), It(), Lt(), pW(), tr() (+90 more)
-
-### Community 379 - "e"
 Cohesion: 0.05
-Nodes (138): et(), $a(), Aa(), ac(), al(), aM(), As(), at() (+130 more)
+Nodes (82): bt(), Gt(), H(), hn(), pW(), rM(), rr(), tr() (+74 more)
+
+### Community 379 - "r"
+Cohesion: 0.06
+Nodes (129): Ps(), at(), et(), it(), ot(), Tn(), $a(), ac() (+121 more)
 
 ### Community 381 - "hu"
-Cohesion: 0.08
-Nodes (59): cy(), Dp(), Hr(), Ll(), Lu(), Mr(), Mu(), Op() (+51 more)
+Cohesion: 0.07
+Nodes (69): Np(), Dp(), Il(), Ll(), Lu(), Mr(), Mu(), Op() (+61 more)
 
 ### Community 383 - "push"
 Cohesion: 0.03
-Nodes (115): ad(), applyPatches(), at(), awe(), buildLayout(), cm(), coe(), computeLayout() (+107 more)
+Nodes (121): Aae(), AQ(), at(), b_e(), bbox(), Che(), coe(), componentDidMount() (+113 more)
 
-### Community 385 - "forEach"
-Cohesion: 0.06
-Nodes (50): add(), addVariantChild(), Au(), bc(), bH(), _c(), ch(), cu() (+42 more)
+### Community 385 - "add"
+Cohesion: 0.08
+Nodes (36): add(), Au(), Av(), bH(), ch(), cu(), events(), eW() (+28 more)
 
 ### Community 387 - "Part II: Architectural Decision Records (ADRs)"
 Cohesion: 0.25
@@ -1552,41 +1586,33 @@ Nodes (7): ADR-001: Orphan Git Reference (`refs/md-comments/data`) for Comment S
 Cohesion: 0.25
 Nodes (7): c4OutputDir, c4Views, d2OutputDir, d2Sources, interactiveOutputDir, rootDir, tempC4D2Dir
 
-### Community 395 - "po"
-Cohesion: 0.06
-Nodes (52): Ds(), Nd(), Ns(), _t(), ac(), as(), bi(), bs() (+44 more)
-
-### Community 397 - "get"
+### Community 395 - "cs"
 Cohesion: 0.07
-Nodes (41): ah(), Bg(), dH(), dl(), eh(), Fg(), Fk(), FV() (+33 more)
+Nodes (50): _s(), cy(), Ds(), Nd(), _t(), Va(), ac(), as() (+42 more)
 
-### Community 398 - "start"
-Cohesion: 0.13
-Nodes (29): addListeners(), attachDevTools(), cancel(), clearAnimation(), commitStyles(), dW(), ed(), endPanSession() (+21 more)
+### Community 397 - "dl"
+Cohesion: 0.10
+Nodes (28): ah(), bl(), By(), cl(), dH(), dl(), eh(), ep() (+20 more)
 
 ### Community 405 - "oQ"
-Cohesion: 0.09
-Nodes (45): En(), er(), ht(), KN(), ni(), nr(), Qn(), rr() (+37 more)
+Cohesion: 0.15
+Nodes (30): En(), ht(), KN(), Qn(), ii(), qv(), ri(), vv() (+22 more)
 
-### Community 409 - "hv"
-Cohesion: 0.12
-Nodes (27): Gu(), By(), fs(), fy(), Gb(), gu(), Gv(), Hb() (+19 more)
+### Community 409 - "fu"
+Cohesion: 0.13
+Nodes (26): Gu(), Ab(), ds(), fs(), fu(), Gb(), Hb(), hv() (+18 more)
 
-### Community 413 - "r"
-Cohesion: 0.04
-Nodes (101): Ge(), Gf(), Np(), Fp(), Je(), jp(), Lp(), Mp() (+93 more)
+### Community 413 - "h"
+Cohesion: 0.05
+Nodes (75): Gf(), JM(), Ut(), Ht(), Je(), Lp(), nf(), Rd() (+67 more)
 
 ### Community 415 - "s"
-Cohesion: 0.06
-Nodes (32): s, merge(), ad(), bl(), bm(), Dg(), difference(), dm() (+24 more)
+Cohesion: 0.05
+Nodes (50): a(), c(), E(), g(), L(), m(), p(), s (+42 more)
 
-### Community 416 - "Ma"
-Cohesion: 0.07
-Nodes (41): E, Ab(), an(), br(), ct(), $f(), getSize(), getVelocity() (+33 more)
-
-### Community 421 - "constructor"
-Cohesion: 0.21
-Nodes (12): constructor(), dl(), _e(), es(), il(), L(), le(), ls() (+4 more)
+### Community 416 - "e"
+Cohesion: 0.05
+Nodes (49): E, Aa(), aM(), an(), ba(), ct(), Du(), duration() (+41 more)
 
 ### Community 423 - "Pe"
 Cohesion: 0.27
@@ -1597,19 +1623,19 @@ Cohesion: 0.50
 Nodes (5): gn(), hn(), mn(), pn(), q()
 
 ## Knowledge Gaps
-- **1313 isolated node(s):** `codegraph`, `CODEGRAPH_MCP_TOOLS`, `root`, `parser`, `browser` (+1308 more)
+- **1355 isolated node(s):** `codegraph`, `CODEGRAPH_MCP_TOOLS`, `root`, `parser`, `browser` (+1350 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **61 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **62 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `a()` connect `a` to `constructor`, `forEach`, `main-DxQ9nvZ6.js`, `push`, `internal-DE3OytvW.js`, `po`, `get`, `start`, `oQ`, `hv`, `r`, `s`, `Ma`, `AIChat-VqYP1yar.js`, `co`, `i`, `includes`, `size`, `dl`, `es-Di-8KFnK.js`, `hooks-XtIdlWL4.js`, `get`, `constructor`, `includes`, `constructor`, `Tk`, `ia`, `likec4-views.js`, `get`, `C`, `qd`, `ze`, `split`, `yr`, `_l`, `splitVariantProps`, `l`, `Xm`, `has`, `ProjectsOverview-irmF-b8X.js`, `e`, `hu`, `push`?**
-  _High betweenness centrality (0.033) - this node is a cross-community bridge._
+- **Why does `a()` connect `a` to `constructor`, `add`, `main-DxQ9nvZ6.js`, `push`, `internal-DE3OytvW.js`, `cs`, `dl`, `oQ`, `fu`, `i`, `h`, `s`, `e`, `AIChat-VqYP1yar.js`, `fn`, `forEach`, `Dt`, `r`, `slice`, `es-Di-8KFnK.js`, `hooks-XtIdlWL4.js`, `add`, `constructor`, `get`, `start`, `constructor`, `Tk`, `$p`, `ia`, `likec4-views.js`, `q`, `C`, `ze`, `split`, `ct`, `Mz`, `i`, `constructor`, `get`, `ul`, `ProjectsOverview-irmF-b8X.js`, `r`, `hu`, `push`?**
+  _High betweenness centrality (0.029) - this node is a cross-community bridge._
 - **Why does `Pe()` connect `Pe` to `pagefind-component-ui.js`, `C`, `a`, `internal-DE3OytvW.js`?**
-  _High betweenness centrality (0.026) - this node is a cross-community bridge._
-- **Why does `cleanup()` connect `pagefind-component-ui.js` to `preview.js`, `preview-webview.js`?**
-  _High betweenness centrality (0.018) - this node is a cross-community bridge._
+  _High betweenness centrality (0.027) - this node is a cross-community bridge._
+- **Why does `cleanup()` connect `setupEventHandlers` to `pagefind-component-ui.js`, `preview.js`, `register`, `preview-webview.js`?**
+  _High betweenness centrality (0.024) - this node is a cross-community bridge._
 - **Are the 363 inferred relationships involving `a()` (e.g. with `addToolResult()` and `Ae()`) actually correct?**
   _`a()` has 363 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 225 inferred relationships involving `i()` (e.g. with `likec4-views.js` and `A()`) actually correct?**
