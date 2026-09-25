@@ -1,6 +1,6 @@
 {
   "name": "chrome-md-comments",
-  "version": "1.4.6",
+  "version": "1.4.7",
   "description": "Chrome extension to display and collaborate on documentation comments on GitHub PRs",
   "main": "dist/content.js",
   "scripts": {

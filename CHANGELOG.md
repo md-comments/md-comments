@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.7] - 2026-09-24
+
+### Added
+
+- **Automatic Feed Auto-Scroll on Addition and Reply**: Automatically scroll comment feeds (`#page-threads` and `#inline-threads`) to the bottom immediately when adding whole-document comments, inline comments, or replies across GitHub extension, Safari companion extension, VS Code preview, Web embeds, and Obsidian plugin.
+- **VS Code Inline Highlight Tooltip**: Displayed speech bubble tooltip when hovering over inline highlighted text in VS Code markdown preview.
+
+### Fixed
+
+- **VS Code Reaction Toggle Parity**: Fixed reaction toggle count decrement and state parity for user's own emoji in VS Code preview.
+- **VS Code Instant Text Highlighting & Timestamps**: Rendered immediate optimistic text highlighting and relative timestamp upon comment submission.
+- **List Item & Blockquote Anchor Attributes**: Attached anchor block attributes to list items and blockquotes in VS Code preview.
+- **Duplicate Phrase Occurrence Anchoring**: Supported duplicate phrase occurrence anchoring for inline comments in VS Code extension.
+- **Standardized Relative Timestamps & Date Tooltips**: Standardized relative timestamps and concrete date tooltips across all client interfaces.
+- **VS Code Paragraph Selection on Triple-Click**: Fixed text paragraph selection behavior on triple-click in preview webview.
+- **Redundant Actions & Indicators Cleanup**: Removed redundant reply button from inline card actions and removed redundant page comment indicator from document cards in VS Code.
+- **Mention Display Names**: Omitted leading `@` symbol when mentions include a display name in shared formatter.
+
 ## [1.4.6] - 2026-09-22
 
 ### Fixed
