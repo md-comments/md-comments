@@ -131,12 +131,12 @@ describe('Cross-Interface Badge Styling & DOM Parity', () => {
       '<span class="md-comments-badge resolved md-comments-badge-resolved">Resolved</span>'
     );
 
-    // 3. Page comment card
+    // 3. Page comment card (omits redundant "Page comment" badge in parity with GitHub extension)
     const pageCardHtml = renderCard(
       'c-page',
       'carol',
       '2026-01-01T00:00:00Z',
-      'Page comment body',
+      'Document comment body',
       'page',
       [],
       [],
@@ -144,9 +144,8 @@ describe('Cross-Interface Badge Styling & DOM Parity', () => {
       undefined,
       false
     );
-    expect(pageCardHtml).toContain(
-      '<span class="md-comments-badge md-comments-type-label">Page comment</span>'
-    );
+    expect(pageCardHtml).not.toContain('md-comments-type-label');
+    expect(pageCardHtml).not.toContain('>Page comment<');
 
     // 4. Document layout with FAB badges
     const mockCtx: any = {

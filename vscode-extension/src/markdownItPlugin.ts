@@ -332,10 +332,6 @@ export function renderCard(
           resolved ? ' data-md-resolved="true"' : ''
         }`
       : '';
-  const pageLabel =
-    type === 'page'
-      ? '<span class="md-comments-badge md-comments-type-label">Page comment</span>'
-      : '';
   const threadStateBtn = !resolved
     ? actionIconBtn('resolve', 'Resolve thread', ICON_RESOLVE, { id, type, kind: 'root' })
     : actionIconBtn('unresolve', 'Reopen thread', ICON_REOPEN, { id, type, kind: 'root' });
@@ -396,7 +392,7 @@ export function renderCard(
     <div class="md-comments-thread-row md-comments-thread-root">
       <div class="md-comments-avatar-wrap">${renderAvatar(author)}</div>
       <div class="md-comments-thread-content">
-        <div class="md-comments-meta">${pageLabel}${renderAuthorLink(author)}<span class="md-comments-time">${escapeHtml(formatCommentTime(created_at, updated_at))}</span>${badges}</div>
+        <div class="md-comments-meta">${renderAuthorLink(author)}<span class="md-comments-time">${escapeHtml(formatCommentTime(created_at, updated_at))}</span>${badges}</div>
         <div class="md-comments-body">${renderCommentBody(body)}</div>
         ${renderReactions(reactions, id, id, type, 'root')}
         <div class="md-comments-actions md-comments-actions-icons">${resolvedActions}</div>

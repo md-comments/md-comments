@@ -328,7 +328,6 @@
       '</div>' +
       '<div class="md-comments-thread-content">' +
       '<div class="md-comments-meta">' +
-      (isPage ? '<span class="md-comments-badge md-comments-type-label">Page comment</span>' : '') +
       '<span class="md-comments-author"' +
       titleAttr +
       '>' +
