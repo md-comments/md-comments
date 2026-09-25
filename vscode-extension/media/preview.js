@@ -1422,7 +1422,31 @@
       return;
     }
     const range = sel.getRangeAt(0);
-    const p = findParagraphFromNode(range.commonAncestorContainer);
+    let p = findParagraphFromNode(range.commonAncestorContainer);
+    if (!p) {
+      let startNode = range.startContainer;
+      if (
+        startNode &&
+        startNode.nodeType === Node.ELEMENT_NODE &&
+        range.startOffset < startNode.childNodes.length
+      ) {
+        startNode = startNode.childNodes[range.startOffset];
+      }
+      const startMatch = findParagraphFromNode(startNode);
+      if (startMatch) {
+        const endMatch = findParagraphFromNode(range.endContainer);
+        if (
+          !endMatch ||
+          endMatch === startMatch ||
+          range.endOffset === 0 ||
+          (range.endContainer &&
+            range.endContainer.contains &&
+            range.endContainer.contains(startMatch))
+        ) {
+          p = startMatch;
+        }
+      }
+    }
     if (!p) {
       return;
     }
