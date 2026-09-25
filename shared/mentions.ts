@@ -36,7 +36,7 @@ export function formatCommentBodyWithMentions(
         displayName.trim() &&
         displayName.trim().toLowerCase() !== login.toLowerCase()
       );
-      const label = hasDisplayName ? `@${displayName!.trim()}` : `@${login}`;
+      const label = hasDisplayName ? displayName!.trim() : `@${login}`;
       const title = hasDisplayName ? ` title="@${escapeHtml(login)}"` : '';
       const href = githubProfileUrl(login);
       return `${prefix}<a href="${href}" class="md-comments-mention"${title} target="_blank" rel="noopener noreferrer">${escapeHtml(label)}</a>`;

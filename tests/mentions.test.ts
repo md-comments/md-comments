@@ -302,7 +302,7 @@ describe('shared/mentions', () => {
       };
       const res = formatCommentBodyWithMentions('Ping @mstrelex and @other', resolver);
       expect(res).toContain(
-        '<a href="https://github.com/mstrelex" class="md-comments-mention" title="@mstrelex" target="_blank" rel="noopener noreferrer">@Marat Strelets</a>'
+        '<a href="https://github.com/mstrelex" class="md-comments-mention" title="@mstrelex" target="_blank" rel="noopener noreferrer">Marat Strelets</a>'
       );
       expect(res).toContain(
         '<a href="https://github.com/other" class="md-comments-mention" target="_blank" rel="noopener noreferrer">@other</a>'
