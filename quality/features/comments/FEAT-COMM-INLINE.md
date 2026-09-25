@@ -20,6 +20,7 @@ verifiedIn:
 invariants:
   - 'INV-XSS-SANITIZED'
   - 'INV-FAST-FORWARD-RETRY'
+  - 'INV-FEED-AUTOSCROLL'
 minCoverage: 100
 ---
 

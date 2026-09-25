@@ -1622,6 +1622,20 @@
       this.renderHighlights();
       this.updateFABCount();
 
+      const inlineListEl = this.drawerEl
+        ? this.drawerEl.querySelector('#inline-threads-list')
+        : null;
+      if (inlineListEl) {
+        requestAnimationFrame(() => {
+          const card = inlineListEl.querySelector(
+            `.md-comments-card[data-thread-id="${newComment.id}"]`
+          );
+          if (card && typeof card.scrollIntoView === 'function') {
+            card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        });
+      }
+
       await this.commitCommentsToGit('add inline comment');
     }
 
@@ -1651,6 +1665,18 @@
 
       this.renderDrawer();
       this.updateFABCount();
+
+      const pageListEl = this.drawerEl ? this.drawerEl.querySelector('#page-threads-list') : null;
+      if (pageListEl) {
+        requestAnimationFrame(() => {
+          const card = pageListEl.querySelector(
+            `.md-comments-card[data-thread-id="${newPageComment.id}"]`
+          );
+          if (card && typeof card.scrollIntoView === 'function') {
+            card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        });
+      }
 
       await this.commitCommentsToGit('add page comment');
     }
@@ -2428,6 +2454,24 @@
           reactions: [],
         });
         this.renderDrawer();
+        const container = this.drawerEl
+          ? this.drawerEl.querySelector(
+              type === 'inline' ? '#inline-threads-list' : '#page-threads-list'
+            )
+          : null;
+        if (container) {
+          requestAnimationFrame(() => {
+            const card = container.querySelector(
+              `.md-comments-card[data-thread-id="${commentId}"]`
+            );
+            if (card) {
+              const replyEl = card.querySelector('.reply-item:last-child');
+              if (replyEl && typeof replyEl.scrollIntoView === 'function') {
+                replyEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+              }
+            }
+          });
+        }
         await this.commitCommentsToGit('add reply');
       }
     }

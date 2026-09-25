@@ -640,13 +640,16 @@ export class CommentsSidebarView extends ItemView {
 
       delete this.composers[key];
 
+      let createdId: string | undefined;
       try {
         if (key === 'addPage') {
-          await this.plugin.store.addPageComment(file, text);
+          const c = await this.plugin.store.addPageComment(file, text);
+          createdId = c.id;
         } else if (key.startsWith('reply-')) {
           const rootId = key.substring(6);
           const type = actionEl.dataset.type as CommentRootType;
           await this.plugin.store.addReply(file, rootId, type, text);
+          createdId = rootId;
         } else if (key.startsWith('edit-')) {
           const id = key.substring(5);
           const rootId = actionEl.dataset.rootId;
@@ -659,6 +662,20 @@ export class CommentsSidebarView extends ItemView {
       }
       await this.refresh();
       this.plugin.triggerRefreshes();
+      if (createdId) {
+        requestAnimationFrame(() => {
+          const targetCard =
+            this.contentEl.querySelector(`[data-id="${createdId}"]`) ||
+            this.contentEl.querySelector(`[data-reply-id="${createdId}"]`);
+          if (targetCard && typeof targetCard.scrollIntoView === 'function') {
+            targetCard.scrollIntoView({ behavior: 'smooth', block: 'end' });
+          } else if (typeof this.contentEl.scrollTo === 'function') {
+            this.contentEl.scrollTo({ top: this.contentEl.scrollHeight, behavior: 'smooth' });
+          } else {
+            this.contentEl.scrollTop = this.contentEl.scrollHeight;
+          }
+        });
+      }
     }
 
     // Toggle Replies panel collapse

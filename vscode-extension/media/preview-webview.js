@@ -297,6 +297,29 @@
 
     targetList.append(article);
 
+    const performFeedScroll = function () {
+      if (typeof targetList.scrollTo === 'function') {
+        targetList.scrollTo({
+          top: targetList.scrollHeight,
+          behavior: 'smooth',
+        });
+      } else {
+        targetList.scrollTop = targetList.scrollHeight;
+      }
+      if (typeof article.scrollIntoView === 'function') {
+        article.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      }
+    };
+
+    if (typeof requestAnimationFrame === 'function') {
+      requestAnimationFrame(function () {
+        performFeedScroll();
+        setTimeout(performFeedScroll, 60);
+      });
+    } else {
+      performFeedScroll();
+    }
+
     if (!isPage) {
       const card = article.querySelector('.md-comments-card');
       if (card && typeof window.mdCommentsWireCommentHighlight === 'function') {
@@ -450,6 +473,32 @@
       '</div>' +
       '</div>';
     list.appendChild(replyEl);
+
+    const performReplyScroll = function () {
+      if (typeof replyEl.scrollIntoView === 'function') {
+        replyEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+      const scrollParent = cardEl.closest('#inline-threads, #page-threads');
+      if (scrollParent) {
+        const bottomDist = replyEl.offsetTop + replyEl.offsetHeight;
+        if (bottomDist > scrollParent.scrollTop + scrollParent.clientHeight) {
+          if (typeof scrollParent.scrollTo === 'function') {
+            scrollParent.scrollTo({ top: bottomDist, behavior: 'smooth' });
+          } else {
+            scrollParent.scrollTop = bottomDist;
+          }
+        }
+      }
+    };
+
+    if (typeof requestAnimationFrame === 'function') {
+      requestAnimationFrame(function () {
+        performReplyScroll();
+        setTimeout(performReplyScroll, 60);
+      });
+    } else {
+      performReplyScroll();
+    }
 
     setTimeout(function () {
       replyEl.classList.add('md-comments-optimistic-synced');

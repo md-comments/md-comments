@@ -56,9 +56,10 @@ test.describe('VS Code Extension Comment Preview E2E', () => {
     const submitBtn = previewFrame.locator('#page-composer .submit-page-btn');
     await submitBtn.dispatchEvent('click');
 
-    // 5. Assert comment card appears optimistically and instantly
+    // 5. Assert comment card appears optimistically and is scrolled into viewport
     const commentCard = previewFrame.locator('.md-comments-card', { hasText: commentBody });
     await expect(commentCard).toBeVisible({ timeout: 2000 });
+    await expect(commentCard).toBeInViewport();
 
     // 6. Assert pointer cursor on comment card
     const cardCursor = await commentCard.evaluate((el) => window.getComputedStyle(el).cursor);

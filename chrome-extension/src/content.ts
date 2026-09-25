@@ -1081,10 +1081,10 @@ async function loadDocumentComments(
     const prevInlineScrollTop = inlineList ? inlineList.scrollTop : 0;
     const prevPageScrollTop = pageList ? pageList.scrollTop : 0;
 
-    renderSidebarComments();
-
-    if (inlineList) inlineList.scrollTop = prevInlineScrollTop;
-    if (pageList) pageList.scrollTop = prevPageScrollTop;
+    void renderSidebarComments().then(() => {
+      if (inlineList) inlineList.scrollTop = prevInlineScrollTop;
+      if (pageList) pageList.scrollTop = prevPageScrollTop;
+    });
   }
 
   if (!isBackgroundRefresh) {
@@ -2833,14 +2833,51 @@ function attachOAuthEvents(container: HTMLElement) {
   }
 }
 
-function renderSidebarComments() {
+let pendingFeedScroll: { tabType: 'inline' | 'page'; targetId?: string } | null = null;
+
+function scrollFeedToBottom(tabType: 'inline' | 'page', targetCommentId?: string) {
   if (!activeSidebarHost) return;
+  const containerId = tabType === 'inline' ? '#inline-threads' : '#page-threads';
+  const container = activeSidebarHost.querySelector(containerId) as HTMLElement | null;
+  if (!container) return;
+
+  const performScroll = () => {
+    if (typeof container.scrollTo === 'function') {
+      container.scrollTo({
+        top: container.scrollHeight,
+        behavior: 'smooth',
+      });
+    } else {
+      container.scrollTop = container.scrollHeight;
+    }
+    if (targetCommentId) {
+      const card = container.querySelector(
+        `#comment-${targetCommentId}, #reply-${targetCommentId}`
+      ) as HTMLElement | null;
+      if (card && typeof card.scrollIntoView === 'function') {
+        card.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      }
+    }
+  };
+
+  if (typeof requestAnimationFrame === 'function') {
+    requestAnimationFrame(() => {
+      performScroll();
+      setTimeout(performScroll, 60);
+    });
+  } else {
+    performScroll();
+  }
+}
+
+function renderSidebarComments(): Promise<void> {
+  if (!activeSidebarHost) return Promise.resolve();
   console.log(
     '[md-comments-debug] renderSidebarComments loadedComments:',
     JSON.stringify(loadedComments)
   );
 
-  getDisplayAuthor().then((author) => {
+  return getDisplayAuthor().then((author) => {
     currentDisplayAuthor = author;
 
     const unauthContainer = activeSidebarHost!.querySelector(
@@ -3007,6 +3044,12 @@ function renderSidebarComments() {
       if (pageComposer) {
         pageComposer.style.display = 'none';
       }
+    }
+
+    if (pendingFeedScroll) {
+      const { tabType, targetId } = pendingFeedScroll;
+      pendingFeedScroll = null;
+      scrollFeedToBottom(tabType, targetId);
     }
   });
 }
@@ -4860,14 +4903,11 @@ async function saveNewInlineComment(
     inline_comments: [...loadedComments.inline_comments, newComment],
   };
 
+  pendingFeedScroll = { tabType: 'inline', targetId: newComment.id };
+  scrollFeedToBottom('inline', newComment.id);
+
   try {
     await commitCommentFileChanges(updated, 'add inline comment');
-    setTimeout(() => {
-      const el = document.getElementById(`comment-${newComment.id}`);
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }
-    }, 100);
   } finally {
     removeSubmittingProgress(newComment.id);
   }
@@ -4899,6 +4939,9 @@ async function saveNewPageComment(body: string) {
     ...loadedComments,
     page_comments: [...loadedComments.page_comments, newComment],
   };
+
+  pendingFeedScroll = { tabType: 'page', targetId: newComment.id };
+  scrollFeedToBottom('page', newComment.id);
 
   try {
     await commitCommentFileChanges(updated, 'add page comment');
@@ -4936,6 +4979,9 @@ async function saveReply(commentId: string, type: 'inline' | 'page', body: strin
       return c;
     });
   }
+
+  pendingFeedScroll = { tabType: type, targetId: reply.id };
+  scrollFeedToBottom(type, reply.id);
 
   try {
     await commitCommentFileChanges(updated, 'add reply:' + commentId);
@@ -5550,5 +5596,8 @@ export {
   pendingSubmissionIds,
   removeSubmittingProgress,
   saveNewInlineComment,
+  saveNewPageComment,
+  saveReply,
+  scrollFeedToBottom,
   draftsStore,
 };

@@ -14,6 +14,7 @@ verifiedIn:
   - 'tests/e2e/comments.spec.ts'
 invariants:
   - 'INV-FAST-FORWARD-RETRY'
+  - 'INV-FEED-AUTOSCROLL'
 minCoverage: 100
 ---
 

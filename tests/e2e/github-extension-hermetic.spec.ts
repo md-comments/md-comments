@@ -156,6 +156,15 @@ test.describe('GitHub Extension: Hermetic Playwright E2E Lifecycle', () => {
         .filter({ hasText: '@md-comments-test-mention' });
       await expect(mentionLink).toBeVisible();
 
+      // FEAT-COMM-FEED-AUTOSCROLL: Assert feed automatically scrolls to reveal newly added comment
+      await expect(commentCard).toBeInViewport();
+      const isScrolledToBottom = await testPage.evaluate(() => {
+        const container = document.querySelector('#page-threads');
+        if (!container) return false;
+        return container.scrollTop + container.clientHeight >= container.scrollHeight - 50;
+      });
+      expect(isScrolledToBottom).toBe(true);
+
       // Verify that the mock GitHub server has the updated comment ref
       await expect
         .poll(
