@@ -113,6 +113,7 @@ describe('Cross-Interface Badge Styling & DOM Parity', () => {
     expect(orphanCardHtml).toContain(
       '<span class="md-comments-badge orphan md-comments-badge-orphan">Orphaned</span>'
     );
+    expect(orphanCardHtml).not.toContain('data-md-action="reply"');
 
     // 2. Resolved comment card
     const resolvedCardHtml = renderCard(
@@ -146,6 +147,7 @@ describe('Cross-Interface Badge Styling & DOM Parity', () => {
     );
     expect(pageCardHtml).not.toContain('md-comments-type-label');
     expect(pageCardHtml).not.toContain('>Page comment<');
+    expect(pageCardHtml).toContain('data-md-action="reply"');
 
     // 4. Document layout with FAB badges
     const mockCtx: any = {

@@ -184,11 +184,14 @@
       { id: commentId, 'root-id': commentId, type: cardType, kind: 'root' },
       'md-comments-edit-btn'
     );
-    const replyBtn = actionIconBtn('reply', 'Reply', ICON_REPLY, {
-      id: commentId,
-      type: cardType,
-      kind: 'root',
-    });
+    const replyBtn =
+      cardType === 'page'
+        ? actionIconBtn('reply', 'Reply', ICON_REPLY, {
+            id: commentId,
+            type: cardType,
+            kind: 'root',
+          })
+        : '';
     const resolveBtn = actionIconBtn('resolve', 'Resolve thread', ICON_RESOLVE, {
       id: commentId,
       type: cardType,

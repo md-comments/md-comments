@@ -342,15 +342,19 @@ export function renderCard(
   const replyStyle = resolved || hasReplies ? 'display: none;' : '';
   const reactStyle = resolved ? 'display: none;' : '';
   const composerStyle = resolved ? ' style="display: none;"' : '';
-  const resolvedActions = `${editBtn}${reanchorBtn}${actionIconBtn(
-    'reply',
-    'Reply',
-    ICON_REPLY,
-    { id, type, kind: 'root' },
-    '',
-    undefined,
-    replyStyle
-  )}
+  const replyBtn =
+    type === 'page'
+      ? actionIconBtn(
+          'reply',
+          'Reply',
+          ICON_REPLY,
+          { id, type, kind: 'root' },
+          '',
+          undefined,
+          replyStyle
+        )
+      : '';
+  const resolvedActions = `${editBtn}${reanchorBtn}${replyBtn}
           ${threadStateBtn}
           ${actionIconBtn(
             'react-picker',
