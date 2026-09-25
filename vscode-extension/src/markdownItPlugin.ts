@@ -1012,6 +1012,82 @@ export function extendMarkdownIt(md: any): any {
     return defaultTrOpen(tokens, idx, options, env, self);
   };
 
+  const defaultListItemOpen =
+    md.renderer.rules.list_item_open ||
+    function (tokens: any, idx: any, options: any, env: any, self: any) {
+      return self.renderToken(tokens, idx, options);
+    };
+
+  md.renderer.rules.list_item_open = (
+    tokens: any,
+    idx: number,
+    options: any,
+    env: any,
+    self: any
+  ) => {
+    if (renderCtx) {
+      const token = tokens[idx];
+      let itemContent = '';
+      for (let j = idx + 1; j < tokens.length && tokens[j].type !== 'list_item_close'; j++) {
+        if (tokens[j].type === 'paragraph_open' && !tokens[j].hidden) {
+          itemContent = '';
+          break;
+        }
+        if (tokens[j].type === 'inline' && tokens[j].content) {
+          itemContent = tokens[j].content;
+          break;
+        }
+      }
+      if (itemContent) {
+        const text = normalizeAnchorText(itemContent);
+        const hash = fnv1aHash(text);
+        const block = findBlockForElement(renderCtx.blocks, hash, text);
+        if (block) {
+          attachBlockAttributes(token, block, renderCtx);
+        }
+      }
+    }
+    return defaultListItemOpen(tokens, idx, options, env, self);
+  };
+
+  const defaultBlockquoteOpen =
+    md.renderer.rules.blockquote_open ||
+    function (tokens: any, idx: any, options: any, env: any, self: any) {
+      return self.renderToken(tokens, idx, options);
+    };
+
+  md.renderer.rules.blockquote_open = (
+    tokens: any,
+    idx: number,
+    options: any,
+    env: any,
+    self: any
+  ) => {
+    if (renderCtx) {
+      const token = tokens[idx];
+      let quoteContent = '';
+      for (let j = idx + 1; j < tokens.length && tokens[j].type !== 'blockquote_close'; j++) {
+        if (tokens[j].type === 'paragraph_open') {
+          quoteContent = '';
+          break;
+        }
+        if (tokens[j].type === 'inline' && tokens[j].content) {
+          quoteContent = tokens[j].content;
+          break;
+        }
+      }
+      if (quoteContent) {
+        const text = normalizeAnchorText(quoteContent);
+        const hash = fnv1aHash(text);
+        const block = findBlockForElement(renderCtx.blocks, hash, text);
+        if (block) {
+          attachBlockAttributes(token, block, renderCtx);
+        }
+      }
+    }
+    return defaultBlockquoteOpen(tokens, idx, options, env, self);
+  };
+
   const defaultParagraphClose =
     md.renderer.rules.paragraph_close ||
     function (tokens: any, idx: any, options: any, env: any, self: any) {

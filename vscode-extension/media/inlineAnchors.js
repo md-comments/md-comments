@@ -11,7 +11,7 @@
     if (el) {
       return el;
     }
-    el = document.querySelector('td' + sel + ', li' + sel + ', tr' + sel);
+    el = document.querySelector('td' + sel + ', li' + sel + ', tr' + sel + ', blockquote' + sel);
     if (el) {
       return el;
     }
