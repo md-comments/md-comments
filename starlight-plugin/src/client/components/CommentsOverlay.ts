@@ -1,6 +1,8 @@
 import {
   GitHubOrphanRefBackend,
   CommentPollManager,
+  formatRelativeTime,
+  formatConcreteTime,
   type CommentsFile,
   type InlineComment,
   type PageComment,
@@ -35,22 +37,6 @@ function escapeHtml(str: string): string {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
-}
-
-function formatRelativeTime(dateStr: string): string {
-  if (!dateStr) return '';
-  const date = new Date(dateStr);
-  const diff = Date.now() - date.getTime();
-  const seconds = Math.floor(diff / 1000);
-  const minutes = Math.floor(seconds / 60);
-  const hours = Math.floor(minutes / 60);
-  const days = Math.floor(hours / 24);
-
-  if (days > 7) return date.toLocaleDateString();
-  if (days > 0) return `${days}d ago`;
-  if (hours > 0) return `${hours}h ago`;
-  if (minutes > 0) return `${minutes}m ago`;
-  return 'just now';
 }
 
 function isGitHubLogin(name: string): boolean {
@@ -740,7 +726,7 @@ export class CommentsOverlay {
               <div class="reply-header">
                 <div>
                   ${renderAuthor(r.author, () => this.renderDrawerContent())}
-                  <span class="md-comments-time">${formatRelativeTime(r.created_at)}</span>
+                  <span class="md-comments-time" title="${escapeHtml(formatConcreteTime(r.created_at))}">${formatRelativeTime(r.created_at)}</span>
                 </div>
                 ${
                   this.currentViewer && isReplyAuthor
@@ -780,7 +766,7 @@ export class CommentsOverlay {
             ${renderAvatar(comment.author, 40, comment.author)}
             <div class="md-comments-author-meta">
               ${renderAuthor(comment.author, () => this.renderDrawerContent())}
-              <span class="md-comments-time">${formatRelativeTime(comment.created_at)}</span>
+              <span class="md-comments-time" title="${escapeHtml(formatConcreteTime(comment.created_at))}">${formatRelativeTime(comment.created_at)}</span>
             </div>
           </div>
           <div class="md-comments-card-actions">
@@ -1182,7 +1168,7 @@ export class CommentsOverlay {
         ${renderAvatar(comment.author, 32, comment.author)}
         <div>
           <div class="tooltip-author">${escapeHtml(displayName)}</div>
-          <div class="tooltip-time">${formatRelativeTime(comment.created_at)}</div>
+          <div class="tooltip-time" title="${escapeHtml(formatConcreteTime(comment.created_at))}">${formatRelativeTime(comment.created_at)}</div>
         </div>
       </div>
       <div class="tooltip-body">${escapeHtml(comment.body.length > 120 ? comment.body.slice(0, 120) + '...' : comment.body)}</div>

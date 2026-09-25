@@ -44,6 +44,7 @@ import {
   formatCommentBodyWithMentions,
   CollaboratorUser,
 } from '../../shared/mentions';
+import { formatRelativeTime, formatConcreteTime } from '../../shared/time';
 import { contentTelemetry } from './telemetry/contentTelemetry';
 
 // Initialize content script error boundaries & telemetry
@@ -3148,7 +3149,7 @@ function renderCommentCard(comment: InlineComment | PageComment, type: 'inline' 
           <div class="reply-header">
             <div>
               ${renderAuthor(r.author)}
-              <span class="md-comments-time">${formatRelativeTime(r.created_at)}</span>
+              <span class="md-comments-time" title="${escapeHtml(formatConcreteTime(r.created_at))}">${formatRelativeTime(r.created_at)}</span>
             </div>
             ${
               isWritable
@@ -3189,7 +3190,7 @@ function renderCommentCard(comment: InlineComment | PageComment, type: 'inline' 
           ${renderAvatar(comment.author, 32, comment.author)}
           <div class="md-comments-author-meta">
             ${renderAuthor(comment.author)}
-            <span class="md-comments-time">${formatRelativeTime(comment.created_at)}</span>
+            <span class="md-comments-time" title="${escapeHtml(formatConcreteTime(comment.created_at))}">${formatRelativeTime(comment.created_at)}</span>
           </div>
         </div>
         ${
@@ -3313,7 +3314,7 @@ function showCommentTooltip(targetEl: HTMLElement, commentId: string) {
     <div class="tooltip-header">
       <img class="tooltip-avatar" src="https://github.com/${encodeURIComponent(comment.author)}.png?size=32" alt="${escapeHtml(comment.author)}">
       <span class="tooltip-author">${escapeHtml(comment.author)}</span>
-      <span class="tooltip-time">${formatRelativeTime(comment.created_at)}</span>
+      <span class="tooltip-time" title="${escapeHtml(formatConcreteTime(comment.created_at))}">${formatRelativeTime(comment.created_at)}</span>
     </div>
     <div class="tooltip-body">${renderCommentBody(bodyText)}</div>
   `;
@@ -5095,29 +5096,6 @@ async function toggleResolve(commentId: string, type: 'inline' | 'page', resolve
 }
 
 // --- Helpers ---
-function formatRelativeTime(dateStr: string): string {
-  const date = new Date(dateStr);
-  const diff = Date.now() - date.getTime();
-  const seconds = Math.floor(diff / 1000);
-  const minutes = Math.floor(seconds / 60);
-  const hours = Math.floor(minutes / 60);
-  const days = Math.floor(hours / 24);
-
-  if (days > 7) {
-    return date.toLocaleDateString();
-  }
-  if (days > 0) {
-    return `${days}d ago`;
-  }
-  if (hours > 0) {
-    return `${hours}h ago`;
-  }
-  if (minutes > 0) {
-    return `${minutes}m ago`;
-  }
-  return 'just now';
-}
-
 function resolveDisplayName(author: string): string {
   const login = author.trim();
   if (isGitHubLogin(login)) {

@@ -36,12 +36,10 @@ import { resolveStorageKeyForUriSync } from './repoManager';
 import { logDebug } from './logger';
 import { hasTokenSync } from './githubAuth';
 
+import { formatRelativeTime, formatConcreteTime } from '../../shared/time';
+
 function formatTime(iso: string): string {
-  try {
-    return new Date(iso).toLocaleString();
-  } catch {
-    return iso;
-  }
+  return formatRelativeTime(iso);
 }
 
 function formatCommentTime(created_at: string, updated_at?: string): string {
@@ -276,7 +274,7 @@ function renderReply(
     <div class="md-comments-thread-row">
       ${renderAvatar(reply.author)}
       <div class="md-comments-thread-content">
-        <div class="md-comments-meta">${renderAuthorLink(reply.author)}<span class="md-comments-time">${escapeHtml(formatCommentTime(reply.created_at, reply.updated_at))}</span></div>
+        <div class="md-comments-meta">${renderAuthorLink(reply.author)}<span class="md-comments-time" title="${escapeHtml(formatConcreteTime(reply.created_at))}">${escapeHtml(formatCommentTime(reply.created_at, reply.updated_at))}</span></div>
         <div class="md-comments-body">${renderCommentBody(reply.body)}</div>
         ${renderReactions(reply.reactions, reply.id, rootId, type, 'reply')}
         <div class="md-comments-actions md-comments-actions-icons">
@@ -396,7 +394,7 @@ export function renderCard(
     <div class="md-comments-thread-row md-comments-thread-root">
       <div class="md-comments-avatar-wrap">${renderAvatar(author)}</div>
       <div class="md-comments-thread-content">
-        <div class="md-comments-meta">${renderAuthorLink(author)}<span class="md-comments-time">${escapeHtml(formatCommentTime(created_at, updated_at))}</span>${badges}</div>
+        <div class="md-comments-meta">${renderAuthorLink(author)}<span class="md-comments-time" title="${escapeHtml(formatConcreteTime(created_at))}">${escapeHtml(formatCommentTime(created_at, updated_at))}</span>${badges}</div>
         <div class="md-comments-body">${renderCommentBody(body)}</div>
         ${renderReactions(reactions, id, id, type, 'root')}
         <div class="md-comments-actions md-comments-actions-icons">${resolvedActions}</div>

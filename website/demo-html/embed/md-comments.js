@@ -132,6 +132,19 @@
     return 'just now';
   }
 
+  function formatConcreteTime(dateStr) {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) return '';
+    return date.toLocaleString(undefined, {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  }
+
   function isGitHubLogin(name) {
     return /^[a-z0-9](?:[a-z0-9]|-(?=[a-z0-9])){0,38}$/i.test((name || '').trim());
   }
@@ -1656,7 +1669,7 @@
           ${renderAvatar(comment.author, 32, comment.author)}
           <div>
             <div class="tooltip-author">${escapeHtml(displayName)}</div>
-            <div class="tooltip-time">${formatRelativeTime(comment.created_at)}</div>
+            <div class="tooltip-time" title="${escapeHtml(formatConcreteTime(comment.created_at))}">${formatRelativeTime(comment.created_at)}</div>
           </div>
         </div>
         <div class="tooltip-body">${escapeHtml(comment.body.length > 120 ? comment.body.slice(0, 120) + '...' : comment.body)}</div>
@@ -1900,7 +1913,7 @@
                 <div class="reply-header">
                   <div>
                     ${renderAuthor(r.author, () => this.renderDrawer())}
-                    <span class="md-comments-time">${formatRelativeTime(r.created_at)}</span>
+                    <span class="md-comments-time" title="${escapeHtml(formatConcreteTime(r.created_at))}">${formatRelativeTime(r.created_at)}</span>
                   </div>
                   ${
                     this.currentUser && isReplyAuthor
@@ -1940,7 +1953,7 @@
               ${renderAvatar(comment.author, 40, comment.author)}
               <div class="md-comments-author-meta">
                 ${renderAuthor(comment.author, () => this.renderDrawer())}
-                <span class="md-comments-time">${formatRelativeTime(comment.created_at)}</span>
+                <span class="md-comments-time" title="${escapeHtml(formatConcreteTime(comment.created_at))}">${formatRelativeTime(comment.created_at)}</span>
               </div>
             </div>
             <div class="md-comments-card-actions">

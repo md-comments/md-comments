@@ -270,7 +270,9 @@
       '>' +
       escapeHtml(resolvedName) +
       '</span>' +
-      '<span class="md-comments-time">Just now</span>' +
+      '<span class="md-comments-time" title="' +
+      escapeHtml(new Date().toLocaleString()) +
+      '">Just now</span>' +
       '</div>' +
       '<div class="md-comments-body">' +
       escapeHtml(body) +
@@ -416,7 +418,9 @@
       '>' +
       escapeHtml(resolvedName) +
       '</span>' +
-      '<span class="md-comments-time">Just now</span>' +
+      '<span class="md-comments-time" title="' +
+      escapeHtml(new Date().toLocaleString()) +
+      '">Just now</span>' +
       '</div>' +
       '<div class="md-comments-body">' +
       escapeHtml(body) +

@@ -9,6 +9,7 @@ import type {
   CommentRootType,
 } from '../../shared/types';
 import { escapeHtml } from '../../shared/html';
+import { formatRelativeTime, formatConcreteTime } from '../../shared/time';
 import type MarkdownCommentsPlugin from './main';
 
 export const VIEW_TYPE_COMMENTS = 'md-comments-sidebar';
@@ -254,11 +255,11 @@ export class CommentsSidebarView extends ItemView {
   }
 
   private formatTime(iso: string): string {
-    try {
-      return new Date(iso).toLocaleString();
-    } catch {
-      return iso;
-    }
+    return formatRelativeTime(iso);
+  }
+
+  private formatConcreteTime(iso: string): string {
+    return formatConcreteTime(iso);
   }
 
   private renderAvatar(author: string): string {
@@ -432,7 +433,7 @@ export class CommentsSidebarView extends ItemView {
             <div class="md-comments-thread-content">
               <div class="md-comments-meta">
                 <span class="md-comments-author" title="@${escapeHtml(comment.author)}">${escapeHtml(this.resolveDisplayName(comment.author))}</span>
-                <span class="md-comments-time">${this.formatTime(comment.created_at)}</span>
+                <span class="md-comments-time" title="${escapeHtml(this.formatConcreteTime(comment.created_at))}">${this.formatTime(comment.created_at)}</span>
                 ${badges}
               </div>
               ${bodyContent}
@@ -463,7 +464,7 @@ export class CommentsSidebarView extends ItemView {
           <div class="md-comments-thread-content">
             <div class="md-comments-meta">
               <span class="md-comments-author" title="@${escapeHtml(reply.author)}">${escapeHtml(this.resolveDisplayName(reply.author))}</span>
-              <span class="md-comments-time">${this.formatTime(reply.created_at)}</span>
+              <span class="md-comments-time" title="${escapeHtml(this.formatConcreteTime(reply.created_at))}">${this.formatTime(reply.created_at)}</span>
             </div>
             ${bodyContent}
             ${showBody ? this.renderReactions(reply.reactions, reply.id, rootId, type, 'reply') : ''}
@@ -484,7 +485,7 @@ export class CommentsSidebarView extends ItemView {
       <details class="md-comments-resolved-collapse">
         <summary class="md-comments-resolved-summary">
           <span class="md-comments-resolved-summary-author" title="@${escapeHtml(comment.author)}">${escapeHtml(this.resolveDisplayName(comment.author))}</span>
-          <span class="md-comments-resolved-summary-time">${this.formatTime(comment.created_at)}</span>
+          <span class="md-comments-resolved-summary-time" title="${escapeHtml(this.formatConcreteTime(comment.created_at))}">${this.formatTime(comment.created_at)}</span>
           <span class="md-comments-resolved-summary-excerpt">${escapeHtml(comment.body.slice(0, 45))}${comment.body.length > 45 ? '...' : ''}</span>
         </summary>
         <div class="md-comments-resolved-body">
