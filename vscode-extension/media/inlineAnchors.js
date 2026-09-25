@@ -136,6 +136,9 @@
     const commentId = card.getAttribute('data-md-comment-id');
     const paragraphIndex = card.getAttribute('data-md-paragraph-index');
     const anchorText = card.getAttribute('data-md-anchor-text');
+    const occurrenceAttr = card.getAttribute('data-md-anchor-occurrence');
+    const occurrenceIndex =
+      occurrenceAttr !== null && occurrenceAttr !== '' ? parseInt(occurrenceAttr, 10) : 0;
     if (!commentId || paragraphIndex === null || !anchorText) {
       return;
     }
@@ -147,7 +150,7 @@
       markFullParagraph(container, commentId);
       return;
     }
-    wrapAnchorText(container, anchorText, commentId);
+    wrapAnchorText(container, anchorText, commentId, occurrenceIndex);
   }
 
   function bindCardHover(card) {
@@ -202,50 +205,64 @@
     return rawIndex;
   }
 
-  function findNeedleRange(raw, needle) {
+  function findNeedleRange(raw, needle, occurrenceIndex) {
     if (!needle) {
       return null;
     }
+    const targetOcc =
+      typeof occurrenceIndex === 'number' && occurrenceIndex >= 0 ? occurrenceIndex : 0;
     const n = normalize(needle);
     if (!n) {
       return null;
     }
 
-    let idx = raw.indexOf(needle);
-    if (idx >= 0) {
-      return { start: idx, length: needle.length };
-    }
-
     const flexible = needle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+');
     // eslint-disable-next-line security/detect-non-literal-regexp
-    const re = new RegExp(flexible);
-    const m = raw.match(re);
-    if (m && m.index !== undefined) {
-      return { start: m.index, length: m[0].length };
+    const re = new RegExp(flexible, 'g');
+    let m;
+    let reCount = 0;
+    while ((m = re.exec(raw)) !== null) {
+      if (reCount === targetOcc) {
+        return { start: m.index, length: m[0].length };
+      }
+      reCount++;
+      if (m.index === re.lastIndex) {
+        re.lastIndex++;
+      }
     }
 
     const normRaw = normalize(raw);
-    const normIdx = normRaw.indexOf(n);
-    if (normIdx >= 0) {
-      const start = mapNormIndexToRaw(raw, normIdx);
-      const endNorm = normIdx + n.length;
-      let normCount = 0;
-      let rawEnd = 0;
-      let lastWasSpace = false;
-      while (rawEnd < raw.length && normCount < endNorm) {
-        const ch = raw[rawEnd];
-        if (/\s/.test(ch)) {
-          if (!lastWasSpace) {
-            normCount++;
-            lastWasSpace = true;
+    let normIdx = -1;
+    let normCount = 0;
+    let searchStart = 0;
+    while ((normIdx = normRaw.indexOf(n, searchStart)) !== -1) {
+      if (normCount === targetOcc) {
+        const start = mapNormIndexToRaw(raw, normIdx);
+        const endNorm = normIdx + n.length;
+        let count = 0;
+        let rawEnd = 0;
+        let lastWasSpace = false;
+        while (rawEnd < raw.length && count < endNorm) {
+          const ch = raw[rawEnd];
+          if (/\s/.test(ch)) {
+            if (!lastWasSpace) {
+              count++;
+              lastWasSpace = true;
+            }
+          } else {
+            count++;
+            lastWasSpace = false;
           }
-        } else {
-          normCount++;
-          lastWasSpace = false;
+          rawEnd++;
         }
-        rawEnd++;
+        return { start: start, length: Math.max(1, rawEnd - start) };
       }
-      return { start: start, length: Math.max(1, rawEnd - start) };
+      normCount++;
+      searchStart = normIdx + 1;
+    }
+
+    if (targetOcc > 0) {
+      return findNeedleRange(raw, needle, 0);
     }
 
     return null;
@@ -303,14 +320,14 @@
     return true;
   }
 
-  function wrapAnchorText(container, anchorText, commentId) {
+  function wrapAnchorText(container, anchorText, commentId, occurrenceIndex) {
     if (
       container.querySelector('.md-comments-text-anchor[data-md-comment-id="' + commentId + '"]')
     ) {
       return true;
     }
     const raw = container.textContent || '';
-    const match = findNeedleRange(raw, anchorText);
+    const match = findNeedleRange(raw, anchorText, occurrenceIndex);
     if (!match) {
       return false;
     }
@@ -387,6 +404,8 @@
 
   window.mdCommentsUnwrapAnchor = unwrapAnchor;
   window.mdCommentsScheduleWire = scheduleWire;
+  window.mdCommentsWireCommentHighlight = wireCommentHighlight;
+  window.mdCommentsFindNeedleRange = findNeedleRange;
 
   const observer = new MutationObserver(scheduleWire);
   observer.observe(document.body, { childList: true, subtree: true });

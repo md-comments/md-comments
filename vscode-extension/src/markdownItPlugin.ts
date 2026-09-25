@@ -308,7 +308,7 @@ export function renderCard(
   reactions: { emoji: string; users: string[] }[],
   replies: Parameters<typeof renderReply>[0][],
   orphaned?: boolean,
-  inlineMeta?: { paragraphIndex: number; anchorText: string },
+  inlineMeta?: { paragraphIndex: number; anchorText: string; occurrence?: number },
   resolved?: boolean,
   updated_at?: string,
   reanchor?: boolean
@@ -327,8 +327,10 @@ export function renderCard(
   const inlineAttrs =
     type === 'inline' && inlineMeta
       ? ` data-md-paragraph-index="${inlineMeta.paragraphIndex}" data-md-anchor-text="${escapeHtml(inlineMeta.anchorText)}"${
-          resolved ? ' data-md-resolved="true"' : ''
-        }`
+          inlineMeta.occurrence !== undefined
+            ? ` data-md-anchor-occurrence="${inlineMeta.occurrence}"`
+            : ''
+        }${resolved ? ' data-md-resolved="true"' : ''}`
       : '';
   const threadStateBtn = !resolved
     ? actionIconBtn('resolve', 'Resolve thread', ICON_RESOLVE, { id, type, kind: 'root' })
@@ -561,7 +563,11 @@ function buildSidebarHtml(ctx: RenderContext): string {
               c.reactions,
               c.replies,
               isOrphan,
-              { paragraphIndex: c.paragraph_index, anchorText: c.anchor_text },
+              {
+                paragraphIndex: c.paragraph_index,
+                anchorText: c.anchor_text,
+                occurrence: c.anchor_occurrence,
+              },
               c.resolved,
               c.updated_at
             ),

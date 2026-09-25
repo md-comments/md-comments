@@ -251,7 +251,17 @@
       cardType +
       '" data-md-stored-author="' +
       escapeHtml(login || author) +
-      '">' +
+      '"' +
+      (!isPage && anchor
+        ? (anchor.paragraphIndex !== undefined
+            ? ' data-md-paragraph-index="' + anchor.paragraphIndex + '"'
+            : '') +
+          (anchor.text ? ' data-md-anchor-text="' + escapeHtml(anchor.text) + '"' : '') +
+          (anchor.occurrence !== undefined
+            ? ' data-md-anchor-occurrence="' + anchor.occurrence + '"'
+            : '')
+        : '') +
+      '>' +
       '<div class="md-comments-thread-row md-comments-thread-root">' +
       '<div class="md-comments-avatar-wrap">' +
       '<div class="md-comments-avatar' +
