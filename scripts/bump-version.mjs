@@ -114,4 +114,18 @@ updateFile('website/index.html', (content) => {
   );
 });
 
+// 6. Built Safari Bundle Manifest & Plists (if existing)
+const builtManifest = 'safari-extension/build/Markdown Comments.app/Contents/PlugIns/Markdown Comments Extension.appex/Contents/Resources/manifest.json';
+if (fs.existsSync(path.join(ROOT, builtManifest))) {
+  updateJsonVersion(builtManifest);
+}
+const builtAppPlist = 'safari-extension/build/Markdown Comments.app/Contents/Info.plist';
+if (fs.existsSync(path.join(ROOT, builtAppPlist))) {
+  updatePlistVersion(builtAppPlist);
+}
+const builtAppexPlist = 'safari-extension/build/Markdown Comments.app/Contents/PlugIns/Markdown Comments Extension.appex/Contents/Info.plist';
+if (fs.existsSync(path.join(ROOT, builtAppexPlist))) {
+  updatePlistVersion(builtAppexPlist);
+}
+
 console.log(`\nAll files updated to version ${targetVersion} successfully.`);

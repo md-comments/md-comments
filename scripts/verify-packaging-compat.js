@@ -79,9 +79,65 @@ function verifyManifestsExist() {
   }
 }
 
+function verifySafariPackaging() {
+  const chromePkgPath = path.resolve(__dirname, '../chrome-extension/package.json');
+  const chromePkg = JSON.parse(fs.readFileSync(chromePkgPath, 'utf8'));
+  const targetVersion = chromePkg.version;
+
+  const safariManifestPath = path.resolve(
+    __dirname,
+    '../chrome-extension/manifests/manifest.safari.json'
+  );
+  if (fs.existsSync(safariManifestPath)) {
+    const safariManifest = JSON.parse(fs.readFileSync(safariManifestPath, 'utf8'));
+    if (safariManifest.version !== targetVersion) {
+      console.error(
+        `[Packaging Guard] Version mismatch in chrome-extension/manifests/manifest.safari.json: ` +
+          `expected ${targetVersion}, found ${safariManifest.version}`
+      );
+      process.exit(1);
+    }
+  }
+
+  const plistPaths = [
+    'safari-extension/src/App/Info.plist',
+    'safari-extension/src/Extension/Info.plist',
+  ];
+  for (const rel of plistPaths) {
+    const full = path.resolve(__dirname, '..', rel);
+    if (fs.existsSync(full)) {
+      const content = fs.readFileSync(full, 'utf8');
+      const m = content.match(/<key>CFBundleShortVersionString<\/key>\s*<string>([^<]+)<\/string>/);
+      if (!m || m[1] !== targetVersion) {
+        console.error(
+          `[Packaging Guard] Version mismatch in ${rel}: expected ${targetVersion}, found ${m ? m[1] : 'unknown'}`
+        );
+        process.exit(1);
+      }
+    }
+  }
+
+  const builtManifestPath = path.resolve(
+    __dirname,
+    '../safari-extension/build/Markdown Comments.app/Contents/PlugIns/Markdown Comments Extension.appex/Contents/Resources/manifest.json'
+  );
+  if (fs.existsSync(builtManifestPath)) {
+    const builtManifest = JSON.parse(fs.readFileSync(builtManifestPath, 'utf8'));
+    if (builtManifest.version !== targetVersion) {
+      console.error(
+        `[Packaging Guard] Stale Safari build detected in safari-extension/build! ` +
+          `Manifest is at v${builtManifest.version}, but repo is at v${targetVersion}. ` +
+          `Please run: pnpm run build:safari`
+      );
+      process.exit(1);
+    }
+  }
+}
+
 function main() {
   verifyVsCodePackaging();
   verifyManifestsExist();
+  verifySafariPackaging();
   console.log('[Packaging Guard] All packaging compatibility checks passed.');
 }
 

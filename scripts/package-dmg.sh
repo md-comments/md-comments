@@ -15,11 +15,9 @@ DMG_NAME="Markdown-Comments-macOS.dmg"
 DMG_PATH="$ARTIFACTS_DIR/$DMG_NAME"
 TEMP_DMG_DIR="$BUILD_DIR/dmg-staging"
 
-# Ensure app is built
-if [ ! -d "$APP_PATH" ]; then
-  echo "App bundle not found. Building Safari app first..."
-  "$REPO_ROOT/scripts/build-safari-app.sh"
-fi
+# Always ensure fresh app build from current source
+echo "==> Building fresh Safari companion app and WebExtension..."
+"$REPO_ROOT/scripts/build-safari-app.sh"
 
 echo "==> Packaging DMG for Markdown Comments macOS..."
 mkdir -p "$ARTIFACTS_DIR"
