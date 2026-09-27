@@ -149,7 +149,59 @@ describe('Cross-Interface Badge Styling & DOM Parity', () => {
     expect(pageCardHtml).not.toContain('>Page comment<');
     expect(pageCardHtml).toContain('data-md-action="reply"');
 
-    // 4. Document layout with FAB badges
+    // 4. Inline comment card WITH replies (verifies redundant footer reply button is omitted)
+    const inlineWithRepliesHtml = renderCard(
+      'c-inline-replies',
+      'alice',
+      '2026-01-01T00:00:00Z',
+      'Inline comment with replies',
+      'inline',
+      [],
+      [
+        {
+          id: 'r-1',
+          author: 'bob',
+          body: 'First reply',
+          created_at: '2026-01-01T00:05:00Z',
+          reactions: [],
+        },
+      ],
+      false,
+      { paragraphIndex: 0, anchorText: 'hello' },
+      false
+    );
+    expect(inlineWithRepliesHtml).toContain('First reply');
+    expect(inlineWithRepliesHtml).toContain('md-comments-replies-block');
+    expect(inlineWithRepliesHtml).not.toContain('data-md-action="reply"');
+    expect(inlineWithRepliesHtml).not.toContain('md-comments-thread-footer');
+    expect(inlineWithRepliesHtml).toContain('md-comments-reply-input');
+
+    // 5. Page comment card WITH replies (retains thread footer reply button)
+    const pageWithRepliesHtml = renderCard(
+      'c-page-replies',
+      'carol',
+      '2026-01-01T00:00:00Z',
+      'Page comment with replies',
+      'page',
+      [],
+      [
+        {
+          id: 'r-2',
+          author: 'dave',
+          body: 'Reply to page comment',
+          created_at: '2026-01-01T00:05:00Z',
+          reactions: [],
+        },
+      ],
+      false,
+      undefined,
+      false
+    );
+    expect(pageWithRepliesHtml).toContain('Reply to page comment');
+    expect(pageWithRepliesHtml).toContain('md-comments-thread-footer');
+    expect(pageWithRepliesHtml).toContain('data-md-action="reply"');
+
+    // 6. Document layout with FAB badges
     const mockCtx: any = {
       blocks: [],
       comments: {

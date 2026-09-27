@@ -230,12 +230,13 @@ function renderRepliesBlock(
 ): string {
   const count = replies.length;
   const replyHtml = replies.map((r) => renderReply(r, rootId, type)).join('');
-  const replyFooter = showReplyInFooter
-    ? threadFooterBtn('reply', 'Reply', ICON_REPLY, { id: rootId, type, kind: 'root' })
-    : '';
+  const replyFooter =
+    showReplyInFooter && type === 'page'
+      ? threadFooterBtn('reply', 'Reply', ICON_REPLY, { id: rootId, type, kind: 'root' })
+      : '';
   return `<div class="md-comments-replies-block" data-md-root-id="${escapeHtml(rootId)}" data-md-reply-count="${count}">
     <div class="md-comments-replies-list" data-md-replies-panel>${replyHtml}</div>
-    ${showReplyInFooter ? `<footer class="md-comments-thread-footer">${replyFooter}</footer>` : ''}
+    ${replyFooter ? `<footer class="md-comments-thread-footer">${replyFooter}</footer>` : ''}
   </div>`;
 }
 
@@ -381,7 +382,8 @@ export function renderCard(
             { id, type, kind: 'root' },
             'md-comments-icon-btn-danger'
           )}`;
-  const repliesBlock = hasReplies ? renderRepliesBlock(id, type, replies, !resolved) : '';
+  const showReplyInFooter = type === 'page' && !resolved;
+  const repliesBlock = hasReplies ? renderRepliesBlock(id, type, replies, showReplyInFooter) : '';
   const replyComposer = `<div class="reply-composer md-comments-reply-composer" data-md-comment-id="${escapeHtml(id)}" data-md-type="${type}"${composerStyle}>
         <input type="text" placeholder="Reply..." class="reply-input md-comments-reply-input" aria-label="Reply to comment">
         <div class="reply-composer-wrapper md-comments-reply-wrapper" style="display: none;">
