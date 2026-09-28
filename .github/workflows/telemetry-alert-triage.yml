@@ -28,7 +28,7 @@ on:
       service_version:
         description: 'Application Release Version'
         required: false
-        default: '1.4.7'
+        default: '1.4.8'
 
 permissions:
   issues: write

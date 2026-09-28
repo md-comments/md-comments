@@ -94,7 +94,7 @@ export class BackgroundTelemetryManager {
 
     const record: TelemetryRecord = {
       serviceName: 'md-comments',
-      serviceVersion: '1.4.7',
+      serviceVersion: '1.4.8',
       clientInterface: this.clientInterface,
       timestamp: Date.now(),
       severity: 'ERROR',

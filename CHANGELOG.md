@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.8] - 2026-09-27
+
+### Fixed
+
+- **VS Code Emoji Reaction Toggle**: Fixed reaction counter state calculation when toggling emoji reactions in VS Code preview.
+- **Redundant Inline Reply Action**: Removed redundant reply action button on inline comment cards in VS Code preview.
+- **Safari Companion App Packaging & E2E Validation**: Ensured macOS companion app rebuilds automatically during packaging and added comprehensive WebKit E2E tests for inline highlight anchoring and reload persistence.
+
 ## [1.4.7] - 2026-09-24
 
 ### Added
