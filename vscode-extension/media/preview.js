@@ -108,6 +108,32 @@
     return !!login && /^[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,37}[a-zA-Z0-9])?$/.test(login);
   }
 
+  function authorsMatchClient(stored, current, displayNames) {
+    if (!stored || !current) {
+      return false;
+    }
+    const s = stored.trim().toLowerCase();
+    const c = current.trim().toLowerCase();
+    if (s === c) {
+      return true;
+    }
+    if (s.replace(/\./g, '') === c.replace(/\./g, '')) {
+      return true;
+    }
+    if (displayNames) {
+      for (const login of Object.keys(displayNames)) {
+        const name = displayNames[login];
+        if (login.toLowerCase() === c && name && name.toLowerCase() === s) {
+          return true;
+        }
+        if (login.toLowerCase() === s && login.toLowerCase() === c) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   const ICON_REPLY =
     '<svg class="md-comments-icon-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 17H5l-4-4 4-4h4M5 13h11.5a3.5 3.5 0 0 0 3.5-3.5V6.5a3.5 3.5 0 0 0-3.5-3.5H5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   const ICON_RESOLVE =
@@ -577,15 +603,48 @@
     if (existingChip) {
       const match = existingChip.textContent.trim().match(/\d+$/);
       let count = match ? parseInt(match[0], 10) : 1;
-      const isMine =
+      let isMine =
         existingChip.classList.contains('md-comments-reaction-active') ||
         existingChip.classList.contains('active') ||
         existingChip.getAttribute('data-md-is-mine') === 'true';
+
+      const currentAuthor = getCurrentAuthor();
+      let usersList = [];
+      try {
+        const rawUsers = existingChip.getAttribute('data-md-users');
+        if (rawUsers) {
+          usersList = JSON.parse(rawUsers);
+        }
+      } catch {
+        usersList = [];
+      }
+      if (!Array.isArray(usersList)) {
+        usersList = [];
+      }
+
+      if (!isMine && currentAuthor && usersList.length > 0) {
+        const footer = document.querySelector('.md-comments-footer');
+        let displayNames = {};
+        try {
+          displayNames = JSON.parse(footer?.getAttribute('data-md-display-names') || '{}');
+        } catch {
+          displayNames = {};
+        }
+        isMine = usersList.some(function (u) {
+          return authorsMatchClient(u, currentAuthor, displayNames);
+        });
+      }
 
       if (isMine) {
         existingChip.classList.remove('md-comments-reaction-active', 'active');
         existingChip.setAttribute('data-md-is-mine', 'false');
         count -= 1;
+        if (currentAuthor) {
+          usersList = usersList.filter(function (u) {
+            return !authorsMatchClient(u, currentAuthor, {});
+          });
+          existingChip.setAttribute('data-md-users', JSON.stringify(usersList));
+        }
         if (count <= 0) {
           existingChip.remove();
           if (!reactionsDiv.children.length) {
@@ -597,9 +656,14 @@
         existingChip.classList.add('md-comments-reaction-active', 'active');
         existingChip.setAttribute('data-md-is-mine', 'true');
         count += 1;
+        if (currentAuthor && !usersList.includes(currentAuthor)) {
+          usersList.push(currentAuthor);
+          existingChip.setAttribute('data-md-users', JSON.stringify(usersList));
+        }
       }
       existingChip.textContent = emoji + ' ' + count;
     } else {
+      const currentAuthor = getCurrentAuthor();
       const chip = document.createElement('a');
       chip.setAttribute('role', 'button');
       chip.href = '#';
@@ -611,6 +675,7 @@
       chip.setAttribute('data-md-kind', kind || 'root');
       chip.setAttribute('data-md-emoji', emoji);
       chip.setAttribute('data-md-is-mine', 'true');
+      chip.setAttribute('data-md-users', JSON.stringify(currentAuthor ? [currentAuthor] : []));
       chip.textContent = emoji + ' 1';
       reactionsDiv.appendChild(chip);
     }

@@ -560,15 +560,48 @@
     if (existingChip) {
       const match = existingChip.textContent.trim().match(/\d+$/);
       let count = match ? parseInt(match[0], 10) : 1;
-      const isMine =
+      let isMine =
         existingChip.classList.contains('md-comments-reaction-active') ||
         existingChip.classList.contains('active') ||
         existingChip.getAttribute('data-md-is-mine') === 'true';
+
+      const currentAuthor = getCurrentAuthor();
+      let usersList = [];
+      try {
+        const rawUsers = existingChip.getAttribute('data-md-users');
+        if (rawUsers) {
+          usersList = JSON.parse(rawUsers);
+        }
+      } catch {
+        usersList = [];
+      }
+      if (!Array.isArray(usersList)) {
+        usersList = [];
+      }
+
+      if (!isMine && currentAuthor && usersList.length > 0) {
+        const footer = document.querySelector('.md-comments-footer');
+        let displayNames = {};
+        try {
+          displayNames = JSON.parse(footer?.getAttribute('data-md-display-names') || '{}');
+        } catch {
+          displayNames = {};
+        }
+        isMine = usersList.some(function (u) {
+          return authorsMatchClient(u, currentAuthor, displayNames);
+        });
+      }
 
       if (isMine) {
         existingChip.classList.remove('md-comments-reaction-active', 'active');
         existingChip.setAttribute('data-md-is-mine', 'false');
         count -= 1;
+        if (currentAuthor) {
+          usersList = usersList.filter(function (u) {
+            return !authorsMatchClient(u, currentAuthor, {});
+          });
+          existingChip.setAttribute('data-md-users', JSON.stringify(usersList));
+        }
         if (count <= 0) {
           existingChip.remove();
           if (!reactionsDiv.children.length) {
@@ -580,9 +613,14 @@
         existingChip.classList.add('md-comments-reaction-active', 'active');
         existingChip.setAttribute('data-md-is-mine', 'true');
         count += 1;
+        if (currentAuthor && !usersList.includes(currentAuthor)) {
+          usersList.push(currentAuthor);
+          existingChip.setAttribute('data-md-users', JSON.stringify(usersList));
+        }
       }
       existingChip.textContent = emoji + ' ' + count;
     } else {
+      const currentAuthor = getCurrentAuthor();
       const chip = document.createElement('a');
       chip.setAttribute('role', 'button');
       chip.href = '#';
@@ -594,6 +632,7 @@
       chip.setAttribute('data-md-kind', kind || 'root');
       chip.setAttribute('data-md-emoji', emoji);
       chip.setAttribute('data-md-is-mine', 'true');
+      chip.setAttribute('data-md-users', JSON.stringify(currentAuthor ? [currentAuthor] : []));
       chip.textContent = emoji + ' 1';
       reactionsDiv.appendChild(chip);
     }
@@ -1764,14 +1803,57 @@
     });
   }
 
+  function syncReactionStates(root) {
+    const footer = document.querySelector('.md-comments-footer');
+    const current = footer?.getAttribute('data-md-current-author')?.trim();
+    if (!current) {
+      return;
+    }
+    let displayNames = {};
+    try {
+      displayNames = JSON.parse(footer?.getAttribute('data-md-display-names') || '{}');
+    } catch {
+      displayNames = {};
+    }
+    const container = root || document;
+    container.querySelectorAll('.md-comments-reaction-chip').forEach(function (chip) {
+      const isAlreadyMine =
+        chip.classList.contains('md-comments-reaction-active') ||
+        chip.classList.contains('active') ||
+        chip.getAttribute('data-md-is-mine') === 'true';
+      if (isAlreadyMine) {
+        return;
+      }
+      try {
+        const rawUsers = chip.getAttribute('data-md-users');
+        if (rawUsers) {
+          const users = JSON.parse(rawUsers);
+          if (
+            Array.isArray(users) &&
+            users.some(function (u) {
+              return authorsMatchClient(u, current, displayNames);
+            })
+          ) {
+            chip.classList.add('md-comments-reaction-active', 'active');
+            chip.setAttribute('data-md-is-mine', 'true');
+          }
+        }
+      } catch {
+        /* ignore */
+      }
+    });
+  }
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function () {
       syncDisplayNamesAndAvatars();
       revealEditButtons();
+      syncReactionStates();
     });
   } else {
     syncDisplayNamesAndAvatars();
     revealEditButtons();
+    syncReactionStates();
   }
 
   window.addEventListener('message', function (event) {
@@ -1782,6 +1864,7 @@
     if (msg.type === 'updateComments' && msg.bodyHtml) {
       applyCommentsUpdate(msg.bodyHtml);
       revealEditButtons();
+      syncReactionStates();
     }
   });
 })();

@@ -60,8 +60,9 @@ function formatCommentTime(created_at: string, updated_at?: string): string {
 /** Set during markdown-it render from env.currentAuthor. */
 let renderCurrentAuthor: string | undefined;
 
-function canEditComment(author: string): boolean {
-  return !!renderCurrentAuthor && authorsMatch(author, renderCurrentAuthor);
+function canEditComment(author: string, currentAuthor?: string): boolean {
+  const effective = currentAuthor ?? renderCurrentAuthor;
+  return !!effective && authorsMatch(author, effective);
 }
 
 function renderEditBtn(
@@ -69,9 +70,10 @@ function renderEditBtn(
   id: string,
   rootId: string,
   type: string,
-  kind: 'root' | 'reply'
+  kind: 'root' | 'reply',
+  currentAuthor?: string
 ): string {
-  const canEdit = canEditComment(author);
+  const canEdit = canEditComment(author, currentAuthor);
   const hiddenAttr = canEdit ? '' : ' hidden';
   return `<button type="button" class="md-comments-icon-btn md-comments-edit-btn"${hiddenAttr} data-md-action="edit" title="Edit comment" aria-label="Edit comment" data-md-id="${escapeHtml(id)}" data-md-root-id="${escapeHtml(rootId)}" data-md-type="${escapeHtml(type)}" data-md-kind="${escapeHtml(kind)}">${ICON_EDIT}</button>`;
 }
@@ -226,10 +228,11 @@ function renderRepliesBlock(
   rootId: string,
   type: 'page' | 'inline',
   replies: Parameters<typeof renderReply>[0][],
-  showReplyInFooter: boolean
+  showReplyInFooter: boolean,
+  currentAuthor?: string
 ): string {
   const count = replies.length;
-  const replyHtml = replies.map((r) => renderReply(r, rootId, type)).join('');
+  const replyHtml = replies.map((r) => renderReply(r, rootId, type, currentAuthor)).join('');
   const replyFooter =
     showReplyInFooter && type === 'page'
       ? threadFooterBtn('reply', 'Reply', ICON_REPLY, { id: rootId, type, kind: 'root' })
@@ -245,15 +248,16 @@ function renderReactions(
   targetId: string,
   rootId: string,
   type: string,
-  kind: string
+  kind: string,
+  currentAuthor?: string
 ): string {
-  if (!reactions.length) {
+  if (!reactions || !reactions.length) {
     return '';
   }
+  const effectiveAuthor = currentAuthor ?? renderCurrentAuthor;
   const chips = reactions
     .map((r) => {
-      const isMine =
-        !!renderCurrentAuthor && r.users.some((u) => authorsMatch(u, renderCurrentAuthor!));
+      const isMine = !!effectiveAuthor && r.users.some((u) => authorsMatch(u, effectiveAuthor));
       const activeClass = isMine ? ' md-comments-reaction-active active' : '';
       const usersAttr = escapeHtml(JSON.stringify(r.users));
       return `<a role="button" class="md-comments-reaction-chip${activeClass}" data-md-action="react" data-md-target="${escapeHtml(targetId)}" data-md-root="${escapeHtml(rootId)}" data-md-type="${type}" data-md-kind="${kind}" data-md-emoji="${escapeHtml(r.emoji)}" data-md-users="${usersAttr}" data-md-is-mine="${isMine}" href="#">${escapeHtml(r.emoji)} ${r.users.length}</a>`;
@@ -272,7 +276,8 @@ function renderReply(
     reactions: { emoji: string; users: string[] }[];
   },
   rootId: string,
-  type: string
+  type: string,
+  currentAuthor?: string
 ): string {
   return `<div class="md-comments-reply" data-md-comment-id="${escapeHtml(reply.id)}" data-md-stored-author="${escapeHtml(reply.author)}">
     <div class="md-comments-thread-row">
@@ -280,9 +285,9 @@ function renderReply(
       <div class="md-comments-thread-content">
         <div class="md-comments-meta">${renderAuthorLink(reply.author)}<span class="md-comments-time" title="${escapeHtml(formatConcreteTime(reply.created_at))}">${escapeHtml(formatCommentTime(reply.created_at, reply.updated_at))}</span></div>
         <div class="md-comments-body">${renderCommentBody(reply.body)}</div>
-        ${renderReactions(reply.reactions, reply.id, rootId, type, 'reply')}
+        ${renderReactions(reply.reactions, reply.id, rootId, type, 'reply', currentAuthor)}
         <div class="md-comments-actions md-comments-actions-icons">
-          ${renderEditBtn(reply.author, reply.id, rootId, type, 'reply')}
+          ${renderEditBtn(reply.author, reply.id, rootId, type, 'reply', currentAuthor)}
           ${actionIconBtn('react-picker', 'Add reaction', ICON_REACT, {
             id: reply.id,
             'target-id': reply.id,
@@ -315,7 +320,8 @@ export function renderCard(
   inlineMeta?: { paragraphIndex: number; anchorText: string; occurrence?: number },
   resolved?: boolean,
   updated_at?: string,
-  reanchor?: boolean
+  reanchor?: boolean,
+  currentAuthor?: string
 ): string {
   const badges = [
     orphaned
@@ -339,7 +345,7 @@ export function renderCard(
   const threadStateBtn = !resolved
     ? actionIconBtn('resolve', 'Resolve thread', ICON_RESOLVE, { id, type, kind: 'root' })
     : actionIconBtn('unresolve', 'Reopen thread', ICON_REOPEN, { id, type, kind: 'root' });
-  const editBtn = renderEditBtn(author, id, id, type, 'root');
+  const editBtn = renderEditBtn(author, id, id, type, 'root', currentAuthor);
   const reanchorBtn = reanchor
     ? actionIconBtn('reanchor-start', 'Re-anchor', ICON_REANCHOR, { id })
     : '';
@@ -383,7 +389,9 @@ export function renderCard(
             'md-comments-icon-btn-danger'
           )}`;
   const showReplyInFooter = type === 'page' && !resolved;
-  const repliesBlock = hasReplies ? renderRepliesBlock(id, type, replies, showReplyInFooter) : '';
+  const repliesBlock = hasReplies
+    ? renderRepliesBlock(id, type, replies, showReplyInFooter, currentAuthor)
+    : '';
   const replyComposer = `<div class="reply-composer md-comments-reply-composer" data-md-comment-id="${escapeHtml(id)}" data-md-type="${type}"${composerStyle}>
         <input type="text" placeholder="Reply..." class="reply-input md-comments-reply-input" aria-label="Reply to comment">
         <div class="reply-composer-wrapper md-comments-reply-wrapper" style="display: none;">
@@ -403,7 +411,7 @@ export function renderCard(
       <div class="md-comments-thread-content">
         <div class="md-comments-meta">${renderAuthorLink(author)}<span class="md-comments-time" title="${escapeHtml(formatConcreteTime(created_at))}">${escapeHtml(formatCommentTime(created_at, updated_at))}</span>${badges}</div>
         <div class="md-comments-body">${renderCommentBody(body)}</div>
-        ${renderReactions(reactions, id, id, type, 'root')}
+        ${renderReactions(reactions, id, id, type, 'root', currentAuthor)}
         <div class="md-comments-actions md-comments-actions-icons">${resolvedActions}</div>
       </div>
     </div>
@@ -418,6 +426,7 @@ interface RenderContext {
   comments: CommentsFile;
   mdPath: string;
   isLoading?: boolean;
+  currentAuthor?: string;
 }
 
 export function sortCommentsChronological<T extends { created_at?: string; id?: string }>(
@@ -574,7 +583,9 @@ function buildSidebarHtml(ctx: RenderContext): string {
                 occurrence: c.anchor_occurrence,
               },
               c.resolved,
-              c.updated_at
+              c.updated_at,
+              false,
+              ctx.currentAuthor
             ),
             { id: c.id, quote: c.anchor_text, heading: c.heading_context || undefined }
           );
@@ -599,7 +610,9 @@ function buildSidebarHtml(ctx: RenderContext): string {
               false,
               undefined,
               c.resolved,
-              c.updated_at
+              c.updated_at,
+              false,
+              ctx.currentAuthor
             ),
             { id: c.id }
           )
@@ -776,12 +789,16 @@ function loadContext(uri: vscode.Uri, envRecord?: Record<string, unknown>): Rend
     }
 
     const placements = placeInlineComments(blocks, comments.inline_comments);
+    const fromEnv =
+      typeof envRecord?.currentAuthor === 'string' ? envRecord.currentAuthor.trim() : '';
+    const currentAuthor = fromEnv || getCachedAuthor()?.trim() || '';
     return {
       blocks,
       placements,
       comments,
       mdPath,
       isLoading,
+      currentAuthor: currentAuthor || undefined,
     };
   } catch (err) {
     console.error('[md-comments] failed to load comment context for', uri.toString(), err);
@@ -1130,6 +1147,9 @@ export function extendMarkdownIt(md: any): any {
       setCachedAuthorDisplayName(currentAuthorName);
     }
     renderCtx = uri ? loadContext(uri, envRecord) : null;
+    if (renderCtx && renderCurrentAuthor) {
+      renderCtx.currentAuthor = renderCurrentAuthor;
+    }
 
     const html = defaultRender(tokens, options, env);
 
@@ -1137,6 +1157,7 @@ export function extendMarkdownIt(md: any): any {
       const hint = uri
         ? `Could not load comments for ${escapeHtml(uri.fsPath)}`
         : 'No document URI in preview render env';
+      renderCurrentAuthor = undefined;
       return `<div class="md-comments-debug">${hint}. Check Markdown Comments output.</div>` + html;
     }
 
@@ -1189,8 +1210,11 @@ export function extendMarkdownIt(md: any): any {
         }
       });
 
-    renderCurrentAuthor = undefined;
-    return renderDocumentLayout(html, renderCtx, saveHint, footer);
+    try {
+      return renderDocumentLayout(html, renderCtx, saveHint, footer);
+    } finally {
+      renderCurrentAuthor = undefined;
+    }
   };
 
   return md;
