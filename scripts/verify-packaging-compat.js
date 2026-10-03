@@ -68,6 +68,7 @@ function verifyManifestsExist() {
     'chrome-extension/manifest.json',
     'safari-extension/HOW-TO-OPEN.txt',
     'assets/icon.png',
+    'embed/package.json',
   ];
 
   for (const relPath of requiredFiles) {
@@ -134,10 +135,28 @@ function verifySafariPackaging() {
   }
 }
 
+function verifyEmbedPackaging() {
+  const chromePkgPath = path.resolve(__dirname, '../chrome-extension/package.json');
+  const chromePkg = JSON.parse(fs.readFileSync(chromePkgPath, 'utf8'));
+  const targetVersion = chromePkg.version;
+
+  const embedPkgPath = path.resolve(__dirname, '../embed/package.json');
+  if (fs.existsSync(embedPkgPath)) {
+    const embedPkg = JSON.parse(fs.readFileSync(embedPkgPath, 'utf8'));
+    if (embedPkg.version !== targetVersion) {
+      console.error(
+        `[Packaging Guard] Version mismatch in embed/package.json: expected ${targetVersion}, found ${embedPkg.version}`
+      );
+      process.exit(1);
+    }
+  }
+}
+
 function main() {
   verifyVsCodePackaging();
   verifyManifestsExist();
   verifySafariPackaging();
+  verifyEmbedPackaging();
   console.log('[Packaging Guard] All packaging compatibility checks passed.');
 }
 

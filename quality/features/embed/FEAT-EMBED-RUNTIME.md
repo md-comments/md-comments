@@ -8,12 +8,18 @@ flowId: 'FLOW-EMBED-RUNTIME'
 dependsOn:
   - 'FEAT-COMM-INLINE'
 implementedIn:
+  - 'embed/src/runtime.js'
   - 'website/demo-mock/embed/md-comments.js'
 verifiedIn:
   - 'tests/e2e/embedded.spec.ts'
+  - 'tests/embed-package-build.test.ts'
+  - 'tests/embed-security-hardening.test.ts'
 invariants:
   - 'INV-OAUTH-ONLY'
   - 'INV-XSS-SANITIZED'
+  - 'INV-INPUT-VALIDATION-REPO'
+  - 'INV-NO-THIRD-PARTY-AUTH-PROXY'
+  - 'INV-BASE-TREE-SHA'
 minCoverage: 100
 ---
 

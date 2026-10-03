@@ -1,0 +1,37 @@
+{
+  "name": "@md-comments/embed",
+  "version": "1.4.8",
+  "description": "Standalone, zero-dependency embed runtime for Markdown Comments on any HTML document or static site",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./styles.css": "./dist/md-comments.css",
+    "./dist/md-comments.min.js": "./dist/md-comments.min.js",
+    "./dist/md-comments.js": "./dist/md-comments.js",
+    "./dist/md-comments.css": "./dist/md-comments.css",
+    "./dist/md-comments.min.css": "./dist/md-comments.min.css"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "node build.mjs production",
+    "dev": "node build.mjs",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "esbuild": "^0.28.1",
+    "typescript": "^5.5.4"
+  }
+}

@@ -85,6 +85,7 @@ updateJsonVersion('chrome-extension/manifests/manifest.safari.json');
 updateJsonVersion('obsidian-plugin/package.json');
 updateJsonVersion('obsidian-plugin/manifest.json');
 updateJsonVersion('shared/package.json');
+updateJsonVersion('embed/package.json');
 updateJsonVersion('starlight-plugin/package.json');
 
 // 2. Safari Plist Files

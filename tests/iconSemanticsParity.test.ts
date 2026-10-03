@@ -12,6 +12,7 @@ describe('Icon Semantics & Differentiation Across All Interfaces (Option C)', ()
     obsidian: '../obsidian-plugin/src/sidebarView.ts',
     demoHtml: '../website/demo-html/embed/md-comments.js',
     demoMock: '../website/demo-mock/embed/md-comments.js',
+    embedPkg: '../embed/dist/md-comments.js',
   };
 
   const extractIcon = (

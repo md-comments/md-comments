@@ -1,5 +1,6 @@
 packages:
   - 'shared'
+  - 'embed'
   - 'vscode-extension'
   - 'obsidian-plugin'
   - 'chrome-extension'

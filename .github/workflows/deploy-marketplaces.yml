@@ -32,12 +32,15 @@ jobs:
         run: |
           pnpm install --frozen-lockfile
           pnpm --filter @md-comments/shared run build
+          pnpm --filter @md-comments/embed run build
           pnpm --filter @md-comments/starlight run build
 
       - name: Publish to npm with Provenance
         run: |
           echo "Publishing @md-comments/shared with OIDC provenance..."
           pnpm --filter @md-comments/shared publish --provenance --no-git-checks --access public || echo "Shared package already published or up to date."
+          echo "Publishing @md-comments/embed with OIDC provenance..."
+          pnpm --filter @md-comments/embed publish --provenance --no-git-checks --access public || echo "Embed package already published or up to date."
           echo "Publishing @md-comments/starlight with OIDC provenance..."
           pnpm --filter @md-comments/starlight publish --provenance --no-git-checks --access public || echo "Starlight plugin already published or up to date."
 
