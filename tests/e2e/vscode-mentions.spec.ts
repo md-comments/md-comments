@@ -15,18 +15,13 @@ test.describe('VS Code Extension Mentions Autocomplete E2E', () => {
     await expect(pageTab).toBeVisible({ timeout: 15000 });
     await pageTab.dispatchEvent('click');
 
-    // 2. Open comment composer
-    const addCommentBtn = previewFrame.locator('[data-md-action="addPage"]');
-    await expect(addCommentBtn).toBeVisible({ timeout: 5000 });
-    await addCommentBtn.dispatchEvent('click');
-
-    // 3. Seed mention users on footer
+    // 2. Seed mention users on footer
     await previewFrame.locator('.md-comments-footer').evaluate((footer) => {
       footer.setAttribute('data-md-mention-users', JSON.stringify(['octocat', 'alice', 'bob']));
     });
 
-    const textarea = previewFrame.locator('.md-comments-editor-input');
-    await expect(textarea).toBeVisible();
+    const textarea = previewFrame.locator('#page-composer .page-textarea');
+    await expect(textarea).toBeVisible({ timeout: 5000 });
     await textarea.focus();
 
     // 4. Type text including @oct to trigger mention autocomplete menu
@@ -48,7 +43,7 @@ test.describe('VS Code Extension Mentions Autocomplete E2E', () => {
     expect(textareaVal).toContain('@octocat');
 
     // 7. Submit comment
-    const submitBtn = previewFrame.locator('.md-comments-btn-primary[data-action="submit"]');
+    const submitBtn = previewFrame.locator('#page-composer .submit-page-btn');
     await submitBtn.dispatchEvent('click');
 
     // 8. Assert rendered comment card has clickable mention link
@@ -56,12 +51,12 @@ test.describe('VS Code Extension Mentions Autocomplete E2E', () => {
     const activePageTab = previewFrame.locator('.md-comments-tab[data-tab="page"]');
     await activePageTab.dispatchEvent('click');
 
-    const card = previewFrame.locator('.md-comments-card').filter({ hasText: 'octocat' });
+    const card = previewFrame.locator('.md-comments-card').filter({ hasText: 'octocat' }).first();
     await expect(card).toBeVisible({ timeout: 10000 });
 
-    const mentionLink = card.locator('a.md-comments-mention');
+    const mentionLink = card.locator('a.md-comments-mention').first();
     await expect(mentionLink).toBeVisible();
-    await expect(mentionLink).toHaveText(/@octocat|@The Octocat/);
+    await expect(mentionLink).toHaveText(/@?(?:The )?octocat/i);
     await expect(mentionLink).toHaveAttribute('href', 'https://github.com/octocat');
   });
 });

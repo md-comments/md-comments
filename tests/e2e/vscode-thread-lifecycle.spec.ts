@@ -16,16 +16,12 @@ test.describe('VS Code Extension Thread Lifecycle E2E', () => {
     await pageTab.dispatchEvent('click');
 
     // 2. Create initial root comment
-    const addCommentBtn = previewFrame.locator('[data-md-action="addPage"]');
-    await expect(addCommentBtn).toBeVisible({ timeout: 5000 });
-    await addCommentBtn.dispatchEvent('click');
-
-    const textarea = previewFrame.locator('.md-comments-editor-input');
+    const textarea = previewFrame.locator('#page-composer .page-textarea');
     await expect(textarea).toBeVisible({ timeout: 5000 });
     const rootCommentText = 'Root thread comment for lifecycle testing';
     await textarea.fill(rootCommentText);
 
-    const submitBtn = previewFrame.locator('.md-comments-btn-primary[data-action="submit"]');
+    const submitBtn = previewFrame.locator('#page-composer .submit-page-btn');
     await submitBtn.dispatchEvent('click');
 
     const card = previewFrame.locator('.md-comments-card', { hasText: rootCommentText });
@@ -36,12 +32,15 @@ test.describe('VS Code Extension Thread Lifecycle E2E', () => {
     await expect(replyBtn).toBeVisible({ timeout: 5000 });
     await replyBtn.dispatchEvent('click');
 
-    const replyTextarea = card.locator('textarea');
+    const replyComposer = card.locator('.md-comments-panel-composer');
+    await expect(replyComposer).toBeVisible({ timeout: 5000 });
+
+    const replyTextarea = replyComposer.locator('textarea');
     await expect(replyTextarea).toBeVisible({ timeout: 5000 });
     const replyText = 'Nested reply acknowledging root comment';
     await replyTextarea.fill(replyText);
 
-    const submitReplyBtn = card.locator('.md-comments-btn-primary[data-action="submit"]');
+    const submitReplyBtn = replyComposer.locator('[data-action="submit"]');
     await submitReplyBtn.dispatchEvent('click');
 
     // Verify reply renders inside the card's reply list

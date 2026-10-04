@@ -5,7 +5,7 @@ test.describe('VS Code Real Repo Sequential Deletion E2E', () => {
   test('runs in test repository md-comments/md-comments-test, validates cancel does not prematurely remove card, deletes comments in sequence without blank page, and verifies GitHub commits', async ({
     vscode,
   }) => {
-    const { page, runCommand, getCommentPreviewFrame } = vscode;
+    const { page, runCommand, openCommentPreview, getCommentPreviewFrame } = vscode;
     page.on('console', (msg) => console.log('VSCODE CONSOLE:', msg.type(), msg.text()));
 
     const targetOwner = process.env.TEST_REPO_OWNER || 'md-comments';
@@ -18,13 +18,13 @@ test.describe('VS Code Real Repo Sequential Deletion E2E', () => {
     }).trim();
     expect(remoteOrigin).toContain(`${targetOwner}/${targetRepo}`);
 
-    // 2. Open native Markdown preview to side via Command Palette
-    await runCommand('Markdown: Open Preview to the Side');
+    // 2. Open Comment Preview panel
+    await openCommentPreview();
 
-    // 3. Locate native markdown preview iframe
+    // 3. Locate comment preview iframe
     const previewFrame = getCommentPreviewFrame();
 
-    // Verify layout rendered inside native preview
+    // Verify layout rendered inside preview
     const layout = previewFrame.locator('#md-comments-layout');
     await expect(layout).toBeAttached({ timeout: 15000 });
 
@@ -33,7 +33,7 @@ test.describe('VS Code Real Repo Sequential Deletion E2E', () => {
     const fab = previewFrame.locator('#md-comments-panel-fab');
     if (!(await sidebar.isVisible())) {
       await expect(fab).toBeVisible({ timeout: 10000 });
-      await fab.click();
+      await fab.dispatchEvent('click');
     }
     await expect(sidebar).toBeVisible({ timeout: 10000 });
     // Allow any initial background refresh to settle
@@ -41,9 +41,8 @@ test.describe('VS Code Real Repo Sequential Deletion E2E', () => {
 
     // 5. Ensure page comments tab is selected
     const pageTab = previewFrame.locator('.md-comments-tab[data-tab="page"]');
-    if (await pageTab.isVisible()) {
-      await pageTab.click();
-    }
+    await expect(pageTab).toBeVisible({ timeout: 15000 });
+    await pageTab.dispatchEvent('click');
 
     // Seed comments if fewer than 3 exist in the test repository
     let sidebarCards = previewFrame.locator('#md-comments-sidebar .md-comments-card:visible');
@@ -53,7 +52,7 @@ test.describe('VS Code Real Repo Sequential Deletion E2E', () => {
       const currentCount = await sidebarCards.count();
       await textarea.fill(`Automated E2E Test Comment ${currentCount + 1}`);
       const submitBtn = previewFrame.locator('#page-composer .submit-page-btn');
-      await submitBtn.click();
+      await submitBtn.dispatchEvent('click');
       await page.waitForTimeout(1500);
       sidebarCards = previewFrame.locator('#md-comments-sidebar .md-comments-card:visible');
     }

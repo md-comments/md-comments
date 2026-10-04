@@ -13,16 +13,12 @@ test.describe('VS Code Extension Reactions E2E', () => {
     await expect(pageTab).toBeVisible({ timeout: 15000 });
     await pageTab.dispatchEvent('click');
 
-    const addCommentBtn = previewFrame.locator('[data-md-action="addPage"]');
-    await expect(addCommentBtn).toBeVisible({ timeout: 5000 });
-    await addCommentBtn.dispatchEvent('click');
-
-    const textarea = previewFrame.locator('.md-comments-editor-input');
-    await expect(textarea).toBeVisible();
+    const textarea = previewFrame.locator('#page-composer .page-textarea');
+    await expect(textarea).toBeVisible({ timeout: 5000 });
     const commentBody = 'Testing emoji reactions in VS Code';
     await textarea.fill(commentBody);
 
-    const submitBtn = previewFrame.locator('.md-comments-btn-primary[data-action="submit"]');
+    const submitBtn = previewFrame.locator('#page-composer .submit-page-btn');
     await submitBtn.dispatchEvent('click');
 
     const card = previewFrame.locator('.md-comments-card', { hasText: commentBody });

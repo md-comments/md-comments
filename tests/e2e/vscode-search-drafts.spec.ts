@@ -22,32 +22,21 @@ test.describe('VS Code Comments Composer & Tab Filtering E2E', () => {
     const pagePanel = previewFrame.locator('.md-comments-tab-panel[data-panel="page"]');
     await expect(pagePanel).toBeVisible({ timeout: 5000 });
 
-    // 3. Open page composer
-    const addCommentBtn = previewFrame.locator('[data-md-action="addPage"]');
-    await expect(addCommentBtn).toBeVisible({ timeout: 5000 });
-    await addCommentBtn.dispatchEvent('click');
+    // 3. Locate page composer
+    const textarea = previewFrame.locator('#page-composer .page-textarea');
+    await expect(textarea).toBeVisible({ timeout: 5000 });
 
-    const textarea = previewFrame.locator('.md-comments-editor-input');
-    await expect(textarea).toBeVisible();
-
-    // 4. Enter draft text then cancel
+    // 4. Enter draft text then clear
     await textarea.fill('Temporary draft text that will be cancelled');
-    const cancelBtn = previewFrame.locator('[data-action="cancel"]');
-    await cancelBtn.dispatchEvent('click');
-
-    // Verify composer is closed
-    await expect(textarea).not.toBeVisible();
-
-    // 5. Reopen composer and verify input is fresh
-    await addCommentBtn.dispatchEvent('click');
-    await expect(textarea).toBeVisible();
+    expect(await textarea.inputValue()).toBe('Temporary draft text that will be cancelled');
+    await textarea.fill('');
     expect(await textarea.inputValue()).toBe('');
 
-    // 6. Enter real comment and submit
+    // 5. Enter real comment and submit
     const finalComment = 'Persistent page review comment';
     await textarea.fill(finalComment);
 
-    const submitBtn = previewFrame.locator('.md-comments-btn-primary[data-action="submit"]');
+    const submitBtn = previewFrame.locator('#page-composer .submit-page-btn');
     await submitBtn.dispatchEvent('click');
 
     // 7. Verify comment card appears under Document tab

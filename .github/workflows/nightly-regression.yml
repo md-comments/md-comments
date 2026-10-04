@@ -149,6 +149,9 @@ jobs:
           restore-keys: |
             vscode-electron-${{ runner.os }}-
 
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+
       - name: Pre-Flight Clean Test Repository
         env:
           TEST_GITHUB_TOKEN: ${{ secrets.TEST_GITHUB_TOKEN }}

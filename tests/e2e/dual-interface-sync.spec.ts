@@ -130,14 +130,7 @@ test.describe('Dual-Interface Cross-Synchronization E2E: VS Code & GitHub Web Ex
     await expect(pageTab).toBeVisible({ timeout: 15000 });
     await pageTab.dispatchEvent('click');
 
-    const addCommentBtn = previewFrame.locator('[data-md-action="addPage"]');
-    if (await addCommentBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
-      await addCommentBtn.dispatchEvent('click');
-    }
-
-    const vscodeTextarea = previewFrame.locator(
-      '#page-composer .page-textarea, .md-comments-editor-input, textarea.page-textarea'
-    );
+    const vscodeTextarea = previewFrame.locator('#page-composer .page-textarea');
     await expect(vscodeTextarea).toBeVisible({ timeout: 10000 });
     const rootCommentText = 'Test page comment created from VS Code';
     await vscodeTextarea.fill(rootCommentText);
@@ -209,15 +202,18 @@ test.describe('Dual-Interface Cross-Synchronization E2E: VS Code & GitHub Web Ex
     // =========================================================================
     // STEP 3: VS Code adds Reply -> Synced to GitHub (Zero Duplicates)
     // =========================================================================
-    const vscodeReplyBtn = vscodeCard.locator('[data-md-action="reply"]');
+    const vscodeReplyBtn = vscodeCard.locator('[data-md-action="reply"]').first();
     await vscodeReplyBtn.dispatchEvent('click');
 
-    const vscodeReplyInput = vscodeCard.locator('textarea');
-    await expect(vscodeReplyInput).toBeVisible({ timeout: 5000 });
+    const vscodeReplyComposer = vscodeCard.locator(
+      '.reply-composer-wrapper, .md-comments-panel-composer'
+    );
+    await expect(vscodeReplyComposer).toBeVisible({ timeout: 5000 });
+    const vscodeReplyInput = vscodeReplyComposer.locator('textarea');
     const vscodeReplyText = 'Second nested reply from VS Code';
     await vscodeReplyInput.fill(vscodeReplyText);
 
-    const vscodeSubmitReply = vscodeCard.locator('.md-comments-btn-primary[data-action="submit"]');
+    const vscodeSubmitReply = vscodeReplyComposer.locator('[data-action="submit"]');
     await vscodeSubmitReply.dispatchEvent('click');
 
     const vscodeReplyItem2 = vscodeCard.locator('.md-comments-reply', { hasText: vscodeReplyText });

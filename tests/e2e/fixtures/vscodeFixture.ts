@@ -73,6 +73,10 @@ export const test = base.extend<{ vscode: VSCodeTestContext }>({
         'diffEditor.codeLens': true,
         'markdown.editor.codeLens.enabled': true,
         'markdown.preview.openMarkdownLinks': 'inEditor',
+        'workbench.layoutControl.enabled': false,
+        'workbench.secondarySideBar.showLabels': false,
+        'chat.commandCenter.enabled': false,
+        'chat.agent.enabled': false,
         'extensions.confirmedUriHandlerExtensionIds': ['md-comments.md-preview-comments'],
         '[markdown]': {
           'editor.codeLens': true,
@@ -156,7 +160,7 @@ export const test = base.extend<{ vscode: VSCodeTestContext }>({
         '--disable-workspace-trust',
         '--skip-welcome',
         '--skip-release-notes',
-        '--window-size=1440,900',
+        '--window-size=1600,1000',
         `--extensionDevelopmentPath=${extensionPath}`,
         `--user-data-dir=${userDataDir}`,
         `--extensions-dir=${extensionsDir}`,
@@ -170,19 +174,8 @@ export const test = base.extend<{ vscode: VSCodeTestContext }>({
     childProc.stderr?.on('data', (d) => process.stderr.write(d));
 
     const page = await electronApp.firstWindow();
-    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.setViewportSize({ width: 1600, height: 1000 });
     await page.waitForLoadState('domcontentloaded');
-
-    // Helper to wait until extension is activated via status bar indicator
-    const waitForExtensionActivation = async () => {
-      const docBase = path.basename(testDocPath);
-      const editorTab = page.getByRole('tab', { name: docBase });
-      if (await editorTab.isVisible()) {
-        await editorTab.click();
-      }
-      const statusItem = page.locator('[id="md-comments.md-preview-comments"]');
-      await expect(statusItem).toBeVisible({ timeout: 25000 });
-    };
 
     // Helper to open command palette
     const openCommandPalette = async () => {
@@ -200,6 +193,23 @@ export const test = base.extend<{ vscode: VSCodeTestContext }>({
       await page
         .waitForSelector('.quick-input-widget', { state: 'hidden', timeout: 5000 })
         .catch(() => {});
+    };
+
+    // Helper to wait until extension is activated via status bar indicator
+    const waitForExtensionActivation = async () => {
+      const docBase = path.basename(testDocPath);
+      const editorTab = page.getByRole('tab', { name: docBase });
+      if (await editorTab.isVisible()) {
+        await editorTab.click();
+      }
+      const statusItem = page.locator('[id="md-comments.md-preview-comments"]');
+      await expect(statusItem).toBeVisible({ timeout: 25000 });
+
+      // Ensure auxiliary bar / secondary sidebar is closed if open
+      const auxiliaryBar = page.locator('.part.auxiliarybar');
+      if (await auxiliaryBar.isVisible()) {
+        await runCommand('View: Close Secondary Side Bar').catch(() => {});
+      }
     };
 
     // Helper to open comment preview panel

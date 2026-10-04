@@ -73,21 +73,20 @@ test.describe('VS Code Extension Comment Preview E2E', () => {
     const replyBtn = commentCard.locator('[data-md-action="reply"]').first();
     await replyBtn.dispatchEvent('click');
 
-    const replyComposer = commentCard.locator(
-      '.reply-composer-wrapper, .md-comments-panel-composer'
-    );
+    const replyComposer = commentCard.locator('.md-comments-panel-composer');
     await expect(replyComposer).toBeVisible({ timeout: 3000 });
 
     const replyTextarea = replyComposer.locator('textarea');
     await replyTextarea.fill('Instant reply test');
 
     const replySubmitBtn = replyComposer.locator(
-      'button[data-action="submit"], .fallback-submit-btn'
+      'button[data-action="submit"], .fallback-submit-btn, [data-action="submit"]'
     );
     await replySubmitBtn.dispatchEvent('click');
 
-    // Verify reply submit button does not remain stuck in loading spinner
-    await expect(replySubmitBtn).not.toHaveClass(/loading/, { timeout: 4500 });
+    // Verify reply completes and appears inside the card
+    const replyItem = commentCard.locator('.md-comments-reply', { hasText: 'Instant reply test' });
+    await expect(replyItem).toBeVisible({ timeout: 5000 });
   });
 
   test('verifies inline paragraph comment anchors in rendered webview', async ({ vscode }) => {
@@ -126,13 +125,23 @@ test.describe('VS Code Extension Comment Preview E2E', () => {
     await expect(body).toHaveClass(/vscode-(dark|light|high-contrast)/);
 
     // Verify MD Comments FAB is present and toggles the comments sidebar
-    const fab = previewFrame.locator('#md-comments-panel-fab');
-    await expect(fab).toBeVisible({ timeout: 10000 });
-
     const layout = previewFrame.locator('#md-comments-layout');
     await expect(layout).toBeVisible();
 
-    // Click FAB to toggle sidebar
+    const fab = previewFrame.locator('#md-comments-panel-fab');
+    const closeBtn = previewFrame.locator('#md-comments-sidebar-close');
+
+    // If sidebar opened by default, closing it restores the FAB
+    if (await layout.evaluate((el) => el.classList.contains('md-comments-sidebar-open'))) {
+      await expect(fab).toBeHidden();
+      await closeBtn.dispatchEvent('click');
+      await expect(layout).not.toHaveClass(/md-comments-sidebar-open/);
+    }
+
+    // Verify FAB is visible when sidebar is closed
+    await expect(fab).toBeVisible({ timeout: 10000 });
+
+    // Click FAB to toggle sidebar open
     await fab.dispatchEvent('click');
     await expect(fab).toHaveAttribute('aria-expanded', 'true');
     await expect(layout).toHaveClass(/md-comments-sidebar-open/);
