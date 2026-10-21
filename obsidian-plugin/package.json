@@ -18,16 +18,16 @@
   "author": "mstrelex",
   "license": "MIT",
   "dependencies": {
-    "js-yaml": "^5.4.2"
+    "js-yaml": "^5.5.0"
   },
   "devDependencies": {
-    "@codemirror/language": "^6.12.4",
-    "@codemirror/state": "^6.7.2",
-    "@codemirror/view": "^6.43.11",
+    "@codemirror/language": "^6.13.1",
+    "@codemirror/state": "^6.7.6",
+    "@codemirror/view": "^6.43.14",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^26.5.1",
     "esbuild": "^0.20.1",
-    "obsidian": "^1.5.7-1",
+    "obsidian": "^1.14.4",
     "tslib": "^2.6.2",
     "typescript": "^5.3.3"
   }

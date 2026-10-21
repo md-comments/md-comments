@@ -13,10 +13,10 @@
   "author": "mstrelex",
   "license": "MIT",
   "dependencies": {
-    "js-yaml": "^5.4.2"
+    "js-yaml": "^5.5.0"
   },
   "devDependencies": {
-    "@types/chrome": "^0.2.9",
+    "@types/chrome": "^0.3.5",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^26.5.1",
     "esbuild": "^0.20.1",
